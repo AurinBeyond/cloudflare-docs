@@ -1,0 +1,172 @@
+---
+title: Type safety
+pcx_content_type: reference
+sidebar:
+  order: 7
+---
+
+import { Tabs, TypeScriptExample } from "~/components";
+
+You can specify the type of messages your queue handler expects using TypeScript generics. This provides better type safety and autocomplete support when processing messages, helping catch type errors at compile time rather than runtime.
+
+Defining message types allows TypeScript to validate the structure of `message.body` as you process each message. Type-safe handlers improve developer experience with accurate autocomplete and inline documentation in your editor. Message types can be primitives (like `string` or `number`) or complex objects with nested properties.
+
+The recommended approach is to use the `satisfies ExportedHandler` pattern, which provides type safety for all handler parameters including `env` and `ctx`.
+
+## Using type inference with ExportedHandler
+
+Define your message type and use `satisfies ExportedHandler` to let TypeScript infer the types for all handler parameters:
+
+```ts
+type MyMessage = {
+	userId: string;
+	action: string;
+	timestamp: number;
+};
+
+export default {
+	async queue(batch, env, ctx) {
+		// TypeScript infers: batch is MessageBatch<MyMessage>
+		// env and ctx are also typed based on your worker configuration
+		for (const message of batch.messages) {
+			console.log(message.body.userId); // Fully typed
+			console.log(message.body.action); // Autocomplete works
+			console.log(message.body.timestamp); // Type-checked
+		}
+	},
+} satisfies ExportedHandler<Env, MyMessage>;
+```
+
+## Using inline type annotations
+
+You can also explicitly annotate the batch parameter type inline. When using this approach, we still recommend adding `satisfies ExportedHandler` to ensure type safety for the `env` and `ctx` parameters.
+
+```ts
+export default {
+	async queue(batch: MessageBatch<{ id: number; data: string }>, env, ctx) {
+		for (const message of batch.messages) {
+			const id = message.body.id; // Fully typed as number
+			const data = message.body.data; // Fully typed as string
+
+			// Process the message
+			await env.DB.prepare("INSERT INTO logs (id, data) VALUES (?, ?)")
+				.bind(id, data)
+				.run();
+
+			message.ack();
+		}
+	},
+} satisfies ExportedHandler<Env, { id: number; data: string }>;
+```
+
+## Using primitive types
+
+For simple use cases, you can use primitive types directly. This is useful when your queue messages contain simple values rather than complex objects.
+
+```ts
+export default {
+	async queue(batch, env, ctx) {
+		// Each message.body is a number
+		const sum = batch.messages.reduce((acc, msg) => acc + msg.body, 0);
+		console.log(`Sum of all messages: ${sum}`);
+
+		const average = sum / batch.messages.length;
+		await env.ANALYTICS.put("average", average.toString());
+	},
+} satisfies ExportedHandler<Env, number>;
+```
+
+## Type safety across producers and consumers
+
+For the best type safety, you can share message types between your producer (sender) and consumer (receiver) workers:
+
+<Tabs syncKey="workersExamples">
+<TypeScriptExample filename="types.ts" omitTabs={true}>
+```ts
+// types.ts - Shared between producer and consumer
+export type UserEvent = {
+	userId: string;
+	eventType: "signup" | "login" | "logout";
+	timestamp: number;
+	metadata?: Record<string, string>;
+};
+```
+</TypeScriptExample>
+<TypeScriptExample filename="producer.ts" omitTabs={true}>
+```ts
+// producer.ts - Worker that sends messages
+import type { UserEvent } from "./types";
+
+interface Env {
+USER_EVENTS_QUEUE: Queue<UserEvent>;
+}
+
+export default {
+	async fetch(request: Request, env: Env) {
+		const event: UserEvent = {
+			userId: "12345",
+			eventType: "signup",
+			timestamp: Date.now(),
+		};
+
+    	// TypeScript validates the message structure
+    	await env.USER_EVENTS_QUEUE.send(event);
+
+    	return new Response("Event queued");
+    },
+
+};
+
+````
+</TypeScriptExample>
+<TypeScriptExample filename="consumer.ts" omitTabs={true}>
+```ts
+// consumer.ts - Worker that receives messages
+import type { UserEvent } from "./types";
+
+export default {
+	async queue(batch, env, ctx) {
+		for (const message of batch.messages) {
+			// message.body is fully typed as UserEvent
+			switch (message.body.eventType) {
+				case "signup":
+					await handleSignup(message.body.userId);
+					break;
+				case "login":
+					await handleLogin(message.body.userId);
+					break;
+				case "logout":
+					await handleLogout(message.body.userId);
+					break;
+			}
+			message.ack();
+		}
+	},
+} satisfies ExportedHandler<Env, UserEvent>;
+````
+
+</TypeScriptExample>
+</Tabs>
+
+## Default behavior without type annotations
+
+If you do not specify a message type, TypeScript will treat `message.body` as `unknown`, which requires type checking before use:
+
+```ts
+export default {
+	async queue(batch, env, ctx) {
+		for (const message of batch.messages) {
+			// message.body has type 'unknown'
+			// You need to validate the type before using it
+			if (
+				typeof message.body === "object" &&
+				message.body !== null &&
+				"userId" in message.body
+			) {
+				// Now you can use it, but still not fully typed
+				console.log(message.body.userId);
+			}
+		}
+	},
+};
+```
