@@ -1,0 +1,344 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----------------------------------------------------------------
+   MATRIX AURIN — Design Tokens
+   Dark, elegant, nature-inspired. Serif headlines + sans body.
+   ---------------------------------------------------------------- */
+@layer base {
+    :root {
+        /* Dark base by default — the platform is dark-first. */
+        --background: 140 12% 6%;        /* #0C110F deep pine-black */
+        --foreground: 44 18% 88%;        /* #E8E4D8 warm cream */
+        --card: 140 10% 8%;              /* #131816 surface */
+        --card-foreground: 44 18% 88%;
+        --popover: 140 12% 7%;
+        --popover-foreground: 44 18% 88%;
+        --primary: 95 18% 68%;           /* #A8C09A sage */
+        --primary-foreground: 140 20% 8%;
+        --secondary: 140 8% 14%;         /* #20272394 muted surface */
+        --secondary-foreground: 44 18% 88%;
+        --muted: 140 8% 12%;
+        --muted-foreground: 100 6% 64%;  /* #9BA39A soft stone */
+        --accent: 42 35% 66%;            /* #C9B785 muted gold/sand */
+        --accent-foreground: 140 20% 8%;
+        --destructive: 10 55% 52%;
+        --destructive-foreground: 44 18% 94%;
+        --border: 140 8% 16%;
+        --input: 140 8% 14%;
+        --ring: 95 18% 58%;
+        --radius: 0.5rem;
+
+        /* Brand-specific */
+        --aurin-bg: 140 12% 6%;
+        --aurin-surface: 140 10% 8%;
+        --aurin-surface-2: 140 9% 11%;
+        --aurin-border: 140 8% 16%;
+        --aurin-border-soft: 140 8% 13%;
+        --aurin-text: 44 18% 88%;
+        --aurin-text-muted: 100 6% 64%;
+        --aurin-sage: 95 18% 68%;
+        --aurin-sand: 42 35% 66%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    html,
+    body,
+    #root {
+        background-color: hsl(var(--aurin-bg));
+        color: hsl(var(--aurin-text));
+    }
+
+    body {
+        margin: 0;
+        font-family: "Instrument Sans", ui-sans-serif, system-ui, -apple-system,
+            sans-serif;
+        font-feature-settings: "ss01", "cv11";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        letter-spacing: 0.005em;
+    }
+
+    ::selection {
+        background: hsl(var(--aurin-sage) / 0.35);
+        color: hsl(var(--aurin-text));
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 400;
+        letter-spacing: -0.015em;
+    }
+
+    /* Subtle film grain for depth — very light, non-intrusive */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.035;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+}
+
+/* ----------------------------------------------------------------
+   Utility classes for the Matrix Aurin system
+   ---------------------------------------------------------------- */
+@layer components {
+    .aurin-container {
+        @apply mx-auto w-full max-w-[1240px] px-6 md:px-10;
+    }
+
+    .aurin-hairline {
+        background: linear-gradient(
+            to right,
+            transparent,
+            hsl(var(--aurin-border)) 20%,
+            hsl(var(--aurin-border)) 80%,
+            transparent
+        );
+        height: 1px;
+    }
+
+    .aurin-eyebrow {
+        @apply inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em];
+        color: hsl(var(--aurin-text-muted));
+        font-family: "Instrument Sans", sans-serif;
+    }
+
+    .aurin-eyebrow::before {
+        content: "";
+        width: 18px;
+        height: 1px;
+        background: hsl(var(--aurin-sage) / 0.7);
+        display: inline-block;
+    }
+
+    .aurin-display {
+        font-family: "Fraunces", serif;
+        font-weight: 300;
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+    }
+
+    .aurin-serif-italic {
+        font-family: "Instrument Serif", "Fraunces", serif;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .aurin-card {
+        background: hsl(var(--aurin-surface));
+        border: 1px solid hsl(var(--aurin-border-soft));
+        border-radius: 14px;
+        transition:
+            border-color 400ms ease,
+            transform 400ms ease,
+            background-color 400ms ease;
+    }
+
+    .aurin-card:hover {
+        border-color: hsl(var(--aurin-border));
+        background: hsl(var(--aurin-surface-2));
+    }
+
+    .aurin-link {
+        position: relative;
+        color: hsl(var(--aurin-text));
+        transition: color 300ms ease;
+    }
+
+    .aurin-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 100%;
+        height: 1px;
+        background: hsl(var(--aurin-sage));
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .aurin-link:hover::after,
+    .aurin-link[aria-current="page"]::after {
+        transform: scaleX(1);
+    }
+
+    .aurin-link[aria-current="page"] {
+        color: hsl(var(--aurin-sage));
+    }
+
+    /* Pill button — sharp, calm, premium */
+    .aurin-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm;
+        font-family: "Instrument Sans", sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        transition:
+            background-color 300ms ease,
+            color 300ms ease,
+            border-color 300ms ease,
+            transform 300ms ease;
+    }
+
+    .aurin-btn-primary {
+        background: hsl(var(--aurin-text));
+        color: hsl(var(--aurin-bg));
+        border: 1px solid hsl(var(--aurin-text));
+    }
+
+    .aurin-btn-primary:hover {
+        background: hsl(var(--aurin-sage));
+        border-color: hsl(var(--aurin-sage));
+        color: hsl(var(--aurin-bg));
+    }
+
+    .aurin-btn-ghost {
+        background: transparent;
+        color: hsl(var(--aurin-text));
+        border: 1px solid hsl(var(--aurin-border));
+    }
+
+    .aurin-btn-ghost:hover {
+        border-color: hsl(var(--aurin-sage));
+        color: hsl(var(--aurin-sage));
+    }
+
+    .aurin-chip {
+        @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs;
+        border: 1px solid hsl(var(--aurin-border));
+        color: hsl(var(--aurin-text-muted));
+        background: hsl(var(--aurin-surface));
+        font-family: "Instrument Sans", sans-serif;
+        letter-spacing: 0.02em;
+    }
+
+    /* Dotted/structured grid background (for page headers) */
+    .aurin-grid-bg {
+        background-image:
+            radial-gradient(
+                circle at 1px 1px,
+                hsl(var(--aurin-border)) 1px,
+                transparent 0
+            );
+        background-size: 28px 28px;
+    }
+
+    /* Soft vignette glow (used on hero) */
+    .aurin-glow {
+        background:
+            radial-gradient(
+                ellipse 60% 50% at 20% 0%,
+                hsl(var(--aurin-sage) / 0.08),
+                transparent 60%
+            ),
+            radial-gradient(
+                ellipse 50% 40% at 85% 20%,
+                hsl(var(--aurin-sand) / 0.06),
+                transparent 60%
+            );
+    }
+
+    /* Slow calm breathing animation for meditation page */
+    .aurin-breathe {
+        animation: aurin-breathe 9s ease-in-out infinite;
+    }
+
+    /* Section spacing (generous) */
+    .aurin-section {
+        @apply py-24 md:py-32;
+    }
+
+    .aurin-section-sm {
+        @apply py-16 md:py-24;
+    }
+}
+
+@keyframes aurin-breathe {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.75;
+    }
+    50% {
+        transform: scale(1.06);
+        opacity: 1;
+    }
+}
+
+@keyframes aurin-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.aurin-fade-up {
+    animation: aurin-fade-up 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.aurin-delay-1 {
+    animation-delay: 80ms;
+}
+.aurin-delay-2 {
+    animation-delay: 160ms;
+}
+.aurin-delay-3 {
+    animation-delay: 240ms;
+}
+.aurin-delay-4 {
+    animation-delay: 320ms;
+}
+.aurin-delay-5 {
+    animation-delay: 400ms;
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}

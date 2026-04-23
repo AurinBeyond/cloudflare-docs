@@ -1,0 +1,11 @@
+/* App-level layout helpers for Matrix Aurin */
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: hsl(var(--aurin-bg));
+}
+
+.App > main {
+    flex: 1;
+}
