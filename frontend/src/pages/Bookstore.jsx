@@ -9,7 +9,7 @@ const fmtPrice = (price, currency) => {
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: currency || "NOK",
+      currency: currency || "USD",
       minimumFractionDigits: 0,
     }).format(price);
   } catch {
