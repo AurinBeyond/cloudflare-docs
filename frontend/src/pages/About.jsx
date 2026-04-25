@@ -16,7 +16,9 @@ export default function About() {
     (async () => {
       try {
         const list = await fetchEntries({ surface: "brand" });
-        if (alive) setEntry(list?.[0] || null);
+        const preferred =
+          list?.find((e) => e.slug === "about-the-author") || list?.[0] || null;
+        if (alive) setEntry(preferred);
       } finally {
         if (alive) setLoading(false);
       }

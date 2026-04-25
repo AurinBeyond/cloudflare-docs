@@ -74,7 +74,38 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - New permanent regression suite at
   `/app/backend/tests/test_iter4_books_legal.py`.
 
-## Production checklist (handover)
+### Iteration 6 — Real assets + author preface (this iteration · 2026-04-25)
+**Brand identity wired:**
+- `prulesoul-logo.png` rendered in `Navigation.jsx` and `Footer.jsx`.
+  Two-line lock-up: "prulesoul" + "MATRIX · *Aurin*" eyebrow.
+- `aurinbeyond-hero.png` archived under `/assets/brand/` for future
+  hero/welcome use.
+
+**About page — author's personal preface (`/brand` surface):**
+- New `SEED_BRAND` list in `server.py` with idempotent upsert in
+  `seed_initial_content()` (step 6 — replaceable by `/brand/about.md`
+  from GitHub).
+- Entry `about-the-author` carries the user's exact life-story text.
+- `About.jsx` now selects the entry by slug (with first-entry fallback).
+
+**Kids Universe — Coloring Studio (gallery rewrite):**
+- `KidsColoringStudio.jsx` replaces the prompt-form placeholder with a
+  real gallery driven by an in-file `COLORING_PAGES` array (mirrors the
+  requested markdown frontmatter: `type/age_group/tags/download_url`).
+- First live page: `aurin-kids-cover.png` on a **pure-white card**.
+- Per card: age chip, tag chips, **Download to Print** (real PNG link)
+  and **Print now** (opens print dialog).
+- Age-group filter (All · 3-5 · 6-8 · 9-12) with empty-state.
+
+**Bookstore — refund acknowledgment:**
+- `bookstore-item-${slug}-refund-notice` paragraph under every Buy-access
+  row links to `/legal#refund-policy`. Closes the audit's compliance gap.
+
+**Tests:**
+- Backend 6/6 pass · Frontend 5/5 pass (iteration_5.json).
+- Regression file: `/app/backend/tests/test_iteration5.py`.
+
+
 | Item | Status |
 |---|---|
 | Multi-page structure | Done |
