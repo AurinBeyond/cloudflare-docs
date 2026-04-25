@@ -166,6 +166,7 @@ export default function KidsUniverse() {
             <div className="aurin-card overflow-hidden">
               <video
                 src="/assets/kids/visualisations/book.mp4"
+                poster="/assets/kids/visualisations/bedtime-angel.png"
                 data-testid="kids-story-trailer-video"
                 className="w-full h-auto block"
                 autoPlay

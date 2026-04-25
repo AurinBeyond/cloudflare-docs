@@ -122,6 +122,33 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 | AI Guardian | Placeholder by design |
 | prulesoul.site branding | Done · DNS at registrar required |
 
+### Iteration 7 — Real catalogue + media wiring (2026-04-25)
+**Bookstore — 6 real titles replacing 4 placeholders:**
+| Slug | Audience | Price | LemonSqueezy ID | External preview |
+|---|---|---|---|---|
+| you-dont-have-to-dance-to-anothers-tune | adult | $35 | PLACEHOLDER_DANCE_TUNE | ebookmaker.ai/...ag5xc |
+| the-language-of-angels | adult | $35 | PLACEHOLDER_LANGUAGE_OF_ANGELS | ebookmaker.ai/...osvhn |
+| beyond-the-matrix-ii | adult | $35 | PLACEHOLDER_BEYOND_MATRIX_II | ebookmaker.ai/...w5x3tf |
+| angels-tales | kids | $25 | PLACEHOLDER_ANGELS_TALES | ebookmaker.ai/angels-tales-... (+ free PDF) |
+| engels-friends-2 | kids | $25 | PLACEHOLDER_ENGELS_FRIENDS_2 | ebookmaker.ai/...ugo0pf |
+| the-night-angels-embrace | kids | $25 | PLACEHOLDER_NIGHT_ANGELS | ebookmaker.ai/the-night-angels-embrace (+ real cover) |
+
+- New `external_read_url` + `pdf_url` fields on `Book` / `BookCreate` / GitHub-sync payload.
+- `angels-tales.pdf` (6.8 MB) shipped at `/assets/books/`.
+- `bedtime-angel.png` shipped as cover for *The Night Angels' Embrace*.
+- Bookstore card now offers **Preview** (eBookMaker), **Free PDF sample** (when present), and the refund-policy line.
+
+**Library — Soul Gift donation card** (`<SoulGiftCard />` at bottom of `Library.jsx`):
+- Hero image `pure-soul-life-card.png` + €1 / €5 / €15 Ko-fi tiers → `ko-fi.com/puresoulife`.
+
+**Kids Universe — real visualisation:**
+- Bedtime visual `bedtime-angel.png` replaces the studio placeholder.
+- Story-trailer section embeds `book.mp4` (2.7 MB, muted/autoplay/loop + poster fallback for iOS/Safari).
+
+**Staged, not shipped:** the 166 MB "You Are Not Who You Became" 60 s trailer lives in `/app/.media-staging/`. Recommend external hosting before embedding.
+
+**Tests:** Backend 13/13 pass · Frontend testids all verified · iteration_6.json clean.
+
 ## Backlog
 ### P1
 - Set `GITHUB_REPO` and run first sync of /brand /legal /library
