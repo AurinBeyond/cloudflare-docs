@@ -41,7 +41,7 @@ export default function ShareStrip({
         href={fbHref}
         target="_blank"
         rel="noopener noreferrer"
-        data-testid={`${testidPrefix}-facebook`}
+        data-testid={`${testidPrefix}-strip-facebook`}
         aria-label="Share on Facebook"
         className="w-9 h-9 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text))/0.85] hover:text-[hsl(var(--aurin-sage))] hover:border-[hsl(var(--aurin-sage))] transition-colors"
       >
@@ -52,7 +52,7 @@ export default function ShareStrip({
         target="_blank"
         rel="noopener noreferrer"
         title="Open Instagram (paste this link in your story)"
-        data-testid={`${testidPrefix}-instagram`}
+        data-testid={`${testidPrefix}-strip-instagram`}
         aria-label="Share on Instagram"
         className="w-9 h-9 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text))/0.85] hover:text-[hsl(var(--aurin-sage))] hover:border-[hsl(var(--aurin-sage))] transition-colors"
       >
@@ -61,7 +61,7 @@ export default function ShareStrip({
       <button
         type="button"
         onClick={onCopy}
-        data-testid={`${testidPrefix}-copy`}
+        data-testid={`${testidPrefix}-strip-copy`}
         className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[hsl(var(--aurin-border))] text-[12px] text-[hsl(var(--aurin-text))/0.85] hover:text-[hsl(var(--aurin-sage))] hover:border-[hsl(var(--aurin-sage))] transition-colors"
       >
         <Link2 size={12} /> {copied ? "Link copied" : "Copy link"}

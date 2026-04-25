@@ -174,6 +174,36 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 **Tests:** Backend 12/12 pass · Frontend testids all verified · iteration_7.json clean.
 - Regression file: `/app/backend/tests/test_iteration7.py`.
 
+### Iteration 9 — Brand layer + Blog + Meditation + Origin (2026-04-25)
+**Blog engine** (replaceable from `/blog/*.md` later):
+- New backend `BlogPost` model + `SEED_BLOG` (idempotent upsert), `GET /api/blog`, `GET /api/blog/{slug}`.
+- Seeded post: **"The Mirror of Our Souls — Why Parenting is the Ultimate Programming"** (Prulesoul). Mirror cover at `/assets/blog/mirror-of-our-souls.png`. Body weaves the parenting/programming + harvest-of-generations material into a single letter ending with "What programs are you running today?".
+- New `/blog` index + `/blog/:slug` reader — italic excerpt, share strip top + bottom, prose body, end-of-post CTA bridge into The Beginning, newsletter capture.
+
+**Newsletter capture** (Tier-1 list-building):
+- `POST /api/newsletter` with explicit `consent` flag, idempotent on email, `db.newsletter_subscribers`.
+- `<NewsletterSignup />` with consent checkbox at end of blog posts.
+
+**The Aurin Philosophy** (`/aurin-philosophy`):
+- Matrix vs. Aurin concept · 3 pillars (Mirror Principle · Sponge Effect · Transformation over Information) · Prulesoul Insight quote · CTA bridge.
+
+**The Origin** (`/about` rewrite):
+- Stone-portal mirror image hero · 3 narrative blocks · expandable longer preface (loads brand entry) · Founder's Promise quote with sage glow · Guardian invitation buttons · final CTA.
+
+**Meditation lead magnet** (Library):
+- `<MeditationPlayer />` — text-script audio-style UI (Play / Pause / Restart, progress bar, 11 lines × 5.5 s ≈ 1 min). Softened "First Light" script (no absolute claims).
+- Tier 3 "Premium meditation series — coming soon" block.
+
+**Privacy / consent:**
+- Portal `portal-consent-line` paragraph below sign-in: occasional updates, opt-out, reflections private, industry-standard storage.
+
+**Navigation refresh:**
+- Top bar: Home · The Beginning · Philosophy · Insights · Bookstore · Library · Origin · Reach Out.
+- Footer Explore adds The Beginning / Philosophy / Insights · Blog / The Origin.
+
+**Tests:** Backend 9/9 pass · Frontend 95 % (3 cosmetic LOW notes — share-strip child testids renamed `*-strip-{facebook|instagram|copy}` after report; native HTML5 email validation by design). iteration_9.json clean.
+- Regression file: `/app/backend/tests/test_iteration9.py`.
+
 ### P1
 - Set `GITHUB_REPO` and run first sync of /brand /legal /library
   /bookstore /kids /learning /meditations
