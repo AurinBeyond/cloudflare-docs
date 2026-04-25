@@ -1,0 +1,61 @@
+{
+  "summary": "Phase 2-continued e2e test (backend + frontend). Backend 26/26 tests pass (100%) — Books CRUD, NOK pricing, audience filter, validate dry-run with all 7 expected warning codes, admin overview + only_with_warnings filter all working. Frontend: navigation reorder (5 primary links), 'The Guardian' rebrand, Bookstore grid, BookDetail with read/exit modes, Reach Out form, Library audience tabs all PASS. ONE blocker on the Admin page: the validate-dry-run UI and the synced-files list UI are NOT RENDERED in AdminContent.jsx — only the create-entry form and GitHub sync card are present. State hooks and handlers exist, but the JSX sections are missing.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "AdminContent.jsx (/admin/content)",
+        "issue": "Markdown VALIDATE dry-run UI section is not rendered. State (validateText, validateResult, validating) and handler (handleValidate) exist (lines 28-31, 95-105), but no JSX uses them. Required testids missing: admin-validate-form, admin-validate-input, admin-validate-run, admin-validate-result, admin-validate-warning-{code}.",
+        "selector": "[data-testid=admin-validate-form]",
+        "priority": "HIGH"
+      },
+      {
+        "component": "AdminContent.jsx (/admin/content)",
+        "issue": "Synced-files / content-health overview list is not rendered. State (adminEntries, adminLoading, adminFilter) and loader (loadAdminEntries) exist (lines 34-36, 107-119), useEffect calls loadAdminEntries on mount, but no JSX iterates rows. Required testids missing: admin-list, admin-list-row-{slug}, admin-list-filter-all, admin-list-filter-warnings.",
+        "selector": "[data-testid=admin-list]",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "/admin/content",
+        "issues": [
+          "Console hydration warning: '<span> cannot be a child of <option>' — caused by ve-dynamic instrumentation wrapper inside <option> in select children. Cosmetic React warning only, does not break functionality."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase2_continued.py",
+    "/app/backend/tests/test_content_api.py",
+    "/app/test_reports/pytest/iteration_2_all.xml"
+  ],
+  "action_items": [
+    "Add the Markdown Validate dry-run UI section to /app/frontend/src/pages/AdminContent.jsx — a form with textarea (admin-validate-input), submit button (admin-validate-run), and a result block (admin-validate-result) that maps validateResult.warnings to chips with testid pattern admin-validate-warning-{code}. The handler handleValidate and state validateText/validateResult are already wired, just no JSX consumes them.",
+    "Add the synced-files / content-health list UI to AdminContent.jsx — render adminEntries with row testid admin-list-row-{slug} inside a container admin-list, plus two filter buttons admin-list-filter-all and admin-list-filter-warnings that call loadAdminEntries(false|true). Each row should show title, source_path, surface, source, and warnings count per the request."
+  ],
+  "critical_code_review_comments": [
+    "AdminContent.jsx imports validateMarkdown and fetchAdminEntries and sets up full state/handlers but never renders the UI — strong indication the JSX was forgotten in commit. File still under 350 lines so adding ~40 lines is safe; no need to split.",
+    "Books seed slugs are 'genesis-protocols-volume-i-book' and 'kids-quiet-stories-volume-i' — the request mentioned 'aurin-hub' as a slug but no such book exists in seed (the example was illustrative). Detail endpoint and BookDetail page work correctly with the actual slugs. Recommend updating any docs that reference 'aurin-hub' as a book slug.",
+    "Library audience filter: 'Grown-ups' returns same count (9) as 'All' because every existing library entry was migrated to grown-ups and Reflections audience is empty. This is correct given the migration but the filter looks visually inert until other audiences gain content. Consider showing a count badge per tab.",
+    "Reach Out: form correctly shows 'Received, in spirit.' confirmation client-side (no backend submission per design). data-testid reach-out-sent present and verified."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_phase2_continued.py (NEW — 12 tests for Phase 2 continued backend)"
+  ],
+  "success_rate": {
+    "backend": "100% (26/26 — 14 prior + 12 new)",
+    "frontend": "~92% (Bookstore + BookDetail + ReachOut + Library audience + Nav + Footer + Guardian dock + 7 regression pages all pass; Admin validate dry-run + synced-files list UI not rendered — 2 sections missing)"
+  },
+  "test_credentials": "none required (admin page has no auth gate per design)",
+  "seed_data_creation": "Created and then cleaned up 2 'test-book-*' books via POST /api/books during test_create_book_and_duplicate. Mongo cleanup performed (deletedCount: 2). 1 stale 'test-admin-99768' entry from a previous iteration remains in DB — not created by this run.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend is solid, do not re-run all 26 tests unless schema changes. After main agent adds the two missing JSX sections to AdminContent.jsx, just re-run the 4 admin-page Playwright assertions: 1) paste '#### Orphan four\\n\\nText.\\n\\n###### Even deeper' → click admin-validate-run → expect chips admin-validate-warning-promoted_orphan_subheadings AND admin-validate-warning-heading_level_jumps_detected; 2) empty input → admin-validate-warning-empty_input; 3) admin-list visible with rows; 4) admin-list-filter-warnings filters list. Books with slug aurin-hub do NOT exist — use 'genesis-protocols-volume-i-book'. The /api endpoint redirect is healthy. Hydration warning about <span> in <option> is from ve-dynamic instrumentation, ignore.",
+  "rca_of_the_issue": "AdminContent.jsx received state hooks (validateText/validateResult/validating, adminEntries/adminLoading/adminFilter), API client imports (validateMarkdown, fetchAdminEntries), and handlers (handleValidate, loadAdminEntries) plus a useEffect that loads admin entries on mount — but the corresponding JSX render blocks were never committed. The page therefore still shows only the create-entry form and the GitHub sync aside (lines 150-310 of AdminContent.jsx). Reproduction: navigate to /admin/content, query [data-testid=admin-validate-form] → null. Mitigation: add two render blocks (validate dry-run form + synced-files overview list with filter buttons) inside the existing <section> grid, using the already-wired state/handlers."
+}

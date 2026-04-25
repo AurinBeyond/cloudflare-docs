@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
+import AiDock from "@/components/AiDock";
 
 export default function Layout() {
   const location = useLocation();
@@ -17,6 +18,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <AiDock />
     </>
   );
 }

@@ -5,9 +5,12 @@ const COLUMNS = [
     title: "Explore",
     links: [
       { to: "/", label: "Home" },
+      { to: "/bookstore", label: "Bookstore" },
       { to: "/library", label: "Library" },
+      { to: "/learning", label: "Learning" },
       { to: "/kids-universe", label: "Kids Universe" },
-      { to: "/meditation-corner", label: "Meditation Corner" },
+      { to: "/meditation-corner", label: "Meditations" },
+      { to: "/reach-out", label: "Reach Out" },
     ],
   },
   {

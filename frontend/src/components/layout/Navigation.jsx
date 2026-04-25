@@ -4,14 +4,10 @@ import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home", testid: "nav-home" },
+  { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
   { to: "/library", label: "Library", testid: "nav-library" },
-  { to: "/kids-universe", label: "Kids Universe", testid: "nav-kids" },
-  {
-    to: "/meditation-corner",
-    label: "Meditation Corner",
-    testid: "nav-meditation",
-  },
-  { to: "/portal", label: "User Portal", testid: "nav-portal" },
+  { to: "/meditation-corner", label: "Meditations", testid: "nav-meditation" },
+  { to: "/reach-out", label: "Reach Out", testid: "nav-reach-out" },
 ];
 
 export default function Navigation() {

@@ -268,6 +268,120 @@
     }
 }
 
+/* ----------------------------------------------------------------
+   Markdown prose — used by Library entry pages
+   ---------------------------------------------------------------- */
+.aurin-prose {
+    color: hsl(var(--aurin-text) / 0.92);
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 68ch;
+}
+
+.aurin-prose > * + * {
+    margin-top: 1.1em;
+}
+
+.aurin-prose h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 1.9rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-top: 2.4em;
+    margin-bottom: 0.4em;
+    color: hsl(var(--aurin-text));
+    scroll-margin-top: 6rem;
+}
+
+.aurin-prose h2::before {
+    content: "—";
+    display: inline-block;
+    color: hsl(var(--aurin-sage));
+    margin-right: 0.6em;
+    opacity: 0.8;
+}
+
+.aurin-prose h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 1.35rem;
+    letter-spacing: -0.005em;
+    margin-top: 1.8em;
+    margin-bottom: 0.2em;
+    color: hsl(var(--aurin-text));
+    scroll-margin-top: 6rem;
+}
+
+.aurin-prose p {
+    color: hsl(var(--aurin-text) / 0.88);
+}
+
+.aurin-prose ul,
+.aurin-prose ol {
+    padding-left: 1.25rem;
+}
+
+.aurin-prose ul li,
+.aurin-prose ol li {
+    margin-top: 0.4em;
+    color: hsl(var(--aurin-text) / 0.9);
+}
+
+.aurin-prose ul {
+    list-style: disc;
+}
+
+.aurin-prose ol {
+    list-style: decimal;
+}
+
+.aurin-prose blockquote {
+    border-left: 1px solid hsl(var(--aurin-sage));
+    padding-left: 1.2rem;
+    color: hsl(var(--aurin-text-muted));
+    font-style: italic;
+    font-family: "Instrument Serif", serif;
+    font-size: 1.15rem;
+}
+
+.aurin-prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: hsl(var(--aurin-surface-2));
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.aurin-prose pre {
+    background: hsl(var(--aurin-surface));
+    border: 1px solid hsl(var(--aurin-border-soft));
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.aurin-prose pre code {
+    background: transparent;
+    padding: 0;
+}
+
+.aurin-prose a {
+    color: hsl(var(--aurin-sage));
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--aurin-sage) / 0.4);
+    text-underline-offset: 3px;
+}
+
+.aurin-prose hr {
+    border: 0;
+    height: 1px;
+    background: hsl(var(--aurin-border-soft));
+    margin: 2.4em 0;
+}
+
 @keyframes aurin-breathe {
     0%,
     100% {
