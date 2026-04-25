@@ -84,17 +84,28 @@ export default function UserPortal() {
             </button>
           </div>
         ) : (
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={handleSignIn}
-              data-testid="portal-sign-in"
-              className="aurin-btn aurin-btn-primary"
+          <div className="space-y-3" data-testid="portal-signed-out">
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={handleSignIn}
+                data-testid="portal-sign-in"
+                className="aurin-btn aurin-btn-primary"
+              >
+                Sign in with Google <LogIn size={13} />
+              </button>
+              <span className="aurin-chip" data-testid="portal-availability-chip">
+                · Email-based, via Emergent Auth
+              </span>
+            </div>
+            <p
+              data-testid="portal-consent-line"
+              className="text-[12px] text-[hsl(var(--aurin-text-muted))] max-w-[58ch] leading-relaxed"
             >
-              Sign in with Google <LogIn size={13} />
-            </button>
-            <span className="aurin-chip" data-testid="portal-availability-chip">
-              · Email-based, via Emergent Auth
-            </span>
+              By continuing, you agree that your account may be used to send
+              occasional updates. You can opt out at any time. Your reflections
+              and personal inputs are private and stored securely using
+              industry-standard protection.
+            </p>
           </div>
         )}
       </PageHeader>

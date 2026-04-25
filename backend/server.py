@@ -1423,6 +1423,39 @@ async def seed_initial_content():
         )
     logger.info("Brand seed/migration done (%d slugs).", len(SEED_BRAND))
 
+    # 7. Blog — idempotent upsert. Replaceable from /blog/*.md later.
+    for b in SEED_BLOG:
+        parsed = parse_markdown(b.get("markdown", ""))
+        obj = BlogPost(
+            **b,
+            html=parsed["html"],
+            sections=[ContentSection(**s) for s in parsed["sections"]],
+        )
+        doc = _serialize(obj.model_dump())
+        await db.blog_posts.update_one(
+            {"slug": b["slug"]},
+            {"$set": {
+                "title": doc["title"],
+                "subtitle": doc.get("subtitle"),
+                "author": doc.get("author"),
+                "excerpt": doc.get("excerpt"),
+                "cover_image_url": doc.get("cover_image_url"),
+                "cover_image_alt": doc.get("cover_image_alt"),
+                "html": doc["html"],
+                "sections": doc["sections"],
+                "tags": doc.get("tags", []),
+                "published": True,
+                "updated_at": doc.get("updated_at"),
+            }, "$setOnInsert": {
+                "id": doc["id"],
+                "slug": doc["slug"],
+                "markdown": doc.get("markdown", ""),
+                "created_at": doc.get("created_at"),
+            }},
+            upsert=True,
+        )
+    logger.info("Blog seed/migration done (%d posts).", len(SEED_BLOG))
+
 
 # =============================================================
 # Auth — Emergent Google Auth
@@ -1835,6 +1868,138 @@ async def experience_reset(request: Request):
         {"user_id": user.user_id, "experience_slug": EXPERIENCE_SLUG}
     )
     return {"status": "reset"}
+
+
+# =============================================================
+# Blog / Insights — manually-seeded long-form posts. Replaceable
+# from GitHub later via /blog/*.md. Public read, no auth.
+# =============================================================
+
+class BlogPost(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    slug: str
+    title: str
+    subtitle: Optional[str] = None
+    author: str = "Prulesoul"
+    excerpt: str = ""
+    cover_image_url: Optional[str] = None
+    cover_image_alt: Optional[str] = None
+    markdown: str = ""
+    html: str = ""
+    sections: List[ContentSection] = Field(default_factory=list)
+    tags: List[str] = Field(default_factory=list)
+    published: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+SEED_BLOG: List[dict] = [
+    {
+        "slug": "mirror-of-our-souls",
+        "title": "The Mirror of Our Souls",
+        "subtitle": "Why parenting is the ultimate programming",
+        "author": "Prulesoul",
+        "excerpt": (
+            "After 50 years of observing human behavior, speech patterns, and the "
+            "subtle energy people carry, I have come to a profound realization: "
+            "our children are not just listening to us — they are absorbing us."
+        ),
+        "cover_image_url": "/assets/blog/mirror-of-our-souls.png",
+        "cover_image_alt": "A woman and a child standing inside a stone portal at dawn.",
+        "tags": ["parenting", "programming", "aurin-philosophy"],
+        "markdown": """We often treat children like students who need to be told what to do. But in reality, they are like high-speed sponges. They don't follow our words; they follow our vibration and our examples.
+
+## The paradox of "Do as I say, not as I do"
+
+There is an old saying: *"The apple doesn't fall far from the tree."* If a parent forbids a behavior but practices it themselves, the child is left in a state of cognitive dissonance. They will always default to what they see, not what they hear.
+
+If we want to change our children's future, we must first audit our own software.
+
+## The language of programming
+
+Consider the power of the words we feed them daily.
+
+**The light path.** When we tell a child *"You are my joy, my wisdom, my princess, my prince,"* we are installing a program of self-worth that becomes their destiny.
+
+**The shadow path.** When a child grows up hearing *"Money is trash,"* *"Money is scarce,"* or *"We don't have enough,"* they are being programmed for poverty. This poverty software will run in their subconscious for decades, sabotaging their success until it is consciously uprooted.
+
+## My journey — from illusions to authenticity
+
+I spent years carrying programs about relationships and money that were handed down to me in my childhood. I unknowingly passed them on to my own child.
+
+But then a shift happened. Together, we discovered that these programs were not "us" — they were just outdated code.
+
+We began the hard work of uprooting these beliefs. Today I am no longer that woman in rose-colored glasses, living in a world of sugary illusions. I have stepped out of the *pink foam* of the matrix into a world that is raw, real, and significantly more beautiful. Every day is a new life. Every day is a chance to rewrite the script.
+
+## The harvest of generations
+
+We often look at the world's problems — wars, pollution, hunger — as if they were caused by some external force. But there are no aliens ruining our planet. It is the human mentality that does it.
+
+Everything comes down to our internal programming. For one person, their values make it impossible to litter; for another, even the most basic respect for common space is missing. Why? Because of what was installed in them as children.
+
+If we raise our children with aggression and greed, we cannot be surprised when we harvest a world at war. If we raise them with fear, we harvest a society of control.
+
+We are the ones planting the seeds today that the entire world will have to eat tomorrow. The fate of the Earth is not in the hands of politicians — it is in the hands of parents.
+
+## Your turn
+
+What programs are you running today?
+
+Are they building a world you want to live in tomorrow?
+""",
+    },
+]
+
+
+@api_router.get("/blog", response_model=List[BlogPost])
+async def list_blog():
+    rows = await db.blog_posts.find({"published": True}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return [BlogPost(**_deserialize(r)) for r in rows]
+
+
+@api_router.get("/blog/{slug}", response_model=BlogPost)
+async def get_blog(slug: str):
+    row = await db.blog_posts.find_one({"slug": slug, "published": True}, {"_id": 0})
+    if not row:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return BlogPost(**_deserialize(row))
+
+
+# =============================================================
+# Newsletter — opt-in capture. Stores email + explicit consent.
+# Email-out wires up later when a transactional provider arrives.
+# =============================================================
+class NewsletterSignup(BaseModel):
+    email: str
+    consent: bool = True
+    source: Optional[str] = None  # e.g., "blog:mirror-of-our-souls"
+
+
+@api_router.post("/newsletter")
+async def newsletter_signup(inp: NewsletterSignup):
+    email = (inp.email or "").strip().lower()
+    if "@" not in email or len(email) > 200:
+        raise HTTPException(status_code=400, detail="Please enter a valid email.")
+    if not inp.consent:
+        raise HTTPException(
+            status_code=400,
+            detail="Consent is required so we can write to you.",
+        )
+    doc = {
+        "id": str(uuid.uuid4()),
+        "email": email,
+        "source": (inp.source or "")[:80],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "delivered": False,
+    }
+    # Idempotent: only one entry per email.
+    await db.newsletter_subscribers.update_one(
+        {"email": email},
+        {"$setOnInsert": doc, "$set": {"consent": True, "last_seen_source": doc["source"]}},
+        upsert=True,
+    )
+    return {"status": "subscribed", "email": email}
 
 
 # =============================================================

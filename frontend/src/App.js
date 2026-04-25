@@ -19,6 +19,9 @@ import Legal from "@/pages/Legal";
 import AuthCallback from "@/pages/AuthCallback";
 import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
+import AurinPhilosophy from "@/pages/AurinPhilosophy";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 
 function AppRouter() {
   const location = useLocation();
@@ -43,6 +46,9 @@ function AppRouter() {
         <Route path="/meditation-corner" element={<MeditationCorner />} />
         <Route path="/the-beginning" element={<TheBeginning />} />
         <Route path="/the-beginning/step" element={<TheBeginningStep />} />
+        <Route path="/aurin-philosophy" element={<AurinPhilosophy />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/reach-out" element={<ReachOut />} />
         <Route path="/portal" element={<UserPortal />} />
         <Route path="/admin/content" element={<AdminContent />} />

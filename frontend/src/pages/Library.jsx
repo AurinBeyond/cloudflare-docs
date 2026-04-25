@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { fetchEntries } from "@/lib/api";
 import InstagramCTA from "@/components/InstagramCTA";
+import MeditationPlayer from "@/components/MeditationPlayer";
 import { Compass } from "lucide-react";
 
 const kindMeta = {
@@ -225,6 +226,46 @@ export default function Library() {
               Nothing matches this view yet. Try another audience.
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Guided meditation — free lead magnet */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="library-meditation-section"
+      >
+        <div className="aurin-container max-w-[760px]">
+          <div className="aurin-eyebrow mb-4">Guided meditations</div>
+          <h2 className="aurin-display text-3xl md:text-4xl leading-[1.1] mb-6">
+            A first light, freely{" "}
+            <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+              given.
+            </span>
+          </h2>
+          <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-9 max-w-[58ch]">
+            A short, calm meditation you can return to before your day begins
+            or as it ends. Designed to dissolve a little of the old code and
+            make room for what is actually yours.
+          </p>
+
+          <MeditationPlayer />
+
+          <div
+            data-testid="library-meditation-coming-soon"
+            className="mt-10 aurin-card p-6 flex items-start gap-4"
+          >
+            <div className="w-10 h-10 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))] shrink-0 text-[10px] uppercase tracking-[0.18em]">
+              Soon
+            </div>
+            <div>
+              <div className="aurin-eyebrow !mb-1">Premium meditation series</div>
+              <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                A small library of deeper, longer guided sessions — recorded in
+                voice, paced for return. Arriving as a Tier 3 offering once the
+                first light has settled with the people who need it most.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,58 @@
+{
+  "summary": "Iteration 9 testing: Blog (list/detail/404), Newsletter (validation + idempotency), Aurin Philosophy, Origin (/about), Library MeditationPlayer, Portal consent disclosure, Navigation + Footer + Mobile menu — all routes load 200, backend 9/9 tests pass, MeditationPlayer auto-advances script and restart resets, newsletter idempotent (verified 3 inserts → 1 row), brand entry + 6 books regression OK.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "BlogPost ShareStrip (top + bottom)",
+        "issue": "Spec requires per-button testids 'blog-post-share-top-strip-facebook|instagram|copy' and 'blog-post-share-bottom-strip-facebook|instagram|copy'. Implementation uses 'blog-post-share-top-facebook|instagram|copy' and 'blog-post-share-bottom-facebook|instagram|copy' (missing the '-strip-' segment). All 6 buttons render and are clickable; only the testid naming differs from the spec.",
+        "selector": "[data-testid=\"blog-post-share-top-strip-facebook\"] (expected) vs [data-testid=\"blog-post-share-top-facebook\"] (actual)",
+        "priority": "LOW"
+      },
+      {
+        "component": "NewsletterSignup (invalid-email path)",
+        "issue": "Submitting an invalid string like 'notanemail' relies on the browser's native HTML5 type=\"email\" validation, which silently blocks submit and does NOT render the [data-testid=\"newsletter-error\"] element. The consent-off path correctly shows newsletter-error. If the spec wants newsletter-error to fire on bad email format too, add an explicit JS check before native validation.",
+        "selector": "[data-testid=\"newsletter-error\"]",
+        "priority": "LOW"
+      },
+      {
+        "component": "AurinPhilosophy ap-pillars",
+        "issue": "ap-pillars parent renders 3 pillar visual cards (verified visually), but individual pillars do not carry data-testids like 'ap-pillar-1/2/3'. Spec only requires 'containing 3 pillars' and parent testid is present, so this is informational only.",
+        "selector": "[data-testid=\"ap-pillars\"] [data-testid^=\"ap-pillar-\"]",
+        "priority": "INFO"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration9.py",
+    "/app/test_reports/pytest/iteration_9.xml"
+  ],
+  "action_items": [
+    "OPTIONAL: Rename ShareStrip per-button testids to include '-strip-' segment (or update spec). Functionality is fine.",
+    "OPTIONAL: Add explicit JS email-format validation in NewsletterSignup so newsletter-error renders for malformed addresses, not just for missing consent.",
+    "OPTIONAL: Add data-testid='ap-pillar-1|2|3' on each pillar card if granular targeting is desired."
+  ],
+  "critical_code_review_comments": [
+    "server.py is now 2033 lines — close to threshold; consider splitting blog/newsletter/auth/content/books into separate routers in a future iteration.",
+    "Newsletter endpoint correctly excludes 'consent' from $setOnInsert/$set conflict and is properly idempotent via upsert on email; verified DB-side.",
+    "Blog seed step 7 in seed_initial_content uses upsert with $setOnInsert for created_at/id which is correct for idempotency."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration9.py (created)"
+  ],
+  "success_rate": {
+    "backend": "100%",
+    "frontend": "95%"
+  },
+  "test_credentials": "n/a — no auth flows tested in this iteration; portal sign-in button verified to be present, navigation handled by JS (href=None is by design for Emergent auth flow).",
+  "seed_data_creation": "Newsletter test inserts via API: 'idempo-test@example.com' + ~3 ephemeral 'test-it9-<rand>@example.com' rows in db.newsletter_subscribers. No other test data created.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration 9 is essentially green: all backend tests pass (9/9), all 13 frontend routes load 200 with header, all spec testids exist except the share-strip child buttons missing the '-strip-' segment in their testid (functionally fine), and the invalid-email branch of NewsletterSignup is handled by browser native validation rather than the explicit newsletter-error component. MeditationPlayer auto-advance verified (line changes after 6s, restart resets to 0:00, aria-label toggles Play↔Pause). Portal consent-line contains all three required phrases. Footer Explore column has all 4 required links. Newsletter idempotency verified at DB level (3 POSTs → 1 row).",
+  "rca of the issue": "n/a — no critical bugs."
+}

@@ -131,3 +131,23 @@ export async function resetBeginning() {
   const res = await api.post("/experience/the-beginning/reset");
   return res.data;
 }
+
+/* ----------------------- Blog ----------------------- */
+export async function fetchBlogPosts() {
+  const res = await api.get("/blog");
+  return res.data;
+}
+
+export async function fetchBlogPost(slug) {
+  const res = await api.get(`/blog/${slug}`);
+  return res.data;
+}
+
+export async function subscribeNewsletter(email, source) {
+  const res = await api.post("/newsletter", {
+    email,
+    consent: true,
+    source: source || null,
+  });
+  return res.data;
+}
