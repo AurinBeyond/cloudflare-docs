@@ -96,6 +96,13 @@ export default function Footer() {
         </div>
 
         <div className="aurin-hairline mt-14 mb-6" />
+        <div
+          data-testid="footer-privacy-luxury"
+          className="text-[12px] text-[hsl(var(--aurin-text-muted))] mb-6 max-w-[68ch]"
+        >
+          No social-media pixels. No tracking cookies. No public feed. Your
+          journey through this work stays yours — that is part of the design.
+        </div>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[hsl(var(--aurin-text-muted))]">
           <div data-testid="footer-copy">
             © {new Date().getFullYear()} prulesoul.site · Matrix Aurin. Quiet by design.

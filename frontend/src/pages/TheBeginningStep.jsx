@@ -296,6 +296,19 @@ function PausePanel({ left }) {
 }
 
 function DonePanel({ reflections = [], onReset }) {
+  const [shared, setShared] = useState(false);
+  const shareUrl =
+    typeof window !== "undefined" ? window.location.origin + "/the-beginning" : "/the-beginning";
+  const handleShareCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    } catch {
+      /* clipboard blocked — link is also visible */
+    }
+  };
+
   return (
     <div className="space-y-10" data-testid="tb-step-done">
       <p className="text-[16px] leading-[1.85] text-[hsl(var(--aurin-text))/0.94]">
@@ -311,6 +324,31 @@ function DonePanel({ reflections = [], onReset }) {
             depth of the same direction. You'll see when it's there.
           </p>
         </div>
+      </div>
+
+      {/* Word-of-mouth — calm, single sentence, not a marketing CTA */}
+      <div
+        data-testid="tb-share-coordinates"
+        className="aurin-card p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-5 hover:border-[hsl(var(--aurin-sage))] transition-colors"
+      >
+        <div className="flex-1 space-y-1.5">
+          <div className="aurin-eyebrow !mb-0">A small invitation</div>
+          <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]">
+            If this shift was real for you, share the coordinates with one
+            person you trust.
+          </p>
+          <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] break-all">
+            {shareUrl}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleShareCopy}
+          data-testid="tb-share-coordinates-copy"
+          className="aurin-btn aurin-btn-ghost shrink-0"
+        >
+          {shared ? "Coordinates copied" : "Copy the coordinates"}
+        </button>
       </div>
 
       {reflections.length > 0 && (

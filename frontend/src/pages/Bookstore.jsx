@@ -121,6 +121,15 @@ export default function Bookstore() {
             <InstagramCTA testidPrefix="bookstore-ig-cta" />
           </div>
 
+          <p
+            data-testid="bookstore-core-library-line"
+            className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-10 max-w-[60ch] aurin-serif-italic"
+          >
+            To integrate this frequency deeper, explore the Core Library —
+            slow-written books for adults, calm storybooks for children. No
+            urgency. Read in the order that feels true.
+          </p>
+
           {loading && (
             <div data-testid="bookstore-loading" className="py-20 text-center text-[hsl(var(--aurin-text-muted))]">
               Loading the bookstore…

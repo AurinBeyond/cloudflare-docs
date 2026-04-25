@@ -204,6 +204,13 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 **Tests:** Backend 9/9 pass · Frontend 95 % (3 cosmetic LOW notes — share-strip child testids renamed `*-strip-{facebook|instagram|copy}` after report; native HTML5 email validation by design). iteration_9.json clean.
 - Regression file: `/app/backend/tests/test_iteration9.py`.
 
+### Iteration 10 — Invisible Architect Protocol (2026-04-25)
+**Brand voice tightening — no marketing speak, "portal not website":**
+- New **Inner Architect — From Masks to Light** manifest section on `/aurin-philosophy` (`ap-inner-architect`). Three calm paragraphs ending on *"returning to the Source is returning to yourself."*
+- New **Privacy as Luxury** card on Philosophy + footer-wide line: *"No social-media pixels. No tracking cookies. No public feed. Your journey through this work stays yours — that is part of the design."* Testids: `ap-privacy-as-luxury`, `footer-privacy-luxury`.
+- **Word-of-mouth share** at the end of The Beginning (Done panel): `tb-share-coordinates` — *"If this shift was real for you, share the coordinates with one person you trust."* Includes a single "Copy the coordinates" button (clipboard) showing `tb-share-coordinates-copy`. No urgency, no marketing copy.
+- **Bookstore framing line** above the catalogue (`bookstore-core-library-line`): *"To integrate this frequency deeper, explore the Core Library — slow-written books for adults, calm storybooks for children. No urgency. Read in the order that feels true."* Replaces salesy framing.
+
 ### P1
 - Set `GITHUB_REPO` and run first sync of /brand /legal /library
   /bookstore /kids /learning /meditations

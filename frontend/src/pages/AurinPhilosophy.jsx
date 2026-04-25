@@ -76,6 +76,54 @@ export default function AurinPhilosophy() {
 
           <div className="aurin-hairline" />
 
+          <div className="aurin-hairline" />
+
+          {/* Inner Architect manifest — the brand's quiet north star */}
+          <div data-testid="ap-inner-architect" className="space-y-6">
+            <div className="aurin-eyebrow">The Inner Architect — From Masks to Light</div>
+            <div className="text-[16.5px] leading-[1.95] text-[hsl(var(--aurin-text))/0.94] space-y-5">
+              <p>
+                Our programs are invisible, yet they dictate our steps. We wear
+                masks — sometimes layers of them — that keep us bound to
+                illusions.
+              </p>
+              <p>
+                But there is another way. Within you dwells an{" "}
+                <em>Invisible Architect</em>. When you align with that inner
+                light, life begins to shift. It becomes light. It becomes calm.
+              </p>
+              <p>
+                I do not speak of one religion, for I see all paths as sacred
+                outlets of the same Source. People, animals, nature — we are
+                all threads in one great field of love. You may call it by many
+                names, but the essence remains:{" "}
+                <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                  returning to the Source is returning to yourself.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="aurin-hairline" />
+
+          {/* Privacy as luxury — quiet differentiator */}
+          <div
+            data-testid="ap-privacy-as-luxury"
+            className="aurin-card p-6 md:p-7 flex items-start gap-4"
+          >
+            <div className="w-10 h-10 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))] shrink-0">
+              <Sparkles size={14} strokeWidth={1.5} />
+            </div>
+            <div className="space-y-1.5">
+              <div className="aurin-eyebrow !mb-0">Privacy as luxury</div>
+              <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                No social-media pixels. No tracking cookies. No public feed.
+                Your journey through this work stays yours — that is part of
+                the design, not an afterthought.
+              </p>
+            </div>
+          </div>
+
           {/* Prulesoul insight */}
           <blockquote
             data-testid="ap-prulesoul-insight"
