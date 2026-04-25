@@ -150,6 +150,30 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 **Tests:** Backend 13/13 pass · Frontend testids all verified · iteration_6.json clean.
 
 ## Backlog
+
+### Iteration 8 — The Beginning + Social CTAs (2026-04-25)
+**The Beginning — 7-step gated guided experience (free for signed-in users):**
+- New backend system: `EXPERIENCE_STEPS` (Awareness → Dependency → Fear → Money → Childhood Patterns → Pattern Break → Clarity), `db.experience_progress` collection, endpoints under `/api/experience/the-beginning/{me,start,reflect,reset}`.
+- Auth-gated (Emergent Bearer token). Reflection text required (≥ 6 chars) to advance. Soft 8-second pause between steps (psychological pacing).
+- Frontend: silent landing at `/the-beginning` (Recognition → Shift → What this is → Balance → Notice → Honest note → Coming Soon → CTA), step view at `/the-beginning/step` (Read → Pause → Read → Done with own-reflections recap and Begin again).
+- Hidden "module" language — UX reads as a continuous human experience.
+- Optional 1-5 presence picker per step (saved into `reflections[].presence`).
+- New nav item `nav-the-beginning` + footer Explore link.
+
+**Social presence:**
+- Instagram + Facebook in `<SocialLinks />` (single source of truth in `/components/SocialLinks.jsx`):
+  - https://www.instagram.com/pruesoul.life/
+  - https://www.facebook.com/groups/4059152880969336/
+- Embedded in Footer brand block + new Reach Out "Find us elsewhere" panel.
+
+**Instagram CTA cards:**
+- Reusable `<InstagramCTA />` ("Follow us for *Matrix Protocols*") shown:
+  - On `/library` next to a hero "The Beginning · Free" card (split 7/5).
+  - Above the catalogue on `/bookstore`.
+
+**Tests:** Backend 12/12 pass · Frontend testids all verified · iteration_7.json clean.
+- Regression file: `/app/backend/tests/test_iteration7.py`.
+
 ### P1
 - Set `GITHUB_REPO` and run first sync of /brand /legal /library
   /bookstore /kids /learning /meditations

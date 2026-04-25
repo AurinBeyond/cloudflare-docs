@@ -1749,6 +1749,7 @@ async def experience_status(request: Request):
         "completed_steps": completed,
         "is_done": is_done,
         "pause_remaining": pause_remaining,
+        "pause_seconds": STEP_PAUSE_SECONDS,
         "step": step_payload,
         "reflections": p.get("reflections", []),
     }
