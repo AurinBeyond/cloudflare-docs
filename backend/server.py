@@ -1056,6 +1056,93 @@ SEED_BOOKS: List[dict] = [
 
 
 # =============================================================
+# Brand seed — Author's personal preface for the About page.
+# Replaceable by /brand/about.md from GitHub once the repository
+# is configured (set GITHUB_REPO and run a sync).
+# =============================================================
+SEED_BRAND: List[dict] = [
+    {
+        "slug": "about-the-author",
+        "title": "A blank page, and the programs we carry",
+        "description": "Why this work exists — a personal preface from the author of prulesoul.site.",
+        "category_slug": "brand",
+        "surface": "brand",
+        "kind": "article",
+        "access": "free",
+        "audience": "grown-ups",
+        "tags": ["author", "preface", "story"],
+        "source_path": "brand/about.md",
+        "markdown": """This book is part of my life story.
+
+We are all born into this world like a blank page. But from the very first moment, even before birth, life begins to shape us.
+
+While still in our mother's womb, we already absorb emotions, thoughts and conversations. After birth the programming continues through parents, family, school, culture and society.
+
+These invisible programs slowly form the beliefs that define who we think we are.
+
+In my family there were many beliefs about life and money.
+
+> "We are poor."
+> "Money is not for people like us."
+> "A woman should always obey a man."
+
+These ideas were not meant to hurt us. They were simply passed down from previous generations who had been programmed the same way.
+
+My childhood was not without love. My family cared for each other deeply. But the beliefs that shaped us created invisible limits that I carried into my adult life.
+
+For many years I repeated the same patterns.
+
+Relationships that didn't work. Financial struggles. Moments when I felt trapped in a life that didn't truly belong to me.
+
+There were times when life became extremely difficult. I remember moments when I had almost no money and had to choose between feeding myself or feeding my child.
+
+Yet even during those hardest moments, something always helped me move forward, sometimes in the most unexpected ways.
+
+Looking back now, I often feel that some invisible protection was always there, guiding me through situations where I could have easily given up.
+
+## The search for answers
+
+Over time I began searching for answers.
+
+Why do so many people repeat the same painful cycles? Why do we stay trapped in patterns that we do not consciously choose?
+
+That search eventually led me to deep inner work and spiritual learning. I spent months studying and questioning everything I believed about life, success, relationships and freedom.
+
+Slowly I began to see something clearly.
+
+**Many of the limits we live under are not real. They are programs.**
+
+This realization became the foundation of the book *Exit the Matrix*.
+
+## A market in Egypt
+
+But something else happened.
+
+In 2026 I traveled with my family to Israel. Shortly after arriving, the situation in the region escalated into conflict and our travel plans changed completely. Eventually we ended up in Egypt, unexpectedly spending several days there.
+
+One evening we walked through a local market.
+
+I saw women sitting on the streets with small children and even infants in their arms, begging for money.
+
+In that moment my own past came back to me. I realized something important.
+
+Giving money once might help someone for a few hours, but the real roots of suffering are much deeper than money alone. The real problem is often invisible — beliefs, systems and programs that keep people trapped in cycles of poverty, fear and dependence.
+
+That moment planted a new idea in my mind.
+
+What if awareness was only the first step? What if the next step was building real solutions that help people regain dignity and create change in their lives?
+
+## Why this place exists
+
+This book is not just about understanding the system. It is about waking up from it.
+
+And perhaps, together, creating a different path. Because even one small act of awareness or kindness can start a wave of change.
+""",
+    },
+]
+
+
+# =============================================================
 # Legal seed — starter text. Lawyer-reviewed text replaces this once
 # the user uploads /legal/*.md to the GitHub repository.
 # =============================================================
@@ -1218,6 +1305,47 @@ async def seed_initial_content():
             )
             await db.content_entries.insert_one(_serialize(obj.model_dump()))
         logger.info("Seeded %d legal entries.", len(SEED_LEGAL))
+
+    # 6. Brand — upsert author preface. Replaceable by /brand/about.md from
+    # GitHub later. Idempotent: re-run replaces stale text from a previous
+    # release without creating duplicates.
+    for e in SEED_BRAND:
+        parsed = parse_markdown(e.get("markdown", ""))
+        obj = ContentEntry(
+            **e,
+            html=parsed["html"],
+            sections=[ContentSection(**s) for s in parsed["sections"]],
+            frontmatter=parsed["frontmatter"],
+            validation_warnings=parsed.get("warnings", []),
+            source="manual",
+        )
+        doc = _serialize(obj.model_dump())
+        await db.content_entries.update_one(
+            {"slug": e["slug"], "surface": "brand"},
+            {"$set": {
+                "title": doc["title"],
+                "description": doc["description"],
+                "html": doc["html"],
+                "sections": doc["sections"],
+                "frontmatter": doc["frontmatter"],
+                "tags": doc.get("tags", []),
+                "audience": doc.get("audience"),
+                "source": "manual",
+                "source_path": doc.get("source_path"),
+            }, "$setOnInsert": {
+                "id": doc["id"],
+                "slug": doc["slug"],
+                "surface": "brand",
+                "category_slug": doc["category_slug"],
+                "kind": doc.get("kind", "article"),
+                "access": doc.get("access", "free"),
+                "created_at": doc.get("created_at"),
+                "updated_at": doc.get("updated_at"),
+                "validation_warnings": doc.get("validation_warnings", []),
+            }},
+            upsert=True,
+        )
+    logger.info("Brand seed/migration done (%d slugs).", len(SEED_BRAND))
 
 
 # =============================================================

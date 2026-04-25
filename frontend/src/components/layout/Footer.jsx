@@ -39,15 +39,17 @@ export default function Footer() {
       <div className="aurin-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-2.5 mb-6">
-              <span className="relative inline-block w-6 h-6">
-                <span className="absolute inset-0 rounded-full border border-[hsl(var(--aurin-sage))] opacity-70" />
-                <span className="absolute inset-[5px] rounded-full bg-[hsl(var(--aurin-sage))]" />
-              </span>
-              <span className="aurin-display text-[19px]">
-                Matrix{" "}
-                <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-                  Aurin
+            <div className="flex items-center gap-3 mb-6" data-testid="footer-brand">
+              <img
+                src="/assets/brand/prulesoul-logo.png"
+                alt="prulesoul"
+                data-testid="footer-brand-logo"
+                className="h-10 w-10 rounded-full object-cover ring-1 ring-[hsl(var(--aurin-sage))/0.5]"
+              />
+              <span className="aurin-display text-[19px] leading-none flex flex-col">
+                <span>prulesoul</span>
+                <span className="text-[10px] uppercase tracking-[0.32em] text-[hsl(var(--aurin-sage))/0.85] mt-1">
+                  Matrix · <span className="aurin-serif-italic normal-case tracking-normal">Aurin</span>
                 </span>
               </span>
             </div>

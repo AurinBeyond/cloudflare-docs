@@ -202,6 +202,19 @@ export default function Bookstore() {
                         Buy access <ShoppingBag size={12} />
                       </button>
                     </div>
+                    <p
+                      data-testid={`bookstore-item-${b.slug}-refund-notice`}
+                      className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
+                    >
+                      By purchasing, you accept the{" "}
+                      <Link
+                        to="/legal#refund-policy"
+                        className="text-[hsl(var(--aurin-sage))] hover:underline"
+                      >
+                        Refund Policy
+                      </Link>
+                      . Digital goods are delivered immediately and final by default.
+                    </p>
                   </div>
                 </article>
               ))}

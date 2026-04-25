@@ -1,119 +1,150 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Sparkles, ArrowLeft, Wand2, Download } from "lucide-react";
+import { ArrowLeft, Download, Printer, Sparkles } from "lucide-react";
 
 /**
- * Kids Coloring Studio — placeholder experience. A child enters a short
- * description; the system shows a structured line-art SVG with the prompt
- * as a calm caption. No real image generation. Designed to feel real and
- * stay extremely safe.
+ * Kids Coloring Studio — live gallery of "Aurin Kids" coloring pages.
+ *
+ * Each page is described in COLORING_PAGES below. The metadata mirrors the
+ * markdown frontmatter the user requested:
+ *
+ *   ---
+ *   type: coloring_page
+ *   title: "Name of the Illustration"
+ *   age_group: "3-5" | "6-8" | "9-12"
+ *   tags: ["Nature", "Geometry", "Discovery"]
+ *   download_url: "/assets/kids/..."
+ *   ---
+ *
+ * Once `/kids/coloring/*.md` lands in the connected GitHub repository, the
+ * gallery can switch to fetching from the API instead of this static seed.
+ *
+ * UI rules (per author):
+ * - Pure-white card behind every illustration (ink-efficient print)
+ * - "Download to Print" available on each card
+ * - Calm, non-distracting layout, safe for very young children
  */
-export default function KidsColoringStudio() {
-  const [prompt, setPrompt] = useState("");
-  const [submitted, setSubmitted] = useState("");
-  const [theme, setTheme] = useState("nature");
 
-  const handleGenerate = (e) => {
-    e.preventDefault();
-    const cleaned = prompt.trim().slice(0, 80);
-    setSubmitted(cleaned);
-  };
+const COLORING_PAGES = [
+  {
+    slug: "aurin-kids-cover",
+    title: "Aurin Kids — Let Your Creativity Shine",
+    age_group: "3-5",
+    tags: ["Geometry", "Friendship", "Nature"],
+    summary:
+      "Two friends meeting inside a quiet crystal of light, surrounded by gentle clouds, an owl, and a fox.",
+    image: "/assets/kids/coloring/aurin-kids-cover.png",
+    download_url: "/assets/kids/coloring/aurin-kids-cover.png",
+  },
+];
+
+const AGE_FILTERS = [
+  { key: "all", label: "All ages" },
+  { key: "3-5", label: "3 – 5" },
+  { key: "6-8", label: "6 – 8" },
+  { key: "9-12", label: "9 – 12" },
+];
+
+export default function KidsColoringStudio() {
+  const [age, setAge] = useState("all");
+
+  const visible = useMemo(
+    () =>
+      age === "all"
+        ? COLORING_PAGES
+        : COLORING_PAGES.filter((p) => p.age_group === age),
+    [age]
+  );
 
   return (
     <div data-testid="page-kids-coloring">
       <PageHeader
         tone="kids"
-        eyebrow="Aurin Kids · Imagine & Color"
-        title="Tell us a story idea —"
-        italicWord="we'll draw the lines."
-        description="Type something gentle. The studio will prepare a calm line drawing for you to colour. (We are still teaching the studio. For now it shows a quiet placeholder design.)"
+        eyebrow="Aurin Kids · Coloring System"
+        title="Quiet pages,"
+        italicWord="ready to colour."
+        description="Each illustration is hand-tuned line art designed for paper-friendly printing. Pick a page, print it on plain paper, and let creativity breathe at its own pace."
       >
-        <Link to="/kids-universe" className="aurin-btn aurin-btn-ghost" data-testid="kids-coloring-back">
+        <Link
+          to="/kids-universe"
+          className="aurin-btn aurin-btn-ghost"
+          data-testid="kids-coloring-back"
+        >
           <ArrowLeft size={13} /> Back to Kids Universe
         </Link>
       </PageHeader>
 
+      <section className="border-b border-[hsl(var(--aurin-border-soft))]">
+        <div className="aurin-container py-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
+          <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
+            Filter by age group
+          </div>
+          <div
+            className="flex items-center gap-2 flex-wrap"
+            data-testid="kids-coloring-age-tabs"
+          >
+            {AGE_FILTERS.map((a) => (
+              <button
+                key={a.key}
+                onClick={() => setAge(a.key)}
+                data-testid={`kids-coloring-age-${a.key}`}
+                className={`text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ${
+                  age === a.key
+                    ? "bg-[hsl(var(--aurin-text))] text-[hsl(var(--aurin-bg))] border-[hsl(var(--aurin-text))]"
+                    : "border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))/0.85]"
+                }`}
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+          <div className="text-[12.5px] text-[hsl(var(--aurin-text-muted))] md:ml-auto">
+            {visible.length} {visible.length === 1 ? "page" : "pages"}
+          </div>
+        </div>
+      </section>
+
       <section className="aurin-section-sm">
-        <div className="aurin-container grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <form onSubmit={handleGenerate} className="lg:col-span-5 space-y-5" data-testid="kids-coloring-form">
-            <label className="block">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
-                Choose a theme
-              </div>
-              <div className="flex flex-wrap gap-2" data-testid="kids-coloring-themes">
-                {[
-                  { key: "nature", label: "Nature" },
-                  { key: "animals", label: "Animals" },
-                  { key: "space", label: "Space" },
-                  { key: "stories", label: "Stories" },
-                ].map((t) => (
-                  <button
-                    type="button"
-                    key={t.key}
-                    onClick={() => setTheme(t.key)}
-                    data-testid={`kids-coloring-theme-${t.key}`}
-                    className={`text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ${
-                      theme === t.key
-                        ? "bg-[hsl(var(--aurin-text))] text-[hsl(var(--aurin-bg))] border-[hsl(var(--aurin-text))]"
-                        : "border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))/0.85]"
-                    }`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            </label>
-
-            <label className="block">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
-                Your idea
-              </div>
-              <textarea
-                rows={5}
-                maxLength={80}
-                data-testid="kids-coloring-input"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="A small fox listening to the wind"
-                className="w-full bg-[hsl(var(--aurin-bg))] border border-[hsl(var(--aurin-border-soft))] rounded-xl px-4 py-3 text-sm focus:border-[hsl(var(--aurin-sage))] outline-none transition-colors"
-              />
-            </label>
-            <button type="submit" data-testid="kids-coloring-generate" className="aurin-btn aurin-btn-primary">
-              <Wand2 size={14} /> Make a coloring page
-            </button>
-
-            <div className="aurin-card p-5 mt-4">
-              <div className="flex items-start gap-3">
-                <Sparkles size={14} className="text-[hsl(var(--aurin-sage))] mt-0.5" />
-                <p className="text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
-                  The studio is in placeholder mode. Real line-art generation
-                  arrives in a later phase, after the AI layer is wired safely
-                  for children's content.
-                </p>
-              </div>
+        <div className="aurin-container">
+          {visible.length === 0 ? (
+            <div
+              data-testid="kids-coloring-empty"
+              className="text-center py-20 text-[hsl(var(--aurin-text-muted))]"
+            >
+              No pages for this age yet. New illustrations arrive slowly.
             </div>
-          </form>
-
-          <div className="lg:col-span-7">
-            <div className="aurin-card overflow-hidden" data-testid="kids-coloring-canvas">
-              <div className="aspect-[4/3] bg-white flex items-center justify-center relative">
-                <PlaceholderLineArt prompt={submitted} />
-              </div>
-              <div className="p-5 flex items-center justify-between">
-                <div className="text-[12.5px] text-[hsl(var(--aurin-text-muted))]">
-                  {submitted ? `“${submitted}”  ·  ${theme}` : `Your ${theme} idea will appear here.`}
-                </div>
-                <button
-                  disabled
-                  data-testid="kids-coloring-download"
-                  className="aurin-btn aurin-btn-ghost !py-2 !px-4 !text-[12px] opacity-60 cursor-not-allowed"
-                  title="Download arrives with the real generator"
-                >
-                  <Download size={12} /> Download
-                </button>
-              </div>
+          ) : (
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-7"
+              data-testid="kids-coloring-grid"
+            >
+              {visible.map((page) => (
+                <ColoringCard key={page.slug} page={page} />
+              ))}
             </div>
+          )}
+
+          <div
+            className="aurin-card p-6 mt-12 flex items-start gap-4"
+            data-testid="kids-coloring-note"
+          >
+            <Sparkles
+              size={16}
+              className="text-[hsl(var(--aurin-sage))] mt-0.5 shrink-0"
+            />
+            <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+              New pages are added gently. If you want to suggest a theme — a
+              brave fox, a star learning to shine, a child meeting the
+              forest — write through{" "}
+              <Link
+                to="/reach-out"
+                className="text-[hsl(var(--aurin-sage))] hover:underline"
+              >
+                Reach Out
+              </Link>
+              . Aurin Kids is a calm space, made slowly.
+            </p>
           </div>
         </div>
       </section>
@@ -121,40 +152,81 @@ export default function KidsColoringStudio() {
   );
 }
 
-function PlaceholderLineArt({ prompt }) {
+function ColoringCard({ page }) {
+  const handlePrint = () => {
+    const w = window.open(page.image, "_blank", "noopener,noreferrer");
+    if (w) {
+      w.addEventListener("load", () => {
+        try {
+          w.focus();
+          w.print();
+        } catch {
+          /* user can still print manually */
+        }
+      });
+    }
+  };
+
   return (
-    <svg
-      viewBox="0 0 480 360"
-      className="w-full h-full p-8"
-      role="img"
-      aria-label={prompt ? `Placeholder line art for ${prompt}` : "Placeholder line art"}
+    <article
+      className="aurin-card overflow-hidden flex flex-col"
+      data-testid={`kids-coloring-card-${page.slug}`}
     >
-      <defs>
-        <pattern id="dots" patternUnits="userSpaceOnUse" width="14" height="14">
-          <circle cx="1" cy="1" r="1" fill="#cfcfcf" />
-        </pattern>
-      </defs>
-      <rect x="0" y="0" width="480" height="360" fill="url(#dots)" />
-      <g fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="240" cy="200" r="80" />
-        <circle cx="220" cy="190" r="6" />
-        <circle cx="260" cy="190" r="6" />
-        <path d="M210 220 Q240 240 270 220" />
-        <path d="M180 130 Q200 100 240 110 Q280 100 300 130" />
-        <path d="M120 280 Q240 320 360 280" />
-        <path d="M60 320 L420 320" />
-      </g>
-      <text
-        x="240"
-        y="345"
-        textAnchor="middle"
-        fontFamily="Fraunces, serif"
-        fontStyle="italic"
-        fontSize="14"
-        fill="#444"
-      >
-        {prompt ? `“${prompt}”` : "a quiet placeholder for your idea"}
-      </text>
-    </svg>
+      {/* Pure white frame for ink-efficient printing */}
+      <div className="bg-white p-5 sm:p-7 flex items-center justify-center">
+        <img
+          src={page.image}
+          alt={page.title}
+          data-testid={`kids-coloring-card-${page.slug}-image`}
+          className="w-full h-auto object-contain max-h-[460px]"
+          loading="lazy"
+        />
+      </div>
+
+      <div className="p-6 flex flex-col gap-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className="aurin-chip"
+            data-testid={`kids-coloring-card-${page.slug}-age`}
+          >
+            Age {page.age_group}
+          </span>
+          {page.tags?.map((t) => (
+            <span
+              key={t}
+              className="text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text-muted))] px-2.5 py-1 rounded-full border border-[hsl(var(--aurin-border-soft))]"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <h3 className="aurin-display text-2xl leading-[1.18]">{page.title}</h3>
+        {page.summary && (
+          <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+            {page.summary}
+          </p>
+        )}
+
+        <div className="mt-2 pt-5 border-t border-[hsl(var(--aurin-border-soft))] flex flex-wrap items-center gap-3">
+          <a
+            href={page.download_url}
+            download
+            data-testid={`kids-coloring-card-${page.slug}-download`}
+            className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+          >
+            <Download size={13} /> Download to Print
+          </a>
+          <button
+            type="button"
+            onClick={handlePrint}
+            data-testid={`kids-coloring-card-${page.slug}-print`}
+            className="aurin-btn aurin-btn-ghost !py-2 !px-4 !text-[12.5px]"
+          >
+            <Printer size={13} /> Print now
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }

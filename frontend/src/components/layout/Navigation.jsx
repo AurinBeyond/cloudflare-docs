@@ -44,14 +44,20 @@ export default function Navigation() {
         <Link
           to="/"
           data-testid="brand-logo"
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-3 group"
+          aria-label="prulesoul · Matrix Aurin home"
         >
-          <span className="relative inline-block w-6 h-6">
-            <span className="absolute inset-0 rounded-full border border-[hsl(var(--aurin-sage))] opacity-70" />
-            <span className="absolute inset-[5px] rounded-full bg-[hsl(var(--aurin-sage))]" />
-          </span>
-          <span className="aurin-display text-[19px] tracking-tight">
-            Matrix <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">Aurin</span>
+          <img
+            src="/assets/brand/prulesoul-logo.png"
+            alt="prulesoul"
+            data-testid="brand-logo-image"
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-[hsl(var(--aurin-sage))/0.5] group-hover:ring-[hsl(var(--aurin-sage))] transition-all"
+          />
+          <span className="aurin-display text-[18px] tracking-tight leading-none flex flex-col">
+            <span className="text-[hsl(var(--aurin-text))]">prulesoul</span>
+            <span className="text-[10px] uppercase tracking-[0.32em] text-[hsl(var(--aurin-sage))/0.85] mt-1">
+              Matrix · <span className="aurin-serif-italic normal-case tracking-normal">Aurin</span>
+            </span>
           </span>
         </Link>
 
