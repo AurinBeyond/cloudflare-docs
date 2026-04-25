@@ -1,114 +1,115 @@
-# Matrix Aurin — PRD
+# Matrix Aurin / prulesoul.site — PRD
 
 ## Original Problem Statement
-Build a structured digital environment called Matrix Aurin. Multi-page,
-calm, premium. Phase 2: prepare for a GitHub-based knowledge source +
-future AI companion. No payments / AI / auth wired yet — only the
-receiving architecture.
+Build a structured digital environment ("Matrix Aurin") published at
+prulesoul.site. Source of truth lives in a GitHub repository. Calm,
+premium, slow tone. Multi-page. Free Library + paid Bookstore + Kids
+Universe + Learning + Meditations + Reach Out + About + Legal + Portal.
 
-## User Direction (key constraints)
-- Unified dark-elegant + nature-inspired visual system. Serif headlines
-  + sans body. Slow, structured, intentional.
-- Library = free hub; Bookstore = paid digital products (ready for
-  Norwegian 0% VAT digital book rate).
-- AI companion ("The Guardian") prepared, not built.
-- GitHub treated as a flexible, evolving source of truth — the platform
-  must interpret and stabilise content, not blindly render it.
-- Admin surfaces stay minimal; no SaaS-style dashboards.
-
-## Architecture
-- **Frontend**: React 19 + React Router 7 + Tailwind + shadcn/ui.
-  Fonts: Fraunces (serif headlines) + Instrument Sans + Instrument
-  Serif italic.
-- **Backend**: FastAPI + MongoDB (Motor). Markdown pipeline uses a
-  resilient `parse_markdown_safe()` (in `content_normalizer.py`) that
-  never raises.
-- **Routing**:
-  - `/` Home · `/bookstore` · `/bookstore/:slug` · `/library` ·
-    `/library/:slug` · `/learning` · `/kids-universe` ·
-    `/meditation-corner` · `/reach-out` · `/portal` ·
-    `/admin/content`
-- **Primary nav**: Home · Bookstore · Library · Meditations · Reach Out.
-  Other routes reachable via Footer + direct URL.
-
-## Content Model
-- `Category(slug, name, surface, source_path, …)`
-- `ContentEntry(slug, title, category_slug, audience, surface, kind,
-  access, markdown, html, sections, frontmatter, validation_warnings,
-  source, source_path)`
-- `Book(slug, title, subtitle, price, currency=NOK, tax_category,
-  delivery_options, lemonsqueezy_product_id, pdf_url, html, sections,
-  validation_warnings, source_path)`
+## Architecture (see SYSTEM_ARCHITECTURE.md)
+```
+GITHUB → CONTENT NORMALIZER → MONGO → FASTAPI → REACT (prulesoul.site)
+                                               ↑
+                          ACCESS CONTROL: 18+ gate · Emergent Google Auth
+                                               ↑
+                          GUIDANCE: "The Guardian" placeholder dock
+```
 
 ## Implemented to date
-### Iteration 1 (MVP shell)
-- 5-page shell with shared nav + footer; design system in `index.css`.
 
-### Iteration 2 (Phase 2 — content layer)
-- Backend `/api/content/categories|entries`, markdown parsing into
-  H2/H3 sections, GitHub sync STUB, AI chat STUB, AI context endpoint.
-- Frontend Library refactored to API; Library entry detail page;
-  Learning page; Admin-light page; AiDock placeholder.
-- Seed: 5 categories + 8 entries across library/learning surfaces.
+### Iteration 1 — MVP shell
+5-page shell with shared nav + footer. Dark elegant + nature-inspired
+design system. Fraunces serif headlines + Instrument Sans body.
 
-### Iteration 3 (Phase 2 — point 7 + Master Plan structure)
-- **Resilient markdown pipeline** (`content_normalizer.py`): handles
-  empty body, missing headings, orphan H4/H5, level jumps, H1
-  demotion, zero-width chars, BOM, excessive blanks, frontmatter
-  failures. Always returns safe HTML, sections list, and
-  `validation_warnings`. Never raises.
-- **`POST /api/content/validate`** dry-run endpoint for admin/internal
-  use — same pipeline, no save.
-- **`GET /api/content/admin/entries`** admin overview with
-  `only_with_warnings` filter.
-- **Bookstore**: separate `Book` model + `/api/books` endpoints.
-  3 seed books (NOK pricing, `tax_category=book_zero_rate_ready`,
-  delivery: read_online + download_pdf).
-- **Bookstore + BookDetail** pages with distraction-free reading view.
-  "Buy access" + "Download PDF" intentionally disabled.
-- **Reach Out** page (calm, no backend submission yet).
-- **Library**: filter tabs now by audience (All, Grown-ups, Kids
-  Universe, Reflections). Migration ran on existing entries.
-- **Navigation reorganised** to Home · Bookstore · Library · Meditations
-  · Reach Out. Kids Universe / Learning / User Portal moved to footer
-  but routes preserved.
-- **AiDock** rebranded to **"The Guardian"**.
-- **Admin /admin/content**: validate dry-run section + synced-files
-  list with All / With-warnings filter (read-only).
-- Full e2e tests passing (backend 26/26; frontend Bookstore, BookDetail,
-  Reach Out, Library audience tabs, validate UI, admin list).
+### Iteration 2 — content layer
+Backend `/api/content/categories|entries`, markdown parsing into
+H2/H3 sections, GitHub sync STUB, AI chat STUB. Frontend Library
+refactored to API; entry detail page; Learning page; admin-light;
+AiDock placeholder.
 
-## Backlog
-### P0 — awaits user input
-- Decide repo structure + folder convention for live GitHub sync
-  (suggested: `bookstore/`, `library/grown-ups/`, `library/kids-universe/`,
-  `library/reflections/`, `_system/tone.md`, `_system/rules.md`).
-- Decide auth provider (Emergent Google Auth vs custom JWT).
+### Iteration 3 — content reliability + Master Plan structure
+Resilient `parse_markdown_safe` (handles malformed input, never raises).
+`POST /api/content/validate`, `GET /api/content/admin/entries`.
+Bookstore + BookDetail + ReachOut. Library audience filters. Nav
+reorganised. AiDock → "The Guardian".
 
+### Iteration 4 — prulesoul.site live MVP (this iteration)
+- **Real GitHub sync** at `/api/content/sync/github`:
+  honours folder convention `/brand /legal /library /bookstore /kids
+  /learning /meditations`. Activates when `GITHUB_REPO` env is set;
+  returns `not_configured` cleanly when blank. Upserts by `source_path`.
+- **Emergent Google Auth** wired end-to-end (Bearer token in
+  localStorage; `/api/auth/session`, `/api/auth/me`, `/api/auth/logout`).
+  CORS set to `allow_origin_regex='.*'` to handle Kubernetes ingress
+  overriding Access-Control-Allow-Origin.
+- **About** page reads `/api/content/entries?surface=brand`; falls back
+  to a clearly-labelled placeholder when empty.
+- **Legal · Responsibility** page reads `?surface=legal`; same
+  graceful placeholder pattern.
+- **18+ gate** modal (`AgeGate.jsx`) on `/learning` and
+  `/meditation-corner` only — `/kids-universe` is NEVER gated.
+  localStorage persisted; resettable from User Portal.
+- **Kids Universe** rebuilt with three age groups (3–5, 6–8, 9–12) and a
+  Coloring Studio placeholder route at `/kids-universe/coloring`.
+- **Reach Out** form now POSTs to `/api/reach-out` (persists to Mongo;
+  email forwarding turns on once `REACH_OUT_EMAIL` is set + a provider
+  wired).
+- **prulesoul.site** branding in `<title>`, og tags, canonical link,
+  footer copyright. No new content generated.
+- **SYSTEM_ARCHITECTURE.md** + **auth_testing.md** created.
+- **All four new surfaces** (brand, legal, kids, meditations) are
+  queryable via the existing `/api/content/entries` endpoint.
+- **Deployment readiness**: PASS (no hardcoded secrets, no hardcoded
+  URLs, env-driven everywhere, supervisor healthy).
+
+## Production checklist (handover)
+| Item | Status |
+|---|---|
+| Multi-page structure | Done |
+| GitHub sync architecture | Done · awaiting `GITHUB_REPO` env value |
+| Content normalizer | Done |
+| Bookstore (paid prep) | Done · awaiting LemonSqueezy product IDs |
+| Library (free) | Done |
+| About / Legal pages | Done · awaiting GitHub `/brand` `/legal` content |
+| Kids Universe + Coloring | Done (placeholder studio) |
+| 18+ gate | Done |
+| Auth | Done (Emergent Google) |
+| Reach Out | Done · awaiting `REACH_OUT_EMAIL` |
+| AI Guardian | Placeholder by design |
+| Domain prulesoul.site | Branding done · DNS at registrar required |
+
+## DNS — manual step at registrar
+After clicking Deploy in Emergent, the deployment URL becomes the CNAME
+target. At your registrar:
+- Add a `CNAME` record: `prulesoul.site` → `<your-emergent-deployment-host>`
+- Or, if the registrar requires apex `A`-records, use the four
+  Emergent-provided IPs (visible inside the deployment screen)
+- Add `www.prulesoul.site` `CNAME` → `prulesoul.site`
+- TTL 300 is fine for testing, raise to 3600 once stable.
+
+## Backlog after first launch
 ### P1
-- Wire real GitHub sync (Contents API or shallow clone) to existing
-  STUB endpoint. Add HMAC-verified webhook for push events.
-- Wire LemonSqueezy for the Bookstore "Buy access" buttons.
-- Object storage for cover images + PDFs (the `pdf_url` and
-  `cover_image_url` fields are already prepared).
-- Reach Out form → real backend submission + email notification.
+- Wire `GITHUB_REPO` + initial sync of /brand /legal /library /bookstore
+  /kids /learning /meditations
+- LemonSqueezy product IDs into the seeded books → enable Buy Access
+- Object storage for cover images + PDFs
+- Real email transport for Reach Out (SendGrid / Resend) using
+  `REACH_OUT_EMAIL`
+- GitHub webhook (HMAC-verified) for automatic re-sync on push
 
 ### P2
-- The Guardian: connect to LLM with RAG over the content layer and
-  `_system/tone.md` as the tone contract.
-- Member-area inside the Portal once auth is live.
-- Admin: bulk re-validate + GitHub diff preview.
+- The Guardian: real RAG over content + `/brand/tone.md` system prompt
+- Admin: bulk re-validate, sync history, GitHub diff preview
+- Member-area inside the Portal once the first paid book ships
+- Real coloring image generation in Kids Studio (separate, safety-vetted
+  pipeline)
 
 ## Notes for fork agents
-- `MONGO_URL` + `DB_NAME` in `backend/.env`. `REACT_APP_BACKEND_URL`
-  in `frontend/.env`. Never hardcode.
-- Markdown is parsed by `content_normalizer.parse_markdown_safe()` —
-  this is the single point of contact for every entry and every
-  future GitHub-ingested file.
-- Validation warnings are **internal only** — they appear on
-  `/admin/content` and on the LibraryEntry warnings panel, never to
-  regular users.
-- Books pricing displays as Intl `currency: NOK`. Tax category
-  `book_zero_rate_ready` flags the entry as eligible for 0% VAT under
-  the Norwegian digital book rate; the actual rate is the payment
-  provider's responsibility.
+- Auth is **Bearer token in `localStorage` key `aurin_session_token`**
+  (axios interceptor auto-attaches header). Cookie path also works but
+  ingress wildcard breaks it cross-origin.
+- Markdown is normalised through `content_normalizer.parse_markdown_safe`
+  — single source of truth for every entry, GitHub-ingested or manual.
+- Every entry/book carries `validation_warnings: string[]` — internal
+  only, surfaced on `/admin/content` and the entry detail warnings panel.
+- 18+ gate uses `localStorage.aurin_age_confirmed_v1`; reset via Portal.
