@@ -902,19 +902,20 @@ class Book(BaseModel):
     author: Optional[str] = "Matrix Aurin"
     cover_image_url: Optional[str] = None
     price: float = 0.0
-    currency: str = "NOK"
+    currency: str = "USD"
+    audience: Literal["adult", "kids"] = "adult"
     tax_category: TaxCategory = "book_zero_rate_ready"
     delivery_options: List[DeliveryOption] = Field(default_factory=lambda: ["read_online", "download_pdf"])
     pages: Optional[int] = None
     tags: List[str] = Field(default_factory=list)
-    lemonsqueezy_product_id: Optional[str] = None  # placeholder — wired later
-    pdf_url: Optional[str] = None  # placeholder — object storage later
+    lemonsqueezy_product_id: Optional[str] = None
     markdown: str = ""
     html: str = ""
     sections: List[ContentSection] = Field(default_factory=list)
     validation_warnings: List[str] = Field(default_factory=list)
+    pdf_url: Optional[str] = None  # placeholder — object storage later
     source: Literal["manual", "github"] = "manual"
-    source_path: Optional[str] = None  # e.g. "bookstore/genesis-volume-1.md"
+    source_path: Optional[str] = None
     published: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -928,7 +929,8 @@ class BookCreate(BaseModel):
     author: Optional[str] = "Matrix Aurin"
     cover_image_url: Optional[str] = None
     price: float = 0.0
-    currency: str = "NOK"
+    currency: str = "USD"
+    audience: Literal["adult", "kids"] = "adult"
     tax_category: TaxCategory = "book_zero_rate_ready"
     delivery_options: List[DeliveryOption] = Field(default_factory=lambda: ["read_online", "download_pdf"])
     pages: Optional[int] = None
@@ -940,11 +942,14 @@ class BookCreate(BaseModel):
 @api_router.get("/books", response_model=List[Book])
 async def list_books(
     q: Optional[str] = Query(None, description="Search in title/description"),
+    audience: Optional[Literal["adult", "kids"]] = None,
     published_only: bool = True,
 ):
     query: dict = {}
     if published_only:
         query["published"] = True
+    if audience:
+        query["audience"] = audience
     if q:
         query["$or"] = [
             {"title": {"$regex": q, "$options": "i"}},
@@ -981,48 +986,132 @@ async def create_book(inp: BookCreate):
 SEED_BOOKS: List[dict] = [
     {
         "slug": "genesis-protocols-volume-i-book",
-        "title": "The Genesis Protocols",
+        "title": "Genesis Protocol",
         "subtitle": "Volume I — Foundations of Self-Mastery",
-        "description": "A structured, durable book on attention, structure, and presence. The first volume of the Genesis Protocols.",
+        "description": "A structured, durable book on attention, structure, and presence. The opening volume of the Genesis Protocols. Written for adults who want a quiet system to come back to.",
         "author": "Matrix Aurin",
-        "price": 149.0,
-        "currency": "NOK",
+        "price": 35.0,
+        "currency": "USD",
+        "audience": "adult",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
         "pages": 142,
         "tags": ["foundations", "self-mastery"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_GENESIS_VOL_1",
         "source_path": "bookstore/genesis-volume-1.md",
         "markdown": """## Preface\n\nThis volume is a beginning. Nothing here is advanced. Everything here is durable.\n\n## On Attention\n\nAttention is the only renewable currency. Spend it deliberately.\n\n## On Structure\n\nStructure is the silence inside which choice becomes possible.\n""",
     },
     {
         "slug": "genesis-protocols-volume-ii-book",
-        "title": "The Genesis Protocols",
+        "title": "Genesis Protocol",
         "subtitle": "Volume II — Patterns, Practice, Presence",
-        "description": "The second volume. Continues the work, assumes Volume I is familiar.",
+        "description": "The second volume. Continues the work, assumes Volume I is familiar. Slow, structured, and practical.",
         "author": "Matrix Aurin",
-        "price": 179.0,
-        "currency": "NOK",
+        "price": 35.0,
+        "currency": "USD",
+        "audience": "adult",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
         "pages": 198,
         "tags": ["patterns", "practice"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_GENESIS_VOL_2",
         "source_path": "bookstore/genesis-volume-2.md",
         "markdown": """## Preface\n\nThis volume continues the work and assumes Volume I is familiar.\n\n## On Patterns\n\nYour problems are rarely new. Learn to see the shape of them.\n\n## On Presence\n\nPresence is not an experience. It is a discipline.\n""",
     },
     {
-        "slug": "kids-quiet-stories-volume-i",
-        "title": "Quiet Stories — Volume I",
-        "subtitle": "Gentle stories for young minds",
-        "description": "A first collection of slow, soft stories from the Kids Universe.",
+        "slug": "star-whispers-childrens-book",
+        "title": "Star Whispers",
+        "subtitle": "A children's book — Ages 6–8",
+        "description": "A child-friendly picture-and-text storybook. Gentle illustrations, slow pacing, and quiet themes that parents can read aloud.",
         "author": "Matrix Aurin",
-        "price": 99.0,
-        "currency": "NOK",
+        "price": 25.0,
+        "currency": "USD",
+        "audience": "kids",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
-        "pages": 64,
+        "pages": 48,
         "tags": ["kids", "stories"],
-        "source_path": "bookstore/kids-quiet-stories-1.md",
-        "markdown": """## About\n\nA small book of quiet stories — meant to be read slowly, ideally aloud, ideally just before sleep.\n\n## How To Use\n\nOne story per night. No more. No less.\n""",
+        "lemonsqueezy_product_id": "PLACEHOLDER_STAR_WHISPERS",
+        "source_path": "bookstore/kids/star-whispers.md",
+        "markdown": """## About\n\nA short, gentle storybook for ages 6–8.\n\n## How to Read\n\nIdeally aloud. Ideally slowly. Ideally just before sleep.\n""",
+    },
+    {
+        "slug": "meditation-pack-volume-i",
+        "title": "Meditation Pack",
+        "subtitle": "Volume I — Quiet Practices",
+        "description": "A small bundle of guided audio meditations for grown-ups. Short, structured, and made for return.",
+        "author": "Matrix Aurin",
+        "price": 35.0,
+        "currency": "USD",
+        "audience": "adult",
+        "tax_category": "book_zero_rate_ready",
+        "delivery_options": ["read_online", "download_pdf"],
+        "pages": 24,
+        "tags": ["meditation", "audio"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_MEDITATION_PACK",
+        "source_path": "bookstore/meditation-pack.md",
+        "markdown": """## About\n\nA pack of guided meditations. Slow voice, long pauses.\n\n## What's Inside\n\nFour sessions, each between 6 and 22 minutes.\n""",
+    },
+]
+
+
+# =============================================================
+# Legal seed — starter text. Lawyer-reviewed text replaces this once
+# the user uploads /legal/*.md to the GitHub repository.
+# =============================================================
+LEGAL_DRAFT_NOTICE = (
+    "_This is a starter draft. Replace with attorney-reviewed text before "
+    "activating payments or accepting personal data._\n\n"
+)
+
+SEED_LEGAL: List[dict] = [
+    {
+        "slug": "terms-of-service",
+        "title": "Terms of Service",
+        "description": "How you may use prulesoul.site and the Matrix Aurin platform.",
+        "category_slug": "legal",
+        "surface": "legal",
+        "kind": "article",
+        "access": "free",
+        "tags": ["terms", "draft"],
+        "source_path": "legal/terms-of-service.md",
+        "markdown": LEGAL_DRAFT_NOTICE + """## 1. Who we are\n\nThese Terms govern your use of prulesoul.site (the \"Service\"), operated by Matrix Aurin. By using the Service you agree to these Terms.\n\n## 2. Your account\n\nYou may sign in via Google. You are responsible for maintaining the confidentiality of your account and for all activity under it.\n\n## 3. Content and intellectual property\n\nAll text, books, audio, video, and visual material on the Service are the intellectual property of Matrix Aurin unless explicitly attributed otherwise. Free content remains the property of Matrix Aurin and may not be republished without permission. Paid content is licensed for personal, non-commercial use only.\n\n## 4. Purchases\n\nDigital products are sold via LemonSqueezy. By completing a purchase you agree to LemonSqueezy's terms in addition to these Terms. Where Norwegian law applies, digital books are zero-rated VAT (0%); other tax regimes apply at LemonSqueezy's determination.\n\n## 5. Acceptable use\n\nYou agree not to: misuse the Service; attempt to access non-public areas; redistribute paid material; or use the Service in any way that harms others.\n\n## 6. Disclaimer\n\nThe Service is provided \"as is\". We make no warranties regarding outcomes from following any protocol or material. See the Liability Disclaimer for details.\n\n## 7. Changes\n\nWe may update these Terms. Continued use after changes constitutes acceptance.\n\n## 8. Contact\n\nQuestions: use the Reach Out form on the Service.\n""",
+    },
+    {
+        "slug": "user-responsibility",
+        "title": "User Responsibility",
+        "description": "How protocols, practices, and content are intended to be used.",
+        "category_slug": "legal",
+        "surface": "legal",
+        "kind": "article",
+        "access": "free",
+        "tags": ["responsibility", "draft"],
+        "source_path": "legal/user-responsibility.md",
+        "markdown": LEGAL_DRAFT_NOTICE + """## Read this first\n\nMatrix Aurin publishes structured material — books, protocols, meditations, and reflections. The material is intended for thoughtful, voluntary use by adults.\n\n## You are responsible for your practice\n\nNothing on the Service is medical, psychological, financial, or legal advice. The protocols are reflective tools, not treatments. If you are in distress, in crisis, or considering changes that affect your health, finances, or relationships, consult a qualified professional first.\n\n## Children\n\nKids Universe is curated for younger readers and is open without an 18+ confirmation. The rest of the Service (Library, Learning, Meditations) is written for adults. Parents are responsible for supervising children's use of any digital material.\n\n## Liability disclaimer\n\nTo the maximum extent permitted by law, Matrix Aurin is not liable for any direct, indirect, incidental, or consequential outcomes arising from your use of the Service. You agree to use the material at your own discretion and risk.\n\n## Community conduct\n\nIf the Service hosts community features in the future, the following always apply: respectful tone, no harassment, no doxxing, no sharing of paid material, and no use of the platform for commercial promotion without written permission.\n""",
+    },
+    {
+        "slug": "refund-policy",
+        "title": "Refund Policy",
+        "description": "How refunds work for digital products bought through the Bookstore.",
+        "category_slug": "legal",
+        "surface": "legal",
+        "kind": "article",
+        "access": "free",
+        "tags": ["refund", "draft"],
+        "source_path": "legal/refund-policy.md",
+        "markdown": LEGAL_DRAFT_NOTICE + """## Digital goods are final\n\nBecause our products are digital and are delivered immediately on purchase, all sales are final by default. By completing checkout you waive your statutory right of withdrawal where local law permits this waiver for delivered digital content.\n\n## Exceptions\n\nWe will issue a full refund within 14 days of purchase if:\n\n### 1. The file is broken\nThe PDF or audio file fails to download or is corrupted, and we are unable to deliver a working copy within 7 days of you reporting the issue.\n\n### 2. Duplicate purchase\nYou accidentally purchased the same item twice within a short window.\n\n### 3. Wrong item delivered\nYou received a product that materially does not match its public description.\n\n## How to request a refund\n\nUse the Reach Out form, choose topic \"Bookstore / order\", and include your order ID and email used at checkout. We respond within two working days.\n\n## Where requests are processed\n\nRefunds are processed by LemonSqueezy and may take 3–10 business days to appear on your card or PayPal balance.\n""",
+    },
+    {
+        "slug": "acceptable-use-and-community",
+        "title": "Acceptable Use & Community",
+        "description": "What is welcome and what is not — short, clear, human.",
+        "category_slug": "legal",
+        "surface": "legal",
+        "kind": "article",
+        "access": "free",
+        "tags": ["community", "draft"],
+        "source_path": "legal/acceptable-use.md",
+        "markdown": LEGAL_DRAFT_NOTICE + """## The shape of the place\n\nMatrix Aurin is a calm, structured environment. We expect users to behave like quiet, thoughtful guests in someone's house.\n\n## Welcome\n\n- Reading slowly\n- Asking sincere questions through Reach Out\n- Sharing free Library entries with people who would benefit\n- Reporting bugs or broken content\n\n## Not welcome\n\n- Harassment, threats, or hate speech of any kind\n- Sharing or reselling paid material\n- Attempts to scrape, mirror, or bulk-download the Service\n- Impersonating Matrix Aurin or its authors\n- Using the platform to advertise unrelated products\n\n## Consequences\n\nWe may, without notice, restrict or terminate accounts that breach this policy and refuse refunds for the breach.\n""",
     },
 ]
 
@@ -1075,10 +1164,27 @@ async def seed_initial_content():
     if res.modified_count:
         logger.info("Migration: set audience=grown-ups on %d entries.", res.modified_count)
 
-    # 4. Books — seed once.
-    book_count = await db.books.count_documents({})
-    if book_count == 0:
-        for b in SEED_BOOKS:
+    # 4. Books — upsert each SEED slug; drop obsolete seeds.
+    seed_slugs = [b["slug"] for b in SEED_BOOKS]
+    for b in SEED_BOOKS:
+        existing = await db.books.find_one({"slug": b["slug"]}, {"_id": 0})
+        if existing:
+            await db.books.update_one(
+                {"slug": b["slug"]},
+                {"$set": {
+                    "title": b["title"],
+                    "subtitle": b.get("subtitle"),
+                    "description": b.get("description"),
+                    "price": b["price"],
+                    "currency": b["currency"],
+                    "audience": b.get("audience", "adult"),
+                    "tax_category": b["tax_category"],
+                    "lemonsqueezy_product_id": b.get("lemonsqueezy_product_id"),
+                    "pages": b.get("pages"),
+                    "tags": b.get("tags") or [],
+                }},
+            )
+        else:
             parsed = parse_markdown(b.get("markdown", ""))
             obj = Book(
                 **b,
@@ -1087,7 +1193,31 @@ async def seed_initial_content():
                 validation_warnings=parsed.get("warnings", []),
             )
             await db.books.insert_one(_serialize(obj.model_dump()))
-        logger.info("Seeded %d books.", len(SEED_BOOKS))
+    # Remove obsolete seeded books (only those marked as manual seed).
+    removed = await db.books.delete_many({
+        "slug": {"$nin": seed_slugs},
+        "source": "manual",
+        "source_path": {"$regex": "^bookstore/"},
+    })
+    if removed.deleted_count:
+        logger.info("Removed %d obsolete seed books.", removed.deleted_count)
+    logger.info("Books seed/migration done (%d slugs).", len(seed_slugs))
+
+    # 5. Legal — seed once. Replaceable by /legal/*.md from GitHub later.
+    legal_count = await db.content_entries.count_documents({"surface": "legal"})
+    if legal_count == 0:
+        for e in SEED_LEGAL:
+            parsed = parse_markdown(e.get("markdown", ""))
+            obj = ContentEntry(
+                **e,
+                html=parsed["html"],
+                sections=[ContentSection(**s) for s in parsed["sections"]],
+                frontmatter=parsed["frontmatter"],
+                validation_warnings=parsed.get("warnings", []),
+                source="manual",
+            )
+            await db.content_entries.insert_one(_serialize(obj.model_dump()))
+        logger.info("Seeded %d legal entries.", len(SEED_LEGAL))
 
 
 # =============================================================

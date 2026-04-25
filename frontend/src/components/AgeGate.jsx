@@ -68,11 +68,12 @@ export default function AgeGate() {
           <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
             18 or older
           </span>{" "}
-          to access this section.
+          to access this content.
         </h2>
         <p className="mt-4 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
           The Learning and Meditation sections of Matrix Aurin are written for
-          adults. Kids Universe stays open and separate, with no gate.
+          adults. For children's content, please visit the Kids Universe — it
+          stays open and separate, with no gate.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
           <button
@@ -81,6 +82,16 @@ export default function AgeGate() {
             className="aurin-btn aurin-btn-primary"
           >
             <Lock size={13} /> I am 18 or older
+          </button>
+          <button
+            data-testid="age-gate-kids"
+            onClick={() => {
+              setOpen(false);
+              navigate("/kids-universe", { replace: true });
+            }}
+            className="aurin-btn aurin-btn-ghost"
+          >
+            Visit Kids Universe
           </button>
           <button
             data-testid="age-gate-leave"

@@ -12,6 +12,7 @@ import { Sparkles, ArrowLeft, Wand2, Download } from "lucide-react";
 export default function KidsColoringStudio() {
   const [prompt, setPrompt] = useState("");
   const [submitted, setSubmitted] = useState("");
+  const [theme, setTheme] = useState("nature");
 
   const handleGenerate = (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ export default function KidsColoringStudio() {
     <div data-testid="page-kids-coloring">
       <PageHeader
         tone="kids"
-        eyebrow="Kids Universe · Coloring Studio"
+        eyebrow="Aurin Kids · Imagine & Color"
         title="Tell us a story idea —"
         italicWord="we'll draw the lines."
         description="Type something gentle. The studio will prepare a calm line drawing for you to colour. (We are still teaching the studio. For now it shows a quiet placeholder design.)"
@@ -36,6 +37,34 @@ export default function KidsColoringStudio() {
       <section className="aurin-section-sm">
         <div className="aurin-container grid grid-cols-1 lg:grid-cols-12 gap-12">
           <form onSubmit={handleGenerate} className="lg:col-span-5 space-y-5" data-testid="kids-coloring-form">
+            <label className="block">
+              <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
+                Choose a theme
+              </div>
+              <div className="flex flex-wrap gap-2" data-testid="kids-coloring-themes">
+                {[
+                  { key: "nature", label: "Nature" },
+                  { key: "animals", label: "Animals" },
+                  { key: "space", label: "Space" },
+                  { key: "stories", label: "Stories" },
+                ].map((t) => (
+                  <button
+                    type="button"
+                    key={t.key}
+                    onClick={() => setTheme(t.key)}
+                    data-testid={`kids-coloring-theme-${t.key}`}
+                    className={`text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ${
+                      theme === t.key
+                        ? "bg-[hsl(var(--aurin-text))] text-[hsl(var(--aurin-bg))] border-[hsl(var(--aurin-text))]"
+                        : "border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))/0.85]"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </label>
+
             <label className="block">
               <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
                 Your idea
@@ -73,7 +102,7 @@ export default function KidsColoringStudio() {
               </div>
               <div className="p-5 flex items-center justify-between">
                 <div className="text-[12.5px] text-[hsl(var(--aurin-text-muted))]">
-                  {submitted ? `“${submitted}”` : "Your idea will appear here."}
+                  {submitted ? `“${submitted}”  ·  ${theme}` : `Your ${theme} idea will appear here.`}
                 </div>
                 <button
                   disabled

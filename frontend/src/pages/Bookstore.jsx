@@ -20,6 +20,7 @@ const fmtPrice = (price, currency) => {
 export default function Bookstore() {
   const [books, setBooks] = useState([]);
   const [query, setQuery] = useState("");
+  const [audience, setAudience] = useState("all");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,14 +40,18 @@ export default function Bookstore() {
 
   const filtered = useMemo(
     () =>
-      books.filter((b) =>
-        query.trim() === ""
-          ? true
-          : `${b.title} ${b.subtitle || ""} ${b.description || ""}`
-              .toLowerCase()
-              .includes(query.toLowerCase())
-      ),
-    [books, query]
+      books
+        .filter((b) =>
+          audience === "all" ? true : (b.audience || "adult") === audience
+        )
+        .filter((b) =>
+          query.trim() === ""
+            ? true
+            : `${b.title} ${b.subtitle || ""} ${b.description || ""}`
+                .toLowerCase()
+                .includes(query.toLowerCase())
+        ),
+    [books, query, audience]
   );
 
   return (
@@ -82,6 +87,26 @@ export default function Bookstore() {
               placeholder="Search the bookstore…"
               className="bg-transparent outline-none text-sm placeholder:text-[hsl(var(--aurin-text-muted))] w-full"
             />
+          </div>
+          <div className="flex items-center gap-2 flex-wrap" data-testid="bookstore-audience-tabs">
+            {[
+              { key: "all", label: "All" },
+              { key: "adult", label: "Adult" },
+              { key: "kids", label: "Kids" },
+            ].map((a) => (
+              <button
+                key={a.key}
+                onClick={() => setAudience(a.key)}
+                data-testid={`bookstore-audience-${a.key}`}
+                className={`text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ${
+                  audience === a.key
+                    ? "bg-[hsl(var(--aurin-text))] text-[hsl(var(--aurin-bg))] border-[hsl(var(--aurin-text))]"
+                    : "border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))/0.85]"
+                }`}
+              >
+                {a.label}
+              </button>
+            ))}
           </div>
           <div className="text-[12.5px] text-[hsl(var(--aurin-text-muted))]">
             {loading ? "Loading…" : `${filtered.length} ${filtered.length === 1 ? "title" : "titles"}`}

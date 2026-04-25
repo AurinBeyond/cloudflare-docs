@@ -5,23 +5,23 @@ import { Sprout, Heart, BookHeart, ShieldCheck, Wand2 } from "lucide-react";
 const AGE_GROUPS = [
   {
     slug: "3-5",
-    title: "Little Explorers",
+    title: "Little Dreamers",
     age: "Ages 3–5",
-    description: "Short, gentle stories and sound journeys. Curiosity, kindness, and noticing the world.",
+    description: "Soft images, simple stories, and gentle themes. A warm beginning.",
     icon: Sprout,
   },
   {
     slug: "6-8",
-    title: "Quiet Seekers",
+    title: "Explorers",
     age: "Ages 6–8",
-    description: "Guided reflections, slow stories, and simple practices that build patience and attention.",
+    description: "Slightly more complex pictures, small adventures, and friendly heroes.",
     icon: BookHeart,
   },
   {
     slug: "9-12",
-    title: "Growing Minds",
+    title: "Future Builders",
     age: "Ages 9–12",
-    description: "Deeper themes — emotions, values, thinking clearly. Structured but still calm and safe.",
+    description: "More detailed pictures, room for imagination, and quiet themes that grow with the reader.",
     icon: Heart,
   },
 ];
