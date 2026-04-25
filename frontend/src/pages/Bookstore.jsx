@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { ShoppingBag, Search, Download, BookOpenCheck } from "lucide-react";
+import { ShoppingBag, Search, Download, BookOpenCheck, ExternalLink } from "lucide-react";
 import { api } from "@/lib/api";
 
 const fmtPrice = (price, currency) => {
@@ -185,14 +185,26 @@ export default function Bookstore() {
                       )}
                     </div>
 
-                    <div className="mt-6 pt-5 border-t border-[hsl(var(--aurin-border-soft))] flex items-center justify-between">
-                      <Link
-                        to={`/bookstore/${b.slug}`}
-                        data-testid={`bookstore-item-${b.slug}-read`}
-                        className="text-[13px] text-[hsl(var(--aurin-text))] hover:text-[hsl(var(--aurin-sage))] transition-colors"
-                      >
-                        Read online →
-                      </Link>
+                    <div className="mt-6 pt-5 border-t border-[hsl(var(--aurin-border-soft))] flex items-center justify-between gap-3">
+                      {b.external_read_url ? (
+                        <a
+                          href={b.external_read_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-testid={`bookstore-item-${b.slug}-preview`}
+                          className="text-[13px] text-[hsl(var(--aurin-text))] hover:text-[hsl(var(--aurin-sage))] transition-colors inline-flex items-center gap-1.5"
+                        >
+                          Preview <ExternalLink size={12} />
+                        </a>
+                      ) : (
+                        <Link
+                          to={`/bookstore/${b.slug}`}
+                          data-testid={`bookstore-item-${b.slug}-read`}
+                          className="text-[13px] text-[hsl(var(--aurin-text))] hover:text-[hsl(var(--aurin-sage))] transition-colors"
+                        >
+                          Read online →
+                        </Link>
+                      )}
                       <button
                         disabled
                         data-testid={`bookstore-item-${b.slug}-buy`}
@@ -202,6 +214,17 @@ export default function Bookstore() {
                         Buy access <ShoppingBag size={12} />
                       </button>
                     </div>
+                    {b.pdf_url && (
+                      <a
+                        href={b.pdf_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-testid={`bookstore-item-${b.slug}-sample-pdf`}
+                        className="mt-3 inline-flex items-center gap-1.5 text-[12px] text-[hsl(var(--aurin-sage))] hover:underline"
+                      >
+                        <Download size={12} /> Free PDF sample
+                      </a>
+                    )}
                     <p
                       data-testid={`bookstore-item-${b.slug}-refund-notice`}
                       className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
@@ -213,7 +236,7 @@ export default function Bookstore() {
                       >
                         Refund Policy
                       </Link>
-                      . Digital goods are delivered immediately and final by default.
+                      . PDF delivered by email after checkout. Digital goods are final by default.
                     </p>
                   </div>
                 </article>

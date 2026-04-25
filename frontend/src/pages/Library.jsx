@@ -188,7 +188,93 @@ export default function Library() {
           )}
         </div>
       </section>
+
+      <SoulGiftCard />
     </div>
+  );
+}
+
+function SoulGiftCard() {
+  return (
+    <section
+      className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+      data-testid="soul-gift-section"
+    >
+      <div className="aurin-container">
+        <div className="aurin-eyebrow mb-4">A small gift · You are not alone</div>
+        <div className="aurin-card overflow-hidden grid grid-cols-1 md:grid-cols-12">
+          <div
+            className="md:col-span-5 bg-[hsl(40,30%,96%)] flex items-center justify-center p-6"
+            data-testid="soul-gift-image-wrap"
+          >
+            <img
+              src="/assets/brand/pure-soul-life-card.png"
+              alt="Pure Soul Life — Love & support flourish with the help of angels"
+              data-testid="soul-gift-image"
+              className="w-full max-w-[360px] h-auto rounded-lg"
+              loading="lazy"
+            />
+          </div>
+          <div className="md:col-span-7 p-8 md:p-10 flex flex-col justify-center">
+            <h2 className="aurin-display text-3xl md:text-4xl leading-[1.1]">
+              Love &amp; support{" "}
+              <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                flourish with the help of angels.
+              </span>
+            </h2>
+            <p className="mt-5 text-[15px] leading-[1.75] text-[hsl(var(--aurin-text-muted))] max-w-[58ch]">
+              <strong className="text-[hsl(var(--aurin-text))]">Pure Soul Life</strong>{" "}
+              is a spiritual project that connects people across languages — sharing
+              inspiration, soul gifts, meditations, and inner guidance. If something
+              you read here helped, even a little, you can support the work and help
+              this light-based system reach more hearts around the world.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <a
+                href="https://ko-fi.com/puresoulife"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="soul-gift-donate-1"
+                className="aurin-btn aurin-btn-ghost"
+              >
+                €1 · Buy a soul gift
+              </a>
+              <a
+                href="https://ko-fi.com/puresoulife"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="soul-gift-donate-5"
+                className="aurin-btn aurin-btn-ghost"
+              >
+                €5 · Support us
+              </a>
+              <a
+                href="https://ko-fi.com/puresoulife"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="soul-gift-donate-15"
+                className="aurin-btn aurin-btn-primary"
+              >
+                €15 · Donate · Access a course
+              </a>
+            </div>
+            <p className="mt-5 text-[12px] text-[hsl(var(--aurin-text-muted))]">
+              Donations are processed by{" "}
+              <a
+                href="https://ko-fi.com/puresoulife"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[hsl(var(--aurin-sage))] hover:underline"
+                data-testid="soul-gift-kofi-link"
+              >
+                ko-fi.com/puresoulife
+              </a>
+              . Every gift, no matter how small, is held with care.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

@@ -117,16 +117,63 @@ export default function KidsUniverse() {
           </div>
           <div className="md:col-span-5">
             <div
-              className="aurin-card aspect-[4/3] flex items-center justify-center"
-              style={{
-                background:
-                  "radial-gradient(circle at 30% 30%, hsl(var(--aurin-sage) / 0.18), transparent 60%), hsl(var(--aurin-surface))",
-              }}
+              className="aurin-card overflow-hidden relative"
+              data-testid="kids-bedtime-visual"
             >
-              <div className="aurin-display text-[hsl(var(--aurin-text))/0.85] text-2xl text-center px-8">
-                A quiet, placeholder<br />
-                <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">drawing room.</span>
+              <img
+                src="/assets/kids/visualisations/bedtime-angel.png"
+                alt="A starry night angel watching over a small child holding a fox"
+                data-testid="kids-bedtime-image"
+                className="w-full h-auto block aspect-square object-cover"
+                loading="lazy"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[hsl(220,40%,8%)/0.92] to-transparent p-5">
+                <div className="aurin-display text-[hsl(var(--aurin-text))] text-lg leading-snug">
+                  A quiet night, watched over by{" "}
+                  <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                    gentle angels.
+                  </span>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Story Trailer — quiet 30s video introducing the kids universe.
+          Self-hosted because the file is small (~3MB). Muted, autoplay,
+          loop — calm by design, no audio surprise. */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="kids-story-trailer"
+      >
+        <div className="aurin-container grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+          <div className="md:col-span-5">
+            <div className="aurin-eyebrow mb-4">A small story trailer</div>
+            <h2 className="aurin-display text-3xl md:text-4xl leading-[1.1] max-w-[20ch]">
+              A book that{" "}
+              <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                opens itself.
+              </span>
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[44ch]">
+              A quiet preview of one of our children's stories — no sound, no rush,
+              no flashing. Just a calm visual you can watch with a small one
+              beside you.
+            </p>
+          </div>
+          <div className="md:col-span-7">
+            <div className="aurin-card overflow-hidden">
+              <video
+                src="/assets/kids/visualisations/book.mp4"
+                data-testid="kids-story-trailer-video"
+                className="w-full h-auto block"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
             </div>
           </div>
         </div>

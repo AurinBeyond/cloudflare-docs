@@ -474,6 +474,8 @@ async def github_sync(inp: GithubSyncRequest):
                         "pages": fm.get("pages"),
                         "tags": fm.get("tags") or [],
                         "lemonsqueezy_product_id": fm.get("lemonsqueezy_product_id"),
+                        "external_read_url": fm.get("external_read_url"),
+                        "pdf_url": fm.get("pdf_url"),
                         "markdown": raw,
                         "html": parsed["html"],
                         "sections": [s for s in parsed["sections"]],
@@ -914,6 +916,7 @@ class Book(BaseModel):
     sections: List[ContentSection] = Field(default_factory=list)
     validation_warnings: List[str] = Field(default_factory=list)
     pdf_url: Optional[str] = None  # placeholder — object storage later
+    external_read_url: Optional[str] = None  # eBookMaker / external preview link
     source: Literal["manual", "github"] = "manual"
     source_path: Optional[str] = None
     published: bool = True
@@ -936,6 +939,8 @@ class BookCreate(BaseModel):
     pages: Optional[int] = None
     tags: List[str] = Field(default_factory=list)
     lemonsqueezy_product_id: Optional[str] = None
+    external_read_url: Optional[str] = None
+    pdf_url: Optional[str] = None
     markdown: str = ""
 
 
@@ -984,75 +989,142 @@ async def create_book(inp: BookCreate):
 
 
 SEED_BOOKS: List[dict] = [
+    # ---------- ADULT (3 × $35) ----------
     {
-        "slug": "genesis-protocols-volume-i-book",
-        "title": "Genesis Protocol",
-        "subtitle": "Volume I — Foundations of Self-Mastery",
-        "description": "A structured, durable book on attention, structure, and presence. The opening volume of the Genesis Protocols. Written for adults who want a quiet system to come back to.",
-        "author": "Matrix Aurin",
+        "slug": "you-dont-have-to-dance-to-anothers-tune",
+        "title": "You Don't Have to Dance to Another's Tune",
+        "subtitle": "On boundaries, choice, and quiet courage",
+        "description": (
+            "A short, direct book about reclaiming your own rhythm. Written for "
+            "adults who feel they have been moving to a melody chosen by others — "
+            "family, culture, fear — and want a calm way home to themselves."
+        ),
+        "author": "prulesoul",
         "price": 35.0,
         "currency": "USD",
         "audience": "adult",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
-        "pages": 142,
-        "tags": ["foundations", "self-mastery"],
-        "lemonsqueezy_product_id": "PLACEHOLDER_GENESIS_VOL_1",
-        "source_path": "bookstore/genesis-volume-1.md",
-        "markdown": """## Preface\n\nThis volume is a beginning. Nothing here is advanced. Everything here is durable.\n\n## On Attention\n\nAttention is the only renewable currency. Spend it deliberately.\n\n## On Structure\n\nStructure is the silence inside which choice becomes possible.\n""",
+        "pages": None,
+        "tags": ["self-growth", "boundaries", "courage"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_DANCE_TUNE",
+        "external_read_url": "https://ebookmaker.ai/you-dont-have-to-dance-to-anothers-tunen-ag5xc",
+        "source_path": "bookstore/you-dont-have-to-dance.md",
+        "markdown": """## A short preface\n\nThis is a small book on a large subject — choosing your own life.\n\n## You are allowed to stop\n\nThe first sentence is simple: you do not have to dance to a tune that was never yours.\n\n## What this book is\n\nA quiet companion. Read slowly. Underline freely.\n""",
     },
     {
-        "slug": "genesis-protocols-volume-ii-book",
-        "title": "Genesis Protocol",
-        "subtitle": "Volume II — Patterns, Practice, Presence",
-        "description": "The second volume. Continues the work, assumes Volume I is familiar. Slow, structured, and practical.",
-        "author": "Matrix Aurin",
+        "slug": "the-language-of-angels",
+        "title": "The Language of Angels",
+        "subtitle": "Embracing Boundaries and Inner Worth",
+        "description": (
+            "A spiritual book for adults — gentle, structured, and warm. Written for "
+            "readers who want to hear the quieter voice inside themselves and learn "
+            "to speak back to it with care."
+        ),
+        "author": "prulesoul",
         "price": 35.0,
         "currency": "USD",
         "audience": "adult",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
-        "pages": 198,
-        "tags": ["patterns", "practice"],
-        "lemonsqueezy_product_id": "PLACEHOLDER_GENESIS_VOL_2",
-        "source_path": "bookstore/genesis-volume-2.md",
-        "markdown": """## Preface\n\nThis volume continues the work and assumes Volume I is familiar.\n\n## On Patterns\n\nYour problems are rarely new. Learn to see the shape of them.\n\n## On Presence\n\nPresence is not an experience. It is a discipline.\n""",
+        "pages": None,
+        "tags": ["spiritual", "boundaries", "self-worth"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_LANGUAGE_OF_ANGELS",
+        "external_read_url": "https://ebookmaker.ai/--the-language-of-angels-embracing-boundaries-and-inner-worth-osvhn",
+        "source_path": "bookstore/language-of-angels.md",
+        "markdown": """## On listening\n\nMost of us were taught to speak before we were taught to listen — to ourselves, most of all.\n\n## A language of light\n\nThis book offers a small vocabulary for the quieter voice inside.\n""",
     },
     {
-        "slug": "star-whispers-childrens-book",
-        "title": "Star Whispers",
-        "subtitle": "A children's book — Ages 6–8",
-        "description": "A child-friendly picture-and-text storybook. Gentle illustrations, slow pacing, and quiet themes that parents can read aloud.",
-        "author": "Matrix Aurin",
+        "slug": "beyond-the-matrix-ii",
+        "title": "Beyond the Matrix II",
+        "subtitle": "Codes of Consciousness",
+        "description": (
+            "The second volume in the Beyond the Matrix series. Goes deeper into the "
+            "patterns and protocols that shape inner life — the invisible programs we "
+            "inherit, and the calm work of becoming free of them."
+        ),
+        "author": "prulesoul",
+        "price": 35.0,
+        "currency": "USD",
+        "audience": "adult",
+        "tax_category": "book_zero_rate_ready",
+        "delivery_options": ["read_online", "download_pdf"],
+        "pages": None,
+        "tags": ["protocols", "consciousness", "deep-work"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_BEYOND_MATRIX_II",
+        "external_read_url": "https://ebookmaker.ai/beyond-the-matrix-ii--codes-of-consciousness-w5x3tf",
+        "source_path": "bookstore/beyond-the-matrix-ii.md",
+        "markdown": """## Why a Volume II\n\nThe first book opens the door. The second one walks slowly through it.\n\n## On invisible codes\n\nMany of the patterns that shape our lives were written into us before we could read.\n""",
+    },
+    # ---------- KIDS (3 × $25) ----------
+    {
+        "slug": "angels-tales",
+        "title": "Angels' Tales",
+        "subtitle": "Adventures of Light and Friendship",
+        "description": (
+            "A children's book for ages 6–12 about gentle adventures, kind friendships, "
+            "and the quiet courage of small hearts. Soft images, warm language, and "
+            "stories that travel well at bedtime."
+        ),
+        "author": "prulesoul",
         "price": 25.0,
         "currency": "USD",
         "audience": "kids",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
-        "pages": 48,
-        "tags": ["kids", "stories"],
-        "lemonsqueezy_product_id": "PLACEHOLDER_STAR_WHISPERS",
-        "source_path": "bookstore/kids/star-whispers.md",
-        "markdown": """## About\n\nA short, gentle storybook for ages 6–8.\n\n## How to Read\n\nIdeally aloud. Ideally slowly. Ideally just before sleep.\n""",
+        "pages": None,
+        "tags": ["kids", "stories", "friendship", "ages-6-12"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_ANGELS_TALES",
+        "external_read_url": "https://ebookmaker.ai/angels-tales--adventures-of-light-and-friendship",
+        "pdf_url": "/assets/books/angels-tales.pdf",
+        "source_path": "bookstore/kids/angels-tales.md",
+        "markdown": """## About\n\nA gentle storybook for ages 6–12. Light, friendship, and a little courage.\n\n## How to read\n\nSlowly. Aloud, if you can. With time for the pictures to settle.\n""",
     },
     {
-        "slug": "meditation-pack-volume-i",
-        "title": "Meditation Pack",
-        "subtitle": "Volume I — Quiet Practices",
-        "description": "A small bundle of guided audio meditations for grown-ups. Short, structured, and made for return.",
-        "author": "Matrix Aurin",
-        "price": 35.0,
+        "slug": "engels-friends-2",
+        "title": "Engels' Friends 2",
+        "subtitle": "More small stories of kindness",
+        "description": (
+            "A children's book for ages 3–8. Short, warm tales designed to be read "
+            "aloud — about belonging, safety, and the small magic of being kind."
+        ),
+        "author": "prulesoul",
+        "price": 25.0,
         "currency": "USD",
-        "audience": "adult",
+        "audience": "kids",
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
-        "pages": 24,
-        "tags": ["meditation", "audio"],
-        "lemonsqueezy_product_id": "PLACEHOLDER_MEDITATION_PACK",
-        "source_path": "bookstore/meditation-pack.md",
-        "markdown": """## About\n\nA pack of guided meditations. Slow voice, long pauses.\n\n## What's Inside\n\nFour sessions, each between 6 and 22 minutes.\n""",
+        "pages": None,
+        "tags": ["kids", "stories", "kindness", "ages-3-8"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_ENGELS_FRIENDS_2",
+        "external_read_url": "https://ebookmaker.ai/engels-friends-2-ugo0pf",
+        "source_path": "bookstore/kids/engels-friends-2.md",
+        "markdown": """## About\n\nLittle stories for little readers. Read aloud, slowly.\n\n## The world this book lives in\n\nA soft world where being kind is the brave thing to do.\n""",
+    },
+    {
+        "slug": "the-night-angels-embrace",
+        "title": "The Night Angels' Embrace",
+        "subtitle": "A bedtime book",
+        "description": (
+            "A bedtime book for children — quiet imagery, gentle words, and the calm "
+            "feeling of being safely held while the world goes to sleep."
+        ),
+        "author": "prulesoul",
+        "price": 25.0,
+        "currency": "USD",
+        "audience": "kids",
+        "tax_category": "book_zero_rate_ready",
+        "delivery_options": ["read_online", "download_pdf"],
+        "pages": None,
+        "tags": ["kids", "bedtime", "calm"],
+        "lemonsqueezy_product_id": "PLACEHOLDER_NIGHT_ANGELS",
+        "external_read_url": "https://ebookmaker.ai/the-night-angels-embrace",
+        "cover_image_url": "/assets/kids/visualisations/bedtime-angel.png",
+        "source_path": "bookstore/kids/night-angels-embrace.md",
+        "markdown": """## About\n\nA short bedtime book to be read in a quiet voice, just before sleep.\n\n## How it ends\n\nGently. Always gently.\n""",
     },
 ]
+
 
 
 # =============================================================
@@ -1267,8 +1339,12 @@ async def seed_initial_content():
                     "audience": b.get("audience", "adult"),
                     "tax_category": b["tax_category"],
                     "lemonsqueezy_product_id": b.get("lemonsqueezy_product_id"),
+                    "external_read_url": b.get("external_read_url"),
+                    "pdf_url": b.get("pdf_url"),
+                    "cover_image_url": b.get("cover_image_url"),
                     "pages": b.get("pages"),
                     "tags": b.get("tags") or [],
+                    "delivery_options": b.get("delivery_options") or ["read_online", "download_pdf"],
                 }},
             )
         else:
