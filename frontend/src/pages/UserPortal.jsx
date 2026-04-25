@@ -1,11 +1,15 @@
+import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Library, LineChart, UserCircle2, Lock } from "lucide-react";
+import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { useAuth } from "@/contexts/AuthProvider";
+import { resetAgeConfirmation } from "@/components/AgeGate";
+import { useState } from "react";
 
 const PREVIEW_BLOCKS = [
   {
     title: "My Content",
     description: "Books, protocols, and sessions you have unlocked.",
-    icon: Library,
+    icon: LibraryIcon,
   },
   {
     title: "My Progress",
@@ -20,45 +24,67 @@ const PREVIEW_BLOCKS = [
 ];
 
 export default function UserPortal() {
+  const { user, loading, logout } = useAuth();
+  const [resetMsg, setResetMsg] = useState("");
+
+  // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+  const handleSignIn = () => {
+    const redirectUrl = window.location.origin + "/portal";
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(
+      redirectUrl
+    )}`;
+  };
+
+  const handleResetAge = () => {
+    resetAgeConfirmation();
+    setResetMsg("18+ confirmation cleared on this device.");
+    setTimeout(() => setResetMsg(""), 3500);
+  };
+
   return (
     <div data-testid="page-portal">
       <PageHeader
         tone="portal"
         eyebrow="User Portal · Your Personal Area"
-        title="A structured space"
-        italicWord="that stays yours."
-        description="The User Portal is where your journey through Matrix Aurin lives — your content, your progress, your account. Accounts are not yet open. What you see below is a preview of the shape the space will take."
+        title={user ? "Welcome back," : "A structured space"}
+        italicWord={user ? user.name?.split(" ")[0] || "friend" : "that stays yours."}
+        description={
+          user
+            ? "This is your personal area. As content unlocks become available, they will appear here under My Content."
+            : "Your journey through Matrix Aurin lives here — your content, your progress, your account. Sign in with Google to begin."
+        }
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            data-testid="portal-sign-in"
-            disabled
-            aria-disabled="true"
-            className="aurin-btn aurin-btn-primary opacity-60 cursor-not-allowed"
-            title="Sign in is not yet available"
-          >
-            Sign In
-            <Lock size={13} />
-          </button>
-          <button
-            data-testid="portal-register"
-            disabled
-            aria-disabled="true"
-            className="aurin-btn aurin-btn-ghost opacity-60 cursor-not-allowed"
-            title="Registration is not yet available"
-          >
-            Register
-          </button>
-          <span
-            className="aurin-chip"
-            data-testid="portal-availability-chip"
-          >
-            · Access opens soon
-          </span>
-        </div>
+        {loading ? (
+          <span className="aurin-chip" data-testid="portal-loading">checking session…</span>
+        ) : user ? (
+          <div className="flex flex-wrap items-center gap-3" data-testid="portal-signed-in">
+            <span className="aurin-chip">{user.email}</span>
+            <span className="aurin-chip">role · {user.role || "member"}</span>
+            <button
+              onClick={logout}
+              data-testid="portal-logout"
+              className="aurin-btn aurin-btn-ghost"
+            >
+              Sign out <LogOut size={13} />
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={handleSignIn}
+              data-testid="portal-sign-in"
+              className="aurin-btn aurin-btn-primary"
+            >
+              Sign in with Google <LogIn size={13} />
+            </button>
+            <span className="aurin-chip" data-testid="portal-availability-chip">
+              · Email-based, via Emergent Auth
+            </span>
+          </div>
+        )}
       </PageHeader>
 
-      {/* PURPOSE */}
+      {/* Purpose */}
       <section className="aurin-section-sm border-b border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container grid grid-cols-1 md:grid-cols-12 gap-10">
           <div className="md:col-span-5">
@@ -72,20 +98,16 @@ export default function UserPortal() {
           </div>
           <div className="md:col-span-7 text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
             <p>
-              When accounts open, the Portal will give you access to your
-              purchased content, personal area, and progress through the
-              Genesis Protocols. It stays quiet and intentional — the same
-              tone as the rest of the system.
-            </p>
-            <p className="mt-5">
-              For now, nothing is active here. This page exists so the
-              structure is visible, and so you know where your space will be.
+              When member content opens, the Portal will give you access to your
+              purchased content, personal area, and progress through the Genesis
+              Protocols. Sign-in is wired today; member-only unlocks turn on as
+              the Bookstore goes live.
             </p>
           </div>
         </div>
       </section>
 
-      {/* STRUCTURAL PREVIEW */}
+      {/* Structural preview */}
       <section className="aurin-section-sm">
         <div className="aurin-container">
           <div className="aurin-eyebrow mb-5">Structural Preview</div>
@@ -96,32 +118,23 @@ export default function UserPortal() {
             </span>
           </h2>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-5"
-            data-testid="portal-preview-grid"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="portal-preview-grid">
             {PREVIEW_BLOCKS.map((b, i) => {
               const Icon = b.icon;
               return (
-                <div
-                  key={b.title}
-                  data-testid={`portal-preview-${i}`}
-                  className="aurin-card p-8 relative"
-                >
+                <div key={b.title} data-testid={`portal-preview-${i}`} className="aurin-card p-8 relative">
                   <div className="flex items-center justify-between">
                     <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text-muted))]">
                       <Icon size={18} strokeWidth={1.4} />
                     </div>
                     <span className="text-[10.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
-                      Placeholder
+                      {user ? "Reserved" : "Placeholder"}
                     </span>
                   </div>
                   <h3 className="aurin-display text-2xl mt-7">{b.title}</h3>
                   <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
                     {b.description}
                   </p>
-
-                  {/* Visual stand-in lines */}
                   <div className="mt-7 space-y-2.5" aria-hidden="true">
                     <div className="h-[6px] w-full rounded-full bg-[hsl(var(--aurin-border-soft))]" />
                     <div className="h-[6px] w-3/4 rounded-full bg-[hsl(var(--aurin-border-soft))]" />
@@ -132,14 +145,40 @@ export default function UserPortal() {
             })}
           </div>
 
-          <p
-            className="mt-10 text-[13px] text-[hsl(var(--aurin-text-muted))]"
-            data-testid="portal-preview-note"
-          >
-            These are structural placeholders. No data, no dashboards, no
-            account logic yet — only the architecture reserved for what comes
-            next.
-          </p>
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="aurin-card p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck size={14} className="text-[hsl(var(--aurin-sage))]" />
+                <div className="aurin-eyebrow !mb-0">Adult sections · 18+</div>
+              </div>
+              <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                Learning and Meditations are gated by a one-time confirmation
+                stored on this device. You can clear it any time:
+              </p>
+              <button
+                onClick={handleResetAge}
+                data-testid="portal-reset-age"
+                className="aurin-btn aurin-btn-ghost mt-4"
+              >
+                Forget my 18+ confirmation
+              </button>
+              {resetMsg && (
+                <div data-testid="portal-reset-age-msg" className="mt-3 text-[12.5px] text-[hsl(var(--aurin-sage))]">
+                  {resetMsg}
+                </div>
+              )}
+            </div>
+
+            <Link to="/legal" className="aurin-card p-6 hover:border-[hsl(var(--aurin-sage))] transition-colors" data-testid="portal-legal-link">
+              <div className="aurin-eyebrow mb-3">Trust</div>
+              <h3 className="aurin-display text-xl">Read the Legal · Responsibility</h3>
+              <p className="mt-3 text-[14px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
+                Terms, user responsibility, and the refund policy that backs the
+                Bookstore.
+              </p>
+              <div className="mt-4 text-[13px] text-[hsl(var(--aurin-sage))]">Open →</div>
+            </Link>
+          </div>
         </div>
       </section>
     </div>

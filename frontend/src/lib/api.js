@@ -4,9 +4,30 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const API_BASE = `${BACKEND_URL}/api`;
 
+const TOKEN_KEY = "aurin_session_token";
+
+export function setSessionToken(t) {
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else localStorage.removeItem(TOKEN_KEY);
+}
+
+export function getSessionToken() {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
+});
+
+api.interceptors.request.use((cfg) => {
+  const t = getSessionToken();
+  if (t) cfg.headers = { ...(cfg.headers || {}), Authorization: `Bearer ${t}` };
+  return cfg;
 });
 
 /* ----------------------- Content ----------------------- */
@@ -17,9 +38,9 @@ export async function fetchCategories(surface) {
   return res.data;
 }
 
-export async function fetchEntries({ surface, category, access, q } = {}) {
+export async function fetchEntries({ surface, category, audience, access, q } = {}) {
   const res = await api.get("/content/entries", {
-    params: { surface, category, access, q },
+    params: { surface, category, audience, access, q },
   });
   return res.data;
 }
@@ -39,7 +60,7 @@ export async function createCategory(payload) {
   return res.data;
 }
 
-/* ----------------------- GitHub sync (stub) ----------------------- */
+/* ----------------------- GitHub sync ----------------------- */
 export async function githubSync(payload = {}) {
   const res = await api.post("/content/sync/github", {
     repo: "owner/repo",

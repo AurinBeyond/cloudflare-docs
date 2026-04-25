@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import AiDock from "@/components/AiDock";
+import AgeGate from "@/components/AgeGate";
 
 export default function Layout() {
   const location = useLocation();
@@ -19,6 +20,7 @@ export default function Layout() {
       </main>
       <Footer />
       <AiDock />
+      <AgeGate />
     </>
   );
 }

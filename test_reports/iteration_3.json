@@ -1,0 +1,71 @@
+{
+  "summary": "Iteration 3 e2e test (backend + frontend) for prulesoul.site live MVP — Emergent Google Auth, real GitHub sync, Reach Out persistence, About/Legal/Kids Universe pages, 18+ gate. Backend: 13/15 tests pass (87%) — auth 401 unauth/bad-bearer/invalid-session-id all correct, GitHub sync returns not_configured for empty repo and graceful error for nonexistent repo, Reach Out persists with correct destination_configured flag, regression endpoints (health, library, books, admin, validate) all healthy. Two backend failures: GET /api/content/entries?surface=brand and ?surface=legal both return 422 instead of 200 because the Surface Pydantic Literal type is still restricted to ['library','learning'] (see /app/backend/server.py line 91). Frontend: All 23 review-request UI checks pass — title contains 'prulesoul.site', footer has 'prulesoul.site · Matrix Aurin' + About + Legal · Responsibility, Guardian dock visible bottom-left, age gate appears on /learning then persists across /meditation-corner via localStorage, /kids-universe is NEVER gated, three age groups + coloring CTA render, Coloring Studio generates placeholder line-art, Portal shows sign-in button, Forget 18+ confirmation works (gate returns on /learning), About + Legal placeholders render, Reach Out form submission shows reach-out-sent confirmation, all regression routes (/, /library, /bookstore, /meditation-corner, /admin/content) render. The 422 error is visible in console on /about and /legal but the frontend's try/finally swallows it so placeholders still render — this becomes a real defect once GitHub content is configured because brand/legal entries will never be fetchable.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/content/entries?surface=brand",
+        "issue": "Returns 422 'Input should be library or learning'. Surface Literal in /app/backend/server.py line 91 is `Literal['library','learning']` but the iteration adds brand, legal, kids, meditations as valid surfaces (see github_sync mapping lines 415-422). Frontend About.jsx and Legal.jsx call this endpoint and silently fail. The placeholder still renders only because the catch is swallowed in try/finally.",
+        "priority": "HIGH"
+      },
+      {
+        "endpoint": "/api/content/entries?surface=legal",
+        "issue": "Same as brand — 422. Once GITHUB_REPO is configured and /legal markdown gets synced, the entries will be saved to mongo but never returnable through this query.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/content/entries?surface=kids and ?surface=meditations",
+        "issue": "Same Literal restriction will block kids and meditations surfaces too — not directly tested in this iteration, deduced from code review (server.py:91)."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "About + Legal page content loading",
+        "issue": "fetchEntries({surface:'brand'|'legal'}) returns 422; About/Legal effects swallow the error so the *placeholder* renders correctly, but real GitHub content will never load even after sync because the backend Surface Literal rejects these surfaces.",
+        "affected_selectors": ["[data-testid=about-entry]", "[data-testid=legal-entry]"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "/admin/content",
+        "issues": ["Pre-existing hydration warning '<span> cannot be a child of <option>' from ve-dynamic instrumentation — cosmetic, carried over from iter 2."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter3_auth_sync_reach.py",
+    "/app/test_reports/pytest/iteration_3.xml"
+  ],
+  "action_items": [
+    "WIDEN backend Surface Literal in /app/backend/server.py line 91 to include all real surfaces: `Surface = Literal['library','learning','brand','legal','kids','meditations']`. This single line change unblocks /api/content/entries?surface=brand and ?surface=legal (returning 200 [] until github sync runs), and will let kids/meditations surfaces be queryable too. Verify by re-running the 2 failing tests in test_iter3_auth_sync_reach.py::TestBrandLegalSurfaces.",
+    "Optional: also include the Surface enum in the surface query param of /api/content/categories (line 217) and CreateEntry (line 332) so admins can create brand/legal entries directly via POST.",
+    "Optional: in About.jsx/Legal.jsx, log the error in the catch instead of try/finally — so future failures surface in console rather than silently falling back to placeholder."
+  ],
+  "critical_code_review_comments": [
+    "Backend server.py is now 1289 lines — close to the 700-line guideline. Recommend splitting auth (lines 1093-1226), reach-out (1229-1258), and github sync (381-543) into separate routers under /app/backend/routes/.",
+    "auth/session sets a Secure;SameSite=None;HttpOnly cookie *and* returns session_token in the body for Bearer use — this dual mode is intentional for Kubernetes ingress that overrides CORS. Documented in agent_to_agent_context_note. Confirmed working: /api/auth/me with bad Bearer returns 401, no Bearer returns 401.",
+    "GitHub sync graceful-error path tested: 'this-account-should-not-exist-9999/no-repo-here-xyz' returns {status:'error', http_status:404} not 500 — handler is robust.",
+    "Reach Out persists to mongo collection reach_out_messages with destination flag — confirmed via API. Email forwarding correctly NOT implemented yet (REACH_OUT_EMAIL is empty by design).",
+    "Age gate persistence verified: localStorage key set on /learning confirm, /meditation-corner does not re-prompt, /kids-universe NEVER prompts (correct), portal-reset-age clears the key and gate returns on /learning.",
+    "Footer copy 'prulesoul.site · Matrix Aurin' present (verified inside copyright line), About + Legal · Responsibility links present.",
+    "Document title 'prulesoul.site — Matrix Aurin · Calm. Structured. Guided.' contains 'prulesoul.site' — pass."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter3_auth_sync_reach.py (NEW — 15 tests covering auth, github sync, reach-out, brand/legal surfaces, regression)"
+  ],
+  "success_rate": {
+    "backend": "87% (13/15 — 2 failures both caused by Surface Literal restriction, single-line fix)",
+    "frontend": "100% (all 23 review-request UI checks pass — title, footer, Guardian dock, age gate flows, /kids-universe never gated, age groups, coloring studio, portal sign-in, reset 18+, About/Legal placeholders, Reach Out submission, regression routes)"
+  },
+  "test_credentials": "Auth flow not fully tested — Emergent Google login requires real interactive sign-in. Verified per request: button click, /api/auth/me returns 401 unauth, /api/auth/session with bad id returns 401. test_credentials.md is empty (no test users defined for this iteration).",
+  "seed_data_creation": "Created TEST_iter3 reach-out messages via POST /api/reach-out and the e2e form. Cleanup fixture in test_iter3_auth_sync_reach.py removes docs where name starts with 'TEST_' from reach_out_messages collection. Cleanup verified ran (2 docs removed).",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "After main agent widens Surface Literal in server.py:91 (single-line change), just re-run the 2 brand/legal tests: `pytest /app/backend/tests/test_iter3_auth_sync_reach.py::TestBrandLegalSurfaces -v`. Frontend already passes; nothing else to retest unless schema or routing changes. Test file test_iter3_auth_sync_reach.py is suitable for permanent regression coverage. Footer assertion was checked via document.body innerText which contains the line. Reach-out form testid for the email *input* is `reach-out-email-field` (not `reach-out-email` which is the mailto link).",
+  "rca_of_the_issue": "Root cause: /app/backend/server.py line 91 still defines `Surface = Literal['library','learning']` from earlier iterations. The new iteration's GitHub sync mapping (lines 415-422) introduces brand/legal/kids/meditations as legitimate surface values, and the frontend pages About.jsx/Legal.jsx query for them. FastAPI validates the query param against the Literal type and rejects with 422 before the handler runs. Reproduction: `curl 'BASE/api/content/entries?surface=brand'` → 422. Mitigation: widen the Literal to include all six surfaces. The frontend currently masks the bug because About/Legal use try { ... } finally { setLoading(false); } without logging — the placeholder always renders so to a user nothing looks broken, but real GitHub content will never display for /about or /legal."
+}

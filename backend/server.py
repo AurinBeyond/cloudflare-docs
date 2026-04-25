@@ -379,45 +379,214 @@ class GithubSyncRequest(BaseModel):
 
 
 @api_router.post("/content/sync/github")
-async def github_sync_stub(inp: GithubSyncRequest):
+async def github_sync(inp: GithubSyncRequest):
     """
-    STUB — not yet connected.
+    Pull markdown content from a public GitHub repo. Honours the folder
+    convention defined in SYSTEM_ARCHITECTURE.md.
 
-    When enabled this endpoint will:
-        1. Fetch the repo contents under `path` on `branch`
-        2. For each `.md` file: parse with `parse_markdown()` and upsert
-           into `content_entries` keyed by `source_path`.
-        3. For each folder: upsert into `content_categories`.
-        4. Record `last_synced_at`.
+    Folder → surface mapping:
+        /brand          → entries (surface=brand)
+        /legal          → entries (surface=legal)
+        /library        → entries (surface=library)
+        /kids           → entries (surface=kids)
+        /learning       → entries (surface=learning)
+        /meditations    → entries (surface=meditations)
+        /bookstore      → books (separate collection)
 
-    Authentication: expects a GitHub App installation token or PAT via
-    env var `GITHUB_TOKEN` (not yet added, by design).
-
-    Webhook path (future): POST /api/content/sync/github/webhook with
-    HMAC signature verification against `GITHUB_WEBHOOK_SECRET`.
+    Configuration: GITHUB_REPO env var (`owner/repo`). If unset, returns
+    `not_configured` so the rest of the platform keeps running on seed
+    data. The endpoint accepts repo/branch/path overrides via body.
     """
-    return {
-        "status": "not_connected",
-        "message": (
-            "GitHub sync is prepared but not active. Provide repo access "
-            "credentials and enable this endpoint to begin ingestion."
-        ),
-        "received": inp.model_dump(),
-        "expected_conventions": {
-            "folders": "library/<category>/<entry>.md or learning/<module>/<entry>.md",
-            "frontmatter": {
-                "title": "string (required)",
-                "description": "string",
-                "access": "'free' | 'member'",
-                "kind": "'book' | 'protocol' | 'audio' | 'video' | 'article'",
-                "tags": "[string]",
-            },
-            "special_files": {
-                "_system/tone.md": "brand voice guide, injected into AI system prompt",
-                "_system/rules.md": "internal protocols, used by AI as constraints",
-            },
-        },
+    import httpx
+
+    repo = inp.repo or os.environ.get("GITHUB_REPO", "")
+    branch = inp.branch or os.environ.get("GITHUB_BRANCH", "main")
+
+    if not repo or repo == "owner/repo":
+        return {
+            "status": "not_configured",
+            "message": (
+                "Set GITHUB_REPO env (e.g. 'owner/prulesoul-content') and "
+                "POST again — or pass {repo, branch} in the body."
+            ),
+            "received": inp.model_dump(),
+        }
+
+    folder_to_surface = {
+        "brand": "brand",
+        "legal": "legal",
+        "library": "library",
+        "kids": "kids",
+        "learning": "learning",
+        "meditations": "meditations",
     }
+
+    headers = {"Accept": "application/vnd.github.v3+json", "User-Agent": "matrix-aurin"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    tree_url = f"https://api.github.com/repos/{repo}/git/trees/{branch}?recursive=1"
+
+    counters = {"entries_upserted": 0, "books_upserted": 0, "skipped": 0, "errors": 0}
+    errors: List[dict] = []
+    upserted_paths: List[str] = []
+
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as http:
+            resp = await http.get(tree_url, headers=headers)
+            if resp.status_code != 200:
+                return {
+                    "status": "error",
+                    "http_status": resp.status_code,
+                    "message": resp.text[:300],
+                    "repo": repo,
+                    "branch": branch,
+                }
+            tree = resp.json().get("tree", [])
+
+            md_files = [t for t in tree if t.get("type") == "blob" and t.get("path", "").lower().endswith(".md")]
+
+            for f in md_files:
+                path: str = f["path"]
+                top = path.split("/")[0]
+
+                if top == "bookstore":
+                    raw = await _fetch_raw(http, repo, branch, path, headers)
+                    if raw is None:
+                        counters["skipped"] += 1
+                        continue
+                    parsed = parse_markdown(raw)
+                    fm = parsed.get("frontmatter") or {}
+                    slug = (fm.get("slug") or _path_to_slug(path)).strip()
+                    title = (fm.get("title") or _path_to_title(path)).strip()
+                    payload = {
+                        "slug": slug,
+                        "title": title,
+                        "subtitle": fm.get("subtitle"),
+                        "description": fm.get("description"),
+                        "author": fm.get("author") or "Matrix Aurin",
+                        "cover_image_url": fm.get("cover_image_url"),
+                        "price": float(fm.get("price") or 0),
+                        "currency": fm.get("currency") or "NOK",
+                        "tax_category": fm.get("tax_category") or "book_zero_rate_ready",
+                        "delivery_options": fm.get("delivery_options") or ["read_online", "download_pdf"],
+                        "pages": fm.get("pages"),
+                        "tags": fm.get("tags") or [],
+                        "lemonsqueezy_product_id": fm.get("lemonsqueezy_product_id"),
+                        "markdown": raw,
+                        "html": parsed["html"],
+                        "sections": [s for s in parsed["sections"]],
+                        "validation_warnings": parsed.get("warnings", []),
+                        "source": "github",
+                        "source_path": path,
+                        "updated_at": _now().isoformat(),
+                    }
+                    await db.books.update_one(
+                        {"slug": slug},
+                        {"$set": payload, "$setOnInsert": {"id": str(uuid.uuid4()), "created_at": _now().isoformat(), "published": True}},
+                        upsert=True,
+                    )
+                    counters["books_upserted"] += 1
+                    upserted_paths.append(path)
+                elif top in folder_to_surface:
+                    surface = folder_to_surface[top]
+                    raw = await _fetch_raw(http, repo, branch, path, headers)
+                    if raw is None:
+                        counters["skipped"] += 1
+                        continue
+                    parsed = parse_markdown(raw)
+                    fm = parsed.get("frontmatter") or {}
+                    slug = (fm.get("slug") or _path_to_slug(path)).strip()
+                    title = (fm.get("title") or _path_to_title(path)).strip()
+                    parts = path.split("/")
+                    category_slug = (fm.get("category") or (parts[1] if len(parts) > 2 else surface)).strip()
+                    audience = fm.get("audience")
+                    if surface == "library" and not audience:
+                        audience = "grown-ups"
+
+                    # Ensure category exists for library surface
+                    if surface == "library":
+                        await db.content_categories.update_one(
+                            {"slug": category_slug},
+                            {"$setOnInsert": _serialize(Category(
+                                slug=category_slug,
+                                name=category_slug.replace("-", " ").title(),
+                                surface="library",
+                                source_path="/".join(parts[:2]) if len(parts) > 2 else top,
+                            ).model_dump())},
+                            upsert=True,
+                        )
+
+                    payload = {
+                        "slug": slug,
+                        "title": title,
+                        "description": fm.get("description"),
+                        "category_slug": category_slug,
+                        "audience": audience,
+                        "surface": surface,
+                        "kind": fm.get("kind") or "article",
+                        "access": fm.get("access") or "free",
+                        "tags": fm.get("tags") or [],
+                        "markdown": raw,
+                        "html": parsed["html"],
+                        "sections": [s for s in parsed["sections"]],
+                        "frontmatter": fm,
+                        "validation_warnings": parsed.get("warnings", []),
+                        "source": "github",
+                        "source_path": path,
+                        "last_synced_at": _now().isoformat(),
+                        "updated_at": _now().isoformat(),
+                    }
+                    await db.content_entries.update_one(
+                        {"slug": slug},
+                        {"$set": payload, "$setOnInsert": {"id": str(uuid.uuid4()), "created_at": _now().isoformat()}},
+                        upsert=True,
+                    )
+                    counters["entries_upserted"] += 1
+                    upserted_paths.append(path)
+                else:
+                    counters["skipped"] += 1
+    except Exception as e:
+        logger.exception("GitHub sync failed: %s", e)
+        return {"status": "error", "message": str(e), "counters": counters}
+
+    return {
+        "status": "ok",
+        "repo": repo,
+        "branch": branch,
+        "counters": counters,
+        "errors": errors,
+        "upserted_paths": upserted_paths[:50],
+    }
+
+
+async def _fetch_raw(http, repo: str, branch: str, path: str, headers: dict) -> Optional[str]:
+    """Fetch a raw markdown file. Returns None on failure (caller logs)."""
+    url = f"https://raw.githubusercontent.com/{repo}/{branch}/{path}"
+    try:
+        r = await http.get(url, headers={k: v for k, v in headers.items() if k != "Accept"})
+        if r.status_code == 200:
+            return r.text
+        logger.warning("raw fetch %s -> %s", path, r.status_code)
+        return None
+    except Exception as e:
+        logger.warning("raw fetch %s failed: %s", path, e)
+        return None
+
+
+def _path_to_slug(path: str) -> str:
+    name = path.rsplit("/", 1)[-1]
+    if name.lower().endswith(".md"):
+        name = name[:-3]
+    return _slugify(name)
+
+
+def _path_to_title(path: str) -> str:
+    name = path.rsplit("/", 1)[-1]
+    if name.lower().endswith(".md"):
+        name = name[:-3]
+    return name.replace("-", " ").replace("_", " ").strip().title()
 
 
 # =============================================================
@@ -922,6 +1091,174 @@ async def seed_initial_content():
 
 
 # =============================================================
+# Auth — Emergent Google Auth
+# =============================================================
+from fastapi import Request, Response, Cookie
+
+EMERGENT_AUTH_SESSION_URL = "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data"
+
+
+class User(BaseModel):
+    user_id: str
+    email: str
+    name: Optional[str] = None
+    picture: Optional[str] = None
+    role: Literal["guest", "member", "admin"] = "member"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class AuthSessionRequest(BaseModel):
+    session_id: str
+
+
+def _seven_days_from_now() -> datetime:
+    return datetime.now(timezone.utc) + __import__("datetime").timedelta(days=7)
+
+
+async def _get_session_token(request: Request, authorization: Optional[str] = None) -> Optional[str]:
+    token = request.cookies.get("session_token")
+    if token:
+        return token
+    auth = authorization or request.headers.get("authorization")
+    if auth and auth.lower().startswith("bearer "):
+        return auth.split(" ", 1)[1].strip()
+    return None
+
+
+async def _resolve_current_user(request: Request) -> Optional[User]:
+    token = await _get_session_token(request)
+    if not token:
+        return None
+    sess = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+    if not sess:
+        return None
+    expires_at = sess.get("expires_at")
+    if isinstance(expires_at, str):
+        try:
+            expires_at = datetime.fromisoformat(expires_at)
+        except ValueError:
+            return None
+    if expires_at and expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at and expires_at < datetime.now(timezone.utc):
+        return None
+    user_doc = await db.users.find_one({"user_id": sess["user_id"]}, {"_id": 0})
+    if not user_doc:
+        return None
+    if isinstance(user_doc.get("created_at"), str):
+        try:
+            user_doc["created_at"] = datetime.fromisoformat(user_doc["created_at"])
+        except ValueError:
+            user_doc.pop("created_at", None)
+    return User(**user_doc)
+
+
+@api_router.post("/auth/session")
+async def auth_session(inp: AuthSessionRequest, response: Response):
+    """Exchange Emergent session_id for our session_token cookie."""
+    import httpx
+    async with httpx.AsyncClient(timeout=15.0) as http:
+        r = await http.get(
+            EMERGENT_AUTH_SESSION_URL,
+            headers={"X-Session-ID": inp.session_id},
+        )
+    if r.status_code != 200:
+        raise HTTPException(status_code=401, detail="Invalid session_id")
+    data = r.json()
+    email = data.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Auth payload missing email")
+
+    existing = await db.users.find_one({"email": email}, {"_id": 0})
+    if existing:
+        user_id = existing["user_id"]
+        await db.users.update_one(
+            {"user_id": user_id},
+            {"$set": {"name": data.get("name"), "picture": data.get("picture")}},
+        )
+    else:
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        await db.users.insert_one({
+            "user_id": user_id,
+            "email": email,
+            "name": data.get("name"),
+            "picture": data.get("picture"),
+            "role": "member",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+
+    session_token = data.get("session_token") or uuid.uuid4().hex
+    expires_at = _seven_days_from_now()
+    await db.user_sessions.insert_one({
+        "user_id": user_id,
+        "session_token": session_token,
+        "expires_at": expires_at.isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        max_age=7 * 24 * 3600,
+        path="/",
+        httponly=True,
+        secure=True,
+        samesite="none",
+    )
+    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    return {"user": user_doc, "session_token": session_token}
+
+
+@api_router.get("/auth/me")
+async def auth_me(request: Request):
+    user = await _resolve_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return user.model_dump()
+
+
+@api_router.post("/auth/logout")
+async def auth_logout(request: Request, response: Response):
+    token = await _get_session_token(request)
+    if token:
+        await db.user_sessions.delete_one({"session_token": token})
+    response.delete_cookie("session_token", path="/")
+    return {"status": "ok"}
+
+
+# =============================================================
+# Reach Out — accepts the contact form (delivery is placeholder).
+# =============================================================
+class ReachOutMessage(BaseModel):
+    name: str
+    email: str
+    topic: Optional[str] = "general"
+    message: str
+
+
+@api_router.post("/reach-out")
+async def reach_out(inp: ReachOutMessage):
+    """Persist the message. Email delivery wires up later when REACH_OUT_EMAIL
+    is configured + a transactional provider is connected."""
+    doc = {
+        "id": str(uuid.uuid4()),
+        "name": inp.name.strip()[:200],
+        "email": inp.email.strip().lower()[:200],
+        "topic": (inp.topic or "general").strip()[:50],
+        "message": inp.message.strip()[:5000],
+        "destination": os.environ.get("REACH_OUT_EMAIL", ""),
+        "delivered": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.reach_out_messages.insert_one(doc)
+    return {
+        "status": "received",
+        "destination_configured": bool(os.environ.get("REACH_OUT_EMAIL")),
+        "id": doc["id"],
+    }
+
+
+# =============================================================
 # App wiring
 # =============================================================
 app.include_router(api_router)
@@ -929,7 +1266,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origin_regex=".*",
     allow_methods=["*"],
     allow_headers=["*"],
 )

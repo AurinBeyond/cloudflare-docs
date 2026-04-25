@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { Mail, MessageCircle, ArrowRight, CheckCircle2 } from "lucide-react";
+import { api } from "@/lib/api";
 
 const TOPICS = [
   { value: "general", label: "General" },
@@ -13,13 +14,25 @@ const TOPICS = [
 export default function ReachOut() {
   const [form, setForm] = useState({ name: "", email: "", topic: "general", message: "" });
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [destinationConfigured, setDestinationConfigured] = useState(null);
+  const [error, setError] = useState(null);
 
   const handle = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Backend submission is intentionally not wired in this iteration.
-    setSent(true);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await api.post("/reach-out", form);
+      setDestinationConfigured(!!res.data?.destination_configured);
+      setSent(true);
+    } catch (err) {
+      setError("Could not send your message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -123,12 +136,16 @@ export default function ReachOut() {
 
                 <div className="flex items-center justify-between pt-2">
                   <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] max-w-[36ch]">
-                    Submission is not active yet. We're preparing the line.
+                    Messages are stored. Email forwarding turns on once
+                    REACH_OUT_EMAIL is configured.
                   </p>
-                  <button type="submit" data-testid="reach-out-submit" className="aurin-btn aurin-btn-primary">
-                    Send <ArrowRight size={14} />
+                  <button type="submit" data-testid="reach-out-submit" disabled={submitting} className="aurin-btn aurin-btn-primary disabled:opacity-60">
+                    {submitting ? "Sending…" : "Send"} <ArrowRight size={14} />
                   </button>
                 </div>
+                {error && (
+                  <div data-testid="reach-out-error" className="text-[13px] text-red-300/90 mt-2">{error}</div>
+                )}
               </form>
             ) : (
               <div
@@ -138,9 +155,9 @@ export default function ReachOut() {
                 <CheckCircle2 className="text-[hsl(var(--aurin-sage))]" size={22} />
                 <h3 className="aurin-display text-3xl">Received, in spirit.</h3>
                 <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[52ch]">
-                  Submission is not yet wired to a real inbox. When it is, you'll
-                  hear back within two working days. Until then, please use the
-                  email above for anything urgent.
+                  Your message has been received. {destinationConfigured
+                    ? "It will be forwarded shortly."
+                    : "Email forwarding is not yet configured — once REACH_OUT_EMAIL is set, messages route automatically. Until then, please use the email above for anything urgent."}
                 </p>
                 <button
                   onClick={() => {

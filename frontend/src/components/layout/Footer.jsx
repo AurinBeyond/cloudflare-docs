@@ -14,11 +14,18 @@ const COLUMNS = [
     ],
   },
   {
+    title: "Trust",
+    links: [
+      { to: "/about", label: "About" },
+      { to: "/legal", label: "Legal · Responsibility" },
+      { to: "/legal#refund-policy", label: "Refund policy" },
+    ],
+  },
+  {
     title: "Account",
     links: [
       { to: "/portal", label: "User Portal" },
       { to: "/portal", label: "Sign In" },
-      { to: "/portal", label: "Register" },
     ],
   },
 ];
@@ -45,9 +52,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-sm">
-              A structured, calm digital environment for self-mastery,
-              reflection, and guided learning. Designed to move slowly, on
-              purpose.
+              A structured digital home for self-mastery, reflection, and guided
+              learning. The published face of <strong className="text-[hsl(var(--aurin-text))]">prulesoul.site</strong>.
+              Designed to move slowly, on purpose.
             </p>
           </div>
 
@@ -81,7 +88,7 @@ export default function Footer() {
         <div className="aurin-hairline mt-14 mb-6" />
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[hsl(var(--aurin-text-muted))]">
           <div data-testid="footer-copy">
-            © {new Date().getFullYear()} Matrix Aurin. Quiet by design.
+            © {new Date().getFullYear()} prulesoul.site · Matrix Aurin. Quiet by design.
           </div>
           <div className="flex items-center gap-5">
             <span>Structured</span>
