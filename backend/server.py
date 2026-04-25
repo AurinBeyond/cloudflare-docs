@@ -88,7 +88,7 @@ async def get_status_checks():
 # =============================================================
 AccessLevel = Literal["free", "member"]
 ContentKind = Literal["book", "protocol", "audio", "video", "article", "story"]
-Surface = Literal["library", "learning"]  # which top-level page the entry belongs to
+Surface = Literal["library", "learning", "brand", "legal", "kids", "meditations"]  # top-level surfaces
 Audience = Literal["grown-ups", "kids-universe", "reflections"]
 
 
