@@ -17,6 +17,8 @@ import AdminContent from "@/pages/AdminContent";
 import About from "@/pages/About";
 import Legal from "@/pages/Legal";
 import AuthCallback from "@/pages/AuthCallback";
+import TheBeginning from "@/pages/TheBeginning";
+import TheBeginningStep from "@/pages/TheBeginningStep";
 
 function AppRouter() {
   const location = useLocation();
@@ -39,6 +41,8 @@ function AppRouter() {
         <Route path="/kids-universe" element={<KidsUniverse />} />
         <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
         <Route path="/meditation-corner" element={<MeditationCorner />} />
+        <Route path="/the-beginning" element={<TheBeginning />} />
+        <Route path="/the-beginning/step" element={<TheBeginningStep />} />
         <Route path="/reach-out" element={<ReachOut />} />
         <Route path="/portal" element={<UserPortal />} />
         <Route path="/admin/content" element={<AdminContent />} />

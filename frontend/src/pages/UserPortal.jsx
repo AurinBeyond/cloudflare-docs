@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { resetAgeConfirmation } from "@/components/AgeGate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PREVIEW_BLOCKS = [
   {
@@ -26,10 +26,25 @@ const PREVIEW_BLOCKS = [
 export default function UserPortal() {
   const { user, loading, logout } = useAuth();
   const [resetMsg, setResetMsg] = useState("");
+  const [params] = useSearchParams();
+  const next = params.get("next");
+
+  // After sign-in, if a `?next=` was requested, send the user there.
+  useEffect(() => {
+    if (!loading && user && next) {
+      // Only follow same-origin paths.
+      if (next.startsWith("/") && !next.startsWith("//")) {
+        window.location.replace(next);
+      }
+    }
+  }, [user, loading, next]);
 
   // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
   const handleSignIn = () => {
-    const redirectUrl = window.location.origin + "/portal";
+    const target = next && next.startsWith("/") && !next.startsWith("//")
+      ? `/portal?next=${encodeURIComponent(next)}`
+      : "/portal";
+    const redirectUrl = window.location.origin + target;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(
       redirectUrl
     )}`;

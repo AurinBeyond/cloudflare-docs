@@ -107,3 +107,27 @@ export async function fetchBook(slug) {
   const res = await api.get(`/books/${slug}`);
   return res.data;
 }
+
+/* ----------------------- The Beginning (experience) ----------------------- */
+export async function fetchBeginningStatus() {
+  const res = await api.get("/experience/the-beginning/me");
+  return res.data;
+}
+
+export async function startBeginning() {
+  const res = await api.post("/experience/the-beginning/start");
+  return res.data;
+}
+
+export async function submitBeginningReflection(text, presence) {
+  const res = await api.post("/experience/the-beginning/reflect", {
+    text,
+    presence: presence ?? null,
+  });
+  return res.data;
+}
+
+export async function resetBeginning() {
+  const res = await api.post("/experience/the-beginning/reset");
+  return res.data;
+}

@@ -1593,6 +1593,250 @@ async def reach_out(inp: ReachOutMessage):
 
 
 # =============================================================
+# The Beginning — Guided Experience (7 hidden steps)
+# -------------------------------------------------------------
+# Internally a 7-step structure. Externally never exposed as a
+# course/module system: copy stays human, "Continue when ready",
+# reflection required to advance, optional presence note.
+# =============================================================
+
+EXPERIENCE_SLUG = "the-beginning"
+
+EXPERIENCE_STEPS: List[dict] = [
+    {
+        "n": 1,
+        "theme": "awareness",
+        "intro": "You might notice more than usual today.\nNot because something changed — but because you are looking.",
+        "guidance": "Take the day as it is.\n\nWatch small moments:\n\n- how you respond\n- how quickly something happens\n- what feels automatic\n\nYou don't need to stop anything.\n\nJust notice.",
+        "prompt": "Take a moment before continuing.\nWrite a few words about one moment that stood out. Even something small.",
+    },
+    {
+        "n": 2,
+        "theme": "dependency",
+        "intro": "Some movements are not really yours.",
+        "guidance": "Notice where you:\n\n- look for confirmation\n- adjust yourself\n- wait for someone else's response\n\nNot in a heavy way. Just… gently.",
+        "prompt": "What did you notice today?\nIf nothing was clear, you can write that too.",
+    },
+    {
+        "n": 3,
+        "theme": "fear",
+        "intro": "Fear is not always loud.",
+        "guidance": "Sometimes it is:\n\n- hesitation\n- delay\n- \"later\"\n\nPick one thing you have been postponing. Do it in the simplest possible way.",
+        "prompt": "What stopped you before?\nAnd what happened when you moved anyway?",
+    },
+    {
+        "n": 4,
+        "theme": "money",
+        "intro": "Money is rarely just about money.",
+        "guidance": "Notice what comes up when you think about it.\n\nNot numbers — feeling.",
+        "prompt": "Did it feel like pressure?\nSafety?\nSomething else?\n\nWrite what felt closest.",
+    },
+    {
+        "n": 5,
+        "theme": "childhood patterns",
+        "intro": "Some thoughts are older than you think.",
+        "guidance": "Write down 3 sentences you heard often when growing up.\n\nNo analysis yet. Just write them.",
+        "prompt": "Do they still live in your decisions?",
+    },
+    {
+        "n": 6,
+        "theme": "pattern break",
+        "intro": "One different action is enough.",
+        "guidance": "Today, choose one small moment\nand do it differently.\n\nNot dramatically. Just… differently.",
+        "prompt": "Did something resist?\nOr did it feel lighter?",
+    },
+    {
+        "n": 7,
+        "theme": "clarity",
+        "intro": "You don't need all answers.\nBut you may see something more clearly now.",
+        "guidance": "Write:\n\n- what you don't want to repeat\n- what feels more true for you",
+        "prompt": "There is no need to conclude this.\nJust don't ignore what you saw.",
+    },
+]
+
+# Soft pause (seconds) the UI will respect before the next step appears.
+# Backend returns this so the rule lives in one place.
+STEP_PAUSE_SECONDS = 8
+TOTAL_STEPS = len(EXPERIENCE_STEPS)
+MIN_REFLECTION_CHARS = 6  # gentle, not strict
+
+
+class StepPublic(BaseModel):
+    """Step shape returned to the frontend (only when unlocked)."""
+    n: int
+    intro: str
+    guidance: str
+    prompt: str
+
+
+class StepReflection(BaseModel):
+    n: int
+    text: str
+    presence: Optional[int] = None  # 1..5, optional
+    written_at: str
+
+
+class ExperienceProgress(BaseModel):
+    """Per-user progress for THE_BEGINNING."""
+    user_id: str
+    experience_slug: str = EXPERIENCE_SLUG
+    started: bool = False
+    current_step: int = 1            # 1..TOTAL_STEPS
+    completed_steps: List[int] = Field(default_factory=list)
+    reflections: List[StepReflection] = Field(default_factory=list)
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    last_step_at: Optional[str] = None  # used for soft-pause
+
+
+class ReflectionInput(BaseModel):
+    text: str
+    presence: Optional[int] = None  # 1..5
+
+
+async def _require_user(request: Request) -> User:
+    user = await _resolve_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Sign in to continue.")
+    return user
+
+
+async def _get_or_init_progress(user_id: str) -> dict:
+    doc = await db.experience_progress.find_one(
+        {"user_id": user_id, "experience_slug": EXPERIENCE_SLUG}, {"_id": 0}
+    )
+    if doc:
+        return doc
+    fresh = ExperienceProgress(user_id=user_id).model_dump()
+    await db.experience_progress.insert_one({**fresh})
+    return await db.experience_progress.find_one(
+        {"user_id": user_id, "experience_slug": EXPERIENCE_SLUG}, {"_id": 0}
+    )
+
+
+def _serialize_step(s: dict) -> StepPublic:
+    return StepPublic(n=s["n"], intro=s["intro"], guidance=s["guidance"], prompt=s["prompt"])
+
+
+@api_router.get("/experience/the-beginning/me")
+async def experience_status(request: Request):
+    """Returns user-specific progress + the currently-unlocked step."""
+    user = await _require_user(request)
+    p = await _get_or_init_progress(user.user_id)
+    current_n = p.get("current_step") or 1
+    completed = p.get("completed_steps") or []
+    is_done = len(completed) >= TOTAL_STEPS
+    # Soft-pause: if the user just submitted, hold the next step a moment.
+    last_at = p.get("last_step_at")
+    pause_remaining = 0
+    if last_at and not is_done:
+        try:
+            t = datetime.fromisoformat(last_at)
+            if t.tzinfo is None:
+                t = t.replace(tzinfo=timezone.utc)
+            elapsed = (datetime.now(timezone.utc) - t).total_seconds()
+            pause_remaining = max(0, int(STEP_PAUSE_SECONDS - elapsed))
+        except (ValueError, TypeError):
+            pause_remaining = 0
+    step_payload = None
+    if not is_done:
+        s = EXPERIENCE_STEPS[current_n - 1]
+        step_payload = _serialize_step(s).model_dump()
+    return {
+        "started": p.get("started", False),
+        "current_step": current_n,
+        "total_steps": TOTAL_STEPS,
+        "completed_steps": completed,
+        "is_done": is_done,
+        "pause_remaining": pause_remaining,
+        "step": step_payload,
+        "reflections": p.get("reflections", []),
+    }
+
+
+@api_router.post("/experience/the-beginning/start")
+async def experience_start(request: Request):
+    user = await _require_user(request)
+    p = await _get_or_init_progress(user.user_id)
+    if p.get("started"):
+        return {"status": "already_started"}
+    now = datetime.now(timezone.utc).isoformat()
+    await db.experience_progress.update_one(
+        {"user_id": user.user_id, "experience_slug": EXPERIENCE_SLUG},
+        {"$set": {"started": True, "started_at": now, "current_step": 1, "last_step_at": None}},
+    )
+    return {"status": "started"}
+
+
+@api_router.post("/experience/the-beginning/reflect")
+async def experience_reflect(inp: ReflectionInput, request: Request):
+    """Submit reflection for the current step → unlocks the next."""
+    user = await _require_user(request)
+    p = await _get_or_init_progress(user.user_id)
+    if not p.get("started"):
+        # auto-start
+        await db.experience_progress.update_one(
+            {"user_id": user.user_id, "experience_slug": EXPERIENCE_SLUG},
+            {"$set": {"started": True, "started_at": datetime.now(timezone.utc).isoformat()}},
+        )
+        p["started"] = True
+    n = p.get("current_step") or 1
+    if n < 1 or n > TOTAL_STEPS:
+        raise HTTPException(status_code=409, detail="No active step.")
+    text = (inp.text or "").strip()
+    if len(text) < MIN_REFLECTION_CHARS:
+        raise HTTPException(
+            status_code=400,
+            detail="Just a few words is enough — but please write something so the next part can open.",
+        )
+    presence = inp.presence
+    if presence is not None and (presence < 1 or presence > 5):
+        presence = None
+    now = datetime.now(timezone.utc).isoformat()
+    reflection = {
+        "n": n,
+        "text": text[:4000],
+        "presence": presence,
+        "written_at": now,
+    }
+    completed = list(p.get("completed_steps") or [])
+    if n not in completed:
+        completed.append(n)
+    is_done = len(completed) >= TOTAL_STEPS
+    next_step = n + 1 if not is_done else n
+    update = {
+        "$push": {"reflections": reflection},
+        "$set": {
+            "completed_steps": completed,
+            "current_step": next_step,
+            "last_step_at": now,
+        },
+    }
+    if is_done:
+        update["$set"]["completed_at"] = now
+    await db.experience_progress.update_one(
+        {"user_id": user.user_id, "experience_slug": EXPERIENCE_SLUG},
+        update,
+    )
+    return {
+        "status": "ok",
+        "next_step": next_step,
+        "is_done": is_done,
+        "pause_seconds": STEP_PAUSE_SECONDS if not is_done else 0,
+    }
+
+
+@api_router.post("/experience/the-beginning/reset")
+async def experience_reset(request: Request):
+    """Wipe progress for this user — testing & user choice."""
+    user = await _require_user(request)
+    await db.experience_progress.delete_one(
+        {"user_id": user.user_id, "experience_slug": EXPERIENCE_SLUG}
+    )
+    return {"status": "reset"}
+
+
+# =============================================================
 # App wiring
 # =============================================================
 app.include_router(api_router)

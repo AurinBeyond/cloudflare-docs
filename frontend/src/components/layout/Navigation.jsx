@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home", testid: "nav-home" },
+  { to: "/the-beginning", label: "The Beginning", testid: "nav-the-beginning" },
   { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
   { to: "/library", label: "Library", testid: "nav-library" },
   { to: "/meditation-corner", label: "Meditations", testid: "nav-meditation" },

@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import SocialLinks from "@/components/SocialLinks";
 
 const COLUMNS = [
   {
     title: "Explore",
     links: [
       { to: "/", label: "Home" },
+      { to: "/the-beginning", label: "The Beginning" },
       { to: "/bookstore", label: "Bookstore" },
       { to: "/library", label: "Library" },
       { to: "/learning", label: "Learning" },
@@ -58,6 +60,9 @@ export default function Footer() {
               learning. The published face of <strong className="text-[hsl(var(--aurin-text))]">prulesoul.site</strong>.
               Designed to move slowly, on purpose.
             </p>
+            <div className="mt-6" data-testid="footer-social">
+              <SocialLinks testidPrefix="footer-social" />
+            </div>
           </div>
 
           {COLUMNS.map((col) => (

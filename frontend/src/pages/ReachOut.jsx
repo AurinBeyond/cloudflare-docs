@@ -2,6 +2,7 @@ import { useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { Mail, MessageCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 import { api } from "@/lib/api";
+import SocialLinks from "@/components/SocialLinks";
 
 const TOPICS = [
   { value: "general", label: "General" },
@@ -76,6 +77,14 @@ export default function ReachOut() {
                   Library, suggest the next protocol, or summarise an entry.
                   For now it is prepared, not on.
                 </p>
+              </div>
+
+              <div data-testid="reach-out-social">
+                <div className="flex items-center gap-2 text-[13px] text-[hsl(var(--aurin-text-muted))] mb-2">
+                  Find us elsewhere
+                </div>
+                <p className="aurin-display text-2xl mt-1 mb-4">@pruesoul.life</p>
+                <SocialLinks testidPrefix="reach-out-social" />
               </div>
             </div>
           </div>

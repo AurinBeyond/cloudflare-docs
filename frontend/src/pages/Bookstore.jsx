@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { ShoppingBag, Search, Download, BookOpenCheck, ExternalLink } from "lucide-react";
 import { api } from "@/lib/api";
+import InstagramCTA from "@/components/InstagramCTA";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
@@ -116,6 +117,10 @@ export default function Bookstore() {
 
       <section className="aurin-section-sm">
         <div className="aurin-container">
+          <div className="mb-10" data-testid="bookstore-ig-cta-wrap">
+            <InstagramCTA testidPrefix="bookstore-ig-cta" />
+          </div>
+
           {loading && (
             <div data-testid="bookstore-loading" className="py-20 text-center text-[hsl(var(--aurin-text-muted))]">
               Loading the bookstore…

@@ -13,6 +13,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { fetchEntries } from "@/lib/api";
+import InstagramCTA from "@/components/InstagramCTA";
+import { Compass } from "lucide-react";
 
 const kindMeta = {
   book: { icon: BookOpen, label: "Book" },
@@ -79,6 +81,43 @@ export default function Library() {
         italicWord="structured knowledge."
         description="Free reading material, protocols, and reflections — organised by audience. Books for purchase live in the Bookstore."
       />
+
+      <section className="aurin-section-sm">
+        <div className="aurin-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5" data-testid="library-feature-row">
+            <Link
+              to="/the-beginning"
+              data-testid="library-the-beginning-card"
+              className="lg:col-span-7 aurin-card p-7 md:p-8 group hover:border-[hsl(var(--aurin-sage))] transition-colors flex flex-col justify-between gap-5"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))] shrink-0">
+                  <Compass size={18} strokeWidth={1.4} />
+                </div>
+                <div>
+                  <div className="aurin-eyebrow !mb-1">The Beginning · Free</div>
+                  <h3 className="aurin-display text-2xl md:text-3xl leading-tight">
+                    A quiet shift starts when you{" "}
+                    <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                      see clearly.
+                    </span>
+                  </h3>
+                  <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[60ch]">
+                    A simple 7-step experience. Not to fix anything — just to see.
+                    Free for now. Sign-in keeps your reflections private.
+                  </p>
+                </div>
+              </div>
+              <div className="text-[12.5px] text-[hsl(var(--aurin-sage))] group-hover:underline">
+                Open The Beginning →
+              </div>
+            </Link>
+            <div className="lg:col-span-5">
+              <InstagramCTA testidPrefix="library-ig-cta" className="h-full" />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="border-b border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container py-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
