@@ -3,6 +3,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { resetAgeConfirmation } from "@/components/AgeGate";
+import StudentCabinet from "@/components/StudentCabinet";
 import { useEffect, useState } from "react";
 
 const PREVIEW_BLOCKS = [
@@ -132,43 +133,58 @@ export default function UserPortal() {
         </div>
       </section>
 
-      {/* Preview of what will live here */}
+      {/* Signed-in: Student Cabinet · Signed-out: gentle preview */}
       <section className="aurin-section-sm">
         <div className="aurin-container">
-          <div className="aurin-eyebrow mb-5">A small preview</div>
-          <h2 className="aurin-display text-3xl md:text-4xl max-w-[22ch] mb-12">
-            What will quietly live{" "}
-            <span className="aurin-serif-italic text-[hsl(var(--aurin-sand))]">
-              here.
-            </span>
-          </h2>
+          {user ? (
+            <>
+              <div className="aurin-eyebrow mb-5">Your room</div>
+              <h2 className="aurin-display text-3xl md:text-4xl max-w-[22ch] mb-12">
+                You don't have to{" "}
+                <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                  start over.
+                </span>
+              </h2>
+              <StudentCabinet user={user} />
+            </>
+          ) : (
+            <>
+              <div className="aurin-eyebrow mb-5">A small preview</div>
+              <h2 className="aurin-display text-3xl md:text-4xl max-w-[22ch] mb-12">
+                What will quietly live{" "}
+                <span className="aurin-serif-italic text-[hsl(var(--aurin-sand))]">
+                  here.
+                </span>
+              </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="portal-preview-grid">
-            {PREVIEW_BLOCKS.map((b, i) => {
-              const Icon = b.icon;
-              return (
-                <div key={b.title} data-testid={`portal-preview-${i}`} className="aurin-card p-8 relative">
-                  <div className="flex items-center justify-between">
-                    <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text-muted))]">
-                      <Icon size={18} strokeWidth={1.4} />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5" data-testid="portal-preview-grid">
+                {PREVIEW_BLOCKS.map((b, i) => {
+                  const Icon = b.icon;
+                  return (
+                    <div key={b.title} data-testid={`portal-preview-${i}`} className="aurin-card p-8 relative">
+                      <div className="flex items-center justify-between">
+                        <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text-muted))]">
+                          <Icon size={18} strokeWidth={1.4} />
+                        </div>
+                        <span className="text-[10.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
+                          Placeholder
+                        </span>
+                      </div>
+                      <h3 className="aurin-display text-2xl mt-7">{b.title}</h3>
+                      <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                        {b.description}
+                      </p>
+                      <div className="mt-7 space-y-2.5" aria-hidden="true">
+                        <div className="h-[6px] w-full rounded-full bg-[hsl(var(--aurin-border-soft))]" />
+                        <div className="h-[6px] w-3/4 rounded-full bg-[hsl(var(--aurin-border-soft))]" />
+                        <div className="h-[6px] w-2/3 rounded-full bg-[hsl(var(--aurin-border-soft))]" />
+                      </div>
                     </div>
-                    <span className="text-[10.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
-                      {user ? "Reserved" : "Placeholder"}
-                    </span>
-                  </div>
-                  <h3 className="aurin-display text-2xl mt-7">{b.title}</h3>
-                  <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
-                    {b.description}
-                  </p>
-                  <div className="mt-7 space-y-2.5" aria-hidden="true">
-                    <div className="h-[6px] w-full rounded-full bg-[hsl(var(--aurin-border-soft))]" />
-                    <div className="h-[6px] w-3/4 rounded-full bg-[hsl(var(--aurin-border-soft))]" />
-                    <div className="h-[6px] w-2/3 rounded-full bg-[hsl(var(--aurin-border-soft))]" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="aurin-card p-6">

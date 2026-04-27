@@ -106,6 +106,10 @@ export default function MeditationPlayer({ audioUrl }) {
               className="aurin-serif-italic text-[hsl(var(--aurin-text-muted))] text-lg md:text-xl leading-[1.6] max-w-[40ch]"
             >
               This sound will open soon.
+              <br />
+              <span className="not-italic text-[13.5px] text-[hsl(var(--aurin-text-muted))]/80">
+                Human voice is being recorded.
+              </span>
             </p>
           )}
         </div>
