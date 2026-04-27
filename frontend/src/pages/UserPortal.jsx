@@ -60,13 +60,13 @@ export default function UserPortal() {
     <div data-testid="page-portal">
       <PageHeader
         tone="portal"
-        eyebrow="User Portal · Your Personal Area"
-        title={user ? "Welcome back," : "A structured space"}
+        eyebrow="Portal"
+        title={user ? "Welcome back," : "A small place"}
         italicWord={user ? user.name?.split(" ")[0] || "friend" : "that stays yours."}
         description={
           user
-            ? "This is your personal area. As content unlocks become available, they will appear here under My Content."
-            : "Your journey through Matrix Aurin lives here — your content, your progress, your account. Sign in with Google to begin."
+            ? "This is yours. As things open, they will quietly appear here."
+            : "What you read, what you write, what you keep — held in one place. Sign in with Google to begin."
         }
       >
         {loading ? (
@@ -124,23 +124,22 @@ export default function UserPortal() {
           </div>
           <div className="md:col-span-7 text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
             <p>
-              When member content opens, the Portal will give you access to your
-              purchased content, personal area, and progress through the Genesis
-              Protocols. Sign-in is wired today; member-only unlocks turn on as
-              the Bookstore goes live.
+              When members' content opens, this is where it lives. Books you've
+              bought, what you've written, what you've returned to. Quiet,
+              private, and yours.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Structural preview */}
+      {/* Preview of what will live here */}
       <section className="aurin-section-sm">
         <div className="aurin-container">
-          <div className="aurin-eyebrow mb-5">Structural Preview</div>
+          <div className="aurin-eyebrow mb-5">A small preview</div>
           <h2 className="aurin-display text-3xl md:text-4xl max-w-[22ch] mb-12">
-            The shape of the{" "}
+            What will quietly live{" "}
             <span className="aurin-serif-italic text-[hsl(var(--aurin-sand))]">
-              Portal.
+              here.
             </span>
           </h2>
 

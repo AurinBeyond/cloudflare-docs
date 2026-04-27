@@ -31,10 +31,10 @@ export default function KidsUniverse() {
     <div data-testid="page-kids">
       <PageHeader
         tone="kids"
-        eyebrow="Kids Universe · A Softer Layer"
+        eyebrow="Kids Universe"
         title="A safe, gentle place for"
         italicWord="young minds."
-        description="The calmest corner of Matrix Aurin — designed to feel warm for children and trustworthy for parents. No noise, no chaos. Stories, gentle practices, and a small creative studio for quiet drawing."
+        description="The calmest corner of the place. Warm for children, trustworthy for parents. No noise, no chaos. Stories, gentle practices, a small room for quiet drawing."
       >
         <div className="flex flex-wrap items-center gap-3">
           <span className="aurin-chip" data-testid="kids-safe-chip">
@@ -102,10 +102,9 @@ export default function KidsUniverse() {
               </span>
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[58ch]">
-              Children will be able to type a small idea — a fox, a quiet room, a
-              kite — and the studio will prepare a calm line drawing to colour.
-              For now the studio is a structured placeholder that demonstrates
-              the experience without generating real images.
+              A child types a small idea — a fox, a quiet room, a kite — and a
+              calm line drawing arrives, ready to colour. For now, a small
+              gallery of hand-drawn pages waits for you here.
             </p>
             <Link
               to="/kids-universe/coloring"

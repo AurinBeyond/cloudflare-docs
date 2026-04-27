@@ -126,7 +126,7 @@ export default function Home() {
           {/* Mini system map */}
           <div className="mt-20 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-px bg-[hsl(var(--aurin-border-soft))] border border-[hsl(var(--aurin-border-soft))] rounded-xl overflow-hidden aurin-fade-up aurin-delay-4">
             {[
-              { k: "Layers", v: "4" },
+              { k: "Doors", v: "Four" },
               { k: "Tone", v: "Calm" },
               { k: "Pace", v: "Slow" },
               { k: "Privacy", v: "Yours alone" },

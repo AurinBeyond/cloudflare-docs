@@ -77,10 +77,10 @@ export default function Library() {
     <div data-testid="page-library">
       <PageHeader
         tone="library"
-        eyebrow="Library · Free Knowledge Hub"
-        title="A central hub for"
-        italicWord="structured knowledge."
-        description="Free reading material, protocols, and reflections — organised by audience. Books for purchase live in the Bookstore."
+        eyebrow="Library · Free reading"
+        title="A quiet shelf,"
+        italicWord="freely open."
+        description="Short readings, reflections, and small practices. Read what calls. Skip what doesn't. The full books live in the Bookstore."
       />
 
       <section className="aurin-section-sm">
@@ -104,8 +104,8 @@ export default function Library() {
                     </span>
                   </h3>
                   <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[60ch]">
-                    A simple 7-step experience. Not to fix anything — just to see.
-                    Free for now. Sign-in keeps your reflections private.
+                    Seven small steps. Not to fix anything — just to see.
+                    Free for now. What you write stays yours alone.
                   </p>
                 </div>
               </div>
@@ -243,9 +243,8 @@ export default function Library() {
             </span>
           </h2>
           <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-9 max-w-[58ch]">
-            A short, calm meditation you can return to before your day begins
-            or as it ends. Designed to dissolve a little of the old code and
-            make room for what is actually yours.
+            A short, quiet meditation you can come back to. Before the day
+            starts, or as it ends. Sometimes that is enough.
           </p>
 
           <MeditationPlayer />
@@ -258,11 +257,11 @@ export default function Library() {
               Soon
             </div>
             <div>
-              <div className="aurin-eyebrow !mb-1">Premium meditation series</div>
+              <div className="aurin-eyebrow !mb-1">More to come</div>
               <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
-                A small library of deeper, longer guided sessions — recorded in
-                voice, paced for return. Arriving as a Tier 3 offering once the
-                first light has settled with the people who need it most.
+                Longer meditations are being recorded slowly, in voice. They
+                will arrive when the first one has settled with the people who
+                need it most.
               </p>
             </div>
           </div>
@@ -304,10 +303,9 @@ function SoulGiftCard() {
             </h2>
             <p className="mt-5 text-[15px] leading-[1.75] text-[hsl(var(--aurin-text-muted))] max-w-[58ch]">
               <strong className="text-[hsl(var(--aurin-text))]">Pure Soul Life</strong>{" "}
-              is a spiritual project that connects people across languages — sharing
-              inspiration, soul gifts, meditations, and inner guidance. If something
-              you read here helped, even a little, you can support the work and help
-              this light-based system reach more hearts around the world.
+              is a quiet project across languages — small offerings, soul gifts,
+              meditations. If something here helped, even a little, you can
+              keep this work alive for someone else.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <a

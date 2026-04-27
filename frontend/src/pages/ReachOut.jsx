@@ -40,10 +40,10 @@ export default function ReachOut() {
     <div data-testid="page-reach-out">
       <PageHeader
         tone="default"
-        eyebrow="Reach Out · A Direct Line"
+        eyebrow="Reach Out"
         title="A short message,"
         italicWord="and we'll write back."
-        description="No long forms, no tickets. Just a quiet way to say something — a question, a thought, or a problem with the system."
+        description="No long forms. No tickets. Just a quiet way to say something — a question, a thought, or something that didn't work."
       />
 
       <section className="aurin-section-sm">
@@ -71,11 +71,11 @@ export default function ReachOut() {
                 <div className="flex items-center gap-2 text-[13px] text-[hsl(var(--aurin-text-muted))]">
                   <MessageCircle size={14} /> The Guardian
                 </div>
-                <p className="aurin-display text-2xl mt-2">For navigation help</p>
+                <p className="aurin-display text-2xl mt-2">A quiet companion</p>
                 <p className="mt-2 text-[13.5px] text-[hsl(var(--aurin-text-muted))] max-w-sm">
-                  When the AI companion is active, it can guide you through the
-                  Library, suggest the next protocol, or summarise an entry.
-                  For now it is prepared, not on.
+                  When it wakes, it will help you find your way through the
+                  reading and the steps — and quietly suggest what might come
+                  next. For now it is waiting.
                 </p>
               </div>
 

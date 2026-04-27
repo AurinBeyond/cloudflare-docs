@@ -88,10 +88,9 @@ export default function TheBeginning() {
           </Block>
 
           <Block eyebrow="What this is" data-testid="tb-what">
-            <p>This is a simple 7-step experience.</p>
+            <p>This is a small, quiet sequence.</p>
             <p>
-              Not to fix anything. Not a training. Not a system you have
-              to complete.
+              Seven small steps. Not to fix anything. Not to teach you anything.
             </p>
             <p>Just to see.</p>
           </Block>

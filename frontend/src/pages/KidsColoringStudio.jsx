@@ -61,10 +61,10 @@ export default function KidsColoringStudio() {
     <div data-testid="page-kids-coloring">
       <PageHeader
         tone="kids"
-        eyebrow="Aurin Kids · Coloring System"
+        eyebrow="Aurin Kids · Coloring"
         title="Quiet pages,"
         italicWord="ready to colour."
-        description="Each illustration is hand-tuned line art designed for paper-friendly printing. Pick a page, print it on plain paper, and let creativity breathe at its own pace."
+        description="Hand-tuned line drawings, made for paper. Pick one, print it, let creativity breathe."
       >
         <Link
           to="/kids-universe"

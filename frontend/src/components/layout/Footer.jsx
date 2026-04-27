@@ -59,9 +59,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-sm">
-              A structured digital home for self-mastery, reflection, and guided
+              A quiet digital home for self-mastery, reflection, and gentle
               learning. The published face of <strong className="text-[hsl(var(--aurin-text))]">prulesoul.site</strong>.
-              Designed to move slowly, on purpose.
+              Made to move slowly, on purpose.
             </p>
             <div className="mt-6" data-testid="footer-social">
               <SocialLinks testidPrefix="footer-social" />
@@ -108,11 +108,11 @@ export default function Footer() {
             © {new Date().getFullYear()} prulesoul.site · Matrix Aurin. Quiet by design.
           </div>
           <div className="flex items-center gap-5">
-            <span>Structured</span>
+            <span>Quiet</span>
             <span className="w-1 h-1 rounded-full bg-[hsl(var(--aurin-border))]" />
             <span>Calm</span>
             <span className="w-1 h-1 rounded-full bg-[hsl(var(--aurin-border))]" />
-            <span>Guided</span>
+            <span>Yours</span>
           </div>
         </div>
       </div>

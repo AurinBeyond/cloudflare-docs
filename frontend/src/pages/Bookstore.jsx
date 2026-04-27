@@ -59,14 +59,14 @@ export default function Bookstore() {
     <div data-testid="page-bookstore">
       <PageHeader
         tone="library"
-        eyebrow="Bookstore · Paid Publications"
+        eyebrow="Bookstore"
         title="Slow books for"
         italicWord="serious readers."
-        description="Digital books, PDFs, and structured stories. Each title is sold once and yours to keep — read online, or download. Pricing is structured for the Norwegian 0% VAT digital book rate."
+        description="Books, PDFs, and stories — written slowly, meant to be read slowly. Each title is sold once and yours to keep."
       >
         <div className="flex flex-wrap items-center gap-3">
           <span className="aurin-chip" data-testid="bookstore-tax-chip">
-            · Tax-ready: 0% VAT (Norway · digital books)
+            · 0% VAT · digital books · Norway
           </span>
           <span className="aurin-chip" data-testid="bookstore-payments-chip">
             · Payments soon
@@ -125,9 +125,8 @@ export default function Bookstore() {
             data-testid="bookstore-core-library-line"
             className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-10 max-w-[60ch] aurin-serif-italic"
           >
-            To integrate this frequency deeper, explore the Core Library —
-            slow-written books for adults, calm storybooks for children. No
-            urgency. Read in the order that feels true.
+            Slow-written books for adults. Calm storybooks for children.
+            No urgency. Read in the order that feels true.
           </p>
 
           {loading && (
