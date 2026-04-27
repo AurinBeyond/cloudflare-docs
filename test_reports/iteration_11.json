@@ -1,0 +1,47 @@
+{
+  "summary": "Iteration 11 testing — Private Cabinet (Quiet Room), Library refactor (hub + adults + kids subroutes), 7th free book 'beyond-the-matrix-i' with soft Buy→Continue copy. Backend 16/16 pytest cases pass (auth gating, full cabinet flow incl. crisis keyword + thread_key + after-3 continuation, books regression, untouched endpoints). Frontend: all 18 smoke routes return 200 with main content; nav-private-room navigates correctly; /private-room unauthenticated shows cabinet-gate and routes to /portal?next=%2Fprivate-room; authenticated flow walks through intro (12 paragraphs cabinet-intro-p-0..11) → confirm (3 checkboxes + thread option, Continue disabled until all 3 checked) → chat (send disabled on empty/whitespace) → after 3 messages cabinet-continuation appears with cabinet-continue-deeper disabled. Bookstore renders 7 books; beyond-the-matrix-i has free-flow buttons (open + take with download attr) and free-notice text 'Take it, if it feels meant for you.'; all 6 paid books have buy-disabled + refund-notice with the new soft copy. Two real issues found.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "LibraryKidsRead (/library/kids/read)",
+        "issue": "Page renders the empty state ('Stories arrive slowly. The first ones are on their way.' / data-testid kids-read-empty) instead of the angels-tales sample card. Backend /api/books returns angels-tales with audience='kids' AND pdf_url='/assets/books/angels-tales.pdf' — so per spec the card kids-read-sample-angels-tales (with -open and -download) MUST render. Likely cause: the page either does not fetch /api/books, or filters by price=0 (angels-tales price is 25), or filters out books that also have an external_read_url. Spec wording was 'free-PDF kids book exists (angels-tales has pdf_url)' — gating on pdf_url presence (not price) should fix it. Static asset /assets/books/angels-tales.pdf returns 200, so target is fine.",
+        "selector": "[data-testid=\"kids-read-sample-angels-tales\"]",
+        "priority": "HIGH"
+      },
+      {
+        "component": "PrivateRoom cabinet-reset",
+        "issue": "Per spec: 'cabinet-reset closes the session and returns to cabinet-intro.' Observed: after clicking cabinet-reset the cabinet-intro element is NOT visible (count=0); page stays in confirm/chat layout. Backend /api/cabinet/clear is invoked correctly (verified — close test passes), but the frontend phase state isn't reset to 'intro'. Should reset local phase state to 'intro' (or refetch /me and force phase='intro') after a successful clear.",
+        "selector": "[data-testid=\"cabinet-intro\"] (after [data-testid=\"cabinet-reset\"] click)",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration11.py",
+    "/app/test_reports/pytest/iteration_11.xml"
+  ],
+  "action_items": [
+    "FIX /library/kids/read: render kids-read-sample-angels-tales card whenever a kids-audience book has pdf_url set (don't gate on price). Card must include -open (to pdf_url) and -download (download anchor) child testids.",
+    "FIX cabinet-reset: after POST /api/cabinet/clear succeeds, also reset the page's phase state back to 'intro' so cabinet-intro renders again."
+  ],
+  "critical_code_review_comments": [
+    "server.py is now ~2248 lines — recommend splitting into routers (auth/blog/books/content/experience/cabinet) for maintainability.",
+    "Cabinet message endpoint correctly excludes Mongo _id via the {_id:0} projection in _get_active_cabinet_session — good.",
+    "_pick_prompt is deterministic (turn + len%3) which means after the same turn count two users can occasionally land on the same prompt; acceptable since copy is curated, but consider random.choice for variety.",
+    "CabinetSession persists for 7 days via session token expiry — but cabinet sessions themselves have no TTL/index. Consider a TTL on started_at if stale rooms accumulate.",
+    "Frontend Bookstore correctly differentiates free vs paid by (price==0 && pdf_url && !external_read_url) — verified for beyond-the-matrix-i; 6 paid books each emit buy+refund-notice testids."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration11.py (created — 16 pytest cases)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "92%"},
+  "test_credentials": "n/a — synthetic Mongo session minted in-test (per /app/auth_testing.md). Cleaned up after run.",
+  "seed_data_creation": "Test created and removed: 1 db.users record (email matches test.it11.*), 1 db.user_sessions record (session_token starts test_session_it11_*), 1 db.cabinet_sessions record. All cleaned up.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend cabinet endpoints + new free book wired correctly — all 16 backend tests pass. Frontend gaps to retest after main agent fixes: (1) /library/kids/read should render kids-read-sample-angels-tales card with -open and -download child testids; backend already returns angels-tales with audience=kids and pdf_url, so frontend filter is the bug. (2) On /private-room after cabinet-reset, the phase should fall back to 'intro' so cabinet-intro re-renders. All other testids spec-compliant: nav-private-room, library-hub-* (grid/adults/kids/the-beginning/ig-cta-link), library-kids-* (grid/read/draw), page-library-kids-read, kids-coloring-grid, page-private-room, cabinet-gate, cabinet-gate-signin (→ /portal?next=%2Fprivate-room), cabinet-intro-p-0..11 (all 12 present), cabinet-intro-begin, cabinet-confirm-{a,b,c,thread,continue}, cabinet-chat, cabinet-input, cabinet-send, cabinet-continuation, cabinet-continue-deeper (disabled), cabinet-reset. Bookstore: 7 distinct slugs, btmi (-open, -take with download attr, -free-notice 'Take it, if it feels meant for you.'); 6 paid books each have -buy (disabled) and -refund-notice ('The full version opens soon. By continuing later, you accept the Refund Policy.'). Note the spec mentioned testid 'bookstore-item-aurin-hub-buy/-refund-notice' but 'aurin-hub' isn't an actual seeded slug; the equivalent paid testids exist on real slugs and were verified.",
+  "rca of the issue": "Issue 1 (kids-read-empty): /library/kids/read either skips API call or applies stronger filter than spec; angels-tales meets the spec criterion (audience=kids + pdf_url) but isn't surfaced. Reproduce: open /library/kids/read in browser → only kids-read-empty visible. Mitigation: in LibraryKidsRead.jsx, fetch /api/books and render any item where audience==='kids' AND !!pdf_url, regardless of price. Issue 2 (reset doesn't return to intro): PrivateRoom.jsx phase state likely set to 'confirm' after consent flag is satisfied; cabinet-reset only POSTs /clear but doesn't reset local phase state. Reproduce: complete intro → confirm → chat, click cabinet-reset → cabinet-intro count=0. Mitigation: in the cabinet-reset handler, after the await for clearCabinet, also setPhase('intro') and clear local consent toggles."
+}

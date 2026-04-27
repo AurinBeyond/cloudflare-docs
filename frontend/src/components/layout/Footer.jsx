@@ -7,6 +7,7 @@ const COLUMNS = [
     links: [
       { to: "/", label: "Home" },
       { to: "/the-beginning", label: "The Beginning" },
+      { to: "/private-room", label: "The Quiet Room" },
       { to: "/aurin-philosophy", label: "Aurin Philosophy" },
       { to: "/blog", label: "Insights · Blog" },
       { to: "/bookstore", label: "Bookstore" },

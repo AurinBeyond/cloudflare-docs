@@ -22,6 +22,10 @@ import TheBeginningStep from "@/pages/TheBeginningStep";
 import AurinPhilosophy from "@/pages/AurinPhilosophy";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import LibraryHub from "@/pages/LibraryHub";
+import LibraryKids from "@/pages/LibraryKids";
+import LibraryKidsRead from "@/pages/LibraryKidsRead";
+import PrivateRoom from "@/pages/PrivateRoom";
 
 function AppRouter() {
   const location = useLocation();
@@ -38,7 +42,11 @@ function AppRouter() {
         <Route path="/legal" element={<Legal />} />
         <Route path="/bookstore" element={<Bookstore />} />
         <Route path="/bookstore/:slug" element={<BookDetail />} />
-        <Route path="/library" element={<Library />} />
+        <Route path="/library" element={<LibraryHub />} />
+        <Route path="/library/adults" element={<Library />} />
+        <Route path="/library/kids" element={<LibraryKids />} />
+        <Route path="/library/kids/read" element={<LibraryKidsRead />} />
+        <Route path="/library/kids/draw" element={<KidsColoringStudio />} />
         <Route path="/library/:slug" element={<LibraryEntry />} />
         <Route path="/learning" element={<Learning />} />
         <Route path="/kids-universe" element={<KidsUniverse />} />
@@ -49,6 +57,7 @@ function AppRouter() {
         <Route path="/aurin-philosophy" element={<AurinPhilosophy />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/private-room" element={<PrivateRoom />} />
         <Route path="/reach-out" element={<ReachOut />} />
         <Route path="/portal" element={<UserPortal />} />
         <Route path="/admin/content" element={<AdminContent />} />

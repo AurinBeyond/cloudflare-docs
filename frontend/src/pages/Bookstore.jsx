@@ -60,9 +60,9 @@ export default function Bookstore() {
       <PageHeader
         tone="library"
         eyebrow="Bookstore"
-        title="Slow books for"
-        italicWord="serious readers."
-        description="Books, PDFs, and stories — written slowly, meant to be read slowly. Each title is sold once and yours to keep."
+        title="If something started moving in you,"
+        italicWord="here you can go deeper."
+        description="Not to do more — to see more clearly. Each title is sold once and yours to keep."
       >
         <div className="flex flex-wrap items-center gap-3">
           <span className="aurin-chip" data-testid="bookstore-tax-chip">
@@ -209,25 +209,46 @@ export default function Bookstore() {
                         >
                           Preview <ExternalLink size={12} />
                         </a>
+                      ) : b.pdf_url && b.price === 0 ? (
+                        <a
+                          href={b.pdf_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-testid={`bookstore-item-${b.slug}-open`}
+                          className="text-[13px] text-[hsl(var(--aurin-text))] hover:text-[hsl(var(--aurin-sage))] transition-colors"
+                        >
+                          Open the book →
+                        </a>
                       ) : (
                         <Link
                           to={`/bookstore/${b.slug}`}
                           data-testid={`bookstore-item-${b.slug}-read`}
                           className="text-[13px] text-[hsl(var(--aurin-text))] hover:text-[hsl(var(--aurin-sage))] transition-colors"
                         >
-                          Read online →
+                          About this book →
                         </Link>
                       )}
-                      <button
-                        disabled
-                        data-testid={`bookstore-item-${b.slug}-buy`}
-                        title="Payments not yet active"
-                        className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px] opacity-60 cursor-not-allowed"
-                      >
-                        Buy access <ShoppingBag size={12} />
-                      </button>
+                      {b.price === 0 && b.pdf_url ? (
+                        <a
+                          href={b.pdf_url}
+                          download
+                          data-testid={`bookstore-item-${b.slug}-take`}
+                          className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+                        >
+                          Take it <Download size={12} />
+                        </a>
+                      ) : (
+                        <button
+                          disabled
+                          data-testid={`bookstore-item-${b.slug}-buy`}
+                          title="The full version opens soon."
+                          className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px] opacity-60 cursor-not-allowed"
+                        >
+                          Continue <ShoppingBag size={12} />
+                        </button>
+                      )}
                     </div>
-                    {b.pdf_url && (
+                    {b.pdf_url && b.price > 0 && (
                       <a
                         href={b.pdf_url}
                         target="_blank"
@@ -235,22 +256,32 @@ export default function Bookstore() {
                         data-testid={`bookstore-item-${b.slug}-sample-pdf`}
                         className="mt-3 inline-flex items-center gap-1.5 text-[12px] text-[hsl(var(--aurin-sage))] hover:underline"
                       >
-                        <Download size={12} /> Free PDF sample
+                        <Download size={12} /> Free sample
                       </a>
                     )}
-                    <p
-                      data-testid={`bookstore-item-${b.slug}-refund-notice`}
-                      className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
-                    >
-                      By purchasing, you accept the{" "}
-                      <Link
-                        to="/legal#refund-policy"
-                        className="text-[hsl(var(--aurin-sage))] hover:underline"
+                    {b.price > 0 ? (
+                      <p
+                        data-testid={`bookstore-item-${b.slug}-refund-notice`}
+                        className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
                       >
-                        Refund Policy
-                      </Link>
-                      . PDF delivered by email after checkout. Digital goods are final by default.
-                    </p>
+                        The full version opens soon. By continuing later, you
+                        accept the{" "}
+                        <Link
+                          to="/legal#refund-policy"
+                          className="text-[hsl(var(--aurin-sage))] hover:underline"
+                        >
+                          Refund Policy
+                        </Link>
+                        .
+                      </p>
+                    ) : (
+                      <p
+                        data-testid={`bookstore-item-${b.slug}-free-notice`}
+                        className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
+                      >
+                        Take it, if it feels meant for you.
+                      </p>
+                    )}
                   </div>
                 </article>
               ))}

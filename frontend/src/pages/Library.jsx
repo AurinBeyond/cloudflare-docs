@@ -77,10 +77,10 @@ export default function Library() {
     <div data-testid="page-library">
       <PageHeader
         tone="library"
-        eyebrow="Library · Free reading"
-        title="A quiet shelf,"
-        italicWord="freely open."
-        description="Short readings, reflections, and small practices. Read what calls. Skip what doesn't. The full books live in the Bookstore."
+        eyebrow="Library · For adults"
+        title="Sometimes one thought is enough"
+        italicWord="to set something moving."
+        description="Take what you need here. No obligation."
       />
 
       <section className="aurin-section-sm">

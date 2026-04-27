@@ -151,3 +151,21 @@ export async function subscribeNewsletter(email, source) {
   });
   return res.data;
 }
+
+/* ----------------------- Private Cabinet ----------------------- */
+export async function fetchCabinet() {
+  const res = await api.get("/cabinet/me");
+  return res.data;
+}
+export async function startCabinet() {
+  const res = await api.post("/cabinet/start");
+  return res.data;
+}
+export async function sendCabinetMessage(text, keepThread = false) {
+  const res = await api.post("/cabinet/message", { text, keep_thread: keepThread });
+  return res.data;
+}
+export async function clearCabinet() {
+  const res = await api.post("/cabinet/clear");
+  return res.data;
+}

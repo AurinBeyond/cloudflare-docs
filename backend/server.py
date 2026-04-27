@@ -989,6 +989,29 @@ async def create_book(inp: BookCreate):
 
 
 SEED_BOOKS: List[dict] = [
+    {
+        "slug": "beyond-the-matrix-i",
+        "title": "Beyond the Matrix",
+        "subtitle": "Volume I — A first reading",
+        "description": (
+            "The opening volume of the Beyond the Matrix series. A short, "
+            "honest book about the invisible code most of us inherited — and "
+            "the calm work of becoming free of it. Free PDF for early readers."
+        ),
+        "author": "prulesoul",
+        "price": 0.0,
+        "currency": "USD",
+        "audience": "adult",
+        "tax_category": "book_zero_rate_ready",
+        "delivery_options": ["read_online", "download_pdf"],
+        "pages": None,
+        "tags": ["consciousness", "patterns", "reading"],
+        "lemonsqueezy_product_id": None,
+        "external_read_url": None,
+        "pdf_url": "/assets/books/beyond-the-matrix-vol1.pdf",
+        "source_path": "bookstore/beyond-the-matrix-i.md",
+        "markdown": """## About\n\nThe first volume in the Beyond the Matrix series. A short, honest book.\n\n## How to read\n\nSlowly. With pauses. Underline freely.\n""",
+    },
     # ---------- ADULT (3 × $35) ----------
     {
         "slug": "you-dont-have-to-dance-to-anothers-tune",
@@ -2000,6 +2023,198 @@ async def newsletter_signup(inp: NewsletterSignup):
         upsert=True,
     )
     return {"status": "subscribed", "email": email}
+
+
+# =============================================================
+# Private Cabinet — The Quiet Room
+# -------------------------------------------------------------
+# A reflective conversation space. NOT therapy, NOT diagnosis,
+# NOT a chatbot in the public-facing sense. The "guide" responds
+# with curated reflective questions drawn from a fixed pool —
+# this lets the structure ship calmly today, with an LLM layer
+# wired in later without breaking the contract.
+#
+# Public copy is held in the frontend. The backend stores only:
+#   - session-scoped messages by default
+#   - optional anonymous "thread key" for continuity
+#   - a soft after-three-replies "continuation" gate
+# =============================================================
+
+CABINET_FREE_REPLIES = 3  # after this many guide replies, surface the soft continuation
+CABINET_MAX_USER_MSG = 4000
+
+# Curated reflective prompts. Picked deterministically from a small
+# rotation so that two consecutive turns don't repeat. Voice rules:
+#   reflect, not advise · ask, not conclude · open, not close.
+CABINET_PROMPTS = [
+    "It sounds like this isn't just one situation. It's something that returns. Do you notice what shifts just before that moment?",
+    "If you had to put this into a single word, what would it be?",
+    "Where does your body feel this most? Sometimes the body knows before the thought.",
+    "Is this feeling new, or already familiar from somewhere else?",
+    "What part of you is still holding on to this?",
+    "What would the smallest possible different choice look like — one that doesn't pull you back into the old shape?",
+    "Does this feel like yours, or learned?",
+    "If you didn't have to defend yourself here, what would you actually feel?",
+    "Some answers arrive before thought. Is anything quietly already known?",
+    "If something inside you were softer right now, what would it say?",
+]
+
+# Crisis triggers — case-insensitive substring match. We respond
+# calmly with an external-help nudge and stop deeper probing.
+CRISIS_KEYWORDS = [
+    "suicide", "kill myself", "kill me", "end my life", "end it all",
+    "want to die", "wanna die", "self harm", "self-harm", "cut myself",
+    "hurt myself", "hurt someone", "abuse me", "being abused",
+    "no reason to live", "can't go on", "cannot go on",
+]
+
+CRISIS_RESPONSE = (
+    "I can hear that this is very heavy right now.\n\n"
+    "This room isn't built to carry a crisis alone. "
+    "Please reach out to local emergency services, a doctor, or someone you trust.\n\n"
+    "You don't have to hold this moment by yourself. "
+    "If you are in immediate danger, please call your local emergency number now."
+)
+
+
+class CabinetMessage(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    role: Literal["user", "guide", "system"]
+    text: str
+    written_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    is_crisis: bool = False
+
+
+class CabinetSession(BaseModel):
+    """One private-room session. user_id is required (login-gated)."""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    thread_key: Optional[str] = None  # anonymous continuity key (user-controlled)
+    keep_thread: bool = False
+    messages: List[CabinetMessage] = Field(default_factory=list)
+    started_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    closed: bool = False
+
+
+class CabinetMessageInput(BaseModel):
+    text: str
+    keep_thread: bool = False  # if true on first message, allocate a thread_key
+
+
+def _detect_crisis(text: str) -> bool:
+    low = (text or "").lower()
+    return any(k in low for k in CRISIS_KEYWORDS)
+
+
+def _pick_prompt(turn: int, last_text: str) -> str:
+    """Pick a reflection question that doesn't immediately repeat the previous one."""
+    idx = (turn + (len(last_text or "") % 3)) % len(CABINET_PROMPTS)
+    return CABINET_PROMPTS[idx]
+
+
+async def _get_active_cabinet_session(user_id: str) -> dict:
+    sess = await db.cabinet_sessions.find_one(
+        {"user_id": user_id, "closed": False},
+        {"_id": 0},
+        sort=[("started_at", -1)],
+    )
+    return sess
+
+
+@api_router.get("/cabinet/me")
+async def cabinet_me(request: Request):
+    """Return the user's active session (or null) and policy values."""
+    user = await _require_user(request)
+    sess = await _get_active_cabinet_session(user.user_id)
+    guide_count = 0
+    if sess:
+        guide_count = sum(1 for m in sess.get("messages", []) if m.get("role") == "guide")
+    return {
+        "session": sess,
+        "guide_replies": guide_count,
+        "free_replies": CABINET_FREE_REPLIES,
+        "show_continuation": bool(sess) and guide_count >= CABINET_FREE_REPLIES,
+    }
+
+
+@api_router.post("/cabinet/start")
+async def cabinet_start(request: Request):
+    """Open a fresh session. Closes any previous one for this user."""
+    user = await _require_user(request)
+    await db.cabinet_sessions.update_many(
+        {"user_id": user.user_id, "closed": False},
+        {"$set": {"closed": True}},
+    )
+    sess = CabinetSession(user_id=user.user_id)
+    await db.cabinet_sessions.insert_one(sess.model_dump())
+    return {"session_id": sess.id}
+
+
+@api_router.post("/cabinet/message")
+async def cabinet_message(inp: CabinetMessageInput, request: Request):
+    """Append a user message → return the guide's reflective reply."""
+    user = await _require_user(request)
+    text = (inp.text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Empty message.")
+    if len(text) > CABINET_MAX_USER_MSG:
+        text = text[:CABINET_MAX_USER_MSG]
+
+    sess = await _get_active_cabinet_session(user.user_id)
+    if not sess:
+        # auto-open a session
+        new_sess = CabinetSession(user_id=user.user_id)
+        await db.cabinet_sessions.insert_one(new_sess.model_dump())
+        sess = await _get_active_cabinet_session(user.user_id)
+
+    # Optional: lock in continuity on first turn
+    if inp.keep_thread and not sess.get("keep_thread"):
+        thread_key = sess.get("thread_key") or uuid.uuid4().hex[:16]
+        await db.cabinet_sessions.update_one(
+            {"id": sess["id"]},
+            {"$set": {"keep_thread": True, "thread_key": thread_key}},
+        )
+        sess["keep_thread"] = True
+        sess["thread_key"] = thread_key
+
+    # User message
+    user_msg = CabinetMessage(role="user", text=text)
+    is_crisis = _detect_crisis(text)
+    if is_crisis:
+        user_msg.is_crisis = True
+
+    # Guide reply
+    guide_count_before = sum(1 for m in sess.get("messages", []) if m.get("role") == "guide")
+    if is_crisis:
+        guide_text = CRISIS_RESPONSE
+    else:
+        guide_text = _pick_prompt(guide_count_before, text)
+    guide_msg = CabinetMessage(role="guide", text=guide_text, is_crisis=is_crisis)
+
+    await db.cabinet_sessions.update_one(
+        {"id": sess["id"]},
+        {"$push": {"messages": {"$each": [user_msg.model_dump(), guide_msg.model_dump()]}}},
+    )
+
+    new_guide_count = guide_count_before + 1
+    return {
+        "guide": guide_msg.model_dump(),
+        "is_crisis": is_crisis,
+        "guide_replies": new_guide_count,
+        "show_continuation": (not is_crisis) and (new_guide_count >= CABINET_FREE_REPLIES),
+        "thread_key": sess.get("thread_key") if sess.get("keep_thread") else None,
+    }
+
+
+@api_router.post("/cabinet/clear")
+async def cabinet_clear(request: Request):
+    """Close the active session (does not delete history; user can rejoin via thread_key)."""
+    user = await _require_user(request)
+    await db.cabinet_sessions.update_many(
+        {"user_id": user.user_id, "closed": False},
+        {"$set": {"closed": True}},
+    )
+    return {"status": "cleared"}
 
 
 # =============================================================

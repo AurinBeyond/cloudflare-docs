@@ -5,12 +5,12 @@ import { Menu, X } from "lucide-react";
 const NAV_ITEMS = [
   { to: "/", label: "Home", testid: "nav-home" },
   { to: "/the-beginning", label: "The Beginning", testid: "nav-the-beginning" },
+  { to: "/private-room", label: "Quiet Room", testid: "nav-private-room" },
   { to: "/aurin-philosophy", label: "Philosophy", testid: "nav-aurin-philosophy" },
   { to: "/blog", label: "Insights", testid: "nav-blog" },
   { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
   { to: "/library", label: "Library", testid: "nav-library" },
   { to: "/about", label: "Origin", testid: "nav-origin" },
-  { to: "/reach-out", label: "Reach Out", testid: "nav-reach-out" },
 ];
 
 export default function Navigation() {
