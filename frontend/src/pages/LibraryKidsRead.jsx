@@ -19,19 +19,26 @@ export default function LibraryKidsRead() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      try {
-        const [eList, bRes] = await Promise.all([
-          fetchEntries({ surface: "library", audience: "kids" }),
-          api.get("/books?audience=kids"),
-        ]);
-        if (!alive) return;
-        setEntries(eList || []);
-        setFreeBooks((bRes.data || []).filter((b) => b.pdf_url));
-      } catch {
-        /* show empty state */
-      } finally {
-        if (alive) setLoading(false);
-      }
+      // Run independently so a failure in one doesn't discard the other.
+      const eP = fetchEntries({ surface: "library", audience: "kids-universe" })
+        .then((list) => {
+          if (alive) setEntries(list || []);
+        })
+        .catch(() => {
+          /* no kids entries yet — fine */
+        });
+      const bP = api
+        .get("/books", { params: { audience: "kids" } })
+        .then((res) => {
+          if (!alive) return;
+          const books = Array.isArray(res.data) ? res.data : [];
+          setFreeBooks(books.filter((b) => !!b.pdf_url));
+        })
+        .catch(() => {
+          /* no kids books yet — fine */
+        });
+      await Promise.all([eP, bP]);
+      if (alive) setLoading(false);
     })();
     return () => {
       alive = false;

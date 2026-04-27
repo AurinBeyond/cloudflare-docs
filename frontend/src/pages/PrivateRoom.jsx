@@ -126,13 +126,18 @@ export default function PrivateRoom() {
   };
 
   const handleReset = async () => {
-    if (!window.confirm("Begin a new session? This closes the current thread.")) return;
-    await clearCabinet();
+    try {
+      await clearCabinet();
+    } catch {
+      /* even if backend errors, return the user to a clean local state */
+    }
     setMessages([]);
     setShowContinuation(false);
     setThreadKey(null);
     setKeepThread(false);
     setConfirms({ a: false, b: false, c: false });
+    setInput("");
+    setError(null);
     setPhase(PHASES.INTRO);
   };
 

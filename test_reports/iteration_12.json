@@ -1,0 +1,45 @@
+{
+  "summary": "Iteration 12 retest of the two P0 frontend fixes from iteration 11. Both fixes verified PASS end-to-end against the live preview URL. Backend pytest (/app/backend/tests/test_iteration11.py) still 16/16 green — no backend code changed.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verified_fixes": [
+    {
+      "fix": "FIX 1 — /library/kids/read renders angels-tales sample card",
+      "status": "PASS",
+      "observations": "page-library-kids-read visible; kids-read-free-samples wrapper present (count=1); kids-read-sample-angels-tales present (count=1); kids-read-sample-angels-tales-open present with href='/assets/books/angels-tales.pdf'; kids-read-sample-angels-tales-download present with href='/assets/books/angels-tales.pdf' AND download attribute set; kids-read-empty count=0 (correctly hidden). LibraryKidsRead.jsx now correctly (a) uses audience='kids-universe' for fetchEntries and (b) runs the books fetch in an independent promise so a 422 on /api/content/entries cannot discard the books payload; freeBooks filter gates on !!b.pdf_url which matches the spec wording."
+    },
+    {
+      "fix": "FIX 2 — /private-room cabinet-reset returns to cabinet-intro (single click, no confirm modal)",
+      "status": "PASS",
+      "observations": "End-to-end flow walked under a synthetic Mongo session (Bearer token persisted via localStorage key 'aurin_session_token' + session_token cookie): cabinet-intro visible → cabinet-intro-begin clicked → cabinet-confirm visible → 3 checkboxes checked (cabinet-confirm-a/b/c) → cabinet-confirm-continue enabled (is_disabled()==False) → clicked → cabinet-chat visible → cabinet-input filled and cabinet-send clicked → cabinet-bubble-guide rendered (guide reply arrived from /api/cabinet/message) → cabinet-reset clicked ONCE (window.confirm removed as described) → cabinet-intro reappeared with count=1; cabinet-chat count=0; cabinet-confirm count=0. handleReset in PrivateRoom.jsx now awaits clearCabinet() and unconditionally resets local state (messages=[], showContinuation=false, threadKey=null, keepThread=false, confirms={a/b/c:false}, input='', error=null) before setPhase(PHASES.INTRO)."
+    },
+    {
+      "fix": "Backend regression",
+      "status": "PASS",
+      "observations": "pytest /app/backend/tests/test_iteration11.py → 16 passed in 4.94s. Covers cabinet auth gating (4x 401), cabinet flow (me/start/message crisis+thread+empty-400/continuation-after-3/clear), books regression (7 books incl. beyond-the-matrix-i + static PDF 200), and untouched-endpoint smoke (blog list, content brand, experience me 401)."
+    }
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iteration11.py",
+    "/app/test_reports/pytest/iteration_12.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "LibraryKidsRead.jsx: the independent-promise pattern (two .then/.catch with a Promise.all join) is clean and resilient to one-sided 422s — good fix.",
+    "PrivateRoom.jsx handleReset: great that the 'even if backend errors, return the user to a clean local state' comment matches the implementation (try/catch is empty and state reset runs unconditionally). Single-click UX without window.confirm is also a better fit for a 'quiet room' interaction.",
+    "Minor (not blocking): PrivateRoom.jsx still holds all sub-panels and ~500 lines in one file; splitting SoftGate / IntroLetter / ConfirmPanel / ChatPanel / Bubble into /components/cabinet/* would help future edits and testability, but is cosmetic.",
+    "Minor: LibraryKidsRead.jsx filter `books.filter((b) => !!b.pdf_url)` would also surface a paid-kids book that merely has a sample PDF — currently only angels-tales qualifies so no regression, but if a priced kids book ships later with a pdf_url it will appear in the 'Free to read' column. Consider tightening to `!b.price || b.price === 0` if that ever becomes a concern."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "n/a — synthetic Mongo session minted in-test (UID test-it12-88e35591, deleted after run). Per /app/auth_testing.md. localStorage key 'aurin_session_token' was seeded so the frontend axios interceptor attaches Bearer auth.",
+  "seed_data_creation": "Created + cleaned up: 1 db.users, 1 db.user_sessions, 1 db.cabinet_sessions (all keyed on user_id=test-it12-88e35591). Cleanup verified: users=1, sessions=1, cabinet=1 rows deleted.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Both iteration-11 P0 bugs are fully resolved. Backend: keep using /app/backend/tests/test_iteration11.py as the regression suite (16/16). Frontend auth-for-tests: Bearer token MUST be stored in localStorage under key 'aurin_session_token' BEFORE navigating to any auth-gated page (cookie alone is not enough — AuthProvider reads localStorage via lib/api.js interceptor). See the working pattern in this iteration: go to origin → page.evaluate localStorage.setItem → context.add_cookies → navigate. LemonSqueezy checkout buttons remain intentionally placeholder (MOCKED) — do not flag. No further retest required for the two fixes.",
+  "rca of the issue": "Both issues were frontend-only state-handling bugs. Issue 1: LibraryKidsRead.jsx was using a single awaited fetch chain and/or the wrong audience param on entries, so a 422 on /api/content/entries short-circuited the books fetch → kids-read-empty. Fix (verified): split fetchEntries and /api/books into independent promises, each with its own .catch; books filter keyed on !!pdf_url. Issue 2: handleReset posted /api/cabinet/clear but never called setPhase(PHASES.INTRO) — and it was additionally gated by window.confirm. Fix (verified): remove the confirm modal, unconditionally reset all local state + setPhase(PHASES.INTRO) inside a try/finally shape so even a backend error leaves the client on the intro letter."
+}
