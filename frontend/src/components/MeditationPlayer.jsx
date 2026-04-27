@@ -1,72 +1,61 @@
 import { useEffect, useRef, useState } from "react";
-import { Play, Pause, RotateCcw, Sparkles } from "lucide-react";
+import { Play, Pause, Sparkles } from "lucide-react";
+import { mediaConfig } from "@/lib/mediaConfig";
 
 /**
- * Aurin First Light — a guided meditation lead magnet.
+ * First Light — minimal audio container.
  *
- * No real audio yet (recording is in production). The "player" plays
- * the script line-by-line at a calm cadence (~5.5 s per line), with a
- * Play / Pause / Restart row, a quiet progress bar, and the live line
- * gently pulsing into view.
+ * Reads an external audio URL from mediaConfig.firstLightAudioUrl
+ * (or via the `audioUrl` prop). When a URL is present, renders a
+ * single Play/Pause button bound to a hidden <audio> element.
  *
- * Visuals follow the brand: soft sage glow around the card.
+ * If no URL is set, shows a quiet placeholder line. By design.
+ *
+ * No autoplay. No tracking. No "stream / embed / upload" wording.
  */
 
-const SCRIPT = [
-  "Close your eyes.",
-  "Breathe in structure…",
-  "and breathe out space.",
-  "You are not limited to what has been written before.",
-  "Imagine a quiet light in your chest.",
-  "Not something new — something that has always been there.",
-  "With each breath, what no longer fits can loosen.",
-  "And in that space…",
-  "something clearer begins to take shape.",
-  "There is nothing you need to force.",
-  "Just don't turn away from it.",
-];
-
-const SECONDS_PER_LINE = 5.5;
-const TOTAL_SECONDS = SCRIPT.length * SECONDS_PER_LINE;
-
-export default function MeditationPlayer() {
+export default function MeditationPlayer({ audioUrl }) {
+  const url = audioUrl || mediaConfig.firstLightAudioUrl || null;
+  const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  const [elapsed, setElapsed] = useState(0); // seconds
-  const tickRef = useRef(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if (!playing) return;
-    tickRef.current = setInterval(() => {
-      setElapsed((s) => {
-        const next = s + 0.1;
-        if (next >= TOTAL_SECONDS) {
-          clearInterval(tickRef.current);
-          setPlaying(false);
-          return TOTAL_SECONDS;
-        }
-        return next;
-      });
-    }, 100);
-    return () => clearInterval(tickRef.current);
-  }, [playing]);
+    const a = audioRef.current;
+    if (!a) return;
+    const onTime = () => setElapsed(a.currentTime || 0);
+    const onMeta = () => setDuration(a.duration || 0);
+    const onEnd = () => setPlaying(false);
+    a.addEventListener("timeupdate", onTime);
+    a.addEventListener("loadedmetadata", onMeta);
+    a.addEventListener("ended", onEnd);
+    return () => {
+      a.removeEventListener("timeupdate", onTime);
+      a.removeEventListener("loadedmetadata", onMeta);
+      a.removeEventListener("ended", onEnd);
+    };
+  }, [url]);
 
-  const lineIndex = Math.min(
-    SCRIPT.length - 1,
-    Math.floor(elapsed / SECONDS_PER_LINE)
-  );
-  const progress = Math.min(100, (elapsed / TOTAL_SECONDS) * 100);
-
-  const formatTime = (s) => {
+  const fmt = (s) => {
+    if (!s || !isFinite(s)) return "0:00";
     const mm = Math.floor(s / 60);
     const ss = Math.floor(s % 60);
     return `${mm}:${ss.toString().padStart(2, "0")}`;
   };
 
-  const handlePlayPause = () => setPlaying((p) => !p);
-  const handleRestart = () => {
-    setElapsed(0);
-    setPlaying(true);
+  const handleToggle = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (playing) {
+      a.pause();
+      setPlaying(false);
+    } else {
+      a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    }
   };
+
+  const progress = duration ? Math.min(100, (elapsed / duration) * 100) : 0;
 
   return (
     <div
@@ -77,7 +66,6 @@ export default function MeditationPlayer() {
           "0 0 0 1px hsl(var(--aurin-border-soft)), 0 30px 80px -40px hsl(var(--aurin-sage) / 0.35)",
       }}
     >
-      {/* Soft sage glow */}
       <div
         aria-hidden
         className="absolute -top-24 -left-24 w-[360px] h-[360px] rounded-full opacity-40 blur-3xl pointer-events-none"
@@ -93,7 +81,7 @@ export default function MeditationPlayer() {
             <Sparkles size={16} strokeWidth={1.4} />
           </div>
           <div>
-            <div className="aurin-eyebrow !mb-0.5">Guided Meditation · Free Gift</div>
+            <div className="aurin-eyebrow !mb-0.5">A small gift</div>
             <h3 className="aurin-display text-2xl md:text-3xl leading-tight">
               First Light{" "}
               <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
@@ -103,55 +91,64 @@ export default function MeditationPlayer() {
           </div>
         </div>
 
-        {/* Script line — pulses softly when active */}
+        {/* Quiet body */}
         <div
-          data-testid="meditation-line"
+          data-testid="meditation-body"
           className="min-h-[120px] py-6 px-2 sm:px-4 flex items-center justify-center text-center"
         >
-          <p
-            key={lineIndex}
-            className={`aurin-serif-italic text-[hsl(var(--aurin-text))/0.94] text-xl md:text-2xl leading-[1.55] max-w-[40ch] transition-opacity duration-700 ${
-              playing ? "opacity-100" : "opacity-80"
-            }`}
-            style={{ animation: playing ? "aurin-fade-in 0.9s ease-out" : "none" }}
-          >
-            {SCRIPT[lineIndex]}
-          </p>
+          {url ? (
+            <p className="aurin-serif-italic text-[hsl(var(--aurin-text))/0.94] text-lg md:text-xl leading-[1.6] max-w-[40ch]">
+              Listen, when you feel like it.
+            </p>
+          ) : (
+            <p
+              data-testid="meditation-placeholder"
+              className="aurin-serif-italic text-[hsl(var(--aurin-text-muted))] text-lg md:text-xl leading-[1.6] max-w-[40ch]"
+            >
+              This sound will open soon.
+            </p>
+          )}
         </div>
 
-        {/* Progress bar */}
-        <div
-          data-testid="meditation-progress"
-          className="h-[3px] w-full bg-[hsl(var(--aurin-border-soft))] rounded-full overflow-hidden mt-2"
-        >
-          <div
-            className="h-full bg-[hsl(var(--aurin-sage))] transition-[width] duration-150"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        {url && (
+          <>
+            <audio
+              ref={audioRef}
+              src={url}
+              preload="metadata"
+              data-testid="meditation-audio-el"
+            />
 
-        <div className="mt-3 flex items-center justify-between text-[11.5px] text-[hsl(var(--aurin-text-muted))]">
-          <span data-testid="meditation-time">{formatTime(elapsed)}</span>
-          <span>{formatTime(TOTAL_SECONDS)}</span>
-        </div>
+            <div
+              data-testid="meditation-progress"
+              className="h-[3px] w-full bg-[hsl(var(--aurin-border-soft))] rounded-full overflow-hidden mt-2"
+            >
+              <div
+                className="h-full bg-[hsl(var(--aurin-sage))] transition-[width] duration-150"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
 
-        {/* Controls */}
-        <div className="mt-6 flex items-center justify-center gap-3">
+            <div className="mt-3 flex items-center justify-between text-[11.5px] text-[hsl(var(--aurin-text-muted))]">
+              <span data-testid="meditation-time">{fmt(elapsed)}</span>
+              <span>{fmt(duration)}</span>
+            </div>
+          </>
+        )}
+
+        {/* Single Play/Pause */}
+        <div className="mt-6 flex items-center justify-center">
           <button
             type="button"
-            onClick={handleRestart}
-            data-testid="meditation-restart"
-            aria-label="Restart"
-            className="w-10 h-10 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-text))/0.85] hover:text-[hsl(var(--aurin-sage))] hover:border-[hsl(var(--aurin-sage))] transition-colors"
-          >
-            <RotateCcw size={14} strokeWidth={1.5} />
-          </button>
-          <button
-            type="button"
-            onClick={handlePlayPause}
+            onClick={handleToggle}
+            disabled={!url}
             data-testid="meditation-play"
             aria-label={playing ? "Pause" : "Play"}
-            className="w-14 h-14 rounded-full bg-[hsl(var(--aurin-sage))] text-[hsl(var(--aurin-bg))] flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+            className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+              url
+                ? "bg-[hsl(var(--aurin-sage))] text-[hsl(var(--aurin-bg))] hover:scale-105"
+                : "bg-[hsl(var(--aurin-border-soft))] text-[hsl(var(--aurin-text-muted))] cursor-not-allowed opacity-70"
+            }`}
           >
             {playing ? (
               <Pause size={20} strokeWidth={1.6} />
@@ -159,12 +156,7 @@ export default function MeditationPlayer() {
               <Play size={20} strokeWidth={1.6} className="ml-0.5" />
             )}
           </button>
-          <div className="w-10 h-10" aria-hidden />
         </div>
-
-        <p className="mt-6 text-center text-[12.5px] text-[hsl(var(--aurin-text-muted))]">
-          Read at a calm pace. Audio recording arriving soon.
-        </p>
       </div>
     </div>
   );
