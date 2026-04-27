@@ -1,41 +1,49 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound } from "lucide-react";
 
+/**
+ * Home — refreshed copy ("Leave the noise. Find the Architect within.")
+ *
+ * Translated from the Estonian master text. The voice is intentionally
+ * uneven — short sentences, line breaks where a person would breathe.
+ * Nothing here is marketing copy.
+ */
+
 const LAYERS = [
   {
     to: "/library",
-    label: "Library",
+    label: "The Genesis Protocols",
     testid: "home-layer-library",
-    title: "The Genesis Protocols",
+    title: "These are not just books.",
     blurb:
-      "Structured digital books, interactive protocols, and audio-visual material for self-mastery.",
+      "These are places where you start to see what is actually moving you. And where the first crack opens — inside the automatic.",
     icon: BookOpen,
   },
   {
     to: "/kids-universe",
     label: "Kids Universe",
     testid: "home-layer-kids",
-    title: "A safe, guided world",
+    title: "A child does not need a system to be whole.",
     blurb:
-      "A softer, warmer layer — built for curiosity, emotional grounding, and gentle learning.",
+      "They need space where they are not interrupted. Here we don't teach them to be \"correct\" — we let them stay real.",
     icon: Sparkles,
   },
   {
     to: "/meditation-corner",
     label: "Meditation Corner",
     testid: "home-layer-meditation",
-    title: "Quiet, by design",
+    title: "Silence is not an escape.",
     blurb:
-      "A spacious room to slow down. Focus on breath, presence, and a clearer mind.",
+      "It is the place where the noise stops working. And where you finally hear what you have always known.",
     icon: Feather,
   },
   {
     to: "/portal",
     label: "User Portal",
     testid: "home-layer-portal",
-    title: "Your personal access",
+    title: "This is not just an account.",
     blurb:
-      "Your own area — content, progress, and account. A structured place that stays yours.",
+      "It is the place you come back to when something starts to change. And where you don't have to begin from zero again.",
     icon: UserRound,
   },
 ];
@@ -43,18 +51,21 @@ const LAYERS = [
 const PRINCIPLES = [
   {
     n: "01",
-    title: "Clarity over decoration",
-    body: "Every element earns its place. Nothing is here to impress — only to guide.",
+    title: "Clarity over noise",
+    body:
+      "If something needs too much explaining, it isn't clear. We keep only what actually works.",
   },
   {
     n: "02",
-    title: "Structured, not random",
-    body: "Each page has a clear role. The system moves you forward on purpose.",
+    title: "Soul over system",
+    body:
+      "The system is not the enemy. But it is not the guide either. Here you learn to feel that difference.",
   },
   {
     n: "03",
-    title: "Calm as a method",
-    body: "Slower rhythm. Deeper thinking. A quieter interface for harder questions.",
+    title: "The body is the map",
+    body:
+      "The body does not get lost. It reacts before you understand. When you learn to listen, you no longer need to search.",
   },
 ];
 
@@ -67,45 +78,48 @@ export default function Home() {
         <div className="absolute inset-0 aurin-glow" />
         <div className="aurin-container relative pt-24 md:pt-36 pb-24 md:pb-32">
           <div className="aurin-eyebrow aurin-fade-up" data-testid="home-eyebrow">
-            Matrix Aurin · A Guided Environment
+            prulesoul · Matrix Aurin
           </div>
 
           <h1
             className="aurin-display mt-7 text-5xl sm:text-6xl lg:text-[88px] max-w-[16ch] aurin-fade-up aurin-delay-1"
             data-testid="home-hero-title"
           >
-            A quiet place to{" "}
+            Leave the noise.{" "}
             <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-              remember
+              Find the Architect
             </span>{" "}
-            who you are.
+            within.
           </h1>
 
           <p
             className="mt-8 max-w-[56ch] text-[15.5px] md:text-base leading-[1.75] text-[hsl(var(--aurin-text-muted))] aurin-fade-up aurin-delay-2"
             data-testid="home-hero-description"
           >
-            Matrix Aurin is a structured digital environment for self-mastery,
-            guided learning, and reflection. Not a feed. Not a blog. A
-            layered, calm space where every section has a purpose — and every
-            step forward is intentional.
+            Something inside you knows this is not the whole truth.
+            <br />
+            Not everything you live is your choice.
+            <br />
+            <br />
+            This is the place where you begin to notice it — and from there,
+            choose.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4 aurin-fade-up aurin-delay-3">
             <Link
-              to="/library"
+              to="/the-beginning"
               className="aurin-btn aurin-btn-primary"
               data-testid="home-cta-explore-library"
             >
-              Enter the Library
+              Begin the protocol
               <ArrowUpRight size={16} />
             </Link>
             <Link
-              to="/meditation-corner"
+              to="/aurin-philosophy"
               className="aurin-btn aurin-btn-ghost"
               data-testid="home-cta-meditation"
             >
-              Step into Meditation
+              The philosophy
             </Link>
           </div>
 
@@ -113,9 +127,9 @@ export default function Home() {
           <div className="mt-20 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-px bg-[hsl(var(--aurin-border-soft))] border border-[hsl(var(--aurin-border-soft))] rounded-xl overflow-hidden aurin-fade-up aurin-delay-4">
             {[
               { k: "Layers", v: "4" },
-              { k: "Philosophy", v: "Calm" },
+              { k: "Tone", v: "Calm" },
               { k: "Pace", v: "Slow" },
-              { k: "Future", v: "Guided by AI" },
+              { k: "Privacy", v: "Yours alone" },
             ].map((s) => (
               <div
                 key={s.k}
@@ -139,20 +153,20 @@ export default function Home() {
         <div className="aurin-container">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
             <div>
-              <div className="aurin-eyebrow mb-5">The System</div>
+              <div className="aurin-eyebrow mb-5">The doors</div>
               <h2
                 className="aurin-display text-4xl md:text-5xl max-w-[20ch]"
                 data-testid="home-system-title"
               >
-                Four layers.{" "}
+                Four entries.{" "}
                 <span className="aurin-serif-italic text-[hsl(var(--aurin-sand))]">
-                  One calm system.
+                  One quiet place.
                 </span>
               </h2>
             </div>
             <p className="max-w-sm text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
-              Each layer is distinct in tone — but part of the same, unified
-              environment. Move slowly. Return often.
+              Each one has its own tone. None of them rush you. Walk through
+              the one that calls.
             </p>
           </div>
 
@@ -181,7 +195,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="mt-10 flex items-center gap-2 text-[13px] text-[hsl(var(--aurin-text))/0.85] group-hover:text-[hsl(var(--aurin-sage))] transition-colors">
-                    <span>Enter {layer.label.toLowerCase()}</span>
+                    <span>Enter</span>
                     <ArrowUpRight size={14} />
                   </div>
                 </Link>
@@ -196,7 +210,7 @@ export default function Home() {
         <div className="aurin-container">
           <div className="aurin-eyebrow mb-6">Principles</div>
           <h2 className="aurin-display text-3xl md:text-4xl max-w-[24ch] mb-16">
-            How the environment{" "}
+            How this place{" "}
             <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
               behaves.
             </span>
@@ -228,19 +242,22 @@ export default function Home() {
             <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-[hsl(var(--aurin-sage))/0.07] blur-3xl" />
             <div className="relative grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
               <div className="md:col-span-8">
-                <div className="aurin-eyebrow mb-5">Future Layer</div>
+                <div className="aurin-eyebrow mb-5">A future layer</div>
                 <h3 className="aurin-display text-3xl md:text-[40px] max-w-[26ch]">
-                  A guided{" "}
+                  Your digital mirror{" "}
                   <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-                    AI companion
+                    won't answer
                   </span>{" "}
-                  will live here — quiet, helpful, and patient.
+                  — it will show.
                 </h3>
                 <p className="mt-5 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[58ch]">
-                  Not yet built. The structure is ready for it. When the time
-                  is right, the assistant will help you navigate the layers,
-                  understand the content, and choose the next step — without
-                  ever getting in the way.
+                  It will not give you answers.
+                  <br />
+                  It will help you see what you already know — but have not yet
+                  fully accepted.
+                  <br />
+                  <br />
+                  Quiet. Precise. Yours alone.
                 </p>
               </div>
               <div className="md:col-span-4 md:text-right">
@@ -250,6 +267,27 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA / CLOSING NOTE */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="home-final-note"
+      >
+        <div className="aurin-container max-w-[640px] text-center space-y-5">
+          <p className="aurin-display text-2xl md:text-3xl leading-snug text-[hsl(var(--aurin-text))/0.94]">
+            If you felt something —
+            <br />
+            <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+              you already know what to do.
+            </span>
+          </p>
+          <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+            If not — don't force it.
+            <br />
+            You'll find your way back when the moment is right.
+          </p>
         </div>
       </section>
     </div>
