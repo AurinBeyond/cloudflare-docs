@@ -209,6 +209,32 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 14 — Quiet Room: greeting + topic routing · Media readiness (2026-04-27)
+
+**Cabinet refinement (per founder's "Starting Rule" directive):**
+- New `CABINET_OPENING_GREETING` ("Hello. It's good to meet you here.\n\nHow can I be of help to you today?") seeded as the first guide message on `/api/cabinet/start` AND on auto-creation in `/api/cabinet/message`.
+- Added `path` field to `CabinetSession` model. The first user message is routed via case-insensitive whole-phrase keyword matching into one of:
+  - `relationship_attachment`
+  - `fear_anxiety`
+  - `self_worth`
+  - `confusion_identity`
+  - `emotion_release`
+  - `default`
+  Path locks on the session — subsequent guide replies rotate through that lane only.
+- Each path has its own curated 5-prompt rotation tuned to the theme. No advice, no diagnosis.
+- `/cabinet/me` and `/cabinet/message` `guide_replies` and `show_continuation` now key on **user-message count** (not guide-message count) so the seeded greeting doesn't burn a free reply.
+- Crisis detection still wins over routing.
+- Frontend `PrivateRoom.beginSession` now fetches the freshly-seeded greeting after `startCabinet()` so the visitor sees the room speak first.
+
+**Media readiness (Light Streaming Mode):**
+- `MeditationPlayer.jsx` rewritten — single Play/Pause bound to a hidden `<audio>` element; reads URL from `mediaConfig.firstLightAudioUrl` (env: `REACT_APP_FIRST_LIGHT_AUDIO_URL`). If URL missing, shows the placeholder "*This sound will open soon.*" and disables the button.
+- New `components/MediaVideo.jsx` — privacy-respecting external video container (YouTube `youtube-nocookie`, Vimeo `dnt=1`, direct mp4/webm). Lazy-loaded, muted by default, related/branding hidden. Renders nothing when no URL set.
+- New `lib/mediaConfig.js` — single source of truth for `firstLightAudioUrl`, `ambientVideoUrl`, `courseVideoUrl`. All optional env-driven.
+
+**Tests:**
+- New `/app/backend/tests/test_iteration14.py` → 10/10 PASS (greeting seed, continuation-after-3-user-messages, 6 routing cases, path-lock, crisis override).
+- `test_iteration11.py` regression → 16/16 PASS.
+
 ### Iteration 13 — Deep Sanctuary language pass (2026-04-27)
 **Master Directive:** No public-facing UI text may contain `system`, `protocol`, `interface`, `module`, `agent`, `chatbot`, `structure`. Site stays 100% English. Backend code untouched (only seed strings + a small migration block).
 

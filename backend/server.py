@@ -2082,21 +2082,102 @@ async def newsletter_signup(inp: NewsletterSignup):
 CABINET_FREE_REPLIES = 3  # after this many guide replies, surface the soft continuation
 CABINET_MAX_USER_MSG = 4000
 
-# Curated reflective prompts. Picked deterministically from a small
-# rotation so that two consecutive turns don't repeat. Voice rules:
-#   reflect, not advise · ask, not conclude · open, not close.
-CABINET_PROMPTS = [
-    "It sounds like this isn't just one situation. It's something that returns. Do you notice what shifts just before that moment?",
-    "If you had to put this into a single word, what would it be?",
-    "Where does your body feel this most? Sometimes the body knows before the thought.",
-    "Is this feeling new, or already familiar from somewhere else?",
-    "What part of you is still holding on to this?",
-    "What would the smallest possible different choice look like — one that doesn't pull you back into the old shape?",
-    "Does this feel like yours, or learned?",
-    "If you didn't have to defend yourself here, what would you actually feel?",
-    "Some answers arrive before thought. Is anything quietly already known?",
-    "If something inside you were softer right now, what would it say?",
+# The Quiet Room always opens with this single greeting. The agent
+# then waits for the visitor's first answer before choosing a path.
+CABINET_OPENING_GREETING = (
+    "Hello. It's good to meet you here.\n\n"
+    "How can I be of help to you today?"
+)
+
+# Six reflection paths. The router (below) reads the FIRST user message
+# and locks the session into one of these lanes. Subsequent guide
+# replies rotate through that lane only — never advice, never diagnosis.
+CABINET_PATHS = {
+    "emotion_release": [
+        "Where in your body do you feel this most? Try not to think — just notice.",
+        "If this had a single word, what would it be?",
+        "Has this feeling been with you long, or did it arrive recently?",
+        "What part of you is still holding it?",
+        "If something inside you were a little softer right now, what would it say?",
+    ],
+    "relationship_attachment": [
+        "What part of this still feels unfinished?",
+        "When you think of this person, what returns first — the memory, or the feeling?",
+        "Do you want to leave it behind, or are you simply tired of carrying it?",
+        "If you separated them from the feeling for a moment, what would be left?",
+        "What did you give them that you have not yet given back to yourself?",
+    ],
+    "fear_anxiety": [
+        "Slow down for a breath. Where do you feel it in your body right now?",
+        "Is the fear about something happening, or about something you might not handle?",
+        "What is one small thing that is true and steady in this moment?",
+        "If you spoke to this fear gently, what would it want you to know?",
+        "What is the smallest piece of this you could put down for a moment?",
+    ],
+    "self_worth": [
+        "Whose voice does this judgement actually sound like?",
+        "If a friend said the same thing about themselves, what would you tell them?",
+        "What were you trying to do — even if it didn't go the way you hoped?",
+        "Is there something you could forgive yourself for, just a little?",
+        "What would be different if you stopped carrying this against yourself?",
+    ],
+    "confusion_identity": [
+        "Not what feels right — what feels true, right now?",
+        "What part of your life still belongs to a version of you that has already changed?",
+        "If nobody were watching, what would you stop doing first?",
+        "Is it that you don't know what you want, or that you haven't let yourself want it yet?",
+        "What is one quiet thing that has been with you for a long time, regardless of the season?",
+    ],
+    "default": [
+        "It sounds like this isn't just one situation. It's something that returns. Do you notice what shifts just before that moment?",
+        "If you had to put this into a single word, what would it be?",
+        "Where does your body feel this most? Sometimes the body knows before the thought.",
+        "What part of you is still holding on to this?",
+        "Some answers arrive before thought. Is anything quietly already known?",
+    ],
+}
+
+# Keyword routing — case-insensitive, word-boundary aware. The first
+# matching path wins. If nothing matches, we fall back to "default".
+PATH_KEYWORDS = [
+    ("relationship_attachment", [
+        "my ex", "ex-", "my husband", "my wife", "my partner", "my mother",
+        "my father", "my mom", "my dad", "miss him", "miss her",
+        "missing him", "missing her", "longing", "can't let go",
+        "cannot let go", "still love him", "still love her",
+        "left me", "abandoned me",
+    ]),
+    ("fear_anxiety", [
+        "afraid", "scared", "anxious", "anxiety", "panic", "panicking",
+        "fearful", "terrified", "nervous", "worry", "worried",
+        "pressure", "overwhelm",
+    ]),
+    ("self_worth", [
+        "my fault", "blame myself", "ashamed", "shame", "guilt", "guilty",
+        "hate myself", "worthless", "not enough", "i'm a failure",
+        "i'm stupid", "i'm bad", "i am bad",
+    ]),
+    ("confusion_identity", [
+        "who am i", "don't know who", "lost myself", "no direction",
+        "no purpose", "what do i want", "don't know what i want",
+        "don't know what to do", "identity",
+    ]),
+    ("emotion_release", [
+        "heavy", "stuck", "sad", "tired", "exhausted", "empty", "numb",
+        "drained", "depressed", "crying", "burnt out", "burned out",
+        "feel low", "feeling low", "overwhelmed",
+    ]),
 ]
+
+
+def _route_path(text: str) -> str:
+    low = (text or "").lower()
+    for path, kws in PATH_KEYWORDS:
+        for kw in kws:
+            if kw in low:
+                return path
+    return "default"
+
 
 # Crisis triggers — case-insensitive substring match. We respond
 # calmly with an external-help nudge and stop deeper probing.
@@ -2130,6 +2211,7 @@ class CabinetSession(BaseModel):
     user_id: str
     thread_key: Optional[str] = None  # anonymous continuity key (user-controlled)
     keep_thread: bool = False
+    path: Optional[str] = None  # locked on the first user message
     messages: List[CabinetMessage] = Field(default_factory=list)
     started_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     closed: bool = False
@@ -2145,10 +2227,11 @@ def _detect_crisis(text: str) -> bool:
     return any(k in low for k in CRISIS_KEYWORDS)
 
 
-def _pick_prompt(turn: int, last_text: str) -> str:
-    """Pick a reflection question that doesn't immediately repeat the previous one."""
-    idx = (turn + (len(last_text or "") % 3)) % len(CABINET_PROMPTS)
-    return CABINET_PROMPTS[idx]
+def _pick_prompt(path: str, turn: int, last_text: str) -> str:
+    """Pick a reflection question from the locked path's rotation."""
+    bank = CABINET_PATHS.get(path) or CABINET_PATHS["default"]
+    idx = (turn + (len(last_text or "") % 3)) % len(bank)
+    return bank[idx]
 
 
 async def _get_active_cabinet_session(user_id: str) -> dict:
@@ -2165,14 +2248,14 @@ async def cabinet_me(request: Request):
     """Return the user's active session (or null) and policy values."""
     user = await _require_user(request)
     sess = await _get_active_cabinet_session(user.user_id)
-    guide_count = 0
+    user_count = 0
     if sess:
-        guide_count = sum(1 for m in sess.get("messages", []) if m.get("role") == "guide")
+        user_count = sum(1 for m in sess.get("messages", []) if m.get("role") == "user")
     return {
         "session": sess,
-        "guide_replies": guide_count,
+        "guide_replies": user_count,
         "free_replies": CABINET_FREE_REPLIES,
-        "show_continuation": bool(sess) and guide_count >= CABINET_FREE_REPLIES,
+        "show_continuation": bool(sess) and user_count >= CABINET_FREE_REPLIES,
     }
 
 
@@ -2185,6 +2268,9 @@ async def cabinet_start(request: Request):
         {"$set": {"closed": True}},
     )
     sess = CabinetSession(user_id=user.user_id)
+    # The room always opens with the same quiet greeting.
+    greeting = CabinetMessage(role="guide", text=CABINET_OPENING_GREETING)
+    sess.messages.append(greeting)
     await db.cabinet_sessions.insert_one(sess.model_dump())
     return {"session_id": sess.id}
 
@@ -2201,8 +2287,11 @@ async def cabinet_message(inp: CabinetMessageInput, request: Request):
 
     sess = await _get_active_cabinet_session(user.user_id)
     if not sess:
-        # auto-open a session
+        # auto-open a session, seed greeting
         new_sess = CabinetSession(user_id=user.user_id)
+        new_sess.messages.append(
+            CabinetMessage(role="guide", text=CABINET_OPENING_GREETING)
+        )
         await db.cabinet_sessions.insert_one(new_sess.model_dump())
         sess = await _get_active_cabinet_session(user.user_id)
 
@@ -2216,18 +2305,36 @@ async def cabinet_message(inp: CabinetMessageInput, request: Request):
         sess["keep_thread"] = True
         sess["thread_key"] = thread_key
 
+    # Route the session into a path on the FIRST user message.
+    is_first_user_msg = not any(
+        m.get("role") == "user" for m in sess.get("messages", [])
+    )
+    locked_path = sess.get("path")
+    if is_first_user_msg and not locked_path:
+        locked_path = _route_path(text)
+        await db.cabinet_sessions.update_one(
+            {"id": sess["id"]},
+            {"$set": {"path": locked_path}},
+        )
+        sess["path"] = locked_path
+    elif not locked_path:
+        locked_path = "default"
+
     # User message
     user_msg = CabinetMessage(role="user", text=text)
     is_crisis = _detect_crisis(text)
     if is_crisis:
         user_msg.is_crisis = True
 
-    # Guide reply
-    guide_count_before = sum(1 for m in sess.get("messages", []) if m.get("role") == "guide")
+    # Guide reply — count only NON-greeting guide messages so that the
+    # opening hello doesn't burn a "free reply" before the user speaks.
+    user_msg_count_before = sum(
+        1 for m in sess.get("messages", []) if m.get("role") == "user"
+    )
     if is_crisis:
         guide_text = CRISIS_RESPONSE
     else:
-        guide_text = _pick_prompt(guide_count_before, text)
+        guide_text = _pick_prompt(locked_path, user_msg_count_before, text)
     guide_msg = CabinetMessage(role="guide", text=guide_text, is_crisis=is_crisis)
 
     await db.cabinet_sessions.update_one(
@@ -2235,12 +2342,13 @@ async def cabinet_message(inp: CabinetMessageInput, request: Request):
         {"$push": {"messages": {"$each": [user_msg.model_dump(), guide_msg.model_dump()]}}},
     )
 
-    new_guide_count = guide_count_before + 1
+    new_user_msg_count = user_msg_count_before + 1
     return {
         "guide": guide_msg.model_dump(),
         "is_crisis": is_crisis,
-        "guide_replies": new_guide_count,
-        "show_continuation": (not is_crisis) and (new_guide_count >= CABINET_FREE_REPLIES),
+        "guide_replies": new_user_msg_count,
+        "path": locked_path,
+        "show_continuation": (not is_crisis) and (new_user_msg_count >= CABINET_FREE_REPLIES),
         "thread_key": sess.get("thread_key") if sess.get("keep_thread") else None,
     }
 

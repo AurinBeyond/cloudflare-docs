@@ -89,7 +89,21 @@ export default function PrivateRoom() {
   const beginSession = async () => {
     try {
       await startCabinet();
-      setMessages([]);
+      // The backend seeds an opening greeting. Pull it back in so the
+      // visitor sees the room "speak" before they type.
+      let seeded = [];
+      try {
+        const data = await fetchCabinet();
+        if (data?.session) {
+          seeded = (data.session.messages || []).filter(
+            (m) => m.role !== "system"
+          );
+          setThreadKey(data.session.thread_key || null);
+        }
+      } catch {
+        /* fall through with empty messages */
+      }
+      setMessages(seeded);
       setShowContinuation(false);
       setPhase(PHASES.CHAT);
     } catch {
