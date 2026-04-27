@@ -205,6 +205,36 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - Regression file: `/app/backend/tests/test_iteration9.py`.
 
 ### Iteration 12 — Iteration-11 P0 frontend bug fixes (2026-04-27)
+- **`LibraryKidsRead`** — `angels-tales` sample card now renders. RC: a 422 on `/api/content/entries?audience=kids` (entries Audience literal is `kids-universe`, not `kids`) was thrown inside a single `Promise.all`, which discarded the books payload. Fix: split entries + books into independent promises with their own `.catch`, and use `audience='kids-universe'` for entries. `freeBooks` filter still gates on `!!pdf_url`.
+- **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
+- **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
+
+### Iteration 13 — Deep Sanctuary language pass (2026-04-27)
+**Master Directive:** No public-facing UI text may contain `system`, `protocol`, `interface`, `module`, `agent`, `chatbot`, `structure`. Site stays 100% English. Backend code untouched (only seed strings + a small migration block).
+
+**Frontend rewrites:**
+- `Home.jsx` — hero CTA "Begin the protocol" → "Begin gently"; LAYERS card "The Genesis Protocols" → "The Genesis Volumes"; PRINCIPLES "Soul over system" → "Soul before pattern"; kids LAYER "A child does not need a system to be whole" → "…does not need to be fixed to be whole".
+- `TheBeginning.jsx` — Honest note: "The old system is deeply rooted" → "The old pull runs deep"; Balance block: "respect structure" → "respect the shape of your life".
+- `Learning.jsx` — eyebrow "Structured Modules" → "Quiet readings"; CTA italic "one module at a time" → "one piece at a time"; loading state → "A small breath…"; per-track count `n module(s)` → `n reading(s)`; entry top label "Module · 0X" → "Reading · 0X"; empty state → "Nothing here yet. Soon."
+- `Library.jsx` — `kindMeta.protocol.label` "Protocol" → "Reading" (key intact for backend match).
+- `About.jsx` — narrative "fear protocols" → "quiet fear loops"; final CTA "7-step protocol is the first practical layer" → "7-day beginning".
+- `Bookstore.jsx` — added psychosomatic thread (`bookstore-body-thread`: "Your body usually knows before your mind does…") + no-dead-end closer (`bookstore-closing-note`: "If something here keeps moving in you, you can come back. Nothing here will run out.").
+- `UserPortal.jsx` — "Books, protocols, and sessions" → "Books, readings, and quiet sessions".
+- `InstagramCTA.jsx` (shared, 5 routes) — heading "Matrix Protocols" → "quiet drops".
+- `AiDock.jsx` — info paragraph rewritten to remove "system guide" + "AI" wording.
+
+**Backend seed + migration (server.py):**
+- Renamed seeded library entries: `morning-orientation-protocol` title → "Morning Orientation"; `evening-reflection-protocol` → "Evening Reflection"; `genesis-protocols-volume-i/ii` → "The Genesis Volumes — Volume I/II". Slugs preserved.
+- Renamed seeded book "The Language of Angels" description ("structured" removed) and "Beyond the Matrix II" description ("patterns and protocols" → "patterns and quiet rhythms"); `tags: ["protocols", …]` → `["patterns", …]`.
+- Renamed two `learning` content categories: `foundations` description → "Introductory readings"; `practice` → "Applied readings and exercises".
+- Added an idempotent **3b/3c migration block** in `seed_initial_content` that updates the above entries + categories on every restart (the original entry seed only runs when the collection is empty).
+
+**Verification:**
+- Live forbidden-word scan over 12 public routes (`/`, `/the-beginning`, `/aurin-philosophy`, `/about`, `/library`, `/library/adults`, `/library/kids`, `/library/kids/read`, `/bookstore`, `/portal`, `/blog`, `/learning`) → **0 hits** for `system | protocol | interface | module | agent | chatbot | structure`.
+- Backend pytest `/app/backend/tests/test_iteration11.py` → **16/16 PASS** (regression unchanged).
+- Iteration 12 fixes still hold: `/library/kids/read` renders Angels' Tales card; `/private-room` `cabinet-reset` returns to `cabinet-intro`.
+
+
 - **`LibraryKidsRead`** — `angels-tales` sample card now renders. Root cause: a 422 on `/api/content/entries?audience=kids` (entries Audience literal is `kids-universe`, not `kids`) was thrown inside a single `Promise.all`, which discarded the books payload. Fix: split entries + books into independent promises with their own `.catch`, and use `audience='kids-universe'` for entries. `freeBooks` filter still gates on `!!pdf_url`.
 - **`PrivateRoom` cabinet-reset** — single-click reset now correctly returns the user to `cabinet-intro`. Root cause: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state (messages / showContinuation / threadKey / keepThread / confirms / input / error) and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass (regression suite unchanged), Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 const PREVIEW_BLOCKS = [
   {
     title: "My Content",
-    description: "Books, protocols, and sessions you have unlocked.",
+    description: "Books, readings, and quiet sessions you have unlocked.",
     icon: LibraryIcon,
   },
   {

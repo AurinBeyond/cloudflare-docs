@@ -98,7 +98,7 @@ export default function TheBeginning() {
           <Block eyebrow="Balance" data-testid="tb-balance">
             <p>You don't need to reject your life.</p>
             <p>You don't need to break rules.</p>
-            <p>You can respect structure — and still expand within it.</p>
+            <p>You can respect the shape of your life — and still expand within it.</p>
             <p>There is more space than it seems.</p>
           </Block>
 

@@ -649,15 +649,15 @@ SEED_CATEGORIES: List[dict] = [
     {"slug": "protocols", "name": "Protocols", "description": "Interactive, text-based guides.", "surface": "library", "order": 1, "source_path": "library/protocols"},
     {"slug": "books", "name": "Books & PDFs", "description": "Digital books and long-form material.", "surface": "library", "order": 2, "source_path": "library/books"},
     {"slug": "materials", "name": "Materials", "description": "Audio, video, and other media.", "surface": "library", "order": 3, "source_path": "library/materials"},
-    {"slug": "foundations", "name": "Foundations", "description": "Introductory modules.", "surface": "learning", "order": 1, "source_path": "learning/foundations"},
-    {"slug": "practice", "name": "Practice", "description": "Applied lessons and exercises.", "surface": "learning", "order": 2, "source_path": "learning/practice"},
+    {"slug": "foundations", "name": "Foundations", "description": "Introductory readings.", "surface": "learning", "order": 1, "source_path": "learning/foundations"},
+    {"slug": "practice", "name": "Practice", "description": "Applied readings and exercises.", "surface": "learning", "order": 2, "source_path": "learning/practice"},
 ]
 
 SEED_ENTRIES: List[dict] = [
     {
         "slug": "morning-orientation-protocol",
-        "title": "Morning Orientation Protocol",
-        "description": "A 7-step structured text-based guide to begin the day with clarity.",
+        "title": "Morning Orientation",
+        "description": "A 7-step gentle reading to begin the day with clarity.",
         "category_slug": "protocols",
         "surface": "library",
         "kind": "protocol",
@@ -665,7 +665,7 @@ SEED_ENTRIES: List[dict] = [
         "tags": ["daily", "orientation"],
         "source_path": "library/protocols/morning-orientation.md",
         "markdown": """---
-title: Morning Orientation Protocol
+title: Morning Orientation
 access: free
 ---
 
@@ -698,13 +698,13 @@ Stand up slowly. Begin.
 
 ## Notes
 
-This protocol is intentionally short. Keep it under four minutes.
+This reading is intentionally short. Keep it under four minutes.
 """,
     },
     {
         "slug": "evening-reflection-protocol",
-        "title": "Evening Reflection Protocol",
-        "description": "A slow, structured review for the close of the day.",
+        "title": "Evening Reflection",
+        "description": "A slow, gentle review for the close of the day.",
         "category_slug": "protocols",
         "surface": "library",
         "kind": "protocol",
@@ -730,8 +730,8 @@ Write short answers. Do not explain. The briefer the better.
     },
     {
         "slug": "genesis-protocols-volume-i",
-        "title": "The Genesis Protocols — Volume I",
-        "description": "Foundations of self-mastery. Structured long-form material.",
+        "title": "The Genesis Volumes — Volume I",
+        "description": "Foundations of self-mastery. Slow, long-form reading.",
         "category_slug": "books",
         "surface": "library",
         "kind": "book",
@@ -767,7 +767,7 @@ The rest of this work is practice. Begin where you are.
     },
     {
         "slug": "genesis-protocols-volume-ii",
-        "title": "The Genesis Protocols — Volume II",
+        "title": "The Genesis Volumes — Volume II",
         "description": "Patterns, practice, presence. Member access.",
         "category_slug": "books",
         "surface": "library",
@@ -826,7 +826,7 @@ practice to begin restoring it.
     {
         "slug": "foundations-intro",
         "title": "Foundations — An Introduction",
-        "description": "The opening module. Start here.",
+        "description": "The opening reading. Start here.",
         "category_slug": "foundations",
         "surface": "learning",
         "kind": "article",
@@ -856,7 +856,7 @@ Open the next module and read only the first section.
     {
         "slug": "practice-small-commitments",
         "title": "Practice — Small Commitments",
-        "description": "Applied module. How to begin with something that fits.",
+        "description": "An applied reading. How to begin with something that fits.",
         "category_slug": "practice",
         "surface": "learning",
         "kind": "article",
@@ -1040,7 +1040,7 @@ SEED_BOOKS: List[dict] = [
         "title": "The Language of Angels",
         "subtitle": "Embracing Boundaries and Inner Worth",
         "description": (
-            "A spiritual book for adults — gentle, structured, and warm. Written for "
+            "A spiritual book for adults — gentle and warm, written with care. For "
             "readers who want to hear the quieter voice inside themselves and learn "
             "to speak back to it with care."
         ),
@@ -1063,7 +1063,7 @@ SEED_BOOKS: List[dict] = [
         "subtitle": "Codes of Consciousness",
         "description": (
             "The second volume in the Beyond the Matrix series. Goes deeper into the "
-            "patterns and protocols that shape inner life — the invisible programs we "
+            "patterns and quiet rhythms that shape inner life — the invisible programs we "
             "inherit, and the calm work of becoming free of them."
         ),
         "author": "prulesoul",
@@ -1073,7 +1073,7 @@ SEED_BOOKS: List[dict] = [
         "tax_category": "book_zero_rate_ready",
         "delivery_options": ["read_online", "download_pdf"],
         "pages": None,
-        "tags": ["protocols", "consciousness", "deep-work"],
+        "tags": ["patterns", "consciousness", "deep-work"],
         "lemonsqueezy_product_id": "PLACEHOLDER_BEYOND_MATRIX_II",
         "external_read_url": "https://ebookmaker.ai/beyond-the-matrix-ii--codes-of-consciousness-w5x3tf",
         "source_path": "bookstore/beyond-the-matrix-ii.md",
@@ -1345,6 +1345,45 @@ async def seed_initial_content():
     )
     if res.modified_count:
         logger.info("Migration: set audience=grown-ups on %d entries.", res.modified_count)
+
+    # 3b. Migration — Sanctuary language pass on already-seeded entries
+    # (seed runs only when the collection is empty, so we patch existing rows here).
+    sanctuary_entry_updates = [
+        ("morning-orientation-protocol", {
+            "title": "Morning Orientation",
+            "description": "A 7-step gentle reading to begin the day with clarity.",
+        }),
+        ("evening-reflection-protocol", {
+            "title": "Evening Reflection",
+            "description": "A slow, gentle review for the close of the day.",
+        }),
+        ("genesis-protocols-volume-i", {
+            "title": "The Genesis Volumes — Volume I",
+            "description": "Foundations of self-mastery. Slow, long-form reading.",
+        }),
+        ("genesis-protocols-volume-ii", {
+            "title": "The Genesis Volumes — Volume II",
+            "description": "Patterns, practice, presence. Member access.",
+        }),
+        ("foundations-intro", {
+            "description": "The opening reading. Start here.",
+        }),
+        ("practice-small-commitments", {
+            "description": "An applied reading. How to begin with something that fits.",
+        }),
+    ]
+    for slug, fields in sanctuary_entry_updates:
+        await db.content_entries.update_one({"slug": slug}, {"$set": fields})
+
+    # 3c. Migration — update the two learning category descriptions
+    await db.content_categories.update_one(
+        {"slug": "foundations", "surface": "learning"},
+        {"$set": {"description": "Introductory readings."}},
+    )
+    await db.content_categories.update_one(
+        {"slug": "practice", "surface": "learning"},
+        {"$set": {"description": "Applied readings and exercises."}},
+    )
 
     # 4. Books — upsert each SEED slug; drop obsolete seeds.
     seed_slugs = [b["slug"] for b in SEED_BOOKS]

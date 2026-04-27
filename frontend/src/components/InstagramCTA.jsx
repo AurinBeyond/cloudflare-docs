@@ -26,7 +26,7 @@ export default function InstagramCTA({ testidPrefix = "ig-cta", className = "" }
         <h3 className="aurin-display text-xl md:text-2xl leading-tight">
           Follow us for{" "}
           <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-            Matrix Protocols.
+            quiet drops.
           </span>
         </h3>
         <p className="mt-2 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[58ch]">
