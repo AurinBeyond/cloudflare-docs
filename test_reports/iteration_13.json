@@ -1,0 +1,112 @@
+{
+  "summary": "Iteration 13 — Final language pass verification. Targeted copy assertions all PASS (Home / Bookstore / About / The Beginning / AI Dock / Learning eyebrow + entry top label). Backend regression /app/backend/tests/test_iteration11.py 16/16 PASS. P0 forbidden-word scan FAILS: 'protocol(s)' and 'module(s)' still leak into 6 public routes via three sources — (a) a shared Instagram block reading 'Follow us for Matrix Protocols.', (b) seeded DB entry titles + book description still containing 'Protocol(s)', (c) Learning track/entry DESCRIPTION strings still using 'module(s)' (only the eyebrow and card top label were renamed). One additional 'structure' hit on /the-beginning (master directive forbidden, but excluded from the explicit P0 list).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "forbidden_word_hits": [
+      {
+        "source": "Shared Instagram block (renders inside library/bookstore/portal/blog and /library/adults)",
+        "word": "protocols",
+        "exact_text": "Follow us for Matrix Protocols.",
+        "routes_affected": ["/library", "/library/adults", "/bookstore", "/portal", "/blog"],
+        "priority": "HIGH",
+        "fix_hint": "Rename the heading copy to e.g. 'Follow us for Matrix Letters.' / 'quiet drops' — single source file (likely a shared <InstagramBlock /> / footer-instagram component). One edit cleans 5 routes."
+      },
+      {
+        "source": "DB-seeded library entries (audience='grown ups')",
+        "word": "protocol",
+        "exact_text": "Evening Reflection Protocol; Morning Orientation Protocol",
+        "routes_affected": ["/library/adults"],
+        "priority": "HIGH",
+        "fix_hint": "Update the two entry titles via /api/admin/content (or seed script) — e.g. 'Evening Reflection Reading' / 'Morning Orientation Reading'. Their descriptions also use 'structured' but that's allowed."
+      },
+      {
+        "source": "DB-seeded book titles",
+        "word": "protocols",
+        "exact_text": "The Genesis Protocols — Volume I; The Genesis Protocols — Volume II",
+        "routes_affected": ["/library/adults", "/bookstore"],
+        "priority": "HIGH",
+        "fix_hint": "Home card already says 'GENESIS VOLUMES' but the actual book titles in the books collection still say 'Genesis Protocols'. Rename the two seeded books to 'The Genesis Volumes — Volume I/II' (or 'The Genesis Volumes — Vol. I/II'). slug can stay; only the displayed title needs editing."
+      },
+      {
+        "source": "Bookstore book description text",
+        "word": "protocols",
+        "exact_text": "...goes deeper into the patterns and protocols that shape inner life — the invisible…",
+        "routes_affected": ["/bookstore"],
+        "priority": "HIGH",
+        "fix_hint": "One book's description in the books collection still contains 'protocols'. Replace with 'patterns and rhythms' or 'patterns and undercurrents'."
+      },
+      {
+        "source": "Portal placeholder card copy (My Content)",
+        "word": "protocols",
+        "exact_text": "Books, protocols, and sessions you have unlocked.",
+        "routes_affected": ["/portal"],
+        "priority": "HIGH",
+        "fix_hint": "Edit the placeholder string inside the Portal page (likely Portal.jsx 'My Content' description) — change to e.g. 'Books, readings, and quiet sessions you have unlocked.'"
+      },
+      {
+        "source": "Learning track + entry description strings (Learning.jsx)",
+        "word": "module / modules",
+        "exact_text": "Introductory modules. · Applied module. How to begin... · The opening module. Start here.",
+        "routes_affected": ["/learning"],
+        "priority": "HIGH",
+        "fix_hint": "Eyebrow ('Quiet readings') and top label ('READING · 0X') and per-track count ('1 reading') were renamed correctly, but the track DESCRIPTIONS and per-entry description blurbs still say 'modules' / 'module'. Rename in Learning.jsx (or wherever the static track/entry copy lives) — e.g. 'Introductory readings.' / 'Applied reading. How to begin…' / 'The opening reading. Start here.'"
+      },
+      {
+        "source": "TheBeginning.jsx body paragraph (NOT tb-honest)",
+        "word": "structure",
+        "exact_text": "you can respect structure — and still expand within it.",
+        "routes_affected": ["/the-beginning"],
+        "priority": "MEDIUM",
+        "fix_hint": "Master Directive forbids 'structure' but the testing-spec P0 list excluded it. Recommend renaming to 'shape' / 'form' / 'rhythm' for full compliance with the directive: 'you can respect the shape — and still expand within it.'"
+      }
+    ]
+  },
+  "verified_passes": [
+    {"test": "home-cta-explore-library text === 'Begin gently'", "status": "PASS"},
+    {"test": "home-layer-library contains 'GENESIS VOLUMES' (not Protocols)", "status": "PASS"},
+    {"test": "home-principle-02 contains 'Soul before pattern' (not 'Soul over system')", "status": "PASS"},
+    {"test": "home-layer-kids contains 'does not need to be fixed'", "status": "PASS"},
+    {"test": "bookstore-body-thread contains 'Your body usually knows'", "status": "PASS"},
+    {"test": "bookstore-closing-note contains 'you can come back' (renders with 7 books seeded)", "status": "PASS"},
+    {"test": "origin-final-cta contains '7-day beginning' (not '7-step protocol')", "status": "PASS"},
+    {"test": "origin-narrative-1 contains 'fear loops' (not 'fear protocols')", "status": "PASS"},
+    {"test": "tb-honest contains 'The old pull runs deep'", "status": "PASS"},
+    {"test": "learning eyebrow contains 'QUIET READINGS' (not 'Structured Modules')", "status": "PASS"},
+    {"test": "learning entry top label === 'READING · 01' (not 'Module · 01')", "status": "PASS"},
+    {"test": "learning per-track count === '1 READING' (not 'modules')", "status": "PASS"},
+    {"test": "ai-dock-open visible on /", "status": "PASS"},
+    {"test": "ai-dock-panel paragraph contains no 'system'/'AI' standalone words — exact text 'When this opens, the companion will reply only from the writings here, in the same quiet voice. Nothing is sent anywhere yet.'", "status": "PASS"},
+    {"test": "Backend regression /app/backend/tests/test_iteration11.py — 16/16 green (cabinet auth, flow, books, smoke)", "status": "PASS"}
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iteration11.py",
+    "/app/test_reports/pytest/iteration_13.xml"
+  ],
+  "action_items": [
+    "P0 — Rename the shared Instagram block heading 'Follow us for Matrix Protocols.' (single source — cleans /library, /library/adults, /bookstore, /portal, /blog).",
+    "P0 — Rename two seeded library entries: 'Evening Reflection Protocol' → 'Evening Reflection Reading'; 'Morning Orientation Protocol' → 'Morning Orientation Reading'.",
+    "P0 — Rename seeded book titles 'The Genesis Protocols — Volume I/II' → 'The Genesis Volumes — Volume I/II' (consistency with home card 'GENESIS VOLUMES').",
+    "P0 — Edit the bookstore book description that contains 'patterns and protocols that shape inner life' → drop 'protocols'.",
+    "P0 — Portal.jsx 'My Content' placeholder: 'Books, protocols, and sessions you have unlocked.' → 'Books, readings, and sessions you have unlocked.' (or similar).",
+    "P0 — Learning.jsx: rename track descriptions ('Introductory modules.', 'Applied module. How to begin…') and per-entry blurbs ('The opening module. Start here.') to use 'reading(s)'.",
+    "P1 — TheBeginning.jsx: rename 'you can respect structure' → 'you can respect the shape' for full Master Directive compliance ('structure' forbidden in directive even though excluded from P0 test list)."
+  ],
+  "critical_code_review_comments": [
+    "Forbidden-word policy is enforced in MULTIPLE source-of-truth layers (static JSX copy + seeded Mongo entries + seeded books). A future rename pass should grep both /app/frontend/src AND the seed/admin data — only updating JSX leaves DB-driven titles stale (this is what bit /library/adults this iteration).",
+    "Strong recommendation: add a CI lint rule (simple regex over `frontend/src/**/*.{js,jsx}`) that fails the build on unescaped occurrences of /\\b(system|protocol|interface|module|agent|chatbot|structure)s?\\b/i — would have caught 6 of the 7 leaks above before review.",
+    "Consider extracting the Instagram block into a single component (it appears to be inlined into multiple pages) — current leakage suggests either copy-paste duplication or a shared component whose copy was not updated. Either way, one prop/string would replace 5 page edits.",
+    "AiDock paragraph rewrite is clean and successful — the new text reads naturally and stays within the directive.",
+    "Iteration 11 fixes (kids/read sample card + cabinet-reset single click) still hold: 16/16 backend regression green; no UI regressions observed in spot checks during this scan."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend_targeted_copy": "100% (15/15)", "frontend_forbidden_word_scan": "50% (6/12 routes clean: /, /aurin-philosophy, /about, /library/kids, /library/kids/read, /reach-out; 6 routes still have hits)"},
+  "test_credentials": "n/a — all tested routes are public; backend regression mints synthetic Mongo session per /app/auth_testing.md (auto-cleaned).",
+  "seed_data_creation": "None new this iteration. Backend regression fixture creates + tears down 1 user / 1 user_session / cabinet rows.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Targeted copy assertions and AI Dock and Learning eyebrow/top-label all PASS — only re-scan the 7 forbidden-word hit locations after main agent fixes. Quick re-scan recipe: visit /library, /library/adults, /bookstore, /portal, /blog, /the-beginning, /learning, evaluate document.body.innerText, and grep for whole-words system|protocol|interface|module|agent|chatbot. Backend regression (test_iteration11.py 16/16) is the canonical regression — keep using it. The 'Matrix Protocols' Instagram block is the single biggest win: one rename cleans 5 routes. The 4 seeded DB items (2 entries + 2 books + possibly 1 book description field) need to be edited via the admin endpoint or seed script — not in JSX. Iteration_13.xml is the backend pytest output.",
+  "rca of the issue": "Three independent sources of leak: (1) shared Instagram block whose heading copy ('Follow us for Matrix Protocols.') was not part of this iteration's rename — leaks to 5 pages because the block is inlined on each. (2) Seeded Mongo content (library entries + books collection) was not updated alongside the JSX rename — Library.jsx now maps `kindMeta.protocol → 'Reading'` for the kind label but the entry/book TITLES themselves still contain the literal word. (3) Learning.jsx renamed the eyebrow + entry top label + per-track count successfully, but the track DESCRIPTIONS and per-entry description blurbs ('Introductory modules.', 'The opening module.') were missed. Reproduction: navigate to any of the 6 affected routes and ctrl-F for 'protocol' or 'module' in rendered text. Mitigation: see the action_items list — 6 P0 edits + 1 P1 edit (structure on /the-beginning)."
+}

@@ -123,10 +123,18 @@ export default function Bookstore() {
 
           <p
             data-testid="bookstore-core-library-line"
-            className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-10 max-w-[60ch] aurin-serif-italic"
+            className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] mb-4 max-w-[60ch] aurin-serif-italic"
           >
             Slow-written books for adults. Calm storybooks for children.
             No urgency. Read in the order that feels true.
+          </p>
+
+          <p
+            data-testid="bookstore-body-thread"
+            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-10 max-w-[58ch]"
+          >
+            Your body usually knows before your mind does. If a title pulls
+            you, sit with it for a moment.
           </p>
 
           {loading && (
@@ -291,6 +299,19 @@ export default function Bookstore() {
                   Nothing matches this search.
                 </div>
               )}
+            </div>
+          )}
+
+          {!loading && filtered.length > 0 && (
+            <div
+              data-testid="bookstore-closing-note"
+              className="mt-16 pt-10 border-t border-[hsl(var(--aurin-border-soft))] max-w-[58ch]"
+            >
+              <p className="aurin-serif-italic text-[15.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9]">
+                If something here keeps moving in you, you can come back.
+                <br />
+                Nothing here will run out.
+              </p>
             </div>
           )}
         </div>

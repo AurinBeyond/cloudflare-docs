@@ -118,9 +118,9 @@ export default function TheBeginning() {
               But this is only the beginning.
             </p>
             <p>
-              The old system is deeply rooted and may try to pull you back into
-              what is familiar. Real change requires continued awareness and
-              conscious direction.
+              The old pull runs deep. It will try to bring you back to what is
+              familiar. Real change asks for continued awareness — and a
+              quieter direction of your own.
             </p>
             <p>What matters is not perfection. Just not going back unconsciously.</p>
           </Block>

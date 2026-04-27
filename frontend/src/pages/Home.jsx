@@ -12,20 +12,20 @@ import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound } from "lucide-rea
 const LAYERS = [
   {
     to: "/library",
-    label: "The Genesis Protocols",
+    label: "The Genesis Volumes",
     testid: "home-layer-library",
     title: "These are not just books.",
     blurb:
-      "These are places where you start to see what is actually moving you. And where the first crack opens — inside the automatic.",
+      "Quiet places where you start to see what is actually moving you. The first crack opens — inside the automatic.",
     icon: BookOpen,
   },
   {
     to: "/kids-universe",
     label: "Kids Universe",
     testid: "home-layer-kids",
-    title: "A child does not need a system to be whole.",
+    title: "A child does not need to be fixed to be whole.",
     blurb:
-      "They need space where they are not interrupted. Here we don't teach them to be \"correct\" — we let them stay real.",
+      "They need space where they are not interrupted. We don't teach them to be \"correct\" — we let them stay real.",
     icon: Sparkles,
   },
   {
@@ -57,9 +57,9 @@ const PRINCIPLES = [
   },
   {
     n: "02",
-    title: "Soul over system",
+    title: "Soul before pattern",
     body:
-      "The system is not the enemy. But it is not the guide either. Here you learn to feel that difference.",
+      "Inherited patterns are not the enemy. They are simply not the guide. Here you learn to feel that difference.",
   },
   {
     n: "03",
@@ -111,7 +111,7 @@ export default function Home() {
               className="aurin-btn aurin-btn-primary"
               data-testid="home-cta-explore-library"
             >
-              Begin the protocol
+              Begin gently
               <ArrowUpRight size={16} />
             </Link>
             <Link

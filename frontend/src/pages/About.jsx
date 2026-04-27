@@ -89,7 +89,7 @@ export default function About() {
             </p>
             <p>
               I saw how we — as parents, as partners, as humans — pass down
-              <em> scarcity software</em> and <em>fear protocols</em> to the
+              <em> scarcity software</em> and <em>quiet fear loops</em> to the
               next generation without even realising it. We tell our children
               to be free while we ourselves live in cages made of old words and
               ancient wounds.
@@ -213,10 +213,10 @@ export default function About() {
               <Sparkles size={18} strokeWidth={1.4} />
             </div>
             <div className="flex-1">
-              <div className="aurin-eyebrow !mb-1">Join the movement</div>
+              <div className="aurin-eyebrow !mb-1">A quiet next step</div>
               <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]">
-                The 7-step protocol is the first practical layer of this work.
-                Free for now. Sign-in keeps your reflections private.
+                A calm 7-day beginning. Free, for now. What you write stays
+                yours alone.
               </p>
             </div>
             <Link

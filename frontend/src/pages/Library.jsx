@@ -19,7 +19,7 @@ import { Compass } from "lucide-react";
 
 const kindMeta = {
   book: { icon: BookOpen, label: "Book" },
-  protocol: { icon: FileText, label: "Protocol" },
+  protocol: { icon: FileText, label: "Reading" },
   audio: { icon: Headphones, label: "Audio" },
   video: { icon: Film, label: "Video" },
   article: { icon: FileIcon, label: "Article" },

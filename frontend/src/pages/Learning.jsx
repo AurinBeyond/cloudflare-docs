@@ -33,17 +33,17 @@ export default function Learning() {
     <div data-testid="page-learning">
       <PageHeader
         tone="default"
-        eyebrow="Learning · Structured Modules"
+        eyebrow="Learning · Quiet readings"
         title="Step forward,"
-        italicWord="one module at a time."
-        description="Learning is the practical layer of Matrix Aurin. Each module has a clear role. Each section is short. You always know where you are, what is available, and what to do next."
+        italicWord="one piece at a time."
+        description="A small shelf of slow readings. Take what speaks. Skip what does not. Nothing here is in a hurry."
       />
 
       <section className="aurin-section-sm">
         <div className="aurin-container">
           {loading ? (
             <div data-testid="learning-loading" className="py-20 text-center text-[hsl(var(--aurin-text-muted))]">
-              Loading modules…
+              A small breath…
             </div>
           ) : (
             <div className="space-y-16" data-testid="learning-groups">
@@ -66,7 +66,7 @@ export default function Learning() {
                         )}
                       </div>
                       <span className="text-xs uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
-                        {inCat.length} {inCat.length === 1 ? "module" : "modules"}
+                        {inCat.length} {inCat.length === 1 ? "reading" : "readings"}
                       </span>
                     </div>
 
@@ -80,7 +80,7 @@ export default function Learning() {
                         >
                           <div className="flex items-start justify-between">
                             <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
-                              Module · 0{idx + 1}
+                              Reading · 0{idx + 1}
                             </div>
                             <ArrowUpRight
                               size={15}
@@ -102,7 +102,7 @@ export default function Learning() {
                       ))}
                       {inCat.length === 0 && (
                         <div className="aurin-card p-7 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
-                          No modules in this track yet.
+                          Nothing here yet. Soon.
                         </div>
                       )}
                     </div>

@@ -82,9 +82,9 @@ export default function AiDock() {
             <div className="flex gap-3 text-[13px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
               <Info size={14} className="mt-0.5 shrink-0 text-[hsl(var(--aurin-sage))]" />
               <p>
-                When active, the companion will answer only from the Matrix
-                Aurin content and follow the tone defined in the system guide.
-                Nothing is sent anywhere yet.
+                When this opens, the companion will reply only from the
+                writings here, in the same quiet voice. Nothing is sent
+                anywhere yet.
               </p>
             </div>
 
