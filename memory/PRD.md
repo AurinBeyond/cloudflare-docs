@@ -209,6 +209,22 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 15 — Student Cabinet + meditation placeholder copy (2026-04-27)
+
+**For the first 10 students.** The Sanctuary's signed-in dashboard now exists.
+
+**Frontend:**
+- New `components/StudentCabinet.jsx` — signed-in dashboard at `/portal`. Resume card chooses the next quiet step (`cabinet-resume-beginning` if mid-journey · `cabinet-resume-room` if cabinet open · `cabinet-resume-beginning-done` if 7/7 walked · `cabinet-resume-default` for fresh users). Three surfaces below: The Beginning · The Quiet Room · The Library. Plus `cabinet-deeper-shelf` empty-state for future paid content. No "% completed", no achievements — tone is "you don't have to start over".
+- `pages/UserPortal.jsx` — splits signed-in vs signed-out. Signed-in renders `<StudentCabinet />`; signed-out keeps the existing 3-block preview grid. Trust/legal/age-reset block stays for both.
+- `components/MeditationPlayer.jsx` — placeholder copy now reads "*This sound will open soon.*" + secondary line "*Human voice is being recorded.*" (italic + small calm grey). Play button stays disabled, no `<audio>` element rendered until a real URL is set.
+
+**Saved to memory (NOT deployed):**
+- `/app/memory/meditation_reference.md` — two Gemini share URLs kept ONLY as inspiration references for the founder's future human-voice recording. Hard rules: never embed Gemini, never use Gemini branding, never add AI-generated voice to the public meditation page.
+
+**Tests:**
+- iteration_15 → Backend 26/26 (test_iteration11 16/16 + test_iteration14 10/10) · Frontend 13/13 PASS first run.
+- Forbidden-word scan over 12 public routes — 0 hits.
+
 ### Iteration 14 — Quiet Room: greeting + topic routing · Media readiness (2026-04-27)
 
 **Cabinet refinement (per founder's "Starting Rule" directive):**
