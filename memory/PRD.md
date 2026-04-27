@@ -204,6 +204,11 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 **Tests:** Backend 9/9 pass · Frontend 95 % (3 cosmetic LOW notes — share-strip child testids renamed `*-strip-{facebook|instagram|copy}` after report; native HTML5 email validation by design). iteration_9.json clean.
 - Regression file: `/app/backend/tests/test_iteration9.py`.
 
+### Iteration 12 — Iteration-11 P0 frontend bug fixes (2026-04-27)
+- **`LibraryKidsRead`** — `angels-tales` sample card now renders. Root cause: a 422 on `/api/content/entries?audience=kids` (entries Audience literal is `kids-universe`, not `kids`) was thrown inside a single `Promise.all`, which discarded the books payload. Fix: split entries + books into independent promises with their own `.catch`, and use `audience='kids-universe'` for entries. `freeBooks` filter still gates on `!!pdf_url`.
+- **`PrivateRoom` cabinet-reset** — single-click reset now correctly returns the user to `cabinet-intro`. Root cause: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state (messages / showContinuation / threadKey / keepThread / confirms / input / error) and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
+- **Tests:** iteration_12 — Backend 16/16 pytest pass (regression suite unchanged), Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
+
 ### Iteration 10 — Invisible Architect Protocol (2026-04-25)
 **Brand voice tightening — no marketing speak, "portal not website":**
 - New **Inner Architect — From Masks to Light** manifest section on `/aurin-philosophy` (`ap-inner-architect`). Three calm paragraphs ending on *"returning to the Source is returning to yourself."*
