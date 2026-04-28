@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound } from "lucide-react";
+import VideoCard from "@/components/VideoCard";
 
 /**
  * Home — refreshed copy ("Leave the noise. Find the Architect within.")
@@ -74,20 +75,6 @@ export default function Home() {
     <div data-testid="page-home">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        {/* Ambient background — muted, looped, no controls. Lazy-decoded.
-            If the asset fails to load, the existing grid + glow layers remain. */}
-        <video
-          data-testid="home-hero-ambient-video"
-          src="/assets/videos/weight-of-stillness.mp4"
-          className="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--aurin-bg))/0.65] via-[hsl(var(--aurin-bg))/0.85] to-[hsl(var(--aurin-bg))]" />
         <div className="absolute inset-0 aurin-grid-bg opacity-[0.22]" />
         <div className="absolute inset-0 aurin-glow" />
         <div className="aurin-container relative pt-24 md:pt-36 pb-24 md:pb-32">
@@ -281,6 +268,19 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* SMALL VIDEO CARD — lower-right, optional, click to play */}
+      <section className="aurin-section-sm">
+        <div className="aurin-container flex justify-end">
+          <VideoCard
+            src="/assets/videos/you-are-not-who-you-became-720p.mp4"
+            eyebrow="A small look"
+            title="You are not who you became."
+            description="Sixty seconds. Watch when you feel like it."
+            testId="home-video-card"
+          />
         </div>
       </section>
 

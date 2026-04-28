@@ -209,6 +209,29 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 19 — Video card refinement + correct media separation (2026-04-28)
+
+**Founder reversal (2026-04-28):** the iteration-18 full-screen ambient hero video was REMOVED. Replaced by a small, click-to-play `<VideoCard>` placed on TWO surfaces only — Home (lower-right) and Meditation Corner (centered). All other founder rules from the new directive enforced strictly.
+
+**Frontend changes:**
+- `Home.jsx` — full-screen `home-hero-ambient-video` element + gradient overlay REMOVED. Hero is back to grid + glow only. New small `<VideoCard>` (testid `home-video-card`) added in a tucked lower section after the AI footnote, right-aligned, max-w-md.
+- `MeditationCorner.jsx` — added `<VideoCard>` (testid `meditation-video-card`, max-w-lg) before the closing note. Plays `weight-of-stillness.mp4` (the calmest clip).
+- New `components/VideoCard.jsx` — purpose-built small player with: dark poster, centered Play overlay (lucide Play/Pause), soft shadow, rounded corners, `preload="none"` (file only downloads on click), no autoplay, no native controls visible until interaction, hides itself on `error` event. Aspect ratio 16/9. Caption block (eyebrow + title + description) below the frame. All testids namespaced via `testId` prop.
+
+**New asset shipped (compressed):**
+- `you-are-not-who-you-became-720p.mp4` — 8.9 MB, 1280×720, 81.9s. Sourced from a 160 MB 1080p artifact uploaded by the founder; first download was corrupted (NAL unit errors), re-downloaded clean, re-encoded with `ffmpeg -vf scale=-2:720 -crf 28 -preset fast +faststart`. Ships from `/app/frontend/public/assets/videos/`.
+
+**Asset folder total:** 17 MB across 4 mp4 files. The 160 MB original was deleted post-encode.
+
+**Audio rule honored** (`/app/memory/audio_truth.md`):
+- Did NOT extract audio from any video.
+- Did NOT wire AI-synthesised voice.
+- First Light placeholder ("*This sound will open soon. Human voice is being recorded.*") stands. Play button still disabled until founder sets `REACT_APP_FIRST_LIGHT_AUDIO_URL`.
+
+**Verification:**
+- Live: `home-hero-ambient-video` count = 0 (background gone), `home-video-card` + `meditation-video-card` render correctly. Both mp4 files serve HTTP 200. Page text remains the focal point; video is a quiet side element. Lint clean.
+- No backend changes. No regression run needed.
+
 ### Iteration 18 — Hero ambient video on Home (2026-04-28)
 
 **Founder uploaded 4 mp4 artifacts (3 unique).** Per founder rule: *"video ONLY on homepage, hero/background layer, muted/looped/no-controls".* Saved all three to `/app/frontend/public/assets/videos/` (~8 MB total) so they ship with the build — no CDN, privacy-safe.

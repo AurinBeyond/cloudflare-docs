@@ -1,5 +1,6 @@
 import PageHeader from "@/components/layout/PageHeader";
 import { Wind, Waves, Moon, Sun } from "lucide-react";
+import VideoCard from "@/components/VideoCard";
 
 const SESSIONS = [
   {
@@ -125,6 +126,20 @@ export default function MeditationCorner() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* OPTIONAL VISUAL CARD — small, calm, click to watch */}
+      <section className="aurin-section-sm">
+        <div className="aurin-container flex justify-center">
+          <VideoCard
+            src="/assets/videos/weight-of-stillness.mp4"
+            eyebrow="A quiet visual"
+            title="The weight of stillness."
+            description="A small loop. Watch only if you feel like it."
+            maxWidthCls="max-w-lg"
+            testId="meditation-video-card"
+          />
         </div>
       </section>
 
