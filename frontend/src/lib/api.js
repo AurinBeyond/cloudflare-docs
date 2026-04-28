@@ -132,6 +132,17 @@ export async function resetBeginning() {
   return res.data;
 }
 
+export async function fetchBeginningStep(n) {
+  const res = await api.get(`/experience/the-beginning/step/${n}`);
+  return res.data;
+}
+
+/* ----------------------- Cabinet — Your Materials ----------------------- */
+export async function fetchCabinetLibrary() {
+  const res = await api.get("/cabinet/library");
+  return res.data;
+}
+
 /* ----------------------- Blog ----------------------- */
 export async function fetchBlogPosts() {
   const res = await api.get("/blog");

@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Compass, BookOpen, Heart, Sparkles, ArrowRight } from "lucide-react";
-import { fetchBeginningStatus, fetchCabinet, fetchBooks } from "@/lib/api";
+import { Compass, BookOpen, Heart, Sparkles, ArrowRight, Eye } from "lucide-react";
+import {
+  fetchBeginningStatus,
+  fetchCabinet,
+  fetchBooks,
+  fetchCabinetLibrary,
+  fetchBeginningStep,
+} from "@/lib/api";
 
 /**
  * StudentCabinet — the signed-in dashboard.
@@ -21,6 +27,9 @@ export default function StudentCabinet({ user }) {
   const [beginning, setBeginning] = useState(null);
   const [cabinet, setCabinet] = useState(null);
   const [bookCount, setBookCount] = useState(null);
+  const [purchased, setPurchased] = useState([]);
+  const [openStep, setOpenStep] = useState(null); // { n, step, reflection }
+  const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -35,11 +44,27 @@ export default function StudentCabinet({ user }) {
       fetchBooks()
         .then((b) => alive && setBookCount(Array.isArray(b) ? b.length : 0))
         .catch(() => {});
+      fetchCabinetLibrary()
+        .then((p) => alive && setPurchased(Array.isArray(p) ? p : []))
+        .catch(() => {});
     })();
     return () => {
       alive = false;
     };
   }, []);
+
+  const openPastStep = async (n) => {
+    setOpenLoading(true);
+    try {
+      const data = await fetchBeginningStep(n);
+      setOpenStep(data);
+    } catch {
+      setOpenStep(null);
+    } finally {
+      setOpenLoading(false);
+    }
+  };
+  const closePastStep = () => setOpenStep(null);
 
   // ---- Resolve the "Continue" state — most personal step first.
   let resume = null;
@@ -235,6 +260,170 @@ export default function StudentCabinet({ user }) {
           </div>
         </div>
       </div>
+
+      {/* YOUR MATERIALS — past Beginning reflections + purchased books */}
+      <div
+        data-testid="cabinet-your-materials"
+        className="aurin-card p-7 md:p-9 border-[hsl(var(--aurin-sage))/0.35]"
+      >
+        <div className="aurin-eyebrow !mb-2">Your Materials</div>
+        <h3 className="aurin-display text-2xl md:text-3xl leading-tight mb-6">
+          What is{" "}
+          <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+            yours alone.
+          </span>
+        </h3>
+
+        {/* Past reflections */}
+        {beginning?.completed_steps?.length > 0 && (
+          <div data-testid="cabinet-past-reflections" className="mb-7">
+            <div className="text-[12px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-3">
+              Steps you have walked
+            </div>
+            <p className="text-[13.5px] aurin-serif-italic text-[hsl(var(--aurin-text))/0.85] mb-4">
+              You have already been here. Read what you wrote.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {beginning.completed_steps.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => openPastStep(n)}
+                  data-testid={`cabinet-past-step-${n}`}
+                  className="aurin-chip hover:border-[hsl(var(--aurin-sage))] transition-colors text-[12.5px] flex items-center gap-1.5"
+                >
+                  <Eye size={11} strokeWidth={1.6} />
+                  Step {n}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Purchased / unlocked content */}
+        <div data-testid="cabinet-purchased">
+          <div className="text-[12px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-3">
+            Books and readings you have unlocked
+          </div>
+          {purchased.length === 0 ? (
+            <p
+              data-testid="cabinet-purchased-empty"
+              className="text-[13.5px] aurin-serif-italic text-[hsl(var(--aurin-text-muted))] max-w-[55ch]"
+            >
+              Nothing here yet. The longer books open soon — when they do,
+              they'll wait for you here, in your hand.
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {purchased.map((p) => (
+                <li
+                  key={p.book_slug}
+                  data-testid={`cabinet-purchased-${p.book_slug}`}
+                  className="flex items-center justify-between gap-3 py-2 border-b border-[hsl(var(--aurin-border-soft))] last:border-b-0"
+                >
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium truncate">
+                      {p.title || p.book_slug}
+                    </div>
+                    {p.granted_at && (
+                      <div className="text-[11px] text-[hsl(var(--aurin-text-muted))]">
+                        opened · {p.granted_at.slice(0, 10)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {p.external_read_url && (
+                      <a
+                        href={p.external_read_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-testid={`cabinet-purchased-${p.book_slug}-open`}
+                        className="text-[12.5px] underline decoration-dotted text-[hsl(var(--aurin-sage))]"
+                      >
+                        Open
+                      </a>
+                    )}
+                    {p.pdf_url && (
+                      <a
+                        href={p.pdf_url}
+                        download
+                        data-testid={`cabinet-purchased-${p.book_slug}-download`}
+                        className="text-[12.5px] underline decoration-dotted text-[hsl(var(--aurin-text))/0.85]"
+                      >
+                        Take it
+                      </a>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* PAST-STEP READER (modal-lite, in-flow panel) */}
+      {(openStep || openLoading) && (
+        <div
+          data-testid="cabinet-past-reader"
+          className="aurin-card p-7 md:p-9 border-[hsl(var(--aurin-sage))/0.45]"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="aurin-eyebrow !mb-1">Already here</div>
+              <h4 className="aurin-display text-xl">
+                {openLoading
+                  ? "Opening…"
+                  : `Step ${openStep?.n} · ${openStep?.step?.eyebrow || ""}`}
+              </h4>
+            </div>
+            <button
+              type="button"
+              onClick={closePastStep}
+              data-testid="cabinet-past-reader-close"
+              className="text-[12px] text-[hsl(var(--aurin-text-muted))] underline decoration-dotted"
+            >
+              Close
+            </button>
+          </div>
+          {!openLoading && openStep?.step && (
+            <div className="mt-5 space-y-4">
+              <p className="aurin-serif-italic text-[15.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.94] max-w-[58ch]">
+                {openStep.step.title}
+              </p>
+              {openStep.step.body && (
+                <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[58ch] whitespace-pre-line">
+                  {openStep.step.body}
+                </p>
+              )}
+              {openStep.step.prompt && (
+                <p className="text-[13.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
+                  {openStep.step.prompt}
+                </p>
+              )}
+              {openStep.reflection?.text ? (
+                <div
+                  data-testid="cabinet-past-reflection-text"
+                  className="aurin-card p-5 mt-3 bg-[hsl(var(--aurin-sand))/0.05]"
+                >
+                  <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
+                    What you wrote
+                  </div>
+                  <p className="text-[14.5px] leading-[1.8] text-[hsl(var(--aurin-text))/0.95] whitespace-pre-wrap">
+                    {openStep.reflection.text}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[13px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic">
+                  No reflection saved for this step.
+                </p>
+              )}
+              <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic mt-2">
+                What is written stays. It cannot be overwritten.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

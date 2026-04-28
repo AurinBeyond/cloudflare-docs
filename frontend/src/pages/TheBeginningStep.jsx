@@ -9,6 +9,7 @@ import {
   resetBeginning,
   startBeginning,
 } from "@/lib/api";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 /**
  * The Beginning — Step view.
@@ -400,6 +401,16 @@ function DonePanel({ reflections = [], onReset }) {
         >
           <RotateCcw size={13} /> Begin again
         </button>
+      </div>
+
+      {/* Soft email capture — only shown at the end. No popup, no pressure. */}
+      <div data-testid="tb-step-newsletter" className="pt-4">
+        <NewsletterSignup
+          source="beginning:end"
+          eyebrow="If you'd like a soft note"
+          title="Stay close, gently."
+          testidPrefix="tb-newsletter"
+        />
       </div>
     </div>
   );

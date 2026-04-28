@@ -26,6 +26,7 @@ import LibraryHub from "@/pages/LibraryHub";
 import LibraryKids from "@/pages/LibraryKids";
 import LibraryKidsRead from "@/pages/LibraryKidsRead";
 import PrivateRoom from "@/pages/PrivateRoom";
+import Start from "@/pages/Start";
 
 function AppRouter() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function AppRouter() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/start" element={<Start />} />
         <Route path="/about" element={<About />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/bookstore" element={<Bookstore />} />

@@ -138,9 +138,15 @@ export default function Bookstore() {
           </p>
           <p
             data-testid="bookstore-soft-consequence"
-            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-10 max-w-[58ch] aurin-serif-italic"
+            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-3 max-w-[58ch] aurin-serif-italic"
           >
             You don't have to take my word for it. Just see what shifts in you.
+          </p>
+          <p
+            data-testid="bookstore-author-note"
+            className="text-[12px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/70 mb-10 max-w-[58ch]"
+          >
+            Material is created by the author. Technical tools were used only to support clarity.
           </p>
 
           {loading && (

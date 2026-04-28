@@ -1932,6 +1932,72 @@ async def experience_reset(request: Request):
     return {"status": "reset"}
 
 
+@api_router.get("/experience/the-beginning/step/{n}")
+async def experience_view_step(n: int, request: Request):
+    """Read-only: return step prompt + the user's saved reflection for that step.
+    Used for "you have already been here" — re-reading what was written."""
+    user = await _require_user(request)
+    if n < 1 or n > TOTAL_STEPS:
+        raise HTTPException(status_code=404, detail="Step not found.")
+    p = await _get_or_init_progress(user.user_id)
+    completed = p.get("completed_steps") or []
+    if n not in completed:
+        raise HTTPException(status_code=403, detail="This step has not been walked yet.")
+    s = EXPERIENCE_STEPS[n - 1]
+    saved = next((r for r in (p.get("reflections") or []) if r.get("n") == n), None)
+    return {
+        "n": n,
+        "total_steps": TOTAL_STEPS,
+        "step": _serialize_step(s).model_dump(),
+        "reflection": saved,
+        "is_last": n == TOTAL_STEPS,
+    }
+
+
+# ============================================================================
+# PURCHASES — ledger of which books a user has unlocked.
+# Empty until LemonSqueezy webhooks start writing into it. Cabinet reads
+# from this collection to populate "Your Materials".
+# ============================================================================
+
+class Purchase(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    book_slug: str
+    source: Literal["lemonsqueezy", "manual_grant", "free_unlock"] = "manual_grant"
+    external_order_id: Optional[str] = None
+    granted_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+@api_router.get("/cabinet/library")
+async def cabinet_library(request: Request):
+    """The signed-in user's purchased / unlocked books.
+    Returns a list of {book_slug, title, cover, pdf_url, granted_at}.
+    Empty list if nothing has been unlocked yet (which is the case
+    until LemonSqueezy goes live)."""
+    user = await _require_user(request)
+    rows = await db.purchases.find({"user_id": user.user_id}).to_list(200)
+    out = []
+    for r in rows:
+        slug = r.get("book_slug")
+        if not slug:
+            continue
+        b = await db.books.find_one({"slug": slug}, {"_id": 0})
+        if not b:
+            continue
+        out.append({
+            "book_slug": slug,
+            "title": b.get("title"),
+            "description": b.get("description"),
+            "cover_image_url": b.get("cover_image_url"),
+            "pdf_url": b.get("pdf_url"),
+            "external_read_url": b.get("external_read_url"),
+            "granted_at": r.get("granted_at"),
+            "source": r.get("source"),
+        })
+    return out
+
+
 # =============================================================
 # Blog / Insights — manually-seeded long-form posts. Replaceable
 # from GitHub later via /blog/*.md. Public read, no auth.

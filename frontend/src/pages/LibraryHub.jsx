@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import InstagramCTA from "@/components/InstagramCTA";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { Compass, BookOpen, Sparkles } from "lucide-react";
 
 /**
@@ -107,6 +108,18 @@ export default function LibraryHub() {
               <InstagramCTA testidPrefix="library-hub-ig-cta" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Soft email capture — bottom of the library hub */}
+      <section className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]">
+        <div className="aurin-container max-w-[640px]">
+          <NewsletterSignup
+            source="library:hub"
+            eyebrow="A quiet way to stay close"
+            title="A note now and then. Nothing more."
+            testidPrefix="library-newsletter"
+          />
         </div>
       </section>
     </div>
