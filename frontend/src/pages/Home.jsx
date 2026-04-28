@@ -74,6 +74,20 @@ export default function Home() {
     <div data-testid="page-home">
       {/* HERO */}
       <section className="relative overflow-hidden">
+        {/* Ambient background — muted, looped, no controls. Lazy-decoded.
+            If the asset fails to load, the existing grid + glow layers remain. */}
+        <video
+          data-testid="home-hero-ambient-video"
+          src="/assets/videos/weight-of-stillness.mp4"
+          className="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--aurin-bg))/0.65] via-[hsl(var(--aurin-bg))/0.85] to-[hsl(var(--aurin-bg))]" />
         <div className="absolute inset-0 aurin-grid-bg opacity-[0.22]" />
         <div className="absolute inset-0 aurin-glow" />
         <div className="aurin-container relative pt-24 md:pt-36 pb-24 md:pb-32">

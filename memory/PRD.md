@@ -209,6 +209,21 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 18 — Hero ambient video on Home (2026-04-28)
+
+**Founder uploaded 4 mp4 artifacts (3 unique).** Per founder rule: *"video ONLY on homepage, hero/background layer, muted/looped/no-controls".* Saved all three to `/app/frontend/public/assets/videos/` (~8 MB total) so they ship with the build — no CDN, privacy-safe.
+
+**Active placement:**
+- `weight-of-stillness.mp4` → `Home.jsx` HERO behind the title ("Leave the noise. Find the Architect within."). `data-testid=home-hero-ambient-video`. Autoplay, muted, looped, no controls, `opacity-25` with a gradient overlay so the title stays razor-clear. 30.7s loop, 1024×1024.
+
+**Reserved (waiting on founder approval):**
+- `blueprint-inside-you.mp4` → recommended for `/aurin-philosophy` hero.
+- `fragile-construct.mp4` → recommended for `/the-beginning` intro (landing, not the step view).
+
+**Documented:** `/app/memory/hero_videos_register.md` — placement, anti-rules, exact JSX pattern for the next two when approved.
+
+**No backend changes. No regression run needed.** Lint clean. Live verified: video element present, autoplay/muted/loop/no-controls all true, mp4 served HTTP 200.
+
 ### Iteration 17 — Pre-sales activation pass (2026-04-28)
 
 **Founder directive:** make the system usable & clear for first 10 users BEFORE LemonSqueezy goes live. No new features beyond the bounded list.
