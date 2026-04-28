@@ -209,6 +209,29 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 16 — Conversion-without-selling layer + soft pause refinement (2026-04-27)
+
+**Founder directive:** add subtle "consequence-based" lines in 4 specific locations. No "buy / offer / upgrade / limited / transformation promise" wording. No new features. Text only.
+
+**Four soft consequence lines added:**
+1. **Bookstore** (`bookstore-soft-consequence`) — under the section header, in italics: *"You don't have to take my word for it. Just see what shifts in you."*
+2. **End of The Beginning** (`tb-soft-consequence`, in `DonePanel`) — *"If this touched something in you, you are not quite in the same place anymore. And from here, sometimes, the next step is taken quietly."*
+3. **Portal resume area** (`cabinet-resume-consequence`, in `StudentCabinet`) — under the resume card: *"If something stayed with you, you can step in from here."*
+4. **Library → Bookstore bridge** (new `library-to-bookstore-bridge` section at the bottom of `/library/adults`) — full calm bridge with header *"If something here kept moving in you, there is a longer way to listen."* + the same consequence line as Bookstore + ghost link *"Step into the longer readings →"*.
+
+**Soft pause refinement** (PausePanel during The Beginning):
+- Headline "Take a breath." → "**No need to rush.**"
+- Body "What you wrote needs a moment to settle. The next part will appear on its own." → "**Let what you wrote settle. The next part will appear on its own.**"
+
+**Saved to memory (NOT deployed):**
+- `/app/memory/seven_day_audio_reference.md` — founder's full Estonian audio refinement script (Stop / Notice / Pattern / Distance / Release / Space / Return) saved verbatim. NOT auto-translated into the existing English step copy because the themes differ (current journey: awareness · dependency · fear · money · childhood · pattern-break · clarity). Both can coexist later as separate audio series.
+- Third Gemini share link archived in the same file as a placement-intuition reference. NEVER embed.
+- Audio placement rule honored: founder said *"if link is not a direct playable audio URL, keep it as reference only"* — so we did NOT add three identical "Soon" placeholders across Home / Beginning / Library. The existing single placeholder on `/library/adults` stands; one drop activates it when the founder ships her own `.mp3`.
+
+**Verification:**
+- Forbidden-word scan over 6 high-traffic routes — 0 hits.
+- Lint clean on all touched files. Backend untouched.
+
 ### Iteration 15 — Student Cabinet + meditation placeholder copy (2026-04-27)
 
 **For the first 10 students.** The Sanctuary's signed-in dashboard now exists.

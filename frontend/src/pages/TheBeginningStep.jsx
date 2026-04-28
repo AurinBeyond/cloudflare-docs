@@ -283,10 +283,12 @@ function PausePanel({ left }) {
     >
       <div className="aurin-eyebrow">A small pause</div>
       <p className="aurin-display text-2xl aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-        Take a breath.
+        No need to rush.
       </p>
       <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[42ch] mx-auto">
-        What you wrote needs a moment to settle. The next part will appear on its own.
+        Let what you wrote settle.
+        <br />
+        The next part will appear on its own.
       </p>
       <div className="text-[12px] text-[hsl(var(--aurin-text-muted))]" aria-live="polite">
         Continuing in {left}…
@@ -313,6 +315,19 @@ function DonePanel({ reflections = [], onReset }) {
     <div className="space-y-10" data-testid="tb-step-done">
       <p className="text-[16px] leading-[1.85] text-[hsl(var(--aurin-text))/0.94]">
         What you see cannot be unseen. What you do next is yours.
+      </p>
+
+      <p
+        data-testid="tb-soft-consequence"
+        className="aurin-serif-italic text-[15.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9] max-w-[52ch]"
+      >
+        If this touched something in you,
+        <br />
+        you are not quite in the same place anymore.
+        <br />
+        And from here, sometimes,
+        <br />
+        the next step is taken quietly.
       </p>
 
       <div className="aurin-card p-6 flex items-start gap-4" data-testid="tb-soft-continuation">

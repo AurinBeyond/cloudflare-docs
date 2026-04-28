@@ -83,30 +83,38 @@ export default function StudentCabinet({ user }) {
   return (
     <div className="space-y-12" data-testid="student-cabinet">
       {/* RESUME — the only "do this next" cue */}
-      <Link
-        to={resume.to}
-        data-testid={resume.testid}
-        className="block aurin-card p-7 md:p-9 group hover:border-[hsl(var(--aurin-sage))] transition-colors"
-      >
-        <div className="flex flex-col md:flex-row md:items-center gap-5">
-          <div className="w-12 h-12 rounded-full border border-[hsl(var(--aurin-sage))/0.5] flex items-center justify-center text-[hsl(var(--aurin-sage))] shrink-0">
-            <Compass size={18} strokeWidth={1.4} />
+      <div className="space-y-4">
+        <Link
+          to={resume.to}
+          data-testid={resume.testid}
+          className="block aurin-card p-7 md:p-9 group hover:border-[hsl(var(--aurin-sage))] transition-colors"
+        >
+          <div className="flex flex-col md:flex-row md:items-center gap-5">
+            <div className="w-12 h-12 rounded-full border border-[hsl(var(--aurin-sage))/0.5] flex items-center justify-center text-[hsl(var(--aurin-sage))] shrink-0">
+              <Compass size={18} strokeWidth={1.4} />
+            </div>
+            <div className="flex-1">
+              <div className="aurin-eyebrow !mb-1">{resume.label}</div>
+              <h3 className="aurin-display text-2xl md:text-3xl leading-tight">
+                {resume.title}
+              </h3>
+              <p className="mt-2 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
+                {resume.hint}
+              </p>
+            </div>
+            <ArrowRight
+              size={16}
+              className="text-[hsl(var(--aurin-sage))] opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
+            />
           </div>
-          <div className="flex-1">
-            <div className="aurin-eyebrow !mb-1">{resume.label}</div>
-            <h3 className="aurin-display text-2xl md:text-3xl leading-tight">
-              {resume.title}
-            </h3>
-            <p className="mt-2 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
-              {resume.hint}
-            </p>
-          </div>
-          <ArrowRight
-            size={16}
-            className="text-[hsl(var(--aurin-sage))] opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
-          />
-        </div>
-      </Link>
+        </Link>
+        <p
+          data-testid="cabinet-resume-consequence"
+          className="text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/85 aurin-serif-italic max-w-[52ch] pl-1"
+        >
+          If something stayed with you, you can step in from here.
+        </p>
+      </div>
 
       {/* THREE SURFACES — gentle, factual, no progress bars */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

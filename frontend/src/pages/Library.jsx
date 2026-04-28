@@ -269,6 +269,33 @@ export default function Library() {
       </section>
 
       <SoulGiftCard />
+
+      {/* Library → Bookstore soft bridge */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="library-to-bookstore-bridge"
+      >
+        <div className="aurin-container max-w-[640px]">
+          <div className="aurin-eyebrow mb-4">A quiet bridge</div>
+          <h2 className="aurin-display text-3xl md:text-4xl leading-[1.15] mb-5">
+            If something here{" "}
+            <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+              kept moving in you,
+            </span>{" "}
+            there is a longer way to listen.
+          </h2>
+          <p className="text-[14.5px] leading-[1.85] text-[hsl(var(--aurin-text-muted))] max-w-[58ch] mb-7 aurin-serif-italic">
+            You don't have to take my word for it. Just see what shifts in you.
+          </p>
+          <Link
+            to="/bookstore"
+            data-testid="library-to-bookstore-bridge-link"
+            className="aurin-btn aurin-btn-ghost"
+          >
+            Step into the longer readings →
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

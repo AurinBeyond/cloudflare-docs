@@ -131,10 +131,16 @@ export default function Bookstore() {
 
           <p
             data-testid="bookstore-body-thread"
-            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-10 max-w-[58ch]"
+            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-2 max-w-[58ch]"
           >
             Your body usually knows before your mind does. If a title pulls
             you, sit with it for a moment.
+          </p>
+          <p
+            data-testid="bookstore-soft-consequence"
+            className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/80 mb-10 max-w-[58ch] aurin-serif-italic"
+          >
+            You don't have to take my word for it. Just see what shifts in you.
           </p>
 
           {loading && (
