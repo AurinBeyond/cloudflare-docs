@@ -209,6 +209,35 @@ prulesoul.site branding; SYSTEM_ARCHITECTURE.md.
 - **`PrivateRoom` cabinet-reset** — single-click reset now returns the user to `cabinet-intro`. RC: `window.confirm` was auto-dismissed in tests AND the local `phase` state wasn't reset on success. Fix: removed `window.confirm`, unconditionally clear all local state and `setPhase(PHASES.INTRO)` whether or not `clearCabinet()` succeeds.
 - **Tests:** iteration_12 — Backend 16/16 pytest pass, Frontend 100% (both fixes verified end-to-end against live preview with synthetic Mongo session).
 
+### Iteration 17 — Pre-sales activation pass (2026-04-28)
+
+**Founder directive:** make the system usable & clear for first 10 users BEFORE LemonSqueezy goes live. No new features beyond the bounded list.
+
+**Backend (server.py):**
+- New `GET /api/experience/the-beginning/step/{n}` — read-only past-reflection view. 401 unauth, 404 if `n` out of 1..7, 403 if step not in `completed_steps`, 200 with full step + saved reflection + `is_last`.
+- New `Purchase` Pydantic model + `db.purchases` collection. New `GET /api/cabinet/library` — returns `[{book_slug, title, description, cover_image_url, pdf_url, external_read_url, granted_at, source}]` joining `db.purchases` ⨝ `db.books`. Empty list until LS webhook starts writing.
+- New unique compound index `(user_id, book_slug)` on `db.purchases` — idempotent against double-fired LS webhooks.
+- All pre-existing endpoints unchanged. test_iteration11 (16/16) + test_iteration14 (10/10) regression green.
+
+**Frontend:**
+- `lib/api.js` — `fetchBeginningStep(n)` + `fetchCabinetLibrary()`.
+- `components/StudentCabinet.jsx` — added **Your Materials** section (`cabinet-your-materials`):
+  - `cabinet-past-reflections`: chips for each completed step. Click → opens `cabinet-past-reader` with the saved reflection text + step prompt + closing line *"What is written stays. It cannot be overwritten."*
+  - `cabinet-purchased`: list of unlocked books with Open / Take it actions; `cabinet-purchased-empty` placeholder for the (current) zero-purchase state.
+- `pages/Learning.jsx` — REWRITTEN as a quiet stub: *"This part is still being written. Some things take longer to form."* with two soft CTAs (Begin gently / Open the library). Old `learning-loading` / `learning-groups` testids removed.
+- `pages/Start.jsx` — NEW `/start` route. Single calm door with two CTAs. Auto-redirects to `/the-beginning` after 2.5s of inactivity.
+- `App.js` — registered `/start`.
+- `pages/TheBeginningStep.jsx` — added `tb-step-newsletter` (NewsletterSignup with `source="beginning:end"`) inside `DonePanel`, only shown when `is_done=true`.
+- `pages/LibraryHub.jsx` — added soft NewsletterSignup at the bottom (`source="library:hub"`).
+- `pages/Bookstore.jsx` — added `bookstore-author-note`: *"Material is created by the author. Technical tools were used only to support clarity."*
+
+**Saved to memory:** none new this iteration.
+
+**Tests:**
+- iteration_17 → Backend 33/33 (7 new + 16 iter11 + 10 iter14) · Frontend 15/15 PASS first run.
+- Forbidden-word scan over 8 routes including new `/start` and rewritten `/learning` — 0 hits.
+- Regressions held: kids-read sample, meditation placeholder copy, cabinet reset.
+
 ### Iteration 16 — Conversion-without-selling layer + soft pause refinement (2026-04-27)
 
 **Founder directive:** add subtle "consequence-based" lines in 4 specific locations. No "buy / offer / upgrade / limited / transformation promise" wording. No new features. Text only.

@@ -2453,6 +2453,13 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def on_startup():
     await seed_initial_content()
+    # Idempotent — guarantees one purchase row per (user, book), so a
+    # double-fired LemonSqueezy webhook can never duplicate access.
+    await db.purchases.create_index(
+        [("user_id", 1), ("book_slug", 1)],
+        unique=True,
+        name="uniq_user_book",
+    )
 
 
 @app.on_event("shutdown")
