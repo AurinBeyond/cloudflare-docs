@@ -1,4 +1,26 @@
----
+Kirje A — DKIM (KÕIGE TÄHTSAM):
+
+Type: TXT
+Name: resend._domainkey
+Content: paste täisväärtus, mille kopeerisid Resendist (algab p=MIGfMA0GCSq...)
+Proxy status: ⚠️ Cloudflare TXT-le proxy't ei kuvatagi — TXT kirjed on alati DNS only, see on automaatne. Hea uudis.
+TTL: Auto
+Save
+Kirje B — Resend MX:
+
+Type: MX
+Name: send
+Mail server: feedback-smtp.eu-west-1.amazonses.com
+Priority: 10
+TTL: Auto
+Save
+Kirje C — Resend SPF (saateahelale):
+
+Type: TXT
+Name: send
+Content: v=spf1 include:amazonses.com ~all
+TTL: Auto
+Save---
 pcx_content_type: concept
 description: Use Cloudflare as your primary DNS provider.
 products:
