@@ -1,0 +1,49 @@
+{
+  "summary": "Iteration 27 / Phase B3 — Claude Sonnet 4.5 real LLM guide + OpenAI TTS + Course Room all pass end-to-end. Backend: 16/16 new iter27 tests PASS (health ai_guide_enabled=true & tts_configured=true; cabinet/message returns real non-curated Claude reply; 3-turn context continuity; crisis response still wins with 'This room isn't built to carry a crisis alone'; /clarity/tts 401 unauth, 200 female coral, 200 male echo, each > 5KB audio/mpeg, ETag returns 304; /api/courses lists 4 slugs each with audio_companion + audio_title; signed-out detail only day-1 unlocked, 2-7 locked body=null; enroll is idempotent and 404 on unknown slug + 401 unauth; enrolled user day-1 unlocked and day-2 unlock_at is a future ISO; all 5 mp3 audio companions return 200/audio/mpeg at ~700KB+; state bridge populates body_context on session). Backend regression: 38/38 across iter23 + iter23_extra + iter24 + iter25 + iter26 PASS. Total backend: 54/54. Frontend smoke: /course-room renders 4 cards (course-card-{slug}), top nav has nav-course-room AND nav-body-room, audio mp3 at /assets/audio/courses/borrowed-beliefs.mp3 is 200/audio/mpeg 743356 bytes. /course-room/letting-the-old-stories-rest renders course-detail-header + course-audio-player + 7 letter testids (course-letter-1 unlocked preview + course-letter-locked-2..7). Signed-out shows course-detail-signin with href /portal?next=/course-room/letting-the-old-stories-rest exactly as spec. /body-room now has 5 .body-presence-halo elements (soft 7s body-pulse + 9s body-halo animation — replaced the previous 4.5s bright pulse). No console or page errors.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "verified_passes": [
+    {"test": "GET /api/clarity/health -> ai_guide_enabled=true AND tts_configured=true", "status": "PASS"},
+    {"test": "POST /api/cabinet/message returns a Claude reply (NOT in curated CABINET_PATHS set)", "status": "PASS"},
+    {"test": "3-turn cabinet conversation — all 3 replies are non-curated Claude output", "status": "PASS"},
+    {"test": "Crisis input returns CRISIS_RESPONSE (curated) with the exact 'This room isn't built to carry a crisis alone' substring — Claude does NOT override it", "status": "PASS"},
+    {"test": "POST /api/clarity/tts unauth -> 401", "status": "PASS"},
+    {"test": "POST /api/clarity/tts female=coral -> 200 audio/mpeg, 5KB+ bytes", "status": "PASS"},
+    {"test": "POST /api/clarity/tts male=echo -> 200 audio/mpeg, 5KB+ bytes", "status": "PASS"},
+    {"test": "POST /api/clarity/tts with If-None-Match returns 304 on identical (text, gender)", "status": "PASS"},
+    {"test": "GET /api/courses returns exactly 4 slugs each with audio_companion + audio_title", "status": "PASS"},
+    {"test": "GET /api/courses/letting-the-old-stories-rest signed-out — 7 letters, day-1 unlocked with body+prompt, days 2-7 locked body=null", "status": "PASS"},
+    {"test": "POST /api/courses/{slug}/enroll — first call enrolled, second call already_enrolled (idempotent), unknown slug 404, unauth 401", "status": "PASS"},
+    {"test": "Enrolled user sees day-1 unlocked; day-2 unlock_at is a future ISO timestamp (1 day out)", "status": "PASS"},
+    {"test": "5 mp3 audio companions at /assets/audio/courses/{borrowed-beliefs|as-yourself|blueprint-inside-you|between-each-breath|what-has-changed}.mp3 — each 200 audio/mpeg, ~700KB+", "status": "PASS"},
+    {"test": "POST /api/clarity/start with unacknowledged body insight — session.body_context is set with region=jaws", "status": "PASS"},
+    {"test": "Regression: iter23 (10) + iter23_extra (5) + iter24 (5) + iter25 (9) + iter26 (9) = 38/38 green", "status": "PASS"},
+    {"test": "FE — /course-room renders 4 course-card-{slug}, nav-course-room + nav-body-room present", "status": "PASS"},
+    {"test": "FE — /course-room/letting-the-old-stories-rest renders course-detail-header + course-audio-player + course-letter-1 + course-letter-locked-2..7", "status": "PASS"},
+    {"test": "FE signed-out — course-detail-signin href = /portal?next=/course-room/letting-the-old-stories-rest", "status": "PASS"},
+    {"test": "FE — /body-room renders 5 .body-presence-halo elements (soft halo replaces previous bright pulse)", "status": "PASS"}
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iteration27.py",
+    "/app/test_reports/pytest/iteration_27.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "clarity_ai.py — clean LlmChat wrapper. System prompt is well-authored (English-only, two-rooms aware, soft invite semantics). History is inline-formatted into the system message with a 16-turn cutoff — stateless SDK call per turn, which is the right choice given the session ciphertext storage. Defensive handling of .content/.text fallback is a nice touch.",
+    "clarity_tts.py — tight, minimal. VOICE_FOR_GENDER={'female':'coral','male':'echo'} matches founder spec. DEFAULT_MODEL='tts-1-hd' and DEFAULT_SPEED=0.92 are applied. TTS_MAX_CHARS=4000 (under OpenAI's 4096 cap). is_configured() correctly gates startup.",
+    "server.py /api/clarity/tts — good ETag-based 304 short-circuit BEFORE calling OpenAI (saves credits on browser re-asks). Auth-gated via _require_user. 503 on RuntimeError (no key) vs 500 on unexpected is appropriate. Cache-Control: private, max-age=86400 is correct — user-specific synthesis should not hit shared caches.",
+    "server.py /api/courses/{slug}/enroll — idempotent via find_one on (user_id, course_slug). uuid.uuid4() id + started_at ISO string + source='beta_grant'. Clean.",
+    "server.py /api/courses/{slug} detail — unlock math uses started_at + (day-1) days; day-1 always treated as preview. Defensive datetime.fromisoformat with try/except is fine. MINOR: imports 'datetime' via __import__ inline rather than using the top-level timedelta import — cosmetic, not a bug.",
+    "CLARITY_AI_ENABLED flag defaults to true and falls back to the curated _pick_prompt rotation if Claude raises — this is the right safety net so a transient Anthropic outage does not 500 the whole cabinet. Crisis detection still runs ahead of both paths so self-harm input always lands on CRISIS_RESPONSE. Verified.",
+    "MagicLinkRequest uses email: str (not EmailStr) — acceptable for this iteration but should be hardened with pydantic EmailStr once the email-validator dep is added; flagging only because it's in files_of_reference.",
+    "5 mp3 audio companions are served from /app/frontend/public/assets/audio/courses/ — frontend-build routing path, correct. File sizes 738KB–744KB, content-type audio/mpeg end-to-end."
+  ],
+  "updated_files": ["/app/backend/tests/test_iteration27.py"],
+  "success_rate": {"backend": "100% (54/54 — 16 iter27 + 38 regression)", "frontend": "100% (9/9 critical assertions across /course-room, /course-room/:slug, /body-room)"},
+  "test_credentials": "Synthetic Mongo session per /app/memory/test_credentials.md. Backend tests use per-fixture ephemeral users with 'test-it27-' prefix — auto-cleaned (users, user_sessions, cabinet_sessions, body_insights, course_enrollments, clarity_user_prefs).",
+  "seed_data_creation": "Ephemeral only — every user + session + cabinet_sessions + course_enrollments + body_insights row is purged in fixture teardown. No persistent seed changes.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase B3 (iteration 27) is GREEN end-to-end. Claude Sonnet 4.5 is live on POST /api/cabinet/message via clarity_ai.generate_guide_reply — non-deterministic replies, so assert membership NOT EQUALITY against the curated CABINET_PATHS set when testing. Crisis detection runs ahead of Claude and always wins. OpenAI TTS is live at POST /api/clarity/tts (auth-gated, ETag-cached, coral female / echo male, tts-1-hd, speed 0.92). 4 courses are seeded at GET /api/courses with audio_companion pointing to /assets/audio/courses/*.mp3 — 5 mp3 files present in /app/frontend/public/assets/audio/courses/ (borrowed-beliefs, as-yourself, blueprint-inside-you, between-each-breath, what-has-changed). Letter unlock model: day-1 always unlocked as preview; day N unlocks at started_at + (N-1) days. Enrollment is idempotent and currently free (beta_grant source) — production flip requires LemonSqueezy purchase. body_context is now persisted on cabinet_sessions when /clarity/start fires with an unacknowledged body insight — the state bridge acknowledges the insight and the body_insight dict is passed to Claude's system prompt for the first 3 user turns. Frontend data-testids covered: course-card-{slug}, course-detail-header, course-audio-player, course-detail-signin, course-detail-enroll, course-letter-{day}, course-letter-locked-{day}, nav-course-room, nav-body-room. Body Room halo uses .body-presence-halo class with 7s/9s animation. New regression file: /app/backend/tests/test_iteration27.py.",
+  "rca of the issue": "No defects. All P0/P1 paths green."
+}

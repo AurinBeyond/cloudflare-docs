@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="8" failures="0" skipped="0" tests="24" time="8.881" timestamp="2026-05-10T18:18:41.316671+00:00" hostname="agent-env-e8fbb50e-1838-4619-b626-b43b6b6aabab"><testcase classname="tests.test_stage2_8_voice_first" name="test_stt_anonymous_blocked" time="0.191" /><testcase classname="tests.test_stage2_8_voice_first" name="test_stt_missing_audio_field" time="0.018" /><testcase classname="tests.test_stage2_8_voice_first" name="test_stt_empty_audio_blob" time="0.013" /><testcase classname="tests.test_stage2_8_voice_first" name="test_stt_unsupported_mime" time="0.012" /><testcase classname="tests.test_stage2_8_voice_first" name="test_stt_oversize_audio" time="0.190" /><testcase classname="tests.test_stage2_8_voice_first" name="test_guide_inner_name_swapped_in_clarity_ai_prompt" time="0.005" /><testcase classname="tests.test_stage2_8_booking_label" name="test_booking_guide_label_uses_human_name[clarity-Brian]" time="0.006"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_stage2_8_booking_label.py:19: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_stage2_8_booking_label" name="test_booking_guide_label_uses_human_name[grace-Jenny]" time="0.001"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_stage2_8_booking_label.py:19: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_me_anonymous" time="0.005"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_magic_link_request_idempotent" time="0.000"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_magic_link_verify_sets_cookie_and_is_single_use" time="0.000"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_magic_link_verify_unknown_token" time="0.001"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_me_authenticated_via_bearer" time="0.001"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1_identity" name="test_phase1_cleanup" time="0.001"><error message="failed on setup with &quot;RuntimeError: Event loop is closed&quot;">tests/test_phase1_identity.py:23: in client
+    with TestClient(app) as c:
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:787: in __enter__
+    portal.call(self.wait_startup)
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:334: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:822: in wait_startup
+    await receive()
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:813: in receive
+    self.task.result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/root/.venv/lib/python3.11/site-packages/anyio/from_thread.py:259: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/starlette/testclient.py:803: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+/root/.venv/lib/python3.11/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/cors.py:77: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py:51: in __call__
+    await self.app(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:765: in app
+    await self.lifespan(scope, receive, send)
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:732: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:608: in __aenter__
+    await self._router.startup()
+/root/.venv/lib/python3.11/site-packages/starlette/routing.py:709: in startup
+    await handler()
+server.py:9519: in on_startup
+    await seed_initial_content()
+server.py:1385: in seed_initial_content
+    cat_count = await db.content_categories.count_documents({})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/motor/metaprogramming.py:74: in method
+    return framework.run_on_executor(
+/root/.venv/lib/python3.11/site-packages/motor/frameworks/asyncio/__init__.py:85: in run_on_executor
+    return loop.run_in_executor(_EXECUTOR, functools.partial(fn, *args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:817: in run_in_executor
+    self._check_closed()
+/usr/local/lib/python3.11/asyncio/base_events.py:520: in _check_closed
+    raise RuntimeError('Event loop is closed')
+E   RuntimeError: Event loop is closed</error></testcase><testcase classname="tests.test_phase1a_presence_signals" name="test_full_trailer" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_no_trailer" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_one_signal_only" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_invalid_value_dropped" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_case_insensitive_with_whitespace" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_trailer_only_falls_back_to_full_text" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_swapped_order" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_empty_input" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_all_seven_user_states_valid" time="0.000" /><testcase classname="tests.test_phase1a_presence_signals" name="test_all_four_tone_tags_valid" time="0.002" /></testsuite></testsuites>

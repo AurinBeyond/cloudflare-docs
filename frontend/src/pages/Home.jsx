@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound } from "lucide-react";
 import VideoCard from "@/components/VideoCard";
+import FirstLetterWidget from "@/components/FirstLetterWidget";
 
 /**
  * Home — refreshed copy ("Leave the noise. Find the Architect within.")
@@ -70,6 +71,38 @@ const PRINCIPLES = [
   },
 ];
 
+// "How this is walked" — a small, honest 3-step map for first-time readers.
+// Each step points at a real route that already exists. No promises.
+const JOURNEY_STEPS = [
+  {
+    n: "I",
+    to: "/the-beginning",
+    label: "Start here",
+    testid: "home-journey-step-1",
+    title: "Find your own rhythm.",
+    blurb:
+      "Seven quiet days. One small thing at a time. Not a course — a way of arriving.",
+  },
+  {
+    n: "II",
+    to: "/body-room",
+    label: "Listen inward",
+    testid: "home-journey-step-2",
+    title: "Let the body speak.",
+    blurb:
+      "A room of eight soft places. You notice where something is held. You do not force it open.",
+  },
+  {
+    n: "III",
+    to: "/cabinet",
+    label: "Release the weight",
+    testid: "home-journey-step-3",
+    title: "Meet yourself in private.",
+    blurb:
+      "A closed room. A voice that listens more than it speaks. What you said there stays there.",
+  },
+];
+
 export default function Home() {
   return (
     <div data-testid="page-home">
@@ -123,6 +156,30 @@ export default function Home() {
               The philosophy
             </Link>
           </div>
+
+          {/* 7 Days of Clarity — soft entry banner. Routes to existing
+              waitlist capture; reuses styling, no new page. */}
+          <Link
+            to="/catalogue#7-days-of-clarity"
+            data-testid="home-7days-banner"
+            className="mt-8 inline-flex flex-col items-start gap-1 px-5 py-4 border border-[hsl(var(--aurin-sage))/0.4] hover:border-[hsl(var(--aurin-sage))] rounded-md transition-colors aurin-fade-up aurin-delay-4 group"
+          >
+            <span className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-sage))]">
+              First door · Free
+            </span>
+            <span
+              className="aurin-display text-[20px] md:text-[22px] leading-snug"
+              data-testid="home-7days-title"
+            >
+              7 Days of Clarity
+            </span>
+            <span
+              className="text-[13px] text-[hsl(var(--aurin-text-muted))] group-hover:text-[hsl(var(--aurin-text))] transition-colors"
+              data-testid="home-7days-subline"
+            >
+              Enter the Free Resonance Path <ArrowUpRight size={12} className="inline -mt-[2px]" />
+            </span>
+          </Link>
 
           {/* Mini system map */}
           <div className="mt-20 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-px bg-[hsl(var(--aurin-border-soft))] border border-[hsl(var(--aurin-border-soft))] rounded-xl overflow-hidden aurin-fade-up aurin-delay-4">
@@ -206,6 +263,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* HOW THIS IS WALKED — soft 3-step orientation (data-testid: home-journey-*) */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="home-journey"
+      >
+        <div className="aurin-container">
+          <div className="aurin-eyebrow mb-6">How this is walked</div>
+          <h2 className="aurin-display text-3xl md:text-4xl max-w-[26ch] mb-14">
+            Three quiet rooms.{" "}
+            <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+              One at a time.
+            </span>
+          </h2>
+          <ol className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 list-none">
+            {JOURNEY_STEPS.map((s, i) => (
+              <li
+                key={s.n}
+                data-testid={s.testid}
+                className="relative border-t border-[hsl(var(--aurin-border-soft))] pt-6"
+              >
+                <div className="flex items-baseline gap-3">
+                  <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))] text-2xl">
+                    {s.n}.
+                  </span>
+                  <div className="aurin-eyebrow">{s.label}</div>
+                </div>
+                <h3 className="aurin-display text-2xl md:text-[26px] mt-3 max-w-[20ch]">
+                  {s.title}
+                </h3>
+                <p className="mt-4 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                  {s.blurb}
+                </p>
+                <Link
+                  to={s.to}
+                  data-testid={`${s.testid}-link`}
+                  className="mt-5 inline-flex items-center gap-2 text-[13px] tracking-[0.14em] uppercase text-[hsl(var(--aurin-sage))] hover:opacity-80 transition-opacity"
+                >
+                  {i === JOURNEY_STEPS.length - 1 ? "Walk in" : "Begin here"}
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-14 text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[62ch]">
+            None of this is urgent. You can stop at any step, return later, or
+            skip one. The rooms do not keep score.
+          </p>
+        </div>
+      </section>
+
       {/* PRINCIPLES */}
       <section className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container">
@@ -281,6 +388,16 @@ export default function Home() {
             description="Sixty seconds. Watch when you feel like it."
             testId="home-video-card"
           />
+        </div>
+      </section>
+
+      {/* FIRST LETTER lead magnet */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="home-first-letter"
+      >
+        <div className="aurin-container max-w-[640px]">
+          <FirstLetterWidget testidPrefix="home-first-letter" />
         </div>
       </section>
 

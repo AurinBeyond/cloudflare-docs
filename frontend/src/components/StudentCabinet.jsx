@@ -15,7 +15,7 @@ import {
  * Quiet, calm, and built around three real surfaces the visitor
  * can already touch on this site:
  *   - The Beginning (7-day journey, progress visible)
- *   - The Quiet Room (last visit, optional thread key)
+ *   - The Quiet Room (last visit, optional thread key) — now Clarity Release
  *   - The Library (calm shelf they can open)
  *
  * Plus a placeholder slot for the deeper readings that open later.
@@ -78,8 +78,8 @@ export default function StudentCabinet({ user }) {
     };
   } else if (cabinet?.session && !cabinet.session.closed) {
     resume = {
-      to: "/private-room",
-      label: "The Quiet Room",
+      to: "/clarity-release",
+      label: "Clarity Release",
       title: "Your room is still open",
       hint: "Step back in when you feel ready",
       testid: "cabinet-resume-room",
@@ -178,9 +178,9 @@ export default function StudentCabinet({ user }) {
           )}
         </Link>
 
-        {/* Quiet Room */}
+        {/* Clarity Release */}
         <Link
-          to="/private-room"
+          to="/clarity-release"
           data-testid="cabinet-card-room"
           className="aurin-card p-7 group hover:border-[hsl(var(--aurin-sage))] transition-colors flex flex-col"
         >
@@ -195,7 +195,7 @@ export default function StudentCabinet({ user }) {
               {cabinet?.session && !cabinet.session.closed ? "Open" : "Quiet"}
             </span>
           </div>
-          <h3 className="aurin-display text-xl mt-6">The Quiet Room</h3>
+          <h3 className="aurin-display text-xl mt-6">Clarity Release</h3>
           <p className="mt-2 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] flex-1">
             A private space that listens. Step in when you feel like writing
             the way it actually is.

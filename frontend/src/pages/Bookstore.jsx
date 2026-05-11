@@ -1,9 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { ShoppingBag, Search, Download, BookOpenCheck, ExternalLink } from "lucide-react";
+import { ShoppingBag, Search, Download, BookOpenCheck, ExternalLink, ArrowRight, Eye } from "lucide-react";
 import { api } from "@/lib/api";
+import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
 import InstagramCTA from "@/components/InstagramCTA";
+import { useAdmin } from "@/hooks/useAdmin";
+import { adminBookPreviewUrl } from "@/lib/admin";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
@@ -23,6 +26,7 @@ export default function Bookstore() {
   const [query, setQuery] = useState("");
   const [audience, setAudience] = useState("all");
   const [loading, setLoading] = useState(true);
+  const { isAdmin, token: adminToken } = useAdmin();
 
   useEffect(() => {
     let alive = true;
@@ -73,6 +77,23 @@ export default function Bookstore() {
           </span>
         </div>
       </PageHeader>
+
+      {/* Bookstore hero — founder-supplied: stacked books + a quiet writer */}
+      <section className="aurin-section-xs" data-testid="bookstore-hero-image-section">
+        <div className="aurin-container">
+          <figure
+            data-testid="bookstore-hero-image"
+            className="aurin-card overflow-hidden"
+          >
+            <img
+              src="/assets/illustrations/library-bookstore.jpg"
+              alt="A small stack of clothbound books beside a woman writing quietly"
+              className="w-full h-auto block"
+              loading="eager"
+            />
+          </figure>
+        </div>
+      </section>
 
       <section className="border-b border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container py-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
@@ -257,15 +278,52 @@ export default function Bookstore() {
                         >
                           Take it <Download size={12} />
                         </a>
-                      ) : (
-                        <button
-                          disabled
-                          data-testid={`bookstore-item-${b.slug}-buy`}
-                          title="The full version opens soon."
-                          className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px] opacity-60 cursor-not-allowed"
+                      ) : b.price === 0 ? (
+                        <Link
+                          to={`/bookstore/${b.slug}`}
+                          data-testid={`bookstore-item-${b.slug}-read-free`}
+                          className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
                         >
-                          Continue <ShoppingBag size={12} />
-                        </button>
+                          Read it <ArrowRight size={12} />
+                        </Link>
+                      ) : (
+                        (() => {
+                          const checkoutUrl = buildLemonCheckoutUrl(b.lemonsqueezy_variant_id);
+                          if (checkoutUrl) {
+                            return (
+                              <a
+                                href={checkoutUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-testid={`bookstore-item-${b.slug}-buy`}
+                                className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+                              >
+                                Continue <ShoppingBag size={12} />
+                              </a>
+                            );
+                          }
+                          return isAdmin ? (
+                            <a
+                              data-testid={`bookstore-item-${b.slug}-buy`}
+                              href={adminBookPreviewUrl(b.slug, adminToken)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Admin preview · paid PDF"
+                              className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+                            >
+                              <Eye size={12} /> Preview
+                            </a>
+                          ) : (
+                            <a
+                              href="/catalogue#7-days-of-clarity"
+                              data-testid={`bookstore-item-${b.slug}-buy`}
+                              title="Doors open soon — join the quiet list"
+                              className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+                            >
+                              Waitlist <ShoppingBag size={12} />
+                            </a>
+                          );
+                        })()
                       )}
                     </div>
                     {b.pdf_url && b.price > 0 && (
@@ -284,8 +342,9 @@ export default function Bookstore() {
                         data-testid={`bookstore-item-${b.slug}-refund-notice`}
                         className="mt-3 text-[11px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
                       >
-                        The full version opens soon. By continuing later, you
-                        accept the{" "}
+                        {b.lemonsqueezy_variant_id
+                          ? "By continuing, you accept the "
+                          : "The full version opens soon. By continuing later, you accept the "}
                         <Link
                           to="/legal#refund-policy"
                           className="text-[hsl(var(--aurin-sage))] hover:underline"

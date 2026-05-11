@@ -465,3 +465,259 @@
         border-bottom-color: inherit;
     }
 }
+
+
+/* ============================================================
+   Guide Presence — restrained micro-animation layer (iter 64c).
+   Per founder mandate: minimal, intentional, rare. No lip-sync,
+   no hand gestures, no posture changes. Only:
+   - aurin-guide-breath: very slow 7s breathing scale
+   - aurin-guide-sway:   tiny 11s side-to-side head sway (±0.7%)
+   - aurin-guide-blink:  occasional 7s soft horizontal flash over
+                         the eye-line (the sweep imitates a blink
+                         without altering the static portrait)
+   All animations honor prefers-reduced-motion.
+   ============================================================ */
+@keyframes aurin-guide-breath {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.013);
+    }
+}
+
+@keyframes aurin-guide-sway {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-0.6%);
+    }
+    75% {
+        transform: translateX(0.6%);
+    }
+}
+
+@keyframes aurin-guide-blink {
+    0%,
+    93%,
+    100% {
+        opacity: 0;
+    }
+    96% {
+        opacity: 0.55;
+    }
+    97% {
+        opacity: 0;
+    }
+    98% {
+        opacity: 0.45;
+    }
+    99% {
+        opacity: 0;
+    }
+}
+
+.aurin-guide-breath {
+    animation: aurin-guide-breath 7s ease-in-out infinite;
+    transform-origin: center 60%;
+    will-change: transform;
+}
+
+.aurin-guide-sway {
+    /* Composes with breath via a wrapping span in the future; for
+       now both target the same element with different durations,
+       which CSS will combine into one animation list. */
+    animation:
+        aurin-guide-breath 7s ease-in-out infinite,
+        aurin-guide-sway 11s ease-in-out infinite;
+}
+
+.aurin-guide-blink {
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        hsl(var(--aurin-bg) / 0.55) 35%,
+        hsl(var(--aurin-bg) / 0.55) 65%,
+        transparent 100%
+    );
+    filter: blur(3px);
+    animation: aurin-guide-blink 7s ease-in-out infinite;
+    animation-delay: 2.3s;
+}
+
+.aurin-guide-presence::after {
+    /* Soft outer ambient pulse — barely visible, signals presence
+       without performing. */
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    pointer-events: none;
+    box-shadow: 0 0 24px -10px hsl(var(--aurin-sage) / 0.4);
+    animation: aurin-breathe 6s ease-in-out infinite;
+    opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aurin-guide-breath,
+    .aurin-guide-sway,
+    .aurin-guide-blink,
+    .aurin-guide-presence::after,
+    .aurin-guide-speaking-halo {
+        animation: none !important;
+    }
+}
+
+/* §Faas 1 — Speaking-state warm halo, layered over the GuidePresence
+ * portrait when the runtimeState becomes "speaking". Pulses softly so
+ * the presence feels "in conversation" without a loudspeaker glyph.
+ */
+@keyframes aurin-guide-speaking-halo {
+    0%, 100% {
+        opacity: 0.45;
+        box-shadow:
+            0 0 18px -4px hsl(var(--aurin-sage) / 0.45),
+            0 0 36px -6px hsl(var(--aurin-sage) / 0.30);
+    }
+    50% {
+        opacity: 0.85;
+        box-shadow:
+            0 0 26px -2px hsl(var(--aurin-sage) / 0.65),
+            0 0 52px -4px hsl(var(--aurin-sage) / 0.40);
+    }
+}
+.aurin-guide-speaking-halo {
+    animation: aurin-guide-speaking-halo 2.4s ease-in-out infinite;
+}
+
+/* §Phase 1A — Concierge presence runtime states + tone classes.
+ * State: idle | listening | thinking | speaking.
+ * Tone:  compassion | support | reflection | neutral.
+ *
+ * All animations are pure CSS, throttled, and disabled under
+ * prefers-reduced-motion. No JS animation loop, no canvas, no
+ * additional dependencies.
+ */
+
+@keyframes aurin-guide-state-ripple {
+    0% {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    50% {
+        opacity: 0.55;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.06);
+    }
+}
+
+@keyframes aurin-guide-thinking-pulse {
+    0%,
+    100% {
+        opacity: 0.30;
+    }
+    50% {
+        opacity: 0.85;
+    }
+}
+
+@keyframes aurin-guide-speaking-pulse {
+    0%,
+    100% {
+        opacity: 0.45;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.95;
+        transform: scale(1.025);
+    }
+}
+
+.aurin-guide-state-ripple {
+    box-shadow:
+        0 0 0 0 hsl(var(--aurin-sage) / 0);
+    transition: box-shadow 600ms ease;
+    opacity: 0;
+}
+
+/* Idle — no extra motion beyond the existing breath/sway/blink. */
+[data-runtime-state="idle"] .aurin-guide-state-ripple {
+    opacity: 0;
+}
+
+/* Listening — a slow soft outer ripple confirming the room is awake. */
+[data-runtime-state="listening"] .aurin-guide-state-ripple {
+    box-shadow: 0 0 22px 4px hsl(var(--aurin-sage) / 0.28);
+    animation: aurin-guide-state-ripple 3.6s ease-in-out infinite;
+}
+
+/* Thinking — same ripple, a touch faster, glow brightens. The reply
+ * is gathering. Never frantic. */
+[data-runtime-state="thinking"] .aurin-guide-state-ripple {
+    box-shadow: 0 0 26px 5px hsl(var(--aurin-sage) / 0.45);
+    animation: aurin-guide-state-ripple 2.4s ease-in-out infinite;
+}
+
+/* Thinking — also slow the breath so the human reads it as
+ * "considering", not "performing". */
+[data-runtime-state="thinking"] .aurin-guide-breath {
+    animation-duration: 9s;
+}
+
+/* Speaking — a softly pulsing ring synchronized with audio playback.
+ * Faster cadence, broader glow. */
+[data-runtime-state="speaking"] .aurin-guide-state-ripple {
+    box-shadow: 0 0 32px 6px hsl(var(--aurin-sage) / 0.55);
+    animation: aurin-guide-speaking-pulse 1.8s ease-in-out infinite;
+}
+
+/* Tone classes — modulate hue + warmth subtly. Neutral leaves the
+ * default sage palette untouched. Compassion warms toward amber.
+ * Support steadies the glow. Reflection slows everything down. */
+
+.aurin-guide-tone-compassion .aurin-guide-state-ripple {
+    box-shadow:
+        0 0 32px 6px hsl(28 36% 70% / 0.40),
+        inset 0 0 12px hsl(28 36% 70% / 0.15);
+}
+.aurin-guide-tone-compassion {
+    --aurin-presence-accent: 28 36% 70%;
+}
+
+.aurin-guide-tone-support .aurin-guide-state-ripple {
+    box-shadow: 0 0 28px 5px hsl(var(--aurin-sage) / 0.55);
+}
+.aurin-guide-tone-support {
+    --aurin-presence-accent: var(--aurin-sage);
+}
+
+.aurin-guide-tone-reflection .aurin-guide-breath {
+    animation-duration: 11s;
+}
+.aurin-guide-tone-reflection .aurin-guide-state-ripple {
+    box-shadow: 0 0 28px 4px hsl(214 22% 64% / 0.42);
+}
+.aurin-guide-tone-reflection {
+    --aurin-presence-accent: 214 22% 64%;
+}
+
+.aurin-guide-tone-neutral {
+    --aurin-presence-accent: var(--aurin-sage);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-runtime-state] .aurin-guide-state-ripple {
+        animation: none !important;
+        box-shadow: none !important;
+    }
+    [data-runtime-state="thinking"] .aurin-guide-breath {
+        animation-duration: 7s;
+    }
+}
+

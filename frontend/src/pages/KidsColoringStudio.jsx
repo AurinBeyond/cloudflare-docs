@@ -1,43 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { ArrowLeft, Download, Printer, Sparkles } from "lucide-react";
+import { api } from "@/lib/api";
 
 /**
  * Kids Coloring Studio — live gallery of "Aurin Kids" coloring pages.
  *
- * Each page is described in COLORING_PAGES below. The metadata mirrors the
- * markdown frontmatter the user requested:
- *
- *   ---
- *   type: coloring_page
- *   title: "Name of the Illustration"
- *   age_group: "3-5" | "6-8" | "9-12"
- *   tags: ["Nature", "Geometry", "Discovery"]
- *   download_url: "/assets/kids/..."
- *   ---
- *
- * Once `/kids/coloring/*.md` lands in the connected GitHub repository, the
- * gallery can switch to fetching from the API instead of this static seed.
+ * Pages are fetched from /api/coloring/pages. The backend generates one
+ * fresh black-and-white line-art page per age group per day using the
+ * Gemini Nano Banana model, and falls back to the curated seed below
+ * (so the gallery is never empty during the first hour of a fresh boot).
  *
  * UI rules (per author):
- * - Pure-white card behind every illustration (ink-efficient print)
- * - "Download to Print" available on each card
- * - Calm, non-distracting layout, safe for very young children
+ *   - Pure-white card behind every illustration (ink-efficient print)
+ *   - "Download to Print" available on each card
+ *   - Calm, non-distracting layout, safe for very young children
  */
 
-const COLORING_PAGES = [
-  {
-    slug: "aurin-kids-cover",
-    title: "Aurin Kids — Let Your Creativity Shine",
-    age_group: "3-5",
-    tags: ["Geometry", "Friendship", "Nature"],
-    summary:
-      "Two friends meeting inside a quiet crystal of light, surrounded by gentle clouds, an owl, and a fox.",
-    image: "/assets/kids/coloring/aurin-kids-cover.png",
-    download_url: "/assets/kids/coloring/aurin-kids-cover.png",
-  },
-];
+const SEED_PAGES = [];
 
 const AGE_FILTERS = [
   { key: "all", label: "All ages" },
@@ -48,13 +29,34 @@ const AGE_FILTERS = [
 
 export default function KidsColoringStudio() {
   const [age, setAge] = useState("all");
+  const [pages, setPages] = useState(SEED_PAGES);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const res = await api.get("/coloring/pages");
+        const live = (res.data && res.data.pages) || [];
+        if (alive) {
+          // Show live pages first, then the curated seed cover.
+          const merged = [...live, ...SEED_PAGES];
+          setPages(merged);
+        }
+      } catch {
+        // Silent fall-back to the seed.
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const visible = useMemo(
-    () =>
-      age === "all"
-        ? COLORING_PAGES
-        : COLORING_PAGES.filter((p) => p.age_group === age),
-    [age]
+    () => (age === "all" ? pages : pages.filter((p) => p.age_group === age)),
+    [age, pages]
   );
 
   return (
@@ -146,6 +148,84 @@ export default function KidsColoringStudio() {
               . Aurin Kids is a calm space, made slowly.
             </p>
           </div>
+
+          {/* Light Guide — a soft guide for parents, never clinical,
+              never diagnostic. The drawing ritual ends in light. */}
+          <section className="mt-12" data-testid="kids-coloring-light-guide">
+            <div className="aurin-card p-7 md:p-9 space-y-6 bg-[hsl(var(--aurin-bg))]/40">
+              <div>
+                <div className="aurin-eyebrow !mb-1">For the parent beside them</div>
+                <h3 className="aurin-display text-2xl md:text-[28px] leading-snug max-w-[26ch]">
+                  A quiet guide, for the evening you sit down{" "}
+                  <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                    to colour together.
+                  </span>
+                </h3>
+              </div>
+              <p className="text-[14px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9]">
+                Drawing is how children speak when words are too small. Your
+                job here is not to interpret, correct, or worry. It is to be
+                beside them — steady, warm, unhurried — while something that
+                had no place goes, gently, onto the paper.
+              </p>
+
+              <ol className="space-y-5">
+                <li>
+                  <div className="aurin-eyebrow !mb-1 text-[10px]">1 · The room</div>
+                  <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9]">
+                    Keep the room quiet and the colours free. Let the child
+                    choose the page, the pencils, and the pace. Your presence
+                    is the container — nothing more is asked of you.
+                  </p>
+                </li>
+                <li>
+                  <div className="aurin-eyebrow !mb-1 text-[10px]">2 · The heavy colours</div>
+                  <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9]">
+                    If dark colours arrive, or the pencil presses hard, do not
+                    ask why. Something is leaving the body through the hand.
+                    Stay beside, breathe slowly, let it pass through.
+                  </p>
+                </li>
+                <li>
+                  <div className="aurin-eyebrow !mb-1 text-[10px] text-[hsl(var(--aurin-sage))]">3 · The turn toward light</div>
+                  <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9]">
+                    When the page feels almost done, a soft invitation is
+                    enough: <em className="aurin-serif-italic">"Where does the sun come in, in this picture?
+                    Which colour would bring a small joy here?"</em> Every drawing
+                    can end in a little light — a sun, a flower, a gold spark,
+                    a smile. The body remembers the way home through this gesture.
+                  </p>
+                </li>
+                <li>
+                  <div className="aurin-eyebrow !mb-1 text-[10px]">4 · The body's small sounds</div>
+                  <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9]">
+                    If the child yawns, coughs, hums, fidgets, or makes odd
+                    small sounds — this is release. You might say softly:
+                    <em className="aurin-serif-italic"> "Your body is letting something old go. That's a
+                    good thing. You can let it come."</em> No interpretation needed.
+                  </p>
+                </li>
+                <li>
+                  <div className="aurin-eyebrow !mb-1 text-[10px] text-[hsl(var(--aurin-sage))]">5 · The closing breath</div>
+                  <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9]">
+                    When the drawing is finished, look at the bright parts
+                    together. A simple closing works: <em className="aurin-serif-italic">"It's on the paper
+                    now. We're both a little lighter."</em> Then put the pencils
+                    away without hurry. The practice is complete.
+                  </p>
+                </li>
+              </ol>
+
+              <p className="text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]/90 aurin-serif-italic pt-3 border-t border-[hsl(var(--aurin-border-soft))]">
+                A gentle note. This is a companion practice, never a
+                replacement for medical or psychological care when that is
+                needed. Holding a positive posture — for the child and for
+                yourself — keeps fear and hopelessness a little further
+                from the door, so that professional help, when it is used,
+                can land more easily.
+              </p>
+            </div>
+          </section>
         </div>
       </section>
     </div>
@@ -153,8 +233,10 @@ export default function KidsColoringStudio() {
 }
 
 function ColoringCard({ page }) {
+  const imgSrc = page.image_url || page.image;
+  const dlHref = page.download_url || imgSrc;
   const handlePrint = () => {
-    const w = window.open(page.image, "_blank", "noopener,noreferrer");
+    const w = window.open(imgSrc, "_blank", "noopener,noreferrer");
     if (w) {
       w.addEventListener("load", () => {
         try {
@@ -175,7 +257,7 @@ function ColoringCard({ page }) {
       {/* Pure white frame for ink-efficient printing */}
       <div className="bg-white p-5 sm:p-7 flex items-center justify-center">
         <img
-          src={page.image}
+          src={imgSrc}
           alt={page.title}
           data-testid={`kids-coloring-card-${page.slug}-image`}
           className="w-full h-auto object-contain max-h-[460px]"
@@ -210,7 +292,7 @@ function ColoringCard({ page }) {
 
         <div className="mt-2 pt-5 border-t border-[hsl(var(--aurin-border-soft))] flex flex-wrap items-center gap-3">
           <a
-            href={page.download_url}
+            href={dlHref}
             download
             data-testid={`kids-coloring-card-${page.slug}-download`}
             className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"

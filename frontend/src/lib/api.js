@@ -96,6 +96,10 @@ export async function fetchAdminEntries(onlyWithWarnings = false) {
   });
   return res.data;
 }
+export async function fetchAdminReminders() {
+  const res = await api.get("/admin/reminders");
+  return res.data;
+}
 
 /* ----------------------- Bookstore ----------------------- */
 export async function fetchBooks(query) {
@@ -164,19 +168,181 @@ export async function subscribeNewsletter(email, source) {
 }
 
 /* ----------------------- Private Cabinet ----------------------- */
+import { getBrowserMemory, appendBrowserFragment, markBrowserVisit, clearBrowserMemory } from "@/lib/browserMemory";
+
 export async function fetchCabinet() {
   const res = await api.get("/cabinet/me");
   return res.data;
 }
 export async function startCabinet() {
-  const res = await api.post("/cabinet/start");
+  // §HYBRID MEMORY: replay last-turn fragments from this device so the
+  // mentor's first reply has soft context at $0 cost.
+  const mem = getBrowserMemory();
+  const payload = {};
+  if (mem.fragments && mem.fragments.length) {
+    payload.transient_context = mem.fragments;
+  }
+  const res = await api.post("/cabinet/start", payload);
+  markBrowserVisit();
   return res.data;
 }
 export async function sendCabinetMessage(text, keepThread = false) {
+  // Save the wanderer's own line locally before the round-trip; if the
+  // network fails the fragment still survives for next time.
+  appendBrowserFragment(text);
   const res = await api.post("/cabinet/message", { text, keep_thread: keepThread });
   return res.data;
 }
 export async function clearCabinet() {
+  clearBrowserMemory();
   const res = await api.post("/cabinet/clear");
   return res.data;
 }
+export async function fetchCabinetThreads() {
+  const res = await api.get("/cabinet/threads");
+  return res.data;
+}
+export async function resumeCabinetThread({ thread_key, session_id }) {
+  const res = await api.post("/cabinet/resume", {
+    thread_key: thread_key || null,
+    session_id: session_id || null,
+  });
+  return res.data;
+}
+
+/* ----------------------- Clarity Release (paid timed sessions) -------- */
+export async function fetchClarityPasses() {
+  // Public endpoint — lists 3 tiers + beta note. No auth required.
+  const res = await api.get("/clarity/passes");
+  return res.data;
+}
+export async function fetchClarityAccess() {
+  // Auth required — returns user's active pass + seconds remaining.
+  const res = await api.get("/clarity/access");
+  return res.data;
+}
+export async function startClaritySession() {
+  const res = await api.post("/clarity/start");
+  return res.data;
+}
+
+/* ----------------------- Clarity beta window --------------------- */
+export async function fetchClarityBetaWindow() {
+  // Public — {active, start, end}
+  const res = await api.get("/clarity/beta-window");
+  return res.data;
+}
+export async function grantBetaPass(tier) {
+  // Auth required — grants a free pass during the beta window.
+  const res = await api.post(`/clarity/passes/${tier}/grant-beta`);
+  return res.data;
+}
+
+/* ----------------------- Clarity prefs / threshold ---------------- */
+export async function fetchClarityPrefs() {
+  const res = await api.get("/clarity/prefs");
+  return res.data;
+}
+export async function fetchChatUsage() {
+  // §W-3 (iter 62) — daily chat cap usage. Returns
+  //   {date, used, ceiling, remaining, tier}
+  // ceiling=null & remaining=null mean unlimited (admin).
+  try {
+    const res = await api.get("/chat/usage");
+    return res.data;
+  } catch {
+    return null;
+  }
+}
+export async function updateClarityPrefs({
+  guide_gender,
+  display_mode,
+  consent_v2,
+  save_threads,
+} = {}) {
+  const payload = {};
+  if (guide_gender !== undefined) payload.guide_gender = guide_gender;
+  if (display_mode !== undefined) payload.display_mode = display_mode;
+  if (consent_v2) payload.consent_v2 = true;
+  if (typeof save_threads === "boolean") payload.save_threads = save_threads;
+  const res = await api.post("/clarity/prefs", payload);
+  return res.data;
+}
+export async function clarityEmergencyExit() {
+  const res = await api.post("/clarity/emergency-exit");
+  return res.data;
+}
+
+/* ----------------------- Body Room ------------------------------- */
+export async function fetchBodyHotspots() {
+  const res = await api.get("/body-room/hotspots");
+  return res.data;
+}
+export async function recordBodyInsight({ region, self_report, intensity }) {
+  const res = await api.post("/body-room/insight", {
+    region,
+    self_report: self_report ?? null,
+    intensity: intensity ?? null,
+  });
+  return res.data;
+}
+export async function fetchBodyInsights(limit = 5) {
+  const res = await api.get(`/body-room/insights?limit=${limit}`);
+  return res.data;
+}
+export async function fetchBodyChildrenPatterns() {
+  const res = await api.get("/body-room/children-patterns");
+  return res.data;
+}
+export async function fetchBodyFurtherReading() {
+  const res = await api.get("/body-room/further-reading");
+  return res.data;
+}
+export async function fetchBodyPatterns() {
+  const res = await api.get("/body-room/patterns");
+  return res.data;
+}
+export async function fetchBodyQuestionnaire() {
+  const res = await api.get("/body-room/questionnaire");
+  return res.data;
+}
+
+/* ----------------------- Beta test group ----------------------- */
+export async function fetchBetaStatus() {
+  const res = await api.get("/beta/status");
+  return res.data;
+}
+export async function fetchBetaMe() {
+  const res = await api.get("/beta/me");
+  return res.data;
+}
+export async function enrollBeta() {
+  const res = await api.post("/beta/enroll");
+  return res.data;
+}
+
+
+/* ----------------------- Course Room — Quiet Letters ----------------------- */
+export async function fetchCourses() {
+  const res = await api.get("/courses");
+  return res.data;
+}
+export async function fetchCourse(slug) {
+  const res = await api.get(`/courses/${slug}`);
+  return res.data;
+}
+export async function enrollCourse(slug) {
+  const res = await api.post(`/courses/${slug}/enroll`);
+  return res.data;
+}
+
+/* ---- First Letter funnel (lead magnet) ---- */
+export async function sendFirstLetter(email, courseSlug) {
+  const res = await api.post("/first-letter", {
+    email,
+    course_slug: courseSlug,
+    consent: true,
+  });
+  return res.data;
+}
+

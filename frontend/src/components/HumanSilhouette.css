@@ -1,0 +1,41 @@
+/* HumanSilhouette — breathing human figure (male or female).
+ * Permanent design rule: the Clarity Release guide always appears as
+ * a human silhouette, never an abstract light orb. See HumanSilhouette.jsx */
+
+.human-silhouette {
+  display: inline-block;
+  position: relative;
+}
+
+.human-silhouette .silhouette-aura,
+.human-silhouette .silhouette-body {
+  transform-origin: 60px 80px;
+  transform-box: fill-box;
+  animation: silhouette-breath 6s ease-in-out infinite;
+}
+
+.human-silhouette .silhouette-aura {
+  animation-duration: 6s;
+}
+.human-silhouette .silhouette-body {
+  animation-duration: 6.5s;
+}
+
+.human-silhouette[data-active="true"] .silhouette-aura {
+  animation-duration: 2.4s;
+}
+.human-silhouette[data-active="true"] .silhouette-body {
+  animation-duration: 2.6s;
+}
+
+@keyframes silhouette-breath {
+  0%,
+  100% {
+    transform: scale(0.97);
+    opacity: 0.78;
+  }
+  50% {
+    transform: scale(1.035);
+    opacity: 1;
+  }
+}

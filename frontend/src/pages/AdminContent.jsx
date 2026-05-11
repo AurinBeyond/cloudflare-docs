@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ShieldAlert, Plus, RefreshCcw, CheckCircle2, AlertTriangle, FileSearch, Eye } from "lucide-react";
-import { fetchCategories, createEntry, githubSync, validateMarkdown, fetchAdminEntries } from "@/lib/api";
+import { ShieldAlert, Plus, RefreshCcw, CheckCircle2, AlertTriangle, FileSearch, Eye, AlarmClock } from "lucide-react";
+import { fetchCategories, createEntry, githubSync, validateMarkdown, fetchAdminEntries, fetchAdminReminders } from "@/lib/api";
 
 /**
  * Admin (light). Minimal, intentional form to add a content entry.
@@ -34,6 +34,20 @@ export default function AdminContent() {
   const [adminEntries, setAdminEntries] = useState([]);
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminFilter, setAdminFilter] = useState("all"); // "all" | "warnings"
+
+  // Founder reminders — red banner surfaces here whenever a dormant
+  // entry in /app/memory/FOUNDER_REMINDERS.md has hit its trigger date.
+  const [reminders, setReminders] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await fetchAdminReminders();
+        setReminders(data);
+      } catch {
+        // admin-only endpoint; silently ignore if not authorised
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -120,6 +134,42 @@ export default function AdminContent() {
 
   return (
     <div data-testid="page-admin">
+      {reminders && reminders.triggered_count > 0 && (
+        <section
+          data-testid="admin-reminders-banner"
+          className="border-b border-red-500/40 bg-red-950/30"
+        >
+          <div className="aurin-container py-5 space-y-3">
+            <div className="flex items-center gap-2 text-red-400 font-semibold text-[14px]">
+              <AlarmClock size={16} strokeWidth={2} />
+              <span>
+                {reminders.triggered_count} founder reminder
+                {reminders.triggered_count > 1 ? "s" : ""} triggered —
+                surface now
+              </span>
+            </div>
+            {reminders.reminders
+              .filter((r) => r.status === "TRIGGERED")
+              .map((r) => (
+                <div
+                  key={r.id}
+                  data-testid={`admin-reminder-${r.id}`}
+                  className="rounded-md border border-red-500/50 bg-red-950/50 p-4 text-[13.5px] leading-relaxed"
+                >
+                  <div className="text-red-300 font-semibold mb-1">
+                    🔴 {r.id} · {r.title}
+                  </div>
+                  <div className="text-red-200/90 text-[12px] mb-2">
+                    Triggered on {r.trigger_date} (today: {reminders.today})
+                  </div>
+                  <pre className="whitespace-pre-wrap text-[13px] text-red-100/90 font-sans">
+                    {r.summary}
+                  </pre>
+                </div>
+              ))}
+          </div>
+        </section>
+      )}
       <section className="relative border-b border-[hsl(var(--aurin-border-soft))]">
         <div className="absolute inset-0 aurin-grid-bg opacity-[0.18]" />
         <div className="aurin-container relative pt-16 pb-10">

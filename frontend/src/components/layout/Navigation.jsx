@@ -4,12 +4,15 @@ import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home", testid: "nav-home" },
+  { to: "/six-nights", label: "Six Nights", testid: "nav-six-nights" },
   { to: "/the-beginning", label: "The Beginning", testid: "nav-the-beginning" },
-  { to: "/private-room", label: "Quiet Room", testid: "nav-private-room" },
+  { to: "/clarity-release", label: "Clarity Release", testid: "nav-clarity-release" },
+  { to: "/body-room", label: "Body Room", testid: "nav-body-room" },
+  { to: "/kids-universe", label: "Kids Universe", testid: "nav-kids-universe" },
+  { to: "/course-room", label: "Courses", testid: "nav-course-room" },
   { to: "/aurin-philosophy", label: "Philosophy", testid: "nav-aurin-philosophy" },
-  { to: "/blog", label: "Insights", testid: "nav-blog" },
-  { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
   { to: "/library", label: "Library", testid: "nav-library" },
+  { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
   { to: "/about", label: "Origin", testid: "nav-origin" },
 ];
 

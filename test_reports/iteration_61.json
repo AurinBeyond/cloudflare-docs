@@ -1,0 +1,46 @@
+{
+  "summary": "Iter 61 ($0 stabilization) — tested 3 changes end-to-end: (1) MemoryPackageSelect.jsx rendering inside ClarityRelease confirmation panel, (2) Body Room TTS button inside BodyRoomChat, (3) regression on 5 prior backend test suites. Result: MemoryPackageSelect works as specced; Body Room TTS is BROKEN at runtime (ReferenceError); all 5 regression suites still green; no new backend endpoints added (verified via network monitor — only POST /api/clarity/prefs and POST /api/clarity/tts are exercised by the new UI).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "BodyRoomChat.jsx → SomaticTtsButton",
+        "issue": "RUNTIME ReferenceError: 'TTS_TOKEN_KEY is not defined'. The review brief states TTS_TOKEN_KEY/TTS_BACKEND_URL constants and Volume2/VolumeX/Headphones imports were added — they were NOT. Only Volume2 is imported (line 15). VolumeX and Headphones are referenced on line 367, TTS_TOKEN_KEY/TTS_BACKEND_URL on lines 320/322/328. ESLint did not catch this (no no-undef rule). Initial render survives because the ternary on line 367 evaluates to Volume2 in the 'idle' state — but the moment the user clicks the Listen button, handleClick() throws and the whole React tree hits an Uncaught runtime error overlay. Verified live with synthetic Bearer session: button label stays 'Listen', red error overlay appears, page error: 'TTS_TOKEN_KEY is not defined at handleClick'.",
+        "selector": "[data-testid^='body-room-chat-tts-']",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Body Room TTS playback (Listen → Loading… → Pause → Resume)",
+        "issue": "Unreachable. /api/clarity/tts is never called from Body Room because handleClick() throws before fetch. (The endpoint itself works — verified by Course Room test_course_tts_iter58.py which returned 136320 bytes audio/mpeg with ETag.)",
+        "affected_selectors": ["body-room-chat-tts-0"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_body_chat_iter60.py",
+    "/app/backend/tests/test_course_tts_iter58.py",
+    "/app/backend/tests/test_hybrid_memory_iter59.py",
+    "/app/backend/tests/test_booking_iter54.py",
+    "/app/backend/tests/test_cabinet_resume_iter56.py"
+  ],
+  "action_items": [
+    "FIX BodyRoomChat.jsx: add the 3 missing pieces at file top — `import { Send, RotateCcw, Volume2, VolumeX, Headphones } from 'lucide-react';` and two module constants `const TTS_TOKEN_KEY = 'aurin_session_token';` and `const TTS_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';` (mirror the pattern used in CourseRoom TTS). Without this fix, every wanderer who clicks Listen in Body Room sees a red 'Uncaught runtime errors' overlay.",
+    "After fix, verify: (a) Listen button cycles label Listen → Loading… → Pause → Resume; (b) audio actually plays (mp3 blob); (c) clicking the button on a second guide reply re-uses /api/clarity/tts (no 404)."
+  ],
+  "critical_code_review_comments": [
+    "BodyRoomChat.jsx ESLint passed despite 4 undefined identifiers — the project's eslint config does not enforce no-undef on jsx; consider enabling it so this class of regression cannot ship again.",
+    "MemoryPackageSelect uses inline color tokens (#5BA7C4 / #E0B45A) — fine for a $0 stab change, but a follow-up should fold them into the aurin design system if Eternal Thread becomes permanent.",
+    "MemoryPackageSelect onChange does `updateClarityPrefs(...).catch(()=>{})` — silently swallowing failures means a save_threads write that fails (network, 401) leaves the UI showing the new selection while the server still has the old value. Consider rolling back state on rejection."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "66%"},
+  "test_credentials": "Synthetic session test_session_iter61_802f...e9eb9 / user_id test-iter61-a5fafb27 — both deleted at end of run.",
+  "seed_data_creation": "None persisted. Synthetic user/session/prefs were inserted then deleted.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Reproduce the BodyRoomChat TTS bug: 1) make synthetic user+session, 2) localStorage.setItem('aurin_session_token', token), 3) accept Wanderer's Agreement gate, 4) /body-room → click 'I enter consciously' (4 checkboxes already auto-checked here), 5) fill body-room-chat-input, 6) click body-room-chat-send, 7) wait ~10s for guide reply, 8) click body-room-chat-tts-0 → red 'Uncaught runtime errors' overlay with 'TTS_TOKEN_KEY is not defined' appears. MemoryPackageSelect is reached via: /clarity-release → 4 wanderer-agreement checkboxes + I enter consciously → 4 clarity-threshold-*-ack + clarity-guide-orb-female + clarity-threshold-enter → clarity-hub-continue → memory-package-select renders. Verified data-selected toggles correctly and POST /api/clarity/prefs body is exactly {\"save_threads\":true|false}.",
+  "rca_of_the_issue": "ROOT CAUSE — Iter 61 commit added SomaticTtsButton that references TTS_TOKEN_KEY, TTS_BACKEND_URL, VolumeX and Headphones, but the corresponding imports/constants at the top of BodyRoomChat.jsx were forgotten. The review brief explicitly says these were added; grep confirms they were not. ReferenceError fires only inside handleClick (lines 318-328) and inside the Icon ternary (line 367) when state moves to 'playing'/'loading' — so initial render is clean and ESLint did not catch it. MITIGATION: add to BodyRoomChat.jsx: `import { Send, RotateCcw, Volume2, VolumeX, Headphones } from 'lucide-react';` (line 15), and after STORE_KEY: `const TTS_TOKEN_KEY = 'aurin_session_token'; const TTS_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';`. No backend change needed."
+}

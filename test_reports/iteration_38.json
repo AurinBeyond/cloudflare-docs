@@ -1,0 +1,47 @@
+{
+  "summary": "Iteration 38 testing — Night Angels free PDF, Lead-magnet, Coloring Studio (Nano Banana), Body Room images, Whispers attribution + WhispersPortal, BookDetail cross-sell, all verified end-to-end against the live preview URL. Backend pytest suite (test_iteration38.py) = 20/20 pass. Frontend playwright smoke = all critical data-testids, links, iframes, copy buttons, and tracker network calls confirmed. PDF byte-verified (magic %PDF, 7,861,452 bytes, content-type application/pdf). Whispers tracker fires correctly on ?w= navigation (POSTs slug + landing_path).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/body-room/image/<slug>", "issue": "All 8 files on disk are JPEG bytes (FFD8 magic) but server advertises Content-Type: image/png. Browsers tolerate this, but the mismatch is a real correctness issue — either re-encode the files to true PNG or change the Content-Type to image/jpeg."},
+      {"endpoint": "/api/whispers/track", "issue": "Frontend mounts WhispersTracker once but two identical POSTs fire on a single ?w= navigation (likely React StrictMode double-invoke in dev). Server dedupes correctly so no functional impact, but worth guarding with a useRef to avoid the second call in production."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Bookstore cards / Cross-sell on /bookstore/beyond-the-matrix-i", "issue": "Title for one book is literally rendered as 'YOU DON'T HAVE TO DANCE TO ANOTHER'S TUNE\\n' — the trailing \\n is a literal escape sequence stored in the title field, not interpreted as a newline. Visible on /bookstore and on the Beyond-the-Matrix-I cross-sell card.", "selector": "[data-testid='book-cross-sell']", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration38.py",
+    "/app/test_reports/pytest/iteration_38.xml"
+  ],
+  "action_items": [
+    "Decide whether body-room images should be true PNG (re-encode) or change Content-Type header to image/jpeg — current state is a header/payload mismatch.",
+    "Strip the trailing literal '\\n' from the 'You Don't Have to Dance to Another's Tune' book title in the seed data / DB.",
+    "(Optional) Add a useRef-guarded one-shot in WhispersTracker so React StrictMode double-mount doesn't fire two POSTs in dev. Server dedupes, so production impact is zero — purely cosmetic in network tab."
+  ],
+  "critical_code_review_comments": [
+    "Lead-magnet endpoint correctly returns BOTH read_url and download_url and honours the 24h dedupe window with status='already_sent' on the second send.",
+    "Free-book ACL is sound: /api/books/free/the-night-angels-embrace/download serves anonymously while /api/books/free/beyond-the-matrix-i/download blocks (returns 404 in current implementation rather than 403 — semantically OK, but spec said 403; consider making it explicit 403 to match documentation).",
+    "Coloring generate-daily endpoint is properly idempotent and ADMIN_TOKEN-gated (header X-Admin-Token works; 401 without token).",
+    "WhispersPortal renders all 6 required data-testids cleanly and the personal link string is exactly 'https://prulesoul.site/?w=anna' as specified.",
+    "BookDetail cross-sell correctly differentiates audience: kids book hides 'Visit the Cabinet' CTA, adult book shows it linking to /clarity-release.",
+    "server.py is now well past the 700-line guideline (carry-over from iter28/29) — splitting whispers + coloring + lead-magnet routers into their own modules is overdue."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration38.py (new — 20 tests, all pass)"
+  ],
+  "success_rate": {
+    "backend": "100% (20/20 in iter38 suite)",
+    "frontend": "100% on all iter38-relevant flows (PDF download link + iframe, cross-sell kids vs adult, coloring 3 pages + age filters present, WhispersPortal data-testids + 4 asset links + 5 copy buttons, WhispersTracker fires on ?w= navigation)"
+  },
+  "test_credentials": "ADMIN_TOKEN read live from /app/backend/.env (5NebFHBpdy-...). No new credentials created. Lead-magnet tests use throwaway tester+<uuid>@example.com addresses.",
+  "seed_data_creation": "None. Test slugs (test-w-<rand>) are scoped and dedupe-bound to the synthetic session.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "test_iteration38.py owns the iter38 surface (Night Angels free PDF + lead-magnet + coloring + body-room + whispers track/summary). Run with `pytest backend/tests/test_iteration38.py -v`. The body-room image test deliberately accepts both PNG and JPEG magic because the on-disk files are JPEG-encoded despite the .png filename — this is documented as a minor backend issue, not a test bug. Lead-magnet test_send_returns_links uses a unique email per run to avoid the 24h dedupe window collapsing the test.",
+  "rca of the issue": "Body-room PNG/JPEG mismatch RCA: the 8 files in /app/backend/storage/body_room/*.png are stored with .png extensions but contain JPEG byte streams (FFD8 FF E0). The FastAPI handler hard-codes media_type='image/png' based on extension. Mitigation: either (a) re-save originals via PIL `Image.open(...).save(..., format='PNG')` to align bytes with extension, or (b) inspect the magic bytes when serving and respond with the correct Content-Type. Option (a) is cheaper and one-time."
+}

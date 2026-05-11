@@ -1,0 +1,52 @@
+{
+  "summary": "§10 Booking System tested end-to-end. All 14 backend booking tests pass via /app/backend/tests/test_booking_iter54.py (public available-slots, capacity, reserve happy/idempotent/anti-FOMO/past/quiet-hours/invalid-duration, mine, cancel idempotent + 401/403/404, admin schedule/stats with X-Admin-Token, six-nights dry_run). Direct curl through public REACT_APP_BACKEND_URL also returns expected status codes (200/401) and shapes (quiet_hours {start:9,end:22}, 4 session_types, slot fields including is_past/is_full/is_own/reserved_count, capacity {live_now,ceiling,slots_today_total,upcoming_total}, six-nights dispatch dry_run reflects subscriber). Frontend WandererGate flow renders correctly on /cabinet/booking; after clicking the 4 checkboxes + 'I enter consciously', unauthed user sees page-cabinet-booking + booking-auth-needed + booking-signin-link as specified. /admin/scheduler renders admin-scheduler-auth without token, and after setting localStorage('aurin_admin_token'), shows page-admin-scheduler with admin-stats, admin-date, admin-day-empty, admin-dispatch-six-nights, admin-refresh, admin-badge — and the dispatch button responds. CRITICAL frontend integration bug: HolographicCalendar.jsx never reaches the holographic-calendar render even when a valid synthetic Bearer session_token is present in localStorage('aurin_session_token'); /api/booking/mine returns 401 to the frontend so authNeeded stays true. Root cause: the calendar uses raw fetch(...) with credentials:'include' (cookie auth) instead of the project's api.js wrapper that injects 'Authorization: Bearer <token>' from localStorage. Therefore the entire authed booking flow (slot grid, reserve, confirmation, mine, cancel) cannot be exercised through the UI in this environment, even though all backend endpoints work via direct Bearer-Auth curl.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "HolographicCalendar.jsx",
+        "issue": "All booking fetches use `credentials: 'include'` (cookie auth) instead of attaching `Authorization: Bearer <localStorage.aurin_session_token>`. The site's auth model is Bearer-token (see /app/frontend/src/lib/api.js TOKEN_KEY='aurin_session_token'). Result: an authenticated user is permanently shown booking-auth-needed, and slot-grid / reserve / mine / cancel UI is unreachable even though the backend works.",
+        "selector": "[data-testid='holographic-calendar'] (never renders)",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "/cabinet/booking authed flow (load slots, reserve, confirmation, release)",
+        "issue": "Frontend never sends Authorization header → /api/booking/mine returns 401 → authNeeded latches to true and holographic-calendar / booking-slot-grid / booking-confirmation / booking-mine-{id} / booking-cancel-{id} can never appear from the UI. Verified: same Bearer token works via curl (200 on /api/auth/me and /api/booking/mine).",
+        "affected_selectors": ["booking-slot-grid", "booking-day-rail", "booking-guide-clarity", "booking-guide-grace", "booking-type-open", "booking-intention", "booking-confirmation", "booking-magic-entry", "booking-mine-*", "booking-cancel-*"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "/admin/scheduler",
+        "issues": ["Date selector uses the browser's native HTML date input (e.g. 05/07/2026 with native chevron) instead of a shadcn Calendar / Popover — inconsistent with the rest of the Aurin design system."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_booking_iter54.py",
+    "/app/test_reports/pytest/booking_iter54_results.xml"
+  ],
+  "action_items": [
+    "FIX HolographicCalendar.jsx: replace raw fetch(...) calls with the apiFetch wrapper from /app/frontend/src/lib/api.js (or manually add `headers: { Authorization: `Bearer ${localStorage.getItem('aurin_session_token')}` }` to all 4 fetches: available-slots, capacity, mine, reserve, and cancel). Without this, no signed-in wanderer can use the booking UI.",
+    "Re-test end-to-end after the fix: load /cabinet/booking with a valid session token, verify holographic-calendar + booking-slot-grid appear, click a future free hour, verify booking-confirmation panel + booking-magic-entry (when Resend configured) + booking-mine-{id}, then click booking-cancel-{id} and verify the active list empties.",
+    "Optional: replace the native <input type=date> on AdminScheduler with the shadcn Calendar component for visual consistency."
+  ],
+  "critical_code_review_comments": [
+    "HolographicCalendar.jsx hardcodes credentials:'include' across 5 fetch calls — should reuse the centralised apiFetch helper to avoid this class of bug recurring on every new authed component.",
+    "loadAll() catches all errors with a generic 'The room is quiet…' string — surfacing the underlying status (401 vs network) would have made this bug obvious to the user.",
+    "/admin/scheduler reads aurin_admin_token from localStorage — fine for an internal tool but documented nowhere in the UI; consider a one-line hint near admin-token-input."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "60%"},
+  "test_credentials": "Synthetic Bearer session created and cleaned up during test (user_id b3177a..., now deleted). ADMIN_TOKEN read from /app/backend/.env (5NebFHBpdy-...). No new persistent credentials.",
+  "seed_data_creation": "None persisted — synthetic test user + session were inserted into mongo for the auth UI probe and removed at the end.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend §10 booking endpoints are fully green (test_booking_iter54.py — 14/14, plus admin/six-nights dispatch dry_run). The single blocker is the HolographicCalendar Bearer-token wiring described above. Once fixed, repeat the UI flow: WandererGate → 4 checkboxes → 'I enter consciously' → set localStorage.aurin_session_token to a valid synthetic session → reload → expect holographic-calendar / booking-slot-grid / booking-day-rail. To create a synthetic user reuse the _make_user pattern in test_booking_iter54.py.",
+  "rca_of_the_issue": "Reproduction: 1) Insert synthetic user + user_sessions row in mongo; 2) localStorage.setItem('aurin_session_token', token); 3) navigate to /cabinet/booking, accept WandererGate; 4) observe DOM contains booking-auth-needed (not holographic-calendar) and Network panel shows /api/booking/mine 401. Cause: HolographicCalendar.jsx lines 102-106, 157-160, 190-193 use `credentials:'include'` only — backend issues a session via Authorization header, not cookies, so credentials:'include' has no effect. Mitigation: route every fetch in HolographicCalendar through apiFetch (lib/api.js) which already attaches `Authorization: Bearer <aurin_session_token>`."
+}

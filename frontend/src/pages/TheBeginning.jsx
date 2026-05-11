@@ -4,6 +4,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import { ArrowRight, Sparkles, Compass } from "lucide-react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { fetchBeginningStatus, startBeginning } from "@/lib/api";
+import MeditationPlayer from "@/components/MeditationPlayer";
 
 /**
  * The Beginning — Silent Landing Page
@@ -94,6 +95,11 @@ export default function TheBeginning() {
             </p>
             <p>Just to see.</p>
           </Block>
+
+          {/* A short pause — listen before reading further. */}
+          <div data-testid="tb-listen" className="pt-2">
+            <MeditationPlayer />
+          </div>
 
           <Block eyebrow="Balance" data-testid="tb-balance">
             <p>You don't need to reject your life.</p>

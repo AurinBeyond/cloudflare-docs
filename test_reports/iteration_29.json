@@ -1,0 +1,44 @@
+{
+  "summary": "Iteration 29 (Resend wiring + First Letter funnel + Magic Link delivery) is fully green. New /app/backend/tests/test_iteration29.py covers email-health, first-letter (validation/success/rate-limit/idempotent newsletter), and magic-link request/verify (including 410-on-replay) — 9/9 pass against the live preview URL. iter26+iter27+iter28 regression suite (49 tests) all pass. Full backend suite: 203 passed / 20 failed; the 20 failures are entirely pre-existing book-inventory tests already documented in iter28 (book seed grew 6→9 over time; PDFs now serve through /api/cabinet/library/{slug}/download). NONE of the failures touch the iter29 surface. Frontend smoke confirmed: Home renders [data-testid=home-first-letter] with form + email + submit + course-select populated with all 4 expected courses (Letting the old stories rest, The language you forgot, Seven quiet evenings with children, The body knows first). Submitting a throwaway email shows [data-testid=home-first-letter-thanks] confirmation. /course-room renders [data-testid=course-room-first-letter-form] for the signed-out user. /api/email/health returns resend_configured=true and the 3 expected @prulesoul.site senders.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration29.py",
+    "/app/test_reports/pytest/iteration_29.xml",
+    "/app/test_reports/pytest/iteration_29_full.xml"
+  ],
+  "action_items": [
+    "OPTIONAL (carry-over from iter28, not iter29): clean up stale book-inventory tests (test_iter4_books_legal.py / test_iteration5/6/7/9.py / test_phase2_continued.py / test_content_api.py). They assert 6 seeded books while SEED_BOOKS now has 9, and they look for /assets/books/*.pdf paths that have been replaced by /api/cabinet/library/{slug}/download. Same 20 failures across iter28 and iter29 runs — purely stale assertions, not real regressions.",
+    "INFO (no action): Resend sandbox sender currently only delivers to founder-verified contact.puresoul@proton.me. Throwaway test emails return status='sent' from the API (Resend SDK accepts the request) but the actual mailbox delivery is dropped silently by the sandbox — this is exactly the documented behaviour and the founder is aware. Once prulesoul.site DNS verification completes, normal delivery will start automatically via the existing _resolve_sender path."
+  ],
+  "critical_code_review_comments": [
+    "email_service.send_email correctly catches 'not verified'/'verify your domain' and retries from RESEND_SANDBOX_FALLBACK — clean, single retry, no recursion risk.",
+    "/api/first-letter rate-limit window is read from sent_at >= now-24h with ISO-string comparison; works because all writes use UTC isoformat. Tested same email/different slug → still sends (separate row).",
+    "newsletter_subscribers upsert uses $setOnInsert so repeat sends do NOT duplicate — verified via DB count.",
+    "/api/auth/magic-link/request never reveals account existence (always 200, always upserts a token) — correct.",
+    "/api/auth/magic-link/verify is single-use (sets used_at on success and returns 410 on replay) — verified.",
+    "Server.py is now ~4155 lines; iter28 nudged it past the 700-line guideline a long time ago. Future cleanup: split first-letter + magic-link + email_health into a dedicated routers module to keep the file scannable.",
+    "Two files in tests/ still hard-fail at collection time when REACT_APP_BACKEND_URL is not in the shell env (test_iter3_auth_sync_reach.py + test_iteration7.py) — they should fall back to reading /app/frontend/.env or skip cleanly. Minor, not iter29-blocking.",
+    "FirstLetterWidget.jsx correctly defaults to FLAGSHIP_SLUG and degrades gracefully to email-only flow if /api/courses is unreachable (courses=[] hides the picker). Good defensive UX."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration29.py (new — 9 tests)"
+  ],
+  "success_rate": {
+    "backend": "100% on iter29 specifics (9/9). Full suite 203/223 — the 20 failures are pre-existing stale book-inventory assertions carried over from iter28, not introduced by iter29.",
+    "frontend": "100% on iter29-relevant flows (Home widget submit→thanks, CourseRoom widget present for signed-out users, course select populated)."
+  },
+  "test_credentials": "Synthetic MongoDB session pattern unchanged from iter23-28. New iter29 tests use throwaway tester+<uuid>@example.com addresses and clean up first_letter_sends, newsletter_subscribers, magic_link_tokens, users, user_sessions on teardown — no founder data touched.",
+  "seed_data_creation": "None. All test rows are scoped to throwaway tester+*@example.com and removed in fixture teardown.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "iter29 surface = /api/email/health, /api/first-letter, /api/auth/magic-link/{request,verify}, FirstLetterWidget on Home + CourseRoom. test_iteration29.py owns this surface. The 20 stale book-inventory failures are still present and still pre-existing — DO NOT chase them as iter29 regressions; they need a dedicated cleanup pass to update assertions for 9 books + /api/cabinet/library/{slug}/download paths. Resend sandbox only delivers to contact.puresoul@proton.me until DNS verification — for any future Resend-related test, treat status='sent' from the API as success (sandbox-side delivery to non-verified recipients is silently dropped, but the API itself returns sent because Resend accepts the request and only filters on send-time).",
+  "rca of the issue": "N/A — no functional issues found in iter29 scope."
+}

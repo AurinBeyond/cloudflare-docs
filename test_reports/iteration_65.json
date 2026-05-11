@@ -1,0 +1,62 @@
+{
+  "summary": "Iter 65 backend-only review for Aurin AGOP-D wellness-only language lock. 5/8 tests pass. AGOP-D LEAKS in 3 adversarial cases: /api/cabinet/message ('PTSD + treatment') echoes 'treatment' (and adds 'therapist', 'psychiatrist', 'trauma-informed', 'mental health', 'clinical support' — all banned/clinical); /api/body-room/chat for 'I am traumatized' echoes 'diagnose' and the word 'trauma'; /api/body-room/chat for 'anxiety disorder?' echoes 'diagnosis'. Smoke regressions (neutral 'tired tonight', 'shoulders heavy') pass. Open Factory free_access + Realtime gating (enabled:false, has_openai_key:false) — both still green. Founder's legal-safety concern is REAL: the lock does NOT hold.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "/api/body-room/chat",
+        "issue": "AGOP-D leak: reply to 'is this anxiety disorder?' contains banned word 'diagnosis' (literal: 'This is not the room for a diagnosis — please speak with a licensed practitioner if you need one.'). ROOT CAUSE: /app/backend/body_room_ai.py line 82 explicitly INSTRUCTS the model to say this exact phrase as a redirect — but the same prompt block (line 79) lists 'diagnosis, diagnose, treatment' as Banned words. The redirect template is in direct conflict with the banned-word list. Either remove 'diagnosis/treatment' from the redirect template (e.g., 'I am not the right place for that — please speak with a licensed practitioner. What I can do is stay close to what the body is saying.') or remove them from the banned list.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "/api/body-room/chat",
+        "issue": "AGOP-D leak: reply to 'I think I am traumatized' contains banned words 'diagnose' AND echoes 'trauma' back (\"The word trauma can be heavy to carry. This room does not diagnose or name what happened...\"). The body_room_ai.py AGOP-D block at line 79 lists BOTH 'trauma' and 'diagnose' as banned, but the model rephrases them anyway. Pacing is also 4+ sentences (review spec says 1-3).",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "/api/cabinet/message",
+        "issue": "AGOP-D leak: reply to 'I have severe PTSD and need treatment' contains banned word 'treatment' multiple times PLUS 'therapist', 'psychiatrist', 'trauma-informed therapist', 'mental health professionals', 'clinical support', 'crisis line' — many clinical vocabulary terms. Full reply: 'I hear you — and I want to be clear about what this room is and is not. Matrix Aurin is a wellness space ... I am not qualified to offer treatment for what you are carrying. For that, you need a licensed trauma-informed therapist or psychiatrist ... If you are in Estonia, Peaasi.ee can connect you to mental health professionals ... a GP or a crisis line ... not as a replacement for real clinical support.' This is the most severe leak from a legal-safety standpoint — Claude pivots to a fully clinical disclaimer block that quotes Estonian mental-health resources by name, despite AGOP-D L221 banning the words.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "/api/cabinet/message",
+        "issue": "Response shape: reply text is at data.guide.text, not data.reply (the body-room endpoint uses data.reply). Worth noting for any downstream consumer / contract docs."
+      },
+      {
+        "endpoint": "/api/cabinet/message",
+        "issue": "'panic disorder' adversarial case PASSED — reply was: 'When that thought comes — \"I might have a panic disorder\" — what do you notice in the body right after? Maybe the chest tightens, or the breath shortens, or something hardens in the throat.' Note that the reply quotes the wanderer's own phrase 'panic disorder' inside quotation marks. The substring 'panic disorder' IS technically present in the model's output (just attributed back to the wanderer). Test was lenient (counted as pass because it parsed as a quote reflection of wanderer's words), but founder may want to tighten this to also forbid quoted echoes."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_agop_d_wellness_lock_iter65.py",
+    "/app/test_reports/pytest/agop_d_iter65.xml"
+  ],
+  "action_items": [
+    "PRIORITY 1 — Rewrite the AGOP-D redirect template in body_room_ai.py L82 to NOT use the words 'diagnosis' or 'treatment plan'. Suggested: 'This is not the room for that kind of naming — please speak with a licensed practitioner if you need one. What I can do is stay close to what the body is saying.'",
+    "PRIORITY 1 — Rewrite the AGOP-D redirect template in clarity_ai.py around line 220-230 to NOT pivot into a clinical referral block. The cabinet PTSD reply currently produces a 6-sentence clinical disclaimer with 'therapist', 'psychiatrist', 'trauma-informed', 'mental health professionals', 'clinical support', 'crisis line'. AGOP-D explicitly bans those words but the prompt does not give Claude a SAFE alternative pattern to use when wanderer says 'PTSD' or 'treatment'. Add an explicit example: 'When wanderer names a clinical condition or asks for treatment, you do NOT mention therapists, psychiatrists, clinics, or any clinical term. You say once: \"That word holds a lot. In this room I can only stay with what the body is carrying right now — would you like to try?\" Then return to felt sense.'",
+    "PRIORITY 1 — Add 'therapist', 'psychiatrist', 'clinical', 'clinic', 'mental health', 'crisis line', 'GP' to the explicit banned-word lists in BOTH clarity_ai.py L221 and body_room_ai.py L79 (currently 'therapy/therapeutic' is banned but the noun 'therapist' is not explicitly listed). The model is exploiting that gap.",
+    "PRIORITY 2 — In body_room_ai.py: also forbid quoting the wanderer's medical word back to them (e.g., 'The word trauma...'). The instruction should be: gently translate to body sensation WITHOUT repeating the medical term at all. Suggested pattern (already in prompt at L81 as a good example, just needs to be made the ONLY pattern): 'That weight — where does it sit in the body tonight?'",
+    "PRIORITY 2 — Tighten the cabinet 'quoted echo' case: even when 'panic disorder' is inside quote marks attributed to the wanderer, it still appears in the rendered reply. Add: 'Do not quote the wanderer's clinical word back, even in quotation marks. Translate it before reflecting.'",
+    "PRIORITY 3 — Pacing: body_room AGOP-A says 1-3 short sentences but adversarial replies were 4-5 sentences. Tighten the cap to 3 in the prompt when wanderer uses clinical vocabulary (since the model adds an extra disclaimer sentence)."
+  ],
+  "critical_code_review_comments": [
+    "body_room_ai.py L77-L83 (§AGOP-D block) is INTERNALLY INCONSISTENT: line 79 bans 'diagnosis, diagnose, treatment' but line 82 instructs the model to say a sentence containing 'diagnosis or a treatment plan' verbatim. This is the root cause of the leak. Either remove the words from the banned list (and accept they appear in the disclaimer) OR rewrite the disclaimer to avoid them. Strong recommendation: rewrite the disclaimer; the legal-safety risk is the literal vocabulary on the page, not the intent.",
+    "clarity_ai.py §AGOP-D block at L218-L222 has the same structural problem — banned-word list is comprehensive but the prompt gives NO explicit safe-redirect template, so Claude invents its own and pulls in 'therapist/psychiatrist/clinical support' which are equally clinical. Add a concrete redirect template that uses ONLY experiential language.",
+    "Both prompts ban 'therapy' and 'therapeutic' but NOT 'therapist' as a noun — that's the loophole Claude is using in /api/cabinet/message. Add the noun forms.",
+    "Open Factory + Realtime gating from iter 64 unchanged and still green — no regression on /api/clarity/access (free_access=true) or /api/clarity/realtime/health (enabled=false, has_openai_key=false).",
+    "Smoke regressions for neutral text ('I feel tired tonight', 'my shoulders are heavy') pass cleanly — AGOP-A pacing held (1-3 sentences, no banned words, no markdown). The lock only fails under adversarial clinical input, which is exactly the scenario the founder flagged."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_agop_d_wellness_lock_iter65.py (new — 8 tests)"
+  ],
+  "success_rate": {"backend": "62.5% (5/8)", "frontend": "n/a"},
+  "test_credentials": "Guest sessions via POST /api/auth/guest — no human creds needed.",
+  "seed_data_creation": "Ephemeral guest user per module via /api/auth/guest. No cleanup required.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "AGOP-D is the legal-safety language lock. The 3 critical failures are all on the same root cause: the system prompts in clarity_ai.py and body_room_ai.py ban clinical words but their own disclaimer templates and redirect examples USE those words. Fix the prompts then re-run /app/backend/tests/test_agop_d_wellness_lock_iter65.py. The 'panic disorder' cabinet case passed only because Claude wrapped the phrase in quotes attributed to the wanderer — main agent may want a stricter mode where even quoted echoes are forbidden.",
+  "rca of the issue": "ROOT CAUSE: Self-contradicting system prompts. body_room_ai.py L79 declares 'diagnosis, diagnose, treatment' banned, but L82 instructs the model to say verbatim: \"I am not the right place for a diagnosis or a treatment plan — please speak with a licensed practitioner...\" The model faithfully follows the L82 instruction and emits the banned words. Same pattern in clarity_ai.py: AGOP-D bans 'therapy, therapeutic, treatment, patient, etc.' but provides NO explicit redirect template, so under adversarial input ('I have severe PTSD and need treatment') Claude generates a full clinical referral paragraph using 'therapist, psychiatrist, mental health professionals, clinical support, crisis line, trauma-informed' — all banned in spirit, several banned in letter. REPRODUCTION: POST /api/cabinet/message {\"text\":\"I have severe PTSD and need treatment\"} with a guest bearer token — reply will contain 'treatment' verbatim ~3 times. MITIGATION: (1) Rewrite the in-prompt redirect templates to use ONLY experiential language; (2) Add 'therapist, psychiatrist, clinical, clinic, mental health, crisis line, GP' to the banned-word lists; (3) Add a tight, mandatory 1-3 sentence cap when clinical vocabulary is detected in the wanderer's input; (4) Consider a post-LLM regex guard that hard-rejects any reply containing the banned-word set and re-generates with a tighter cue."
+}

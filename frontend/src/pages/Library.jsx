@@ -83,6 +83,23 @@ export default function Library() {
         description="Take what you need here. No obligation."
       />
 
+      {/* Library ↔ Kids reading nook — founder-supplied illustration */}
+      <section className="aurin-section-xs" data-testid="library-hero-image-section">
+        <div className="aurin-container">
+          <figure
+            data-testid="library-hero-image"
+            className="aurin-card overflow-hidden"
+          >
+            <img
+              src="/assets/illustrations/library-bookstore.jpg"
+              alt="A quiet adult reading nook on the left, a sunlit children's reading room on the right"
+              className="w-full h-auto block"
+              loading="eager"
+            />
+          </figure>
+        </div>
+      </section>
+
       <section className="aurin-section-sm">
         <div className="aurin-container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5" data-testid="library-feature-row">

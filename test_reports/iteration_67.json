@@ -1,0 +1,26 @@
+{
+  "summary": "Iter 67 — Aurin Matrix Open Factory final tail. All 9 review items verified green on first run: (1) realtime/health returns {enabled:false, has_openai_key:false}; (2) realtime/session returns 503 with 'Realtime mode is currently off' detail; (3) /api/clarity/access returns has_active_pass:true / tier:'free_access'; (4-5) AGOP-D banned-word filter holds airtight on the exact iter-67 adversarial prompt in BOTH /api/cabinet/message and /api/body-room/chat (zero banned words; verified across 3 additional stress repeats = 6/6 adversarial calls clean); (6-7) neutral regressions (cabinet 'I feel quiet tonight' + body-room 'my shoulders feel tight') return non-empty replies with valid tone_tag; (8) public /api/courses returns 7 courses, all language=='en', the Estonian 'raha-ja-teadvus' slug is filtered out as expected (server.py:6166); (9) static media /avatars/grace_vision_pilot.mp4 served with content-type video/mp4 and HTTP 206 on range request.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_iter67_open_factory_tail.py",
+    "/app/test_reports/pytest/iter67_open_factory.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "clarity_realtime.py is correctly gated: _is_enabled() reads REALTIME_MODE (default 'off') and BOTH /session and /health behave correctly when off. /session returns 503 (not 200 with a disabled flag), which is the right surface for the frontend to fall back on.",
+    "server.py:6164-6166 — courses_list filters by c.get('language', 'en') == 'en' so Estonian 'raha-ja-teadvus' (language='et' at line 5996) is hidden from the public catalogue while still resolvable via direct /api/courses/{slug}. Confirmed empirically: no et leak in /api/courses.",
+    "clarity_safety.py two-layer post-filter (Layer 1 grammar-aware substitution + Layer 2 hard nuclear regex with canned _SAFE_FALLBACK) continues to hold under the iter-67 adversarial prompt; the new banned word 'psychiatric' was not requested in iter-66 but the filter naturally catches it via the broader _HARD_BANNED set. The shared filter via clarity_ai._split_signals means both /api/cabinet/message and /api/body-room/chat get the same guarantee.",
+    "Static media /avatars/* is mounted correctly and serves video/mp4 with byte-range support (HTTP 206), which is what mobile Safari needs for inline playback."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter67_open_factory_tail.py (new — 9 tests covering the iter-67 review spec end-to-end)"
+  ],
+  "success_rate": {"backend": "100% (9/9) on first run; AGOP-D adversarial subset 6/6 across 3 stress repeats", "frontend": "n/a (out of scope)"},
+  "test_credentials": "Guest sessions via POST /api/auth/guest with {guide_gender:'female'}. No human creds needed.",
+  "seed_data_creation": "Ephemeral guest user per module. No cleanup required.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iter 67 backend is fully green and Open Factory final tail is verified. The frontend changes (5-clause WandererGate, RealtimeCompanion mount inside ClarityRelease, country-neutral 112/911 in WanderersAgreement, BodyRoom 'Just talk to Grace' CTA) were explicitly out of scope for this pass and were NOT tested — if a frontend pass is requested, focus on (a) the new 5-checkbox a-e threshold including confirm-d psychiatric and confirm-e personal responsibility, (b) RealtimeCompanion gracefully rendering nothing when /api/clarity/realtime/health returns enabled:false (current state), (c) the Eluliin 116 123 string being absent from /wanderers-agreement and replaced with 112/911 + findahelpline.com link, (d) BodyRoom CTA navigation. The backend regression file /app/backend/tests/test_iter67_open_factory_tail.py is the regression entrypoint for this iter and can be re-run by future agents.",
+  "rca of the issue": "No issues — all green."
+}

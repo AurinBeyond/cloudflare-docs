@@ -38,6 +38,19 @@ export default function AurinPhilosophy() {
             </p>
           </Block>
 
+          {/* Matrix ↔ Aurin visual divider — founder-supplied illustration */}
+          <figure
+            data-testid="ap-split-image"
+            className="aurin-card overflow-hidden my-2"
+          >
+            <img
+              src="/assets/illustrations/matrix-aurin-split.jpg"
+              alt="The Matrix and the Aurin — two figures, two frequencies"
+              className="w-full h-auto block"
+              loading="lazy"
+            />
+          </figure>
+
           <Block eyebrow="The aurin" data-testid="ap-aurin">
             <p>
               Aurin is the part of you that was already there before any of it
@@ -88,17 +101,20 @@ export default function AurinPhilosophy() {
                 illusions.
               </p>
               <p>
-                But there is another way. Within you dwells an{" "}
-                <em>Invisible Architect</em>. When you align with that inner
-                light, life begins to shift. It becomes light. It becomes calm.
+                But there is another way. Within you lives a quieter
+                <em> Inner Architect</em> — an honest, original part of
+                you that was there before the masks arrived. When you
+                listen to that part, life begins to move differently.
+                Lighter. Calmer.
               </p>
               <p>
-                I do not speak of one religion, for I see all paths as sacred
-                outlets of the same Source. People, animals, nature — we are
-                all threads in one great field of love. You may call it by many
-                names, but the essence remains:{" "}
+                This is not a religion, not a doctrine, not a path you
+                must follow. It is a return — to your own clear voice,
+                your own honest steps, your own unpressured pace. You
+                may call it whatever feels true to you. The work stays
+                the same:{" "}
                 <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-                  returning to the Source is returning to yourself.
+                  hearing yourself a little more clearly each day.
                 </span>
               </p>
             </div>

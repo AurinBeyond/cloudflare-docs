@@ -194,25 +194,26 @@ class TestCabinetFlow:
         assert rm.json().get("session") is None
 
 
-# ---------- 3. Books regression: 7 books incl. beyond-the-matrix-i (free) ----------
+# ---------- 3. Books regression: 8 books, gated download URLs ----------
 class TestBooksRegression:
-    def test_books_list_has_seven_with_new_free_book(self):
+    def test_books_list_has_at_least_eight(self):
         r = requests.get(f"{BASE_URL}/api/books", timeout=15)
         assert r.status_code == 200, r.text
         payload = r.json()
         items = payload if isinstance(payload, list) else (payload.get("items") or [])
         slugs = [b.get("slug") for b in items]
-        assert len(items) >= 7, f"expected >=7 books, got {len(items)} → {slugs}"
+        assert len(items) >= 8, f"expected >=8 books, got {len(items)} → {slugs}"
         assert "beyond-the-matrix-i" in slugs, slugs
         b = next(b for b in items if b["slug"] == "beyond-the-matrix-i")
-        assert (b.get("price") or 0) == 0
-        assert b.get("pdf_url") == "/assets/books/beyond-the-matrix-vol1.pdf"
+        # Now $13 paid, gated pdf_url
+        assert (b.get("price") or 0) == 13.0
+        assert b.get("pdf_url") == "/api/cabinet/library/beyond-the-matrix-i/download"
 
-    def test_pdf_static_asset_200(self):
-        r = requests.get(f"{BASE_URL}/assets/books/beyond-the-matrix-vol1.pdf",
-                         timeout=20, stream=True)
-        # may be served from frontend public — should not 404
-        assert r.status_code == 200, f"got {r.status_code}"
+    def test_gated_download_requires_auth(self):
+        # Static asset path no longer exists; gated endpoint must 401 without auth.
+        r = requests.get(f"{BASE_URL}/api/cabinet/library/beyond-the-matrix-i/download",
+                         timeout=10)
+        assert r.status_code == 401, f"got {r.status_code}"
 
 
 # ---------- 4. Untouched endpoints regression ----------

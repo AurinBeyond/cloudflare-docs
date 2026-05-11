@@ -1,0 +1,38 @@
+{
+  "summary": "Iter 66 re-run of AGOP-D wellness language lock after the two-layer post-filter (clarity_safety.py) was added. 8/8 tests pass on first run, 8/8 on second run, and a 6x stress repeat against the two most adversarial cabinet prompts found ZERO banned words across all replies. The legal-safety lock is now AIRTIGHT under the founder-enumerated banned-word set. Smoke regressions (neutral 'tired tonight', 'shoulders heavy') still produce non-empty replies with valid tone_tag. Open Factory + Realtime gating unchanged: /api/clarity/access returns has_active_pass:true / tier:'free_access', /api/clarity/realtime/health returns enabled:false / has_openai_key:false.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "/api/cabinet/message",
+        "issue": "Cosmetic grammar artifact from Layer 1 substitution: Claude wrote 'any diagnosis or treatment plan' and the regex rewrote it to 'any a naming or a plan with a licensed practitioner' — the leading 'any' collides with the inserted article, yielding 'any a naming'. Not a clinical leak (no banned word), but reads awkwardly. Consider adding a Layer-1 post-pass that strips 'any a ' -> 'any ' and 'any an ' -> 'any '. Same fix can collapse 'a a' / 'an a' that already has handling but does not catch determiner+article collisions like 'any a', 'some a', 'this a'."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_agop_d_wellness_lock_iter66.py",
+    "/app/test_reports/pytest/iter66_agop_d.xml"
+  ],
+  "action_items": [
+    "OPTIONAL (cosmetic only) — Polish clarity_safety.py Layer 1 to also collapse 'any a / any an / some a / this a / that a' article collisions left over after substitutions like 'diagnosis' -> 'a naming'.",
+    "OPTIONAL — Consider adding 'bipolar' and 'psychiatrist' to the AGOP-D explicit example list inside the system prompts (they ARE handled by clarity_safety.py Layer 1 already, but adding to the prompt would reduce Layer 2's nuclear-fallback firing rate)."
+  ],
+  "critical_code_review_comments": [
+    "clarity_safety.py is well-designed: Layer 1 is grammar-aware (handles article 'a/an', specific phrases like 'panic disorder' before standalone 'disorder'), and Layer 2 is the hard nuclear option (canned _SAFE_FALLBACK). Idempotent. Good separation.",
+    "Layer 2's _HARD_BANNED regex covers every founder-enumerated banned word from the iter-66 spec — verified by reading list against BANNED_PHRASES in the test file.",
+    "clarity_ai._split_signals applies sanitize_reply() as the final step before returning — confirmed at line 679-682 with a defensive try/except so the filter is best-effort and never breaks the conversation. body_room_ai.py reuses _split_signals from clarity_ai, so the same filter runs in both rooms — single point of truth.",
+    "Iter-65's three CRITICAL leaks ('treatment'/'therapist'/'psychiatrist' in cabinet PTSD reply; 'diagnose'/'trauma' in body_room traumatized reply; 'diagnosis' in body_room anxiety-disorder reply) are now ALL fixed. The Layer 1 substitutions catch the prompt's own redirect templates that previously contradicted the banned-word list.",
+    "Smoke regressions are unchanged: neutral replies still flow naturally, tone_tag remains in the valid set, AGOP-A pacing holds. The filter does not regress non-clinical conversation."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_agop_d_wellness_lock_iter66.py (new — 8 tests, exact iter-66 review-spec inputs)"
+  ],
+  "success_rate": {"backend": "100% (8/8) over two consecutive runs + 6x stress repeat (12/12 zero-banned)", "frontend": "n/a"},
+  "test_credentials": "Guest sessions via POST /api/auth/guest with {guide_gender:'female'}. No human creds needed.",
+  "seed_data_creation": "Ephemeral guest user per module. No cleanup required.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "AGOP-D lock confirmed airtight after the two-layer clarity_safety.py post-filter was wired into clarity_ai._split_signals (which is now shared by both /api/cabinet/message and /api/body-room/chat). Iter-65 leaks are resolved. Next testing agent only needs to re-run /app/backend/tests/test_agop_d_wellness_lock_iter66.py and confirm 8/8 still pass; consider also running test_agop_d_wellness_lock_iter65.py for the slightly different adversarial inputs from that iter. The only remaining nit is a cosmetic grammar artifact ('any a naming') in the cabinet bipolar/medication case — not a legal-safety issue, just polish.",
+  "rca of the issue": "Iter 65 RCA was self-contradicting prompts (banned-word list vs redirect-template instruction inside the same prompt). Iter 66 fix is structural and the correct move: a hard post-LLM regex filter that runs on every mentor reply regardless of what the prompt or the model decided to say. Layer 1 does grammar-aware substitution (preserving readability); Layer 2 falls back to a safe canned reply if any banned token survives. Idempotent. Best-effort wrapped in try/except so it never breaks the chat. Same filter is shared across rooms via clarity_ai._split_signals."
+}

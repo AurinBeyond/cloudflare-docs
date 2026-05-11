@@ -1,0 +1,33 @@
+{
+  "summary": "Stage 2.8 voice-first STT + Brian/Jenny name swap verified. New /api/clarity/stt endpoint validates anonymous (401), missing field (400/422), empty audio (400), unsupported MIME (400), and oversize >24MB (413) — all paths fail BEFORE Whisper SDK is invoked, so zero LLM credits spent. Public preview URL returns the exact spec'd 401 detail 'Sign in to continue.' for both /api/clarity/stt and /api/clarity/tts (TTS unchanged). Booking confirmation guide_label swap verified end-to-end via TestClient: guide_name='clarity' → guide_label='Brian'; guide_name='grace' → guide_label='Jenny'; internal slugs unchanged. Regression: test_phase1_identity.py 4/4 and test_phase1a_presence_signals.py 12/12 still pass in isolation. Frontend code-inspection confirmed HolographicCalendar GUIDES array now uses Brian/Jenny labels with internal slugs clarity/grace, GuidePresence eyebrow labels say Brian/Jenny, useVoiceIO exports the documented surface (supportedIn/Out, transcribing, MediaRecorder→/api/clarity/stt path), BodyRoomChat exposes both data-testid='body-room-chat-mic' and 'body-room-chat-mute'. Frontend webpack still compiling cleanly after my one minor fix.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_stage2_8_voice_first.py",
+    "/app/backend/tests/test_stage2_8_booking_label.py",
+    "/app/test_reports/pytest/iter63_stt.xml",
+    "/app/test_reports/pytest/iter63_regression.xml",
+    "/app/test_reports/pytest/iter63_full.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "GuidePresence.jsx had a stale 'Clarity'/'Grace' string in the <img alt> (lines 92-98) — would have leaked the old human-facing names to screen-reader users + image-search bots. FIXED by this agent (1 line each: alt now says 'Guide portrait — Brian' / '— Jenny'). Recommend a one-line lint guard or unit snapshot against /Clarity|Grace/ in user-visible JSX strings to catch future drift, since the internal slugs intentionally still read 'clarity'/'grace' in code paths.",
+    "Pre-existing: pytest's TestClient + FastAPI lifespan does not tear down the asyncio event loop between modules, so a multi-module run produces 'RuntimeError: Event loop is closed' on the second module's setUp. Not introduced by Stage 2.8 — already documented in iter 62 brief — but worth fixing once with a session-scoped TestClient or a `pytest-asyncio` mode='session' upgrade so future regression suites can run as a single command.",
+    "/api/clarity/stt: when `audio_field` arrives without an explicit content_type (some browsers omit it for blob fallbacks), the empty `base_ct` skips MIME validation entirely and falls through to size+empty checks. Acceptable today (Whisper will reject garbage) but consider a fail-closed default once telemetry shows real-world content_type coverage."
+  ],
+  "updated_files": [
+    "/app/frontend/src/components/GuidePresence.jsx (img alt text Clarity/Grace → Brian/Jenny)",
+    "/app/backend/tests/test_stage2_8_booking_label.py (NEW — 2 parametrised tests proving guide_label swap end-to-end)"
+  ],
+  "success_rate": {"backend": "100% (24/24 across 4 suites in isolation; multi-module run is pre-existing test infra issue)", "frontend": "code-inspection only per brief — no UI walkthrough; webpack compiles clean"},
+  "test_credentials": "Synthetic per-test users via /app/backend/tests/conftest.py member fixture (auto-cleaned). EMERGENT_LLM_KEY read from /app/backend/.env. No Whisper credits spent.",
+  "seed_data_creation": "Two ephemeral bookings created during test_stage2_8_booking_label and deleted in the same test (mongo_db.bookings.delete_many on the user_id). No persistent seed data.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "STT endpoint is at /api/clarity/stt and IS registered (proven: 401 not 404 from public URL anonymously, with detail 'Sign in to continue.'). All validation paths (missing/empty/oversize/wrong-MIME) return BEFORE the Whisper SDK call so they're free to test. Happy-path STT was deliberately NOT exercised against real Whisper to avoid billing — if main agent wants that, post a tiny WAV (≤100KB) of 'hello' and assert `text` non-empty. The 'Event loop is closed' multi-module pytest error is a known infra issue from iter 62; run each test file separately. Booking label swap is hard-coded at server.py:8595 and now also covered by tests/test_stage2_8_booking_label.py.",
+  "rca_of_the_issue": "N/A — feature verification iteration, no bugs to root-cause. Single FE polish fix applied (GuidePresence.jsx alt text) so the user-visible surface is fully Clarity-free for screen-reader users."
+}

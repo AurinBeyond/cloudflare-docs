@@ -1,10 +1,12 @@
 import { Link, useSearchParams } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCheck, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { resetAgeConfirmation } from "@/components/AgeGate";
 import StudentCabinet from "@/components/StudentCabinet";
 import { useEffect, useState } from "react";
+import { track } from "@/lib/telemetry";
+import { api } from "@/lib/api";
 
 const PREVIEW_BLOCKS = [
   {
@@ -32,9 +34,11 @@ export default function UserPortal() {
 
   // After sign-in, if a `?next=` was requested, send the user there.
   useEffect(() => {
+    track("portal_open");
     if (!loading && user && next) {
       // Only follow same-origin paths.
       if (next.startsWith("/") && !next.startsWith("//")) {
+        track("signed_in");
         window.location.replace(next);
       }
     }
@@ -67,7 +71,7 @@ export default function UserPortal() {
         description={
           user
             ? "This is yours. As things open, they will quietly appear here."
-            : "What you read, what you write, what you keep — held in one place. Sign in with Google to begin."
+            : "What you read, what you write, what you keep — held in one place. Enter your email below to receive a quiet access link."
         }
       >
         {loading ? (
@@ -85,19 +89,22 @@ export default function UserPortal() {
             </button>
           </div>
         ) : (
-          <div className="space-y-3" data-testid="portal-signed-out">
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={handleSignIn}
-                data-testid="portal-sign-in"
-                className="aurin-btn aurin-btn-primary"
-              >
-                Sign in with Google <LogIn size={13} />
-              </button>
-              <span className="aurin-chip" data-testid="portal-availability-chip">
-                · Email-based, via Emergent Auth
-              </span>
-            </div>
+          <div className="space-y-4" data-testid="portal-signed-out">
+            <MagicLinkEntry next={next} />
+            <details className="text-[12.5px] text-[hsl(var(--aurin-text-muted))]" data-testid="portal-google-fallback">
+              <summary className="cursor-pointer aurin-link inline-flex items-center gap-1">
+                Or continue with Google
+              </summary>
+              <div className="mt-2">
+                <button
+                  onClick={handleSignIn}
+                  data-testid="portal-sign-in"
+                  className="aurin-btn aurin-btn-ghost"
+                >
+                  Sign in with Google <LogIn size={13} />
+                </button>
+              </div>
+            </details>
             <p
               data-testid="portal-consent-line"
               className="text-[12px] text-[hsl(var(--aurin-text-muted))] max-w-[58ch] leading-relaxed"
@@ -223,5 +230,97 @@ export default function UserPortal() {
         </div>
       </section>
     </div>
+  );
+}
+
+function MagicLinkEntry({ next }) {
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function submit(e) {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      await api.post("/auth/magic-link/request", {
+        email: email.trim().toLowerCase(),
+        redirect_to: next && next.startsWith("/") && !next.startsWith("//") ? next : "/portal",
+      });
+      track("portal_magic_link_request");
+      setDone(true);
+    } catch (err) {
+      setError(err?.response?.data?.detail || "Could not send the link. Try again in a moment.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <div data-testid="portal-magic-sent" className="aurin-card p-5 max-w-[480px]">
+        <p className="aurin-display text-[18px] mb-2">A quiet link is on its way.</p>
+        <p className="text-[13px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
+          Open the email we just sent and click the link to step into your
+          private layer. The link is valid for 30 minutes and works once.
+        </p>
+        <p className="mt-3 text-[12px] text-[hsl(var(--aurin-text-muted))/0.7]">
+          Didn't arrive? Check spam, then{" "}
+          <button
+            type="button"
+            onClick={() => setDone(false)}
+            className="aurin-link"
+            data-testid="portal-magic-send-again"
+          >
+            send another
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={submit}
+      data-testid="portal-magic-form"
+      className="flex flex-col sm:flex-row gap-2 max-w-[480px]"
+    >
+      <div className="relative flex-1">
+        <Mail
+          size={14}
+          strokeWidth={1.6}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--aurin-text-muted))]"
+          aria-hidden
+        />
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your email"
+          data-testid="portal-magic-email"
+          className="w-full bg-transparent border border-[hsl(var(--aurin-sage))/0.4] rounded-sm pl-9 pr-3 py-2.5 text-[14px] focus:outline-none focus:border-[hsl(var(--aurin-sage))]"
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={busy || !email.includes("@")}
+        data-testid="portal-magic-send"
+        className="aurin-btn aurin-btn-primary"
+      >
+        {busy ? "Sending…" : "Send a quiet link"}
+        <LogIn size={13} />
+      </button>
+      {error && (
+        <span
+          className="text-[12.5px] text-[#c97070] sm:ml-2 sm:self-center"
+          data-testid="portal-magic-error"
+        >
+          {error}
+        </span>
+      )}
+    </form>
   );
 }

@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Sprout, Heart, BookHeart, ShieldCheck, Wand2 } from "lucide-react";
+import { Sprout, Heart, BookHeart, ShieldCheck, Wand2, ArrowRight } from "lucide-react";
+
+const API = process.env.REACT_APP_BACKEND_URL;
 
 const AGE_GROUPS = [
   {
@@ -27,6 +30,23 @@ const AGE_GROUPS = [
 ];
 
 export default function KidsUniverse() {
+  const [kidsBooks, setKidsBooks] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const r = await fetch(`${API}/api/books`);
+        if (!r.ok) return;
+        const d = await r.json();
+        const books = Array.isArray(d) ? d : (d.books || []);
+        if (alive) setKidsBooks(books.filter((b) => b.audience === "kids"));
+      } catch {}
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
     <div data-testid="page-kids">
       <PageHeader
@@ -84,6 +104,82 @@ export default function KidsUniverse() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Children's Books — discovery layer.
+          NO commerce duplication: each card links to the central Bookstore. */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="kids-featured-books"
+      >
+        <div className="aurin-container">
+          <div className="aurin-eyebrow mb-4 flex items-center gap-2">
+            <BookHeart size={12} /> Featured Children's Books
+          </div>
+          <h2 className="aurin-display text-3xl md:text-4xl max-w-[24ch] mb-3">
+            Stories that{" "}
+            <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+              hold a small hand.
+            </span>
+          </h2>
+          <p className="aurin-serif-italic text-[15px] text-[hsl(var(--aurin-sage))] mb-10 max-w-[60ch]">
+            Each book opens in the Bookstore — one shared place for purchase,
+            preview, and quiet reading.
+          </p>
+          {kidsBooks.length === 0 ? (
+            <p className="text-[14px] aurin-serif-italic text-[hsl(var(--aurin-text-muted))]">
+              The shelf is being arranged. Return in a breath.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {kidsBooks.map((b) => (
+                <Link
+                  key={b.slug}
+                  to={`/bookstore/${b.slug}`}
+                  data-testid={`kids-book-${b.slug}`}
+                  className="aurin-card p-6 border border-[hsl(var(--aurin-border-soft))] hover:border-[hsl(var(--aurin-sage))/0.5] transition-all duration-500 group block"
+                >
+                  {b.cover_image_url && (
+                    <div className="aspect-[3/4] rounded-md overflow-hidden mb-4 bg-[hsl(var(--aurin-bg-elevated))]">
+                      <img
+                        src={b.cover_image_url}
+                        alt={b.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        data-testid={`kids-book-image-${b.slug}`}
+                      />
+                    </div>
+                  )}
+                  <h3 className="aurin-display text-lg leading-snug text-[hsl(var(--aurin-text))] mb-2">
+                    {b.title}
+                  </h3>
+                  {b.subtitle && (
+                    <p className="text-[13px] aurin-serif-italic text-[hsl(var(--aurin-sage))] mb-3 leading-relaxed">
+                      {b.subtitle}
+                    </p>
+                  )}
+                  <div className="mt-4 flex items-center justify-between text-[12px]">
+                    <span className="text-[hsl(var(--aurin-text-muted))]">
+                      {b.price > 0 ? `$${b.price}` : "Free"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[hsl(var(--aurin-sage))] opacity-0 group-hover:opacity-100 transition-opacity">
+                      Open in Bookstore <ArrowRight size={11} />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+          <div className="mt-10">
+            <Link
+              to="/bookstore"
+              data-testid="kids-all-books-link"
+              className="aurin-link text-[13px] tracking-wide inline-flex items-center gap-2"
+            >
+              See all books in the Bookstore <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
