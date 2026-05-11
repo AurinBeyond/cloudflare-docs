@@ -1,4 +1,58 @@
-> 🟢 **STAGE 2.9b — 2026-02-10 (FINAL GUEST ACCESS + MENTOR VISIBILITY)**
+> 🟢 **STAGE 2.9c — 2026-02-11 (BODY ROOM v2 — AYURVEDA LENS)**
+>
+> Founder directive (Estonian): "tee see ayurveda teema korda body roomis. D)"
+>
+> **What landed (surgical, additive only):**
+>
+> 1. **`AyurvedaLens.jsx` (NEW component)** — Two named exports:
+>    - `<AyurvedaThreeWinds />` — calm "three winds" intro card
+>      (Vāta · Pitta · Kapha) with element + body-felt description +
+>      one small steadying note per wind. No quiz, no doṣa lock-in,
+>      no diagnosis. Disclaimer at bottom reaffirms wellness-only
+>      framing.
+>    - `<AyurvedaForRegion region={...} />` — single-region lens
+>      rendered inside `HotspotModal`. Shows doṣa + element badge,
+>      one breath note (Sanskrit + plain meaning), one permission
+>      line. Hidden if region is unknown.
+>
+> 2. **`BodyRoom.jsx`** — Imported both exports. `AyurvedaThreeWinds`
+>    placed right above `<BodyRoomChat />` (after questionnaire,
+>    before chat). `AyurvedaForRegion` rendered inside `HotspotModal`
+>    after the "One quiet release" section, before any deep_layer.
+>
+> 3. **`body_room_ai.py`** — Extended `§Ancient wisdom` block with a
+>    concrete `§Region → ancient lens map`. The AI now has explicit
+>    region→breath→permission mappings for all 8 hotspots (crown,
+>    throat, heart, solar_plexus, belly, hips, hands, feet). Sanskrit
+>    terms always paired with plain meaning. The instruction is
+>    "MAY, not must" and "at most one phrase per reply" — pacing
+>    discipline preserved.
+>
+> **Wellness-language safety re-verified:**
+> - `clarity_safety.sanitize_reply()` passes Ayurveda terms (sītalī,
+>   doṣa, vāta, ujjāyī, anuloma-viloma) without redaction.
+> - `audit_clinical_drift()` returns [] for all three sample lines.
+> - No banned words introduced.
+>
+> **Tests:**
+> - 10/10 existing body-room pytests still green
+>   (`test_body_chat_iter60.py` + `test_aurin_p0_realtime_free_access_body_room.py`).
+> - DOM smoke verified live on preview: `[data-testid="ayurveda-three-winds"]`,
+>   `ayurveda-wind-vata`, `ayurveda-wind-pitta`, `ayurveda-wind-kapha`
+>   all present.
+>
+> **Files changed:**
+> - `/app/frontend/src/components/AyurvedaLens.jsx` (NEW)
+> - `/app/frontend/src/pages/BodyRoom.jsx` — import + 2 insertion points
+> - `/app/backend/body_room_ai.py` — `§Region → ancient lens map` appended
+>
+> **Founder action required:** Press **Deploy** to push to `prulesoul.site`
+> (preview is live now). Mobile reality test (iPhone Safari, Android Chrome,
+> Instagram in-app browser) still pending.
+
+---
+
+
 >
 > Founder directive: "FINAL GUEST ACCESS + MENTOR VISIBILITY DIRECTIVE.
 > No new architecture. No new rooms. No redesign. Complete and

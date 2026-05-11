@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import BodyRoomChat from "@/components/BodyRoomChat";
+import { AyurvedaThreeWinds, AyurvedaForRegion } from "@/components/AyurvedaLens";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
   fetchBodyHotspots,
@@ -882,6 +883,8 @@ function HotspotModal({ spot, user, savedFlash, onNoted, onClose }) {
         <Section label="One quiet release" icon={Wind}>
           {spot.release}
         </Section>
+
+        <AyurvedaForRegion region={spot.region} />
 
         {spot.deep_layer && (
           <div
