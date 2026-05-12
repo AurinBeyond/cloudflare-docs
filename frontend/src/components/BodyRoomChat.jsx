@@ -16,6 +16,7 @@ import { Send, RotateCcw, Volume2, VolumeX, Headphones } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
 import useVoiceIO from "@/hooks/useVoiceIO";
+import { LENS_STORE_KEY, LENS_EVENT } from "@/components/BodyLensSelector";
 
 const STORE_KEY = "aurin_body_chat_v1";
 const MAX_TURNS = 30;
@@ -62,6 +63,22 @@ export default function BodyRoomChat({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [usageKey, setUsageKey] = useState(0);
+  // §Stage 2.9d — active wisdom lens (opt-in). Synced with the
+  // <BodyLensSelector /> via localStorage + a custom event.
+  const [activeLens, setActiveLens] = useState(() => {
+    try {
+      return typeof window !== "undefined"
+        ? window.localStorage.getItem(LENS_STORE_KEY)
+        : null;
+    } catch {
+      return null;
+    }
+  });
+  useEffect(() => {
+    const onChange = (e) => setActiveLens(e?.detail?.id || null);
+    window.addEventListener(LENS_EVENT, onChange);
+    return () => window.removeEventListener(LENS_EVENT, onChange);
+  }, []);
   const scrollerRef = useRef(null);
   // §Stage 2.7 — concierge presence runtime signals.
   const [toneTag, setToneTag] = useState("neutral");
@@ -186,6 +203,7 @@ export default function BodyRoomChat({
         body_context: bodyContext || null,
         transient_context: transientContext || null,
         session_id: sessionId,
+        lens: activeLens || null,
       });
       const reply = res?.data?.reply;
       const newToneTag = res?.data?.tone_tag;
@@ -310,6 +328,22 @@ export default function BodyRoomChat({
               {bodyContext.pattern_label && (
                 <span>pattern · {bodyContext.pattern_label}</span>
               )}
+              {activeLens && (
+                <span
+                  className="text-[hsl(var(--aurin-sage))]"
+                  data-testid="body-room-chat-active-lens"
+                >
+                  lens · {activeLens.replace("_", " ")}
+                </span>
+              )}
+            </div>
+          )}
+          {(!bodyContext || (!bodyContext.region && !bodyContext.pattern_label)) && activeLens && (
+            <div
+              className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--aurin-sage))]/85"
+              data-testid="body-room-chat-active-lens"
+            >
+              lens · {activeLens.replace("_", " ")}
             </div>
           )}
 

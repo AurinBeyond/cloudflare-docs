@@ -5359,6 +5359,21 @@ class BodyRoomChatIn(BaseModel):
     body_context: Optional[Dict[str, Any]] = None
     transient_context: Optional[List[str]] = None
     session_id: Optional[str] = None  # client-supplied UUID for log scoping
+    lens: Optional[str] = None  # §Stage 2.9d — opt-in wisdom lens id
+
+
+@api_router.get("/body-room/lenses")
+async def body_room_lenses():
+    """Public registry of the three opt-in wisdom lenses (Eastern /
+    Psychosomatic Mirror / Somatic Science). Returns metadata + each
+    lens's 8 region-insights so the frontend can render the selector
+    and the per-region card without a second round-trip.
+
+    No auth required — the lens registry itself contains no PII; it is
+    static content authored by us.
+    """
+    from body_lenses import list_lenses
+    return {"lenses": list_lenses()}
 
 
 @api_router.post("/body-room/chat")
@@ -5392,6 +5407,7 @@ async def body_room_chat(inp: BodyRoomChatIn, request: Request):
         body_context=inp.body_context,
         transient_context=transient,
         session_id=inp.session_id or user.user_id,
+        lens=(inp.lens or "").strip().lower() or None,
     )
     # `reply` is now a dict {text, tone_tag, user_state}. Backward-compat
     # shim: keep `reply` (str) AND surface the new presence signals.

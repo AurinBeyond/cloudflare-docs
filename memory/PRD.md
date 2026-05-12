@@ -1,4 +1,109 @@
-> 🟢 **STAGE 2.9c — 2026-02-11 (BODY ROOM v2 — AYURVEDA LENS)**
+> 🟢 **STAGE 2.9d — 2026-02-12 (BODY ROOM MULTI-LENS · 3 WISDOM SCHOOLS)**
+>
+> Founder directive (Estonian): "me peame haldama body ruumis väga
+> palju erinevaid psühhosomaatika teooriad ja praktikaid, mis on
+> maailmas näitanud häid tulemusi … on vöimalik kasutada neid
+> teadmisi sama printsiibiga, nagu me tegime privat pihitoas."
+>
+> Founder choice: **(a) opt-in lens selector at the top** — three
+> cards visible, none active by default, user picks one for the
+> session.
+>
+> **What landed (additive, never breaks the existing universal
+> register):**
+>
+> 1. **`backend/body_lenses.py` (NEW)** — central registry of three
+>    opt-in wisdom lenses, each carrying:
+>    - `id`, `name`, `subtitle`, `plain`, `scope`, `attribution`
+>    - `prompt_anchor` — fragment injected into the body-room system
+>      prompt when this lens is active
+>    - `regions` — full 8-hotspot map (crown, throat, heart,
+>      solar_plexus, belly, hips, hands, feet) with one `insight`,
+>      one `practice`, one `permission` line each.
+>    - **Lenses:**
+>      - `eastern` · Ayurveda + classical Chinese medicine + yogic
+>        prāṇāyāma. Energetic register: doṣas, meridians, breath.
+>      - `psychosomatic` · *Psychosomatic Mirror* — Luule Viilma +
+>        Louise Hay. Body-as-quiet-messenger register; forgiveness
+>        sentences as the practice.
+>      - `somatic_science` · Stephen Porges (nervous-system-aware
+>        practice) + Peter Levine (somatic experiencing). Pure
+>        regulation register.
+>    - **NOT included** (legal-safety lock): GNM / Germanic New
+>      Medicine, any "this cures X" claim, any cancer-disappearance
+>      anecdote. Wellness-only language; all 24 region texts pass
+>      `clarity_safety.sanitize_reply` + `audit_clinical_drift`
+>      without rewrites.
+>
+> 2. **`POST /api/body-room/chat`** — now accepts optional `lens`
+>    field (validates + lowercases + trims). The lens flows into
+>    `generate_body_reply(..., lens=...)`, which injects the right
+>    `prompt_anchor` so the mentor's register matches the chosen
+>    perspective. AGOP pacing + wellness-language lock are NEVER
+>    overridden.
+>
+> 3. **`GET /api/body-room/lenses` (NEW endpoint)** — returns the full
+>    registry as JSON. Public (no auth) — the data is authored by us
+>    and contains no PII. The frontend fetches it once and caches
+>    module-side so the modal lens display is instantaneous.
+>
+> 4. **`frontend/src/components/BodyLensSelector.jsx` (NEW)** — Three
+>    soft cards at the top of `/body-room`. Each card carries name,
+>    subtitle, scope, and attribution. Clicking activates the lens
+>    (soft sage halo CSS animation, `lens-breathing` keyframe).
+>    Clicking the active card again or "Step away" clears the choice.
+>    Selection persists in `localStorage` as `aurin_body_lens_v1`
+>    and broadcasts a `aurin-body-lens-changed` custom event so the
+>    chat + modal stay in sync without prop drilling.
+>
+> 5. **`frontend/src/components/LensForRegion.jsx` (NEW)** — replaces
+>    the previous `AyurvedaForRegion`. Inside `HotspotModal`, shows
+>    the active lens's view of that region. **Fallback:** if no lens
+>    is picked, defaults to the Eastern lens so the modal never feels
+>    empty. The "default lens" badge tells the wanderer they're
+>    seeing a default.
+>
+> 6. **`frontend/src/components/BodyRoomChat.jsx`** — reads
+>    `localStorage[aurin_body_lens_v1]` on mount, listens to the
+>    custom event, and sends `lens` in every chat request. Active
+>    lens is shown as a small calm badge under the chat header.
+>
+> 7. **`backend/tests/test_stage2_9d_body_lenses.py` (NEW, 12 tests,
+>    all passing):**
+>    - all 3 lenses present, all 8 regions per lens, all metadata
+>      keys present
+>    - 24/24 region texts pass `clarity_safety.sanitize_reply` (no
+>      banned vocab) and `audit_clinical_drift` (no soft warnings)
+>    - every prompt anchor carries possibility-language (MAY / may /
+>      possibility / permission / never)
+>    - `list_lenses` / `get_lens` / `lens_prompt_anchor` helpers
+>    - `generate_body_reply` accepts unknown lens id without crashing
+>    - parametrised over all 3 known lens ids — flows clean
+>
+> **Regression check:**
+> - 10/10 existing body-room pytests still green
+>   (`test_body_chat_iter60.py` + `test_aurin_p0_realtime_free_access_body_room.py`).
+> - DOM smoke (live preview): `body-lens-selector` + all 3 cards
+>   (`body-lens-card-eastern`, `psychosomatic`, `somatic_science`)
+>   render. Backend endpoint returns 3 lenses with full payload.
+>
+> **Files changed:**
+> - `/app/backend/body_lenses.py` (NEW · 24 region insights)
+> - `/app/backend/body_room_ai.py` — `generate_body_reply` accepts `lens`
+> - `/app/backend/server.py` — `BodyRoomChatIn.lens` field + `GET /api/body-room/lenses`
+> - `/app/backend/tests/test_stage2_9d_body_lenses.py` (NEW · 12 tests)
+> - `/app/frontend/src/components/BodyLensSelector.jsx` (NEW)
+> - `/app/frontend/src/components/LensForRegion.jsx` (NEW)
+> - `/app/frontend/src/components/BodyRoomChat.jsx` — reads lens + sends `lens` param
+> - `/app/frontend/src/pages/BodyRoom.jsx` — replaced AyurvedaThreeWinds with BodyLensSelector
+> - `/app/frontend/src/components/AyurvedaLens.jsx` — DELETED (replaced)
+>
+> **Founder action required:** Press **Deploy** to push to
+> `prulesoul.site`. The preview is live now.
+
+---
+
+
 >
 > Founder directive (Estonian): "tee see ayurveda teema korda body roomis. D)"
 >

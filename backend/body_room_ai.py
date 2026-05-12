@@ -163,6 +163,7 @@ async def generate_body_reply(
     body_context: Optional[Dict] = None,
     transient_context: Optional[List[str]] = None,
     session_id: Optional[str] = None,
+    lens: Optional[str] = None,
 ) -> dict:
     """One-shot Body Room reply.
 
@@ -191,6 +192,19 @@ async def generate_body_reply(
         }
 
     parts = [BODY_ROOM_SYSTEM_PROMPT.strip()]
+
+    # §Stage 2.9d — opt-in wisdom lens.
+    # If the wanderer chose a lens for tonight (eastern / psychosomatic /
+    # somatic_science), inject that lens's prompt anchor so the mentor's
+    # register matches the chosen perspective. Wellness-language and
+    # AGOP pacing locks above this point are NEVER overridden.
+    try:
+        from body_lenses import lens_prompt_anchor  # local import to keep module load light
+        anchor = lens_prompt_anchor(lens)
+        if anchor:
+            parts.append("# §Active wisdom lens (wanderer's choice this session)\n" + anchor)
+    except Exception:  # noqa: BLE001
+        pass
 
     body_block = _build_body_context_block(body_context)
     if body_block:
