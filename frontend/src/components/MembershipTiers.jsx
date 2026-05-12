@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Sparkles, Check } from "lucide-react";
 import { api } from "@/lib/api";
 import { track } from "@/lib/telemetry";
+import useFreeAccess from "@/hooks/useFreeAccess";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 
 /**
  * MembershipTiers — three-tier presentation (Transient / Voyager /
@@ -15,6 +17,7 @@ export default function MembershipTiers({ compact = false, defaultExpanded = "" 
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(defaultExpanded || "");
+  const freeAccess = useFreeAccess();
 
   useEffect(() => {
     let alive = true;
@@ -82,12 +85,16 @@ export default function MembershipTiers({ compact = false, defaultExpanded = "" 
                 <h3 className="text-[16.5px] font-medium text-[hsl(var(--aurin-text))]">
                   {t.label}
                 </h3>
-                <span
-                  className="text-[12.5px] tracking-[0.04em] text-[hsl(var(--aurin-sage))]"
-                  data-testid={`tier-price-${t.key}`}
-                >
-                  {t.price_label}
-                </span>
+                {freeAccess.active ? (
+                  <FreeAccessBadge testidSuffix={`tier-${t.key}`} />
+                ) : (
+                  <span
+                    className="text-[12.5px] tracking-[0.04em] text-[hsl(var(--aurin-sage))]"
+                    data-testid={`tier-price-${t.key}`}
+                  >
+                    {t.price_label}
+                  </span>
+                )}
               </div>
               <div
                 className="text-[12px] uppercase tracking-[0.14em] text-[hsl(var(--aurin-text-muted))/0.85] mt-[2px]"
@@ -169,10 +176,12 @@ export default function MembershipTiers({ compact = false, defaultExpanded = "" 
             ))}
           </div>
         )}
-        <p className="mt-3 text-[11.5px] text-[hsl(var(--aurin-text-muted))] opacity-70">
-          Pricing is in {data.currency}. Payment provider:{" "}
-          {data.billing_provider} ({data.billing_status}).
-        </p>
+        {!freeAccess.active && (
+          <p className="mt-3 text-[11.5px] text-[hsl(var(--aurin-text-muted))] opacity-70">
+            Pricing is in {data.currency}. Payment provider:{" "}
+            {data.billing_provider} ({data.billing_status}).
+          </p>
+        )}
       </div>
     </section>
   );

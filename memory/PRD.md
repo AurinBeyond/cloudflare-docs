@@ -1,6 +1,94 @@
-> 🟢 **STAGE 2.9f — 2026-02-12 (FREE-ACCESS PAYWALL CLEANUP · PUBLIC ENDPOINT)**
+> 🟢 **STAGE 2.9g — 2026-02-12 (SITE-WIDE PAYWALL SWEEP · UNIVERSAL FREE-ACCESS BADGE)**
 >
-> Founder report (Estonian, mobile): "mobiilis 15$ takistus on ikka
+> Founder directive (Estonian, leaving for work): "Palun hetkel eemalda
+> köik makse vöimalused, pane kas tasuta kasutamiseks, vöi varsti
+> saadaval. ainus mis läheb käiku on teie oma platvormil otsene
+> krediitide täiendamine, klientide poolt, kui nende tegevus nöuab
+> süsteemis krediidi kulu." → Remove every external paywall site-wide;
+> the only future paid surface is the in-app credit top-up (Stripe
+> Elements, 1€ = 10 replies, 15 free/day, 00:00 UTC reset; integration
+> deferred until Stripe sandbox keys arrive).
+>
+> **What landed:**
+>
+> 1. **`useFreeAccess.js` (NEW hook)** — single source of truth for
+>    the global gift window. Fetches `/api/aurin/free-access` once
+>    per session, caches module-side. Returns
+>    `{ active, until, loaded, formattedUntil }`. Never throws.
+>
+> 2. **`FreeAccessBadge.jsx` (NEW component)** — universal price-tag
+>    replacement. Two variants:
+>    - `compact` (default · inline sage tag with sparkle icon)
+>    - `block` (card-style with date)
+>    Renders nothing when the window is inactive, so callers can drop
+>    it in next to existing price code without conditionals.
+>
+> 3. **Site-wide swap of price labels and external checkouts:**
+>    - `ClarityRelease.jsx` (HUB) — already gated (Stage 2.9f);
+>      tier-cards block hidden, "Your gift" banner shown.
+>    - `MembershipTiers.jsx` — price-tag per tier replaced with
+>      `<FreeAccessBadge />` when active. Billing-provider footer
+>      hidden during gift window.
+>    - `Catalogue.jsx` `<Shelf />` — price chip per item replaced
+>      with `<FreeAccessBadge />` (skips "Coming soon" items).
+>    - `CourseDetail.jsx` — the LemonSqueezy "Continue · $X" CTA is
+>      completely removed during the gift window; a calm
+>      "Free during launch" line shows instead.
+>    - `Bookstore.jsx` — price chip swaps to "Free during launch";
+>      the LemonSqueezy buy button is replaced with a Library "Read it"
+>      link so the wanderer stays on-site.
+>    - `BookDetail.jsx` — top price chip + cross-promo price both
+>      swap to "Free during launch" when applicable.
+>    - `KidsUniverse.jsx` — book cards swap `$X` → "Free during launch".
+>
+> 4. **`GET /api/aurin/free-access`** — already shipped (Stage 2.9f);
+>    re-verified: `{"active":true,"until":"2026-05-20"}`.
+>
+> **Verified live:**
+> - Catalogue rendered: no $ signs above the fold; first card is
+>   "7 Days of Clarity · FREE · Join waitlist" (always free anyway).
+> - 28/28 backend pytests still green.
+> - Lint clean across all 8 touched files.
+>
+> **Files changed:**
+> - `/app/frontend/src/hooks/useFreeAccess.js` (NEW)
+> - `/app/frontend/src/components/FreeAccessBadge.jsx` (NEW)
+> - `/app/frontend/src/components/MembershipTiers.jsx` — price swap
+> - `/app/frontend/src/pages/Catalogue.jsx` — Shelf badge
+> - `/app/frontend/src/pages/CourseDetail.jsx` — LS CTA hidden
+> - `/app/frontend/src/pages/Bookstore.jsx` — price + LS CTA swap
+> - `/app/frontend/src/pages/BookDetail.jsx` — price chips swap
+> - `/app/frontend/src/pages/KidsUniverse.jsx` — kids price swap
+>
+> **Founder action required:**
+> 1. **Save to GitHub** → **Deploy** to push to `prulesoul.site`.
+> 2. Mobile re-test: open `prulesoul.site` on iPhone/Android; should
+>    see ZERO $ amounts anywhere, only "Free during launch · until
+>    May 20, 2026" badges.
+>
+> **Acknowledged P1 (Stripe credit top-up) — implementation queued, blocked on:**
+> - Stripe sandbox `pk_test_…` and `sk_test_…` from founder.
+> - Frontend will use **Stripe Elements** (in-app, no redirect).
+> - Daily reset at **00:00 UTC**.
+> - Founder also evaluating **Revolut Business** as second rail; we
+>   will scope only after Stripe is live.
+>
+> **Acknowledged P2 (deferred · scope-too-large-for-one-iteration):**
+> - Global Agent Alignment (Stage 3.0) — clarity_safety + Intuitive
+>   Flow lens-system propagation to Clarity Release, marketing, audio,
+>   artist, kuraator agents. Requires inventory + lift-and-shift.
+> - Parents' Room v2 (`/parents-room`) — Shitsuke + Montessori +
+>   Positive-coding lenses, mirror of `body_lenses.py`. ~300 lines.
+> - Autonomous Artist Loop — multi-agent orchestration (marketing →
+>   artist → audio → AH agent) + job queue + review pipeline.
+> - "Wisdom Weaver" tonality filter — pre-publish review against the
+>   blog-prose anti-pattern.
+> - Seasonal flow + Soul Audit + Feedback loop.
+> - Smart Latency filler audio — pre-recorded EE+EN clips needed.
+>
+> ---
+
+> 🟢 **STAGE 2.9f — 2026-02-12 (FREE-ACCESS PAYWALL CLEANUP · PUBLIC ENDPOINT)**
 > ees" — the $15 / $30 / $50 tier cards were still rendering on
 > `/clarity-release` even though `FREE_ACCESS_UNTIL=2026-05-20` was
 > set, because:

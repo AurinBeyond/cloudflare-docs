@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { Sprout, Heart, BookHeart, ShieldCheck, Wand2, ArrowRight } from "lucide-react";
+import useFreeAccess from "@/hooks/useFreeAccess";
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -30,6 +31,7 @@ const AGE_GROUPS = [
 ];
 
 export default function KidsUniverse() {
+  const freeAccess = useFreeAccess();
   const [kidsBooks, setKidsBooks] = useState([]);
   useEffect(() => {
     let alive = true;
@@ -162,7 +164,11 @@ export default function KidsUniverse() {
                   )}
                   <div className="mt-4 flex items-center justify-between text-[12px]">
                     <span className="text-[hsl(var(--aurin-text-muted))]">
-                      {b.price > 0 ? `$${b.price}` : "Free"}
+                      {freeAccess.active && b.price > 0
+                        ? "Free during launch"
+                        : b.price > 0
+                        ? `$${b.price}`
+                        : "Free"}
                     </span>
                     <span className="inline-flex items-center gap-1 text-[hsl(var(--aurin-sage))] opacity-0 group-hover:opacity-100 transition-opacity">
                       Open in Bookstore <ArrowRight size={11} />

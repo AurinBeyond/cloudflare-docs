@@ -4,6 +4,8 @@ import PageHeader from "@/components/layout/PageHeader";
 import { useAuth } from "@/contexts/AuthProvider";
 import { fetchCourse, enrollCourse, fetchClarityPrefs } from "@/lib/api";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
+import useFreeAccess from "@/hooks/useFreeAccess";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 import {
   ArrowLeft,
   Lock,
@@ -31,6 +33,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
  *   - "Buy" button gracefully disabled until LemonSqueezy variant ID lands
  */
 export default function CourseDetail() {
+  const freeAccess = useFreeAccess();
   const { slug } = useParams();
   const { user } = useAuth();
 
@@ -175,6 +178,11 @@ export default function CourseDetail() {
             </span>
           )}
           {(() => {
+            if (freeAccess.active) {
+              // Free-access window — hide the LemonSqueezy CTA entirely
+              // and surface a calm "free during launch" line instead.
+              return <FreeAccessBadge variant="compact" testidSuffix={`course-${slug}`} />;
+            }
             const checkoutUrl = buildLemonCheckoutUrl(course.lemonsqueezy_variant_id);
             if (!checkoutUrl || !course.price) return null;
             return (

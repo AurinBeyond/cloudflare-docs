@@ -7,6 +7,7 @@ import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
 import InstagramCTA from "@/components/InstagramCTA";
 import { useAdmin } from "@/hooks/useAdmin";
 import { adminBookPreviewUrl } from "@/lib/admin";
+import useFreeAccess from "@/hooks/useFreeAccess";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
@@ -22,6 +23,7 @@ const fmtPrice = (price, currency) => {
 };
 
 export default function Bookstore() {
+  const freeAccess = useFreeAccess();
   const [books, setBooks] = useState([]);
   const [query, setQuery] = useState("");
   const [audience, setAudience] = useState("all");
@@ -211,7 +213,9 @@ export default function Bookstore() {
                       </div>
                     )}
                     <div className="absolute top-3 right-3 aurin-chip" data-testid={`bookstore-item-${b.slug}-price`}>
-                      {fmtPrice(b.price, b.currency)}
+                      {freeAccess.active && b.price > 0
+                        ? "Free during launch"
+                        : fmtPrice(b.price, b.currency)}
                     </div>
                   </div>
 
@@ -288,6 +292,21 @@ export default function Bookstore() {
                         </Link>
                       ) : (
                         (() => {
+                          if (freeAccess.active) {
+                            // During the free-access window, hide the
+                            // LemonSqueezy checkout link entirely; the
+                            // wanderer reads the book from the Library
+                            // instead. We point them to the detail page.
+                            return (
+                              <Link
+                                to={`/library/${b.slug}`}
+                                data-testid={`bookstore-item-${b.slug}-buy`}
+                                className="aurin-btn aurin-btn-primary !py-2 !px-4 !text-[12.5px]"
+                              >
+                                Read it <ArrowRight size={12} />
+                              </Link>
+                            );
+                          }
                           const checkoutUrl = buildLemonCheckoutUrl(b.lemonsqueezy_variant_id);
                           if (checkoutUrl) {
                             return (

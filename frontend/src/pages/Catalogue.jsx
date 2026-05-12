@@ -5,6 +5,8 @@ import PageHeader from "@/components/layout/PageHeader";
 import MembershipTiers, { WaitlistInline } from "@/components/MembershipTiers";
 import { api } from "@/lib/api";
 import { track } from "@/lib/telemetry";
+import useFreeAccess from "@/hooks/useFreeAccess";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 
 /**
  * Catalogue — public structured archive of every public product.
@@ -216,6 +218,7 @@ export default function Catalogue() {
 }
 
 function Shelf({ testid, eyebrow, title, intro, items }) {
+  const freeAccess = useFreeAccess();
   if (!items || items.length === 0) return null;
   return (
     <section className="aurin-section" data-testid={testid}>
@@ -245,12 +248,16 @@ function Shelf({ testid, eyebrow, title, intro, items }) {
                     <h3 className="text-[16.5px] font-medium text-[hsl(var(--aurin-text))]">
                       {it.title}
                     </h3>
-                    <span
-                      className="text-[12.5px] tracking-[0.04em] text-[hsl(var(--aurin-sage))]"
-                      data-testid={`${testid}-price-${it.key}`}
-                    >
-                      {it.comingSoon ? "Coming soon" : it.price}
-                    </span>
+                    {freeAccess.active && !it.comingSoon ? (
+                      <FreeAccessBadge testidSuffix={`${testid}-${it.key}`} />
+                    ) : (
+                      <span
+                        className="text-[12.5px] tracking-[0.04em] text-[hsl(var(--aurin-sage))]"
+                        data-testid={`${testid}-price-${it.key}`}
+                      >
+                        {it.comingSoon ? "Coming soon" : it.price}
+                      </span>
+                    )}
                   </div>
                   <div className="text-[12px] uppercase tracking-[0.14em] text-[hsl(var(--aurin-text-muted))/0.85] mt-[2px]">
                     {it.meta} · {it.detail}

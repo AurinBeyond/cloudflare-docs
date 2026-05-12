@@ -4,6 +4,8 @@ import { ArrowLeft, Download, ShoppingBag, BookOpenCheck, Mail, Eye } from "luci
 import { api } from "@/lib/api";
 import { useAdmin } from "@/hooks/useAdmin";
 import { adminBookPreviewUrl } from "@/lib/admin";
+import useFreeAccess from "@/hooks/useFreeAccess";
+import FreeAccessBadge from "@/components/FreeAccessBadge";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
@@ -19,6 +21,7 @@ const fmtPrice = (price, currency) => {
 };
 
 export default function BookDetail() {
+  const freeAccess = useFreeAccess();
   const { slug } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -176,7 +179,11 @@ export default function BookDetail() {
               )}
 
               <div className="mt-8 flex flex-wrap gap-3" data-testid="book-meta">
-                <span className="aurin-chip">{fmtPrice(book.price, book.currency)}</span>
+                {freeAccess.active && book.price > 0 ? (
+                  <FreeAccessBadge testidSuffix={`book-${book.slug}`} />
+                ) : (
+                  <span className="aurin-chip">{fmtPrice(book.price, book.currency)}</span>
+                )}
                 <span className="aurin-chip">By {book.author || "Matrix Aurin"}</span>
                 {book.tax_category === "book_zero_rate_ready" && (
                   <span className="aurin-chip" data-testid="book-tax-chip">0% VAT · Norway digital book</span>
@@ -354,7 +361,10 @@ function CrossSell({ currentBook }) {
               </div>
               <div className="p-5">
                 <div className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] mb-2">
-                  {fmtPrice(b.price, b.currency)} · {b.audience === "kids" ? "Kids" : "Adult"}
+                  {freeAccess.active && b.price > 0
+                    ? "Free during launch"
+                    : fmtPrice(b.price, b.currency)}{" "}
+                  · {b.audience === "kids" ? "Kids" : "Adult"}
                 </div>
                 <div className="aurin-display text-xl leading-snug mb-1">{b.title}</div>
                 {b.subtitle && (
