@@ -78,7 +78,7 @@ async def record_signals(db, user_id: str, room: str, text: str) -> List[str]:
     Returns the list of tags actually written. Silently no-ops if
     user_id is missing/guest, db is None, or the room name is unknown.
     """
-    if not user_id or not db or room not in _VALID_ROOMS:
+    if not user_id or db is None or room not in _VALID_ROOMS:
         return []
     tags = extract_signals(text)
     if not tags:
@@ -110,7 +110,7 @@ async def quiet_knowledge(db, user_id: str, room: str, limit: int = 6) -> List[D
     excluded — we already know what was said HERE; the bridge is for
     what was said ELSEWHERE.
     """
-    if not user_id or not db:
+    if not user_id or db is None:
         return []
     cursor = db.shared_memory_tags.find(
         {"user_id": user_id, "last_source_room": {"$ne": room}},

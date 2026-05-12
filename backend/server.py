@@ -39,6 +39,8 @@ from content_normalizer import parse_markdown_safe
 from clarity_crypto import encrypt_text, decrypt_text, is_configured as clarity_crypto_ready
 from clarity_ai import generate_guide_reply, summarize_session
 from body_room_ai import generate_body_reply
+from parents_room_ai import generate_parents_reply
+import shared_memory as _shared_memory
 from clarity_tts import synthesize_speech, is_configured as tts_configured
 from clarity_stt import transcribe_audio, is_configured as stt_configured
 from six_nights_seed import seed_six_nights, SIX_NIGHTS_CONTENT
@@ -3329,6 +3331,34 @@ async def _enforce_chat_cap(user, room: str) -> None:
         )
 
 
+# =============================================================
+# §Stage 3.3 — Cross-Room "quiet teadmine" bridge helpers.
+# Reads & writes the shared_memory_tags collection. Loud no-op on
+# any DB hiccup so room chat never breaks for memory-layer issues.
+# =============================================================
+
+async def _quiet_knowledge_block(user_id: str, room: str) -> Optional[str]:
+    """Fetch up to 6 cross-room tags for this wanderer and render them
+    into a system-prompt fragment. Returns None when nothing to share."""
+    if not user_id:
+        return None
+    try:
+        tags = await _shared_memory.quiet_knowledge(db, user_id, room, limit=6)
+        return _shared_memory.render_prompt_block(tags)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+async def _record_room_signals_safe(user_id: str, room: str, text: str) -> None:
+    """Fire-and-forget tag recorder. Never raises."""
+    if not user_id or not text:
+        return
+    try:
+        await _shared_memory.record_signals(db, user_id, room, text)
+    except Exception:  # noqa: BLE001
+        return
+
+
 @api_router.get("/chat/usage")
 async def chat_usage(request: Request):
     """Wanderer's daily chat usage + ceiling. Used by the UI to show a
@@ -3503,6 +3533,7 @@ async def cabinet_message(inp: CabinetMessageInput, request: Request):
                     minutes_remaining=minutes_remaining,
                     prior_summaries=prior_summaries,
                     transient_context=sess.get("transient_context") or [],
+                    quiet_knowledge=await _quiet_knowledge_block(user.user_id, "clarity"),
                 )
                 guide_text = (guide_reply_obj or {}).get("text") or ""
                 tone_tag = (guide_reply_obj or {}).get("tone_tag")
@@ -3523,6 +3554,8 @@ async def cabinet_message(inp: CabinetMessageInput, request: Request):
         {"id": sess["id"]},
         {"$push": {"messages": {"$each": [user_msg_for_db, guide_msg.model_dump()]}}},
     )
+    # §Stage 3.3 — record cross-room signals from the wanderer's text.
+    asyncio.create_task(_record_room_signals_safe(user.user_id, "clarity", text))
 
     new_user_msg_count = user_msg_count_before + 1
     # If a paid Clarity pass is active on this session, replies are
@@ -5435,6 +5468,9 @@ async def body_room_chat(inp: BodyRoomChatIn, request: Request):
         if isinstance(t, str):
             transient.append(t.strip()[:240])
 
+    # §Stage 3.3 — Cross-Room quiet-knowledge bridge.
+    quiet_block = await _quiet_knowledge_block(user.user_id, "body")
+
     reply = await generate_body_reply(
         user_text=text,
         history=history,
@@ -5442,9 +5478,70 @@ async def body_room_chat(inp: BodyRoomChatIn, request: Request):
         transient_context=transient,
         session_id=inp.session_id or user.user_id,
         lens=(inp.lens or "").strip().lower() or None,
+        quiet_knowledge=quiet_block,
     )
+    # §Stage 3.3 — record any signals from the wanderer's text (write).
+    asyncio.create_task(_record_room_signals_safe(user.user_id, "body", text))
     # `reply` is now a dict {text, tone_tag, user_state}. Backward-compat
     # shim: keep `reply` (str) AND surface the new presence signals.
+    return {
+        "reply": reply.get("text") if isinstance(reply, dict) else reply,
+        "tone_tag": reply.get("tone_tag") if isinstance(reply, dict) else None,
+        "user_state": reply.get("user_state") if isinstance(reply, dict) else None,
+    }
+
+
+class ParentsRoomChatTurn(BaseModel):
+    role: str  # "user" | "guide"
+    text: str
+
+
+class ParentsRoomChatIn(BaseModel):
+    message: str
+    history: Optional[List[ParentsRoomChatTurn]] = None
+    situation: Optional[str] = None  # bedtime / mealtime / big_emotions / ...
+    transient_context: Optional[List[str]] = None
+    session_id: Optional[str] = None
+    lens: Optional[str] = None  # intuitive | shitsuke | montessori | positive_coding
+
+
+@api_router.post("/parents-room/chat")
+async def parents_room_chat(inp: ParentsRoomChatIn, request: Request):
+    """One-shot Parents' Room mentor reply. Stateless on the server.
+    Mirrors `/body-room/chat`: same chat-cap, same wellness-language
+    lock, same Cross-Room quiet-knowledge bridge. The chosen parenting
+    lens (intuitive default) is injected into the prompt."""
+    user = await _require_user(request)
+    text = (inp.message or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Empty message.")
+    if len(text) > 1500:
+        text = text[:1500]
+
+    # §W-3 daily ceiling — shared with all other rooms.
+    await _enforce_chat_cap(user, "parents_room")
+
+    history = []
+    for h in (inp.history or [])[-10:]:
+        history.append({"role": h.role, "text": (h.text or "")[:600]})
+
+    transient = []
+    for t in (inp.transient_context or [])[-5:]:
+        if isinstance(t, str):
+            transient.append(t.strip()[:240])
+
+    quiet_block = await _quiet_knowledge_block(user.user_id, "parents")
+
+    reply = await generate_parents_reply(
+        user_text=text,
+        history=history,
+        situation=(inp.situation or "").strip().lower() or None,
+        transient_context=transient,
+        session_id=inp.session_id or user.user_id,
+        lens=(inp.lens or "").strip().lower() or None,
+        quiet_knowledge=quiet_block,
+    )
+    asyncio.create_task(_record_room_signals_safe(user.user_id, "parents", text))
     return {
         "reply": reply.get("text") if isinstance(reply, dict) else reply,
         "tone_tag": reply.get("tone_tag") if isinstance(reply, dict) else None,
@@ -10040,6 +10137,12 @@ async def on_startup():
     # Stored in MongoDB so they survive production deploys.
     from binary_storage import ensure_indexes as ensure_binary_indexes
     await ensure_binary_indexes(db)
+
+    # §Stage 3.3 — Cross-Room "quiet teadmine" bridge indexes.
+    try:
+        await _shared_memory.ensure_indexes(db)
+    except Exception as _smi_err:  # noqa: BLE001
+        logging.warning("shared_memory.ensure_indexes failed: %s", _smi_err)
 
     # §10 Booking system indexes — fast lookup by user, by start_at,
     # by guide. No unique constraint: parallel-instance reservations

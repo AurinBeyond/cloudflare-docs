@@ -164,6 +164,7 @@ async def generate_body_reply(
     transient_context: Optional[List[str]] = None,
     session_id: Optional[str] = None,
     lens: Optional[str] = None,
+    quiet_knowledge: Optional[str] = None,
 ) -> dict:
     """One-shot Body Room reply.
 
@@ -192,6 +193,12 @@ async def generate_body_reply(
         }
 
     parts = [BODY_ROOM_SYSTEM_PROMPT.strip()]
+
+    # §Stage 3.3 — Cross-Room "quiet knowledge" bridge. Pre-rendered
+    # block listing themes the wanderer surfaced in OTHER rooms. The
+    # mentor uses these to soften tone, never to quote.
+    if quiet_knowledge:
+        parts.append(quiet_knowledge)
 
     # §Stage 2.9d — opt-in wisdom lens.
     # If the wanderer chose a lens for tonight (eastern / psychosomatic /

@@ -342,12 +342,19 @@ def build_system_message(
     minutes_remaining: Optional[float] = None,
     prior_summaries: Optional[List[Dict]] = None,
     transient_context: Optional[List[str]] = None,
+    quiet_knowledge: Optional[str] = None,
 ) -> str:
     """Compose the full system prompt: core protocol + gendered energy +
     soft-landing (if near the end) + body-room state-bridge + path hint
     + prior-session reflections (if any) + transcript of the
     conversation so far."""
     parts = [CLARITY_SYSTEM_PROMPT.strip()]
+    # §Stage 3.3 — Cross-Room "quiet knowledge" bridge. Themes the
+    # wanderer has surfaced in OTHER rooms (Body Room, Parents' Room)
+    # are passed here as a pre-rendered prompt fragment. The mentor
+    # uses them ONLY to soften tone, never to quote.
+    if quiet_knowledge:
+        parts.append(quiet_knowledge)
 
     # §Stage 3.0 — Intuitive Flow lens-system propagation. Clarity
     # Release inherits the same invisible-mentor logic as Body Room:
@@ -603,6 +610,7 @@ async def generate_guide_reply(
     minutes_remaining: Optional[float] = None,
     prior_summaries: Optional[List[Dict]] = None,
     transient_context: Optional[List[str]] = None,
+    quiet_knowledge: Optional[str] = None,
 ):
     """Send one user message to Claude Sonnet 4.5 and return its reply.
 
@@ -632,6 +640,7 @@ async def generate_guide_reply(
         minutes_remaining=minutes_remaining,
         prior_summaries=prior_summaries,
         transient_context=transient_context,
+        quiet_knowledge=quiet_knowledge,
     )
 
     chat = LlmChat(

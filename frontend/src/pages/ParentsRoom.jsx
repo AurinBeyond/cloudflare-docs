@@ -30,6 +30,8 @@ import PageHeader from "@/components/layout/PageHeader";
 import { api } from "@/lib/api";
 import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
+import { useAuth } from "@/contexts/AuthProvider";
+import ParentsRoomChat from "@/components/ParentsRoomChat";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -66,6 +68,7 @@ const SITUATION_ORDER = [
 
 
 export default function ParentsRoom() {
+  const { user } = useAuth();
   const [lenses, setLenses] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [activeLens, setActiveLens] = useState(() => {
@@ -375,9 +378,9 @@ export default function ParentsRoom() {
           </div>
 
           <p className="mt-8 text-[12.5px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic max-w-[64ch]">
-            A live parents-room dialogue with the mentor is coming next.
-            For now, choose a situation above and the active lens will
-            offer one quiet possibility you can carry into the evening.
+            Below, a small live companion. Type — or speak — about
+            tonight, and the room will answer in a sentence or two,
+            shaped by the lens you have chosen above.
           </p>
 
           <div className="mt-6 flex gap-3 flex-wrap">
@@ -390,6 +393,15 @@ export default function ParentsRoom() {
           </div>
         </div>
       </section>
+
+      {/* §Stage 3.3 — Live parents' companion chat. Same daily ceiling
+          as Body Room + Cabinet. Cross-Room "quiet teadmine" bridge is
+          loaded server-side; the parent never sees the bookkeeping. */}
+      <ParentsRoomChat
+        user={user}
+        activeLens={activeLens}
+        activeSituation={openSituation}
+      />
 
       {/* Situation modal */}
       {openSituation && activeLensObj && (
