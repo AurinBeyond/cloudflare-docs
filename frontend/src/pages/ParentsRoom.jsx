@@ -135,6 +135,96 @@ export default function ParentsRoom() {
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
 
+      {/* §Stage 3.2 — Featured ritual: The Calm Parent's Code.
+          A seven-day soft anchor that introduces the room without
+          asking for anything. No CTA pressure, no signup gate. */}
+      <section className="aurin-section-sm" data-testid="parents-calm-code">
+        <div className="aurin-container max-w-[860px]">
+          <div
+            className="aurin-card relative overflow-hidden p-7 md:p-9 border-[hsl(var(--aurin-sage))/0.3]"
+            style={{
+              background:
+                "linear-gradient(180deg, hsl(var(--aurin-bg-soft)/0.7) 0%, hsl(var(--aurin-bg)/0.4) 100%)",
+            }}
+          >
+            <div className="aurin-eyebrow !mb-2 inline-flex items-center gap-1.5">
+              <Sparkles size={11} strokeWidth={1.4} className="text-[hsl(var(--aurin-sage))]" />
+              Featured · the door-stone ritual
+            </div>
+            <h2
+              className="aurin-display text-2xl md:text-[28px] leading-snug max-w-[24ch]"
+              data-testid="parents-calm-code-title"
+            >
+              The Calm Parent's Code{" "}
+              <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                · seven evenings.
+              </span>
+            </h2>
+            <p className="text-[13.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9] mt-3 max-w-[60ch]">
+              One quiet practice for tonight — and for the six nights
+              after. The same three small acts, in the same order,
+              done with whatever softness you have left in the day.
+              That is the whole code.
+            </p>
+
+            <ol className="mt-5 space-y-3.5 max-w-[62ch]">
+              <li
+                data-testid="parents-calm-code-step-1"
+                className="flex items-start gap-3 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]"
+              >
+                <span className="mt-[2px] inline-flex w-6 h-6 items-center justify-center rounded-full bg-[hsl(var(--aurin-sage))/0.18] text-[11px] text-[hsl(var(--aurin-sage))] shrink-0">
+                  1
+                </span>
+                <span>
+                  <strong className="font-medium">A small ritual.</strong>{" "}
+                  Choose ONE tiny act each evening — a warm cloth on the
+                  face, a candle blown out together, three slow breaths
+                  at the door. The act matters less than the repetition.
+                </span>
+              </li>
+              <li
+                data-testid="parents-calm-code-step-2"
+                className="flex items-start gap-3 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]"
+              >
+                <span className="mt-[2px] inline-flex w-6 h-6 items-center justify-center rounded-full bg-[hsl(var(--aurin-sage))/0.18] text-[11px] text-[hsl(var(--aurin-sage))] shrink-0">
+                  2
+                </span>
+                <span>
+                  <strong className="font-medium">One sentence to swap.</strong>{" "}
+                  Pick ONE heavy sentence you noticed yourself saying
+                  this week ("stop crying", "you have to finish your
+                  plate"). Choose a lighter version below in the
+                  Positive Coding lens. Say only the new one for seven
+                  days.
+                </span>
+              </li>
+              <li
+                data-testid="parents-calm-code-step-3"
+                className="flex items-start gap-3 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]"
+              >
+                <span className="mt-[2px] inline-flex w-6 h-6 items-center justify-center rounded-full bg-[hsl(var(--aurin-sage))/0.18] text-[11px] text-[hsl(var(--aurin-sage))] shrink-0">
+                  3
+                </span>
+                <span>
+                  <strong className="font-medium">Ten seconds of full face.</strong>{" "}
+                  Once a day, give the child your whole face for ten
+                  seconds — no phone, no question, no fixing. Just the
+                  face. Notice what changes over the seven evenings.
+                </span>
+              </li>
+            </ol>
+
+            <p
+              className="mt-5 text-[12.5px] aurin-serif-italic text-[hsl(var(--aurin-text-muted))] max-w-[58ch] pt-4 border-t border-[hsl(var(--aurin-border-soft))]"
+              data-testid="parents-calm-code-permission"
+            >
+              No tracker. No streak. No screen pressure. The code lives
+              in your home, not in this page.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {freeAccess.active && (
         <section className="aurin-section-sm">
           <div className="aurin-container max-w-[860px]">

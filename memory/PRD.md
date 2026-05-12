@@ -1,7 +1,83 @@
-> 🟢 **STAGE 3.2 — 2026-02-12 (PARENTS' ROOM SCAFFOLDING + OG-COVER + AUTONOMOUS)**
+> 🟢 **STAGE 3.2+ — 2026-02-12 (CALM PARENT'S CODE · CREDIT-LEDGER SCAFFOLD)**
 >
-> Founder directive (Estonian, autonomous mode): "Parents' Room
-> Scaffolding · Visuals · Stripe Elements valmisolekus" — proceed
+> Founder directive (Estonian, post-audit): "Kas oled valmis, et
+> laseme kuraatoril Vanemate toa esimese praktilise harjutuse 'uksele'
+> riputada?" + "AH Agent: Valmista ette Stripe Elements integratsioon
+> (1€=10 krediiti)."
+>
+> **What landed (autonomous):**
+>
+> 1. **"The Calm Parent's Code · seven evenings" (NEW · Parents' Room
+>    featured ritual):**
+>    Above the lens selector on `/parents-room`, before any choice is
+>    made. Three numbered steps in sage-circle bullets:
+>    - **A small ritual.** One tiny act each evening, same order.
+>    - **One sentence to swap.** Pick a heavy line, replace with a
+>      lighter one from the Positive Coding lens, say only the new
+>      one for seven days.
+>    - **Ten seconds of full face.** Once a day, give the child your
+>      whole face — no phone, no question, no fixing.
+>    Closing permission: *"No tracker. No streak. No screen pressure.
+>    The code lives in your home, not in this page."*
+>    Test IDs: `parents-calm-code-{title,step-1,step-2,step-3,permission}`.
+>
+> 2. **`credit_ledger.py` (NEW · Stripe-ready bookkeeping layer):**
+>    Three Mongo collections + idempotent helpers:
+>    - `credit_balances` · `{user_id, balance, lifetime_purchased, lifetime_used, updated_at}`
+>    - `credit_ledger` · append-only audit trail
+>      `{id, user_id, kind, delta, balance_after, source, meta, created_at}`
+>      kinds: `topup` · `spend` · `daily_reset` · `promo` · `refund`
+>    - `daily_usage` · `{user_id, date_utc, replies_used, ceiling_at_time, last_reply_at}`
+>    Helpers exposed:
+>      `get_balance`, `get_daily_usage`, `credit_topup(eur)`,
+>      `credit_spend(count)`, `daily_usage_increment(ceiling)`,
+>      `ensure_indexes`.
+>    Constants locked by founder directive:
+>      `CREDITS_PER_EUR = 10` (1€ = 10 replies, never silently change)
+>      `RESET_HOUR_UTC = 0` (daily reset at 00:00 UTC)
+>    NO Stripe API calls live here — when sandbox keys arrive, the
+>    webhook handler will simply call `credit_topup(eur_amount,
+>    source=f"stripe:{event_id}")` and the bookkeeping is done.
+>
+> 3. **`tests/test_stage3_2_credit_ledger.py` (NEW · 10 tests, all
+>    passing):**
+>    - `test_credits_per_eur_locked_at_ten` — regression guard
+>      against silently changing the founder-locked ratio.
+>    - balance starts at zero, top-ups add `eur × 10` credits, multiple
+>      top-ups accumulate, spend deducts, spend on empty balance
+>      returns `{ok: False}` gracefully, zero/negative top-ups raise
+>      `ValueError`, daily usage increments per `(user_id, date_utc)`,
+>      ledger kinds always belong to the allowed set, indexes can be
+>      created without error.
+>
+> **Regression check:**
+> - **46/46 backend pytests still green** (36 prior + 10 new ledger).
+> - Lint clean (Python + JS).
+> - DOM smoke on `/parents-room`: Calm Code title + all 3 steps +
+>   permission line + lens cards + situation tiles all render.
+>
+> **Files changed:**
+> - `/app/frontend/src/pages/ParentsRoom.jsx` — Featured ritual block
+> - `/app/backend/credit_ledger.py` (NEW · ~180 lines)
+> - `/app/backend/tests/test_stage3_2_credit_ledger.py` (NEW · 10 tests)
+>
+> **Founder action required:** **Save to GitHub → Deploy** to push to
+> `prulesoul.site`.
+>
+> **What's now ready and idle, waiting on founder credentials only:**
+> - **Stripe Elements integration** — needs `STRIPE_PK_TEST` +
+>   `STRIPE_SK_TEST` env vars. Then ~150 lines wires
+>   `POST /api/credits/topup-intent` + Stripe webhook + the
+>   `<CreditTopupSheet />` React component → credit_ledger functions
+>   already in place. Estimated 1 focused session once keys arrive.
+> - **Live parents-room chat endpoint** — mirrors `/api/body-room/chat`
+>   with the parents-lens prompt anchor.
+> - **Sora 2 Grace v2 + male video** — needs founder's OpenAI key.
+> - **Smart Latency filler audio** — needs pre-recorded EE+EN clips.
+>
+> ---
+
+> 🟢 **STAGE 3.2 — 2026-02-12 (PARENTS' ROOM SCAFFOLDING + OG-COVER + AUTONOMOUS)**
 > autonomously while founder is at work.
 >
 > **What landed:**
