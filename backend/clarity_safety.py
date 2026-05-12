@@ -174,6 +174,14 @@ def sanitize_reply(text: str) -> str:
     # Layer 2: hard ban.
     if _HARD_BANNED.search(out):
         return _SAFE_FALLBACK
+    # Layer 3: §Stage 3.3 — Wisdom Weaver tonality filter. Softens
+    # dry-blog / hedging-academic patterns and collapses bullet-list
+    # listicles into prose. Conservative; most replies untouched.
+    try:
+        from tonality_filter import soften
+        out = soften(out)
+    except Exception:  # noqa: BLE001
+        pass
     return out
 
 
