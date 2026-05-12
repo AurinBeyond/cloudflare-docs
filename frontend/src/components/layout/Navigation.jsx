@@ -47,20 +47,20 @@ export default function Navigation() {
           : undefined
       }
     >
-      <div className="aurin-container flex items-center justify-between h-[72px]">
+      <div className="aurin-container flex items-center justify-between h-[72px] gap-4">
         <Link
           to="/"
           data-testid="brand-logo"
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-3 group flex-shrink-0 min-w-0"
           aria-label="prulesoul · Matrix Aurin home"
         >
           <img
             src="/assets/brand/prulesoul-logo.png"
             alt="prulesoul"
             data-testid="brand-logo-image"
-            className="h-9 w-9 rounded-full object-cover ring-1 ring-[hsl(var(--aurin-sage))/0.5] group-hover:ring-[hsl(var(--aurin-sage))] transition-all"
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-[hsl(var(--aurin-sage))/0.5] group-hover:ring-[hsl(var(--aurin-sage))] transition-all flex-shrink-0"
           />
-          <span className="aurin-display text-[18px] tracking-tight leading-none flex flex-col">
+          <span className="aurin-display text-[18px] tracking-tight leading-none flex flex-col whitespace-nowrap">
             <span className="text-[hsl(var(--aurin-text))]">prulesoul</span>
             <span className="text-[10px] uppercase tracking-[0.32em] text-[hsl(var(--aurin-sage))/0.85] mt-1">
               Matrix · <span className="aurin-serif-italic normal-case tracking-normal">Aurin</span>
@@ -68,7 +68,7 @@ export default function Navigation() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-9" data-testid="desktop-nav">
+        <nav className="hidden xl:flex items-center gap-6 flex-nowrap" data-testid="desktop-nav">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -76,7 +76,7 @@ export default function Navigation() {
               end={item.to === "/"}
               data-testid={item.testid}
               className={({ isActive }) =>
-                `aurin-link text-[13.5px] tracking-wide ${
+                `aurin-link text-[13.5px] tracking-wide whitespace-nowrap ${
                   isActive ? "" : "text-[hsl(var(--aurin-text))/0.82]"
                 }`
               }
@@ -86,18 +86,18 @@ export default function Navigation() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden xl:flex items-center gap-3 flex-shrink-0">
           <Link
             to="/portal"
             data-testid="nav-cta-enter"
-            className="aurin-btn aurin-btn-ghost"
+            className="aurin-btn aurin-btn-ghost whitespace-nowrap"
           >
             Enter Portal
           </Link>
         </div>
 
         <button
-          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))]"
+          className="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(var(--aurin-border))] text-[hsl(var(--aurin-text))] flex-shrink-0"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
           data-testid="mobile-menu-toggle"
@@ -109,7 +109,7 @@ export default function Navigation() {
       {open && (
         <div
           data-testid="mobile-menu"
-          className="lg:hidden border-t border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg))]"
+          className="xl:hidden border-t border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg))]"
         >
           <div className="aurin-container py-6 flex flex-col gap-4">
             {NAV_ITEMS.map((item) => (

@@ -482,9 +482,11 @@
     0%,
     100% {
         transform: scale(1);
+        filter: brightness(0.98);
     }
     50% {
-        transform: scale(1.013);
+        transform: scale(1.022);
+        filter: brightness(1.04);
     }
 }
 

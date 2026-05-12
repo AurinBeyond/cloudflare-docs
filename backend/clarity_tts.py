@@ -1,14 +1,13 @@
 """
 clarity_tts.py — OpenAI TTS wrapper for the Clarity Release guide voice.
 
-Voice choice (founder directive: safe, natural, human, calming, soft,
-about one gram sweet, never broken):
-    female  → "coral"   (warm, friendly — closest to a soothing companion)
-    male    → "echo"    (smooth, calm)
+Founder directive · Phase 0 Sanctuary lock (2026-02-13):
+    female  → "shimmer"  (the softest of the OpenAI voices — calm,
+                          breathy, sanctuary-grade)
+    male    → "echo"     (smooth, calm)
 
-Model: tts-1-hd. Quality matters more than cost for intimate sessions.
-Speed: 0.86 — slightly slower than default. Stage 2.8d humanization
-       directive: drop from 0.92 to remove residual machine-edge.
+Model: tts-1-hd. Speed locked at 0.85 for low-pressure conversational
+pacing. Both values are P0 — do NOT raise without founder approval.
 Format: mp3 (browser-native).
 """
 from __future__ import annotations
@@ -22,13 +21,15 @@ from emergentintegrations.llm.openai import OpenAITextToSpeech
 
 VoiceGender = Literal["female", "male"]
 
+# §Phase 0 Sanctuary lock. Shimmer is the only acceptable female voice.
 VOICE_FOR_GENDER = {
-    "female": "coral",
+    "female": "shimmer",
     "male": "echo",
 }
 
 DEFAULT_MODEL = "tts-1-hd"
-DEFAULT_SPEED = 0.82
+# §Phase 0 Sanctuary lock — 0.85 is the founder-approved pacing.
+DEFAULT_SPEED = 0.85
 TTS_MAX_CHARS = 4000  # OpenAI cap is 4096, leave a small margin
 
 

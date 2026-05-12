@@ -1,3 +1,96 @@
+> 🟢 **PHASE 0 — 2026-02-13 (CRITICAL SANCTUARY STABILIZATION · founder distress directive)**
+>
+> Founder directive (Estonian, in distress): logo/menu overlap, harsh
+> robotic voice, AI-assistant defensive language ("wrong room"),
+> static portrait, admin/preview chrome leaking into the wanderer's
+> room. **Stop-work on all new features until the Clarity Release
+> sanctuary feels alive and clean.**
+>
+> **What landed (all surgical, no architecture change):**
+>
+> 1. **Header overlap eliminated** (`Navigation.jsx`)
+>    - Breakpoint raised from `lg:` (1024px) → `xl:` (1280px) so the 12
+>      nav items either fit on one line or collapse cleanly to the
+>      mobile menu. No more two-row wrap-onto-logo at 1280/1366.
+>    - Logo + container gain `flex-shrink-0` + `whitespace-nowrap` +
+>      `min-w-0`; nav items add `whitespace-nowrap`. Gap reduced
+>      `gap-9 → gap-6`. Verified live: 16px clear gap at both 1280px
+>      and 1920px viewports.
+>
+> 2. **TTS voice & pacing locked** (`clarity_tts.py`)
+>    - Female voice changed `coral → shimmer` (the softest of the
+>      OpenAI voices — calm, breathy, sanctuary-grade).
+>    - `DEFAULT_SPEED` `0.82 → 0.85` (founder-mandated lock).
+>
+> 3. **Reply-length stabilization** (3 prompts updated)
+>    - `clarity_ai.CLARITY_SYSTEM_PROMPT` — "two to four sentences" →
+>      "**ONE or TWO short sentences per reply. Often one.**"
+>    - `body_room_ai.BODY_ROOM_SYSTEM_PROMPT` — same lock.
+>    - `parents_room_ai.PARENTS_ROOM_SYSTEM_PROMPT` — same lock.
+>    - All three "your turn" trailers rewritten to: "If unsure, say
+>      *'I am here. Take your time.'* and stop. Never explain rooms,
+>      systems, or yourself."
+>
+> 4. **Sanctuary forbidden-behaviour block** (3 prompts + `clarity_safety.py`
+>    regex safety net):
+>    Forbidden phrases the mentor must NEVER produce:
+>    - "wrong room" / "belongs in another room"
+>    - "as an AI" / "I am just an AI" / "language model"
+>    - "I'd be happy to…" / "let me clarify" / "is there anything
+>      else I can help you with?"
+>    - "you can leave any time" / "this room may not be for you"
+>    `clarity_safety._LAYER_1` now rewrites all of these in place
+>    (e.g. "wrong room" → "this room"; "as an AI" → "as a quiet
+>    presence"; "Is there anything else..." → "I am here when you
+>    want to keep going.") so even a model slip is caught.
+>
+> 5. **Subtle breathing presence** (`index.css` + `GuidePresence.jsx`)
+>    - `@keyframes aurin-guide-breath` strengthened: scale 1.013 →
+>      **1.022** + brightness pulse 0.98 → 1.04. 7s cycle preserved.
+>    - Animation now also applied to the `<video>` element (was only
+>      on `<img>` fallback) — every portrait now breathes whether
+>      the Sora 2 clip is live or the static jpg.
+>
+> 6. **Admin / preview chrome hidden inside the sanctuary**
+>    (`Layout.jsx`, `AdminBadge.jsx`)
+>    - The `AiDock` "The Guardian · soon" teaser is suppressed on
+>      `/clarity-release`, `/body-room`, `/parents-room`,
+>      `/kids-universe`, `/cabinet`, `/guest`, `/portal/guest`.
+>    - The `AdminBadge` ("admin · live preview") is suppressed on the
+>      same paths so the founder herself, while signed in as admin,
+>      sees the wanderer's experience un-cluttered.
+>
+> **Verified live (preview):**
+> - `clarity_safety.sanitize_reply("You are in the wrong room")` →
+>   "I am here with you"
+> - `sanitize_reply("As an AI, I cannot help with that")` → "as a
+>   quiet presence, I cannot help with that"
+> - `VOICE_FOR_GENDER["female"] == "shimmer"`, `DEFAULT_SPEED == 0.85`
+> - Body Room "Are you okay?" → *"I am here. Thank you for asking. …"*
+>   (2 sentences, no defensive language, no "wrong room")
+> - Parents' Room "Tonight was loud..." → 2 calm sentences,
+>   parent-to-parent tone.
+> - Header at 1280px: 16px clean gap between logo and nav.
+> - 52/52 regression pytests still green.
+>
+> **Files changed:**
+> - `/app/backend/clarity_tts.py` — shimmer + 0.85
+> - `/app/backend/clarity_ai.py` — Phase 0 prompt block + reply length lock
+> - `/app/backend/body_room_ai.py` — Phase 0 prompt block + reply length lock
+> - `/app/backend/parents_room_ai.py` — Phase 0 prompt block + reply length lock
+> - `/app/backend/clarity_safety.py` — 10 new Phase 0 regex rewrites
+> - `/app/frontend/src/components/layout/Navigation.jsx` — xl: breakpoint, flex-shrink-0, whitespace-nowrap, gap-6
+> - `/app/frontend/src/components/layout/Layout.jsx` — `!isSanctuary && <AiDock />`
+> - `/app/frontend/src/components/AdminBadge.jsx` — sanctuary suppression
+> - `/app/frontend/src/components/GuidePresence.jsx` — breath on `<video>` too
+> - `/app/frontend/src/index.css` — stronger breath keyframes
+>
+> **Founder action required:** **Save to GitHub → Deploy** to push to
+> `prulesoul.site`. The preview is live now and the next visit will
+> show the quieter mentor + clean header + breathing portrait.
+>
+> ---
+
 > 🟢 **STAGE 3.3 — 2026-02-13 (CROSS-ROOM "QUIET TEADMINE" BRIDGE + PARENTS' ROOM LIVE CHAT + WISDOM WEAVER ON)**
 >
 > Founder directive (Estonian): "Ehita Cross-Room Context Memory

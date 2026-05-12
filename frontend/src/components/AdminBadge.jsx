@@ -1,4 +1,5 @@
 import { useAdmin } from "@/hooks/useAdmin";
+import { useLocation } from "react-router-dom";
 
 /**
  * AdminBadge — small fixed strip shown only when an admin token is in
@@ -8,7 +9,22 @@ import { useAdmin } from "@/hooks/useAdmin";
  */
 export default function AdminBadge() {
   const { isAdmin } = useAdmin();
+  const location = useLocation();
   if (!isAdmin) return null;
+
+  // §Phase 0 — Sanctuary mode. Even the founder's admin badge must
+  // not overlap the mentor surfaces. The badge is a development
+  // affordance; inside the wanderer's room it is visual noise.
+  const isSanctuary = (
+    location.pathname.startsWith("/clarity-release") ||
+    location.pathname.startsWith("/body-room") ||
+    location.pathname.startsWith("/parents-room") ||
+    location.pathname.startsWith("/kids-universe") ||
+    location.pathname.startsWith("/cabinet") ||
+    location.pathname.startsWith("/portal/guest") ||
+    location.pathname.startsWith("/guest")
+  );
+  if (isSanctuary) return null;
 
   const handleExit = () => {
     try {

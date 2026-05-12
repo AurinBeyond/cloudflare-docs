@@ -12,6 +12,20 @@ export default function Layout() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
+  // §Phase 0 — Sanctuary mode. The mentor rooms must feel like a
+  // sanctuary, not a marketing site. Hide the AiDock ("The Guardian ·
+  // soon") teaser on every mentor surface so it never overlaps the
+  // wanderer's speaking experience.
+  const isSanctuary = (
+    location.pathname.startsWith("/clarity-release") ||
+    location.pathname.startsWith("/body-room") ||
+    location.pathname.startsWith("/parents-room") ||
+    location.pathname.startsWith("/kids-universe") ||
+    location.pathname.startsWith("/cabinet") ||
+    location.pathname.startsWith("/portal/guest") ||
+    location.pathname.startsWith("/guest")
+  );
+
   return (
     <>
       <Navigation />
@@ -19,7 +33,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
-      <AiDock />
+      {!isSanctuary && <AiDock />}
       <AgeGate />
     </>
   );

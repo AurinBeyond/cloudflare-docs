@@ -106,7 +106,7 @@ export default function GuidePresence({
         {videoSrc && !videoFailed ? (
           <video
             src={videoSrc}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover aurin-guide-breath aurin-guide-sway"
             autoPlay
             loop
             muted
