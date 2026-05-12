@@ -1,3 +1,122 @@
+> 🟢 **STAGE 2.9e — 2026-02-12 (INTUITIVE FLOW DEFAULT + ESTONIAN `ravim` LOCK)**
+>
+> Founder directive (Estonian): two surgical follow-ups to the
+> Multi-Lens system —
+>   1. *"Intuitive Flow Mode: Sea see vaikimisi (default) režiimiks.
+>       Grace ei tohi vestluse ajal deklareerida, millist meetodit
+>       ta kasutab."* (Default mode where the mentor reads context
+>       and switches lens invisibly — never names the method aloud.)
+>   2. *"Sõna ravim (ja kõik selle vormid) on rangelt KEELATUD.
+>       Kasuta: vabastamine, tasakaalustamine, toetamine, leevendus,
+>       rännak, praktika."* (Hard ban on the Estonian word "ravim"
+>       and its declensions/conjugations in all AI output.)
+>
+> **What landed:**
+>
+> 1. **`intuitive` lens (NEW · the default)** — added to
+>    `body_lenses.py` as a fourth registry entry, region map left
+>    intentionally empty (`regions: {}`). Its `prompt_anchor`
+>    instructs Claude to read the wanderer's last line and pick the
+>    register SILENTLY:
+>    - high stress / alarm / racing-heart language → SOMATIC SCIENCE
+>      register (regulating breaths, orienting, ground/exhale).
+>    - guilt / anger / blame / withheld-words / relationship knot →
+>      PSYCHOSOMATIC MIRROR register (Luule Viilma / Louise Hay
+>      forgiveness sentences).
+>    - fatigue / fog / energetic blockage → EASTERN register (one
+>      Sanskrit term with plain meaning, one permission).
+>    - The mentor MUST NOT say "I am using Viilma's method" or
+>      "in Ayurveda we…" — wisdom must arrive as if her own.
+>    - Allows micro-mixing (≤ 2 elements per reply). If the wanderer
+>      explicitly asks "what method are you using?", an honest list
+>      is allowed; then return to the body.
+>
+> 2. **`BodyLensSelector.jsx`** — promoted from 3 → 4 cards.
+>    Intuitive sits leftmost and is **the default**: empty
+>    `localStorage[aurin_body_lens_v1]` is treated as Intuitive Flow.
+>    Other lens picks are stored explicitly. "Return to Intuitive"
+>    replaces the previous "Step away" button (and only appears
+>    when an override is active). New `DEFAULT_LENS` + `readActiveLens()`
+>    exports keep the contract honest.
+>
+> 3. **`LensForRegion.jsx`** — when Intuitive is active, the modal
+>    renders a calm placeholder instead of a static insight/practice/
+>    permission triple ("The mentor will read your words for this
+>    region and choose…"). For the other 3 lenses, the per-region
+>    content is shown as before.
+>
+> 4. **`BodyRoomChat.jsx`** — always sends a known lens id (defaults
+>    to `intuitive` when nothing explicit is picked). The "lens · …"
+>    badge under the chat header is hidden when the lens is the
+>    default Intuitive — preserving the "invisible mentor" promise.
+>
+> 5. **`clarity_safety.py` — Estonian `ravim` lock (P0):**
+>    Layer 1 now rewrites all common declensions and conjugations:
+>    - `ravim`, `ravimi`, `ravimid`, `ravimile`, `ravimist`,
+>      `ravimina`, `ravimiks` → **`toetus`**
+>    - `ravimid(e/ele/elt/esse/ega)` → **`toetused`**
+>    - `ravimine(gi)` → **`tasakaalustamine`**
+>    - `ravimisega` → **`tasakaalustamisega`**
+>    - `raviefekt(i/id/ile/ist/iga)` → **`toetav mõju`**
+>    - `ravimtaim(e/ed/ede/i/ele/elt)` → **`tugitaim`**
+>    - `ravitse(n/d/me/te/ma/takse/tud/b/vad/nud/nuks)` →
+>      **`toetama`**
+>    - `ravi(da/nud/s/sin/sid/sime/site/vad/b/d/ks/me/te)` →
+>      **`toetab`**
+>    - bare `ravi(+ case endings)` → **`tasakaalustamine`**
+>    `_AUDIT_WORDS` extended with the same family so drift logs
+>    surface any AI output that still contains a forbidden form.
+>
+> 6. **Tests (28/28 PASS in this session):**
+>    - `test_stage2_9d_body_lenses.py` (NEW · 14 tests): 4 lenses
+>      present, all 3 concrete lenses carry 8 regions, Intuitive
+>      carries 0 regions but its anchor explicitly forbids naming
+>      the method.
+>    - `test_stage2_9e_ravim_filter.py` (NEW · 4 tests): every
+>      Estonian `ravi*` form is stripped from sanitized output;
+>      audit flags raw drift; replacement vocabulary is one of
+>      `toetus / toetused / toetav / tasakaalustamine / tugitaim`;
+>      `sanitize_reply` is idempotent.
+>    - 10/10 existing Body Room tests still green.
+>
+> **Files changed:**
+> - `/app/backend/body_lenses.py` — new `intuitive` registry entry
+> - `/app/backend/clarity_safety.py` — Estonian ravi-family Layer 1 + audit
+> - `/app/frontend/src/components/BodyLensSelector.jsx` — 4 cards, intuitive default
+> - `/app/frontend/src/components/LensForRegion.jsx` — intuitive placeholder
+> - `/app/frontend/src/components/BodyRoomChat.jsx` — default lens + hidden badge
+> - `/app/backend/tests/test_stage2_9d_body_lenses.py` — updated assertions
+> - `/app/backend/tests/test_stage2_9e_ravim_filter.py` (NEW)
+>
+> **Live verified:**
+> - `GET /api/body-room/lenses` → 4 lenses, intuitive first, regions
+>   counts `0 / 8 / 8 / 8` (intuitive / eastern / psychosomatic /
+>   somatic_science).
+> - DOM smoke: `body-lens-card-intuitive` rendered as default with
+>   `data-default="true"`.
+>
+> **Founder action required:** Press **Deploy** to push to
+> `prulesoul.site` (preview is live now).
+>
+> **Out of scope this iteration (acknowledged, not implemented):**
+> - **Direct credit top-up system** (separate from LemonSqueezy) —
+>   needs UX scoping before code: price per credit unit, how many
+>   credits = how many AI minutes, in-app one-click payment provider
+>   (Stripe? LemonSqueezy mini-products? Coingate?), per-user
+>   daily ceiling math. Will plan as a focused next phase.
+> - **Smart Latency filler audio** — needs ~6-10 short pre-recorded
+>   "mhm / kuulan / oota..." clips (Estonian + English) to play
+>   while the LLM thinks. Audio asset production is the blocker.
+> - **Admin emergency-brake** (auto read-only when daily API spend
+>   exceeds ceiling) — backend-only, ~80 lines, scheduled after
+>   the credit system lands.
+> - **Mobile reality test** (iPhone Safari + Android Chrome +
+>   Instagram in-app browser) — physical-device check, only the
+>   founder can run.
+
+---
+
+
 > 🟢 **STAGE 2.9d — 2026-02-12 (BODY ROOM MULTI-LENS · 3 WISDOM SCHOOLS)**
 >
 > Founder directive (Estonian): "me peame haldama body ruumis väga

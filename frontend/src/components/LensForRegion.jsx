@@ -12,9 +12,9 @@
  * by us, never user-generated.
  */
 import { useEffect, useState } from "react";
-import { Sparkles, Wind, Activity } from "lucide-react";
+import { Sparkles, Wind, Activity, Compass } from "lucide-react";
 import { api } from "@/lib/api";
-import { LENS_STORE_KEY, LENS_EVENT } from "@/components/BodyLensSelector";
+import { LENS_STORE_KEY, LENS_EVENT, DEFAULT_LENS } from "@/components/BodyLensSelector";
 
 let _LENS_CACHE = null;
 let _LENS_PROMISE = null;
@@ -37,6 +37,7 @@ async function getLenses() {
 }
 
 const ICON_FOR = {
+  intuitive: Compass,
   eastern: Wind,
   psychosomatic: Sparkles,
   somatic_science: Activity,
@@ -47,10 +48,10 @@ export default function LensForRegion({ region }) {
   const [activeId, setActiveId] = useState(() => {
     try {
       return typeof window !== "undefined"
-        ? window.localStorage.getItem(LENS_STORE_KEY)
-        : null;
+        ? window.localStorage.getItem(LENS_STORE_KEY) || DEFAULT_LENS
+        : DEFAULT_LENS;
     } catch {
-      return null;
+      return DEFAULT_LENS;
     }
   });
 
@@ -65,23 +66,50 @@ export default function LensForRegion({ region }) {
   }, []);
 
   useEffect(() => {
-    const onChange = (e) => setActiveId(e?.detail?.id || null);
+    const onChange = (e) => setActiveId(e?.detail?.id || DEFAULT_LENS);
     window.addEventListener(LENS_EVENT, onChange);
     return () => window.removeEventListener(LENS_EVENT, onChange);
   }, []);
 
   if (!region || lenses.length === 0) return null;
 
-  // Fall back to Eastern when nothing is chosen — a soft default,
-  // not a forced choice.
-  const lensId = activeId || "eastern";
+  const lensId = activeId || DEFAULT_LENS;
   const lens = lenses.find((l) => l.id === lensId);
   if (!lens) return null;
 
+  const Icon = ICON_FOR[lensId] || Sparkles;
+
+  // Intuitive Flow has no static per-region content — the mentor
+  // reads context live and chooses. Render a calm placeholder.
+  if (lensId === DEFAULT_LENS) {
+    return (
+      <div
+        data-testid={`lens-region-intuitive-${region}`}
+        className="space-y-2 pt-3 border-t border-[hsl(var(--aurin-border-soft))]"
+      >
+        <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.28em] text-[hsl(var(--aurin-text-muted))]">
+          <Icon
+            size={11}
+            strokeWidth={1.4}
+            className="text-[hsl(var(--aurin-sage))]"
+          />
+          <span>Through Intuitive Flow</span>
+        </div>
+        <p
+          className="text-[13px] leading-relaxed aurin-serif-italic text-[hsl(var(--aurin-text))/0.92]"
+          data-testid={`lens-region-intuitive-note-${region}`}
+        >
+          The mentor will read your words for this region and choose the
+          quietest fitting practice — sometimes a breath, sometimes a
+          gentle release, sometimes a single permission. Nothing is named
+          aloud.
+        </p>
+      </div>
+    );
+  }
+
   const entry = lens.regions?.[region];
   if (!entry) return null;
-
-  const Icon = ICON_FOR[lensId] || Sparkles;
 
   return (
     <div
@@ -97,14 +125,6 @@ export default function LensForRegion({ region }) {
           />
           <span>Through the {lens.name}</span>
         </div>
-        {!activeId && (
-          <span
-            className="text-[10px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]/70 aurin-serif-italic"
-            data-testid={`lens-region-default-${region}`}
-          >
-            default lens
-          </span>
-        )}
       </div>
       <p
         className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.92]"

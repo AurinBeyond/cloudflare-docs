@@ -28,15 +28,20 @@ from body_lenses import (  # noqa: E402
 from clarity_safety import sanitize_reply, audit_clinical_drift  # noqa: E402
 
 
-REQUIRED_LENS_IDS = {"eastern", "psychosomatic", "somatic_science"}
+REQUIRED_LENS_IDS = {"intuitive", "eastern", "psychosomatic", "somatic_science"}
+LENSES_WITH_REGIONS = {"eastern", "psychosomatic", "somatic_science"}
 
 
-def test_three_lenses_present():
+def test_four_lenses_present():
     assert set(LENSES.keys()) == REQUIRED_LENS_IDS
 
 
 def test_each_lens_has_all_eight_regions():
-    for lens_id, lens in LENSES.items():
+    """Region maps are required for the three concrete lenses. The
+    Intuitive Flow lens intentionally has no static region map — the
+    mentor reads context and chooses live."""
+    for lens_id in LENSES_WITH_REGIONS:
+        lens = LENSES[lens_id]
         for region in REGION_IDS:
             assert region in lens["regions"], (
                 f"{lens_id} is missing region {region}"
@@ -45,6 +50,15 @@ def test_each_lens_has_all_eight_regions():
             assert entry.get("insight"), f"{lens_id}/{region} missing insight"
             assert entry.get("practice"), f"{lens_id}/{region} missing practice"
             assert entry.get("permission"), f"{lens_id}/{region} missing permission"
+
+
+def test_intuitive_lens_has_no_static_regions():
+    """The intuitive lens uses the prompt to choose at run time."""
+    assert LENSES["intuitive"]["regions"] == {}
+    # But the prompt anchor must explicitly forbid naming the method.
+    anchor = LENSES["intuitive"]["prompt_anchor"]
+    assert "MUST NOT" in anchor or "must not" in anchor
+    assert "without naming" in anchor.lower() or "naming it aloud" in anchor.lower()
 
 
 def test_each_lens_has_required_metadata():
@@ -89,7 +103,7 @@ def test_each_prompt_anchor_carries_safety_language():
 
 def test_list_lenses_helper_shape():
     out = list_lenses()
-    assert len(out) == 3
+    assert len(out) == 4
     ids = {l["id"] for l in out}
     assert ids == REQUIRED_LENS_IDS
     for lens in out:
@@ -138,7 +152,7 @@ def test_generate_body_reply_handles_unknown_lens_gracefully():
     assert audit_clinical_drift(result["text"]) == []
 
 
-@pytest.mark.parametrize("lens_id", list(REQUIRED_LENS_IDS))
+@pytest.mark.parametrize("lens_id", sorted(REQUIRED_LENS_IDS))
 def test_generate_body_reply_accepts_each_known_lens(lens_id):
     """Each known lens id must flow through `generate_body_reply`
     without exception. (LLM mock not needed — we hit the early

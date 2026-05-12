@@ -17,41 +17,53 @@
  */
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { Wind, Sparkles, Activity, Check } from "lucide-react";
+import { Wind, Sparkles, Activity, Check, Compass } from "lucide-react";
 
 export const LENS_STORE_KEY = "aurin_body_lens_v1";
 export const LENS_EVENT = "aurin-body-lens-changed";
+export const DEFAULT_LENS = "intuitive";
 
 const ICONS = {
+  intuitive: Compass,
   eastern: Wind,
   psychosomatic: Sparkles,
   somatic_science: Activity,
 };
 
 const ACCENT = {
+  intuitive: "from-amber-300/15 to-sage-100/0",
   eastern: "from-emerald-300/15 to-emerald-100/0",
   psychosomatic: "from-rose-300/15 to-rose-100/0",
   somatic_science: "from-sky-300/15 to-sky-100/0",
 };
 
+/**
+ * The active lens id. If nothing is stored, the intuitive (default)
+ * lens is returned so the chat always sends a known id. Components
+ * that want to distinguish "explicitly picked" vs "default" should
+ * read `localStorage` directly.
+ */
 export function readActiveLens() {
   try {
-    if (typeof window === "undefined") return null;
-    return window.localStorage.getItem(LENS_STORE_KEY) || null;
+    if (typeof window === "undefined") return DEFAULT_LENS;
+    return window.localStorage.getItem(LENS_STORE_KEY) || DEFAULT_LENS;
   } catch {
-    return null;
+    return DEFAULT_LENS;
   }
 }
 
 function writeActiveLens(id) {
   try {
     if (typeof window === "undefined") return;
-    if (id) {
+    if (id && id !== DEFAULT_LENS) {
       window.localStorage.setItem(LENS_STORE_KEY, id);
     } else {
+      // Default (intuitive) means "no override" — clear the storage.
       window.localStorage.removeItem(LENS_STORE_KEY);
     }
-    window.dispatchEvent(new CustomEvent(LENS_EVENT, { detail: { id } }));
+    window.dispatchEvent(
+      new CustomEvent(LENS_EVENT, { detail: { id: id || DEFAULT_LENS } })
+    );
   } catch {
     /* noop */
   }
@@ -81,21 +93,24 @@ export default function BodyLensSelector() {
 
   // External changes (other tab / chat clear) → keep in sync.
   useEffect(() => {
-    const onChange = (e) => setActiveId(e?.detail?.id || null);
+    const onChange = (e) => setActiveId(e?.detail?.id || DEFAULT_LENS);
     window.addEventListener(LENS_EVENT, onChange);
     return () => window.removeEventListener(LENS_EVENT, onChange);
   }, []);
 
   if (!loaded || lenses.length === 0) return null;
 
+  // Render intuitive first so it always sits in the leftmost slot — the
+  // "home base" the wanderer returns to.
+  const ordered = [...lenses].sort((a, b) => {
+    if (a.id === DEFAULT_LENS) return -1;
+    if (b.id === DEFAULT_LENS) return 1;
+    return 0;
+  });
+
   const pick = (id) => {
-    if (activeId === id) {
-      writeActiveLens(null);
-      setActiveId(null);
-    } else {
-      writeActiveLens(id);
-      setActiveId(id);
-    }
+    writeActiveLens(id);
+    setActiveId(id || DEFAULT_LENS);
   };
 
   return (
@@ -112,26 +127,27 @@ export default function BodyLensSelector() {
               Choose a lens · entirely optional
             </div>
             <h2 className="aurin-display text-2xl md:text-3xl leading-snug max-w-[28ch]">
-              Three quiet perspectives,{" "}
+              Four quiet perspectives,{" "}
               <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-                pick one for tonight.
+                one of them invisible.
               </span>
             </h2>
             <p className="text-[13.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9] mt-3 max-w-[60ch]">
-              Every tradition reads the body differently. You may choose
-              one lens for this visit, or none at all — the mentor stays
-              kind either way. You can change or release the lens at any
-              moment.
+              Intuitive Flow is the default — the mentor reads your
+              words and adapts silently. If you would rather choose a
+              single lens for tonight, the other three are here. You
+              can return to Intuitive Flow at any moment.
             </p>
           </div>
 
           <div
-            className="grid md:grid-cols-3 gap-4"
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
             data-testid="body-lens-cards"
           >
-            {lenses.map((lens) => {
+            {ordered.map((lens) => {
               const Icon = ICONS[lens.id] || Wind;
               const active = activeId === lens.id;
+              const isDefault = lens.id === DEFAULT_LENS;
               return (
                 <button
                   type="button"
@@ -139,6 +155,7 @@ export default function BodyLensSelector() {
                   onClick={() => pick(lens.id)}
                   data-testid={`body-lens-card-${lens.id}`}
                   data-active={active ? "true" : "false"}
+                  data-default={isDefault ? "true" : "false"}
                   aria-pressed={active}
                   className={`group text-left relative p-5 rounded-xl border bg-gradient-to-b ${
                     ACCENT[lens.id] || ""
@@ -164,15 +181,19 @@ export default function BodyLensSelector() {
                         </p>
                       </div>
                     </div>
-                    {active && (
+                    {active ? (
                       <span
-                        className="inline-flex items-center gap-1 text-[10.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-sage))]"
+                        className="inline-flex items-center gap-1 text-[10.5px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-sage))] shrink-0"
                         data-testid={`body-lens-active-badge-${lens.id}`}
                       >
                         <Check size={11} strokeWidth={1.8} />
                         active
                       </span>
-                    )}
+                    ) : isDefault ? (
+                      <span className="text-[10px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]/70 aurin-serif-italic shrink-0">
+                        default
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-[13px] leading-relaxed text-[hsl(var(--aurin-text))/0.92]">
                     {lens.scope}
@@ -185,22 +206,22 @@ export default function BodyLensSelector() {
             })}
           </div>
 
-          {activeId && (
+          {activeId && activeId !== DEFAULT_LENS && (
             <div
               className="flex items-center justify-between gap-3 pt-2 border-t border-[hsl(var(--aurin-border-soft))]"
               data-testid="body-lens-active-row"
             >
               <p className="text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] aurin-serif-italic">
                 The mentor will speak through this lens tonight. You can
-                step away from it at any moment.
+                return to Intuitive Flow at any moment.
               </p>
               <button
                 type="button"
-                onClick={() => pick(activeId)}
+                onClick={() => pick(DEFAULT_LENS)}
                 data-testid="body-lens-clear"
                 className="aurin-btn aurin-btn-ghost !py-1.5 !px-3 !text-[12px] shrink-0"
               >
-                Step away
+                Return to Intuitive
               </button>
             </div>
           )}

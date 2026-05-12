@@ -16,7 +16,7 @@ import { Send, RotateCcw, Volume2, VolumeX, Headphones } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
 import useVoiceIO from "@/hooks/useVoiceIO";
-import { LENS_STORE_KEY, LENS_EVENT } from "@/components/BodyLensSelector";
+import { LENS_STORE_KEY, LENS_EVENT, DEFAULT_LENS } from "@/components/BodyLensSelector";
 
 const STORE_KEY = "aurin_body_chat_v1";
 const MAX_TURNS = 30;
@@ -63,19 +63,20 @@ export default function BodyRoomChat({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [usageKey, setUsageKey] = useState(0);
-  // §Stage 2.9d — active wisdom lens (opt-in). Synced with the
-  // <BodyLensSelector /> via localStorage + a custom event.
+  // §Stage 2.9d — active wisdom lens. The default is Intuitive Flow:
+  // when nothing is explicitly picked, the mentor still receives a
+  // valid lens id and chooses its register live.
   const [activeLens, setActiveLens] = useState(() => {
     try {
       return typeof window !== "undefined"
-        ? window.localStorage.getItem(LENS_STORE_KEY)
-        : null;
+        ? window.localStorage.getItem(LENS_STORE_KEY) || DEFAULT_LENS
+        : DEFAULT_LENS;
     } catch {
-      return null;
+      return DEFAULT_LENS;
     }
   });
   useEffect(() => {
-    const onChange = (e) => setActiveLens(e?.detail?.id || null);
+    const onChange = (e) => setActiveLens(e?.detail?.id || DEFAULT_LENS);
     window.addEventListener(LENS_EVENT, onChange);
     return () => window.removeEventListener(LENS_EVENT, onChange);
   }, []);
@@ -328,7 +329,7 @@ export default function BodyRoomChat({
               {bodyContext.pattern_label && (
                 <span>pattern · {bodyContext.pattern_label}</span>
               )}
-              {activeLens && (
+              {activeLens && activeLens !== DEFAULT_LENS && (
                 <span
                   className="text-[hsl(var(--aurin-sage))]"
                   data-testid="body-room-chat-active-lens"
@@ -338,7 +339,7 @@ export default function BodyRoomChat({
               )}
             </div>
           )}
-          {(!bodyContext || (!bodyContext.region && !bodyContext.pattern_label)) && activeLens && (
+          {(!bodyContext || (!bodyContext.region && !bodyContext.pattern_label)) && activeLens && activeLens !== DEFAULT_LENS && (
             <div
               className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--aurin-sage))]/85"
               data-testid="body-room-chat-active-lens"

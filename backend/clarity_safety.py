@@ -96,6 +96,20 @@ _LAYER_1: List[Tuple[re.Pattern, str]] = [
     (re.compile(r"\binterventions?\b", re.IGNORECASE), "practices"),
     (re.compile(r"\bprotocols?\b", re.IGNORECASE), "practices"),
     (re.compile(r"\bdysfunctions?\b", re.IGNORECASE), "imbalance"),
+    # ---- Estonian forms — explicitly forbidden by founder directive
+    # 2026-02-12. The word "ravim" and its family are clinical in
+    # Estonian; we replace with the wellness vocabulary the founder
+    # asked for (vabastamine, tasakaalustamine, toetamine).
+    (re.compile(r"\braviefekt(?:i|id|ile|ist|iga)?\b", re.IGNORECASE), "toetav mõju"),
+    (re.compile(r"\bravimtaim(?:e|ed|ede|edega|i|ele|elt)?\b", re.IGNORECASE), "tugitaim"),
+    (re.compile(r"\bravimid(?:e|ele|elt|esse|ega)?\b", re.IGNORECASE), "toetused"),
+    (re.compile(r"\bravim(?:i|it|ile|ist|iga|ina|iks)?\b", re.IGNORECASE), "toetus"),
+    (re.compile(r"\bravimist(?:ki|gi)?\b", re.IGNORECASE), "tasakaalustamisest"),
+    (re.compile(r"\bravimine(?:gi)?\b", re.IGNORECASE), "tasakaalustamine"),
+    (re.compile(r"\bravimisega\b", re.IGNORECASE), "tasakaalustamisega"),
+    (re.compile(r"\bravitse(?:n|d|me|te|ma|takse|tud|b|vad|nud|nuks)\b", re.IGNORECASE), "toetama"),
+    (re.compile(r"\bravi(?:da|nud|s|sin|sid|sime|site|vad|b|d|ks|me|te)\b", re.IGNORECASE), "toetab"),
+    (re.compile(r"\bravi(?:le|st|ga|sse|ks|na|d|de|dele|delt|desse)?\b", re.IGNORECASE), "tasakaalustamine"),
 ]
 
 
@@ -167,6 +181,9 @@ _AUDIT_WORDS = (
     "therapy", "therapist", "diagnosis", "diagnose", "treatment", "ptsd",
     "trauma", "panic disorder", "phobia", "depression", "anxiety disorder",
     "patient", "clinical", "mental health",
+    # Estonian forms — founder directive 2026-02-12
+    "ravim", "ravimi", "ravimid", "ravimine", "ravimisega",
+    "raviefekt", "ravimtaim", "ravitseb", "ravitsema", "ravitsen",
 )
 
 
