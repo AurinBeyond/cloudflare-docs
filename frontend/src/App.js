@@ -31,6 +31,7 @@ import LibraryKidsRead from "@/pages/LibraryKidsRead";
 import ClarityRelease from "@/pages/ClarityRelease";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import BodyRoom from "@/pages/BodyRoom";
+import ParentsRoom from "@/pages/ParentsRoom";
 import BetaTestGroup from "@/pages/BetaTestGroup";
 import CourseRoom from "@/pages/CourseRoom";
 import CourseDetail from "@/pages/CourseDetail";
@@ -102,6 +103,10 @@ function AppRouter() {
               <BodyRoom />
             </WandererGate>
           }
+        />
+        <Route
+          path="/parents-room"
+          element={<ParentsRoom />}
         />
         <Route
           path="/cabinet/booking"

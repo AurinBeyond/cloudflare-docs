@@ -5395,6 +5395,21 @@ async def body_room_lenses():
     return {"lenses": list_lenses()}
 
 
+@api_router.get("/parents-room/lenses")
+async def parents_room_lenses():
+    """Public registry of the four opt-in parenting lenses (Intuitive
+    Flow / Shitsuke / Montessori / Positive Coding) for the new
+    `/parents-room` page. Same JSON shape as `/body-room/lenses` but
+    keyed on `situations` instead of `regions` (bedtime, mealtime,
+    big_emotions, screen_time, sibling, separation, school_stress,
+    connection).
+
+    No auth required — static content authored by us.
+    """
+    from parents_lenses import list_lenses as parents_list_lenses
+    return {"lenses": parents_list_lenses()}
+
+
 @api_router.post("/body-room/chat")
 async def body_room_chat(inp: BodyRoomChatIn, request: Request):
     """One-shot Body Room mentor reply. Stateless on the server: the

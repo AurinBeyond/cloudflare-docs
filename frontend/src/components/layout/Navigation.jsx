@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: "/the-beginning", label: "The Beginning", testid: "nav-the-beginning" },
   { to: "/clarity-release", label: "Clarity Release", testid: "nav-clarity-release" },
   { to: "/body-room", label: "Body Room", testid: "nav-body-room" },
+  { to: "/parents-room", label: "Parents' Room", testid: "nav-parents-room" },
   { to: "/kids-universe", label: "Kids Universe", testid: "nav-kids-universe" },
   { to: "/course-room", label: "Courses", testid: "nav-course-room" },
   { to: "/aurin-philosophy", label: "Philosophy", testid: "nav-aurin-philosophy" },

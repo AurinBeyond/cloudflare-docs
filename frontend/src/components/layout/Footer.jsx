@@ -11,6 +11,7 @@ const COLUMNS = [
       { to: "/clarity-release", label: "Clarity Release" },
       { to: "/cabinet/booking", label: "Quiet hours" },
       { to: "/body-room", label: "Body Room" },
+      { to: "/parents-room", label: "Parents' Room" },
       { to: "/aurin-philosophy", label: "Aurin Philosophy" },
       { to: "/bookstore", label: "Bookstore" },
       { to: "/library", label: "Library" },

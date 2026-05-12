@@ -1,6 +1,94 @@
-> 🟢 **STAGE 3.1 — 2026-02-12 (FREE-ACCESS CHAT-CAP LIFT + USAGE HINT POLISH)**
+> 🟢 **STAGE 3.2 — 2026-02-12 (PARENTS' ROOM SCAFFOLDING + OG-COVER + AUTONOMOUS)**
 >
-> Founder report (Estonian, post-deploy): "tasuta versioonis vestlus
+> Founder directive (Estonian, autonomous mode): "Parents' Room
+> Scaffolding · Visuals · Stripe Elements valmisolekus" — proceed
+> autonomously while founder is at work.
+>
+> **What landed:**
+>
+> 1. **`backend/parents_lenses.py` (NEW)** — Parents' Room Multi-Lens
+>    registry mirroring `body_lenses.py`. Four lenses:
+>    - `intuitive` · default · invisible context-aware switcher
+>    - `shitsuke` · Japanese rhythm parenting (Shitsuke + Itadakimasu + Amae)
+>    - `montessori` · Montessori prepared-environment + Steiner +
+>      developmental observation
+>    - `positive_coding` · sentence-swap affirmation language
+>    Each concrete lens carries 8 everyday situations
+>    (`bedtime`, `mealtime`, `big_emotions`, `screen_time`, `sibling`,
+>    `separation`, `school_stress`, `connection`) × 3 fields
+>    (`insight`, `practice`, `permission`) = **72 authored micro-texts**.
+>    All 72 pass `clarity_safety.sanitize_reply` + `audit_clinical_drift`
+>    with zero rewrites (verified live).
+>
+> 2. **`GET /api/parents-room/lenses` (NEW endpoint)** — public,
+>    no-auth, same shape as `/body-room/lenses`. Live verified:
+>    returns 4 lenses with correct `situations` counts (0/8/8/8).
+>
+> 3. **`frontend/src/pages/ParentsRoom.jsx` (NEW · 405 lines)** —
+>    new `/parents-room` page:
+>    - Calm `PageHeader` ("Three quiet schools, one calm room for parents")
+>    - `FreeAccessBadge variant="block"` while gift window active
+>    - 4-card opt-in lens selector (`parents-lens-selector` testid)
+>      with same `lens-breathing` halo CSS as Body Room
+>    - 8-tile situation grid (Moon/Utensils/Flame/Smartphone/Users/
+>      Plane/GraduationCap/HandHeart icons)
+>    - `SituationModal` opens on tile click, showing the active lens's
+>      `insight + practice + permission` for that situation (or a
+>      calm placeholder for Intuitive Flow)
+>    - Cross-links to Body Room + Clarity Release
+>
+> 4. **Routing & navigation:**
+>    - `App.js` — new `<Route path="/parents-room" element={<ParentsRoom />} />`
+>      (NO WandererGate — parents come for techniques, the
+>      psychiatric-exclusion disclaimer is wrong tone)
+>    - `Navigation.jsx` — "Parents' Room" added between Body Room and
+>      Kids Universe with `data-testid="nav-parents-room"`
+>    - `Footer.jsx` — "Parents' Room" added to explore section
+>
+> 5. **`scripts/make_og_cover.py` (NEW) → `public/og-cover.png`:**
+>    1200×630 PNG, 52 KB. Sage-green vertical gradient
+>    (forest → sage), soft radial glow upper-right, "PRULESOUL ·
+>    MATRIX AURIN" eyebrow, "the room that reads you" display title,
+>    "Three wisdom schools · one quiet room" subline, sage sparkle
+>    accent, "FREE DURING LAUNCH" pill top-right. Served at
+>    `/og-cover.png` (HTTP 200 verified). Picked up by the OG meta
+>    tags shipped in Stage 3.0 — social shares on
+>    LinkedIn / X / Facebook / iMessage will now show a branded card.
+>
+> **Verified live:**
+> - `GET /api/parents-room/lenses` → 4 lenses, intuitive `situations=0`,
+>   shitsuke/montessori/positive_coding `situations=8` each.
+> - `/parents-room` renders all 4 lens cards + free-access block badge
+>   + Intuitive default-active with sage halo.
+> - Navigation shows "Parents' Room" between Body Room and Kids Universe.
+> - `GET /og-cover.png` → HTTP 200, 52 KB PNG.
+> - Lint clean (Python + JS).
+>
+> **Files changed:**
+> - `/app/backend/parents_lenses.py` (NEW · ~430 lines · 72 texts)
+> - `/app/backend/server.py` — `/api/parents-room/lenses` endpoint
+> - `/app/frontend/src/pages/ParentsRoom.jsx` (NEW · 405 lines)
+> - `/app/frontend/src/App.js` — import + route
+> - `/app/frontend/src/components/layout/Navigation.jsx` — nav link
+> - `/app/frontend/src/components/layout/Footer.jsx` — explore link
+> - `/app/scripts/make_og_cover.py` (NEW · 100 lines)
+> - `/app/frontend/public/og-cover.png` (NEW · 52 KB)
+>
+> **Founder action required:** **Save to GitHub → Deploy** prulesoul.site.
+>
+> **NOT yet built (queued):**
+> - Live parents-room chat endpoint (`POST /api/parents-room/chat`) —
+>   would mirror `/body-room/chat` with the parents-lens prompt anchor.
+>   Surfacing the static-content + lens UX first so the founder can
+>   validate the editorial voice before we wire the live mentor.
+> - Stripe Elements integration — blocked on sandbox keys.
+> - Smart Latency filler audio — needs recordings.
+> - Sora 2 Grace v2 + male video — blocked on founder's OpenAI key.
+> - Autonomous artist-loop orchestration — multi-iteration scope.
+>
+> ---
+
+> 🟢 **STAGE 3.1 — 2026-02-12 (FREE-ACCESS CHAT-CAP LIFT + USAGE HINT POLISH)**
 > eriti ei sujunud, vastus agendi poolt pidevalt väga viibis, vöi ta
 > ainult tervitas… ning mingid numbrid, olid 1-12 vestluse all, mis
 > see on?"
