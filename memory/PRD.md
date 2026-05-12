@@ -1,3 +1,131 @@
+> 🟢 **STAGE 3.3 — 2026-02-13 (CROSS-ROOM "QUIET TEADMINE" BRIDGE + PARENTS' ROOM LIVE CHAT + WISDOM WEAVER ON)**
+>
+> Founder directive (Estonian): "Ehita Cross-Room Context Memory
+> (jagatud teadvuse sild) + Parents' Roomi live-vestlus, hoolitse,
+> et AI kasutaks uut Wisdom Weaver tonaalsust."
+>
+> **What landed:**
+>
+> 1. **`backend/shared_memory.py` (FINISHED)** — Cross-Room
+>    "quiet teadmine" bridge:
+>    - `extract_signals(text)` — 17 conservative regex patterns
+>      (tiredness, sleep_loss, anger, anxiety, grief, loneliness,
+>      shame, child, partner, work_stress, tension_chest/shoulders/
+>      head/belly, screen_struggle, bedtime_struggle, food_struggle).
+>      Each tag returned at most once; supports both English and
+>      Estonian forms (`väsinud`, `laps`, `viha`, etc.).
+>    - `record_signals(db, user_id, room, text)` — Mongo upsert into
+>      `shared_memory_tags { user_id, tag, weight, last_seen_at,
+>      last_source_room, source_rooms[] }`. Silent no-op when
+>      `user_id` empty or room unknown.
+>    - `quiet_knowledge(db, user_id, room, limit=6)` — returns up to
+>      6 recent tags whose `last_source_room` ≠ current room, sorted
+>      by `last_seen_at`.
+>    - `render_prompt_block(tags)` — flattens the list into a calm
+>      "§Quiet knowledge from earlier (do not quote back)" system-
+>      prompt fragment.
+>    - `ensure_indexes(db)` — unique `(user_id, tag)` + recency index.
+>      Wired into `server.on_startup`.
+>
+> 2. **`backend/tonality_filter.py` (FINISHED · "Wisdom Weaver")** —
+>    Conservative post-filter that runs after `clarity_safety.sanitize_reply`:
+>    - Phrase rewrites: "research shows that…" → "many people find
+>      that…", "you should/must/need to" → "you might/may want to",
+>      "in conclusion" → "as a quiet close," (etc.).
+>    - 1–2 bullet lines → flattened to prose.
+>    - 3+ bullet lines (heavy listicle) → calm re-anchor fallback
+>      ("I want to slow down here. There is no list for this…").
+>    - `audit(text)` returns dry-blog signals for telemetry.
+>    - Now linked into `clarity_safety.sanitize_reply` so every AI
+>      reply across Body / Clarity / Parents passes through it.
+>
+> 3. **`backend/parents_room_ai.py` (NEW · 200 lines)** — Parents'
+>    Room live mentor pipeline mirroring `body_room_ai.py`:
+>    - `PARENTS_ROOM_SYSTEM_PROMPT` — tuned to parenting voice
+>      ("parent-to-parent in tone, not clinical, not aspirational",
+>      no "amazing parents" language, no developmental labelling).
+>    - All AGOP §A–D locks (pacing, autonomy, voice, wellness).
+>    - Extended crisis-phrase list: "hurt my child", "shake the
+>      baby", "hit my child" route to Eluliin 116 123 + child-welfare
+>      116 111 + 112.
+>    - `generate_parents_reply(...)` accepts `lens`, `situation`,
+>      `quiet_knowledge`, `transient_context`. Output flows through
+>      `clarity_safety.sanitize_reply` (which now also runs Wisdom
+>      Weaver).
+>
+> 4. **`POST /api/parents-room/chat` (NEW endpoint)** — mirrors
+>    `/body-room/chat`:
+>    - Auth required (401 without Bearer).
+>    - Shared `_enforce_chat_cap(user, "parents_room")` — same daily
+>      ceiling (60 during gift window) as Body Room + Cabinet.
+>    - Loads `_quiet_knowledge_block(user_id, "parents")` server-side
+>      before generating; injects into prompt invisibly.
+>    - After reply: `asyncio.create_task(_record_room_signals_safe(...))`
+>      writes tags from the wanderer's text for next visit.
+>    - Returns `{reply, tone_tag, user_state}` matching Body Room shape.
+>
+> 5. **Cross-Room bridge wired into all three rooms (read + write):**
+>    - `body_room_chat` (server.py:5413) — loads parents/clarity tags
+>      before reply, records body tags after.
+>    - `cabinet_message` (server.py:3362) — loads body/parents tags
+>      before reply, records clarity tags after.
+>    - `parents_room_chat` (NEW) — loads body/clarity tags before
+>      reply, records parents tags after.
+>    - The two AI functions `generate_guide_reply` (clarity_ai.py)
+>      and `generate_body_reply` (body_room_ai.py) gained
+>      `quiet_knowledge` param.
+>
+> 6. **`frontend/src/components/ParentsRoomChat.jsx` (NEW · 380 lines)** —
+>    Live chat surface mirroring `BodyRoomChat.jsx`:
+>    - Whisper STT + auto-speak TTS (same `useVoiceIO`).
+>    - GuidePresence portrait + tone/state animation.
+>    - Sends the active parenting lens + the currently-open situation.
+>    - Browser-side history in `aurin_parents_chat_v1`.
+>    - All interactive elements carry `data-testid="parents-room-chat-*"`.
+>
+> 7. **`frontend/src/pages/ParentsRoom.jsx`** — `<ParentsRoomChat />`
+>    embedded at the bottom of the page, always visible. The "coming
+>    next" placeholder paragraph replaced with a calm invitation.
+>
+> **Testing:**
+> - **26/26 NEW Stage 3.3 unit tests pass** (`test_stage3_3_shared_memory.py`
+>   14 + `test_stage3_3_parents_chat.py` 12 — uses FakeDB pattern so
+>   no live Mongo dependency).
+> - **11/11 NEW live HTTP integration tests pass**
+>   (`tests/test_stage3_3_live_integration.py`, created by testing
+>   subagent): GET lenses, POST chat 401/400/200, invalid lens,
+>   long-message truncation, crisis Eluliin redirect, clinical-term
+>   block, Estonian `ravim` block, body→parents Cross-Room bridge
+>   verified via direct MongoDB inspection.
+> - Regression: Body Room + Cabinet endpoints still 200 OK with
+>   non-empty replies.
+>
+> **Files changed:**
+> - `/app/backend/shared_memory.py` (logic completed)
+> - `/app/backend/tonality_filter.py` (logic completed · wired into clarity_safety)
+> - `/app/backend/parents_room_ai.py` (NEW · 200 lines)
+> - `/app/backend/server.py` — `/api/parents-room/chat` endpoint, `_quiet_knowledge_block`, `_record_room_signals_safe`, cabinet wire-up, ensure_indexes startup
+> - `/app/backend/clarity_ai.py` — `quiet_knowledge` param
+> - `/app/backend/body_room_ai.py` — `quiet_knowledge` param
+> - `/app/backend/clarity_safety.py` — Wisdom Weaver link (Stage 3.2 step)
+> - `/app/backend/tests/test_stage3_3_shared_memory.py` (NEW · 14 tests)
+> - `/app/backend/tests/test_stage3_3_parents_chat.py` (NEW · 12 tests)
+> - `/app/backend/tests/test_stage3_3_live_integration.py` (NEW · 11 tests, by testing agent)
+> - `/app/frontend/src/components/ParentsRoomChat.jsx` (NEW · 380 lines)
+> - `/app/frontend/src/pages/ParentsRoom.jsx` — chat embed
+>
+> **Founder action required:** **Save to GitHub → Deploy** to push
+> to `prulesoul.site`.
+>
+> **What's queued next (founder-prioritized after this lands):**
+> - 🟡 Kids Universe Lenses — 3-lens system (Playfulness · Story · Peace).
+> - 🟡 Welcome Email / Gift Delivery audit under mass traffic.
+> - 🟡 Dynamic Course Curator (loose content instead of static PDFs).
+> - 🟡 Stripe Elements frontend (still BLOCKED on sandbox keys).
+> - 🟡 Sora 2 Grace v2 video (BLOCKED on founder's OpenAI key).
+>
+> ---
+
 > 🟢 **STAGE 3.2+ — 2026-02-12 (CALM PARENT'S CODE · CREDIT-LEDGER SCAFFOLD)**
 >
 > Founder directive (Estonian, post-audit): "Kas oled valmis, et
