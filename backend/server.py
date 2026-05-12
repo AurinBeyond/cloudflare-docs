@@ -2796,6 +2796,19 @@ def _free_access_active() -> bool:
     except Exception:
         return False
 
+
+@api_router.get("/aurin/free-access")
+async def aurin_free_access_status():
+    """Public (no-auth) endpoint that exposes the global free-access
+    window. Used by guest visitors on /clarity-release and elsewhere
+    to hide the $15 / $30 / $50 paywall when free access is active.
+
+    Returns a stable shape even when the env var is unset:
+        { "active": bool, "until": ISO-string | null }
+    """
+    raw = os.environ.get("FREE_ACCESS_UNTIL")
+    return {"active": _free_access_active(), "until": raw or None}
+
 # The Quiet Room always opens with this single greeting. The agent
 # then waits for the visitor's first answer before choosing a path.
 CABINET_OPENING_GREETING = (

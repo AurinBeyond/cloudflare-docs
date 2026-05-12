@@ -1,3 +1,70 @@
+> 🟢 **STAGE 2.9f — 2026-02-12 (FREE-ACCESS PAYWALL CLEANUP · PUBLIC ENDPOINT)**
+>
+> Founder report (Estonian, mobile): "mobiilis 15$ takistus on ikka
+> ees" — the $15 / $30 / $50 tier cards were still rendering on
+> `/clarity-release` even though `FREE_ACCESS_UNTIL=2026-05-20` was
+> set, because:
+>   1. The free-access flag was only exposed via the authenticated
+>      `/api/clarity/access` endpoint. Guest visitors never received
+>      it and so the HUB always rendered the paywall.
+>   2. Even for signed-in visitors with `free_access=true`, the HUB
+>      tier-cards block was NOT gated by the flag, only the
+>      "active pass" badge was.
+>
+> **What landed:**
+>
+> 1. **`GET /api/aurin/free-access` (NEW · public, no-auth)** — returns
+>    `{"active": bool, "until": ISO-date | null}`. Reads the same
+>    `FREE_ACCESS_UNTIL` env var as the signed-in helper. Lets guests
+>    detect the gift window without forcing a login.
+>
+> 2. **`ClarityRelease.jsx`** — fetches `/api/aurin/free-access` on
+>    mount in parallel with the pass catalog. `HubPanel` now computes
+>    `giftActive = !!(access?.free_access || freeAccessWindow?.active)`
+>    and `giftUntil = access?.expires_at || freeAccessWindow?.until`.
+>    When `giftActive`:
+>    - The `clarity-free-access` banner replaces the paid "active pass"
+>      banner with the founder-requested copy: *"Your gift: free
+>      access to every room until [date]. Walk slowly. There is no
+>      payment to make today."*
+>    - The entire `clarity-tiers` block (incl. the $15 30-Minute
+>      Release card, the $30 60-Minute card, and the Season Pass) is
+>      **completely hidden** for both guests and signed-in visitors.
+>
+> **Verified live:**
+> - `curl /api/aurin/free-access` → `{"active":true,"until":"2026-05-20"}`
+> - 28/28 pytests still green
+> - Lint clean (Python + JS)
+>
+> **Files changed:**
+> - `/app/backend/server.py` — `GET /api/aurin/free-access` endpoint
+> - `/app/frontend/src/pages/ClarityRelease.jsx` — public free-access fetch + HubPanel gift gating
+>
+> **Founder action required:** Press **Deploy** to push to
+> `prulesoul.site`. Preview is live now.
+>
+> **Acknowledged but explicitly deferred (need design before code):**
+> - **Direct credit top-up (Stripe, 1€ = 10 replies, 15/day free cap):**
+>   confirmed parameters. Implementation needs: Stripe sandbox keys
+>   (founder will provide), credit-ledger Mongo collection, daily
+>   reset cron, soft-paywall card after limit. ETA ~1 focused session
+>   once keys arrive.
+> - **Global Agent Alignment (Stage 3.0):** clarity_safety + lens
+>   system propagation to Clarity Release / cabinet / landing voice /
+>   marketing / artist agents. Requires explicit inventory of which
+>   agents exist + which call paths to re-route. Will scope as next
+>   ticket.
+> - **Parents' Room lenses** (Shitsuke / Montessori / Positive-coding):
+>   ~300 lines of new lens registry + UI; mirror of `body_lenses.py`.
+>   Will scope after Stage 3.0.
+> - **Autonomous Artist Loop** (marketing → artist → audio → seller):
+>   multi-agent orchestration; needs a job queue + content review
+>   pipeline. NOT a one-iteration job.
+> - **Smart Latency filler audio** — pre-recorded EE+EN clips needed;
+>   asset production is the blocker.
+>
+> ---
+
 > 🟢 **STAGE 2.9e — 2026-02-12 (INTUITIVE FLOW DEFAULT + ESTONIAN `ravim` LOCK)**
 >
 > Founder directive (Estonian): two surgical follow-ups to the

@@ -25,6 +25,7 @@ import {
   fetchClarityBetaWindow,
   grantBetaPass,
   updateClarityPrefs,
+  api,
 } from "@/lib/api";
 import {
   ArrowRight,
@@ -90,6 +91,11 @@ export default function ClarityRelease() {
   const [betaGrantingTier, setBetaGrantingTier] = useState(null);
   const [betaGrantError, setBetaGrantError] = useState(null);
 
+  // §FREE-ACCESS WINDOW (public, no-auth) — global gift period that
+  // hides every paywall ($15/$30/$50) for both guests and signed-in
+  // visitors. Fetched on mount; the room stays open if the call fails.
+  const [freeAccessWindow, setFreeAccessWindow] = useState({ active: false, until: null });
+
   // Past quiet hours (cross-session memory) — sessions the user explicitly
   // opted into keep_thread for. Surfaced on the HUB phase as a soft "resume"
   // panel. Empty list = first-time visitor or user who never enabled keep_thread.
@@ -140,14 +146,16 @@ export default function ClarityRelease() {
     let alive = true;
     (async () => {
       try {
-        const [data, win] = await Promise.all([
+        const [data, win, freeWin] = await Promise.all([
           fetchClarityPasses(),
           fetchClarityBetaWindow().catch(() => ({ active: false, end: null })),
+          api.get("/aurin/free-access").then(r => r.data).catch(() => ({ active: false, until: null })),
         ]);
         if (!alive) return;
         setPasses(data.passes || []);
         setBetaNote(data.beta_note || "");
         setBetaWindow(win || { active: false, end: null });
+        setFreeAccessWindow(freeWin || { active: false, until: null });
       } catch {
         /* tier list is decorative — silent fail OK */
       }
@@ -491,6 +499,7 @@ export default function ClarityRelease() {
           sending={sending}
           onReset={handleReset}
           showContinuation={showContinuation}
+          freeAccessWindow={freeAccessWindow}
           threadKey={threadKey}
           error={error}
           scrollerRef={scroller}
@@ -578,7 +587,13 @@ function HubPanel({
   betaGrantError,
   onBetaGrant,
   onContinue,
+  freeAccessWindow,
 }) {
+  // §FREE-ACCESS WINDOW — global gift period. Honour either the
+  // signed-in personal flag OR the public global window so guests
+  // also see no paywall while the room is in gift mode.
+  const giftActive = !!(access?.free_access || freeAccessWindow?.active);
+  const giftUntil = access?.expires_at || freeAccessWindow?.until || null;
   const betaActive = !!(betaWindow && betaWindow.active);
   const betaEnds = formatBetaEnd(betaWindow && betaWindow.end);
   const alreadyHasPass = !!(access && access.has_active_pass);
@@ -656,7 +671,31 @@ function HubPanel({
         </div>
 
         {/* User access state */}
-        {access?.has_active_pass && (
+        {giftActive && (
+          <div
+            data-testid="clarity-free-access"
+            className="aurin-card p-5 flex items-center gap-3"
+          >
+            <Shield size={16} className="text-[hsl(var(--aurin-sage))]" />
+            <p className="text-[13.5px] text-[hsl(var(--aurin-text))/0.92]">
+              <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
+                Your gift:
+              </span>{" "}
+              free access to every room until{" "}
+              <span className="font-medium">
+                {giftUntil
+                  ? new Date(giftUntil).toLocaleDateString(undefined, {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  : "the opening date"}
+              </span>
+              . Walk slowly. There is no payment to make today.
+            </p>
+          </div>
+        )}
+        {access?.has_active_pass && !giftActive && (
           <div
             data-testid="clarity-active-pass"
             className="aurin-card p-5 flex items-center gap-3"
@@ -676,22 +715,26 @@ function HubPanel({
           </div>
         )}
 
-        {/* Pricing tiers */}
-        <div data-testid="clarity-tiers" className="space-y-4">
-          <div className="aurin-eyebrow">Choose a depth</div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {passes.map((p) => (
-              <TierCard
-                key={p.tier}
-                pass={p}
-                betaActive={betaActive}
-                alreadyHasPass={alreadyHasPass}
-                betaGrantingTier={betaGrantingTier}
-                onBetaGrant={onBetaGrant}
-              />
-            ))}
+        {/* Pricing tiers — hidden whenever the global gift window is
+            active (so guests + signed-in visitors both walk in without
+            seeing the $15 / $30 / $50 paywall). */}
+        {!giftActive && (
+          <div data-testid="clarity-tiers" className="space-y-4">
+            <div className="aurin-eyebrow">Choose a depth</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {passes.map((p) => (
+                <TierCard
+                  key={p.tier}
+                  pass={p}
+                  betaActive={betaActive}
+                  alreadyHasPass={alreadyHasPass}
+                  betaGrantingTier={betaGrantingTier}
+                  onBetaGrant={onBetaGrant}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Continue into intro / chat */}
         <div className="pt-6 flex flex-col items-start gap-3">
