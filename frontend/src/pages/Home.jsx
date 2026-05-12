@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound } from "lucide-react";
+import { ArrowUpRight, BookOpen, Sparkles, Feather, UserRound, Gift } from "lucide-react";
 import VideoCard from "@/components/VideoCard";
 import FirstLetterWidget from "@/components/FirstLetterWidget";
+import useFreeAccess from "@/hooks/useFreeAccess";
 
 /**
  * Home — refreshed copy ("Leave the noise. Find the Architect within.")
@@ -104,8 +105,34 @@ const JOURNEY_STEPS = [
 ];
 
 export default function Home() {
+  const freeAccess = useFreeAccess();
   return (
     <div data-testid="page-home">
+      {/* §Stage 2.9g — soft, single-line free-access strip. Renders
+          only while the global gift window is active. Never bargains,
+          never urgent — a small piece of information at the very top. */}
+      {freeAccess.loaded && freeAccess.active && (
+        <div
+          data-testid="home-free-access-strip"
+          className="border-b border-[hsl(var(--aurin-sage))/0.25] bg-[hsl(var(--aurin-bg-soft))/0.6]"
+        >
+          <div className="aurin-container py-2.5 flex flex-wrap items-center justify-center gap-2 text-center">
+            <Gift
+              size={12}
+              strokeWidth={1.5}
+              className="text-[hsl(var(--aurin-sage))]"
+            />
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[hsl(var(--aurin-sage))]">
+              Free during launch
+            </p>
+            {freeAccess.formattedUntil && (
+              <p className="text-[11.5px] aurin-serif-italic text-[hsl(var(--aurin-text-muted))]">
+                · every room, every voice, until {freeAccess.formattedUntil}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 aurin-grid-bg opacity-[0.22]" />
@@ -178,6 +205,33 @@ export default function Home() {
               data-testid="home-7days-subline"
             >
               Enter the Free Resonance Path <ArrowUpRight size={12} className="inline -mt-[2px]" />
+            </span>
+          </Link>
+
+          {/* §Stage 3.0 — Multi-Lens marketing tile. Single sentence,
+              quiet, no exclamation marks. Routes straight to the
+              Body Room where the lens selector lives. */}
+          <Link
+            to="/body-room"
+            data-testid="home-multilens-tile"
+            className="mt-5 inline-flex flex-col items-start gap-1 px-5 py-4 border border-[hsl(var(--aurin-sage))/0.25] hover:border-[hsl(var(--aurin-sage))/0.6] rounded-md transition-colors aurin-fade-up aurin-delay-4 group"
+          >
+            <span className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-sage))]">
+              Three wisdom schools · one quiet room
+            </span>
+            <span
+              className="aurin-display text-[20px] md:text-[22px] leading-snug"
+              data-testid="home-multilens-title"
+            >
+              The room reads you and{" "}
+              <span className="aurin-serif-italic">chooses silently.</span>
+            </span>
+            <span
+              className="text-[13px] text-[hsl(var(--aurin-text-muted))] group-hover:text-[hsl(var(--aurin-text))] transition-colors"
+              data-testid="home-multilens-subline"
+            >
+              Eastern breath · Psychosomatic mirror · Nervous-system science{" "}
+              <ArrowUpRight size={12} className="inline -mt-[2px]" />
             </span>
           </Link>
 

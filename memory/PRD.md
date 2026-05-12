@@ -1,6 +1,86 @@
-> 🟢 **STAGE 2.9g — 2026-02-12 (SITE-WIDE PAYWALL SWEEP · UNIVERSAL FREE-ACCESS BADGE)**
+> 🟢 **STAGE 3.0 — 2026-02-12 (GLOBAL AGENT ALIGNMENT + MARKETING REFRESH)**
 >
-> Founder directive (Estonian, leaving for work): "Palun hetkel eemalda
+> Founder directive (Estonian, autonomous mode): "seadista köik
+> agendid nende uute muudatustega, ning pane marketing tööle"
+> → Propagate the new wellness-language lock + Intuitive Flow lens
+> system to every AI surface, and refresh marketing copy to reflect
+> the free-during-launch + Multi-Lens positioning.
+>
+> **What landed:**
+>
+> 1. **Universal `sanitize_reply` post-filter (no more orphan AI paths):**
+>    - `body_room_ai.generate_body_reply()` now sanitizes its final
+>      `parsed["text"]` before returning. Body Room replies are now
+>      guaranteed to pass through `clarity_safety` (no medical terms,
+>      no Estonian `ravim` forms).
+>    - `clarity_ai.generate_summary()` — the close-of-session note
+>      that gets saved to the user's archive now ALSO passes through
+>      `sanitize_reply`. Previously the summary was the only AI output
+>      that could leak clinical drift.
+>    - `clarity_ai.generate_reply()` was already sanitized (Stage 2.9b).
+>    - `clarity_realtime.py` is gated off (`REALTIME_MODE=off`); no
+>      action needed until the founder's OpenAI key arrives.
+>
+> 2. **Intuitive Flow lens propagation to Clarity Release:**
+>    - `clarity_ai._build_system_prompt()` now injects
+>      `body_lenses.lens_prompt_anchor("intuitive")` as a default
+>      section right after the base `CLARITY_SYSTEM_PROMPT`.
+>    - The Clarity mentor now silently shifts between somatic
+>      regulation / psychosomatic mirror / eastern breath registers
+>      based on the wanderer's wording — never naming the method
+>      aloud (same invisible-mentor contract as Body Room).
+>    - The summary builder path (line 563+) is left at the base
+>      prompt — closing notes are descriptive, not conversational.
+>
+> 3. **Marketing copy refresh (the "Pane marketing tööle" half):**
+>    - `Home.jsx` now renders a slim `home-free-access-strip` at the
+>      very top: "Free during launch · every room, every voice,
+>      until May 20, 2026" — only while the gift window is active.
+>    - New `home-multilens-tile` between the 7-Days banner and the
+>      mini-system-map: "The room reads you and *chooses silently.*
+>      Eastern breath · Psychosomatic mirror · Nervous-system science"
+>      Routes directly to `/body-room` where the lens selector lives.
+>    - `public/index.html` meta tags rewritten:
+>      - `<title>` → "prulesoul · Matrix Aurin — the room that reads you"
+>      - `og:title` + `og:description` + `twitter:card` all updated to
+>        the new positioning. Social-share previews now lead with the
+>        Multi-Lens promise and the free-during-launch hook.
+>
+> **Verified live:**
+> - **36/36 backend pytests green** (Stage 2.9d + 2.9e ravim filter
+>   + body_chat_iter60 + AGOP-D wellness lock + p0_realtime).
+> - `GET /api/aurin/free-access` → `{"active":true,"until":"2026-05-20"}`.
+> - DOM smoke on `/` (preview): free-access strip, multi-lens tile,
+>   7-days banner all render as expected.
+>
+> **Files changed:**
+> - `/app/backend/body_room_ai.py` — sanitize_reply on final parsed text
+> - `/app/backend/clarity_ai.py` — Intuitive Flow injection + summary sanitize
+> - `/app/frontend/src/pages/Home.jsx` — free-access strip + multi-lens tile
+> - `/app/frontend/public/index.html` — title + OG + Twitter meta refresh
+>
+> **Founder action required:** **Save to GitHub → Deploy** to push to
+> `prulesoul.site`. Social-share image (`/og-cover.png`) is referenced
+> in the OG meta but the file may not exist yet — preview will fall
+> back to no image, which is acceptable for launch.
+>
+> **Still queued (out of scope this iteration, blocked on external dependencies):**
+> - **Stripe in-app credit top-up** — blocked on sandbox keys
+>   (`pk_test_…` + `sk_test_…`). Specs locked: 1€ = 10 replies, 15
+>   free/day, 00:00 UTC reset, Stripe Elements.
+> - **Parents' Room v2** — `/parents-room` new page, mirror of
+>   `body_lenses.py` with Shitsuke / Montessori / Positive Coding
+>   lenses. ~300 lines, will scope after Stripe.
+> - **Autonomous Artist Loop** — marketing → artist → audio → AH;
+>   needs job queue architecture, not a one-iteration job.
+> - **Smart Latency filler audio** — pre-recorded EE+EN clips needed.
+> - **Revolut Business** — second payment rail; scope after Stripe.
+> - **`og-cover.png` asset** — branded social-share image. Trivial to
+>   produce once founder approves the visual direction.
+>
+> ---
+
+> 🟢 **STAGE 2.9g — 2026-02-12 (SITE-WIDE PAYWALL SWEEP · UNIVERSAL FREE-ACCESS BADGE)**
 > köik makse vöimalused, pane kas tasuta kasutamiseks, vöi varsti
 > saadaval. ainus mis läheb käiku on teie oma platvormil otsene
 > krediitide täiendamine, klientide poolt, kui nende tegevus nöuab

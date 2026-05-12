@@ -268,4 +268,13 @@ async def generate_body_reply(
     parsed = _split_signals(raw_text)
     if not parsed["text"]:
         parsed["text"] = "I am beside you."
+    # §Stage 3.0 — Global Agent Alignment. Every AI text reply, in
+    # every room, must pass through clarity_safety so the
+    # wellness-language lock (no medical terms, no Estonian "ravim"
+    # forms, no clinical drift) is enforced site-wide.
+    try:
+        from clarity_safety import sanitize_reply
+        parsed["text"] = sanitize_reply(parsed["text"])
+    except Exception:  # noqa: BLE001
+        pass
     return parsed

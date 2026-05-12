@@ -349,6 +349,22 @@ def build_system_message(
     conversation so far."""
     parts = [CLARITY_SYSTEM_PROMPT.strip()]
 
+    # §Stage 3.0 — Intuitive Flow lens-system propagation. Clarity
+    # Release inherits the same invisible-mentor logic as Body Room:
+    # the AI reads the wanderer's words and shifts register silently
+    # (somatic regulation / psychosomatic mirror / eastern breath),
+    # never naming a method aloud. The same wellness-language lock
+    # and the same forgiveness-sentence patterns apply.
+    try:
+        from body_lenses import lens_prompt_anchor
+        anchor = lens_prompt_anchor("intuitive")
+        if anchor:
+            parts.append(
+                "# §Active wisdom lens (default · invisible)\n" + anchor
+            )
+    except Exception:  # noqa: BLE001
+        pass
+
     energy = GENDERED_ENERGY_BLOCKS.get(guide_gender or "")
     if energy:
         parts.append(energy)
@@ -561,9 +577,17 @@ async def summarize_session(
             UserMessage(text="Write the note now.")
         )
         if isinstance(reply, str):
-            return reply.strip()
-        text = getattr(reply, "content", None) or getattr(reply, "text", None)
-        return (text or "").strip()
+            summary_text = reply.strip()
+        else:
+            text = getattr(reply, "content", None) or getattr(reply, "text", None)
+            summary_text = (text or "").strip()
+        # §Stage 3.0 — apply the same wellness-language lock to summary notes
+        try:
+            from clarity_safety import sanitize_reply
+            summary_text = sanitize_reply(summary_text)
+        except Exception:  # noqa: BLE001
+            pass
+        return summary_text
     except Exception:
         return ""
 
