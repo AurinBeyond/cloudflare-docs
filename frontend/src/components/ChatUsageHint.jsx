@@ -42,6 +42,12 @@ export default function ChatUsageHint({ refreshKey = 0, className = "" }) {
     label = "The room is resting today.";
   } else if (tone === "soft") {
     label = `${remaining} quiet ${remaining === 1 ? "reply" : "replies"} remaining today.`;
+  } else if (ceiling >= 30 && used < 5) {
+    // §Stage 2.9 — during the gift window the ceiling is high (60).
+    // Showing "0 of 60 today" right at the start of a session feels
+    // like a paywall counter. We hold the hint back until at least
+    // five replies have been exchanged.
+    return null;
   } else {
     label = `${used} of ${ceiling} today.`;
   }

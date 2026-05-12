@@ -3266,6 +3266,12 @@ async def _chat_cap_for_user(user) -> int:
     """Resolve the daily ceiling for this wanderer."""
     if getattr(user, "role", None) == "admin":
         return 10**9  # admins unlimited
+    # §Stage 2.9 — during the FREE_ACCESS_UNTIL gift window every
+    # wanderer (signed-in or guest-on-pass) gets the PREMIUM ceiling
+    # so the launch period feels truly unrestricted. The founder's
+    # directive: "platvorm peab olema kerge ja vaba takistustest".
+    if _free_access_active():
+        return CHAT_CAP_PREMIUM
     # Premium = currently-active Clarity pass OR Eternal Thread opt-in.
     try:
         now_iso = datetime.now(timezone.utc).isoformat()

@@ -1,6 +1,71 @@
-> 🟢 **STAGE 3.0 — 2026-02-12 (GLOBAL AGENT ALIGNMENT + MARKETING REFRESH)**
+> 🟢 **STAGE 3.1 — 2026-02-12 (FREE-ACCESS CHAT-CAP LIFT + USAGE HINT POLISH)**
 >
-> Founder directive (Estonian, autonomous mode): "seadista köik
+> Founder report (Estonian, post-deploy): "tasuta versioonis vestlus
+> eriti ei sujunud, vastus agendi poolt pidevalt väga viibis, vöi ta
+> ainult tervitas… ning mingid numbrid, olid 1-12 vestluse all, mis
+> see on?"
+>
+> **Root cause found:** The daily chat ceiling for free-tier wanderers
+> was capped at 12 (`CHAT_CAP_FREE_PER_DAY`). Even during the
+> `FREE_ACCESS_UNTIL=2026-05-20` gift window, free-tier visitors hit
+> a hard 429 after 12 replies — which is why the mentor "only
+> greeted" (the founder hit the cap mid-conversation) and why "1-12"
+> appeared under the chat (the `ChatUsageHint` counter).
+>
+> **What landed:**
+>
+> 1. **`server._chat_cap_for_user()`** — added the gift-window short
+>    circuit. While `_free_access_active()` is true, the cap is
+>    `CHAT_CAP_PREMIUM` (60/day) for everyone, signed-in or not.
+>    Verified via direct asyncio test (`Cap for free-tier wanderer
+>    during gift window: 60`).
+>
+> 2. **`ChatUsageHint.jsx`** — hides the "0 of 60 today" counter
+>    during the first five replies of a session when the ceiling is
+>    ≥ 30 (i.e. the gift-window state). Founder feedback: showing
+>    a hard counter at session start "feels like a paywall". The
+>    soft "X quiet replies remaining" still appears when the cap is
+>    actually being approached.
+>
+> **Answers to founder's three other questions (delivered in-message):**
+>
+> - **Magic link uuendused?** Yes. Magic links exchange a token for
+>   an httpOnly session cookie; they carry no UI version. Every
+>   visit after deploy reads the production deploy's UI. Cache may
+>   need a hard reload (Cmd+Shift+R) on first visit after deploy.
+>
+> - **"ChatGPT vorm" Clarity Releases?** The `variant="call"`
+>   Zoom-style layout is applied in code (verified `ClarityRelease.jsx:1085`).
+>   GuidePresence renders the `grace_vision_pilot.mp4` video for
+>   female guides; male guides fall back to a static portrait (no
+>   male video yet — Sora 2 generation is blocked on the founder's
+>   OpenAI key). Founder's session was probably using a non-female
+>   guide profile, which is why the call layout felt static.
+>
+> - **Vastused viibivad** — Claude API latency floor is ~2-4s per
+>   reply. Reaching sub-second requires the OpenAI Realtime WebRTC
+>   path, which is gated on the founder's OpenAI key. The
+>   "Smart Latency" filler-audio approach (mhm / oota / kuulan
+>   clips while the LLM thinks) is queued as a P1; needs
+>   pre-recorded audio assets.
+>
+> **Verified:**
+> - 36/36 backend pytests still green.
+> - `GET /api/aurin/free-access` → `{active:true, until:"2026-05-20"}`.
+> - `_chat_cap_for_user` returns 60 for a synthetic free user during
+>   the gift window.
+>
+> **Files changed:**
+> - `/app/backend/server.py` — `_chat_cap_for_user` gift-window branch
+> - `/app/frontend/src/components/ChatUsageHint.jsx` — hide early hint
+>
+> **Founder action required:** **Save to GitHub → Deploy** again.
+> The previous deploy still has the 12-cap — until this push lands,
+> active wanderers will keep hitting the limit.
+>
+> ---
+
+> 🟢 **STAGE 3.0 — 2026-02-12 (GLOBAL AGENT ALIGNMENT + MARKETING REFRESH)**
 > agendid nende uute muudatustega, ning pane marketing tööle"
 > → Propagate the new wellness-language lock + Intuitive Flow lens
 > system to every AI surface, and refresh marketing copy to reflect
