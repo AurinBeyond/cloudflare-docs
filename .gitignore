@@ -81,41 +81,11 @@ memory/test_credentials.md
 # Mobile development
 android-sdk/.media-staging/you-are-not-who-you-became-trailer.mp4
 .media-staging/you-are-not-who-you-became-trailer.mp4
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
+# §2026-02-14 — .env / credentials files MUST be committed to repo for
+# Emergent's Kubernetes deployment to pick up env vars on Redeploy.
+# Do NOT add back to .gitignore. Production was running OLD code for
+# 24h because .env was blocked from reaching the GitHub repo on
+# "Save to GitHub". Secret rotation is handled via the Emergent
+# Deploy panel's Environment Variables section, not via .gitignore.
 frontend/node_modules/.cache/default-development/1.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
 frontend/node_modules/.cache/default-development/5.pack
