@@ -177,14 +177,34 @@ async def _synthesize_openai(clean: str, gender: VoiceGender) -> bytes:
 
 def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
     """Sync ElevenLabs call. Wrapped in `run_in_executor` by the async
-    entry point so the FastAPI event loop is not blocked."""
+    entry point so the FastAPI event loop is not blocked.
+
+    §Phase 1 follow-up 2026-02-14 — hard guards added:
+      • httpx_options.timeout=20.0 — ElevenLabs occasionally has 30+s
+        cold-start latencies during model warm-up. Without an
+        explicit timeout the FastAPI worker would block indefinitely.
+        20 s is a generous ceiling; if exceeded, the caller catches
+        the exception and we fall back to OpenAI Shimmer.
+      • Model is pinned to eleven_monolingual_v1 by default
+        (English-only, no multilingual v2 drift). Founder mandate:
+        zero language switching, zero accent leakage.
+      • language_code="en" is passed where the SDK supports it
+        (newer monolingual variants honour this; older ignore it
+        silently — both safe).
+    """
     api_key = os.getenv("ELEVENLABS_API_KEY")
     if not api_key:
         raise RuntimeError("ELEVENLABS_API_KEY not configured")
     from elevenlabs.client import ElevenLabs  # noqa: WPS433
     from elevenlabs import VoiceSettings  # noqa: WPS433
+    import httpx  # noqa: WPS433
 
-    client = ElevenLabs(api_key=api_key)
+    # 20 s hard ceiling. The SDK uses an internal httpx.Client which
+    # we can override via the client constructor's httpx_client kwarg
+    # only on newer versions; for broad compatibility we set REST
+    # timeout via the env var the SDK honours.
+    os.environ.setdefault("ELEVEN_HTTP_TIMEOUT", "20")
+    client = ElevenLabs(api_key=api_key, timeout=20.0)
     voice_id = ELEVENLABS_VOICE_FOR_GENDER.get(
         gender, ELEVENLABS_VOICE_FOR_GENDER["female"]
     )
@@ -194,13 +214,28 @@ def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
         style=ELEVENLABS_STYLE,
         use_speaker_boost=ELEVENLABS_USE_SPEAKER_BOOST,
     )
-    audio_iter = client.text_to_speech.convert(
+    # `language_code` is supported by eleven_turbo_v2 and the newer
+    # multilingual models; eleven_monolingual_v1 ignores it. Passing
+    # it everywhere is harmless and locks en-US wherever supported.
+    convert_kwargs = dict(
         text=clean,
         voice_id=voice_id,
         model_id=ELEVENLABS_MODEL,
         voice_settings=settings,
         output_format="mp3_44100_128",
     )
+    try:
+        audio_iter = client.text_to_speech.convert(
+            language_code="en", **convert_kwargs
+        )
+    except TypeError:
+        # Older SDK signature without language_code — fall back.
+        audio_iter = client.text_to_speech.convert(**convert_kwargs)
+    except httpx.TimeoutException as exc:
+        # Surface as a generic exception so the async caller's
+        # fallback-to-OpenAI path kicks in.
+        raise RuntimeError(f"ElevenLabs timeout: {exc}") from exc
+
     buf = io.BytesIO()
     for chunk in audio_iter:
         if chunk:
