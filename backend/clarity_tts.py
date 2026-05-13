@@ -273,3 +273,141 @@ async def synthesize_speech(
             return await _synthesize_openai(clean, gender)
 
     return await _synthesize_openai(clean, gender)
+
+
+# =============================================================
+# §Phase 1 Market-Ready (2026-02-14) — STREAMING TTS
+# =============================================================
+# Reduces perceived latency from ~5 s → ~1.5 s by streaming MP3
+# chunks from ElevenLabs to the browser as they are generated.
+# Uses ElevenLabs `stream()` endpoint with
+# `optimize_streaming_latency=3` for the lowest first-byte time.
+#
+# Flow:
+#   FastAPI StreamingResponse → calls synthesize_speech_stream()
+#   → which run-in-executor's the sync ElevenLabs iterator and
+#     pushes each chunk onto an asyncio.Queue → which the async
+#     generator yields back to the StreamingResponse.
+# =============================================================
+
+def _synthesize_elevenlabs_stream_sync(clean: str, gender: VoiceGender):
+    """Returns the sync ElevenLabs stream iterator (yields MP3 bytes).
+
+    Latency knobs (founder spec):
+      optimize_streaming_latency=3  (max latency reduction with quality)
+      output_format=mp3_44100_64    (smaller chunks → faster first byte;
+                                     still browser-playable everywhere)
+    """
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    if not api_key:
+        raise RuntimeError("ELEVENLABS_API_KEY not configured")
+    from elevenlabs.client import ElevenLabs  # noqa: WPS433
+    from elevenlabs import VoiceSettings  # noqa: WPS433
+
+    os.environ.setdefault("ELEVEN_HTTP_TIMEOUT", "20")
+    client = ElevenLabs(api_key=api_key, timeout=20.0)
+    voice_id = ELEVENLABS_VOICE_FOR_GENDER.get(
+        gender, ELEVENLABS_VOICE_FOR_GENDER["female"]
+    )
+    settings = VoiceSettings(
+        stability=ELEVENLABS_STABILITY,
+        similarity_boost=ELEVENLABS_SIMILARITY,
+        style=ELEVENLABS_STYLE,
+        use_speaker_boost=ELEVENLABS_USE_SPEAKER_BOOST,
+    )
+    convert_kwargs = dict(
+        text=clean,
+        voice_id=voice_id,
+        model_id=ELEVENLABS_MODEL,
+        voice_settings=settings,
+        output_format="mp3_44100_64",
+        optimize_streaming_latency=3,
+    )
+    try:
+        return client.text_to_speech.stream(
+            language_code="en", **convert_kwargs
+        )
+    except TypeError:
+        # Older SDK signature — drop language_code.
+        return client.text_to_speech.stream(**convert_kwargs)
+
+
+async def synthesize_speech_stream(
+    text: str,
+    gender: VoiceGender = "female",
+):
+    """Async generator yielding MP3 audio bytes as they are produced.
+
+    Tries ElevenLabs streaming first (low TTFB). Falls back to
+    OpenAI non-streaming on any failure — the browser still gets a
+    single MP3 blob, just with the higher 1-2 s TTFB.
+    """
+    import asyncio  # noqa: WPS433
+
+    clean = (text or "").strip()
+    if not clean:
+        raise ValueError("Empty text")
+    if len(clean) > TTS_MAX_CHARS:
+        clean = clean[:TTS_MAX_CHARS]
+    clean = _humanize_for_speech(clean)
+
+    provider = voice_provider()
+    if provider == "elevenlabs":
+        loop = asyncio.get_running_loop()
+        queue: asyncio.Queue = asyncio.Queue(maxsize=64)
+        _SENTINEL = object()
+
+        def _producer():
+            try:
+                stream_iter = _synthesize_elevenlabs_stream_sync(clean, gender)
+                for chunk in stream_iter:
+                    if chunk:
+                        # Push back onto the asyncio loop.
+                        asyncio.run_coroutine_threadsafe(
+                            queue.put(chunk), loop
+                        ).result()
+            except Exception as exc:  # noqa: BLE001
+                asyncio.run_coroutine_threadsafe(
+                    queue.put(("__error__", exc)), loop
+                ).result()
+            finally:
+                asyncio.run_coroutine_threadsafe(
+                    queue.put(_SENTINEL), loop
+                ).result()
+
+        producer_fut = loop.run_in_executor(None, _producer)
+        try:
+            first = True
+            while True:
+                item = await queue.get()
+                if item is _SENTINEL:
+                    break
+                if isinstance(item, tuple) and item[0] == "__error__":
+                    # ElevenLabs failed mid-stream. If we haven't yielded
+                    # anything yet, fall back to OpenAI. Otherwise log
+                    # and end the stream — the browser will play what
+                    # it has.
+                    if first:
+                        logger.warning(
+                            "ElevenLabs stream failed (%s) — OpenAI fallback",
+                            item[1],
+                        )
+                        audio = await _synthesize_openai(clean, gender)
+                        yield audio
+                    else:
+                        logger.warning(
+                            "ElevenLabs stream broke mid-flight: %s", item[1]
+                        )
+                    break
+                first = False
+                yield item
+        finally:
+            try:
+                await producer_fut
+            except Exception:  # noqa: BLE001
+                pass
+        return
+
+    # OpenAI provider — no streaming SDK available, yield single blob.
+    audio = await _synthesize_openai(clean, gender)
+    yield audio

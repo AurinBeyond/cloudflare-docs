@@ -41,7 +41,7 @@ from clarity_ai import generate_guide_reply, summarize_session
 from body_room_ai import generate_body_reply
 from parents_room_ai import generate_parents_reply
 import shared_memory as _shared_memory
-from clarity_tts import synthesize_speech, is_configured as tts_configured
+from clarity_tts import synthesize_speech, synthesize_speech_stream, is_configured as tts_configured
 from clarity_stt import transcribe_audio, is_configured as stt_configured
 from six_nights_seed import seed_six_nights, SIX_NIGHTS_CONTENT
 from seed_anna_coloring_pages import seed_anna_against
@@ -4197,6 +4197,89 @@ async def clarity_tts(inp: ClarityTTSInput, request: Request):
         headers={
             "Cache-Control": "private, max-age=86400",
             "ETag": etag,
+        },
+    )
+
+
+# ---- §Phase 1 Market-Ready — STREAMING TTS endpoint --------------
+# Returns audio/mpeg as a chunked HTTP stream. ElevenLabs MP3 frames
+# arrive in ~300-500 ms TTFB instead of the ~1-2 s blob-mode latency.
+# The browser's <audio> element can play partial MP3 as it arrives.
+#
+# Auth: standard cookie/bearer flow OR `?t=<session_token>` query
+# param so the frontend can attach the streaming URL directly to an
+# <audio src> (which cannot carry Authorization headers). The token
+# is single-use only in the sense that it never leaves the user's
+# own browser address-bar — never exposed in marketing material.
+from fastapi.responses import StreamingResponse as _FastAPIStreamingResponse
+
+
+async def _resolve_user_for_stream(request: Request, t: Optional[str]) -> User:
+    """Resolve the current user via cookie/bearer/query-param token.
+
+    Used by streaming endpoints where <audio src=...> cannot carry
+    custom Authorization headers."""
+    token = await _get_session_token(request)
+    if not token and t:
+        token = t.strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Sign in required.")
+    sess = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+    if not sess:
+        raise HTTPException(status_code=401, detail="Sign in required.")
+    expires_at = sess.get("expires_at")
+    if isinstance(expires_at, str):
+        try:
+            expires_at = datetime.fromisoformat(expires_at)
+        except ValueError:
+            raise HTTPException(status_code=401, detail="Session expired.")
+    if expires_at and expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at and expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=401, detail="Session expired.")
+    user_doc = await db.users.find_one({"user_id": sess["user_id"]}, {"_id": 0})
+    if not user_doc:
+        raise HTTPException(status_code=401, detail="Sign in required.")
+    return User(**user_doc)
+
+
+@api_router.get("/clarity/tts/stream")
+async def clarity_tts_stream(
+    request: Request,
+    text: str,
+    gender: Optional[Literal["male", "female"]] = "female",
+    t: Optional[str] = None,
+):
+    """Streaming MP3 TTS — yields audio chunks via chunked transfer
+    encoding. The browser starts playing as soon as the first chunk
+    lands (~300-500 ms TTFB with ElevenLabs streaming).
+    """
+    user = await _resolve_user_for_stream(request, t)  # noqa: F841 — auth gate
+    clean = (text or "").strip()
+    if not clean:
+        raise HTTPException(status_code=400, detail="Empty text")
+    if len(clean) > 4000:
+        clean = clean[:4000]
+    g = gender or "female"
+
+    async def _stream():
+        try:
+            async for chunk in synthesize_speech_stream(clean, gender=g):
+                if chunk:
+                    yield chunk
+        except RuntimeError as exc:  # surface as empty stream; frontend handles silently
+            logging.error("TTS stream failed for user=%s: %s", user.user_id, exc)
+            return
+        except Exception as exc:  # noqa: BLE001
+            logging.error("TTS stream crashed for user=%s: %s", user.user_id, exc)
+            return
+
+    return _FastAPIStreamingResponse(
+        _stream(),
+        media_type="audio/mpeg",
+        headers={
+            "Cache-Control": "private, no-store",
+            "X-Accel-Buffering": "no",  # disable proxy buffering for true streaming
         },
     )
 

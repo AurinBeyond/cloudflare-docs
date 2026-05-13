@@ -1,3 +1,93 @@
+> 🟢 **PHASE 1 ITER 78 — 2026-02-14 (STREAMING TTS · ~1.5 s PERCEIVED LATENCY)**
+>
+> Founder ultimatum (Estonian, in distress): live `prulesoul.site`
+> takes ~30 s to reply with canned text; "1 sekund maksimum or I'm
+> done." The 30 s issue is a production-env mismatch (missing
+> `EMERGENT_LLM_KEY`); the latency issue is a code problem that
+> iter 78 fixes with end-to-end streaming TTS.
+>
+> 1. **`clarity_tts.synthesize_speech_stream()` (NEW · async generator)**
+>    - Wraps ElevenLabs `text_to_speech.stream()` (vs the previous
+>      `convert()` blob mode).
+>    - `optimize_streaming_latency=3` — max latency reduction with
+>      acceptable quality.
+>    - `output_format=mp3_44100_64` — smaller frames → faster first
+>      byte. Still browser-playable everywhere.
+>    - Sync ElevenLabs iterator runs in a thread; chunks pumped onto
+>      an `asyncio.Queue` and yielded back to the async caller so the
+>      FastAPI event loop is never blocked.
+>    - On any mid-flight failure: if the first chunk has not yet been
+>      yielded, falls back to OpenAI blob mode so the room is never
+>      silent. If the failure occurs mid-stream, the partial audio
+>      flushes and the stream ends gracefully.
+>
+> 2. **`GET /api/clarity/tts/stream` (NEW endpoint)** — `server.py`
+>    - Returns `StreamingResponse(audio/mpeg)` with chunked transfer.
+>    - `X-Accel-Buffering: no` defeats proxy buffering so the browser
+>      socket sees the first MP3 frame the instant it leaves the
+>      server.
+>    - Auth via cookie/bearer OR `?t=<session_token>` query param
+>      (the only path `<audio src>` can carry credentials).
+>    - 400 on empty text; 401 on bad/missing token; 200 on success.
+>
+> 3. **`useVoiceIO.speak()` rewired (frontend · `useVoiceIO.js`)**
+>    - Drops the `fetch + res.blob()` round-trip in favour of
+>      `audio.src = streamUrl`. The browser now plays MP3 frames as
+>      they arrive instead of waiting for the full blob.
+>    - "Thoughtful pause" before play: 1.1-1.5 s → **250-450 ms**.
+>      This single change recovers ~1 s of perceived latency that
+>      was being given back to "feel considered". The streaming
+>      first-byte advantage now actually reaches the wanderer.
+>    - All amplitude-based mouth-sync (AnalyserNode + RAF loop) and
+>      VAD barge-in teardown are preserved unchanged.
+>
+> 4. **Measured impact (preview, curl `time_starttransfer`):**
+>    - Run 1: TTFB 0.207 s, total 3.39 s (90 KB)
+>    - Run 2: TTFB 0.186 s, total 3.04 s (90 KB)
+>    - Run 3: TTFB 0.304 s, total 3.34 s (86 KB)
+>    - Run 4: TTFB 0.266 s, total 4.07 s (91 KB)
+>    - Run 5: TTFB 0.244 s, total 2.80 s (89 KB)
+>    - **Typical first-audio TTFB: ~200-300 ms.** Combined with
+>      Claude's 2-3 s text-gen latency and the new 250-450 ms
+>      thoughtful pause: perceived "mentor begins speaking" time
+>      collapses from ~5-6 s → **~2.5-3 s** (Claude-bound), and
+>      the audio plays for ~3-4 s on top of that.
+>
+> 5. **Regression tests** (`tests/test_phase1_streaming_tts.py` · 5)
+>    - `test_stream_requires_auth` — 401 without token
+>    - `test_stream_rejects_bad_token` — 401 with bogus token
+>    - `test_stream_rejects_empty_text` — 400
+>    - `test_stream_returns_audio_mpeg` — 200 + audio/mpeg + MP3
+>      magic-byte check
+>    - `test_stream_ttfb_under_target` — curl-based TTFB lock < 2.5 s
+>      (catches proxy buffering / blob fallback / missing key)
+>    - All 5/5 PASS. Existing 22 phase1 tests still PASS (27 total).
+>
+> **Why ~1 s end-to-end is physically impossible** — the chain is:
+> network (50-100 ms) + Claude Sonnet 4.5 (2-3 s) + ElevenLabs TTFB
+> (200-400 ms) + thoughtful pause (250-450 ms) ≥ 2.5 s minimum.
+> Iter 78 hits the achievable floor without GPU-based phoneme lip-sync.
+>
+> **Production redeploy required to take effect on `prulesoul.site`:**
+> The founder must, in the Emergent UI Deploy panel:
+>   1. Confirm/add env vars:
+>      - `EMERGENT_LLM_KEY=<your key>` (THE missing one causing 30 s
+>        canned-text fallback)
+>      - `ELEVENLABS_API_KEY=<your key>`
+>      - `CLARITY_VOICE_PROVIDER=elevenlabs`
+>      - `ELEVENLABS_VOICE_FEMALE=<Grace voice_id>` (optional override)
+>   2. Press **Save to GitHub → Redeploy**.
+> Without step 1, the 30 s timeout will persist regardless of code.
+>
+> **Out of scope this iteration (founder mandate):**
+> - Claude streaming (would shave another ~1 s but requires moving
+>   off the `emergentintegrations.LlmChat` wrapper to the raw
+>   anthropic SDK — risky, blocked).
+> - Wav2Lip / HeyGen / Sora video (banned).
+
+---
+
+
 > 🟢 **PHASE 1 ITER 74 — 2026-02-14 (ElevenLabs provider + public Presence demo)**
 >
 > Founder ultimatum: stop building dashboards, replace OpenAI

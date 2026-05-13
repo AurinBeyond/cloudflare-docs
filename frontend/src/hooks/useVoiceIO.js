@@ -514,51 +514,39 @@ export default function useVoiceIO({
       inflightRef.current = controller;
       try {
         setSpeaking(true);
-        const res = await fetch(`${BACKEND}/api/clarity/tts`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ text, gender }),
-          signal: controller.signal,
+
+        // §Phase 1 Market-Ready (2026-02-14) — STREAMING TTS.
+        // The new /api/clarity/tts/stream endpoint returns audio/mpeg
+        // via chunked HTTP, so the browser can start playing as soon
+        // as the first MP3 frame arrives (~300-500 ms TTFB with
+        // ElevenLabs streaming). Auth flows through the ?t= query
+        // param because <audio src> cannot carry custom headers.
+        const params = new URLSearchParams({
+          text,
+          gender,
+          t: token,
         });
-        if (!res.ok) {
-          setSpeaking(false);
-          return;
-        }
-        const blob = await res.blob();
-        if (controller.signal.aborted) return;
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+        const url = `${BACKEND}/api/clarity/tts/stream?${params.toString()}`;
+        const audio = new Audio();
         audio.preload = "auto";
         audio.crossOrigin = "anonymous";
         audio.onended = () => {
           setSpeaking(false);
           _stopTtsAnalyser();
-          try {
-            URL.revokeObjectURL(url);
-          } catch {
-            /* noop */
-          }
         };
         audio.onerror = () => {
           setSpeaking(false);
           _stopTtsAnalyser();
-          try {
-            URL.revokeObjectURL(url);
-          } catch {
-            /* noop */
-          }
         };
         audioRef.current = audio;
+        audio.src = url;
 
-        // §Phase 1 — "Silence is part of the system". A randomized
-        // 1.1–1.5 s thoughtful pause before the mentor speaks. Founder
-        // mandate: the wanderer must FEEL considered, not processed.
-        // Chaos factor: jitter so the wanderer's brain can't pattern-
-        // match a metronome cadence.
-        const pauseMs = thoughtfulPauseMs ?? (1100 + Math.random() * 400);
+        // §Phase 1 Market-Ready — drastically shorten the "thoughtful
+        // pause". The full 1.1-1.5 s pause was eating most of our
+        // perceived-latency budget. We keep a short 250-450 ms jitter
+        // (still "considered", never "instant"), so the streaming
+        // first-byte advantage actually reaches the wanderer.
+        const pauseMs = thoughtfulPauseMs ?? (250 + Math.random() * 200);
         await new Promise((r) => setTimeout(r, pauseMs));
         if (controller.signal.aborted) return;
 
