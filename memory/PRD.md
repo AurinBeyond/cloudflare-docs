@@ -1,3 +1,111 @@
+> 🟢 **PHASE 1 ITER 70-71 — 2026-02-14 ("Digital Presence" Variant C lock, $0 / warranty)**
+>
+> Founder selected Variant C from the "Digital Presence" ultimatum:
+> amplitude-driven real-time mouth sync, browser-only, no GPU, no
+> Wav2Lip, no Sora videos. Locked constraints: minimal motion, no
+> fish-flapping, rare/random blinks (3-8 s), human pauses, short
+> answers, listening is part of the system, silence is part of the
+> system, no push-to-talk where possible, AI never interrupts the
+> wanderer, responds only after 1.7 s natural pause. Visual: soft,
+> semi-abstract, NOT photorealistic uncanny valley.
+>
+> **What landed (one iteration, surgical, no architecture change):**
+>
+> 1. **Layered presence visuals** (`GuidePresence.jsx`)
+>    - Component rewritten. 4-layer DOM: base `<img>` portrait inside
+>      `.aurin-guide-gaze` wrapper, plus `.aurin-guide-mouth` overlay
+>      (opacity + Y-scale follow CSS variable `--mouth-open` 0..1),
+>      plus `.aurin-guide-blink-once` span (re-keyed on JS interval),
+>      plus existing speaking-halo + state-ripple.
+>    - Sora video pilot removed per founder mandate ("unusta Sora
+>      videod").
+>    - Randomized blink schedule: `3200 + Math.random()*4800` ms.
+>      Founder's "chaos factor" so the brain cannot pattern-match a
+>      metronome blink.
+>    - RAF loop reads `mouthOpenRef.current` 60 Hz and writes
+>      `--mouth-open` on the portrait wrapper. Sub-perceptual delta
+>      threshold 0.005 to skip redundant DOM writes.
+>
+> 2. **Amplitude-driven mouth sync** (`useVoiceIO.js` + `index.css`)
+>    - `speak()` now wires an AnalyserNode onto the TTS
+>      `HTMLAudioElement` via `ctx.createMediaElementSource(audio)` +
+>      `analyser.connect(ctx.destination)` (so audio output still
+>      reaches the speakers — the well-known MediaElementSource gotcha).
+>    - `fftSize=256`, `smoothingTimeConstant=0.4`. RMS amplitude
+>      mapped to 0..1 with gentle compression `(rms-0.02)*4.5` and
+>      low-pass lerp 0.55 keep / 0.45 new — soft, never snappy.
+>    - Mouth shadow overlay in CSS: dark radial gradient positioned
+>      at the lip-line of both Gemini portraits (top:63%, left/right:
+>      38%, 4.2% high), `opacity: calc(var(--mouth-open,0)*0.55)`
+>      (capped to never fish-flap), `transform: scaleY(0.55..1.30)`,
+>      `transition: 80ms ease-out` on both.
+>    - Source / analyser / RAF all torn down in `_stopTtsAnalyser`
+>      AND in the VAD barge-in path AND in `audio.onended`. No
+>      dangling MediaElementSource leaks over long sessions.
+>    - `mouthOpenRef` exported from useVoiceIO and threaded through
+>      `ClarityRelease.jsx` (GuideHologram wrapper), `BodyRoomChat.jsx`,
+>      `ParentsRoomChat.jsx` into `<GuidePresence mouthOpenRef={…}>`.
+>
+> 3. **"Silence is part of the system"** (`useVoiceIO.speak`)
+>    - New `thoughtfulPauseMs` prop on the hook; default randomized
+>      1100-1500 ms. Awaited AFTER the TTS HTTP fetch but BEFORE
+>      `audio.play()`. The mentor's voice arrives "considered", not
+>      "instant".
+>    - `vadSilenceMs` default raised 1500 → 1700 ms. Natural pause,
+>      not pushy. Founder mandate: "ei katkesta kasutajat".
+>    - Barge-in (VAD detects voice while TTS is playing) — was
+>      already implemented at L348; iter 70 added analyser teardown
+>      so the mouth shadow doesn't tick against a dead audio element.
+>
+> 4. **Minimal-motion lock** (`index.css`)
+>    - `@keyframes aurin-guide-breath` scale dialled 1.022 → 1.012,
+>      brightness pulse 1.04 → 1.02. Honest still-portrait with
+>      almost-imperceptible breath. Founder: "minimaalseks".
+>    - `@keyframes aurin-guide-sway` reduced ±0.6% → ±0.35%.
+>    - New `@keyframes aurin-guide-blink-once` (220 ms ease-in-out)
+>      and `@keyframes aurin-guide-listening-nod` (4.6 s, 0.35° tilt).
+>    - `.aurin-guide-gaze` layer with 600 ms cubic-bezier transition;
+>      `[data-runtime-state="thinking"] .aurin-guide-gaze`
+>      translates(-1.2%, 1.4%) to simulate "looking at the notebook"
+>      while the LLM response is being prepared.
+>    - `[data-runtime-state="listening"]` triggers a slow nod cycle
+>      on top of breath+sway so the mentor reads "I am being heard"
+>      while the wanderer is speaking.
+>    - `prefers-reduced-motion` honoured (all animations disabled,
+>      transitions cleared).
+>
+> 5. **Iter 69 cleanup propagation** (`BodyRoomChat.jsx`,
+>    `ParentsRoomChat.jsx`)
+>    - The "A small pause." / "Listening, unhurried." voice-status
+>      labels missed by iter 69 were caught by iter 70 testing and
+>      removed in iter 71. The voice-status row now only renders
+>      operational labels ("Microphone paused.", "Hearing the
+>      words.") or an empty string. The "A small pause" eyebrow on
+>      `TheBeginningStep.jsx` remains — it is intentional
+>      contemplative content (no trailing period, eyebrow heading),
+>      not a state-label leak.
+>
+> Testing: iter 71 = 100% backend, 100% frontend. 8/8 phase0
+> numbered-list-strip pytest, both guide-face endpoints 200 with
+> exact byte match (98012 / 95330). No console errors. Banned
+> strings fully absent from the chat surfaces.
+>
+> **Out of scope this iteration (founder's "do not overbuild"):**
+> Live2D / Wav2Lip phoneme-accurate sync, Three.js depth-of-field,
+> Sentiment-Analysis filter (already covered by existing
+> `aurin-guide-tone-${tone}` class). To be revisited only if the
+> founder explicitly opens a Phase 2.
+>
+> **Known follow-up (next iteration):**
+> - Extract `<VoiceStatusRow>` shared component to prevent the
+>   recurring copy-paste regression between BodyRoomChat /
+>   ParentsRoomChat (3rd occurrence in 3 iterations).
+> - useVoiceIO.js is approaching 700 lines — consider splitting the
+>   TTS analyser logic into a `useAmplitudeSync` sibling hook.
+
+---
+
+
 > 🟢 **PHASE 0 ITER 69 — 2026-02-14 (founder warranty pass: numbers, labels, portraits)**
 >
 > Founder ultimatum (Estonian, "garantii korras"): four lingering Phase 0
