@@ -14,6 +14,7 @@ import { api } from "@/lib/api";
 import { Send, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
+import VoiceStatusRow from "@/components/VoiceStatusRow";
 import useVoiceIO from "@/hooks/useVoiceIO";
 
 const STORE_KEY = "aurin_parents_chat_v1";
@@ -396,38 +397,12 @@ export default function ParentsRoomChat({
             </button>
           </div>
 
-          {voice.supportedIn && (
-            <div
-              data-testid="parents-room-voice-status"
-              data-listening={voice.listening ? "true" : "false"}
-              data-transcribing={voice.transcribing ? "true" : "false"}
-              data-speaking={voice.speaking ? "true" : "false"}
-              data-muted={voice.muted ? "true" : "false"}
-              className="mt-1 flex items-center gap-2 text-[11px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic"
-            >
-              <span
-                aria-hidden
-                className={`inline-block w-1.5 h-1.5 rounded-full ${
-                  voice.speaking
-                    ? "bg-[hsl(var(--aurin-sage))]"
-                    : voice.transcribing
-                    ? "bg-[hsl(var(--aurin-sage))/0.6]"
-                    : voice.listening
-                    ? "bg-[hsl(var(--aurin-sage))/0.85] animate-pulse"
-                    : voice.muted
-                    ? "bg-[hsl(var(--aurin-text-muted))/0.4]"
-                    : "bg-[hsl(var(--aurin-sage))/0.35]"
-                }`}
-              />
-              <span>
-                {voice.muted
-                  ? "Microphone paused."
-                  : voice.transcribing
-                  ? "Hearing the words."
-                  : ""}
-              </span>
-            </div>
-          )}
+          {/* §Phase 1 follow-up — shared voice-status component. */}
+          <VoiceStatusRow
+            voice={voice}
+            variant="compact"
+            testid="parents-room-voice-status"
+          />
           {voice.voiceError && (
             <button
               type="button"

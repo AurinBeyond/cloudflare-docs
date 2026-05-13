@@ -1,0 +1,23 @@
+{
+  "summary": "Iter 72 refactor + lock verified. VoiceStatusRow shared component is in place; all 3 chat surfaces (ClarityRelease, BodyRoomChat, ParentsRoomChat) import and use it. All 11 pytest assertions pass (3 phase1_voice_status_lock + 8 phase0_numbered_list_strip). /clarity-release loads cleanly with 0 console errors, 0 banned label leaks in DOM. guide-face JPEG endpoints return 200 with the exact contract-spec byte sizes.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": { "ui_bugs": [], "integration_issues": [], "design_issues": [] },
+  "test_report_links": [
+    "/app/backend/tests/test_phase1_voice_status_lock.py",
+    "/app/backend/tests/test_phase0_numbered_list_strip.py",
+    "/app/test_reports/pytest/iter72_phase1.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "VoiceStatusRow.jsx is clean (~127 lines), well-documented, single-responsibility, and properly typed via JSDoc props. The component contract (props, banned-label guard, allowed-label whitelist) is well-pinned by the 3 source-level regression tests.",
+    "BodyRoomChat.jsx and ParentsRoomChat.jsx still keep their OWN inline mute toggle button next to the textarea (data-testid 'body-room-chat-mute' / 'parents-room-chat-mute'). This is intentional per the iter 72 design (VoiceStatusRow only carries showMuteToggle on the clarity variant) but means there are still two parallel mute affordances per chat surface — flag for founder review if any future iter wants the mute UX truly unified.",
+    "BodyRoomChat.jsx is 579 lines (still under the 700-line threshold but trending up — the SomaticTtsButton sub-component could be extracted to its own file in a future cleanup, mirroring how VoiceStatusRow was extracted)."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "100% (11/11 pytest)", "frontend": "100% (page load + 0 console errors + 0 banned-label DOM leaks)" },
+  "test_credentials": "Not exercised — /clarity-release unauthenticated landed on the consent-threshold gate as expected by route guards. Live beta test of authed flow is founder-owned per the request.",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 72 is a pure refactor + lock. Source of truth: /app/frontend/src/components/VoiceStatusRow.jsx. Regression guard: /app/backend/tests/test_phase1_voice_status_lock.py (3 tests). If a future iter adds a 4th chat surface using voice, it MUST import VoiceStatusRow or the test will fail loudly. Banned labels are pinned in BANNED_STATE_LABELS in the same file."
+}

@@ -15,6 +15,7 @@ import { api } from "@/lib/api";
 import { Send, RotateCcw, Volume2, VolumeX, Headphones } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
+import VoiceStatusRow from "@/components/VoiceStatusRow";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { LENS_STORE_KEY, LENS_EVENT, DEFAULT_LENS } from "@/components/BodyLensSelector";
 
@@ -448,39 +449,13 @@ export default function BodyRoomChat({
               <Send size={13} /> Send
             </button>
           </div>
-          {/* §Faas 2 — calm voice status (replaces push-to-talk button) */}
-          {voice.supportedIn && (
-            <div
-              data-testid="body-room-voice-status"
-              data-listening={voice.listening ? "true" : "false"}
-              data-transcribing={voice.transcribing ? "true" : "false"}
-              data-speaking={voice.speaking ? "true" : "false"}
-              data-muted={voice.muted ? "true" : "false"}
-              className="mt-1 flex items-center gap-2 text-[11px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic"
-            >
-              <span
-                aria-hidden
-                className={`inline-block w-1.5 h-1.5 rounded-full ${
-                  voice.speaking
-                    ? "bg-[hsl(var(--aurin-sage))]"
-                    : voice.transcribing
-                    ? "bg-[hsl(var(--aurin-sage))/0.6]"
-                    : voice.listening
-                    ? "bg-[hsl(var(--aurin-sage))/0.85] animate-pulse"
-                    : voice.muted
-                    ? "bg-[hsl(var(--aurin-text-muted))/0.4]"
-                    : "bg-[hsl(var(--aurin-sage))/0.35]"
-                }`}
-              />
-              <span>
-                {voice.muted
-                  ? "Microphone paused."
-                  : voice.transcribing
-                  ? "Hearing the words."
-                  : ""}
-              </span>
-            </div>
-          )}
+          {/* §Faas 2 — calm voice status (replaces push-to-talk button).
+              §Phase 1 follow-up — shared component. */}
+          <VoiceStatusRow
+            voice={voice}
+            variant="compact"
+            testid="body-room-voice-status"
+          />
           {voice.voiceError && (
             <button
               type="button"

@@ -9,6 +9,7 @@ import MemoryPackageSelect from "@/components/MemoryPackageSelect";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import { CabinetUpgradeHook } from "@/components/MembershipTiers";
 import GuidePresence from "@/components/GuidePresence";
+import VoiceStatusRow from "@/components/VoiceStatusRow";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1143,58 +1144,19 @@ function ChatPanel({
 
             {/* §Faas 2 — Voice-first row, no push-to-talk button. The
                 room is always quietly listening (VAD-driven) and the
-                guide takes its turn when you fall silent. We surface
-                only a calm status line + a mute/pause toggle. */}
-            {voice.supportedIn && (
-              <div className="flex items-center justify-center gap-3">
-                <div
-                  data-testid="clarity-voice-status"
-                  data-listening={voice.listening ? "true" : "false"}
-                  data-transcribing={voice.transcribing ? "true" : "false"}
-                  data-speaking={voice.speaking ? "true" : "false"}
-                  data-muted={voice.muted ? "true" : "false"}
-                  className="flex items-center gap-2 text-[12px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic"
-                >
-                  <span
-                    aria-hidden
-                    className={`inline-block w-2 h-2 rounded-full transition-all ${
-                      voice.speaking
-                        ? "bg-[hsl(var(--aurin-sage))] shadow-[0_0_10px_hsl(var(--aurin-sage))]"
-                        : voice.transcribing
-                        ? "bg-[hsl(var(--aurin-sage))/0.6]"
-                        : voice.listening
-                        ? "bg-[hsl(var(--aurin-sage))/0.85] animate-pulse"
-                        : voice.muted
-                        ? "bg-[hsl(var(--aurin-text-muted))/0.4]"
-                        : "bg-[hsl(var(--aurin-sage))/0.35]"
-                    }`}
-                  />
-                  <span>
-                    {voice.muted
-                      ? "Microphone paused."
-                      : voice.transcribing
-                      ? "Hearing the words."
-                      : ""}
-                  </span>
-                </div>
-                {voice.supportedOut && (
-                  <button
-                    type="button"
-                    onClick={voice.toggleMute}
-                    aria-label={voice.muted ? "Resume" : "Pause microphone"}
-                    data-testid="clarity-mute"
-                    title={voice.muted ? "Resume" : "Pause"}
-                    className={`aurin-btn aurin-btn-ghost !p-2 ${
-                      voice.speaking
-                        ? "ring-1 ring-[hsl(var(--aurin-sage))]/70 text-[hsl(var(--aurin-sage))]"
-                        : ""
-                    }`}
-                  >
-                    {voice.muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                  </button>
-                )}
-              </div>
-            )}
+                guide takes its turn when you fall silent. Visual state
+                lives in the dot + GuidePresence; the line itself is
+                near-silent (founder Phase 0 lock).
+                §Phase 1 follow-up (2026-02-14) — extracted to
+                <VoiceStatusRow> so the three rooms cannot drift apart
+                and reintroduce banned labels. */}
+            <VoiceStatusRow
+              voice={voice}
+              variant="clarity"
+              testid="clarity-voice-status"
+              showMuteToggle
+              muteTestid="clarity-mute"
+            />
 
             {/* Secondary text path — quieter, smaller, "or type" affordance. */}
             <details
