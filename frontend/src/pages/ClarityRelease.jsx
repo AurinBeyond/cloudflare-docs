@@ -12,6 +12,7 @@ import GuidePresence from "@/components/GuidePresence";
 import VoiceStatusRow from "@/components/VoiceStatusRow";
 import SessionCalmerPrompt from "@/components/SessionCalmerPrompt";
 import TypingIndicator from "@/components/TypingIndicator";
+import RoomConvaiChat from "@/components/RoomConvaiChat";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1003,6 +1004,12 @@ function ChatPanel({
   audioPlaying,
 }) {
   const pendingAutoSendRef = useRef(false);
+  // §Phase 1 STABILIZATION (2026-02-14) — ConvAI live-dialogue panel.
+  // Grace runs through ElevenLabs Conversational AI. If anything fails
+  // (or the wanderer prefers the older mode), `convaiActive` flips
+  // false and the existing useVoiceIO + /api/cabinet/message pipeline
+  // below stays as a complete, untouched fallback.
+  const [convaiActive, setConvaiActive] = useState(true);
   const voice = useVoiceIO({
     gender: guideGender || "female",
     autoVoice: true,                // §Faas 2 — no-button continuous dialogue
@@ -1100,6 +1107,19 @@ function ChatPanel({
               : "idle"
           }
         />
+
+        {/* §Phase 1 STABILIZATION (2026-02-14) — Grace via ElevenLabs
+            Conversational AI. Mounted ONLY in Private Room (room="clarity").
+            On any failure, the wanderer can fall back to the legacy
+            useVoiceIO + /api/cabinet/message pipeline below. */}
+        {convaiActive ? (
+          <div data-testid="convai-grace-panel" className="mt-6">
+            <RoomConvaiChat
+              room="clarity"
+              onFallback={() => setConvaiActive(false)}
+            />
+          </div>
+        ) : null}
 
         <div
           className="mt-6 flex flex-col bg-[hsl(var(--aurin-bg))]/30 backdrop-blur-sm border-0 rounded-md px-1 md:px-2"

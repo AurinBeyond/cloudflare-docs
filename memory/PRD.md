@@ -1,3 +1,106 @@
+> 🟢 **PHASE 1 ITER 80 — 2026-02-14 (ELEVENLABS CONVERSATIONAL AI · GRACE · PHASE A ONLY)**
+>
+> Founder directive (Estonian, stabilization mode): replace the
+> Claude-pipeline Private Room dialogue with a dedicated ElevenLabs
+> Conversational AI agent ("Grace"). Founder configures the agent
+> herself in the ElevenLabs UI; agent runs as a private
+> authentication-required agent with signed URLs.
+>
+> **What landed (Phase A — Private Room ONLY):**
+>
+> 1. **Backend env-driven 4-agent allowlist** (`server.py`)
+>    - New strict mapping `clarity→Grace · body→Kaelan · parents→Sara · courses→Alistair`
+>    - `POST /api/clarity/convai/signed-url {room}` — auth-required,
+>      mints a 15-min signed wss:// URL from
+>      `GET /v1/convai/conversation/get-signed-url?agent_id=…`
+>    - `agent_id` and `ELEVENLABS_API_KEY` NEVER reach the browser
+>    - 422 on bad enum, 401 without auth, 502 on upstream failure
+>      (never 500). All four rooms route in the backend; only
+>      `clarity` is mounted in the frontend.
+>
+> 2. **`.env` additions** (4 agent ids):
+>    ```
+>    ELEVENLABS_CONVAI_AGENT_GRACE=agent_019e22de-a39e7130a05f5091482066a6
+>    ELEVENLABS_CONVAI_AGENT_KAELAN=agent_019e22de-8f9d77d9ae726e955c399f27
+>    ELEVENLABS_CONVAI_AGENT_SARA=agent_019e22de-b1e0744b97fa3f08a86ae7db
+>    ELEVENLABS_CONVAI_AGENT_ALISTAIR=agent_019e22de-a4a97daa9bea82213085681f
+>    ```
+>
+> 3. **`RoomConvaiChat.jsx` (NEW · ~230 lines)**
+>    - Generic component, takes `room` prop (strict allowlist).
+>    - Wraps `@elevenlabs/react` `useConversation()` inside
+>      `ConversationProvider`.
+>    - Voice mode: SDK handles mic + audio worklet + WebSocket via
+>      signed URL.
+>    - Text mode: `conversation.sendUserMessage(text)` — typed input
+>      reaches the same agent in the same session, agent speaks back.
+>    - Transcript history: `onMessage` → coalesced user/agent lines.
+>    - Status dot: ready / connecting / live / quiet-for-now.
+>    - `onFallback` prop → parent restores legacy voice mode.
+>    - `data-testid` on every interactive element
+>      (`convai-panel`, `-status-dot`, `-status-label`, `-start-btn`,
+>      `-stop-btn`, `-text-input`, `-send-btn`, `-transcript`,
+>      `-error`, `-fallback-btn`).
+>
+> 4. **`ClarityRelease.jsx` — single mount line**
+>    - Added one `<RoomConvaiChat room="clarity" onFallback={…} />`
+>      block right after `<GuideHologram />` inside `ChatPanel`.
+>    - `convaiActive` useState inside ChatPanel — flips false on
+>      user-requested fallback, restoring the legacy `useVoiceIO`
+>      pipeline (which has not been touched at all).
+>
+> 5. **What is NOT touched (founder directive):**
+>    - Body Room (`BodyRoomChat.jsx`, `body_room_ai.py`)
+>    - Parents' Room (`ParentsRoomChat.jsx`, `parents_room_ai.py`)
+>    - Course Room, Kids Universe
+>    - Stripe / LemonSqueezy
+>    - `GuidePresence.jsx` avatar, all animations
+>    - `useVoiceIO.js` (intact, stays as Private Room fallback)
+>    - `/api/cabinet/message` Claude pipeline (intact)
+>    - `clarity_ai.py` system prompt (intact; ConvAI agent has its
+>      own system prompt configured in the ElevenLabs UI by founder)
+>
+> 6. **Regression tests** (`tests/test_convai_signed_url.py` · 6 +
+>    iter 79 `test_stabilization_private_room.py` · 9 + iter 78
+>    `test_phase1_streaming_tts.py` · 5 = **20/20 PASS**):
+>    - Auth required
+>    - Room allowlist enforced (422 on `evil`, missing field)
+>    - All four rooms pass routing gate (status in {200,502,503})
+>    - **Critical isolation lock:** response body never contains
+>      `agent_019e22de` substring (server-side mapping only)
+>    - Successful 200 has shape `{signed_url: "wss://…", room}`
+>
+> 7. **Live smoke** (preview, screenshot):
+>    - `/clarity-release` renders ConvAI panel under Grace portrait.
+>    - "READY" dot + "Speak with Grace" button + text input visible.
+>    - Active nav: "Clarity Release" (no Body Room leak).
+>    - No JS console errors.
+>
+> **CRITICAL FOUNDER ACTION REQUIRED — ElevenLabs API key is invalid:**
+> Current `ELEVENLABS_API_KEY` in `/app/backend/.env` returns
+> `401 invalid_api_key` for ALL ElevenLabs endpoints, including
+> `/v1/user`. The key was working earlier today (iter 78 TTS) — it
+> appears to have been rotated/revoked after the founder created the
+> 4 ConvAI agents. **Founder must regenerate the API key at
+> https://elevenlabs.io/app/settings/api-keys and paste the new one
+> into:**
+>   - `/app/backend/.env` (preview)
+>   - Emergent Deploy panel env vars (production) + Save to GitHub → Redeploy
+>
+> Once the key is valid, both the streaming TTS (iter 78) and ConvAI
+> Grace (iter 80) start working immediately — no code change needed.
+>
+> **Phase B (queued, NOT implemented in this iter):**
+> After founder confirms Grace works live, three single-line edits
+> activate the other three agents:
+>   - `BodyRoomChat.jsx` → `<RoomConvaiChat room="body" />` (Kaelan)
+>   - `ParentsRoomChat.jsx` → `<RoomConvaiChat room="parents" />` (Sara)
+>   - Course Room page → `<RoomConvaiChat room="courses" />` (Alistair)
+> Backend routing for all four is already live and tested.
+
+---
+
+
 > 🔴 **PHASE 1 ITER 79 — 2026-02-14 (STABILIZATION · PRIVATE ROOM IDENTITY LEAK)**
 >
 > Founder ultimatum (Estonian, distressed): the Private Room

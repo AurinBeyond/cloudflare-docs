@@ -4284,6 +4284,80 @@ async def clarity_tts_stream(
     )
 
 
+# ---- §Phase 1 STABILIZATION (2026-02-14) — ELEVENLABS CONVERSATIONAL AI ----
+# Mints a 15-min signed conversation URL for a pre-configured ElevenLabs
+# Conversational AI agent. The agent_id is mapped server-side from a
+# strict room allowlist; the browser only ever sees the temporary signed
+# WebSocket URL. API key and agent_id never leave the backend.
+#
+# Room → agent mapping is env-driven so a key rotation or agent rebuild
+# is a single .env edit, no code change.
+#
+# Phase A: only the "clarity" mapping (Grace) is consumed by the
+# frontend. The other three mappings are routed but unmounted; they
+# turn on by adding one line in BodyRoomChat/ParentsRoomChat/CourseRoom.
+_ROOM_TO_CONVAI_AGENT_ENV = {
+    "clarity": "ELEVENLABS_CONVAI_AGENT_GRACE",
+    "body":    "ELEVENLABS_CONVAI_AGENT_KAELAN",
+    "parents": "ELEVENLABS_CONVAI_AGENT_SARA",
+    "courses": "ELEVENLABS_CONVAI_AGENT_ALISTAIR",
+}
+
+
+class ConvAISignedUrlInput(BaseModel):
+    room: Literal["clarity", "body", "parents", "courses"]
+
+
+@api_router.post("/clarity/convai/signed-url")
+async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request):
+    """Mint a 15-minute signed conversation URL for the room's ConvAI agent.
+
+    Strict allowlist: room must be one of clarity|body|parents|courses.
+    Agent_id and ELEVENLABS_API_KEY never reach the browser; the only
+    token the browser ever sees is the expiring wss:// signed URL.
+    """
+    user = await _require_user(request)  # auth gate — sign-in required
+    room = inp.room
+    env_name = _ROOM_TO_CONVAI_AGENT_ENV.get(room)
+    if not env_name:
+        raise HTTPException(status_code=400, detail="Unknown room")
+    agent_id = os.getenv(env_name)
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    if not agent_id or not api_key:
+        raise HTTPException(
+            status_code=503,
+            detail=f"ConvAI agent for room '{room}' is not configured",
+        )
+    try:
+        import httpx  # noqa: WPS433
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            r = await client.get(
+                "https://api.elevenlabs.io/v1/convai/conversation/get-signed-url",
+                params={"agent_id": agent_id},
+                headers={"xi-api-key": api_key},
+            )
+        if r.status_code != 200:
+            logging.error(
+                "ConvAI signed URL fetch failed: status=%s body=%s",
+                r.status_code, r.text[:300],
+            )
+            raise HTTPException(
+                status_code=502,
+                detail="ConvAI provider could not mint a session right now.",
+            )
+        payload = r.json()
+        signed_url = payload.get("signed_url")
+        if not signed_url:
+            raise HTTPException(status_code=502, detail="ConvAI provider returned no URL.")
+        return {"signed_url": signed_url, "room": room}
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        logging.error("ConvAI signed URL crash for user=%s room=%s: %s",
+                      user.user_id, room, exc)
+        raise HTTPException(status_code=502, detail="ConvAI temporarily unavailable.")
+
+
 # ---- Clarity Release — STT (push-to-talk → Whisper transcript) ----
 # Voice-first directive (Stage 2.8): browser MediaRecorder captures
 # webm/ogg/mp4 audio, posts it here, server transcribes via Whisper-1
