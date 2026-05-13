@@ -553,7 +553,7 @@ function SoftGate({ onSignIn }) {
           data-testid="clarity-gate-signin"
           className="aurin-btn aurin-btn-primary"
         >
-          Sign in with Google to begin <ArrowRight size={14} />
+          Continue with email <ArrowRight size={14} />
         </button>
       </div>
     </section>

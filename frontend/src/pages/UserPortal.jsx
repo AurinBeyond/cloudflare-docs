@@ -45,6 +45,11 @@ export default function UserPortal() {
   }, [user, loading, next]);
 
   // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+  // §Phase 1 2026-02-14 — Google OAuth button removed from the
+  // portal per founder mandate (email-only entry). handleSignIn
+  // retained as dead code in case the founder ever re-opens Google
+  // auth as a fallback; not referenced from any rendered JSX.
+  // eslint-disable-next-line no-unused-vars
   const handleSignIn = () => {
     const target = next && next.startsWith("/") && !next.startsWith("//")
       ? `/portal?next=${encodeURIComponent(next)}`
@@ -91,20 +96,6 @@ export default function UserPortal() {
         ) : (
           <div className="space-y-4" data-testid="portal-signed-out">
             <MagicLinkEntry next={next} />
-            <details className="text-[12.5px] text-[hsl(var(--aurin-text-muted))]" data-testid="portal-google-fallback">
-              <summary className="cursor-pointer aurin-link inline-flex items-center gap-1">
-                Or continue with Google
-              </summary>
-              <div className="mt-2">
-                <button
-                  onClick={handleSignIn}
-                  data-testid="portal-sign-in"
-                  className="aurin-btn aurin-btn-ghost"
-                >
-                  Sign in with Google <LogIn size={13} />
-                </button>
-              </div>
-            </details>
             <p
               data-testid="portal-consent-line"
               className="text-[12px] text-[hsl(var(--aurin-text-muted))] max-w-[58ch] leading-relaxed"

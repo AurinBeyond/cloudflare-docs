@@ -37,7 +37,7 @@ export default function TheBeginning() {
 
   const handleBegin = async () => {
     if (!user) {
-      // route through the portal — Google sign-in lives there.
+      // route through the portal — magic-link email sign-in lives there.
       const back = encodeURIComponent("/the-beginning/step");
       navigate(`/portal?next=${back}`);
       return;
