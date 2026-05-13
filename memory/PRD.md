@@ -1,3 +1,90 @@
+> 🔒 **PHASE 1 ITER 82 — 2026-02-15 (FINAL SYNCHRONIZATION + FRONTEND CLEANUP)**
+>
+> Founder directive (Estonian, terminal stabilization mode):
+> 1. Confirm iter 81 (Whisper filter + .gitignore fix) is committed
+> 2. Frontend cleanup — old Claude/Whisper pipeline must NOT be
+>    visible by default in Private Room; ConvAI panel is the only
+>    surface, legacy fallback only after explicit user click on
+>    "Use the older voice mode"
+> 3. Body Room — remove the two redirect CTAs that pushed wanderers
+>    to Private Room (caused "rooms-mix-up" perception); show
+>    "Kaelan is preparing the space" placeholder instead
+> 4. No new code beyond these three points
+>
+> **What landed (exact files, exact diffs):**
+>
+> 1. **`ClarityRelease.jsx`** — wrapped the legacy chat UI block
+>    (lines 1124-1256 — `VoiceStatusRow`, text fallback `<details>`,
+>    typing indicator, chat scroller, voice-error button) in
+>    `{!convaiActive && (...)}`. When the wanderer lands in Private
+>    Room, the legacy fallback is now **entirely absent from the
+>    DOM**, not just hidden. It only mounts after the wanderer
+>    explicitly clicks the "Use the older voice mode" link inside
+>    RoomConvaiChat. Added `data-testid="clarity-legacy-fallback"`
+>    on the wrapper for regression locking.
+>
+> 2. **`BodyRoom.jsx`** — two surgical removals:
+>    - Removed the **"Just talk to Grace"** CTA (`Link to=
+>      /clarity-release?entry=just-talk`) that was the primary
+>      perceived source of room-mix-up.
+>    - Removed the **"Step into Clarity Release"** CTA in the
+>      `body-room-bridge` panel.
+>    - Replaced top-of-page "If nothing yet has a name" copy with:
+>      *"Kaelan is preparing the space. The somatic guide for this
+>      room — Kaelan — is being tuned. Until he arrives, the
+>      silhouette below is yours to walk slowly. No conversation
+>      is required tonight."*
+>    - Added `data-testid="body-room-kaelan-placeholder"`.
+>    - The cross-room "your last pauses are remembered" thread is
+>      preserved (it requires explicit prior body engagement to
+>      render — `recent.length > 0` — so it does not cause the
+>      same "I was just shoved into the wrong room" perception).
+>
+> 3. **Iter 81 verification** — `_filter_whisper_hallucination()`
+>    and `.gitignore` fix were already in `/app` and verified by
+>    `git log` (commit `4ba4dbe`).
+>
+> **Live verified (preview screenshots + counts):**
+>
+> Private Room (`/clarity-release`):
+>   - `convai-grace-panel` mounted: 1
+>   - `clarity-legacy-fallback` in DOM: 0 (✓ correctly absent)
+>   - Active nav: "Clarity Release"
+>   - Page heading: "Welcome to Clarity Release."
+>
+> Body Room (`/body-room`):
+>   - `body-room-kaelan-placeholder` rendered: 1
+>   - `body-room-just-talk-cta`: 0 (✓ removed)
+>   - `body-room-go-clarity`: 0 (✓ removed)
+>   - Active nav: "Body Room"
+>   - Page heading: "Learning to speak with your body."
+>
+> **Regression tests:** 32/32 PASS (12 Whisper + 6 ConvAI signed-URL
+> + 9 stabilization private room + 5 streaming TTS).
+>
+> **What is now the only Private Room voice path on production:**
+> ElevenLabs Conversational AI agent "Grace" (`agent_6801krh8dnmze1zthsnf5xb6xe43`).
+> System prompt, knowledge base, voice, stability, turn-taking — all
+> configured by founder in the ElevenLabs UI. Backend's job is
+> minting a signed wss:// URL via `/api/clarity/convai/signed-url`
+> and never touching Grace's behaviour.
+>
+> **NOT touched (founder mandate):**
+> - Parents' Room, Course Room
+> - Kids Universe, Stripe, LemonSqueezy
+> - `GuidePresence.jsx` avatar / animations
+> - `useVoiceIO.js` and `/api/cabinet/message` (preserved as user-
+>   triggered fallback only)
+> - Sara & Alistair agents (still not created in ElevenLabs)
+> - Checkout / packages page UX
+>
+> **Production redeploy required.** Founder must press Save to
+> GitHub (now actually pushes after iter 81 .gitignore fix) →
+> Redeploy → hard refresh (Ctrl+Shift+R) on prulesoul.site.
+
+---
+
+
 > 🟡 **PHASE 1 ITER 81 — 2026-02-15 (WHISPER HALLUCINATION FILTER + .gitignore FIX)**
 >
 > Founder report (Estonian, distressed): Production prulesoul.site

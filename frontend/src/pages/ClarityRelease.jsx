@@ -1121,9 +1121,20 @@ function ChatPanel({
           </div>
         ) : null}
 
+        {/* §STABILIZATION 2026-02-15 — Legacy chat UI (Whisper STT +
+            Claude pipeline) is now a strict FALLBACK. It only renders
+            when the wanderer explicitly clicks the "Use the older
+            voice mode" button inside RoomConvaiChat (which flips
+            convaiActive false). This kills the credit drain caused
+            by Whisper transcribing silence as "soy sauce" and Claude
+            earnestly replying. The ConvAI agent — with the system
+            prompt founder configured in the ElevenLabs UI — is now
+            the only default surface for Private Room. */}
+        {!convaiActive && (
         <div
           className="mt-6 flex flex-col bg-[hsl(var(--aurin-bg))]/30 backdrop-blur-sm border-0 rounded-md px-1 md:px-2"
           style={{ minHeight: 180 }}
+          data-testid="clarity-legacy-fallback"
         >
           <div
             ref={scrollerRef}
@@ -1254,6 +1265,7 @@ function ChatPanel({
             </button>
           )}
         </div>
+        )}
 
         {showContinuation && (
           <div

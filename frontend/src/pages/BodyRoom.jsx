@@ -183,20 +183,24 @@ export default function BodyRoom() {
         <div className="aurin-container max-w-[760px]">
           <div className="aurin-card p-6 md:p-7 flex flex-col md:flex-row gap-5 items-center justify-between">
             <div className="space-y-1.5">
-              <div className="aurin-eyebrow !mb-0">If nothing yet has a name</div>
-              <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[52ch]">
-                You do not have to choose a region tonight. If you just want to
-                speak — about anything, in no order — Grace is in the next
-                room. You can land there first and find the body word later.
+              <div className="aurin-eyebrow !mb-0">Kaelan is preparing the space</div>
+              <p
+                data-testid="body-room-kaelan-placeholder"
+                className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[52ch]"
+              >
+                The somatic guide for this room — Kaelan — is being
+                tuned. Until he arrives, the silhouette below is yours
+                to walk slowly. No conversation is required tonight.
               </p>
             </div>
-            <Link
-              to="/clarity-release?entry=just-talk"
-              data-testid="body-room-just-talk-cta"
-              className="aurin-btn aurin-btn-primary shrink-0"
-            >
-              Just talk to Grace
-            </Link>
+            {/* §STABILIZATION 2026-02-15 — Founder directive: do NOT
+                redirect Body Room wanderers into Private Room. Body
+                Room must keep its own identity even when its
+                conversational layer is pending. The "Just talk to
+                Grace" CTA that lived here previously was creating the
+                "rooms-mix-up" sensation the founder reported on
+                prulesoul.site. Kaelan ConvAI mount lands in a
+                separate, named iteration. */}
           </div>
         </div>
       </section>
@@ -227,7 +231,14 @@ export default function BodyRoom() {
         </div>
       </section>
 
-      {/* If signed in, show a soft "the room remembers" panel */}
+      {/* If signed in, show a soft "the room remembers" panel. The
+          cross-link to Clarity Release is preserved here ONLY as a
+          gentle "the rooms remember each other" thread — the wanderer
+          is NOT auto-redirected; they choose. §STABILIZATION 2026-02-15
+          removed the previous "Just talk to Grace" CTA above (which
+          was causing room-mix-up complaints). This panel below stays
+          because it requires explicit prior body engagement to even
+          render (recent.length > 0). */}
       {user && recent.length > 0 && (
         <section className="aurin-section-sm" data-testid="body-room-bridge">
           <div className="aurin-container max-w-[760px]">
@@ -244,13 +255,6 @@ export default function BodyRoom() {
                 . When you next step into Clarity Release, the room may begin
                 there.
               </p>
-              <Link
-                to="/clarity-release"
-                data-testid="body-room-go-clarity"
-                className="aurin-btn aurin-btn-primary inline-flex"
-              >
-                Step into Clarity Release <ArrowRight size={13} />
-              </Link>
             </div>
           </div>
         </section>
