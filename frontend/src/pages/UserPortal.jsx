@@ -256,15 +256,34 @@ function MagicLinkEntry({ next }) {
           Open the email we just sent and click the link to step into your
           private layer. The link is valid for 30 minutes and works once.
         </p>
+        {/* §Phase 1 2026-02-14 — visible, friendlier spam hint. Several
+            inbox providers (mail.com, AOL, outlook.com) sometimes route
+            new-sender transactional mail to Junk for the first 1-2
+            messages until the sender's domain reputation settles.
+            Surfacing this prevents wanderers from feeling abandoned. */}
+        <div
+          data-testid="portal-magic-spam-hint"
+          className="mt-4 p-3 rounded-sm bg-[hsl(var(--aurin-sage))/0.06] border border-[hsl(var(--aurin-sage))/0.18] text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text))]"
+        >
+          <p className="mb-1.5">
+            <strong className="font-semibold">If you don't see it within a minute,</strong>{" "}
+            please check your <strong>Spam</strong> or <strong>Junk</strong> folder —
+            some email providers route new senders there briefly.
+          </p>
+          <p className="text-[hsl(var(--aurin-text-muted))]">
+            The link itself is safe to open. Marking the message as
+            "Not spam" helps it land in your inbox next time.
+          </p>
+        </div>
         <p className="mt-3 text-[12px] text-[hsl(var(--aurin-text-muted))/0.7]">
-          Didn't arrive? Check spam, then{" "}
+          Still nothing?{" "}
           <button
             type="button"
             onClick={() => setDone(false)}
             className="aurin-link"
             data-testid="portal-magic-send-again"
           >
-            send another
+            Send another
           </button>
           .
         </p>
