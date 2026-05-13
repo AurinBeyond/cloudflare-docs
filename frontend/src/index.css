@@ -688,6 +688,38 @@
         aurin-guide-listening-nod 4.6s ease-in-out infinite;
 }
 
+/* ------------------------------------------------------------------
+   §Phase 1 follow-up (2026-02-14) — typing indicator.
+   Three soft sage dots that fade in during the 1.1-1.5s thoughtful
+   pause + LLM generation window. The wanderer feels "she is
+   composing", not "the system froze".
+   ------------------------------------------------------------------ */
+@keyframes aurin-typing-fade-in {
+    from { opacity: 0; transform: translateY(2px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aurin-typing-dot-pulse {
+    0%, 80%, 100% { opacity: 0.35; transform: translateY(0); }
+    40%           { opacity: 1.00; transform: translateY(-1.5px); }
+}
+
+.aurin-typing-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: hsl(var(--aurin-sage) / 0.85);
+    animation: aurin-typing-dot-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aurin-typing-dot {
+        animation: none !important;
+        opacity: 0.65;
+    }
+}
+
 /* §Faas 1 — Speaking-state warm halo, layered over the GuidePresence
  * portrait when the runtimeState becomes "speaking". Pulses softly so
  * the presence feels "in conversation" without a loudspeaker glyph.

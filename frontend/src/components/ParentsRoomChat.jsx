@@ -15,6 +15,7 @@ import { Send, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
 import VoiceStatusRow from "@/components/VoiceStatusRow";
+import TypingIndicator from "@/components/TypingIndicator";
 import useVoiceIO from "@/hooks/useVoiceIO";
 
 const STORE_KEY = "aurin_parents_chat_v1";
@@ -331,12 +332,7 @@ export default function ParentsRoomChat({
               </div>
             ))}
             {sending && (
-              <div
-                className="text-[12px] opacity-60"
-                data-testid="parents-room-chat-typing"
-              >
-                Listening…
-              </div>
+              <TypingIndicator visible testid="parents-room-chat-typing" />
             )}
           </div>
 

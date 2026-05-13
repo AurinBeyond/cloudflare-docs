@@ -11,6 +11,7 @@ import { CabinetUpgradeHook } from "@/components/MembershipTiers";
 import GuidePresence from "@/components/GuidePresence";
 import VoiceStatusRow from "@/components/VoiceStatusRow";
 import SessionCalmerPrompt from "@/components/SessionCalmerPrompt";
+import TypingIndicator from "@/components/TypingIndicator";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1200,13 +1201,7 @@ function ChatPanel({
           <div className="mt-2 flex items-center justify-between gap-2">
             <div className="flex-1 min-h-[16px] text-[11.5px] text-[hsl(var(--aurin-text-muted))] aurin-serif-italic">
               {sending ? (
-                <span
-                  data-testid="clarity-thinking"
-                  className="inline-flex items-center gap-1.5 opacity-80"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--aurin-sage))] animate-pulse" />
-                  <span>The room is listening with you…</span>
-                </span>
+                <TypingIndicator visible testid="clarity-thinking" />
               ) : voice.speaking ? (
                 <span
                   data-testid="clarity-speaking"

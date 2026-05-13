@@ -16,6 +16,7 @@ import { Send, RotateCcw, Volume2, VolumeX, Headphones } from "lucide-react";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import GuidePresence from "@/components/GuidePresence";
 import VoiceStatusRow from "@/components/VoiceStatusRow";
+import TypingIndicator from "@/components/TypingIndicator";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { LENS_STORE_KEY, LENS_EVENT, DEFAULT_LENS } from "@/components/BodyLensSelector";
 
@@ -384,12 +385,7 @@ export default function BodyRoomChat({
               </div>
             ))}
             {sending && (
-              <div
-                className="text-[12px] opacity-60"
-                data-testid="body-room-chat-typing"
-              >
-                Listening…
-              </div>
+              <TypingIndicator visible testid="body-room-chat-typing" />
             )}
           </div>
 
