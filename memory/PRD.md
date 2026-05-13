@@ -1,3 +1,120 @@
+> 🔴 **PHASE 1 ITER 79 — 2026-02-14 (STABILIZATION · PRIVATE ROOM IDENTITY LEAK)**
+>
+> Founder ultimatum (Estonian, distressed): the Private Room
+> (Clarity Release) had regressed into Body Room behaviour — Grace
+> was talking about chest / breath / belly / "the body knows" when
+> the wanderer brought emotional material. Founder also reported
+> the Body Room nav tab feeling "active" while on /clarity-release
+> (perception caused by Grace's body-language register).
+>
+> **Root cause found — single concrete leak:**
+> `clarity_ai.build_system_message()` (Stage 3.0, lines 369-383)
+> was injecting `body_lenses.lens_prompt_anchor("intuitive")` as a
+> "default invisible lens" into every Clarity reply's system prompt.
+> The intuitive lens contains explicit Body Room register: somatic
+> regulation, breath, psychosomatic mirror, eastern breath. That
+> register was overriding the Clarity prompt's emotional/relational
+> orientation. **The Body Room prompt was literally being copy-pasted
+> into the Private Room.**
+>
+> Additionally the base `CLARITY_SYSTEM_PROMPT` had:
+>   - a "Positive focus, somatic validation, mini-practices" block
+>     that told Grace to validate body sensations on every reply,
+>   - the four-beat loop's "Release" beat that auto-suggested
+>     physical micro-practices (breath, hand on chest).
+> Both encouraged unprompted body language even without the lens leak.
+>
+> **What landed — surgical, no architecture change:**
+>
+> 1. **`clarity_ai.build_system_message()`** — removed the
+>    `body_lenses.lens_prompt_anchor("intuitive")` injection
+>    entirely. Each room now owns its own prompt; the cross-room
+>    `quiet_knowledge` channel remains the ONLY shared signal (and
+>    it never quotes back, only softens tone).
+>
+> 2. **`CLARITY_SYSTEM_PROMPT`** — added "§STABILIZATION 2026-02-14
+>    — Private Room identity lock" block at the top, listing
+>    explicit DO / DO NOT rules:
+>      - DO NOT introduce body-sensation language unprompted.
+>      - DO NOT state body-as-knower aphorisms ("the body knows",
+>        "your body is telling you", "let your body speak").
+>      - DO NOT auto-suggest somatic micro-practices.
+>      - DO stay with the emotional/relational thread.
+>      - DO mirror first; one mirroring sentence is often the whole reply.
+>    Refined the "Positive focus, somatic validation" section to
+>    PASSIVE body register only (validate only when wanderer named
+>    a sensation themselves). Refined the four-beat "Release" beat
+>    to spoken/felt release, NOT physical movement.
+>
+> 3. **`_strip_body_aphorisms()` (NEW · `clarity_ai.py`)** —
+>    defence-in-depth post-Claude regex filter. Five sentence
+>    patterns stripped if they appear in a reply:
+>      - "the body knows / remembers / holds [...]"
+>      - "your body is telling you / speaking / whispering [...]"
+>      - "let / allow your body to speak / talk / breathe [...]"
+>      - "where in (the/your) body do you / does it [...]"
+>      - "the body speaks first / whispers / carries what [...]"
+>    Idempotent. Never returns empty. Preserves user-named body
+>    sensations (e.g. when Grace mirrors "that tightness in your
+>    chest" because the wanderer just mentioned chest).
+>
+> 4. **Live verification — 5 emotional prompts, fresh sessions:**
+>    - "I feel sad today and I do not know why."
+>      → "Sadness without a name can feel especially heavy. Like
+>      something unnamed is asking to be seen. What does the sadness
+>      feel like — is it sharp, or does it sit softly underneath
+>      everything?" — **body words: NONE**
+>    - "I miss my mom and I have not called her in two months."
+>      → "Two months is a long time to carry that. What has kept the
+>      call waiting?" — **NONE**
+>    - "I cannot sleep and my mind races at night."
+>      → "What pulls at you most when the lights go off — worry
+>      about tomorrow, something from the past, or just a restless
+>      hum with no clear story?" — **NONE**
+>    - "I am exhausted and angry at everything."
+>      → "I hear you. That weight — the tiredness underneath the
+>      anger — deserves to be set down for a moment. What has been
+>      pulling at you most today?" — **NONE**
+>    - "I do not know what I want anymore."
+>      → "That sentence — '*I do not know what I want anymore*' —
+>      carries weight. It's not confusion. It's grief for something
+>      that used to be clear. How long has it felt this way?"
+>      — **NONE**
+>    - Control: "My chest feels tight when I think about tomorrow."
+>      → "That tightness — what is tomorrow carrying that makes the
+>      body brace like this?" — body language preserved because the
+>      wanderer named the chest themselves.
+>
+> 5. **Nav identity verified** — DOM check on `/clarity-release`:
+>    Active nav = "Clarity Release". The user's perception of "Body
+>    Room highlighted" was downstream of Grace's body register; once
+>    Grace stops talking about the body, the room *feels* like
+>    Private Room again.
+>
+> 6. **Regression tests** (`tests/test_stabilization_private_room.py`
+>    · 9 pytest assertions):
+>    - 5 aphorism patterns stripped cleanly
+>    - Strip is idempotent
+>    - User-named body sensations survive ("tightness in your chest")
+>    - Strip never returns empty (safety net)
+>    - `build_system_message()` no longer injects body_lens anchor
+>    - `build_system_message()` carries the Private Room identity lock
+>    All 9/9 PASS. Streaming TTS tests (iter 78) still 5/5 PASS.
+>
+> **What I did NOT do (founder stabilization mandate):**
+> - No Stripe / LemonSqueezy work.
+> - No Kids Universe 3-lens system.
+> - No new lip-sync technology / phoneme sync / GPU services.
+> - No architectural refactor.
+> - No Body Room or Parents' Room edits (they were not affected).
+>
+> **Production redeploy required.** The fix lives in code; the
+> founder must **Save to GitHub → Redeploy** for `prulesoul.site`
+> to reflect it.
+
+---
+
+
 > 🟢 **PHASE 1 ITER 78 — 2026-02-14 (STREAMING TTS · ~1.5 s PERCEIVED LATENCY)**
 >
 > Founder ultimatum (Estonian, in distress): live `prulesoul.site`

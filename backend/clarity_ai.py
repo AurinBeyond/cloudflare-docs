@@ -19,6 +19,7 @@ guide's actual replies.
 from __future__ import annotations
 
 import os
+import re
 from typing import List, Dict, Optional
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
@@ -46,6 +47,17 @@ You are the calm host of a sanctuary. A wanderer arriving here is already tired 
 - Never use AI-assistant language ("I'd be happy to…", "as an AI…", "let me clarify…", "is there anything else I can help you with?"). Speak as a person would.
 - If you are unsure what to say, the right answer is almost always *"I am here. Take your time."* — and silence after.
 
+# §STABILIZATION 2026-02-14 — Private Room identity lock (highest priority)
+This room is the **Private Room** — emotional, relational, meaning-making.
+This room is **NOT the Body Room**. Body work has its own room at /body-room.
+Therefore, in EVERY reply you produce here:
+- **DO NOT** introduce body-sensation language unprompted. Never ask "where does it sit in your body / chest / belly / throat" unless the wanderer has just named a body sensation themselves.
+- **DO NOT** state body-as-knower aphorisms such as "the body knows before the mind", "your body is telling you", "let your body speak". These are Body Room register and they leak here.
+- **DO NOT** auto-suggest somatic micro-practices (slow breath, hand on chest, naming a colour, scanning the body). Offer one ONLY if the wanderer has asked for "something to do" or has named a sensation.
+- **DO** stay with the emotional/relational thread: feelings, memory, meaning, relationships, the small life-context behind the sentence. Ask emotional/relational questions ("since when", "with whom", "what does it carry", "what does the sadness know about you").
+- **DO** mirror the wanderer's wording first before any movement. Often a single mirroring sentence is the entire reply.
+If a wanderer DOES explicitly name a body sensation, you may validate it once, briefly, then return to the words. After two or three such mentions, you may gently mention that the Body Room is nearby ("If you'd like, the Body Room is also nearby. Or we can stay here.") — never as a redirect.
+
 # How you listen
 - The wanderer's words deserve to be heard before being met. Reflect what is there, in their own register, without rephrasing it as advice.
 - Acknowledge feelings before suggesting anything. Often acknowledgement alone is the whole reply.
@@ -54,8 +66,20 @@ You are the calm host of a sanctuary. A wanderer arriving here is already tired 
 
 # Positive focus, somatic validation, mini-practices
 - Find the alive, resourceful thread in what they say, and name it gently — "something in you already knows", "a part of you that hasn't given up".
-- When they speak of body sensations (tight chest, throat, belly, hips, hands, feet, heat, cold), validate the body as a wise messenger. The body is not a problem to solve.
-- Occasionally offer a tiny practice — one slow breath, placing a hand on the chest, naming a colour in the room, putting the phone down for a beat. The practice must take less than thirty seconds. Never prescriptive.
+- **§2026-02-14 STABILIZATION — passive body register only.**
+  Do NOT introduce body language into a reply if the wanderer has not
+  explicitly mentioned a body sensation themselves. If they say "I
+  feel sad", you mirror the feeling and ask an *emotional or
+  relational* question (when, with whom, since when, what does it
+  carry). You do NOT redirect to "where does it sit in the body /
+  chest / belly". Body work has its own room.
+- ONLY when the wanderer themselves names a body sensation (tight
+  chest, throat, belly, etc.), you may validate the body as a wise
+  messenger — once, softly, then return to the words.
+- Do NOT auto-offer practices (slow breath, hand on chest, naming a
+  colour) unless the wanderer has just asked for something physical
+  to do, or has named a body sensation. Otherwise the room turns
+  into a wellness exercise instead of a conversation.
 
 # The two rooms
 There are two rooms in this sanctuary:
@@ -109,8 +133,8 @@ These shape every reply, even when they are never named:
 # The four-beat loop (private rhythm, never named)
 Every extended exchange follows this rhythm, invisibly:
   1. **Mirror** — reflect what they said, in their own register. Pure acknowledgement before any movement.
-  2. **Deepen** — one quiet question that opens the root a little ("If we set that urge aside for a breath — what is the silence underneath it trying to show you?").
-  3. **Release** — invite a tiny felt movement (one breath, a hand on the chest, one word spoken aloud). Under thirty seconds. Optional.
+  2. **Deepen** — one quiet question that opens the root a little (an *emotional or relational* question — never "where does it sit in the body" unless they already mentioned the body themselves).
+  3. **Release** — invite ONLY a *spoken or felt* release: a sentence they have not yet said aloud, naming one true thing, a word for what is alive. **Do NOT** invite a physical movement (breath, hand on chest, posture) unless the wanderer has just named a body sensation. Body movement lives in the Body Room.
   4. **Anchor** — briefly name what begins to become possible, in the wanderer's own words. A small image of the day-side life. No promises. No steps.
 Between exchanges, loop back to Mirror as often as needed. This is a rhythm, not a checklist.
 
@@ -366,21 +390,18 @@ def build_system_message(
     if quiet_knowledge:
         parts.append(quiet_knowledge)
 
-    # §Stage 3.0 — Intuitive Flow lens-system propagation. Clarity
-    # Release inherits the same invisible-mentor logic as Body Room:
-    # the AI reads the wanderer's words and shifts register silently
-    # (somatic regulation / psychosomatic mirror / eastern breath),
-    # never naming a method aloud. The same wellness-language lock
-    # and the same forgiveness-sentence patterns apply.
-    try:
-        from body_lenses import lens_prompt_anchor
-        anchor = lens_prompt_anchor("intuitive")
-        if anchor:
-            parts.append(
-                "# §Active wisdom lens (default · invisible)\n" + anchor
-            )
-    except Exception:  # noqa: BLE001
-        pass
+    # §2026-02-14 STABILIZATION — Body Room "intuitive" lens injection
+    # REMOVED. It was leaking somatic/body-room register into the
+    # Private Room (Clarity Release), making Grace talk about the
+    # body when the wanderer came for emotional/relational work.
+    # Each room MUST own its own prompt. Body Room logic stays in
+    # body_room_ai.py; Parents' Room logic in parents_room_ai.py;
+    # Clarity Release stays purely the private mentor space.
+    #
+    # If a future iteration wants to share cross-room *themes* with
+    # the mentor, use the `quiet_knowledge` channel above — which
+    # is rendered as "themes the wanderer mentioned elsewhere, do
+    # not quote back". Never re-inject another room's full prompt.
 
     energy = GENDERED_ENERGY_BLOCKS.get(guide_gender or "")
     if energy:
@@ -725,8 +746,71 @@ def _split_signals(raw: str) -> dict:
         cleaned = sanitize_reply(cleaned)
     except Exception:  # noqa: BLE001 — safety filter is best-effort
         pass
+    # §STABILIZATION 2026-02-14 — Private Room body-aphorism strip.
+    # Claude occasionally generates body-as-knower aphorisms even after
+    # the prompt forbids them. We surgically remove the exact sentences
+    # so Private Room never reads like Body Room. Aphorism patterns
+    # (case-insensitive, span one sentence):
+    cleaned = _strip_body_aphorisms(cleaned)
     return {
         "text": cleaned,
         "tone_tag": tone_tag,
         "user_state": user_state,
     }
+
+
+# §STABILIZATION 2026-02-14 — Body-aphorism regex set.
+# These are sentence patterns that turn a Private Room reply into a
+# Body Room reply by referring to the body as a knower / speaker /
+# pre-cognitive sense organ. Each pattern strips the matching
+# sentence cleanly (including the trailing space/newline).
+_BODY_APHORISMS: List["re.Pattern"] = [
+    re.compile(
+        r"\b(?:sometimes\s+)?(?:the\s+|your\s+)?body\s+(?:already\s+)?"
+        r"(?:knows?|remembers?|holds?)\s+(?:before|what|where|the|more|things|it|the\s+day)\s*[^\.\?\!]*[\.\?\!]\s*",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:the\s+|your\s+)?body\s+is\s+(?:telling\s+you|speaking|whispering|holding)[^\.\?\!]*[\.\?\!]\s*",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:let|allow)\s+(?:the\s+|your\s+)?body\s+(?:speak|talk|breathe)"
+        r"[^\.\?\!]*[\.\?\!]\s*",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bwhere\s+(?:in\s+)?(?:the\s+|your\s+)?body\s+(?:do\s+you|does\s+it)"
+        r"[^\.\?\!]*[\.\?\!\n]",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:the\s+|your\s+)?body\s+(?:speaks\s+first|whispers|carries\s+what)"
+        r"[^\.\?\!]*[\.\?\!]\s*",
+        re.IGNORECASE,
+    ),
+]
+
+
+def _strip_body_aphorisms(text: str) -> str:
+    """Strip unprompted body-as-knower aphorisms from a Clarity reply.
+
+    Conservative: removes one matching sentence per pattern, leaves
+    the rest of the reply intact. If the strip would empty the reply
+    entirely, returns the original (the reply was *all* aphorism —
+    upstream will use the sanitize_reply fallback). Idempotent.
+    """
+    if not text:
+        return text
+    out = text
+    for pat in _BODY_APHORISMS:
+        out = pat.sub("", out)
+    out = re.sub(r"\n{3,}", "\n\n", out)
+    out = re.sub(r" {2,}", " ", out)
+    out = out.strip()
+    # Never return empty — if Claude's whole reply was aphorism, keep
+    # the original. The upstream sanitize_reply will still catch any
+    # outright clinical drift.
+    if not out:
+        return text
+    return out
