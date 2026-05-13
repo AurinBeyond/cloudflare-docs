@@ -69,12 +69,21 @@ DEFAULT_SPEED = _read_speed()
 TTS_MAX_CHARS = 4000  # OpenAI cap is 4096, leave a small margin
 
 
-# -- ElevenLabs defaults (founder "Jenny" spec) ---------------------
+# -- ElevenLabs defaults (founder "Grace Voice Mix" spec 2026-02-14) -
+# Custom Grace voice designed in ElevenLabs Voice Lab. Founder spec:
+#   Model: eleven_monolingual_v1  (English-only — no multilingual
+#                                  drift, no accent leakage)
+#   Stability: 0.50               (founder bumped from 0.42 → 0.50)
+#   Similarity: 0.80
+#   Style: 0.00                   (founder bumped from 0.10 → 0.00:
+#                                  zero performative drift, pure
+#                                  professional mentor)
+#   Speaker Boost: true
 ELEVENLABS_VOICE_FOR_GENDER = {
-    "female": os.getenv("ELEVENLABS_VOICE_FEMALE", "21m00Tcm4Tlm"),  # Rachel
+    "female": os.getenv("ELEVENLABS_VOICE_FEMALE", "21m00Tcm4Tlm"),  # Rachel until founder ships custom Grace voice_id
     "male": os.getenv("ELEVENLABS_VOICE_MALE", "pNInz6obpgDQGcFmaJgB"),  # Adam
 }
-ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_multilingual_v2")
+ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_monolingual_v1")
 
 
 def _read_float(env_name: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -87,9 +96,10 @@ def _read_float(env_name: str, default: float, lo: float = 0.0, hi: float = 1.0)
         return default
 
 
-ELEVENLABS_STABILITY = _read_float("ELEVENLABS_STABILITY", 0.42)
+ELEVENLABS_STABILITY = _read_float("ELEVENLABS_STABILITY", 0.50)
 ELEVENLABS_SIMILARITY = _read_float("ELEVENLABS_SIMILARITY", 0.80)
-ELEVENLABS_STYLE = _read_float("ELEVENLABS_STYLE", 0.10)
+ELEVENLABS_STYLE = _read_float("ELEVENLABS_STYLE", 0.00)
+ELEVENLABS_USE_SPEAKER_BOOST = (os.getenv("ELEVENLABS_SPEAKER_BOOST", "true").lower() == "true")
 
 
 def voice_provider() -> str:
@@ -182,7 +192,7 @@ def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
         stability=ELEVENLABS_STABILITY,
         similarity_boost=ELEVENLABS_SIMILARITY,
         style=ELEVENLABS_STYLE,
-        use_speaker_boost=True,
+        use_speaker_boost=ELEVENLABS_USE_SPEAKER_BOOST,
     )
     audio_iter = client.text_to_speech.convert(
         text=clean,
