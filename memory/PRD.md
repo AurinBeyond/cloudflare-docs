@@ -1,3 +1,64 @@
+> 🟢 **PHASE 1 ITER 72 — 2026-02-14 (VoiceStatusRow shared component + regression lock)**
+>
+> Founder decision after iter 71: lock the recurring banned-label
+> regression (3rd occurrence) by extracting voice-status JSX into a
+> single shared component and pinning the contract with pytest.
+>
+> 1. **`<VoiceStatusRow>` shared component**
+>    (`/app/frontend/src/components/VoiceStatusRow.jsx`, ~127 lines)
+>    - Single source of truth for the sanctuary voice-status line.
+>    - Props: `voice` (the useVoiceIO return), `variant`
+>      ("clarity"|"compact"), `testid`, `showMuteToggle`,
+>      `muteTestid`.
+>    - Renders ONLY two operational labels: "Microphone paused." OR
+>      "Hearing the words." OR empty string. All previous sanctuary
+>      labels ("A small pause.", "Listening, unhurried.",
+>      "Speaking softly.", "Listening.", "Speaking.") are explicitly
+>      excluded.
+>    - Coloured dot signals state visually; the wanderer FEELS
+>      listening / speaking / muted from the dot + GuidePresence
+>      portrait, never reads it as text.
+>
+> 2. **Three consumers refactored**
+>    - `pages/ClarityRelease.jsx` (~line 1148): uses variant="clarity"
+>      with showMuteToggle. The ~50 lines of inline JSX (dot + label
+>      ternary + mute button) replaced with a single `<VoiceStatusRow>`
+>      call.
+>    - `components/BodyRoomChat.jsx` (~line 452): variant="compact",
+>      no mute toggle (the room already has its own SomaticTtsButton).
+>    - `components/ParentsRoomChat.jsx` (~line 399): variant="compact".
+>
+> 3. **Regression lock — 3 pytest assertions**
+>    (`/app/backend/tests/test_phase1_voice_status_lock.py`)
+>    - `test_no_banned_state_labels_in_frontend` — recursively scans
+>      `/app/frontend/src/` for the 5 banned labels (with trailing
+>      period). Strips JS comments before scanning so docstrings
+>      describing the bans as cautionary examples are allowed.
+>    - `test_voice_status_row_is_the_single_source_of_truth` —
+>      asserts ClarityRelease, BodyRoomChat, ParentsRoomChat all
+>      import `VoiceStatusRow`. If a future iter adds a 4th chat
+>      surface using voice, it MUST import the shared component or
+>      this test fails loudly.
+>    - `test_voice_status_row_only_emits_allowed_labels` — pins the
+>      two permitted strings inside VoiceStatusRow.jsx and asserts
+>      no banned label sneaks back in.
+>
+> Testing iter 72: 100% backend (11/11 pytest pass — 3 new lock +
+> 8 phase0 numbered-list-strip), 100% frontend (page loads, 0
+> console errors, 0 banned strings in DOM). Live beta test on
+> `/clarity-release` is now founder-owned (real-user verification).
+>
+> **Out of scope explicitly closed per founder decision:**
+> - Phoneme-accurate Wav2Lip / HeyGen / Modal / Replicate (NO)
+> - ElevenLabs voice vendor swap (NO — current OpenAI Shimmer @
+>   0.85 already matches the founder's voice spec: low-pitch, warm,
+>   breathy)
+> - Kids Universe 3-lens system (P2, waits for Stripe keys)
+> - useVoiceIO → useAmplitudeSync extraction (P3, no stability issue)
+
+---
+
+
 > 🟢 **PHASE 1 ITER 70-71 — 2026-02-14 ("Digital Presence" Variant C lock, $0 / warranty)**
 >
 > Founder selected Variant C from the "Digital Presence" ultimatum:
