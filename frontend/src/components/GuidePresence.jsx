@@ -1,25 +1,32 @@
 /**
- * GuidePresence.jsx — §Stage 2.7 cross-room presence component.
+ * GuidePresence.jsx — §Phase 1 "Digital Presence" (2026-02-14).
  *
- * Single shared, lightweight CSS-only presence layer for any private
- * room. Originally extracted from `pages/ClarityRelease.jsx` so the
- * Body Room (and later Cabinet) can share the exact same runtime
- * states + tone classes without duplicating CSS or JS.
+ * Founder Variant C lock: calm digital companion presence built ONLY
+ * from a still portrait + layered CSS overlays + Web-Audio-driven
+ * amplitude. No Sora videos, no Live2D, no GPU, no spectacle.
  *
- * Props:
- *   gender          "male" | "female" | undefined  (Clarity / Grace / neutral)
- *   sending         boolean — collapses to runtimeState="thinking"
- *   toneTag         "compassion" | "support" | "reflection" | "neutral"
- *   runtimeState    "idle" | "listening" | "thinking" | "speaking"
- *   variant         "full"  → big card with copy line (Clarity Release)
- *                   "compact" → tighter row, no descriptive copy (Body Room)
- *   labelOverride   optional eyebrow string (else uses Clarity / Grace / your companion)
+ * Layered architecture (front-to-back):
+ *   1. Base portrait <img> (Gemini-generated guide-{male|female}.jpg).
+ *   2. Mouth shadow overlay — opacity + Y-scale follow CSS variable
+ *      `--mouth-open` (0..1), written 60 Hz by useVoiceIO's TTS
+ *      AnalyserNode. Soft, capped, never fish-flaps.
+ *   3. Eye-blink sweep — JS-randomized 3-8 s intervals so the
+ *      wanderer's brain cannot pattern-match a metronome blink.
+ *   4. Gaze layer — when runtimeState=thinking, a CSS transform
+ *      micro-shifts the portrait down-left ("looking at the notebook")
+ *      so the wanderer reads "she is considering", not "system delay".
+ *   5. Speaking halo (existing) — warm sage glow during TTS playback.
+ *   6. State ripple (existing) — outer ambient pulse.
  *
- * No animation libraries. No canvas. No WebGL. Honest still-portrait +
- * pure-CSS reactivity. Reduced-motion is respected via existing
- * keyframes in index.css.
+ * Motion budget — founder mandate "minimal, soft":
+ *   - breath scale: 1.012 max (was 1.022)
+ *   - sway:        ±0.35% (was ±0.6%)
+ *   - listening nod fires only when data-runtime-state="listening"
+ *   - mouth opacity capped at 0.55, Y-scale 0.55..1.30
+ *
+ * Honors prefers-reduced-motion via index.css.
  */
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const VALID_TONES = ["compassion", "support", "reflection", "neutral"];
 
@@ -34,10 +41,9 @@ const RING_BY_STATE = {
     "ring-2 ring-[hsl(var(--aurin-sage))/0.85] shadow-[0_0_30px_-2px_hsl(var(--aurin-sage)/0.6)]",
 };
 
+// State labels removed in iter 69 (founder: feel, do not read).
 const STATE_LINE = {
   idle: null,
-  // §Phase 0 Sanctuary (2026-02-14) — the wanderer must FEEL these
-  // states, never read them. Technical state labels removed.
   listening: null,
   thinking: null,
   speaking: null,
@@ -51,18 +57,17 @@ export default function GuidePresence({
   variant = "full",
   labelOverride,
   testidPrefix = "guide",
+  // §Phase 1 — real-time mouth amplitude from useVoiceIO. When provided,
+  // the mouth overlay tracks the TTS audio amplitude. Optional: if
+  // omitted, the mouth overlay simply stays at rest (presence still
+  // breathes & blinks — never breaks).
+  mouthOpenRef = null,
 }) {
   const portraitSrc = `/api/clarity/guide-face/${gender}`;
   const fallbackSrc =
     gender === "male"
       ? "/assets/illustrations/guide-male.jpg"
       : "/assets/illustrations/guide-female.jpg";
-
-  // Video presence — Grace has a Sora 2 vision pilot loop; Clarity falls
-  // back to static portrait until a male video is generated. The video
-  // plays muted+loop+playsInline so iOS Safari autoplay is permitted.
-  const videoSrc = gender === "female" ? "/avatars/grace_vision_pilot.mp4" : null;
-  const [videoFailed, setVideoFailed] = React.useState(false);
 
   const state = sending ? "thinking" : runtimeState || "idle";
   const tone = VALID_TONES.includes(toneTag) ? toneTag : "neutral";
@@ -89,8 +94,50 @@ export default function GuidePresence({
     ? "flex flex-col items-center gap-3 pt-2"
     : "mt-8 aurin-card p-6 md:p-7 flex flex-col md:flex-row gap-5 items-center";
 
-  // Speaking-state halo overlay (warm sage glow, slow pulse).
   const showSpeakingHalo = state === "speaking";
+
+  // ---- §Phase 1: amplitude → CSS variable (60 Hz, decoupled) ----
+  const portraitWrapperRef = useRef(null);
+  useEffect(() => {
+    if (!mouthOpenRef || !portraitWrapperRef.current) return undefined;
+    let raf = 0;
+    let cancelled = false;
+    const el = portraitWrapperRef.current;
+    const tick = () => {
+      if (cancelled) return;
+      const v = Math.max(0, Math.min(1, mouthOpenRef.current || 0));
+      // Skip DOM write when value is essentially unchanged (saves
+      // layout work on quiet frames).
+      el.style.setProperty("--mouth-open", v.toFixed(3));
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      el.style.setProperty("--mouth-open", "0");
+    };
+  }, [mouthOpenRef]);
+
+  // ---- §Phase 1: randomized rare blinks (3-8 s; founder: chaos factor) ----
+  const [blinkTick, setBlinkTick] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    let timeoutId = 0;
+    const schedule = () => {
+      const delay = 3200 + Math.random() * 4800; // 3.2-8.0 s
+      timeoutId = window.setTimeout(() => {
+        if (cancelled) return;
+        setBlinkTick((t) => t + 1);
+        schedule();
+      }, delay);
+    };
+    schedule();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
     <div
@@ -102,27 +149,12 @@ export default function GuidePresence({
       className={`${wrapperClasses} aurin-guide-tone-${tone} aurin-guide-state-${state}`}
     >
       <div
+        ref={portraitWrapperRef}
         className={`shrink-0 ${portraitSize} rounded-full overflow-hidden border border-[hsl(var(--aurin-border))] transition-all duration-700 ${ringClass} aurin-guide-presence relative`}
         data-testid={`${testidPrefix}-portrait`}
+        style={{ "--mouth-open": 0 }}
       >
-        {videoSrc && !videoFailed ? (
-          <video
-            src={videoSrc}
-            className="w-full h-full object-cover aurin-guide-breath aurin-guide-sway"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            onError={() => setVideoFailed(true)}
-            data-testid={`${testidPrefix}-portrait-video`}
-            aria-label={
-              gender === "female"
-                ? "Guide presence — Grace, breathing quietly"
-                : "Guide presence"
-            }
-          />
-        ) : (
+        <div className="aurin-guide-gaze w-full h-full">
           <img
             src={portraitSrc}
             alt={
@@ -140,10 +172,20 @@ export default function GuidePresence({
               }
             }}
           />
-        )}
+          {/* §Phase 1 mouth shadow overlay — tracks `--mouth-open`. */}
+          <span
+            aria-hidden
+            data-testid={`${testidPrefix}-mouth`}
+            className="aurin-guide-mouth"
+          />
+        </div>
+        {/* §Phase 1 randomized blink — remounted via `key` so the
+            single-shot animation retriggers each tick. */}
         <span
+          key={`blink-${blinkTick}`}
           aria-hidden
-          className="aurin-guide-blink pointer-events-none absolute inset-x-0 top-[34%] h-[6px]"
+          data-testid={`${testidPrefix}-blink`}
+          className="aurin-guide-blink-once pointer-events-none absolute inset-x-0 top-[34%] h-[6px]"
         />
         <span
           aria-hidden

@@ -292,6 +292,7 @@ export default function BodyRoomChat({
                 : "idle"
             }
             variant="compact"
+            mouthOpenRef={voice.mouthOpenRef}
             labelOverride="A quiet hand · somatic companion"
             testidPrefix="body-room-guide"
           />

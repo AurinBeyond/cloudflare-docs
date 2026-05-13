@@ -482,11 +482,14 @@
     0%,
     100% {
         transform: scale(1);
-        filter: brightness(0.98);
+        filter: brightness(0.99);
     }
     50% {
-        transform: scale(1.022);
-        filter: brightness(1.04);
+        /* §Phase 1 (2026-02-14): founder mandate — keep motion MINIMAL.
+           Scale dialled from 1.022 → 1.012 and brightness pulse from
+           1.04 → 1.02 so the wanderer feels presence, not performance. */
+        transform: scale(1.012);
+        filter: brightness(1.02);
     }
 }
 
@@ -496,10 +499,11 @@
         transform: translateX(0);
     }
     25% {
-        transform: translateX(-0.6%);
+        /* §Phase 1 — softened sway: ±0.35% (was ±0.6%). Minimal. */
+        transform: translateX(-0.35%);
     }
     75% {
-        transform: translateX(0.6%);
+        transform: translateX(0.35%);
     }
 }
 
@@ -568,10 +572,120 @@
     .aurin-guide-breath,
     .aurin-guide-sway,
     .aurin-guide-blink,
+    .aurin-guide-blink-once,
+    .aurin-guide-listening-nod,
     .aurin-guide-presence::after,
-    .aurin-guide-speaking-halo {
+    .aurin-guide-speaking-halo,
+    .aurin-guide-mouth {
         animation: none !important;
+        transition: none !important;
     }
+}
+
+/* ============================================================
+   §Phase 1 "Digital Presence" (2026-02-14, founder Variant C lock).
+   
+   Calm digital companion presence — not an AI presenter, not a
+   corporate avatar, not a hologram, not a streamer. Minimal,
+   randomized, soft motion. Web-Audio-driven mouth (no fish-flapping).
+   Silence is part of the system.
+   ============================================================ */
+
+/* Once-shot blink — triggered via React key remount. Single 220ms
+   sweep over the eye-line, indistinguishable from the previous
+   periodic blink visually but driven by randomized JS timing
+   (3-8 s intervals) so the wanderer's brain can NEVER pattern-match
+   on a metronome blink. The blink is RARE on purpose. */
+@keyframes aurin-guide-blink-once {
+    0% { opacity: 0; }
+    40% { opacity: 0.55; }
+    60% { opacity: 0.55; }
+    100% { opacity: 0; }
+}
+
+.aurin-guide-blink-once {
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        hsl(var(--aurin-bg) / 0.55) 35%,
+        hsl(var(--aurin-bg) / 0.55) 65%,
+        transparent 100%
+    );
+    filter: blur(3px);
+    animation: aurin-guide-blink-once 220ms ease-in-out;
+    opacity: 0;
+}
+
+/* Amplitude-driven mouth shadow. The portrait JPG already has the
+   mouth painted closed/relaxed; we never morph the underlying lips
+   (that would produce uncanny-valley artifacts on a photographic
+   face). Instead we overlay a soft sub-lip shadow whose opacity +
+   subtle Y-scale follow the TTS waveform amplitude in real time
+   (via CSS variable --mouth-open, 0..1, written 60 Hz by
+   useVoiceIO's TTS AnalyserNode). 
+   
+   The shadow is positioned at the mouth-line of our Gemini portraits
+   (roughly 64% from top, 24% wide centered). Max opacity capped at
+   0.55 so it always reads as "soft mouth shape", never "fish flap". */
+.aurin-guide-mouth {
+    position: absolute;
+    /* Founder tuning: positioned over the lip-parting line of both
+       portrait sources (guide-male.jpg, guide-female.jpg). */
+    left: 38%;
+    right: 38%;
+    top: 63%;
+    height: 4.2%;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at center,
+        hsl(0 0% 8% / 0.85) 0%,
+        hsl(0 0% 8% / 0.45) 45%,
+        transparent 75%
+    );
+    filter: blur(2.5px);
+    pointer-events: none;
+    opacity: calc(var(--mouth-open, 0) * 0.55);
+    transform: scaleY(calc(0.55 + var(--mouth-open, 0) * 0.75));
+    transform-origin: center top;
+    /* Smooth easing — never a hard on/off. */
+    transition:
+        opacity 80ms ease-out,
+        transform 80ms ease-out;
+    will-change: opacity, transform;
+}
+
+/* Gaze-aside — when runtimeState=thinking, eye-overlay shifts down-left
+   to simulate "looking at the notebook" while words gather. Pure CSS,
+   triggered via data-runtime-state="thinking" on the wrapper. */
+.aurin-guide-gaze {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate3d(0, 0, 0);
+}
+
+[data-runtime-state="thinking"] .aurin-guide-gaze {
+    transform: translate3d(-1.2%, 1.4%, 0);
+}
+
+/* Listening-nod — a barely-perceptible 0.3° head tilt that fires when
+   the user is actively speaking (data-runtime-state="listening" on the
+   wrapper). The wanderer perceives "I am being heard" without the
+   mentor performing comprehension. Single soft cycle. */
+@keyframes aurin-guide-listening-nod {
+    0% { transform: rotate(0deg) translateY(0); }
+    35% { transform: rotate(0.35deg) translateY(-0.4%); }
+    70% { transform: rotate(-0.15deg) translateY(0.15%); }
+    100% { transform: rotate(0deg) translateY(0); }
+}
+
+[data-runtime-state="listening"] .aurin-guide-breath,
+[data-runtime-state="listening"] .aurin-guide-sway {
+    animation:
+        aurin-guide-breath 7s ease-in-out infinite,
+        aurin-guide-sway 11s ease-in-out infinite,
+        aurin-guide-listening-nod 4.6s ease-in-out infinite;
 }
 
 /* §Faas 1 — Speaking-state warm halo, layered over the GuidePresence

@@ -257,6 +257,7 @@ export default function ParentsRoomChat({
                 : "idle"
             }
             variant="compact"
+            mouthOpenRef={voice.mouthOpenRef}
             labelOverride="A quiet hand · parents' companion"
             testidPrefix="parents-room-guide"
           />

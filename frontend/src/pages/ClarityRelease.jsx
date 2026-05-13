@@ -1084,6 +1084,7 @@ function ChatPanel({
           sending={sending}
           toneTag={toneTag}
           variant="call"
+          mouthOpenRef={voice.mouthOpenRef}
           runtimeState={
             voice.listening
               ? "listening"
@@ -1452,7 +1453,7 @@ function PreviousQuietHoursPanel({ threads, onResume, resumingId }) {
  * Allowed motion: breathing, blink, subtle head sway, send-state glow.
  * Forbidden: lip-sync, hand gestures, posture changes, eye-tracking.
  */
-function GuideHologram({ gender, sending, toneTag, runtimeState }) {
+function GuideHologram({ gender, sending, toneTag, runtimeState, mouthOpenRef }) {
   // §Stage 2.7 — thin wrapper preserving the original testid/contract.
   // The actual visual + state handling now lives in
   // `components/GuidePresence.jsx` so the Body Room can share it.
@@ -1465,6 +1466,7 @@ function GuideHologram({ gender, sending, toneTag, runtimeState }) {
         runtimeState={runtimeState}
         variant="full"
         testidPrefix="clarity-guide"
+        mouthOpenRef={mouthOpenRef}
       />
     </div>
   );

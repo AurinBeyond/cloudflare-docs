@@ -1,0 +1,58 @@
+{
+  "summary": "Iteration 70 — §Phase 1 'Digital Presence' (Variant C) verification. Code review + DOM/CSS structure + backend regression. 8/8 phase0 numbered-list-strip tests still pass, guide-face endpoints return new Gemini portraits (98012 / 95330 bytes, image/jpeg, 200). GuidePresence layered overlays (img + mouth + blink + gaze), randomized 3.2–8s blink scheduler, RAF amplitude → CSS --mouth-open are wired correctly. useVoiceIO exposes mouthOpenRef, AnalyserNode (createMediaElementSource + analyser.connect(ctx.destination)) on TTS, thoughtful pause 1100-1500ms randomized before audio.play(), vadSilenceMs default 1700ms, barge-in path intact. All three chat surfaces pass voice.mouthOpenRef into <GuidePresence>. index.css has new keyframes (blink-once 220ms, listening-nod, softened breath 1.012, mouth/gaze). HOWEVER, two regression label leaks were found: BodyRoomChat and ParentsRoomChat still render 'A small pause.' and 'Listening, unhurried.' in the voice-status row — exactly the labels iter 69 was supposed to remove. Visual end-to-end DOM verification of GuidePresence inside ClarityRelease was blocked by the welcome/consent wall (custom checkbox not toggled by playwright check), but the rendered structure is provable by file inspection and is correct.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "BodyRoomChat.jsx",
+        "issue": "REGRESSION (Phase 1 lock violation): banned state labels still rendered in voice-status row — line 483 'Listening, unhurried.' and line 484 'A small pause.'. Iter 69 cleanup was applied only to ClarityRelease + RealtimeCompanion; Body Room missed.",
+        "selector": "BodyRoomChat voice-status <span>",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ParentsRoomChat.jsx",
+        "issue": "REGRESSION (Phase 1 lock violation): banned state labels still rendered — line 430 'Listening, unhurried.' and line 431 'A small pause.'.",
+        "selector": "ParentsRoomChat voice-status <span>",
+        "priority": "HIGH"
+      },
+      {
+        "component": "TheBeginningStep.jsx",
+        "issue": "Eyebrow 'A small pause' (line 285) — same phrase as the banned voice-status label. Likely pre-existing copy on the slow-pause page, not the voice-room label, but worth a founder check.",
+        "selector": ".aurin-eyebrow",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase0_numbered_list_strip.py",
+    "/app/test_reports/pytest/iter70_phase0.xml"
+  ],
+  "action_items": [
+    "FIX: Replace the 'A small pause.' / 'Listening, unhurried.' branches in BodyRoomChat.jsx (~L476-485) and ParentsRoomChat.jsx (~L423-432) with the same calm-default treatment used in ClarityRelease/RealtimeCompanion (drop the label, keep only the speaking/transcribing micro-cues, or leave the row empty). This is the same regression the iter 69 cleanup landed for ClarityRelease.",
+    "OPTIONAL: confirm with founder whether the 'A small pause' eyebrow on TheBeginningStep.jsx (L285) should also be re-worded to avoid vocabulary overlap with the banned voice-room labels.",
+    "OPTIONAL code cleanup (carry-over from iter 69 review): GuidePresence STATE_LINE map is now all-null — simplify to a single calm-default copy block; ClarityRelease.jsx is still >1400 LOC and should be split."
+  ],
+  "critical_code_review_comments": [
+    "useVoiceIO.speak() correctly wires AnalyserNode AFTER the TTS fetch + BEFORE audio.play(), but the call uses ctx.createMediaElementSource(audio) on a freshly-built <audio> each call. If speak() is called twice in quick succession the previous AudioContext is reused (ttsCtxRef.current) which is fine, but the previous source node is NOT explicitly disconnected — over a long session this can accumulate dangling MediaElementSource nodes. _stopTtsAnalyser disconnects the analyser but not the source. Low-priority leak.",
+    "GuidePresence RAF loop (line 106-114) writes --mouth-open every frame even when the value is unchanged. The TODO comment claims a 'skip when unchanged' but no such guard exists. Minor perf nit (60 Hz CSS-var writes are cheap).",
+    "BodyRoomChat / ParentsRoomChat voice-status row regression (above) — same code shape as the ClarityRelease block that was cleaned in iter 69. The cleanup needs to be propagated.",
+    "useVoiceIO line 565 source.connect(analyser) + analyser.connect(ctx.destination) — correct, this avoids the common 'audio goes silent when you tap an element source' bug.",
+    "VAD barge-in (line 360-369): pauses audioRef.current and sets it to null on first voiced frame — works, but does NOT call _stopTtsAnalyser, so the analyser RAF keeps ticking against a now-null audio element for a few frames (sampleLoop has a guard `audio.paused || audio.ended` so it self-fades to 0). Cosmetic, not a bug."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100%",
+    "frontend": "85% (DOM/CSS/JS structure all correct; 2 regression label leaks in Body/Parents rooms)"
+  },
+  "test_credentials": "Used the live preview session from /app/memory/test_credentials.md (e1-stab-test@example.com, session_token ccb7b5b6…40cd, valid 2026-05-17). No mongo writes this iteration.",
+  "seed_data_creation": "None.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "§Phase 1 'Digital Presence' Variant C is structurally correct (4-layer GuidePresence overlays, 60 Hz amplitude → CSS var, randomized 3.2-8s blink scheduler, randomized 1.1-1.5s thoughtful pause before TTS, vadSilenceMs=1700, AnalyserNode wired with connect(ctx.destination), barge-in intact). Backend phase0 numbered-list-strip is still locked by 8 tests (test_phase0_numbered_list_strip.py). Guide-face endpoints serve 98012 / 95330 byte image/jpeg. The OPEN regression to fix is the voice-status row in BodyRoomChat.jsx (~L483-484) and ParentsRoomChat.jsx (~L430-431) which still print 'A small pause.' and 'Listening, unhurried.' — same shape as the block iter 69 cleaned in ClarityRelease. Visual screenshot of in-room GuidePresence was not captured because the ClarityRelease welcome/consent wall blocks deep navigation without a real human click on the custom-styled checkbox; the layered DOM is provable by source.",
+  "rca_of_the_issue": "Iter 69 cleanup pass removed banned state labels from ClarityRelease.jsx + RealtimeCompanion.jsx, but BodyRoomChat.jsx and ParentsRoomChat.jsx (which have an identically-shaped voice-status row) were missed. The strings 'A small pause.' (line 484 / line 431) and 'Listening, unhurried.' (line 483 / line 430) are hard-coded in a ternary chain. Mitigation: replace these branches with empty string OR the same calm-default copy used in ClarityRelease."
+}

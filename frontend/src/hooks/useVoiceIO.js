@@ -64,12 +64,23 @@ export default function useVoiceIO({
   onResult,
   gender = "female",
   autoVoice = false,           // when true: no button, continuous listen+VAD
-  vadSilenceMs = 1500,         // ms of quiet before auto-stop+send
+  vadSilenceMs = 1700,         // ms of quiet before auto-stop+send (founder: natural pause, not pushy)
   vadVolumeThreshold = 0.018,  // RMS threshold for "is speaking"
   vadMinSpeechMs = 350,        // require at least this much voiced audio
+  thoughtfulPauseMs,           // optional: ms of silence before TTS begins; defaults to 1100-1500 random
 }) {
   const audioRef = useRef(null);
   const inflightRef = useRef(null); // AbortController for current TTS request
+
+  // §Phase 1 "Digital Presence" (2026-02-14). Real-time mouth amplitude
+  // ref written 60 Hz by the TTS AnalyserNode below. GuidePresence
+  // reads this ref via its own RAF loop and writes the value into a
+  // CSS custom property `--mouth-open` on its wrapper. 0..1.
+  // Decoupled, no React re-renders, never blocks the audio pipeline.
+  const mouthOpenRef = useRef(0);
+  const ttsCtxRef = useRef(null);
+  const ttsAnalyserRef = useRef(null);
+  const ttsRafRef = useRef(null);
 
   // MediaRecorder refs
   const mediaStreamRef = useRef(null);
@@ -434,6 +445,18 @@ export default function useVoiceIO({
   }, [cleanupStream]);
 
   // ---- Backend TTS playback ----
+  const _stopTtsAnalyser = useCallback(() => {
+    if (ttsRafRef.current) {
+      cancelAnimationFrame(ttsRafRef.current);
+      ttsRafRef.current = null;
+    }
+    if (ttsAnalyserRef.current) {
+      try { ttsAnalyserRef.current.disconnect(); } catch { /* noop */ }
+      ttsAnalyserRef.current = null;
+    }
+    mouthOpenRef.current = 0;
+  }, []);
+
   const stopSpeaking = useCallback(() => {
     if (inflightRef.current) {
       try {
@@ -452,8 +475,9 @@ export default function useVoiceIO({
       }
       audioRef.current = null;
     }
+    _stopTtsAnalyser();
     setSpeaking(false);
-  }, []);
+  }, [_stopTtsAnalyser]);
 
   const speak = useCallback(
     async (text) => {
@@ -486,8 +510,10 @@ export default function useVoiceIO({
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
         audio.preload = "auto";
+        audio.crossOrigin = "anonymous";
         audio.onended = () => {
           setSpeaking(false);
+          _stopTtsAnalyser();
           try {
             URL.revokeObjectURL(url);
           } catch {
@@ -496,6 +522,7 @@ export default function useVoiceIO({
         };
         audio.onerror = () => {
           setSpeaking(false);
+          _stopTtsAnalyser();
           try {
             URL.revokeObjectURL(url);
           } catch {
@@ -503,22 +530,93 @@ export default function useVoiceIO({
           }
         };
         audioRef.current = audio;
+
+        // §Phase 1 — "Silence is part of the system". A randomized
+        // 1.1–1.5 s thoughtful pause before the mentor speaks. Founder
+        // mandate: the wanderer must FEEL considered, not processed.
+        // Chaos factor: jitter so the wanderer's brain can't pattern-
+        // match a metronome cadence.
+        const pauseMs = thoughtfulPauseMs ?? (1100 + Math.random() * 400);
+        await new Promise((r) => setTimeout(r, pauseMs));
+        if (controller.signal.aborted) return;
+
+        // §Phase 1 — amplitude-driven mouth sync. We wire an
+        // AnalyserNode onto the TTS HTMLAudioElement BEFORE play()
+        // (createMediaElementSource consumes the element, so we MUST
+        // also connect to ctx.destination or audio output is muted).
+        // Output amplitude (RMS, smoothed via low-pass lerp) drives
+        // `mouthOpenRef` 0..1, which GuidePresence reads at 60 Hz and
+        // applies to the CSS variable `--mouth-open`.
+        try {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) {
+            const ctx = ttsCtxRef.current || new AC();
+            ttsCtxRef.current = ctx;
+            // Some browsers suspend the context until a user gesture.
+            // We've had one (the chat submit) by the time we get here.
+            if (ctx.state === "suspended") {
+              try { await ctx.resume(); } catch { /* noop */ }
+            }
+            const source = ctx.createMediaElementSource(audio);
+            const analyser = ctx.createAnalyser();
+            analyser.fftSize = 256;
+            analyser.smoothingTimeConstant = 0.4;
+            source.connect(analyser);
+            analyser.connect(ctx.destination);
+            ttsAnalyserRef.current = analyser;
+            const buf = new Uint8Array(analyser.fftSize);
+            const sampleLoop = () => {
+              if (!ttsAnalyserRef.current) return;
+              if (audio.paused || audio.ended) {
+                mouthOpenRef.current = mouthOpenRef.current * 0.55;
+                ttsRafRef.current = requestAnimationFrame(sampleLoop);
+                return;
+              }
+              analyser.getByteTimeDomainData(buf);
+              let sum = 0;
+              for (let i = 0; i < buf.length; i++) {
+                const v = (buf[i] - 128) / 128;
+                sum += v * v;
+              }
+              const rms = Math.sqrt(sum / buf.length);
+              // Map ~0.02..0.30 RMS to 0..1 with gentle compression.
+              // Clamp ceiling so very loud frames can't fish-flap.
+              const target = Math.min(
+                1,
+                Math.max(0, (rms - 0.02) * 4.5),
+              );
+              // Low-pass lerp: 0.55 keep / 0.45 new — smooth, never
+              // snappy. This is the difference between "speaking"
+              // and "fish-flapping".
+              mouthOpenRef.current =
+                mouthOpenRef.current * 0.55 + target * 0.45;
+              ttsRafRef.current = requestAnimationFrame(sampleLoop);
+            };
+            ttsRafRef.current = requestAnimationFrame(sampleLoop);
+          }
+        } catch {
+          /* AnalyserNode unavailable — audio still plays, mouth stays
+             at rest. Never breaks the conversation. */
+        }
+
         await audio.play().catch(() => {
           // Autoplay blocked — surface gracefully.
           setSpeaking(false);
+          _stopTtsAnalyser();
         });
       } catch (err) {
         if (err?.name !== "AbortError") {
           // Silent fail keeps the room calm; text reply still landed.
         }
         setSpeaking(false);
+        _stopTtsAnalyser();
       } finally {
         if (inflightRef.current === controller) {
           inflightRef.current = null;
         }
       }
     },
-    [gender, muted, stopSpeaking],
+    [gender, muted, stopSpeaking, _stopTtsAnalyser, thoughtfulPauseMs],
   );
 
   const toggleMute = useCallback(() => {
@@ -561,5 +659,7 @@ export default function useVoiceIO({
     stopSpeaking,
     toggleMute,
     dismissVoiceError,
+    // §Phase 1 — real-time mouth amplitude (0..1) for GuidePresence.
+    mouthOpenRef,
   };
 }
