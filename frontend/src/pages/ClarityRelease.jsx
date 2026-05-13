@@ -1282,7 +1282,7 @@ function ChatPanel({
             className="aurin-card p-7 md:p-8 mt-7 flex flex-col md:flex-row md:items-center gap-5"
           >
             <div className="flex-1">
-              <div className="aurin-eyebrow !mb-1">A small pause</div>
+              <div className="aurin-eyebrow !mb-1">One more breath</div>
               <p className="aurin-display text-2xl leading-snug">
                 Some conversations{" "}
                 <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">

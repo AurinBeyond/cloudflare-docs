@@ -178,16 +178,13 @@ def _strip_numbered_list_leakage(text: str) -> str:
     if not text:
         return text
     out = text
-    # Pattern: run of "N. N. N. ..." (two+) — drop them
-    out = re.sub(r"(?:(?:^|[.\n!?]\s*))((?:\s*\d{1,3}\.\s+){2,})", lambda m: m.group(0)[: m.start(1) - m.start(0)] if False else (m.group(0).split(m.group(1))[0] if m.group(1) in m.group(0) else m.group(0)), out)
-    # Simpler robust passes:
     # 1) Leading run at start of string
     out = re.sub(r"^\s*(?:\d{1,3}\.\s+){2,}", "", out)
     # 2) Run after sentence boundary
     out = re.sub(r"([.!?\n]\s+)(?:\d{1,3}\.\s+){2,}", r"\1", out)
     # 3) Any remaining 3+ consecutive enumeration markers anywhere
     out = re.sub(r"(?:\d{1,3}\.\s+){3,}", "", out)
-    # 4) Single trailing/leading bare "N." with no sentence content
+    # 4) Single bare "N." at the very start with no sentence content
     out = re.sub(r"^\s*\d{1,3}\.\s*(?=[A-ZÄÖÕÜ])", "", out)
     # Collapse double spaces left behind.
     out = re.sub(r" {2,}", " ", out).strip()

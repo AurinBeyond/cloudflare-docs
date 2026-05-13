@@ -1,3 +1,64 @@
+> 🟢 **PHASE 0 ITER 69 — 2026-02-14 (founder warranty pass: numbers, labels, portraits)**
+>
+> Founder ultimatum (Estonian, "garantii korras"): four lingering Phase 0
+> bugs that broke the sanctuary feeling — numbered-list token leakage in
+> chat ("5. 6. 7. 8. ... 19. Hello."), technical state labels visible
+> ("A small pause.", "Speaking softly.", "Listening, unhurried."),
+> stick-figure SVG silhouettes on the guide selector, and the old
+> candle/portrait imagery. All four fixed surgically, no architecture
+> change, $0 credit (warranty work):
+>
+> 1. **Numbered-list stripper** (`clarity_safety.py`)
+>    - New Layer 0 `_strip_numbered_list_leakage()` runs BEFORE the
+>      Layer 1 clinical rewrites and Layer 2 hard-ban. Strips any run
+>      of `N.` enumeration tokens at the start of the message or after
+>      a sentence boundary. Legitimate inline numbers ("in 5 minutes")
+>      are preserved.
+>    - 8 regression tests in `tests/test_phase0_numbered_list_strip.py`
+>      (long enumeration, short, mid-sentence, clean preservation,
+>      inline-number preservation, full-pipeline, whitespace, idempotent).
+>
+> 2. **System-prompt anti-enumeration rule** (3 prompts)
+>    - `clarity_ai.CLARITY_SYSTEM_PROMPT`, `body_room_ai.BODY_ROOM_SYSTEM_PROMPT`,
+>      `parents_room_ai.PARENTS_ROOM_SYSTEM_PROMPT` all gained an
+>      explicit "Never start a sentence with a digit followed by a
+>      period. Sequences like '5. 6. 7. Hello.' are token-counting
+>      artifacts and must never reach the wanderer." line. Belt + braces
+>      with the new safety filter.
+>
+> 3. **Technical state labels removed** (4 files)
+>    - `GuidePresence.jsx` `STATE_LINE` — all four values nulled.
+>    - `ClarityRelease.jsx` chat state row — removed
+>      "A small pause." / "Speaking." / "Listening, unhurried." literals
+>      (microphone-paused + transcribing-feedback retained because they
+>      are user-actionable).
+>    - `ClarityRelease.jsx` continuation card — renamed eyebrow
+>      "A small pause" → "One more breath".
+>    - `RealtimeCompanion.jsx` status row — only "Opening the room."
+>      or error string remain.
+>
+> 4. **Real Gemini portraits replace stick figures and candle** (assets +
+>    `ClarityThreshold.jsx`)
+>    - New `guide-female.jpg` (98 KB) and `guide-male.jpg` (95 KB) cropped
+>      from the founder-uploaded `Gemini_Generated_Image_a3ci52…` duo
+>      portrait, dropped at `/app/frontend/public/assets/illustrations/`.
+>      `-sm` variants (~30 KB each) also generated for the selector.
+>    - `LightOrb` in `ClarityThreshold.jsx` now renders a circular
+>      `<img>` from `/api/clarity/guide-face/{variant}` (Mongo binary
+>      first, static fallback) instead of the `HumanSilhouette` SVG.
+>      Adds a sage ring + portrait halo on selection.
+>    - `HumanSilhouette` import removed from `ClarityRelease.jsx`
+>      (was unused after iter 68 audit).
+>    - `GuidePresence.jsx` continues to serve from the same endpoint,
+>      so the portrait identity is consistent across threshold +
+>      private rooms + future uploads.
+>
+> Testing iteration 69: 100% backend, 100% frontend; 8/8 phase0 pytest
+> pass; existing Layer 1/2 clinical-filter regression intact.
+
+---
+
+
 > 🟢 **PHASE 0 — 2026-02-13 (CRITICAL SANCTUARY STABILIZATION · founder distress directive)**
 >
 > Founder directive (Estonian, in distress): logo/menu overlap, harsh
