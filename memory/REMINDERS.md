@@ -58,11 +58,35 @@ E1 agent must (~5-min task):
 
 ### Anna's broader pending actions (independent of E1 agent):
 
-- **Production redeploy** for `prulesoul.site` with the 6 env vars
-  documented in iter 80 PRD entry. Without this, none of the
-  ConvAI work reaches paying users.
+- **Production redeploy** for `prulesoul.site` with the env vars
+  documented in iter 80 PRD entry. After iter 81 .gitignore fix,
+  "Save to GitHub" actually pushes .env now — without that fix,
+  none of the env vars were reaching the GitHub repo.
 - **Refund / credit escalation** → support@emergent.sh
   (Anna already filed; awaiting Emergent Support response).
+- **Browser cache clear** — when testing live, ALWAYS do
+  Ctrl+Shift+R (hard refresh) on prulesoul.site after a Redeploy.
+  The React bundle is aggressively cached; without hard refresh
+  she will see the OLD UI even though the server has the new code.
+
+### Queued for next iter (NOT in scope today):
+
+- **Checkout / packages page UX:** Anna reported "the page with 2
+  package options — packages should be at TOP, and the consent
+  checkbox should be UNDER the package choice. Currently users
+  don't realise they need to scroll up to give consent. They get
+  stuck and can't proceed."
+  → Touch the packages page only when Anna confirms which page
+    (likely /portal or /threshold). Move package cards above the
+    consent block; add a sticky "Continue" CTA that becomes active
+    only when both consent + package are picked. ~15 min work.
+
+- **Body Room conversational mode (Kaelan):** Currently `/body-room`
+  shows silhouette + region-hotspot UX + two "Go to Clarity Release"
+  CTAs. Anna expects to talk to **Kaelan** there. Phase B mount:
+  one line `<RoomConvaiChat room="body" />` in BodyRoom.jsx (env
+  already has the agent_id). ~5 min work.
+
 
 ---
 

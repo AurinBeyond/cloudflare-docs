@@ -1,3 +1,95 @@
+> 🟡 **PHASE 1 ITER 81 — 2026-02-15 (WHISPER HALLUCINATION FILTER + .gitignore FIX)**
+>
+> Founder report (Estonian, distressed): Production prulesoul.site
+> Grace was looping the same intro and replying to nonsense input.
+> Conversation snippet she captured:
+> ```
+> I'm here. What brought you to this room tonight?
+> 10. 10. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. ...
+> I'm here. What are you carrying underneath the numbers?
+> 10.5tbsp soy sauce 10.5tbsp mirin 10.5tbsp sugar ...
+> I'm here. What are you carrying underneath the recipe?
+> ```
+> Also reported: random Chinese / CJK characters appearing, no real
+> dialog progression, Grace repeating opening greeting.
+>
+> **Diagnosis (definitive, no guessing):**
+> Two production bugs:
+> 1. **Whisper STT hallucinations on silence.** OpenAI Whisper-1
+>    (and turbo) is well-documented to hallucinate when given silent
+>    or very low-amplitude audio. Common shapes: bare number
+>    sequences ("10. 11. 12."), recipe fragments, YouTube credit
+>    footers ("thanks for watching", "subscribe"), CJK glyphs.
+>    Anna's mic + room ambience triggered this every time she paused.
+>    Claude then earnestly responded to the hallucinations.
+> 2. **`.gitignore` silently blocked `.env` from reaching GitHub.**
+>    Lines 86-117 of `.gitignore` had four copies of `.env`,
+>    `.env.*`, `*.env` patterns. Every "Save to GitHub" left `.env`
+>    out of the push. Founder's Deploy panel env vars were correct
+>    but the **code** was being deployed without backend `.env`
+>    references intact. Founder was burning credits on a phantom
+>    config drift she could not see.
+>
+> **Verified production state (curl against `prulesoul.site`):**
+>   - `POST /api/clarity/convai/signed-url` → `401 Sign in to continue`
+>     → the new iter 80 endpoint IS on production
+>   - `GET /api/clarity/tts/stream` → `401`
+>     → the new iter 78 endpoint IS on production
+>   So the code deploy did succeed. The bugs above were the
+>   remaining quality blockers.
+>
+> **What landed (this iter):**
+>
+> 1. **`.gitignore`** — collapsed four duplicate blocks of `.env`,
+>    `.env.*`, `*.env`, `credentials.json`, `*.pem`, `*.key`,
+>    `.credentials` entries (lines 86-120) into a single comment
+>    explaining the rule: secrets are managed via Emergent Deploy
+>    panel env vars, NOT via .gitignore. The .env files must reach
+>    GitHub for the platform's Kubernetes deployment to pick them up.
+>
+> 2. **`server.py` `_filter_whisper_hallucination()` (NEW · ~60 lines)**
+>    Defence-in-depth post-Whisper filter applied inside
+>    `POST /api/clarity/stt` before the transcript is returned to
+>    the frontend. Five drop signatures (all gated on transcript
+>    length < 80 chars so real long sentences are never lost):
+>    - bare number sequences (`^[\s\d\.,]+$`)
+>    - recipe fragments (`\d+\s*(tbsp|tsp|cup|oz|gram|kg|ml|...)`)
+>    - YouTube/transcription footer phrases
+>    - >30% non-Latin glyphs (CJK / Cyrillic / Arabic / Hangul) on
+>      short clips
+>    - single-token-repeated loops ("hello hello hello hello hello")
+>    - 1-3 char non-vowel transcripts ("hm", "k", "zz")
+>    When a hallucination is filtered, the endpoint returns `""` and
+>    the wanderer's input is silently ignored — the room stays quiet
+>    rather than firing Claude on garbage.
+>
+> 3. **Regression tests** (`tests/test_whisper_hallucination_filter.py`
+>    · 12 cases):
+>    - 6 DROP scenarios (numbers, recipe, YouTube, repeats, CJK, single-char)
+>    - 5 KEEP scenarios (real greetings, emotional short, long
+>      sentences with numbers/Cyrillic, empty, trimmed whitespace)
+>    - 1 idempotence check
+>    All 12/12 PASS. Full test grid: **32/32 PASS** (12 new + 20 from
+>    iter 78/79/80).
+>
+> **NOT touched (founder stabilization mandate):**
+> - Body Room (Kaelan mount is Phase B pending — `<RoomConvaiChat
+>   room="body" />` is one line, deferred until founder confirms
+>   Grace works live).
+> - Parents' Room (Sara agent not yet created).
+> - Course Room (Alistair agent not yet created).
+> - Checkout / packages page UX (founder mentioned briefly but did
+>   not give specifics; queued for next iter).
+> - Sara/Alistair agent system prompts (founder's territory in
+>   ElevenLabs UI).
+>
+> **Production redeploy required** for `prulesoul.site` to receive
+> these fixes. Save to GitHub (which now actually pushes .env after
+> the .gitignore fix) → Redeploy.
+
+---
+
+
 > 🟢 **PHASE 1 ITER 80 — 2026-02-14 (ELEVENLABS CONVERSATIONAL AI · GRACE · PHASE A ONLY)**
 >
 > Founder directive (Estonian, stabilization mode): replace the

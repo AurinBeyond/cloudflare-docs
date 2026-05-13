@@ -4450,7 +4450,88 @@ async def clarity_stt(request: Request):
         logging.error("STT failed for user=%s: %s", user.user_id, e)
         raise HTTPException(status_code=500, detail="The room could not hear that clearly.")
 
+    # §2026-02-15 STABILIZATION — Whisper hallucination filter.
+    # Whisper-1 (and turbo) frequently hallucinates on silence, mic
+    # white-noise, or very short clips. Common shapes observed in
+    # production:
+    #   - sequences of bare numbers ("10. 11. 12. 13. ...")
+    #   - random recipe fragments ("10.5tbsp soy sauce mirin sugar")
+    #   - CJK / Cyrillic / Arabic glyphs when no language hint given
+    #   - YouTube-train footer phrases ("Thanks for watching", "Subscribe")
+    # If we forward these into Claude, the mentor genuinely tries to
+    # respond to them and the wanderer sees "What are you carrying
+    # underneath the numbers?" — which destroys trust.
+    # Better to return empty and let the room stay silent.
+    text = _filter_whisper_hallucination(text or "")
+
     return {"text": text or ""}
+
+
+# Common Whisper hallucination signatures, gathered from production logs
+# 2026-02-14/15. Each pattern is matched case-insensitively against the
+# WHOLE transcript. If the transcript matches AND is short (< 80 chars),
+# it is discarded.
+_WHISPER_HALLUCINATION_PATTERNS = [
+    # YouTube/transcription footer
+    re.compile(r"^\s*(thanks?\s+for\s+watching|please\s+subscribe|like\s+and\s+subscribe|click\s+the\s+bell)", re.IGNORECASE),
+    # Bare number sequences ("10. 11. 12. 13.")
+    re.compile(r"^[\s\d\.,]+$"),
+    # Recipe fragments ("X tbsp ingredient")
+    re.compile(r"^[\s\d\.]*\d+(\.\d+)?\s*(tbsp|tsp|cup|oz|gram|kg|ml|tablespoon|teaspoon)\b", re.IGNORECASE),
+    # Single repeated short token ("hi hi hi hi" / "hello hello hello")
+    re.compile(r"^\s*((\b\w{1,8}\b)[\s\.,!\?]*)\2{3,}\s*$", re.IGNORECASE),
+    # Captioner credits
+    re.compile(r"(subtitle|caption)s?\s+by", re.IGNORECASE),
+]
+
+
+def _filter_whisper_hallucination(text: str) -> str:
+    """Drop transcripts that look like Whisper hallucinations.
+
+    Returns the transcript unchanged when it looks like real speech.
+    Returns "" when the transcript matches any known hallucination
+    signature AND is short enough to plausibly be noise (longer real
+    transcripts that happen to contain a hallucination phrase still
+    pass through — we don't want to lose a real wanderer sentence).
+    """
+    stripped = (text or "").strip()
+    if not stripped:
+        return ""
+    # 1. Non-Latin glyph dominance (Whisper hallucinates CJK on silence
+    #    when no language hint). If > 30% of chars are CJK / Arabic /
+    #    Cyrillic AND length is short, it is almost certainly noise.
+    if len(stripped) < 120:
+        non_latin = sum(
+            1 for ch in stripped
+            if (
+                "\u3000" <= ch <= "\u9fff"   # CJK
+                or "\u0400" <= ch <= "\u04ff"  # Cyrillic
+                or "\u0600" <= ch <= "\u06ff"  # Arabic
+                or "\uac00" <= ch <= "\ud7af"  # Hangul
+            )
+        )
+        if non_latin >= 3 and non_latin / max(len(stripped), 1) > 0.3:
+            logging.info("Whisper hallucination filtered (non-latin): %r", stripped[:80])
+            return ""
+    # 2. Pattern matches — only short transcripts get dropped, so we
+    #    never throw away real long sentences that happen to contain a
+    #    suspect phrase.
+    if len(stripped) < 80:
+        for pat in _WHISPER_HALLUCINATION_PATTERNS:
+            if pat.search(stripped):
+                logging.info("Whisper hallucination filtered (pattern): %r", stripped[:80])
+                return ""
+    # 3. Single character or one-token transcripts with no vowels and
+    #    no spaces are also noise.
+    if len(stripped) <= 3 and not re.search(r"[aeiouAEIOU]", stripped):
+        return ""
+    # 4. Repeated-word noise ("hello hello hello hello"). Whisper
+    #    sometimes loops a single token on short noise bursts.
+    words = stripped.split()
+    if len(words) >= 4 and len(set(w.lower().strip(".,!?") for w in words)) == 1:
+        logging.info("Whisper hallucination filtered (repeated token): %r", stripped[:80])
+        return ""
+    return stripped
 
 
 # ---- Clarity Release — user prefs (consent, guide choice, mode) ----

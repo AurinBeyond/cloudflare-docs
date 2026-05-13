@@ -89,3 +89,4 @@ android-sdk/.media-staging/you-are-not-who-you-became-trailer.mp4
 # Deploy panel's Environment Variables section, not via .gitignore.
 frontend/node_modules/.cache/default-development/1.pack
 frontend/node_modules/.cache/default-development/5.pack
+frontend/node_modules/.cache/default-development/0.pack
