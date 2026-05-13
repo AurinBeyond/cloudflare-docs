@@ -83,7 +83,7 @@ ELEVENLABS_VOICE_FOR_GENDER = {
     "female": os.getenv("ELEVENLABS_VOICE_FEMALE", "21m00Tcm4Tlm"),  # Rachel until founder ships custom Grace voice_id
     "male": os.getenv("ELEVENLABS_VOICE_MALE", "pNInz6obpgDQGcFmaJgB"),  # Adam
 }
-ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_monolingual_v1")
+ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_turbo_v2_5")
 
 
 def _read_float(env_name: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
