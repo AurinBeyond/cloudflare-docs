@@ -21,15 +21,35 @@ from emergentintegrations.llm.openai import OpenAITextToSpeech
 
 VoiceGender = Literal["female", "male"]
 
-# §Phase 0 Sanctuary lock. Shimmer is the only acceptable female voice.
+# §Phase 0 Sanctuary lock. Shimmer is the founder-approved softest
+# female voice (breathy, sanctuary-grade). The defaults below are the
+# Phase 0 lock; the environment overrides allow safe, reversible A/B
+# tuning if the founder ever wants to test a slightly warmer voice
+# (e.g. `ballad` / `sage`) without a code change. Set in /app/backend/.env:
+#     CLARITY_VOICE_FEMALE=shimmer
+#     CLARITY_VOICE_MALE=echo
+#     CLARITY_TTS_SPEED=0.85
+# Leave unset to use the Phase 0 defaults.
 VOICE_FOR_GENDER = {
-    "female": "shimmer",
-    "male": "echo",
+    "female": os.getenv("CLARITY_VOICE_FEMALE", "shimmer"),
+    "male": os.getenv("CLARITY_VOICE_MALE", "echo"),
 }
 
 DEFAULT_MODEL = "tts-1-hd"
 # §Phase 0 Sanctuary lock — 0.85 is the founder-approved pacing.
-DEFAULT_SPEED = 0.85
+def _read_speed() -> float:
+    raw = os.getenv("CLARITY_TTS_SPEED")
+    if not raw:
+        return 0.85
+    try:
+        v = float(raw)
+    except ValueError:
+        return 0.85
+    # Hard guard against accidental over-fast voice. 0.7 .. 1.0 only.
+    return max(0.7, min(1.0, v))
+
+
+DEFAULT_SPEED = _read_speed()
 TTS_MAX_CHARS = 4000  # OpenAI cap is 4096, leave a small margin
 
 

@@ -10059,6 +10059,93 @@ async def catalogue_availability():
 
 
 # =============================================================
+# §Phase 1 follow-up — "Calmer-than-arrival" feedback (2026-02-14).
+# Founder mandate: the single most important quality metric for the
+# Clarity Release sanctuary is whether a tired wanderer feels calmer
+# after the conversation than when they arrived. We collect a one-tap,
+# anonymous, post-session signal — no identity, no email, no link to
+# the underlying chat. This is the calm-meter the Blueprint pinned as
+# "Most important metric".
+#
+# Surface area is intentionally tiny: one POST to record a vote, one
+# admin GET to read aggregate counts.
+# =============================================================
+@api_router.post("/clarity/session-feedback")
+async def clarity_session_feedback(request: Request):
+    """Record a single calmer/not-calmer/skipped vote. Anonymous.
+
+    Body (JSON): {"calmer": true | false | null, "room": "clarity"|"body"|"parents"}
+    - `calmer` is the only payload. We deliberately do NOT bind to a
+      user_id, session_token, or chat session. The wanderer's identity
+      is sanctuary-private.
+    - `room` defaults to "clarity" if missing. Used so we can later
+      compare which rooms produce the strongest calm signal.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    calmer = body.get("calmer")
+    if calmer not in (True, False, None):
+        raise HTTPException(status_code=400, detail="calmer must be true, false, or null")
+    room = (body.get("room") or "clarity").lower()
+    if room not in ("clarity", "body", "parents"):
+        room = "clarity"
+    doc = {
+        "id": str(uuid.uuid4()),
+        "calmer": calmer,
+        "room": room,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    try:
+        await db.clarity_session_feedback.insert_one(doc)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Clarity feedback insert failed: %s", exc)
+        raise HTTPException(status_code=500, detail="Could not record feedback.")
+    return {"ok": True}
+
+
+@api_router.get("/admin/clarity/calmer-stats")
+async def clarity_calmer_stats(request: Request):
+    """Admin — return aggregate counts of the calm-meter vote.
+
+    Header `X-Admin-Token` required. Returns counts per room and the
+    rolling 30-day window.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = request.headers.get("X-Admin-Token") or request.query_params.get("token")
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    pipeline = [
+        {"$group": {
+            "_id": {"room": "$room", "calmer": "$calmer"},
+            "count": {"$sum": 1},
+        }},
+    ]
+    by_room: dict[str, dict[str, int]] = {}
+    try:
+        async for row in db.clarity_session_feedback.aggregate(pipeline):
+            room = (row.get("_id") or {}).get("room") or "clarity"
+            key = (row.get("_id") or {}).get("calmer")
+            label = "yes" if key is True else "no" if key is False else "not_now"
+            by_room.setdefault(room, {"yes": 0, "no": 0, "not_now": 0})
+            by_room[room][label] = int(row.get("count") or 0)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Calmer-stats aggregate failed: %s", exc)
+        by_room = {}
+
+    # 30-day window
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+    try:
+        last_30 = await db.clarity_session_feedback.count_documents({"created_at": {"$gte": cutoff}})
+    except Exception:
+        last_30 = 0
+
+    return {"by_room": by_room, "last_30_days": last_30}
+
+
+# =============================================================
 # App wiring
 # =============================================================
 app.include_router(api_router)

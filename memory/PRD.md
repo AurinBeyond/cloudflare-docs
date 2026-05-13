@@ -1,3 +1,59 @@
+> 🟢 **PHASE 1 ITER 73 — 2026-02-14 (calm-meter + voice A/B knob)**
+>
+> Founder pinned "Did the wanderer feel calmer than when they
+> arrived?" as the single most important quality metric. Iter 73
+> ships the surface for that metric plus a small env-driven voice
+> A/B knob so the founder can tune voice without code changes.
+>
+> 1. **Calm-meter feedback flow**
+>    - `POST /api/clarity/session-feedback` — anonymous, fire-and-
+>      forget. Body: `{calmer: true|false|null, room: "clarity"|"body"|"parents"}`.
+>      Bad `calmer` → 400. Unknown room silently coerced to clarity.
+>      Records into `db.clarity_session_feedback` with id+timestamp.
+>      No user_id, no session_token binding — sanctuary-private.
+>    - `GET /api/admin/clarity/calmer-stats` — `X-Admin-Token`
+>      required. Returns `{by_room: {clarity: {yes,no,not_now}}, last_30_days}`.
+>    - `<SessionCalmerPrompt>` (`/app/frontend/src/components/`) —
+>      gentle one-time post-session card. Three buttons: "Yes, a
+>      little" / "Not yet" / "Quietly skip". One-tap, no submit, no
+>      follow-up, no identity. Daily localStorage bucket
+>      (`aurin_calmer_feedback_{room}_{YYYY-MM-DD}`) prevents repeat
+>      prompts. Soft-appears 900 ms after trigger.
+>    - Wired into ClarityRelease: triggers after ≥3 guide replies
+>      (real conversation took place).
+>
+> 2. **Env-driven voice A/B knob** (`/app/backend/clarity_tts.py`)
+>    - New env overrides:
+>      - `CLARITY_VOICE_FEMALE` (default `shimmer`)
+>      - `CLARITY_VOICE_MALE` (default `echo`)
+>      - `CLARITY_TTS_SPEED` (default `0.85`, clamped 0.7..1.0)
+>    - Unset → Phase 0 defaults preserved. Set in `/app/backend/.env`
+>      → live A/B without a deploy. Hard speed guard prevents
+>      accidental fast voice (founder is sensitive to "rushed").
+>    - Vendor stays OpenAI (no GPU spend, no ElevenLabs key needed).
+>      If founder ever wants ElevenLabs after the live beta test,
+>      it's a separate iteration with its own key + cost decision.
+>
+> 3. **Regression tests** (`/app/backend/tests/test_phase1_calmer_feedback.py`)
+>    - 7 sync httpx tests against the live preview URL:
+>      yes / no / null skip / 400 on invalid / unknown-room
+>      normalisation / admin-token gate / admin aggregate non-empty.
+>    - Combined with iter 71/72 lock tests: 18/18 PASS.
+>
+> Testing iter 73 = 100% backend (18/18 pytest pass), 100% lint
+> (frontend + backend), preview build serves successfully.
+>
+> **Deferred to founder ownership:**
+> - Live beta test of /clarity-release (founder's seat).
+> - Pro-quality demo video for Revolut/Tanushree — out of scope
+>   for code agent; recording infrastructure can be added in a
+>   later iteration if needed.
+> - Final voice vendor decision (stay OpenAI Shimmer vs switch to
+>   ElevenLabs) — pending founder's actual ear-on-the-page reaction.
+
+---
+
+
 > 🟢 **PHASE 1 ITER 72 — 2026-02-14 (VoiceStatusRow shared component + regression lock)**
 >
 > Founder decision after iter 71: lock the recurring banned-label

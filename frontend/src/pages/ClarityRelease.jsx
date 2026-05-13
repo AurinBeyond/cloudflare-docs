@@ -10,6 +10,7 @@ import ChatUsageHint from "@/components/ChatUsageHint";
 import { CabinetUpgradeHook } from "@/components/MembershipTiers";
 import GuidePresence from "@/components/GuidePresence";
 import VoiceStatusRow from "@/components/VoiceStatusRow";
+import SessionCalmerPrompt from "@/components/SessionCalmerPrompt";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1273,6 +1274,14 @@ function ChatPanel({
         {!access?.has_active_pass && messages.length >= 4 && (
           <CabinetUpgradeHook />
         )}
+
+        {/* §Phase 1 calm-meter — only after a real conversation
+            took place (>=3 guide replies). One-time per day. */}
+        <SessionCalmerPrompt
+          room="clarity"
+          trigger={messages.filter((m) => m.role === "guide").length >= 3}
+          testidPrefix="clarity-calmer"
+        />
 
         <div className="mt-7 flex flex-wrap items-center gap-3 text-[12.5px] text-[hsl(var(--aurin-text-muted))]">
           <button
