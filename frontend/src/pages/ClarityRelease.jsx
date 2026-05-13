@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import RealtimeCompanion from "@/components/RealtimeCompanion";
 import PageHeader from "@/components/layout/PageHeader";
 import EmergencyExit from "@/components/EmergencyExit";
-import HumanSilhouette from "@/components/HumanSilhouette";
+// HumanSilhouette removed §Phase 0 Sanctuary 2026-02-14 — real
+// portrait selector now lives in ClarityThreshold.
 import MemoryPackageSelect from "@/components/MemoryPackageSelect";
 import ChatUsageHint from "@/components/ChatUsageHint";
 import { CabinetUpgradeHook } from "@/components/MembershipTiers";
@@ -1170,13 +1171,9 @@ function ChatPanel({
                   <span>
                     {voice.muted
                       ? "Microphone paused."
-                      : voice.speaking
-                      ? "Speaking."
                       : voice.transcribing
                       ? "Hearing the words."
-                      : voice.listening
-                      ? "Listening, unhurried."
-                      : "A small pause."}
+                      : ""}
                   </span>
                 </div>
                 {voice.supportedOut && (
@@ -1252,7 +1249,6 @@ function ChatPanel({
                   className="inline-flex items-center gap-1.5 opacity-80"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--aurin-sage))]" />
-                  <span>Speaking softly.</span>
                 </span>
               ) : null}
             </div>

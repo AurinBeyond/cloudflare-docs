@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import EmergencyExit from "@/components/EmergencyExit";
-import HumanSilhouette from "@/components/HumanSilhouette";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
   fetchClarityPrefs,
@@ -309,8 +308,14 @@ function DeclarationCard({
 }
 
 function LightOrb({ testid, label, sublabel, selected, onSelect, variant }) {
-  // PERMANENT RULE: the companion is always depicted as a human
-  // silhouette (male or female), never an abstract light shape.
+  // §Phase 0 Sanctuary (2026-02-14) — founder directive: stick-figure
+  // silhouettes are REPLACED by real human portraits. The wanderer
+  // chooses between two real faces, not abstractions. Images are
+  // served via the same `/api/clarity/guide-face/<gender>` route the
+  // private room uses (Mongo binary + static fallback) so a future
+  // upload propagates everywhere.
+  const portraitSrc = `/api/clarity/guide-face/${variant}`;
+  const fallbackSrc = `/assets/illustrations/guide-${variant}-sm.jpg`;
   return (
     <button
       type="button"
@@ -323,12 +328,30 @@ function LightOrb({ testid, label, sublabel, selected, onSelect, variant }) {
           : "hover:bg-[hsl(var(--aurin-surface))]/40"
       }`}
     >
-      <HumanSilhouette
-        gender={variant}
-        active={selected}
-        size={120}
-        testid={`${testid}-silhouette`}
-      />
+      <div
+        data-testid={`${testid}-portrait`}
+        className={`relative w-[140px] h-[140px] rounded-full overflow-hidden border transition-all duration-500 ${
+          selected
+            ? "border-[hsl(var(--aurin-sage))]/70 shadow-[0_0_28px_-4px_hsl(var(--aurin-sage)/0.5)]"
+            : "border-[hsl(var(--aurin-border))] opacity-90 group-hover:opacity-100"
+        }`}
+      >
+        <img
+          src={portraitSrc}
+          alt={
+            variant === "female"
+              ? "Soft companion — a calm, listening presence"
+              : "Steady companion — a grounding, listening presence"
+          }
+          loading="eager"
+          onError={(e) => {
+            if (e.currentTarget.src.indexOf("/assets/illustrations/") === -1) {
+              e.currentTarget.src = fallbackSrc;
+            }
+          }}
+          className="w-full h-full object-cover aurin-guide-breath"
+        />
+      </div>
       <span className="flex flex-col items-center gap-0.5">
         <span
           className={`aurin-display text-[15px] tracking-tight transition-colors ${

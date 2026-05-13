@@ -231,13 +231,9 @@ export default function RealtimeCompanion({
           <span>
             {status === "connecting"
               ? "Opening the room."
-              : status === "listening"
-              ? "Listening."
-              : status === "speaking"
-              ? "Speaking."
               : status === "error"
               ? `A small problem: ${error || "could not open"}`
-              : "A small pause."}
+              : ""}
           </span>
           {status !== "connecting" && (
             <button

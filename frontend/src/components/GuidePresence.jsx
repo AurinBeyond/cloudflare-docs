@@ -36,9 +36,11 @@ const RING_BY_STATE = {
 
 const STATE_LINE = {
   idle: null,
-  listening: "Listening, unhurried.",
-  thinking: "A small pause while the words gather.",
-  speaking: "Speaking softly.",
+  // §Phase 0 Sanctuary (2026-02-14) — the wanderer must FEEL these
+  // states, never read them. Technical state labels removed.
+  listening: null,
+  thinking: null,
+  speaking: null,
 };
 
 export default function GuidePresence({

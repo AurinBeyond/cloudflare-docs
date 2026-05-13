@@ -163,16 +163,48 @@ _SAFE_FALLBACK = (
 )
 
 
+def _strip_numbered_list_leakage(text: str) -> str:
+    """§Phase 0 Sanctuary fix (2026-02-14) — strip number-token leakage.
+
+    Claude occasionally streams sequences like ``"5. 6. 7. 8. 9. 10. Hello."``
+    when it has been asked not to use numbered lists but slips into one
+    anyway. The wanderer must NEVER see that. We:
+
+      1. Collapse any run of two-or-more leading ``N.`` tokens that
+         appear at the start of a sentence or message into nothing.
+      2. Strip a single bare ``N.`` at the very start of the reply.
+      3. Strip any inline run of three-or-more ``N.`` tokens anywhere.
+    """
+    if not text:
+        return text
+    out = text
+    # Pattern: run of "N. N. N. ..." (two+) — drop them
+    out = re.sub(r"(?:(?:^|[.\n!?]\s*))((?:\s*\d{1,3}\.\s+){2,})", lambda m: m.group(0)[: m.start(1) - m.start(0)] if False else (m.group(0).split(m.group(1))[0] if m.group(1) in m.group(0) else m.group(0)), out)
+    # Simpler robust passes:
+    # 1) Leading run at start of string
+    out = re.sub(r"^\s*(?:\d{1,3}\.\s+){2,}", "", out)
+    # 2) Run after sentence boundary
+    out = re.sub(r"([.!?\n]\s+)(?:\d{1,3}\.\s+){2,}", r"\1", out)
+    # 3) Any remaining 3+ consecutive enumeration markers anywhere
+    out = re.sub(r"(?:\d{1,3}\.\s+){3,}", "", out)
+    # 4) Single trailing/leading bare "N." with no sentence content
+    out = re.sub(r"^\s*\d{1,3}\.\s*(?=[A-ZÄÖÕÜ])", "", out)
+    # Collapse double spaces left behind.
+    out = re.sub(r" {2,}", " ", out).strip()
+    return out
+
+
 def sanitize_reply(text: str) -> str:
     """Run the AGOP-D filter. Always returns wellness-safe text.
 
+    Layer 0 strips numbered-list / enumeration leakage from the model.
     Layer 1 rewrites known clinical words/phrases grammar-aware.
     Layer 2 substitutes the whole reply if any banned token survives.
     Idempotent: applying twice is safe.
     """
     if not text:
         return text
-    out = text
+    out = _strip_numbered_list_leakage(text)
     for pattern, replacement in _LAYER_1:
         out = pattern.sub(replacement, out)
     # Collapse article collisions: "a a", "an an", "a an old", "an a quiet"
