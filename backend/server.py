@@ -6743,7 +6743,17 @@ async def _issue_magic_link_for_email(
                 html=html_body,
                 text=text_body,
                 sender="support",
-                tags=[{"name": "kind", "value": "magic_link"}],
+                # §Phase 1 — reply-to + List-Unsubscribe-style tags for
+                # spam-filter reputation. Filters reward two-way
+                # transactional shape: the message advertises a real
+                # human inbox on the other end.
+                reply_to=os.environ.get(
+                    "AURIN_SUPPORT_REPLY_TO", "support@prulesoul.site"
+                ),
+                tags=[
+                    {"name": "kind", "value": "magic_link"},
+                    {"name": "transactional", "value": "true"},
+                ],
             )
             delivered_via = "email"
         except Exception as e:  # noqa: BLE001
