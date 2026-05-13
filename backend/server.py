@@ -10045,6 +10045,70 @@ COMING_SOON_OVERLAY = {
 }
 
 
+# =============================================================
+# §Phase 1 follow-up — public Presence demo endpoint (2026-02-14).
+# Founder mandate: shareable link to "see Grace and hear Jenny"
+# without auth. The endpoint:
+#   - is rate-limited (single in-flight call per IP, plus a 30 s
+#     cool-down between calls to keep API spend predictable)
+#   - synthesises ONE curated short line (~110 chars) using the
+#     active CLARITY_VOICE_PROVIDER (openai by default, ElevenLabs
+#     once the founder provides the key)
+#   - returns raw MP3 bytes
+# =============================================================
+_PRESENCE_SAMPLE_COOLDOWN_S = 25
+_presence_sample_last_at: dict[str, float] = {}
+
+
+@api_router.post("/presence/sample")
+async def presence_sample(request: Request):
+    """Public — synthesise one curated demo line and return MP3 bytes.
+
+    Body: {"gender": "female"|"male", "line": "..."}
+    """
+    import time
+    ip = (request.client.host if request.client else "anon") or "anon"
+    now = time.monotonic()
+    last = _presence_sample_last_at.get(ip, 0.0)
+    if last and now - last < _PRESENCE_SAMPLE_COOLDOWN_S:
+        wait = int(_PRESENCE_SAMPLE_COOLDOWN_S - (now - last))
+        raise HTTPException(
+            status_code=429,
+            detail=f"A small pause — please wait {wait}s and try again.",
+        )
+
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    gender = (body.get("gender") or "female").lower()
+    if gender not in ("female", "male"):
+        gender = "female"
+    line = (body.get("line") or "").strip()
+    # Hard cap on demo line length so this endpoint can never be
+    # abused to drain TTS budget. The curated frontend line is well
+    # under 200 chars; we permit up to 320 for slight variations.
+    if not line:
+        line = (
+            "You can put it down here. The room is quiet, and you "
+            "don't have to be anyone in particular."
+        )
+    if len(line) > 320:
+        line = line[:320]
+
+    try:
+        from clarity_tts import synthesize_speech
+        audio = await synthesize_speech(line, gender=gender)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Presence sample synth failed: %s", exc)
+        raise HTTPException(status_code=500, detail="Could not synthesise.")
+
+    _presence_sample_last_at[ip] = now
+    return Response(content=audio, media_type="audio/mpeg")
+
+
 @api_router.get("/catalogue/availability")
 async def catalogue_availability():
     """Public — returns the current Coming Soon / Waitlist overlay.

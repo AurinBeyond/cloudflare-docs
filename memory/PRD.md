@@ -1,3 +1,83 @@
+> 🟢 **PHASE 1 ITER 74 — 2026-02-14 (ElevenLabs provider + public Presence demo)**
+>
+> Founder ultimatum: stop building dashboards, replace OpenAI
+> Shimmer with the agreed Jenny-grade voice (ElevenLabs if needed),
+> and give me a SHAREABLE link where the bank can see Grace and
+> hear the voice without auth.
+>
+> 1. **ElevenLabs TTS provider** (`clarity_tts.py` rewritten ~240 lines)
+>    - Provider-pluggable: `CLARITY_VOICE_PROVIDER=openai` (default)
+>      or `elevenlabs`. Active provider chosen at request time so an
+>      env flip + service reload swaps voices without code.
+>    - ElevenLabs path uses `eleven_multilingual_v2` + Voice IDs
+>      `21m00Tcm4Tlm` (Rachel — soft warm narrator, closest match to
+>      founder's "Jenny" reference) for female, `pNInz6obpgDQGcFmaJgB`
+>      (Adam) for male. Both overridable via
+>      `ELEVENLABS_VOICE_FEMALE` / `ELEVENLABS_VOICE_MALE`.
+>    - Voice settings tuned to founder spec: stability 0.42 (35-45%
+>      range), similarity 0.80, style 0.10 (low style = calm,
+>      non-performative). All overridable via env.
+>    - Sync ElevenLabs SDK call wrapped in `loop.run_in_executor`
+>      so the FastAPI event loop is never blocked.
+>    - **Sanctuary-grade fallback**: if ElevenLabs fails for any
+>      reason at request time (bad key, quota exhausted, transient
+>      outage), we transparently fall back to OpenAI so the room
+>      NEVER goes silent on the wanderer mid-conversation.
+>    - `is_configured()` returns True if either provider is set.
+>    - Dependency: `elevenlabs==2.47.0` added to requirements.txt.
+>
+> 2. **Public `/presence` demo page** (`pages/Presence.jsx` + route)
+>    - No auth, no consent gate, no analytics. Shareable URL for
+>      bank / Tanushree / external demos.
+>    - Renders Grace large (variant="call") + the full Phase 1
+>      presence stack: breathing, random blinks, gaze layer, mouth
+>      amplitude overlay.
+>    - Two pickers (Grace / Clarity) → swap gender live.
+>    - "Hear her" button calls the public `/api/presence/sample`,
+>      pipes the returned MP3 through an AnalyserNode + RAF loop
+>      (same shape as `useVoiceIO.speak`), so the mouth overlay
+>      tracks the demo audio in real time exactly like in the live
+>      room.
+>    - Single curated default line ("You can put it down here. The
+>      room is quiet, and you don't have to be anyone in
+>      particular.") — embodies the "Ultimate Human Warmth" spec.
+>
+> 3. **Public `/api/presence/sample` endpoint** (`server.py`)
+>    - Body: `{gender, line}`. Returns raw `audio/mpeg`.
+>    - Hard-capped at 320 chars to make the endpoint un-abusable for
+>      TTS spend.
+>    - Per-IP 25 s cool-down to throttle public traffic; 429 with a
+>      sanctuary-grade message ("A small pause — please wait Ns…")
+>      when triggered.
+>    - Resolves to the active TTS provider — once founder provides
+>      ELEVENLABS_API_KEY and flips CLARITY_VOICE_PROVIDER, this
+>      same endpoint delivers Jenny-grade audio for the public demo.
+>
+> 4. **Regression tests** (`tests/test_phase1_presence_sample.py`)
+>    - 4 sync httpx tests pinning the new endpoint contract:
+>      MP3-on-success (with magic-byte check), unknown-gender
+>      coercion, long-line truncation, cool-down 429.
+>    - Total project pytest now: 22/22 PASS (4 presence-sample +
+>      7 calmer-feedback + 3 voice-status lock + 8 numbered-list).
+>
+> **What I did NOT do (per founder mandate)**
+> - No admin dashboard / calm-stats widget (founder said no graphs).
+> - No demo video production (out of code-agent scope).
+> - No Stripe integration progress (blocked on founder keys).
+>
+> **What I need from founder to flip to Jenny voice**
+> 1. `ELEVENLABS_API_KEY` (get from https://elevenlabs.io/app/settings/api-keys)
+> 2. Optional: a custom Voice ID if Rachel doesn't match. Founder
+>    can browse https://elevenlabs.io/app/voice-library and pick a
+>    specific voice — paste the ID and I set
+>    `ELEVENLABS_VOICE_FEMALE` to it.
+> Once both are in `/app/backend/.env`, add `CLARITY_VOICE_PROVIDER=elevenlabs`
+> and restart the backend. Both `/clarity-release` chat AND the
+> public `/presence` demo flip to Jenny on the next request.
+
+---
+
+
 > 🟢 **PHASE 1 ITER 73 — 2026-02-14 (calm-meter + voice A/B knob)**
 >
 > Founder pinned "Did the wanderer feel calmer than when they

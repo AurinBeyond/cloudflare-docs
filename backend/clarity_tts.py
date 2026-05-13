@@ -1,17 +1,40 @@
 """
-clarity_tts.py — OpenAI TTS wrapper for the Clarity Release guide voice.
+clarity_tts.py — TTS wrapper for the Clarity Release guide voice.
 
-Founder directive · Phase 0 Sanctuary lock (2026-02-13):
-    female  → "shimmer"  (the softest of the OpenAI voices — calm,
-                          breathy, sanctuary-grade)
-    male    → "echo"     (smooth, calm)
+Founder directive · Phase 1 "Digital Presence" (2026-02-14):
+Vendor support is now PROVIDER-pluggable so the founder can move
+between OpenAI Shimmer (default) and ElevenLabs "Jenny-grade"
+voices without a code change.
 
-Model: tts-1-hd. Speed locked at 0.85 for low-pressure conversational
-pacing. Both values are P0 — do NOT raise without founder approval.
-Format: mp3 (browser-native).
+Env overrides
+  CLARITY_VOICE_PROVIDER    "openai" (default) | "elevenlabs"
+  CLARITY_VOICE_FEMALE      OpenAI voice name (default "shimmer")
+  CLARITY_VOICE_MALE        OpenAI voice name (default "echo")
+  CLARITY_TTS_SPEED         OpenAI speed 0.7..1.0 (default 0.85)
+  ELEVENLABS_API_KEY        ElevenLabs API key (required for the
+                            elevenlabs provider; obtain at
+                            https://elevenlabs.io/app/settings/api-keys)
+  ELEVENLABS_VOICE_FEMALE   ElevenLabs voice_id for the female guide.
+                            Default = "21m00Tcm4Tlm" (Rachel — soft,
+                            warm narrator; closest match to the
+                            founder's "Jenny" reference).
+  ELEVENLABS_VOICE_MALE     ElevenLabs voice_id for the male guide.
+                            Default = "pNInz6obpgDQGcFmaJgB" (Adam —
+                            warm mature male).
+  ELEVENLABS_MODEL          Default "eleven_multilingual_v2".
+  ELEVENLABS_STABILITY      0..1, default 0.42 (founder spec 35-45%).
+  ELEVENLABS_SIMILARITY     0..1, default 0.80.
+  ELEVENLABS_STYLE          0..1, default 0.10 (low style = calm,
+                            non-performative).
+
+If `CLARITY_VOICE_PROVIDER=elevenlabs` but no key is set, or if
+ElevenLabs fails at request time, the synthesiser silently falls
+back to OpenAI so the sanctuary never breaks.
 """
 from __future__ import annotations
 
+import io
+import logging
 import os
 import re
 from typing import Literal
@@ -19,24 +42,18 @@ from typing import Literal
 from emergentintegrations.llm.openai import OpenAITextToSpeech
 
 
+logger = logging.getLogger(__name__)
+
 VoiceGender = Literal["female", "male"]
 
-# §Phase 0 Sanctuary lock. Shimmer is the founder-approved softest
-# female voice (breathy, sanctuary-grade). The defaults below are the
-# Phase 0 lock; the environment overrides allow safe, reversible A/B
-# tuning if the founder ever wants to test a slightly warmer voice
-# (e.g. `ballad` / `sage`) without a code change. Set in /app/backend/.env:
-#     CLARITY_VOICE_FEMALE=shimmer
-#     CLARITY_VOICE_MALE=echo
-#     CLARITY_TTS_SPEED=0.85
-# Leave unset to use the Phase 0 defaults.
 VOICE_FOR_GENDER = {
     "female": os.getenv("CLARITY_VOICE_FEMALE", "shimmer"),
     "male": os.getenv("CLARITY_VOICE_MALE", "echo"),
 }
 
 DEFAULT_MODEL = "tts-1-hd"
-# §Phase 0 Sanctuary lock — 0.85 is the founder-approved pacing.
+
+
 def _read_speed() -> float:
     raw = os.getenv("CLARITY_TTS_SPEED")
     if not raw:
@@ -45,7 +62,6 @@ def _read_speed() -> float:
         v = float(raw)
     except ValueError:
         return 0.85
-    # Hard guard against accidental over-fast voice. 0.7 .. 1.0 only.
     return max(0.7, min(1.0, v))
 
 
@@ -53,11 +69,43 @@ DEFAULT_SPEED = _read_speed()
 TTS_MAX_CHARS = 4000  # OpenAI cap is 4096, leave a small margin
 
 
+# -- ElevenLabs defaults (founder "Jenny" spec) ---------------------
+ELEVENLABS_VOICE_FOR_GENDER = {
+    "female": os.getenv("ELEVENLABS_VOICE_FEMALE", "21m00Tcm4Tlm"),  # Rachel
+    "male": os.getenv("ELEVENLABS_VOICE_MALE", "pNInz6obpgDQGcFmaJgB"),  # Adam
+}
+ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_multilingual_v2")
+
+
+def _read_float(env_name: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
+    raw = os.getenv(env_name)
+    if not raw:
+        return default
+    try:
+        return max(lo, min(hi, float(raw)))
+    except ValueError:
+        return default
+
+
+ELEVENLABS_STABILITY = _read_float("ELEVENLABS_STABILITY", 0.42)
+ELEVENLABS_SIMILARITY = _read_float("ELEVENLABS_SIMILARITY", 0.80)
+ELEVENLABS_STYLE = _read_float("ELEVENLABS_STYLE", 0.10)
+
+
+def voice_provider() -> str:
+    """Return the active TTS provider after validating the env.
+
+    `CLARITY_VOICE_PROVIDER=elevenlabs` requires `ELEVENLABS_API_KEY`
+    to be set; otherwise we silently keep OpenAI so the sanctuary
+    never breaks during a misconfigured rollout.
+    """
+    chosen = (os.getenv("CLARITY_VOICE_PROVIDER") or "openai").strip().lower()
+    if chosen == "elevenlabs" and os.getenv("ELEVENLABS_API_KEY"):
+        return "elevenlabs"
+    return "openai"
+
+
 # -- Subtle pacing prep ---------------------------------------------
-# The model often emits long em-dash chains ("— and yet —") that the
-# TTS reads as a clipped beat rather than a breath. We rewrite a few
-# patterns so the audio carries a calmer rhythm without rewriting the
-# wanderer's actual words.
 _EM_DASH_PAUSE = re.compile(r"\s*—\s*")
 _DOUBLE_LINEBREAK = re.compile(r"\n\s*\n")
 _STRIP_MD_BOLD = re.compile(r"\*\*(.+?)\*\*")
@@ -65,21 +113,16 @@ _STRIP_MD_ITALIC = re.compile(r"(?<!\*)\*([^*\n]+?)\*(?!\*)")
 
 
 def _humanize_for_speech(text: str) -> str:
-    """Return a slightly re-punctuated version of `text` so OpenAI TTS
+    """Return a slightly re-punctuated version of `text` so the TTS
     pronounces it with calmer pacing. Non-destructive: no semantic
-    rewriting, no word changes — only pause shaping.
-    """
+    rewriting, no word changes — only pause shaping. Works for both
+    providers."""
     if not text:
         return text
     out = text
-    # Strip Markdown emphasis markers (TTS reads them literally otherwise).
     out = _STRIP_MD_BOLD.sub(r"\1", out)
     out = _STRIP_MD_ITALIC.sub(r"\1", out)
-    # Em-dash → soft comma. Keeps the pause but feels less staccato.
     out = _EM_DASH_PAUSE.sub(", ", out)
-    # Double line breaks already give a long breath; OpenAI honours
-    # them. Single line breaks become a comma+space if not already
-    # punctuated, so phrases land with a small breath.
     lines = out.split("\n")
     re_punct_end = re.compile(r"[\.\?\!,:;…]\s*$")
     fixed = []
@@ -92,9 +135,7 @@ def _humanize_for_speech(text: str) -> str:
             s = s + ","
         fixed.append(s)
     out = "\n".join(fixed)
-    # Replace 3+ line breaks with double (max one breath).
     out = re.sub(r"\n{3,}", "\n\n", out)
-    # Collapse spaces around the new commas.
     out = re.sub(r"\s+,", ",", out)
     out = re.sub(r",\s*,", ", ", out)
     out = re.sub(r" {2,}", " ", out)
@@ -102,29 +143,17 @@ def _humanize_for_speech(text: str) -> str:
 
 
 def is_configured() -> bool:
+    """Either provider configured is enough."""
+    if voice_provider() == "elevenlabs":
+        return True
     return bool(os.getenv("EMERGENT_LLM_KEY"))
 
 
-async def synthesize_speech(
-    text: str,
-    gender: VoiceGender = "female",
-) -> bytes:
-    """Return MP3 audio bytes for the given text. Raises RuntimeError
-    if the LLM key is not configured."""
+async def _synthesize_openai(clean: str, gender: VoiceGender) -> bytes:
     api_key = os.getenv("EMERGENT_LLM_KEY")
     if not api_key:
         raise RuntimeError("EMERGENT_LLM_KEY not configured")
-
-    clean = (text or "").strip()
-    if not clean:
-        raise ValueError("Empty text")
-    if len(clean) > TTS_MAX_CHARS:
-        clean = clean[:TTS_MAX_CHARS]
-
-    # Stage 2.8d: shape pauses before sending to OpenAI.
-    clean = _humanize_for_speech(clean)
-
-    voice = VOICE_FOR_GENDER.get(gender, "coral")
+    voice = VOICE_FOR_GENDER.get(gender, "shimmer")
     tts = OpenAITextToSpeech(api_key=api_key)
     audio = await tts.generate_speech(
         text=clean,
@@ -134,3 +163,68 @@ async def synthesize_speech(
         response_format="mp3",
     )
     return audio
+
+
+def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
+    """Sync ElevenLabs call. Wrapped in `run_in_executor` by the async
+    entry point so the FastAPI event loop is not blocked."""
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    if not api_key:
+        raise RuntimeError("ELEVENLABS_API_KEY not configured")
+    from elevenlabs.client import ElevenLabs  # noqa: WPS433
+    from elevenlabs import VoiceSettings  # noqa: WPS433
+
+    client = ElevenLabs(api_key=api_key)
+    voice_id = ELEVENLABS_VOICE_FOR_GENDER.get(
+        gender, ELEVENLABS_VOICE_FOR_GENDER["female"]
+    )
+    settings = VoiceSettings(
+        stability=ELEVENLABS_STABILITY,
+        similarity_boost=ELEVENLABS_SIMILARITY,
+        style=ELEVENLABS_STYLE,
+        use_speaker_boost=True,
+    )
+    audio_iter = client.text_to_speech.convert(
+        text=clean,
+        voice_id=voice_id,
+        model_id=ELEVENLABS_MODEL,
+        voice_settings=settings,
+        output_format="mp3_44100_128",
+    )
+    buf = io.BytesIO()
+    for chunk in audio_iter:
+        if chunk:
+            buf.write(chunk)
+    return buf.getvalue()
+
+
+async def synthesize_speech(
+    text: str,
+    gender: VoiceGender = "female",
+) -> bytes:
+    """Return MP3 audio bytes for the given text using the active
+    provider (openai or elevenlabs, env-driven). On any ElevenLabs
+    failure, gracefully falls back to OpenAI."""
+    clean = (text or "").strip()
+    if not clean:
+        raise ValueError("Empty text")
+    if len(clean) > TTS_MAX_CHARS:
+        clean = clean[:TTS_MAX_CHARS]
+    clean = _humanize_for_speech(clean)
+
+    provider = voice_provider()
+    if provider == "elevenlabs":
+        import asyncio  # noqa: WPS433
+
+        loop = asyncio.get_running_loop()
+        try:
+            return await loop.run_in_executor(
+                None, _synthesize_elevenlabs_sync, clean, gender
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(
+                "ElevenLabs TTS failed (%s) — falling back to OpenAI", exc
+            )
+            return await _synthesize_openai(clean, gender)
+
+    return await _synthesize_openai(clean, gender)

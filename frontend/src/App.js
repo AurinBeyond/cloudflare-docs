@@ -30,6 +30,7 @@ import LibraryKids from "@/pages/LibraryKids";
 import LibraryKidsRead from "@/pages/LibraryKidsRead";
 import ClarityRelease from "@/pages/ClarityRelease";
 import ClarityThreshold from "@/pages/ClarityThreshold";
+import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
 import ParentsRoom from "@/pages/ParentsRoom";
 import BetaTestGroup from "@/pages/BetaTestGroup";
@@ -96,6 +97,9 @@ function AppRouter() {
           }
         />
         <Route path="/clarity-release/threshold" element={<ClarityThreshold />} />
+        {/* §Phase 1 — public Grace-only demo route (no auth, no
+            consent gate). Founder-shareable link for bank / demo. */}
+        <Route path="/presence" element={<Presence />} />
         <Route
           path="/body-room"
           element={
