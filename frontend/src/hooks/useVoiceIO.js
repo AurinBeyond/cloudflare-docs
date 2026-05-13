@@ -80,6 +80,7 @@ export default function useVoiceIO({
   const mouthOpenRef = useRef(0);
   const ttsCtxRef = useRef(null);
   const ttsAnalyserRef = useRef(null);
+  const ttsSourceRef = useRef(null);
   const ttsRafRef = useRef(null);
 
   // MediaRecorder refs
@@ -365,6 +366,22 @@ export default function useVoiceIO({
                   /* noop */
                 }
                 audioRef.current = null;
+                // §Phase 1 — also tear down the TTS analyser so the
+                // mouth amplitude doesn't keep ticking against a dead
+                // audio element.
+                if (ttsRafRef.current) {
+                  cancelAnimationFrame(ttsRafRef.current);
+                  ttsRafRef.current = null;
+                }
+                if (ttsAnalyserRef.current) {
+                  try { ttsAnalyserRef.current.disconnect(); } catch { /* noop */ }
+                  ttsAnalyserRef.current = null;
+                }
+                if (ttsSourceRef.current) {
+                  try { ttsSourceRef.current.disconnect(); } catch { /* noop */ }
+                  ttsSourceRef.current = null;
+                }
+                mouthOpenRef.current = 0;
                 setSpeaking(false);
               }
             }
@@ -453,6 +470,11 @@ export default function useVoiceIO({
     if (ttsAnalyserRef.current) {
       try { ttsAnalyserRef.current.disconnect(); } catch { /* noop */ }
       ttsAnalyserRef.current = null;
+    }
+    if (ttsSourceRef.current) {
+      // Prevent dangling MediaElementSource nodes over long sessions.
+      try { ttsSourceRef.current.disconnect(); } catch { /* noop */ }
+      ttsSourceRef.current = null;
     }
     mouthOpenRef.current = 0;
   }, []);
@@ -558,6 +580,7 @@ export default function useVoiceIO({
               try { await ctx.resume(); } catch { /* noop */ }
             }
             const source = ctx.createMediaElementSource(audio);
+            ttsSourceRef.current = source;
             const analyser = ctx.createAnalyser();
             analyser.fftSize = 256;
             analyser.smoothingTimeConstant = 0.4;

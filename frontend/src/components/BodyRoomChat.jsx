@@ -475,13 +475,9 @@ export default function BodyRoomChat({
               <span>
                 {voice.muted
                   ? "Microphone paused."
-                  : voice.speaking
-                  ? "Speaking."
                   : voice.transcribing
                   ? "Hearing the words."
-                  : voice.listening
-                  ? "Listening, unhurried."
-                  : "A small pause."}
+                  : ""}
               </span>
             </div>
           )}

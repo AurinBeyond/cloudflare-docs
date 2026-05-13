@@ -1,0 +1,23 @@
+{
+  "summary": "Iteration 71 regression-fix verification (Variant C 'Digital Presence' Phase 1). All 6 requested checks PASS. Both banned voice-status labels ('A small pause.' / 'Listening, unhurried.') are gone from BodyRoomChat.jsx and ParentsRoomChat.jsx — voice-status row now only renders 'Microphone paused.', 'Hearing the words.' or empty. Full-tree grep confirms the banned strings only remain in /app/frontend/src/pages/TheBeginningStep.jsx (intentional contemplative 'A small pause' eyebrow heading, distinct phrasing without trailing period, not a state label). All Phase 1 structural items intact: GuidePresence 4-layer overlays present, mouthOpenRef wired, vadSilenceMs=1700, thoughtfulPauseMs default 1100+random*400, AnalyserNode wired on TTS HTMLAudioElement. useVoiceIO.js barge-in path (L378-385) now disconnects ttsSourceRef and zeroes mouthOpenRef; _stopTtsAnalyser (L465-478) disconnects ttsSourceRef. Backend: 8/8 phase0 numbered-list-strip tests PASS; /api/clarity/guide-face/female returns 200 image/jpeg 98012 bytes; /api/clarity/guide-face/male returns 200 image/jpeg 95330 bytes (exact byte match). Live DOM check on preview URL — no banned strings present, no error-class elements, page renders cleanly.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_phase0_numbered_list_strip.py",
+    "/app/test_reports/pytest/iter71_phase0.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "BodyRoomChat.jsx (604 lines) and ParentsRoomChat.jsx (449 lines) are under the 700-line guideline but both share near-identical voice-status JSX/handlers — consider extracting <VoiceStatusRow> shared component to prevent future divergence of the banned-string kind (this is the third iteration in a row touching the same two files in tandem).",
+    "useVoiceIO.js still 640+ lines — close to the 700-line threshold; the TTS analyser teardown logic is now duplicated in the barge-in path (L378-385) and _stopTtsAnalyser (L465-478). Recommend consolidating into a single helper to keep them in sync.",
+    "GuidePresence.jsx sub-perceptual 0.005 threshold is hard-coded inside the RAF tick — small, but worth a named constant for clarity if other deltas get added later."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Not exercised in this iter — verification was source-grep + static DOM + backend curl per request.",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 71 is a clean PASS for the Phase 1 'Digital Presence' regression fix. The recurring banned-state-label leak (3rd occurrence across iters 69/70/71) suggests the duplication between BodyRoomChat/ParentsRoomChat voice-status JSX is a structural risk — consider extracting a shared <VoiceStatusRow> component going forward. Backend phase0 strip tests (8/8) and guide-face endpoints are stable; safe to use as smoke baseline. Payments still mocked (LemonSqueezy bypass) — out of scope here.",
+  "rca of the issue": "Iter 70 found two banned soft-voice labels still rendered in voice-status rows of BodyRoomChat.jsx (~L483-484) and ParentsRoomChat.jsx (~L430-431) because the iter 69 ClarityRelease cleanup was not applied identically to the other two chat components. Iter 71 fix replaces the soft contemplative strings with the operational state labels ('Microphone paused.', 'Hearing the words.') and an empty-string fallback. Verified: (1) grep across /app/frontend/src/ shows the banned strings only in TheBeginningStep.jsx (intentional, distinct phrasing, eyebrow heading, no trailing period); (2) the two voice-status <span> blocks now use a 3-arm ternary with only allowed strings; (3) live DOM check on Home shows no banned strings. Mitigation suggestion: extract VoiceStatusRow into a shared component to eliminate the copy-paste vector that caused the regression."
+}

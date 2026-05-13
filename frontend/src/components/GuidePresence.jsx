@@ -102,13 +102,18 @@ export default function GuidePresence({
     if (!mouthOpenRef || !portraitWrapperRef.current) return undefined;
     let raf = 0;
     let cancelled = false;
+    let lastWritten = -1;
     const el = portraitWrapperRef.current;
     const tick = () => {
       if (cancelled) return;
       const v = Math.max(0, Math.min(1, mouthOpenRef.current || 0));
-      // Skip DOM write when value is essentially unchanged (saves
-      // layout work on quiet frames).
-      el.style.setProperty("--mouth-open", v.toFixed(3));
+      // Skip DOM writes for sub-perceptual deltas (saves style-recalc
+      // on quiet frames). 0.005 is below visual threshold for the
+      // capped opacity (0.55 * 0.005 ≈ 0.003 alpha).
+      if (Math.abs(v - lastWritten) > 0.005) {
+        el.style.setProperty("--mouth-open", v.toFixed(3));
+        lastWritten = v;
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
