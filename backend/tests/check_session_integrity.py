@@ -86,6 +86,8 @@ def main() -> int:
     # ── 3. Live signed-url for every room (3 passes) ─────────────────
     section("3. Live POST /api/clarity/convai/signed-url — 3 sequential passes")
     pass_results: dict[str, list[str]] = {r: [] for r, *_ in ROOMS}
+    identity_prompts: dict[str, str] = {}
+    first_messages: dict[str, str] = {}
     with httpx.Client(timeout=20) as client:
         for p in range(1, 4):
             print(f"  Pass #{p}")
@@ -95,11 +97,25 @@ def main() -> int:
                     headers={"Authorization": f"Bearer {SESSION_TOKEN}"},
                     json={"room": room},
                 )
-                signed = r.json().get("signed_url", "") if r.status_code == 200 else ""
+                if r.status_code == 200:
+                    body = r.json()
+                    signed = body.get("signed_url", "")
+                    if p == 1:
+                        identity_prompts[room] = body.get("identity_prompt", "")
+                        first_messages[room]   = body.get("first_message", "")
+                else:
+                    signed = ""
                 m = re.search(r"agent_id=([^&]+)", signed)
                 aid = m.group(1) if m else "<no agent_id in URL>"
                 pass_results[room].append(aid)
                 print(f"    room={room:8s} → {aid}")
+
+    # ── 3b. Identity-lock payload (the override sent to ElevenLabs) ──
+    section("3b. IDENTITY-LOCK override sent to ElevenLabs on session start")
+    for room, _route, _env_var, _name in ROOMS:
+        print(f"  room={room}")
+        print(f"    identity_prompt = {identity_prompts.get(room,'')}")
+        print(f"    first_message   = {first_messages.get(room,'')}")
 
     # ── 4. ElevenLabs side: who is each agent_id, really? ────────────
     section("4. ElevenLabs `/v1/convai/agents/{id}` — Provider-side identity")

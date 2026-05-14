@@ -136,19 +136,36 @@ function ConvaiPanel({ room, onFallback }) {
     try {
       // Mic permission first — required by the SDK before startSession.
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const { signed_url: signedUrl } = await fetchSignedUrl(room);
+      const {
+        signed_url: signedUrl,
+        identity_prompt: identityPrompt,
+        first_message: firstMessage,
+      } = await fetchSignedUrl(room);
       // §STABILIZATION 2026-02-15 — Using WebSocket transport.
       // WebRTC would shave ~200-400 ms but requires a different
       // auth flow (`conversationToken` from `/v1/convai/conversation/token`
       // — SDK rejects `signedUrl` for WebRTC at the type level).
-      // The actual perceived "long pauses + monologue" the founder
-      // reports are configured in the ElevenLabs agent UI
-      // (Latency optimization, Turn-taking, System Prompt length),
-      // not in our transport choice. WebRTC migration is queued as
-      // a separate iter once the agent-UI settings are dialled in.
+      //
+      // §IDENTITY LOCK 2026-02-15 — Per founder directive, we pass a
+      // server-minted `overrides.agent.prompt` and
+      // `overrides.agent.firstMessage` on every startSession. This
+      // pins the mentor's identity at the wire level, independent of
+      // whatever the ElevenLabs Dashboard system prompt currently
+      // says. REQUIRES the agent's Security → Overrides checkboxes
+      // for `System prompt` + `First message` to be enabled in the
+      // Dashboard; otherwise ElevenLabs silently ignores these
+      // fields and the Dashboard prompt wins.
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",
+        overrides: {
+          agent: {
+            ...(identityPrompt
+              ? { prompt: { prompt: identityPrompt } }
+              : {}),
+            ...(firstMessage ? { firstMessage } : {}),
+          },
+        },
       });
     } catch (err) {
       setStatus("error");

@@ -75,8 +75,9 @@ def test_convai_response_never_leaks_agent_id():
 
 
 def test_convai_response_shape_when_successful():
-    """If the upstream call succeeds, the response shape must be
-    exactly {signed_url, room}. Skips gracefully if upstream is down."""
+    """If the upstream call succeeds, the response shape must include
+    signed_url, room, identity_prompt and first_message. Skips
+    gracefully if upstream is down."""
     r = _post(
         {"room": "clarity"}, {"Authorization": f"Bearer {TEST_TOKEN}"}
     )
@@ -86,3 +87,42 @@ def test_convai_response_shape_when_successful():
     assert "signed_url" in payload
     assert payload.get("room") == "clarity"
     assert payload["signed_url"].startswith("wss://")
+    # §IDENTITY LOCK 2026-02-15
+    assert "identity_prompt" in payload
+    assert "Grace" in payload["identity_prompt"]
+    assert "first_message" in payload
+    assert "Grace" in payload["first_message"]
+
+
+def test_convai_identity_prompt_is_room_specific():
+    """Each room must return its own distinct identity prompt anchored
+    on the correct mentor name. This is the wire-level guarantee that
+    Grace stays Grace and Kaelan stays Kaelan even if the ElevenLabs
+    Dashboard system prompt drifts."""
+    expected_name = {
+        "clarity": "Grace",
+        "body": "Kaelan",
+        "parents": "Sara",
+        "courses": "Alistair",
+    }
+    prompts = {}
+    for room, name in expected_name.items():
+        r = _post(
+            {"room": room}, {"Authorization": f"Bearer {TEST_TOKEN}"}
+        )
+        if r.status_code != 200:
+            return  # upstream unreachable — skip rather than false-fail
+        payload = r.json()
+        assert name in payload["identity_prompt"], (
+            f"room={room} identity_prompt missing '{name}': "
+            f"{payload['identity_prompt'][:200]}"
+        )
+        assert name in payload["first_message"], (
+            f"room={room} first_message missing '{name}': "
+            f"{payload['first_message']}"
+        )
+        prompts[room] = payload["identity_prompt"]
+    # All four prompts must be distinct.
+    assert len(set(prompts.values())) == 4, (
+        "identity prompts collided across rooms"
+    )

@@ -1,3 +1,48 @@
+> 🟢 **IDENTITY LOCK — ITER 84 (2026-02-15, Estonian directive)**
+>
+> Founder reported persistent crosstalk on the live site (Grace's room
+> "speaking like Kaelan/Aura"). Full architectural audit confirmed
+> ZERO crosstalk in code: no caching, no session-stored agent_id, no
+> hardcoded fallbacks, no localStorage agent mapping. Live preview
+> reliably mints the correct agent_id per room across 3+ sequential
+> passes (verified by `/app/backend/tests/check_session_integrity.py`).
+> Provider-side check revealed the Dashboard system prompts of three
+> agents named the AI as "Elara" (Grace) / "Aura" (Kaelan) / placeholder
+> (Sara), which explains the perceived misidentification.
+>
+> Founder issued strict directive: ship a **code-level identity lock**
+> so the live product is bulletproof regardless of Dashboard drift.
+>
+> **What landed (3 surgical edits):**
+>
+> 1. **`/app/backend/server.py`** — added `_ROOM_IDENTITY_PROMPT` +
+>    `_ROOM_FIRST_MESSAGE` (4 entries each, ~25 words). The
+>    `/api/clarity/convai/signed-url` endpoint now returns
+>    `{signed_url, room, identity_prompt, first_message}` per room.
+>
+> 2. **`/app/frontend/src/components/RoomConvaiChat.jsx`** — passes the
+>    backend-minted prompts into the SDK as
+>    `overrides.agent.prompt.prompt` and `overrides.agent.firstMessage`
+>    on every `startSession()` call. Wire-level override of any
+>    Dashboard prompt drift.
+>
+> 3. **`/app/backend/tests/test_convai_signed_url.py`** — added two
+>    new regression tests:
+>      • `test_convai_response_shape_when_successful` (extended)
+>      • `test_convai_identity_prompt_is_room_specific`
+>    `/app/backend/tests/check_session_integrity.py` updated to log
+>    the identity-lock payload per room. 7/7 backend tests green.
+>
+> **⚠️ Dashboard requirement (founder action item):**
+> For the override to take effect, ElevenLabs requires per-agent
+> `Security → Overrides → System prompt ☑ + First message ☑` to be
+> enabled. Without those checkboxes, overrides are silently ignored.
+>
+> **Stage 3 (WebRTC) — still on hold** per founder directive.
+>
+> ---
+>
+
 > 🟢 **PHASE B + HARD-DISABLE FALLBACK — ITER 83 (2026-02-15)**
 >
 > Founder directive (Estonian, "Master Blueprint" final synchronization):
