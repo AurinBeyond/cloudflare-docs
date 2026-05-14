@@ -231,14 +231,7 @@ export default function GuidePresence({
           >
             {STATE_LINE[state] ? (
               <span className="aurin-serif-italic">{STATE_LINE[state]}</span>
-            ) : (
-              <>
-                A quiet companion — someone to speak with when there's no
-                one else you can say it to. The room listens, slowly. No
-                rush, no advice, no judgment. You'll notice a soft breath,
-                a calm posture. That's all.
-              </>
-            )}
+            ) : null}
           </p>
         )}
       </div>
