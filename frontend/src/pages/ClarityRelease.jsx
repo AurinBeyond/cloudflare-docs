@@ -1116,20 +1116,25 @@ function ChatPanel({
           <div data-testid="convai-grace-panel" className="mt-6">
             <RoomConvaiChat
               room="clarity"
-              onFallback={() => setConvaiActive(false)}
+              /* §STABILIZATION 2026-02-15 — onFallback is intentionally
+                 not wired. Founder directive: hard-disable the legacy
+                 useVoiceIO + Claude pipeline as a user-reachable
+                 surface in Private Room. ConvAI is the only voice
+                 path. If it fails, the user is shown a calm
+                 "System initializing" notice in the panel itself. */
             />
           </div>
         ) : null}
 
-        {/* §STABILIZATION 2026-02-15 — Legacy chat UI (Whisper STT +
-            Claude pipeline) is now a strict FALLBACK. It only renders
-            when the wanderer explicitly clicks the "Use the older
-            voice mode" button inside RoomConvaiChat (which flips
-            convaiActive false). This kills the credit drain caused
-            by Whisper transcribing silence as "soy sauce" and Claude
-            earnestly replying. The ConvAI agent — with the system
-            prompt founder configured in the ElevenLabs UI — is now
-            the only default surface for Private Room. */}
+        {/* §STABILIZATION 2026-02-15 — Legacy chat surface is now
+            architecturally disabled in Private Room. The wrapper
+            below renders only when `convaiActive` is false; in
+            current code that state is no longer flipped from any
+            UI control, so this block is unreachable at runtime.
+            We keep the code in place (rather than deleting) so the
+            backend `/api/cabinet/message` pipeline retains a
+            consumer if a future controlled re-introduction is
+            decided. */}
         {!convaiActive && (
         <div
           className="mt-6 flex flex-col bg-[hsl(var(--aurin-bg))]/30 backdrop-blur-sm border-0 rounded-md px-1 md:px-2"

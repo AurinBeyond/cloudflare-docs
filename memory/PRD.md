@@ -1,3 +1,101 @@
+> 🟢 **PHASE B + HARD-DISABLE FALLBACK — ITER 83 (2026-02-15)**
+>
+> Founder directive (Estonian, "Master Blueprint" final synchronization):
+> - Stages 1 + 2 from the master blueprint: verified agent IDs, all
+>   4 rooms mounted with their dedicated agents, hard-disable the
+>   legacy useVoiceIO + Whisper + Claude voice path so no wanderer
+>   can land on it.
+> - Stages 3 (WebRTC migration), 4 (turn-taking SDK config), 5
+>   (latency logging) — held for a follow-up iter.
+>
+> **Critical pre-work — agent-id verification:**
+> Founder again supplied 4 agent IDs from an external AI. Curl
+> against `/v1/convai/agents` showed 3 of the 4 did not exist on
+> her account (the ID suffix `0v06emdtv3cvgkbsybff` was actually
+> her own `user_id` template re-pasted). Listed the real agents
+> on her ElevenLabs account, identified canonical IDs for all 4
+> personas, and surfaced 3 duplicate agents she will delete in the
+> UI. Founder explicitly approved the 4 canonical IDs.
+>
+> **What landed (4 surgical edits):**
+>
+> 1. **`/app/backend/.env`** — 4 canonical agent IDs:
+>    ```
+>    GRACE    = agent_6801krh8dnmze1zthsnf5xb6xe43
+>    KAELAN   = agent_6401krjff71xf1pss69kqe1wtxs8
+>    SARA     = agent_2701krjvc4mpezzsym54wsr2vn1t
+>    ALISTAIR = agent_2401krjfn3cpeyjrreqgy1d1dbr0
+>    ```
+>    All four mint signed URLs successfully (curl 200 OK per room).
+>
+> 2. **`BodyRoom.jsx`** — added `<RoomConvaiChat room="body" />`
+>    above the silhouette section. Removed the "Kaelan is preparing
+>    the space" placeholder (iter 82) since Kaelan now exists.
+>
+> 3. **`ParentsRoom.jsx`** — added `<RoomConvaiChat room="parents" />`
+>    immediately after `PageHeader`, before the three-lens content.
+>
+> 4. **`CourseRoom.jsx`** — added `<RoomConvaiChat room="courses" />`
+>    at the very top of the page body.
+>
+> 5. **`RoomConvaiChat.jsx`** — two changes:
+>    - **Hard-disable legacy fallback**: the "Use the older voice
+>      mode" CTA is removed; replaced with a calm
+>      *"System initializing. Please refresh the page (Ctrl + Shift
+>      + R) and try again in a moment."* notice. Wanderer can no
+>      longer be routed into the Whisper-hallucination-prone legacy
+>      pipeline from any room.
+>    - **Room-aware copy**: button label and footer caption now
+>      use a per-room agent name (`ROOM_AGENT_NAME` map →
+>      `clarity:Grace, body:Kaelan, parents:Sara, courses:Alistair`).
+>      No room ever says "Speak with Grace" anymore — the wanderer
+>      always sees the correct dedicated agent name.
+>
+> 6. **`ClarityRelease.jsx`** — removed the `onFallback` prop wiring
+>    on `<RoomConvaiChat>`. The legacy chat panel block below
+>    (`{!convaiActive && …}`) is now unreachable at runtime because
+>    no UI control flips `convaiActive` to false anymore. Block left
+>    in place (not deleted) so backend `/api/cabinet/message`
+>    retains a future consumer if a controlled re-introduction is
+>    decided.
+>
+> **Live verified (preview screenshots + DOM counts):**
+>
+> | Route | "Speak with X" button | Active nav | Status |
+> |---|---|---|---|
+> | `/clarity-release` | "Speak with **Grace**" | Clarity Release | ✓ |
+> | `/body-room` | "Speak with **Kaelan**" | Body Room | ✓ |
+> | `/parents-room` | "Speak with **Sara**" | Parents' Room | ✓ |
+> | `/course-room` | "Speak with **Alistair**" | Courses | ✓ |
+>
+> No "Use the older voice mode" CTA reachable from any of the 4
+> rooms. Legacy `useVoiceIO` + `/api/cabinet/message` pipeline
+> preserved in code as an unreached fallback consumer.
+>
+> **Tests:** 32/32 PASS (unchanged from iter 82). All backend curl
+> tests pass for the 4 signed-URL routes. Frontend lint clean.
+>
+> **What is now NOT reachable from any room:**
+> - Whisper STT path (iter 81 hallucination filter is therefore
+>   defence-in-depth, not the only line)
+> - Claude `/api/cabinet/message` (still works, no consumer in UI)
+> - Random body-leak in Private Room (iter 79 fix is now also
+>   defence-in-depth because Grace's system prompt is configured
+>   founder-side in ElevenLabs UI)
+>
+> **NOT touched (founder mandate):**
+> - WebRTC transport (Stage 3, deferred — needs new token endpoint)
+> - SDK-side VAD config (Stage 4, partial — barge-in is SDK
+>   default)
+> - Latency logging (Stage 5, deferred)
+> - Stripe, Kids Universe, animations, GuidePresence, checkout UX
+>
+> **Production redeploy required** for `prulesoul.site` to receive
+> these mounts. Save to GitHub → Redeploy → hard refresh.
+
+---
+
+
 > 🔒 **PHASE 1 ITER 82 — 2026-02-15 (FINAL SYNCHRONIZATION + FRONTEND CLEANUP)**
 >
 > Founder directive (Estonian, terminal stabilization mode):

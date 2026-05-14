@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import FirstLetterWidget from "@/components/FirstLetterWidget";
+import RoomConvaiChat from "@/components/RoomConvaiChat";
 import { fetchCourses } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
@@ -71,6 +72,17 @@ export default function CourseRoom() {
         description="A small shelf of letter-courses. Seven slow letters per series, one per day, with a single audio companion you can play on quiet repeat. No videos. No webinars. No urgency. Just a reading practice that returns each evening."
         testid="course-room-header"
       />
+
+      {/* §Phase B (2026-02-15) — Alistair ConvAI is mounted at the
+          top of Course Room. Alistair is the dedicated learning-
+          orientation voice agent configured by founder in the
+          ElevenLabs UI; he is strictly isolated from Grace / Kaelan
+          / Sara. */}
+      <section className="aurin-section-sm" data-testid="course-room-alistair">
+        <div className="aurin-container max-w-[760px]">
+          <RoomConvaiChat room="courses" />
+        </div>
+      </section>
 
       <section className="aurin-section-sm" data-testid="course-room-intro">
         <div className="aurin-container max-w-[760px]">

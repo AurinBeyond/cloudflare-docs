@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import BodyRoomChat from "@/components/BodyRoomChat";
+import RoomConvaiChat from "@/components/RoomConvaiChat";
 import BodyLensSelector from "@/components/BodyLensSelector";
 import LensForRegion from "@/components/LensForRegion";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -175,33 +176,15 @@ export default function BodyRoom() {
         </div>
       </section>
 
-      {/* §Open Factory — "I am not sure / Just talk" gentle entry.
-          For wanderers who arrive without a clear body region in mind.
-          Lands them in Clarity Release with a soft opening so they
-          don't have to choose anything yet. */}
-      <section className="aurin-section-sm" data-testid="body-room-not-sure">
+      {/* §Phase B (2026-02-15) — Kaelan ConvAI is now mounted. Body
+          Room's voice surface is Kaelan, a dedicated somatic agent
+          configured by founder in the ElevenLabs UI. Strict room
+          isolation: Kaelan's signed URL is minted from
+          ELEVENLABS_CONVAI_AGENT_KAELAN only; he never speaks for
+          Grace, Sara, or Alistair. */}
+      <section className="aurin-section-sm" data-testid="body-room-kaelan">
         <div className="aurin-container max-w-[760px]">
-          <div className="aurin-card p-6 md:p-7 flex flex-col md:flex-row gap-5 items-center justify-between">
-            <div className="space-y-1.5">
-              <div className="aurin-eyebrow !mb-0">Kaelan is preparing the space</div>
-              <p
-                data-testid="body-room-kaelan-placeholder"
-                className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[52ch]"
-              >
-                The somatic guide for this room — Kaelan — is being
-                tuned. Until he arrives, the silhouette below is yours
-                to walk slowly. No conversation is required tonight.
-              </p>
-            </div>
-            {/* §STABILIZATION 2026-02-15 — Founder directive: do NOT
-                redirect Body Room wanderers into Private Room. Body
-                Room must keep its own identity even when its
-                conversational layer is pending. The "Just talk to
-                Grace" CTA that lived here previously was creating the
-                "rooms-mix-up" sensation the founder reported on
-                prulesoul.site. Kaelan ConvAI mount lands in a
-                separate, named iteration. */}
-          </div>
+          <RoomConvaiChat room="body" />
         </div>
       </section>
 

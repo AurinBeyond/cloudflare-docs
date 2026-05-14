@@ -32,6 +32,7 @@ import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { useAuth } from "@/contexts/AuthProvider";
 import ParentsRoomChat from "@/components/ParentsRoomChat";
+import RoomConvaiChat from "@/components/RoomConvaiChat";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -137,6 +138,16 @@ export default function ParentsRoom() {
         title="Three quiet schools, one calm room for parents."
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
+
+      {/* §Phase B (2026-02-15) — Sara ConvAI is mounted at the top of
+          Parents' Room. Sara is the dedicated parental-support voice
+          agent configured by founder in the ElevenLabs UI; she is
+          strictly isolated from Grace / Kaelan / Alistair. */}
+      <section className="aurin-section-sm" data-testid="parents-room-sara">
+        <div className="aurin-container max-w-[760px]">
+          <RoomConvaiChat room="parents" />
+        </div>
+      </section>
 
       {/* §Stage 3.2 — Featured ritual: The Calm Parent's Code.
           A seven-day soft anchor that introduces the room without

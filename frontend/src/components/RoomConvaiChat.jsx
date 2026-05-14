@@ -33,6 +33,18 @@ const TOKEN_KEY = "aurin_session_token";
 
 const ALLOWED_ROOMS = new Set(["clarity", "body", "parents", "courses"]);
 
+// §Phase B (2026-02-15) — room → agent display name mapping. Each
+// room's voice surface MUST identify the correct dedicated agent so
+// the wanderer never thinks they are talking to Grace inside Body
+// Room. This is the ONLY copy-aware piece of the otherwise generic
+// component.
+const ROOM_AGENT_NAME = {
+  clarity: "Grace",
+  body: "Kaelan",
+  parents: "Sara",
+  courses: "Alistair",
+};
+
 /**
  * Mint a fresh signed URL from our backend.
  * Returns { signed_url } or throws.
@@ -67,6 +79,7 @@ function ConvaiPanel({ room, onFallback }) {
   const [transcript, setTranscript] = useState([]); // [{role:"user"|"agent", text}]
   const [textInput, setTextInput] = useState("");
   const scrollRef = useRef(null);
+  const agentName = ROOM_AGENT_NAME[room] || "the guide";
 
   const pushTranscript = useCallback((role, text) => {
     if (!text) return;
@@ -217,7 +230,7 @@ function ConvaiPanel({ room, onFallback }) {
             disabled={isConnecting}
             className="aurin-btn-primary text-[13px] disabled:opacity-60"
           >
-            {isConnecting ? "Connecting…" : "Speak with Grace"}
+            {isConnecting ? "Connecting…" : `Speak with ${agentName}`}
           </button>
         )}
       </div>
@@ -228,15 +241,18 @@ function ConvaiPanel({ room, onFallback }) {
           className="text-[12.5px] text-[hsl(var(--aurin-text))/0.7] mb-3"
         >
           <p>{errorMsg}</p>
-          {onFallback ? (
-            <button
-              data-testid="convai-fallback-btn"
-              onClick={onFallback}
-              className="mt-2 aurin-link text-[12px]"
-            >
-              Use the older voice mode instead →
-            </button>
-          ) : null}
+          {/* §STABILIZATION 2026-02-15 — Hard-disable fallback.
+              The legacy useVoiceIO + Whisper + Claude pipeline is no
+              longer reachable from this surface. If ConvAI fails, the
+              wanderer is shown a calm initialization notice and asked
+              to refresh — they are NEVER routed into the older,
+              hallucinatory STT path. The `onFallback` prop is left in
+              place for future controlled re-introduction but is no
+              longer wired to a visible CTA. */}
+          <p className="mt-2 text-[11.5px] text-[hsl(var(--aurin-text))/0.55]">
+            System initializing. Please refresh the page (Ctrl + Shift + R)
+            and try again in a moment.
+          </p>
         </div>
       ) : null}
 
@@ -293,7 +309,7 @@ function ConvaiPanel({ room, onFallback }) {
       </div>
 
       <p className="mt-3 text-[11.5px] text-[hsl(var(--aurin-text))/0.45]">
-        Voice or text — both reach Grace the same way. Microphone
+        Voice or text — both reach {agentName} the same way. Microphone
         permission is needed only for voice.
       </p>
     </div>
