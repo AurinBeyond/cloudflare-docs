@@ -315,6 +315,18 @@ function ConvaiPanel({ room, onFallback }) {
     // conversation. Identity-lock means the agent's first_message
     // will repopulate this within ~1s.
     setTranscript([]);
+    setMicLevel(0);
+    setVadScore(0);
+    // §NUCLEAR KILL SWITCH (defensive) — even though room/mode
+    // change cleanup useEffects already call endSession(), the SDK
+    // teardown is async. If the wanderer hits Speak again very
+    // quickly, an old session may still be draining audio. Await a
+    // clean teardown here before opening the next socket.
+    try {
+      await conversation.endSession();
+    } catch {
+      /* prior session already torn down — fine */
+    }
     try {
       // §STABILIZATION 2026-02-15 — Mic permission is requested
       // INTERNALLY by VoiceConversation.startSession (see
