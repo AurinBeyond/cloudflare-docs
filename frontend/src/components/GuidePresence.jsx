@@ -169,7 +169,9 @@ export default function GuidePresence({
                 ? "Guide portrait — Grace"
                 : "Guide portrait"
             }
-            className="w-full h-full object-cover aurin-guide-breath aurin-guide-sway"
+            className={`w-full h-full object-cover ${
+              state === "speaking" ? "aurin-guide-breath" : ""
+            }`}
             loading="eager"
             onError={(e) => {
               if (e.currentTarget.src.indexOf("/assets/illustrations/") === -1) {

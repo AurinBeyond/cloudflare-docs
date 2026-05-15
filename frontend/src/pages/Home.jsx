@@ -217,7 +217,7 @@ export default function Home() {
             className="mt-5 inline-flex flex-col items-start gap-1 px-5 py-4 border border-[hsl(var(--aurin-sage))/0.25] hover:border-[hsl(var(--aurin-sage))/0.6] rounded-md transition-colors aurin-fade-up aurin-delay-4 group"
           >
             <span className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-sage))]">
-              Three wisdom schools · one quiet room
+              Three wisdom traditions · one quiet room
             </span>
             <span
               className="aurin-display text-[20px] md:text-[22px] leading-snug"

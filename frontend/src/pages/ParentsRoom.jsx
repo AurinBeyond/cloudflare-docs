@@ -58,7 +58,7 @@ const SITUATION_META = {
   screen_time:   { label: "Screen time",    sub: "the bridge, not the cliff", Icon: Smartphone },
   sibling:       { label: "Siblings",       sub: "the neutral object between", Icon: Users },
   separation:    { label: "Separation",     sub: "the small ambassador",      Icon: PlaneTakeoff },
-  school_stress: { label: "School stress",  sub: "noticing, not evaluating",  Icon: GraduationCap },
+  school_stress: { label: "Learning stress",  sub: "noticing, not evaluating",  Icon: GraduationCap },
   connection:    { label: "Connection",     sub: "the seams of the day",      Icon: HandHeart },
 };
 
@@ -135,7 +135,7 @@ export default function ParentsRoom() {
     <div data-testid="page-parents-room">
       <PageHeader
         eyebrow="Parents' Room · Wisdom Weaver"
-        title="Three quiet schools, one calm room for parents."
+        title="Three wisdom traditions, one calm room for parents."
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
 
