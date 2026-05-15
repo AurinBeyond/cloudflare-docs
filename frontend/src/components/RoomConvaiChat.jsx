@@ -99,6 +99,27 @@ async function fetchSignedUrl(room) {
   return res.json();
 }
 
+// §IDENTITY LOCK 2026-02-15 PM (founder explicit directive after voice
+// drift kept recurring). Each room has ONE locked voice_id. Sent as
+// `overrides.tts.voice_id` on every startSession so the wanderer
+// CAN NEVER again hear Sara speak with a male voice, etc., even if a
+// Dashboard PATCH or admin slip changes the voice elsewhere.
+//
+// The agents' personality, dialogue style, and warmth still live in
+// the Dashboard system prompt — code only locks the *voice timbre*.
+const ROOM_VOICE_LOCK = {
+  clarity: "21m00Tcm4TlvDq8ikWAM",  // Rachel — warm female (Grace)
+  parents: "EXAVITQu4vr4xnSDxMaL",  // Bella  — gentle female (Sara)
+  body:    "ErXwobaYiN019PkySvjV",  // Antoni — calm male (Kaelan)
+  courses: "pNInz6obpgDQGcFmaJgB",  // Adam   — deep male (Alistair)
+};
+
+// §AUTO-DISCONNECT 2026-02-15 PM — If the wanderer is silent for this
+// many milliseconds while VOICE mode is live, the session
+// auto-disconnects so the agent never falls into a "are you still
+// there?" monologue loop. 10 seconds per founder directive.
+const VOICE_SILENCE_AUTODISCONNECT_MS = 10_000;
+
 function ConvaiPanel({ room, onFallback }) {
   const [status, setStatus] = useState("idle"); // idle | connecting | live | error
   const [errorMsg, setErrorMsg] = useState("");
@@ -225,6 +246,10 @@ function ConvaiPanel({ room, onFallback }) {
   // half (voice band) and normalise to 0..1. This is independent of
   // the SDK's _isMuted flag — getInputVolume() returns 0 when muted,
   // but FFT data is the actual audio spectrum.
+  //
+  // §AUTO-DISCONNECT — if the spectrum stays flat (< 0.04) for
+  // 10s while VOICE mode is live, end the session so the agent
+  // never falls into a "are you still there?" monologue loop.
   useEffect(() => {
     if (status !== "live") {
       setMicLevel(0);
@@ -233,21 +258,34 @@ function ConvaiPanel({ room, onFallback }) {
     }
     const fftBuf = new Uint8Array(1024);
     let raf = 0;
+    let lastVoiceAt = Date.now();
     const tick = () => {
       try {
         const fn = conversation.getInputByteFrequencyData;
         if (typeof fn === "function") {
           fn.call(conversation, fftBuf);
-          // Sum the lower 384 bins (≈0–6 kHz, voice range) and
-          // normalise. Empirically 384 * 64 ≈ a reasonable "loud
-          // speech" ceiling on default mic gain.
           let sum = 0;
           for (let i = 0; i < 384; i += 1) sum += fftBuf[i];
           const v = Math.min(1, sum / (384 * 64));
           setMicLevel(v);
+          if (v > 0.04) lastVoiceAt = Date.now();
         }
       } catch {
         /* getInputByteFrequencyData may briefly throw during teardown */
+      }
+      // Auto-disconnect after silence (VOICE mode only — HYBRID
+      // deliberately keeps mic muted, TEXT has no mic).
+      if (
+        modeRef.current === "voice" &&
+        Date.now() - lastVoiceAt > VOICE_SILENCE_AUTODISCONNECT_MS
+      ) {
+        try {
+          const p = conversation.endSession();
+          if (p && typeof p.catch === "function") p.catch(() => {});
+        } catch { /* noop */ }
+        setStatus("idle");
+        setErrorMsg("");
+        return; // stop polling
       }
       raf = requestAnimationFrame(tick);
     };
@@ -344,30 +382,22 @@ function ConvaiPanel({ room, onFallback }) {
       // For TEXT mode the SDK uses TextConversation which never
       // requests mic permission at all — accessibility-correct.
       const { signed_url: signedUrl } = await fetchSignedUrl(room);
-      // §STABILIZATION 2026-02-15 — Using WebSocket transport.
-      // WebRTC would shave ~200-400 ms but requires a different
-      // auth flow (`conversationToken` from `/v1/convai/conversation/token`
-      // — SDK rejects `signedUrl` for WebRTC at the type level).
-      //
-      // §ZERO-OVERRIDE 2026-02-15 PM — founder directive: the
-      // Dashboard is the single source of truth. The SDK call below
-      // sends ZERO content overrides — no `overrides.agent.prompt`,
-      // no `overrides.agent.firstMessage`, no `overrides.tts`.
-      // Personality, greeting, voice and behaviour ALL come from the
-      // Dashboard. Edit a comma in ElevenLabs → it reaches the
-      // wanderer on the next session, no code change needed.
-      //
-      // §ACCESSIBILITY 2026-02-15 — For TEXT mode we still flip the
-      // SDK's top-level `textOnly` flag (this is a transport choice,
-      // not content — it switches the SDK between TextConversation
-      // and VoiceConversation classes). HYBRID stays on voice
-      // transport; mic is muted in `onConnect`.
+      // §IDENTITY LOCK 2026-02-15 PM — Force the locked voice_id on
+      // every session start. Belt-and-suspenders over the API PATCH
+      // already applied to the agent's Dashboard. Founder directive:
+      // "Grace = naine. Alistair = mees. Ära puutu enam kunagi."
+      const lockedVoiceId = ROOM_VOICE_LOCK[room];
       modeRef.current = mode;
       const isTextMode = mode === "text";
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",
         ...(isTextMode ? { textOnly: true } : {}),
+        overrides: {
+          ...(lockedVoiceId
+            ? { tts: { voiceId: lockedVoiceId } }
+            : {}),
+        },
       });
     } catch (err) {
       setStatus("error");
