@@ -26,7 +26,11 @@
  * the same page. The parent decides which one is active.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ConversationProvider, useConversation } from "@elevenlabs/react";
+import {
+  ConversationProvider,
+  useConversation,
+  useConversationInput,
+} from "@elevenlabs/react";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 const TOKEN_KEY = "aurin_session_token";
@@ -44,6 +48,28 @@ const ROOM_AGENT_NAME = {
   parents: "Sara",
   courses: "Alistair",
 };
+
+// §ACCESSIBILITY 2026-02-15 — Three-mode toggle (founder directive,
+// long-standing request). Each mode controls the SDK + UI behaviour:
+//   - voice  : full voice-to-voice. Mic captured, agent speaks back.
+//              (TextConversation is NOT used; SDK creates VoiceConversation.)
+//   - text   : pure text-to-text. Mic never requested. Agent replies
+//              with text only — no audio output. (SDK uses
+//              TextConversation when overrides.conversation.textOnly=true.)
+//   - hybrid : type-to-voice. Wanderer types; agent speaks the reply
+//              aloud. Mic is captured by SDK (VoiceConversation) but
+//              we mute it immediately after connect so ambient noise
+//              never triggers a turn.
+//
+// REQUIREMENT — `overrides.conversation.textOnly` must be enabled in
+// each agent's Dashboard → Security → Overrides (already enabled via
+// API PATCH on 2026-02-15). Without it, the agent ignores the
+// override and forces voice mode.
+const MODES = [
+  { key: "voice",  label: "Voice",  hint: "Speak — the guide speaks back." },
+  { key: "text",   label: "Text",   hint: "Type — the guide writes back." },
+  { key: "hybrid", label: "Hybrid", hint: "Type — the guide speaks back." },
+];
 
 /**
  * Mint a fresh signed URL from our backend.
@@ -78,6 +104,8 @@ function ConvaiPanel({ room, onFallback }) {
   const [errorMsg, setErrorMsg] = useState("");
   const [transcript, setTranscript] = useState([]); // [{role:"user"|"agent", text}]
   const [textInput, setTextInput] = useState("");
+  const [mode, setMode] = useState("voice"); // "voice" | "text" | "hybrid"
+  const modeRef = useRef("voice"); // capture mode for onConnect handler
   const scrollRef = useRef(null);
   const agentName = ROOM_AGENT_NAME[room] || "the guide";
 
@@ -95,10 +123,29 @@ function ConvaiPanel({ room, onFallback }) {
     });
   }, []);
 
+  // §ACCESSIBILITY 2026-02-15 — Mic mute control (used only in HYBRID
+  // mode, where the wanderer types but the guide replies aloud). The
+  // SDK still allocates a mic track because VoiceConversation is used
+  // for audio output; muting it ensures no ambient noise reaches the
+  // agent's turn detector.
+  const { setMuted } = useConversationInput();
+
   const conversation = useConversation({
     onConnect: () => {
       setStatus("live");
       setErrorMsg("");
+      // HYBRID: silence the mic so only typed input reaches the agent.
+      if (modeRef.current === "hybrid") {
+        try {
+          setMuted(true);
+        } catch {
+          /* setMuted may throw if conversation not yet attached;
+             a microtask retry handles the race. */
+          queueMicrotask(() => {
+            try { setMuted(true); } catch { /* noop */ }
+          });
+        }
+      }
     },
     onDisconnect: () => {
       setStatus("idle");
@@ -131,9 +178,10 @@ function ConvaiPanel({ room, onFallback }) {
 
   // §STABILIZATION 2026-02-15 — STRICT CLEANUP (founder directive).
   // When the wanderer navigates between rooms (Grace → Body → Parents
-  // …), React Router unmounts the previous page. Without this effect,
-  // the underlying WebSocket + audio output of the previous agent
-  // keeps streaming in the background — the founder reported hearing
+  // …) OR switches communication mode (Voice → Text → Hybrid), React
+  // Router or our toggle causes a teardown. Without this effect, the
+  // underlying WebSocket + audio output of the previous session keeps
+  // streaming in the background — the founder reported hearing
   // multiple voices at once. We force-close any live conversation on
   // unmount AND whenever the `room` prop changes mid-mount.
   useEffect(() => {
@@ -147,6 +195,21 @@ function ConvaiPanel({ room, onFallback }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally
     // only depend on `room`; `conversation` identity is stable per provider.
   }, [room]);
+
+  // §ACCESSIBILITY 2026-02-15 — Mode kill-switch. Changing mode while a
+  // session is live MUST end the session — VOICE↔TEXT swap requires
+  // a different underlying SDK class (TextConversation vs
+  // VoiceConversation) which is decided at startSession time only.
+  useEffect(() => {
+    modeRef.current = mode;
+    if (status === "live" || status === "connecting") {
+      try { conversation.endSession(); } catch { /* noop */ }
+      setStatus("idle");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we only
+    // want this effect to fire on real mode toggles, not on every
+    // status change.
+  }, [mode]);
 
   const start = useCallback(async () => {
     if (status === "connecting" || status === "live") return;
@@ -164,6 +227,9 @@ function ConvaiPanel({ room, onFallback }) {
       // `getUserMedia` here was leaving the input track in a stopped
       // state, which manifested as "the agent speaks but doesn't hear
       // me". Let the SDK own the full mic lifecycle.
+      //
+      // For TEXT mode the SDK uses TextConversation which never
+      // requests mic permission at all — accessibility-correct.
       const {
         signed_url: signedUrl,
         identity_prompt: identityPrompt,
@@ -182,9 +248,19 @@ function ConvaiPanel({ room, onFallback }) {
       // `overrides.tts` (voice_id / stability / similarity / speed /
       // style). The wanderer's Dashboard voice config is the single
       // source of truth for sound. Identity overrides text only.
+      //
+      // §ACCESSIBILITY 2026-02-15 — For TEXT mode we flip the SDK's
+      // top-level `textOnly` flag (NOT the override). This makes the
+      // SDK instantiate `TextConversation` instead of
+      // `VoiceConversation` → no mic, no audio output, no costly
+      // TTS frames. HYBRID stays on VoiceConversation; we mute the
+      // mic inside `onConnect`.
+      modeRef.current = mode;
+      const isTextMode = mode === "text";
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",
+        ...(isTextMode ? { textOnly: true } : {}),
         overrides: {
           agent: {
             ...(identityPrompt
@@ -199,7 +275,7 @@ function ConvaiPanel({ room, onFallback }) {
       const detail = err?.message || "Could not connect to the room.";
       setErrorMsg(detail);
     }
-  }, [conversation, room, status]);
+  }, [conversation, mode, room, status]);
 
   const stop = useCallback(() => {
     try {
@@ -274,9 +350,50 @@ function ConvaiPanel({ room, onFallback }) {
             disabled={isConnecting}
             className="aurin-btn-primary text-[13px] disabled:opacity-60"
           >
-            {isConnecting ? "Connecting…" : `Speak with ${agentName}`}
+            {isConnecting
+              ? "Connecting…"
+              : mode === "text"
+                ? `Write to ${agentName}`
+                : mode === "hybrid"
+                  ? `Write — ${agentName} speaks`
+                  : `Speak with ${agentName}`}
           </button>
         )}
+      </div>
+
+      {/* §ACCESSIBILITY 2026-02-15 — Three-mode toggle. Founder
+          directive: explicit communication-mode choice for wanderers
+          with hearing or speech needs, for privacy, or simply for
+          those who want dialogue over monologue. Disabled while a
+          session is live — the wanderer must end the current
+          session before switching mode (the SDK uses a different
+          underlying class per mode). */}
+      <div
+        data-testid="convai-mode-toggle"
+        role="radiogroup"
+        aria-label="Communication mode"
+        className="flex items-center gap-1.5 mb-4 p-1 rounded-full bg-[hsl(var(--aurin-bg))/0.5] border border-[hsl(var(--aurin-border-soft))] w-fit"
+      >
+        {MODES.map((m) => {
+          const selected = mode === m.key;
+          return (
+            <button
+              key={m.key}
+              data-testid={`convai-mode-${m.key}`}
+              role="radio"
+              aria-checked={selected}
+              type="button"
+              onClick={() => setMode(m.key)}
+              className={`px-4 py-1.5 rounded-full text-[12px] tracking-[0.06em] transition-colors ${
+                selected
+                  ? "bg-[hsl(var(--aurin-sage))/0.18] text-[hsl(var(--aurin-text))] border border-[hsl(var(--aurin-sage))/0.45]"
+                  : "text-[hsl(var(--aurin-text))/0.55] hover:text-[hsl(var(--aurin-text))/0.85] border border-transparent"
+              }`}
+            >
+              {m.label}
+            </button>
+          );
+        })}
       </div>
 
       {errorMsg ? (
@@ -352,9 +469,16 @@ function ConvaiPanel({ room, onFallback }) {
         </button>
       </div>
 
-      <p className="mt-3 text-[11.5px] text-[hsl(var(--aurin-text))/0.45]">
-        Voice or text — both reach {agentName} the same way. Microphone
-        permission is needed only for voice.
+      <p
+        data-testid="convai-mode-hint"
+        className="mt-3 text-[11.5px] text-[hsl(var(--aurin-text))/0.45]"
+      >
+        {MODES.find((m) => m.key === mode)?.hint}
+        {mode === "voice"
+          ? " Microphone permission is needed."
+          : mode === "hybrid"
+            ? " Your mic stays muted — only what you type is sent."
+            : " No microphone is requested."}
       </p>
     </div>
   );
