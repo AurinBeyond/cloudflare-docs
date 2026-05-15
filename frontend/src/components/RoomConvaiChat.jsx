@@ -129,13 +129,41 @@ function ConvaiPanel({ room, onFallback }) {
     }
   }, [transcript]);
 
+  // §STABILIZATION 2026-02-15 — STRICT CLEANUP (founder directive).
+  // When the wanderer navigates between rooms (Grace → Body → Parents
+  // …), React Router unmounts the previous page. Without this effect,
+  // the underlying WebSocket + audio output of the previous agent
+  // keeps streaming in the background — the founder reported hearing
+  // multiple voices at once. We force-close any live conversation on
+  // unmount AND whenever the `room` prop changes mid-mount.
+  useEffect(() => {
+    return () => {
+      try {
+        conversation.endSession();
+      } catch {
+        /* SDK may already be torn down; ignore. */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally
+    // only depend on `room`; `conversation` identity is stable per provider.
+  }, [room]);
+
   const start = useCallback(async () => {
     if (status === "connecting" || status === "live") return;
     setStatus("connecting");
     setErrorMsg("");
+    // §STABILIZATION 2026-02-15 — Reset transcript so stale lines
+    // from a previous (now-ended) session never bleed into a fresh
+    // conversation. Identity-lock means the agent's first_message
+    // will repopulate this within ~1s.
+    setTranscript([]);
     try {
-      // Mic permission first — required by the SDK before startSession.
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // §STABILIZATION 2026-02-15 — Mic permission is requested
+      // INTERNALLY by VoiceConversation.startSession (see
+      // @elevenlabs/client/VoiceConversation.js line ~41). Pre-calling
+      // `getUserMedia` here was leaving the input track in a stopped
+      // state, which manifested as "the agent speaks but doesn't hear
+      // me". Let the SDK own the full mic lifecycle.
       const {
         signed_url: signedUrl,
         identity_prompt: identityPrompt,
@@ -148,13 +176,12 @@ function ConvaiPanel({ room, onFallback }) {
       //
       // §IDENTITY LOCK 2026-02-15 — Per founder directive, we pass a
       // server-minted `overrides.agent.prompt` and
-      // `overrides.agent.firstMessage` on every startSession. This
-      // pins the mentor's identity at the wire level, independent of
-      // whatever the ElevenLabs Dashboard system prompt currently
-      // says. REQUIRES the agent's Security → Overrides checkboxes
-      // for `System prompt` + `First message` to be enabled in the
-      // Dashboard; otherwise ElevenLabs silently ignores these
-      // fields and the Dashboard prompt wins.
+      // `overrides.agent.firstMessage` on every startSession.
+      //
+      // §VOICE DIRECTIVE 2026-02-15 — We deliberately DO NOT send any
+      // `overrides.tts` (voice_id / stability / similarity / speed /
+      // style). The wanderer's Dashboard voice config is the single
+      // source of truth for sound. Identity overrides text only.
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",
