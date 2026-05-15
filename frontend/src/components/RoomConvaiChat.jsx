@@ -130,11 +130,27 @@ function ConvaiPanel({ room, onFallback }) {
   // agent's turn detector.
   const { setMuted } = useConversationInput();
 
-  // §MIC DIAGNOSTIC 2026-02-15 PM — Live mic input level (0..1).
-  // Shown to the wanderer as a green bar so they can SEE the system
-  // is hearing them. If they speak and the bar stays flat, the bug
-  // is browser-permission level, not SDK / ASR level.
+  // §MIC DIAGNOSTIC 2026-02-15 PM — Two independent signals:
+  //
+  //   micLevel    : local FFT spectrum sum from the browser's own
+  //                 mic capture (via SDK getInputByteFrequencyData).
+  //                 Tells us "browser hears my voice".
+  //
+  //   vadScore    : ElevenLabs server-side Voice Activity Detection
+  //                 score (0..1) sent over the WebSocket on every
+  //                 audio chunk. Tells us "ElevenLabs hears my voice".
+  //
+  // When the wanderer speaks:
+  //   - If micLevel reacts but vadScore stays at 0 → audio is
+  //     captured locally but is NOT reaching ElevenLabs (transport /
+  //     format problem).
+  //   - If both react but agent never replies with a transcript →
+  //     ASR language config rejects the speech (e.g. Estonian on an
+  //     English-only agent).
+  //   - If neither reacts → browser-level mic problem (permission,
+  //     wrong default device, hardware mute).
   const [micLevel, setMicLevel] = useState(0);
+  const [vadScore, setVadScore] = useState(0);
 
   const conversation = useConversation({
     onConnect: () => {
@@ -182,6 +198,18 @@ function ConvaiPanel({ room, onFallback }) {
       if (src === "user") pushTranscript("user", text);
       else if (src === "ai") pushTranscript("agent", text);
     },
+    // §MIC DIAGNOSTIC 2026-02-15 PM — Server-side VAD score (0..1).
+    // ElevenLabs streams this on every audio chunk. If it stays at
+    // exactly 0 while the wanderer speaks, audio is not reaching
+    // their servers (transport / format / mute problem). If it
+    // rises but no `onMessage` with source=user fires, the ASR is
+    // rejecting the speech (language / accent mismatch).
+    onVadScore: (evt) => {
+      const s = evt?.vadScore;
+      if (typeof s === "number" && Number.isFinite(s)) {
+        setVadScore(s);
+      }
+    },
   });
 
   // Auto-scroll transcript
@@ -191,26 +219,35 @@ function ConvaiPanel({ room, onFallback }) {
     }
   }, [transcript]);
 
-  // §MIC DIAGNOSTIC 2026-02-15 PM — Poll mic input volume while live.
-  // SDK exposes getInputVolume() returning a 0..1 RMS level. When the
-  // wanderer speaks, we want the bar to react instantly so they SEE
-  // the system is hearing them. If their words still don't reach
-  // ElevenLabs even when the bar moves, the bug is downstream
-  // (ASR config), not microphone capture.
+  // §MIC DIAGNOSTIC 2026-02-15 PM — Poll mic input via FFT spectrum.
+  // SDK exposes getInputByteFrequencyData(buffer) which fills the
+  // buffer with raw FFT magnitudes (Uint8 0..255). We sum the lower
+  // half (voice band) and normalise to 0..1. This is independent of
+  // the SDK's _isMuted flag — getInputVolume() returns 0 when muted,
+  // but FFT data is the actual audio spectrum.
   useEffect(() => {
     if (status !== "live") {
       setMicLevel(0);
+      setVadScore(0);
       return undefined;
     }
+    const fftBuf = new Uint8Array(1024);
     let raf = 0;
     const tick = () => {
       try {
-        const v = conversation.getInputVolume?.();
-        if (typeof v === "number" && Number.isFinite(v)) {
+        const fn = conversation.getInputByteFrequencyData;
+        if (typeof fn === "function") {
+          fn.call(conversation, fftBuf);
+          // Sum the lower 384 bins (≈0–6 kHz, voice range) and
+          // normalise. Empirically 384 * 64 ≈ a reasonable "loud
+          // speech" ceiling on default mic gain.
+          let sum = 0;
+          for (let i = 0; i < 384; i += 1) sum += fftBuf[i];
+          const v = Math.min(1, sum / (384 * 64));
           setMicLevel(v);
         }
       } catch {
-        /* getInputVolume may briefly throw during teardown */
+        /* getInputByteFrequencyData may briefly throw during teardown */
       }
       raf = requestAnimationFrame(tick);
     };
@@ -431,31 +468,51 @@ function ConvaiPanel({ room, onFallback }) {
         })}
       </div>
 
-      {/* §MIC DIAGNOSTIC 2026-02-15 PM — Visible mic level meter.
-          Only shown when a VOICE-mode session is live so the wanderer
-          can SEE that the system is hearing them. If the bar stays
-          flat while speaking, the issue is at browser-permission
-          level (mic blocked, wrong default device, etc.) — not
-          downstream in the SDK or ASR. */}
+      {/* §MIC DIAGNOSTIC 2026-02-15 PM — Two visible bars while
+          VOICE-mode session is live:
+            Mic    — your browser's mic spectrum (local capture)
+            Heard  — ElevenLabs' server-side VAD score (remote)
+          Two bars give the wanderer (and us) an instant, true picture
+          of where the audio path is breaking when it breaks. */}
       {status === "live" && mode === "voice" ? (
-        <div
-          data-testid="convai-mic-meter"
-          className="mb-4"
-          aria-label="Microphone input level"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <span className="aurin-mono text-[10px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.5]">
-              Mic
-            </span>
-            <span className="aurin-mono text-[10px] text-[hsl(var(--aurin-text))/0.4]">
-              {micLevel > 0.02 ? "hearing you" : "speak — I'm listening"}
-            </span>
+        <div data-testid="convai-mic-meter" className="mb-4 space-y-2">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="aurin-mono text-[10px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.5]">
+                Mic
+              </span>
+              <span className="aurin-mono text-[10px] text-[hsl(var(--aurin-text))/0.4]">
+                {micLevel > 0.04 ? "your voice is reaching the browser" : "speak — I'm listening"}
+              </span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[hsl(var(--aurin-bg))/0.6] overflow-hidden">
+              <div
+                data-testid="convai-mic-bar"
+                className="h-full bg-[hsl(var(--aurin-sage))/0.85] transition-[width] duration-75"
+                style={{ width: `${Math.min(100, Math.round(micLevel * 220))}%` }}
+              />
+            </div>
           </div>
-          <div className="h-1.5 w-full rounded-full bg-[hsl(var(--aurin-bg))/0.6] overflow-hidden">
-            <div
-              className="h-full bg-[hsl(var(--aurin-sage))/0.85] transition-[width] duration-75"
-              style={{ width: `${Math.min(100, Math.round(micLevel * 240))}%` }}
-            />
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="aurin-mono text-[10px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.5]">
+                Heard
+              </span>
+              <span className="aurin-mono text-[10px] text-[hsl(var(--aurin-text))/0.4]">
+                {vadScore > 0.4
+                  ? `${agentName} hears you clearly`
+                  : vadScore > 0.1
+                    ? `${agentName} hears faint sound`
+                    : `${agentName} hears nothing yet`}
+              </span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[hsl(var(--aurin-bg))/0.6] overflow-hidden">
+              <div
+                data-testid="convai-vad-bar"
+                className="h-full bg-[hsl(var(--aurin-cream))/0.7] transition-[width] duration-100"
+                style={{ width: `${Math.min(100, Math.round(vadScore * 100))}%` }}
+              />
+            </div>
           </div>
         </div>
       ) : null}
