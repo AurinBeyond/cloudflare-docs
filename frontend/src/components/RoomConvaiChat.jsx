@@ -232,7 +232,6 @@ function ConvaiPanel({ room, onFallback }) {
       // requests mic permission at all — accessibility-correct.
       const {
         signed_url: signedUrl,
-        identity_prompt: identityPrompt,
         first_message: firstMessage,
       } = await fetchSignedUrl(room);
       // §STABILIZATION 2026-02-15 — Using WebSocket transport.
@@ -240,14 +239,22 @@ function ConvaiPanel({ room, onFallback }) {
       // auth flow (`conversationToken` from `/v1/convai/conversation/token`
       // — SDK rejects `signedUrl` for WebRTC at the type level).
       //
-      // §IDENTITY LOCK 2026-02-15 — Per founder directive, we pass a
-      // server-minted `overrides.agent.prompt` and
-      // `overrides.agent.firstMessage` on every startSession.
+      // §IDENTITY LOCK REVERSED 2026-02-15 PM — We deliberately
+      // DO NOT send `overrides.agent.prompt` any more. The earlier
+      // override REPLACED the wanderer's rich Dashboard system
+      // prompt and destroyed the agent's empathy / dialogue style.
+      // Name-fixing happens at SOURCE: the Dashboard prompts of
+      // Grace and Kaelan were PATCHed via API (Elara → Grace,
+      // Aura → Kaelan) so the wrong-identity issue is solved there,
+      // not by overwriting personality at session time.
       //
-      // §VOICE DIRECTIVE 2026-02-15 — We deliberately DO NOT send any
-      // `overrides.tts` (voice_id / stability / similarity / speed /
-      // style). The wanderer's Dashboard voice config is the single
-      // source of truth for sound. Identity overrides text only.
+      // We STILL pass `overrides.agent.firstMessage` because it is a
+      // single greeting line, does not touch the system prompt, and
+      // guarantees the wanderer always meets the correct mentor.
+      //
+      // §VOICE DIRECTIVE 2026-02-15 — We never send `overrides.tts`.
+      // The wanderer's Dashboard voice config is the single source
+      // of truth for sound.
       //
       // §ACCESSIBILITY 2026-02-15 — For TEXT mode we flip the SDK's
       // top-level `textOnly` flag (NOT the override). This makes the
@@ -262,12 +269,9 @@ function ConvaiPanel({ room, onFallback }) {
         connectionType: "websocket",
         ...(isTextMode ? { textOnly: true } : {}),
         overrides: {
-          agent: {
-            ...(identityPrompt
-              ? { prompt: { prompt: identityPrompt } }
-              : {}),
-            ...(firstMessage ? { firstMessage } : {}),
-          },
+          ...(firstMessage
+            ? { agent: { firstMessage } }
+            : {}),
         },
       });
     } catch (err) {

@@ -4303,48 +4303,24 @@ _ROOM_TO_CONVAI_AGENT_ENV = {
     "courses": "ELEVENLABS_CONVAI_AGENT_ALISTAIR",
 }
 
-# §STABILIZATION 2026-02-15 — IDENTITY LOCK (founder directive).
-# Sent as `conversation_config_override.agent.prompt` on every
-# startSession. This GUARANTEES, at the wire level, that Grace stays
-# Grace and Kaelan stays Kaelan — even if the Dashboard system prompt
-# of an agent has been edited to a wrong persona ("You are Elara…",
-# "You are Aura…"). Keep each prompt short and identity-anchoring;
-# the rich personality remains in the Dashboard prompt (which still
-# loads first; this lock REPLACES it during the session, so it must
-# itself contain the minimum behavioural guidance we want).
+# §STABILIZATION 2026-02-15 — IDENTITY LOCK REVERSED 2026-02-15 PM.
+# The earlier identity-lock prompt (sent as `overrides.agent.prompt`)
+# REPLACED the wanderer's rich Dashboard system prompts — the entire
+# empathy / dialogue / warmth configuration she built was being
+# silently overwritten on every session start. Founder asked us to
+# STOP overriding. The Dashboard prompts are now the single source
+# of truth for personality. We fixed the wrong-name issue at SOURCE
+# via API PATCH on the Dashboard prompts directly (Elara → Grace,
+# Aura → Kaelan; Sara/Alistair untouched).
 #
-# REQUIREMENT — for these to take effect, the founder must enable
-#   ElevenLabs Dashboard → Agent → Security → Overrides:
-#     ☑ System prompt
-#     ☑ First message
-# Without those checkboxes, ElevenLabs silently ignores the override.
-_ROOM_IDENTITY_PROMPT = {
-    "clarity": (
-        "You are Grace, the Private Room mentor inside Matrix Aurin. "
-        "Speak with calm, minimalist clarity. Help the wanderer name "
-        "what they feel. Never claim to be anyone else."
-    ),
-    "body": (
-        "You are Kaelan, the Body Room somatic mentor inside Matrix "
-        "Aurin. Speak slowly. Guide attention to physical sensation "
-        "without diagnosis. Never claim to be anyone else."
-    ),
-    "parents": (
-        "You are Sara, the Parents' Room mentor inside Matrix Aurin. "
-        "Speak with warmth. Hold space for parenting strain without "
-        "advice-giving. Never claim to be anyone else."
-    ),
-    "courses": (
-        "You are Alistair, the Course Room strategist inside Matrix "
-        "Aurin. Speak concretely. Help the wanderer pick one next "
-        "step. Never claim to be anyone else."
-    ),
-}
+# We STILL ship a per-room `first_message` override because that is a
+# single greeting line, does not destroy personality, and guarantees
+# the wanderer always meets the correct mentor by name.
 _ROOM_FIRST_MESSAGE = {
-    "clarity": "I'm Grace. You're in the Private Room. What's present for you right now?",
-    "body":    "I'm Kaelan. You're in the Body Room. Where in your body would you like to start?",
-    "parents": "I'm Sara. You're in the Parents' Room. What's on your mind as a parent today?",
-    "courses": "I'm Alistair. You're in the Course Room. What would you like to move on?",
+    "clarity": "I'm Grace. You're in the Private Room. How are you arriving today?",
+    "body":    "I'm Kaelan. You're in the Body Room. How is your body meeting you right now?",
+    "parents": "I'm Sara. You're in the Parents' Room. How are you, as a parent, today?",
+    "courses": "I'm Alistair. You're in the Course Room. How can I help you take the next step?",
 }
 
 
@@ -4393,15 +4369,14 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
         signed_url = payload.get("signed_url")
         if not signed_url:
             raise HTTPException(status_code=502, detail="ConvAI provider returned no URL.")
-        # §STABILIZATION 2026-02-15 — Return identity-lock prompt and
-        # first message alongside the signed URL. Frontend MUST pass
-        # these as `overrides.agent.prompt` / `overrides.agent.firstMessage`
-        # to `startSession()` so the wanderer always meets the correct
-        # mentor, regardless of any Dashboard prompt drift.
+        # §STABILIZATION 2026-02-15 PM — Identity-lock REMOVED. We
+        # return only `first_message` (a single greeting line). The
+        # rich Dashboard system prompt is now the source of truth for
+        # personality — empathy, dialogue style, and warmth are
+        # preserved exactly as the wanderer configured them.
         return {
             "signed_url": signed_url,
             "room": room,
-            "identity_prompt": _ROOM_IDENTITY_PROMPT[room],
             "first_message": _ROOM_FIRST_MESSAGE[room],
         }
     except HTTPException:
