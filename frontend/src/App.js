@@ -110,7 +110,11 @@ function AppRouter() {
         />
         <Route
           path="/parents-room"
-          element={<ParentsRoom />}
+          element={
+            <WandererGate scope="private">
+              <ParentsRoom />
+            </WandererGate>
+          }
         />
         <Route
           path="/cabinet/booking"
@@ -121,7 +125,14 @@ function AppRouter() {
           }
         />
         <Route path="/test-group" element={<BetaTestGroup />} />
-        <Route path="/course-room" element={<CourseRoom />} />
+        <Route
+          path="/course-room"
+          element={
+            <WandererGate scope="private">
+              <CourseRoom />
+            </WandererGate>
+          }
+        />
         <Route path="/course-room/:slug" element={<CourseDetail />} />
         <Route path="/catalogue" element={<Catalogue />} />
         <Route path="/faq" element={<Faq />} />

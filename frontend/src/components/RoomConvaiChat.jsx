@@ -319,14 +319,20 @@ function ConvaiPanel({ room, onFallback }) {
     setVadScore(0);
     // §NUCLEAR KILL SWITCH (defensive) — even though room/mode
     // change cleanup useEffects already call endSession(), the SDK
-    // teardown is async. If the wanderer hits Speak again very
-    // quickly, an old session may still be draining audio. Await a
-    // clean teardown here before opening the next socket.
+    // teardown is async AND the React wrapper's `onDisconnect` may
+    // fire on the next tick. If the wanderer hits Speak again very
+    // quickly, the old AudioContext may still be draining its last
+    // buffered audio frames while a new session opens — manifesting
+    // as "two voices speak at once" (which the founder reported on
+    // a fresh /clarity-release session). Await a clean teardown
+    // here, then wait 220ms for the React state to propagate before
+    // opening the next socket.
     try {
       await conversation.endSession();
     } catch {
       /* prior session already torn down — fine */
     }
+    await new Promise((resolve) => setTimeout(resolve, 220));
     try {
       // §STABILIZATION 2026-02-15 — Mic permission is requested
       // INTERNALLY by VoiceConversation.startSession (see
