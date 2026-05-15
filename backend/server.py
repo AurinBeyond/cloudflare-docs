@@ -4303,25 +4303,14 @@ _ROOM_TO_CONVAI_AGENT_ENV = {
     "courses": "ELEVENLABS_CONVAI_AGENT_ALISTAIR",
 }
 
-# §STABILIZATION 2026-02-15 — IDENTITY LOCK REVERSED 2026-02-15 PM.
-# The earlier identity-lock prompt (sent as `overrides.agent.prompt`)
-# REPLACED the wanderer's rich Dashboard system prompts — the entire
-# empathy / dialogue / warmth configuration she built was being
-# silently overwritten on every session start. Founder asked us to
-# STOP overriding. The Dashboard prompts are now the single source
-# of truth for personality. We fixed the wrong-name issue at SOURCE
-# via API PATCH on the Dashboard prompts directly (Elara → Grace,
-# Aura → Kaelan; Sara/Alistair untouched).
-#
-# We STILL ship a per-room `first_message` override because that is a
-# single greeting line, does not destroy personality, and guarantees
-# the wanderer always meets the correct mentor by name.
-_ROOM_FIRST_MESSAGE = {
-    "clarity": "I'm Grace. You're in the Private Room. How are you arriving today?",
-    "body":    "I'm Kaelan. You're in the Body Room. How is your body meeting you right now?",
-    "parents": "I'm Sara. You're in the Parents' Room. How are you, as a parent, today?",
-    "courses": "I'm Alistair. You're in the Course Room. How can I help you take the next step?",
-}
+# §2026-02-15 PM — ZERO-OVERRIDE POLICY (founder directive).
+# The Dashboard is the SINGLE source of truth for every agent's
+# personality, identity, greeting, voice, and behaviour. This
+# component does ONE thing: mint a signed WebSocket URL for the
+# correct agent and return it. No prompt injection, no first_message
+# injection, no tts injection. If the founder edits a comma in the
+# ElevenLabs Dashboard, it reaches the wanderer on the next session
+# without a single line of code changing.
 
 
 class ConvAISignedUrlInput(BaseModel):
@@ -4369,15 +4358,14 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
         signed_url = payload.get("signed_url")
         if not signed_url:
             raise HTTPException(status_code=502, detail="ConvAI provider returned no URL.")
-        # §STABILIZATION 2026-02-15 PM — Identity-lock REMOVED. We
-        # return only `first_message` (a single greeting line). The
-        # rich Dashboard system prompt is now the source of truth for
-        # personality — empathy, dialogue style, and warmth are
-        # preserved exactly as the wanderer configured them.
+        # §ZERO-OVERRIDE 2026-02-15 PM — Response is minimal. We
+        # return ONLY the signed URL the SDK needs to open a socket,
+        # plus the room key for client-side routing/tests. No
+        # first_message, no identity_prompt, no anything that could
+        # touch the wanderer's Dashboard config.
         return {
             "signed_url": signed_url,
             "room": room,
-            "first_message": _ROOM_FIRST_MESSAGE[room],
         }
     except HTTPException:
         raise

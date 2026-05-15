@@ -130,21 +130,36 @@ function ConvaiPanel({ room, onFallback }) {
   // agent's turn detector.
   const { setMuted } = useConversationInput();
 
+  // §MIC DIAGNOSTIC 2026-02-15 PM — Live mic input level (0..1).
+  // Shown to the wanderer as a green bar so they can SEE the system
+  // is hearing them. If they speak and the bar stays flat, the bug
+  // is browser-permission level, not SDK / ASR level.
+  const [micLevel, setMicLevel] = useState(0);
+
   const conversation = useConversation({
     onConnect: () => {
       setStatus("live");
       setErrorMsg("");
-      // HYBRID: silence the mic so only typed input reaches the agent.
-      if (modeRef.current === "hybrid") {
-        try {
-          setMuted(true);
-        } catch {
-          /* setMuted may throw if conversation not yet attached;
-             a microtask retry handles the race. */
-          queueMicrotask(() => {
-            try { setMuted(true); } catch { /* noop */ }
-          });
-        }
+      // §STABILIZATION 2026-02-15 PM — Explicit mute state per mode.
+      // VOICE: ensure mic is UNMUTED (the SDK's setMuted state may
+      //        persist across sessions; without this an earlier
+      //        HYBRID session would leave the next VOICE session
+      //        silent and the wanderer's voice would never reach
+      //        ElevenLabs — the "deafness" bug).
+      // HYBRID: mute so ambient noise never triggers a turn.
+      // TEXT: no mic exists; setMuted is a no-op (still safe).
+      const m = modeRef.current;
+      try {
+        if (m === "hybrid") setMuted(true);
+        else setMuted(false);
+      } catch {
+        // SDK not fully attached yet — retry on next microtask.
+        queueMicrotask(() => {
+          try {
+            if (modeRef.current === "hybrid") setMuted(true);
+            else setMuted(false);
+          } catch { /* noop */ }
+        });
       }
     },
     onDisconnect: () => {
@@ -176,18 +191,49 @@ function ConvaiPanel({ room, onFallback }) {
     }
   }, [transcript]);
 
-  // §STABILIZATION 2026-02-15 — STRICT CLEANUP (founder directive).
-  // When the wanderer navigates between rooms (Grace → Body → Parents
-  // …) OR switches communication mode (Voice → Text → Hybrid), React
-  // Router or our toggle causes a teardown. Without this effect, the
-  // underlying WebSocket + audio output of the previous session keeps
-  // streaming in the background — the founder reported hearing
-  // multiple voices at once. We force-close any live conversation on
-  // unmount AND whenever the `room` prop changes mid-mount.
+  // §MIC DIAGNOSTIC 2026-02-15 PM — Poll mic input volume while live.
+  // SDK exposes getInputVolume() returning a 0..1 RMS level. When the
+  // wanderer speaks, we want the bar to react instantly so they SEE
+  // the system is hearing them. If their words still don't reach
+  // ElevenLabs even when the bar moves, the bug is downstream
+  // (ASR config), not microphone capture.
+  useEffect(() => {
+    if (status !== "live") {
+      setMicLevel(0);
+      return undefined;
+    }
+    let raf = 0;
+    const tick = () => {
+      try {
+        const v = conversation.getInputVolume?.();
+        if (typeof v === "number" && Number.isFinite(v)) {
+          setMicLevel(v);
+        }
+      } catch {
+        /* getInputVolume may briefly throw during teardown */
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [status, conversation]);
+
+  // §NUCLEAR KILL SWITCH 2026-02-15 PM — Strict cleanup on room
+  // OR mode change. The SDK's endSession() is async and already
+  // disconnects the WebSocket, releases the WakeLock, closes the
+  // input MediaStream + AudioContext, and closes the output
+  // AudioContext (verified in VoiceConversation.js handleEndSession,
+  // lines 110-125). We just need to invoke it on every teardown.
   useEffect(() => {
     return () => {
+      // endSession() is async but React cleanup is sync. We must
+      // not await here — but the SDK's internal queue still
+      // completes the teardown reliably before the next session
+      // can start, because the next session won't enter `start()`
+      // until React mounts the next page.
       try {
-        conversation.endSession();
+        const p = conversation.endSession();
+        if (p && typeof p.catch === "function") p.catch(() => {});
       } catch {
         /* SDK may already be torn down; ignore. */
       }
@@ -203,13 +249,25 @@ function ConvaiPanel({ room, onFallback }) {
   useEffect(() => {
     modeRef.current = mode;
     if (status === "live" || status === "connecting") {
-      try { conversation.endSession(); } catch { /* noop */ }
+      try {
+        const p = conversation.endSession();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      } catch { /* noop */ }
       setStatus("idle");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- we only
     // want this effect to fire on real mode toggles, not on every
     // status change.
   }, [mode]);
+
+  const stop = useCallback(async () => {
+    try {
+      await conversation.endSession();
+    } catch {
+      /* SDK may already be torn down; ignore. */
+    }
+    setStatus("idle");
+  }, [conversation]);
 
   const start = useCallback(async () => {
     if (status === "connecting" || status === "live") return;
@@ -230,49 +288,31 @@ function ConvaiPanel({ room, onFallback }) {
       //
       // For TEXT mode the SDK uses TextConversation which never
       // requests mic permission at all — accessibility-correct.
-      const {
-        signed_url: signedUrl,
-        first_message: firstMessage,
-      } = await fetchSignedUrl(room);
+      const { signed_url: signedUrl } = await fetchSignedUrl(room);
       // §STABILIZATION 2026-02-15 — Using WebSocket transport.
       // WebRTC would shave ~200-400 ms but requires a different
       // auth flow (`conversationToken` from `/v1/convai/conversation/token`
       // — SDK rejects `signedUrl` for WebRTC at the type level).
       //
-      // §IDENTITY LOCK REVERSED 2026-02-15 PM — We deliberately
-      // DO NOT send `overrides.agent.prompt` any more. The earlier
-      // override REPLACED the wanderer's rich Dashboard system
-      // prompt and destroyed the agent's empathy / dialogue style.
-      // Name-fixing happens at SOURCE: the Dashboard prompts of
-      // Grace and Kaelan were PATCHed via API (Elara → Grace,
-      // Aura → Kaelan) so the wrong-identity issue is solved there,
-      // not by overwriting personality at session time.
+      // §ZERO-OVERRIDE 2026-02-15 PM — founder directive: the
+      // Dashboard is the single source of truth. The SDK call below
+      // sends ZERO content overrides — no `overrides.agent.prompt`,
+      // no `overrides.agent.firstMessage`, no `overrides.tts`.
+      // Personality, greeting, voice and behaviour ALL come from the
+      // Dashboard. Edit a comma in ElevenLabs → it reaches the
+      // wanderer on the next session, no code change needed.
       //
-      // We STILL pass `overrides.agent.firstMessage` because it is a
-      // single greeting line, does not touch the system prompt, and
-      // guarantees the wanderer always meets the correct mentor.
-      //
-      // §VOICE DIRECTIVE 2026-02-15 — We never send `overrides.tts`.
-      // The wanderer's Dashboard voice config is the single source
-      // of truth for sound.
-      //
-      // §ACCESSIBILITY 2026-02-15 — For TEXT mode we flip the SDK's
-      // top-level `textOnly` flag (NOT the override). This makes the
-      // SDK instantiate `TextConversation` instead of
-      // `VoiceConversation` → no mic, no audio output, no costly
-      // TTS frames. HYBRID stays on VoiceConversation; we mute the
-      // mic inside `onConnect`.
+      // §ACCESSIBILITY 2026-02-15 — For TEXT mode we still flip the
+      // SDK's top-level `textOnly` flag (this is a transport choice,
+      // not content — it switches the SDK between TextConversation
+      // and VoiceConversation classes). HYBRID stays on voice
+      // transport; mic is muted in `onConnect`.
       modeRef.current = mode;
       const isTextMode = mode === "text";
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",
         ...(isTextMode ? { textOnly: true } : {}),
-        overrides: {
-          ...(firstMessage
-            ? { agent: { firstMessage } }
-            : {}),
-        },
       });
     } catch (err) {
       setStatus("error");
@@ -280,15 +320,6 @@ function ConvaiPanel({ room, onFallback }) {
       setErrorMsg(detail);
     }
   }, [conversation, mode, room, status]);
-
-  const stop = useCallback(() => {
-    try {
-      conversation.endSession();
-    } catch {
-      /* noop */
-    }
-    setStatus("idle");
-  }, [conversation]);
 
   const sendText = useCallback(() => {
     const text = textInput.trim();
@@ -399,6 +430,35 @@ function ConvaiPanel({ room, onFallback }) {
           );
         })}
       </div>
+
+      {/* §MIC DIAGNOSTIC 2026-02-15 PM — Visible mic level meter.
+          Only shown when a VOICE-mode session is live so the wanderer
+          can SEE that the system is hearing them. If the bar stays
+          flat while speaking, the issue is at browser-permission
+          level (mic blocked, wrong default device, etc.) — not
+          downstream in the SDK or ASR. */}
+      {status === "live" && mode === "voice" ? (
+        <div
+          data-testid="convai-mic-meter"
+          className="mb-4"
+          aria-label="Microphone input level"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <span className="aurin-mono text-[10px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.5]">
+              Mic
+            </span>
+            <span className="aurin-mono text-[10px] text-[hsl(var(--aurin-text))/0.4]">
+              {micLevel > 0.02 ? "hearing you" : "speak — I'm listening"}
+            </span>
+          </div>
+          <div className="h-1.5 w-full rounded-full bg-[hsl(var(--aurin-bg))/0.6] overflow-hidden">
+            <div
+              className="h-full bg-[hsl(var(--aurin-sage))/0.85] transition-[width] duration-75"
+              style={{ width: `${Math.min(100, Math.round(micLevel * 240))}%` }}
+            />
+          </div>
+        </div>
+      ) : null}
 
       {errorMsg ? (
         <div

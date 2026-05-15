@@ -75,54 +75,30 @@ def test_convai_response_never_leaks_agent_id():
 
 
 def test_convai_response_shape_when_successful():
-    """If the upstream call succeeds, the response shape must include
-    signed_url, room, and first_message (NOT identity_prompt — that
-    field was removed on 2026-02-15 PM after it destroyed the
-    wanderer's Dashboard personality config)."""
+    """ZERO-OVERRIDE policy: response must contain ONLY signed_url and
+    room. Any other top-level field (identity_prompt, first_message,
+    overrides, …) is a regression — the Dashboard is the single
+    source of truth and the response must not carry content."""
     r = _post(
         {"room": "clarity"}, {"Authorization": f"Bearer {TEST_TOKEN}"}
     )
     if r.status_code != 200:
         return  # upstream not reachable today; that's OK for this test
     payload = r.json()
-    assert "signed_url" in payload
     assert payload.get("room") == "clarity"
+    assert "signed_url" in payload
     assert payload["signed_url"].startswith("wss://")
-    assert "first_message" in payload
-    assert "Grace" in payload["first_message"]
-    # Identity-lock prompt MUST NOT come back — its presence would
-    # silently overwrite the wanderer's Dashboard system prompt.
+    # Zero-override guard rails.
     assert "identity_prompt" not in payload, (
-        "identity_prompt field returned — it would overwrite "
-        "Dashboard system prompts and destroy agent empathy."
+        "identity_prompt leaked into response — would overwrite Dashboard."
     )
-
-
-def test_convai_first_message_is_room_specific():
-    """Each room must return its own distinct first_message anchored
-    on the correct mentor name. This is the only override we still
-    send to ElevenLabs — keeps personality intact while guaranteeing
-    correct greeting."""
-    expected_name = {
-        "clarity": "Grace",
-        "body": "Kaelan",
-        "parents": "Sara",
-        "courses": "Alistair",
-    }
-    messages = {}
-    for room, name in expected_name.items():
-        r = _post(
-            {"room": room}, {"Authorization": f"Bearer {TEST_TOKEN}"}
-        )
-        if r.status_code != 200:
-            return  # upstream unreachable — skip rather than false-fail
-        payload = r.json()
-        assert name in payload["first_message"], (
-            f"room={room} first_message missing '{name}': "
-            f"{payload['first_message']}"
-        )
-        messages[room] = payload["first_message"]
-    # All four messages must be distinct.
-    assert len(set(messages.values())) == 4, (
-        "first_messages collided across rooms"
+    assert "first_message" not in payload, (
+        "first_message leaked into response — would overwrite Dashboard greeting."
+    )
+    assert "overrides" not in payload, (
+        "overrides field leaked into response — Dashboard is single source of truth."
+    )
+    # Allowed top-level keys only.
+    assert set(payload.keys()).issubset({"signed_url", "room"}), (
+        f"unexpected keys in response: {set(payload.keys()) - {'signed_url', 'room'}}"
     )
