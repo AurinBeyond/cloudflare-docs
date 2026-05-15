@@ -327,7 +327,7 @@ function ConvaiPanel({ room, onFallback }) {
             className="aurin-mono text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.6]"
           >
             {isLive
-              ? "Live"
+              ? "Listening"
               : isConnecting
                 ? "Opening the room…"
                 : status === "error"
