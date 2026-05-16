@@ -1635,6 +1635,14 @@ class User(BaseModel):
     picture: Optional[str] = None
     role: Literal["guest", "member", "admin"] = "member"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    # §STABILIZATION 2026-05-16 PM — MLV Presence Time model.
+    # Canonical voice budget in seconds, shared across all rooms.
+    # Granted by LemonSqueezy webhook on purchase. Decremented by
+    # /api/presence/end when a voice session closes.
+    presence_seconds_left: int = 0
+    # §STABILIZATION 2026-05-16 PM — Optional per-user uncapped voice
+    # access, used for admin / staff / founder accounts.
+    unlimited_voice: bool = False
 
 
 class AuthSessionRequest(BaseModel):
@@ -2452,6 +2460,136 @@ async def lemonsqueezy_webhook(request: Request):
             return {"status": "revoked", "tier": pass_tier}
         return {"status": "ignored", "reason": f"event {event_name} not handled for pass"}
 
+    # §STABILIZATION 2026-05-16 PM — MLV Presence Time grant branch.
+    # Maps a LemonSqueezy variant_id to a seconds-grant. ENV-driven so
+    # the founder can wire variant IDs from the Lemon dashboard after
+    # opening the account without redeploying code.
+    #
+    # Expected ENV (each can be empty until variant exists in Lemon):
+    #   LEMONSQUEEZY_VARIANT_VOICE_30MIN   → 1800   ($39)
+    #   LEMONSQUEEZY_VARIANT_VOICE_60MIN   → 3600   ($69)
+    #   LEMONSQUEEZY_VARIANT_ETERNAL       → 10800  ($89/$99 monthly)
+    #   LEMONSQUEEZY_VARIANT_TOPUP_30MIN   → 1800   ($19)
+    #   LEMONSQUEEZY_VARIANT_TOPUP_60MIN   → 3600   ($39)
+    #
+    # Idempotency: each (external_order_id) is recorded once in
+    # `presence_grants`. A duplicate webhook is a no-op.
+    variant_id = _extract_lemonsqueezy_variant_id(data)
+    presence_seconds = _presence_seconds_for_variant(variant_id)
+    if presence_seconds > 0:
+        # Resolve target user: prefer explicit user_id, fall back to email.
+        target_user = None
+        if user_id:
+            target_user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+        if not target_user and customer_email:
+            target_user = await db.users.find_one({"email": customer_email}, {"_id": 0})
+        if not target_user and customer_email:
+            # Create a placeholder user so the grant doesn't vanish.
+            # They'll claim it via magic-link login.
+            new_id = f"user_{uuid.uuid4().hex[:12]}"
+            target_user = {
+                "user_id": new_id,
+                "email": customer_email,
+                "role": "member",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "presence_seconds_left": 0,
+                "unlimited_voice": False,
+            }
+            try:
+                await db.users.insert_one(dict(target_user))
+            except Exception as e:  # noqa: BLE001
+                logger.warning("presence grant: user-create failed: %s", e)
+
+        if not target_user:
+            return {"status": "ignored", "reason": "no_user_resolved"}
+
+        if event_name in ("order_created", "subscription_created", "subscription_payment_success"):
+            # Idempotency check.
+            existing = await db.presence_grants.find_one(
+                {"external_order_id": order_id, "user_id": target_user["user_id"]}
+            )
+            if existing:
+                return {
+                    "status": "already_granted",
+                    "presence_seconds": presence_seconds,
+                }
+            try:
+                await db.presence_grants.insert_one({
+                    "id": str(uuid.uuid4()),
+                    "user_id": target_user["user_id"],
+                    "external_order_id": order_id,
+                    "variant_id": variant_id,
+                    "presence_seconds": presence_seconds,
+                    "source": "lemonsqueezy",
+                    "granted_at": datetime.now(timezone.utc).isoformat(),
+                })
+                await db.users.update_one(
+                    {"user_id": target_user["user_id"]},
+                    {"$inc": {"presence_seconds_left": presence_seconds}},
+                )
+            except Exception as e:  # noqa: BLE001
+                logger.warning("presence grant insert failed: %s", e)
+                return {"status": "error", "reason": "grant_insert_failed"}
+
+            # §Telemetry — log the grant for analytics.
+            try:
+                await db.funnel_events.insert_one({
+                    "id": str(uuid.uuid4()),
+                    "event": "presence_granted",
+                    "user_id": target_user["user_id"],
+                    "seconds": presence_seconds,
+                    "variant_id": variant_id,
+                    "occurred_at": datetime.now(timezone.utc).isoformat(),
+                })
+            except Exception:
+                pass
+
+            # Issue magic link so the buyer lands directly in Private Room.
+            magic = None
+            target_email = target_user.get("email") or customer_email
+            if target_email:
+                try:
+                    magic = await _issue_magic_link_for_email(
+                        target_email,
+                        redirect_to="/clarity-release",
+                        email_subject_override="Your Presence Time is ready",
+                        email_intro_override=(
+                            f"You now have {presence_seconds // 60} minutes of "
+                            "Guided Presence available. The link below opens your "
+                            "private sanctuary directly — no password needed. It is "
+                            "valid for 30 minutes; if it expires, request a new one "
+                            "any time."
+                        ),
+                    )
+                except Exception as e:  # noqa: BLE001
+                    logger.warning("magic_link auto-issue (presence) failed: %s", e)
+
+            return {
+                "status": "granted",
+                "presence_seconds": presence_seconds,
+                "magic_link_url": (magic or {}).get("magic_link_url"),
+                "delivered_via": (magic or {}).get("delivered_via"),
+            }
+
+        if event_name in ("order_refunded", "subscription_cancelled", "subscription_expired"):
+            # Best-effort revoke: subtract the original grant. Never go
+            # below zero — the wanderer may have already consumed it.
+            grant = await db.presence_grants.find_one(
+                {"external_order_id": order_id, "user_id": target_user["user_id"]}
+            )
+            if grant:
+                seconds = int(grant.get("presence_seconds") or 0)
+                current = int(target_user.get("presence_seconds_left") or 0)
+                new_value = max(0, current - seconds)
+                await db.users.update_one(
+                    {"user_id": target_user["user_id"]},
+                    {"$set": {"presence_seconds_left": new_value}},
+                )
+                await db.presence_grants.delete_one({"id": grant["id"]})
+            return {"status": "revoked", "presence_seconds": presence_seconds}
+
+        return {"status": "ignored", "reason": f"event {event_name} not handled for presence"}
+
     if not (user_id and book_slug):
         # Webhook landed but custom data is missing — probably a manual
         # purchase from the LS dashboard. Log + ignore (no auto-grant).
@@ -2515,6 +2653,281 @@ async def lemonsqueezy_health():
         "events_received": await db.lemonsqueezy_events.count_documents({}),
         "purchases_total": await db.purchases.count_documents({}),
     }
+
+
+# =============================================================
+# §STABILIZATION 2026-05-16 PM — PRESENCE TIME RUNTIME
+# =============================================================
+# Phase-1 (MLV) runtime for the locked product structure:
+#   30-min Guided Presence  ($39)  → 1800 sec
+#   60-min Extended Session ($69)  → 3600 sec
+#   Eternal monthly         ($89/$99) → 10800 sec / month
+#   Top-up +30min           ($19)  → 1800 sec
+#   Top-up +60min           ($39)  → 3600 sec
+#
+# A single MongoDB field on `users` (`presence_seconds_left`) is the
+# canonical balance. LemonSqueezy webhook grants seconds; the four
+# endpoints below let the frontend read the balance, open a tracked
+# voice session, ping a heartbeat while live, and close cleanly.
+#
+# This system is ISOLATED — no audio code is modified. The cap
+# decision is computed by `session_cap.compute_voice_window` which
+# already prefers `presence_seconds_left` when present.
+#
+# Failsafe: SESSION_CAP_ENABLED=false → all endpoints still work
+# (balance is readable, sessions are tracked) but signed-url never
+# 402s on the cap. This lets the founder roll out telemetry first
+# and only flip the gate when stable.
+
+def _extract_lemonsqueezy_variant_id(data: dict) -> Optional[str]:
+    """Best-effort variant_id lookup for both order and subscription events.
+
+    LemonSqueezy webhooks vary by event type. We try several known shapes
+    and fall back to None so an unfamiliar payload becomes a calm no-op.
+    """
+    if not isinstance(data, dict):
+        return None
+    attrs = data.get("attributes") or {}
+    # Subscription events expose variant_id directly on attributes.
+    vid = attrs.get("variant_id")
+    if vid:
+        return str(vid)
+    # Order events nest line items.
+    first_item = attrs.get("first_order_item") or {}
+    vid = first_item.get("variant_id")
+    if vid:
+        return str(vid)
+    return None
+
+
+def _presence_seconds_for_variant(variant_id: Optional[str]) -> int:
+    """Map a LemonSqueezy variant_id to a presence-seconds grant via ENV.
+
+    Returns 0 when the variant is not configured. Founder fills the
+    variant IDs in the Emergent Deploy panel after opening the Lemon
+    account; until then every variant returns 0 (no auto-grant).
+    """
+    if not variant_id:
+        return 0
+    mapping = {
+        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_30MIN"): 1800,
+        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_60MIN"): 3600,
+        _os.environ.get("LEMONSQUEEZY_VARIANT_ETERNAL"):     10800,
+        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_30MIN"): 1800,
+        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_60MIN"): 3600,
+    }
+    return mapping.get(str(variant_id), 0)
+
+
+@api_router.get("/presence/balance")
+async def presence_balance(request: Request):
+    """Return the wanderer's current Presence Time balance.
+
+    Read-only. Used by the frontend banner alongside `voice-window` for
+    a calm display of "X minutes remaining".
+    """
+    user = await _require_user(request)
+    user_doc = await db.users.find_one({"user_id": user.user_id}, {"_id": 0})
+    seconds = int((user_doc or {}).get("presence_seconds_left") or 0)
+    return {
+        "presence_seconds_left": seconds,
+        "minutes_left": seconds // 60,
+        "unlimited": bool((user_doc or {}).get("unlimited_voice", False)),
+    }
+
+
+class PresenceStartInput(BaseModel):
+    room: Literal["clarity", "body", "parents", "courses"] = "clarity"
+
+
+@api_router.post("/presence/start")
+async def presence_start(inp: PresenceStartInput, request: Request):
+    """Open a tracked voice-session ledger row.
+
+    The frontend calls this immediately AFTER the SDK confirms the
+    WebSocket is open. The row is closed by `/presence/end` (or, on a
+    crash, reaped by the next `presence_start` call from the same user).
+    """
+    user = await _require_user(request)
+    # Close any orphaned previous session: deduct elapsed time based on
+    # last_ping_at so a tab-crash never costs more than ~30 seconds.
+    prior = await db.voice_sessions.find_one(
+        {"user_id": user.user_id, "closed": False}, {"_id": 0}
+    )
+    if prior:
+        await _close_voice_session_safe(prior, user.user_id, reason="orphaned")
+
+    sess_id = str(uuid.uuid4())
+    now_iso = datetime.now(timezone.utc).isoformat()
+    await db.voice_sessions.insert_one({
+        "id": sess_id,
+        "user_id": user.user_id,
+        "room": inp.room,
+        "started_at": now_iso,
+        "last_ping_at": now_iso,
+        "closed": False,
+    })
+    # §Telemetry
+    try:
+        await db.funnel_events.insert_one({
+            "id": str(uuid.uuid4()),
+            "event": "voice_session_started",
+            "user_id": user.user_id,
+            "room": inp.room,
+            "session_id": sess_id,
+            "occurred_at": now_iso,
+        })
+    except Exception:
+        pass
+    return {"session_id": sess_id, "started_at": now_iso}
+
+
+class PresenceHeartbeatInput(BaseModel):
+    session_id: str
+
+
+@api_router.post("/presence/heartbeat")
+async def presence_heartbeat(inp: PresenceHeartbeatInput, request: Request):
+    """Update the live session's last_ping_at. Idempotent."""
+    user = await _require_user(request)
+    now_iso = datetime.now(timezone.utc).isoformat()
+    res = await db.voice_sessions.update_one(
+        {"id": inp.session_id, "user_id": user.user_id, "closed": False},
+        {"$set": {"last_ping_at": now_iso}},
+    )
+    if res.matched_count == 0:
+        # The session was already closed or never existed — soft success
+        # so the frontend keeps pinging without raising.
+        return {"status": "no_active_session"}
+    return {"status": "ok", "last_ping_at": now_iso}
+
+
+class PresenceEndInput(BaseModel):
+    session_id: str
+    reason: Optional[Literal["user_end", "page_unload", "voice_error", "auto"]] = "user_end"
+
+
+@api_router.post("/presence/end")
+async def presence_end(inp: PresenceEndInput, request: Request):
+    """Close a tracked voice session and decrement the user's Presence Time."""
+    user = await _require_user(request)
+    sess = await db.voice_sessions.find_one(
+        {"id": inp.session_id, "user_id": user.user_id, "closed": False},
+        {"_id": 0},
+    )
+    if not sess:
+        return {"status": "already_closed"}
+    return await _close_voice_session_safe(sess, user.user_id, reason=inp.reason or "user_end")
+
+
+async def _close_voice_session_safe(
+    sess: dict, user_id: str, *, reason: str
+) -> dict:
+    """Compute elapsed seconds and decrement the user's balance.
+
+    Idempotent: a second call is a no-op. Never throws — used by both
+    `/presence/end` and the orphan-reaper inside `/presence/start`.
+    """
+    try:
+        started = datetime.fromisoformat(sess["started_at"])
+        last_ping = datetime.fromisoformat(sess.get("last_ping_at") or sess["started_at"])
+    except (KeyError, ValueError):
+        return {"status": "error", "reason": "bad_timestamps"}
+    if started.tzinfo is None:
+        started = started.replace(tzinfo=timezone.utc)
+    if last_ping.tzinfo is None:
+        last_ping = last_ping.replace(tzinfo=timezone.utc)
+
+    # Bill from started → last_ping (the heartbeat is what we trust).
+    # On user_end calls happening AFTER a final heartbeat, the gap is
+    # at most a few seconds and rounds correctly.
+    if reason == "user_end":
+        end_at = datetime.now(timezone.utc)
+    else:
+        end_at = last_ping
+    elapsed = max(0, int((end_at - started).total_seconds()))
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    await db.voice_sessions.update_one(
+        {"id": sess["id"]},
+        {"$set": {
+            "closed": True,
+            "ended_at": now_iso,
+            "elapsed_seconds": elapsed,
+            "close_reason": reason,
+        }},
+    )
+    # Decrement balance, never below zero.
+    if elapsed > 0:
+        user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+        if user_doc and not user_doc.get("unlimited_voice"):
+            current = int(user_doc.get("presence_seconds_left") or 0)
+            new_value = max(0, current - elapsed)
+            await db.users.update_one(
+                {"user_id": user_id},
+                {"$set": {"presence_seconds_left": new_value}},
+            )
+            # §Telemetry: drained event when balance hits zero.
+            if new_value == 0 and current > 0:
+                try:
+                    await db.funnel_events.insert_one({
+                        "id": str(uuid.uuid4()),
+                        "event": "presence_drained",
+                        "user_id": user_id,
+                        "session_id": sess["id"],
+                        "occurred_at": now_iso,
+                    })
+                except Exception:
+                    pass
+    # §Telemetry: session_ended.
+    try:
+        await db.funnel_events.insert_one({
+            "id": str(uuid.uuid4()),
+            "event": "voice_session_ended",
+            "user_id": user_id,
+            "room": sess.get("room"),
+            "session_id": sess["id"],
+            "elapsed_seconds": elapsed,
+            "reason": reason,
+            "occurred_at": now_iso,
+        })
+    except Exception:
+        pass
+
+    return {
+        "status": "closed",
+        "elapsed_seconds": elapsed,
+        "reason": reason,
+    }
+
+
+@api_router.post("/presence/interrupted")
+async def presence_interrupted(request: Request):
+    """Lightweight telemetry beacon for the voice-recovery card.
+
+    Fired by the frontend when the SDK reports an unexpected
+    disconnect / error. We DO NOT decrement the balance here — the
+    open `voice_sessions` row will still be reaped on the next
+    `presence_start` call. This is purely an analytics event.
+    """
+    user = await _require_user(request)
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    await db.funnel_events.insert_one({
+        "id": str(uuid.uuid4()),
+        "event": "voice_session_interrupted",
+        "user_id": user.user_id,
+        "room": body.get("room"),
+        "session_id": body.get("session_id"),
+        "error": (body.get("error") or "")[:300],
+        "occurred_at": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"status": "logged"}
+
+
+# =============================================================
 
 
 # =============================================================

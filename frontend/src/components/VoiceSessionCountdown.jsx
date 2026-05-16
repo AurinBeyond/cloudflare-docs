@@ -29,9 +29,10 @@ function formatRemaining(secs) {
 }
 
 const TIER_LABEL = {
-  "30min": "30-min session",
-  "60min": "60-min session",
-  "season_30days": "30-day pass",
+  "30min": "30-min Guided Presence",
+  "60min": "60-min Extended Session",
+  "season_30days": "Eternal sanctuary",
+  presence: "Guided Presence",
   free_access: "Free access",
   unlimited: "Unlimited",
   pending: "Ready to begin",
@@ -56,11 +57,11 @@ export function VoiceSessionCountdown({ enabled = true }) {
           className="aurin-serif text-[16px] text-[hsl(var(--aurin-text))/0.92] mb-2"
           data-testid="voice-cap-closed-title"
         >
-          Your time with Grace has gently closed.
+          Your Presence Time has gently closed.
         </p>
         <p className="text-[13px] text-[hsl(var(--aurin-text))/0.65] leading-relaxed mb-4">
-          You can keep writing here, or refill a pass when you're ready
-          to talk again.
+          You can keep writing here, or refill your Presence Time when
+          you're ready to talk again.
         </p>
         <div className="flex flex-wrap gap-2.5">
           <Link
@@ -68,7 +69,7 @@ export function VoiceSessionCountdown({ enabled = true }) {
             data-testid="voice-cap-refill-link"
             className="aurin-btn-primary text-[12.5px]"
           >
-            Refill a pass
+            Refill Presence Time
           </Link>
         </div>
       </div>

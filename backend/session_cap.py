@@ -154,6 +154,25 @@ async def compute_voice_window(
             cap_enabled=True,
         )
 
+    # §STABILIZATION 2026-05-16 PM — Presence Time (PRIMARY tier).
+    # `users.presence_seconds_left` is the canonical voice budget for
+    # the locked MLV pricing model (30-min / 60-min / Eternal / top-ups).
+    # If the wanderer has any seconds in the bank, voice is allowed and
+    # the banner shows the remaining balance.
+    if user_doc:
+        try:
+            presence = int(user_doc.get("presence_seconds_left") or 0)
+        except (TypeError, ValueError):
+            presence = 0
+        if presence > 0:
+            return VoiceWindow(
+                allowed=True,
+                seconds_remaining=presence,
+                tier="presence",
+                reason="presence_balance",
+                cap_enabled=True,
+            )
+
     # 3. Soft-launch free-access window.
     if _free_access_window_active():
         return VoiceWindow(

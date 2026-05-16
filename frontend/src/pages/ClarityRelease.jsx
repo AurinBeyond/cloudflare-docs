@@ -14,6 +14,7 @@ import SessionCalmerPrompt from "@/components/SessionCalmerPrompt";
 import TypingIndicator from "@/components/TypingIndicator";
 import RoomConvaiChat from "@/components/RoomConvaiChat";
 import VoiceSessionCountdown from "@/components/VoiceSessionCountdown";
+import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1137,15 +1138,13 @@ function ChatPanel({
                 free-access tier. NEVER touches RoomConvaiChat's audio,
                 SDK, or WebSocket state. */}
             <VoiceSessionCountdown />
-            <RoomConvaiChat
-              room="clarity"
-              /* §STABILIZATION 2026-02-15 — onFallback is intentionally
-                 not wired. Founder directive: hard-disable the legacy
-                 useVoiceIO + Claude pipeline as a user-reachable
-                 surface in Private Room. ConvAI is the only voice
-                 path. If it fails, the user is shown a calm
-                 "System initializing" notice in the panel itself. */
-            />
+            {/* §STABILIZATION 2026-05-16 PM — Presence Tracker wraps
+                RoomConvaiChat with realtime ledger updates and the
+                Voice Recovery Card. The tracker is a passive observer:
+                it reads status via `onStatusChange` (read-only emit)
+                and posts /api/presence/* without touching the SDK or
+                audio. RoomConvaiChat's audio core remains sealed. */}
+            <ConvaiPresenceTracker room="clarity" />
           </div>
         ) : null}
 

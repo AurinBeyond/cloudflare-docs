@@ -125,7 +125,7 @@ const ROOM_VOICE_LOCK = {
 // realtime-continuity requirement. The FFT diagnostic bars below
 // remain — they are visual only and do not affect the session.
 
-function ConvaiPanel({ room, onFallback }) {
+function ConvaiPanel({ room, onFallback, onStatusChange }) {
   const [status, setStatus] = useState("idle"); // idle | connecting | live | error
   const [errorMsg, setErrorMsg] = useState("");
   const [transcript, setTranscript] = useState([]); // [{role:"user"|"agent", text}]
@@ -134,6 +134,19 @@ function ConvaiPanel({ room, onFallback }) {
   const modeRef = useRef("voice"); // capture mode for onConnect handler
   const scrollRef = useRef(null);
   const agentName = ROOM_AGENT_NAME[room] || "the guide";
+
+  // §STABILIZATION 2026-05-16 PM — Passive status observer.
+  // Read-only callback fired on every status / errorMsg change.
+  // The audio core remains sealed; this is a one-way emit so the
+  // parent (e.g. ClarityRelease) can render the Voice Recovery Card
+  // when an unexpected disconnect occurs. Never used to influence
+  // the SDK, WebSocket, or audio pipeline.
+  useEffect(() => {
+    if (typeof onStatusChange === "function") {
+      onStatusChange(status, errorMsg);
+    }
+  }, [status, errorMsg, onStatusChange]);
+
 
   const pushTranscript = useCallback((role, text) => {
     if (!text) return;
@@ -704,11 +717,11 @@ function ConvaiPanel({ room, onFallback }) {
  * SDK's ConversationProvider. If the prop is malformed, renders
  * nothing rather than risk loading a wrong agent.
  */
-export default function RoomConvaiChat({ room = "clarity", onFallback }) {
+export default function RoomConvaiChat({ room = "clarity", onFallback, onStatusChange }) {
   if (!ALLOWED_ROOMS.has(room)) return null;
   return (
     <ConversationProvider>
-      <ConvaiPanel room={room} onFallback={onFallback} />
+      <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
     </ConversationProvider>
   );
 }
