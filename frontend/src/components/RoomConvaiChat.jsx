@@ -114,11 +114,16 @@ const ROOM_VOICE_LOCK = {
   courses: "pNInz6obpgDQGcFmaJgB",  // Adam   — deep male (Alistair)
 };
 
-// §AUTO-DISCONNECT 2026-02-15 PM — If the wanderer is silent for this
-// many milliseconds while VOICE mode is live, the session
-// auto-disconnects so the agent never falls into a "are you still
-// there?" monologue loop. 10 seconds per founder directive.
-const VOICE_SILENCE_AUTODISCONNECT_MS = 10_000;
+// §STABILIZATION 2026-05-16 PM — Silence-based auto-disconnect REMOVED.
+// Founder directive (2026-05-16): sessions may terminate ONLY via
+//   - user intent (End button, room/mode change, page navigation),
+//   - package/wallet limits,
+//   - true technical failure surfaced by the SDK (onError/onDisconnect),
+//   - or ElevenLabs server-side turn_timeout (Dashboard-controlled).
+// The previous 10s mic-silence kill switch caused ~20s ghost
+// disconnects across all 4 rooms (shared component) and violated the
+// realtime-continuity requirement. The FFT diagnostic bars below
+// remain — they are visual only and do not affect the session.
 
 function ConvaiPanel({ room, onFallback }) {
   const [status, setStatus] = useState("idle"); // idle | connecting | live | error
@@ -255,9 +260,9 @@ function ConvaiPanel({ room, onFallback }) {
   // the SDK's _isMuted flag — getInputVolume() returns 0 when muted,
   // but FFT data is the actual audio spectrum.
   //
-  // §AUTO-DISCONNECT — if the spectrum stays flat (< 0.04) for
-  // 10s while VOICE mode is live, end the session so the agent
-  // never falls into a "are you still there?" monologue loop.
+  // §STABILIZATION 2026-05-16 PM — Silence-based auto-disconnect was
+  // removed from this loop. The loop now only updates the visual
+  // diagnostic bars and never calls endSession() on its own.
   useEffect(() => {
     if (status !== "live") {
       setMicLevel(0);
@@ -266,7 +271,6 @@ function ConvaiPanel({ room, onFallback }) {
     }
     const fftBuf = new Uint8Array(1024);
     let raf = 0;
-    let lastVoiceAt = Date.now();
     const tick = () => {
       try {
         const fn = conversation.getInputByteFrequencyData;
@@ -276,24 +280,9 @@ function ConvaiPanel({ room, onFallback }) {
           for (let i = 0; i < 384; i += 1) sum += fftBuf[i];
           const v = Math.min(1, sum / (384 * 64));
           setMicLevel(v);
-          if (v > 0.04) lastVoiceAt = Date.now();
         }
       } catch {
         /* getInputByteFrequencyData may briefly throw during teardown */
-      }
-      // Auto-disconnect after silence (VOICE mode only — HYBRID
-      // deliberately keeps mic muted, TEXT has no mic).
-      if (
-        modeRef.current === "voice" &&
-        Date.now() - lastVoiceAt > VOICE_SILENCE_AUTODISCONNECT_MS
-      ) {
-        try {
-          const p = conversation.endSession();
-          if (p && typeof p.catch === "function") p.catch(() => {});
-        } catch { /* noop */ }
-        setStatus("idle");
-        setErrorMsg("");
-        return; // stop polling
       }
       raf = requestAnimationFrame(tick);
     };
