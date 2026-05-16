@@ -1010,9 +1010,23 @@ function ChatPanel({
   // false and the existing useVoiceIO + /api/cabinet/message pipeline
   // below stays as a complete, untouched fallback.
   const [convaiActive, setConvaiActive] = useState(true);
+  // §STABILIZATION 2026-05-16 — GHOSTING ROOT-CAUSE FIX.
+  // The legacy useVoiceIO hook ran with `autoVoice: true` even when
+  // ConvAI was the active surface. That left a parallel mic-VAD loop
+  // AND an auto-speak useEffect alive — every guide message that
+  // arrived through the legacy /api/cabinet/message pipeline was
+  // played aloud through the LEGACY TTS endpoint (ElevenLabs TTS,
+  // not the ConvAI WebSocket), producing the "second female voice"
+  // the founder heard on Private Room. The fix is surgical:
+  //   - autoVoice is gated to !convaiActive so VAD never starts
+  //     listening while ConvAI owns the mic.
+  //   - the auto-send and auto-speak useEffects short-circuit when
+  //     convaiActive is true.
+  // Nothing about prompts, personas, voices, agent_ids, Dashboard,
+  // architecture, or room content is touched.
   const voice = useVoiceIO({
     gender: guideGender || "female",
-    autoVoice: true,                // §Faas 2 — no-button continuous dialogue
+    autoVoice: !convaiActive,        // §STABILIZATION 2026-05-16 — no parallel mic while ConvAI is live
     onResult: (text) => {
       const trimmed = (text || "").trim();
       if (!trimmed) return;
@@ -1024,17 +1038,19 @@ function ChatPanel({
   // §Faas 2 — when the VAD loop produced a transcript, auto-fire onSend
   // without the user having to press a button.
   useEffect(() => {
+    if (convaiActive) return;        // §STABILIZATION 2026-05-16 — never auto-send while ConvAI is live
     if (!pendingAutoSendRef.current) return;
     if (!input.trim()) return;
     if (sending || showContinuation) return;
     pendingAutoSendRef.current = false;
     onSend({ preventDefault: () => {} });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, sending, showContinuation]);
+  }, [input, sending, showContinuation, convaiActive]);
 
   // Auto-speak the latest guide message (non-crisis, not already spoken).
   const lastSpokenIdRef = useRef(null);
   useEffect(() => {
+    if (convaiActive) return;        // §STABILIZATION 2026-05-16 — GHOSTING fix: never speak via legacy TTS while ConvAI is live
     if (!voice.supportedOut || voice.muted) return;
     if (!messages || messages.length === 0) return;
     const last = messages[messages.length - 1];
@@ -1044,7 +1060,7 @@ function ChatPanel({
     lastSpokenIdRef.current = key;
     voice.speak(last.text || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages, voice.muted, voice.supportedOut]);
+  }, [messages, voice.muted, voice.supportedOut, convaiActive]);
 
   const showTimer =
     access?.has_active_pass &&

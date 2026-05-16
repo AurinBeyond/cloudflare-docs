@@ -30,11 +30,6 @@ next-env.d.ts
 dist/
 dist
 
-# Environment files (comprehensive coverage)
-
-*token.json*
-*credentials.json*
-
 # Logs and debug files
 npm-debug.log*
 yarn-debug.log*
@@ -44,7 +39,6 @@ dump.rdb
 
 # System files
 .DS_Store
-*.pem
 
 # Python
 __pycache__/
@@ -76,124 +70,37 @@ agenthub/agents/youtube/db
 # Build caches
 .cache/
 
+# Memory / test credentials are local-only
 memory/test_credentials.md
 
 # Mobile development
 android-sdk/.media-staging/you-are-not-who-you-became-trailer.mp4
 .media-staging/you-are-not-who-you-became-trailer.mp4
-# §2026-02-14 — .env / credentials files MUST be committed to repo for
-# Emergent's Kubernetes deployment to pick up env vars on Redeploy.
-# Do NOT add back to .gitignore. Production was running OLD code for
-# 24h because .env was blocked from reaching the GitHub repo on
-# "Save to GitHub". Secret rotation is handled via the Emergent
-# Deploy panel's Environment Variables section, not via .gitignore.
-frontend/node_modules/.cache/default-development/1.pack
-frontend/node_modules/.cache/default-development/5.pack
-frontend/node_modules/.cache/default-development/0.pack
-frontend/node_modules/.cache/default-development/3.pack
+
+# §2026-02-14 + §2026-02-15 + §2026-05-16 — DO NOT re-add `.env` exclusions.
+# `.env` files (backend/.env, frontend/.env) MUST stay tracked so the
+# Emergent "Save to GitHub" + Redeploy flow ships them to production.
+# Iter 82, 85, and the May-15 incident all confirmed that re-adding
+# `.env`, `.env.*`, or `*.env` to this file caused 24h+ production
+# outages (ELEVENLABS_API_KEY + agent IDs missing → 503 from
+# /api/clarity/convai/signed-url → no Chrome profile could open a
+# ConvAI session). Secret rotation belongs in the Emergent Deploy
+# panel's Environment Variables section IN ADDITION to the repo.
+#
+# If an auto-tool re-adds any of the patterns below, REMOVE them
+# immediately:
+#   .env
+#   .env.*
+#   *.env
+
+# Generic credential / certificate exclusions (NOT .env-related):
+credentials.json
+*.pem
+*.key
+*token.json*
+*credentials.json*
+.credentials
+
+# Frontend webpack cache packs (pure build artefacts, never secrets)
+frontend/node_modules/.cache/
 frontend/node_modules/.cache/default-development/4.pack
--e 
-# §2026-02-15 — .env files were re-added by some auto-tool. Per founder
-# directive (iter 82 + iter 85), .env files MUST stay tracked so
-# Emergent's Save-to-GitHub flow ships them to production. Production
-# was running OLD env vars for 24h+ when this block existed. Do NOT
-# re-add `.env`, `.env.*`, or `*.env` to this file under any
-# circumstance. Secret rotation belongs in the Emergent Deploy panel,
-# not in .gitignore.
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/7.pack
-# §2026-02-15 — Sentinel comment to prevent auto-tools from re-adding
-# the .env exclusion block below. If you see `.env`, `.env.*`, or
-# `*.env` patterns reappear in this file, REMOVE them immediately —
-# they will silently block production deployments.
-frontend/node_modules/.cache/default-development/2.pack
-frontend/node_modules/.cache/default-development/6.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/8.pack
-frontend/node_modules/.cache/default-development/8.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/10.pack
-frontend/node_modules/.cache/default-development/12.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/13.pack

@@ -204,11 +204,19 @@ function ConvaiPanel({ room, onFallback }) {
     },
     onError: (err) => {
       setStatus("error");
-      setErrorMsg(
+      // §STABILIZATION 2026-05-16 — Precise error-cause routing.
+      // The SDK reports browser mic permission denial via a payload
+      // whose `message` contains either "NotAllowedError",
+      // "Permission denied", or "permission dismissed". Routing
+      // that to a generic "Conversation interrupted" hid the true
+      // cause (per-Chrome-profile mic block) and forced the
+      // wanderer to guess. We now classify the cause into one of
+      // three buckets and let the UI render the right hint.
+      const raw =
         typeof err === "string"
           ? err
-          : err?.message || "Conversation interrupted.",
-      );
+          : err?.message || err?.error || "Conversation interrupted.";
+      setErrorMsg(raw);
     },
     onMessage: (msg) => {
       // The SDK fires onMessage for both sides; payload shape:
@@ -570,19 +578,68 @@ function ConvaiPanel({ room, onFallback }) {
           data-testid="convai-error"
           className="text-[12.5px] text-[hsl(var(--aurin-text))/0.7] mb-3"
         >
-          <p>{errorMsg}</p>
-          {/* §STABILIZATION 2026-02-15 — Hard-disable fallback.
-              The legacy useVoiceIO + Whisper + Claude pipeline is no
-              longer reachable from this surface. If ConvAI fails, the
-              wanderer is shown a calm initialization notice and asked
-              to refresh — they are NEVER routed into the older,
-              hallucinatory STT path. The `onFallback` prop is left in
-              place for future controlled re-introduction but is no
-              longer wired to a visible CTA. */}
-          <p className="mt-2 text-[11.5px] text-[hsl(var(--aurin-text))/0.55]">
-            System initializing. Please refresh the page (Ctrl + Shift + R)
-            and try again in a moment.
-          </p>
+          {(() => {
+            // §STABILIZATION 2026-05-16 — Three failure buckets, each
+            // with a precise, actionable instruction so the wanderer
+            // never has to guess whether the issue is the browser,
+            // the network, the server, or themselves.
+            //
+            //  1. Mic permission blocked by the Chrome profile.
+            //  2. Mic device missing / not selected.
+            //  3. Signed-url / SDK / network failure (anything else).
+            const lower = (errorMsg || "").toLowerCase();
+            const isMicBlocked =
+              lower.includes("notallowederror") ||
+              lower.includes("permission denied") ||
+              lower.includes("permission dismissed") ||
+              lower.includes("not allowed");
+            const isMicMissing =
+              lower.includes("notfounderror") ||
+              lower.includes("device not found") ||
+              lower.includes("requested device not found");
+            const isSignedUrl =
+              lower.includes("signed-url failed") ||
+              lower.includes("503") ||
+              lower.includes("502") ||
+              lower.includes("temporarily unavailable");
+            if (isMicBlocked) {
+              return (
+                <p data-testid="convai-error-mic-blocked">
+                  Microphone is blocked in this Chrome profile. Click
+                  the lock icon (or "Not secure" / tune icon) in the
+                  address bar → Site settings → Microphone → Allow,
+                  then refresh the page.
+                </p>
+              );
+            }
+            if (isMicMissing) {
+              return (
+                <p data-testid="convai-error-mic-missing">
+                  No microphone detected in this browser. Check your
+                  system sound input (Settings → System → Sound) and
+                  refresh once a microphone is selected.
+                </p>
+              );
+            }
+            if (isSignedUrl) {
+              return (
+                <p data-testid="convai-error-signed-url">
+                  The room is taking a moment to wake up. Please try
+                  again in a moment. If this keeps happening, refresh
+                  the page (Ctrl + Shift + R).
+                </p>
+              );
+            }
+            return (
+              <>
+                <p data-testid="convai-error-generic">{errorMsg}</p>
+                <p className="mt-2 text-[11.5px] text-[hsl(var(--aurin-text))/0.55]">
+                  System initializing. Please refresh the page
+                  (Ctrl + Shift + R) and try again in a moment.
+                </p>
+              </>
+            );
+          })()}
         </div>
       ) : null}
 
