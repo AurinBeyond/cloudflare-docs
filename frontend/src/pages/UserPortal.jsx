@@ -242,7 +242,23 @@ function MagicLinkEntry({ next }) {
       track("portal_magic_link_request");
       setDone(true);
     } catch (err) {
-      setError(err?.response?.data?.detail || "Could not send the link. Try again in a moment.");
+      // §STABILIZATION 2026-05-16 — Distinguish "backend warming up
+      // after a redeploy" (transient 502/503/504/timeout / no response)
+      // from real failures, so the wanderer is told to wait 30s
+      // instead of guessing. Generic copy is preserved for every other
+      // failure shape.
+      const status = err?.response?.status;
+      const isWarmup =
+        !err?.response ||
+        status === 502 ||
+        status === 503 ||
+        status === 504;
+      setError(
+        err?.response?.data?.detail ||
+          (isWarmup
+            ? "Service is warming up — please try again in 30 seconds."
+            : "Could not send the link. Try again in a moment."),
+      );
     } finally {
       setBusy(false);
     }

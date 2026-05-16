@@ -104,3 +104,4 @@ credentials.json
 # Frontend webpack cache packs (pure build artefacts, never secrets)
 frontend/node_modules/.cache/
 frontend/node_modules/.cache/default-development/4.pack
+frontend/node_modules/.cache/default-development/5.pack
