@@ -13,6 +13,7 @@ import VoiceStatusRow from "@/components/VoiceStatusRow";
 import SessionCalmerPrompt from "@/components/SessionCalmerPrompt";
 import TypingIndicator from "@/components/TypingIndicator";
 import RoomConvaiChat from "@/components/RoomConvaiChat";
+import VoiceSessionCountdown from "@/components/VoiceSessionCountdown";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -1130,6 +1131,12 @@ function ChatPanel({
             useVoiceIO + /api/cabinet/message pipeline below. */}
         {convaiActive ? (
           <div data-testid="convai-grace-panel" className="mt-6">
+            {/* §STABILIZATION 2026-05-16 — Isolated session-cap banner.
+                Renders nothing when SESSION_CAP_ENABLED=false (default
+                first deploy) or when the wanderer holds an unlimited /
+                free-access tier. NEVER touches RoomConvaiChat's audio,
+                SDK, or WebSocket state. */}
+            <VoiceSessionCountdown />
             <RoomConvaiChat
               room="clarity"
               /* §STABILIZATION 2026-02-15 — onFallback is intentionally

@@ -4330,6 +4330,47 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
     env_name = _ROOM_TO_CONVAI_AGENT_ENV.get(room)
     if not env_name:
         raise HTTPException(status_code=400, detail="Unknown room")
+
+    # §STABILIZATION 2026-05-16 — Session-cap layer.
+    # Phase 1 rollout: gate ONLY Grace / Private Room. Body Room,
+    # Parents Room, and Course Room remain uncapped. The cap module
+    # is a passive read-only check over the existing clarity_passes
+    # collection; it never mutates state and never affects an already
+    # running session.
+    if room == "clarity":
+        try:
+            from session_cap import compute_voice_window
+            user_doc = await db.users.find_one(
+                {"user_id": user.user_id}, {"_id": 0}
+            )
+            window = await compute_voice_window(user.user_id, user_doc, db)
+            if not window["allowed"]:
+                # 402 = Payment Required. The frontend countdown
+                # banner renders the graceful-close card; the SDK
+                # call site never sees this status because the
+                # banner shows up before the start() button is
+                # pressed (or because the running session continues
+                # to its natural end and only the NEXT attempt 402's).
+                raise HTTPException(
+                    status_code=402,
+                    detail={
+                        "reason": window["reason"],
+                        "tier": window.get("tier"),
+                        "soft_close": True,
+                        "refill_url": "/clarity-release#passes",
+                    },
+                )
+        except HTTPException:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            # Cap layer must NEVER break the realtime core. On any
+            # internal failure (Mongo blip, import glitch) we open
+            # the door — the wanderer's session is sacred.
+            logging.warning(
+                "session_cap.compute_voice_window soft-failed for user=%s: %s",
+                user.user_id, exc,
+            )
+
     agent_id = os.getenv(env_name)
     api_key = os.getenv("ELEVENLABS_API_KEY")
     if not agent_id or not api_key:
@@ -4373,6 +4414,39 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
         logging.error("ConvAI signed URL crash for user=%s room=%s: %s",
                       user.user_id, room, exc)
         raise HTTPException(status_code=502, detail="ConvAI temporarily unavailable.")
+
+
+# §STABILIZATION 2026-05-16 — Voice-window read-only endpoint.
+# Companion to the cap-gated signed-url above. The frontend countdown
+# banner polls this every 15s. It is intentionally read-only and
+# never mutates `clarity_passes` / `users` / `cabinet_sessions`.
+@api_router.get("/clarity/convai/voice-window")
+async def clarity_convai_voice_window(request: Request):
+    """Return the wanderer's current voice-cap snapshot for Grace.
+
+    Always responds 200 with the structured `VoiceWindow` shape so
+    the frontend hook can degrade gracefully on transient errors.
+    """
+    user = await _require_user(request)
+    try:
+        from session_cap import compute_voice_window
+        user_doc = await db.users.find_one(
+            {"user_id": user.user_id}, {"_id": 0}
+        )
+        window = await compute_voice_window(user.user_id, user_doc, db)
+        return window
+    except Exception as exc:  # noqa: BLE001
+        logging.warning(
+            "voice-window soft-failed for user=%s: %s", user.user_id, exc,
+        )
+        # Open the door on any internal error — cap must never block.
+        return {
+            "allowed": True,
+            "seconds_remaining": 0,
+            "tier": "unlimited",
+            "reason": "cap_soft_failed",
+            "cap_enabled": False,
+        }
 
 
 # ---- Clarity Release — STT (push-to-talk → Whisper transcript) ----
