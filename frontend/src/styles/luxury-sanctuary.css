@@ -1,0 +1,1023 @@
+/* ===================================
+   MATRIX AURIN — Silent Luxury Homepage
+   Premium sanctuary with human warmth
+   =================================== */
+
+:root {
+    /* Colors */
+    --black: #000000;
+    --dark: #0A0A0A;
+    --ivory: #F5F5F3;
+    --ivory-soft: #E8E6E3;
+    --brass: #C5A059;
+    --brass-warm: #D4AD60;
+    --brass-muted: rgba(197, 160, 89, 0.15);
+    --brass-subtle: rgba(197, 160, 89, 0.08);
+    --brass-glow: rgba(197, 160, 89, 0.04);
+    --brass-hover: rgba(212, 173, 96, 0.1);
+    --text-secondary: #8A8580;
+    --text-muted: #4A4540;
+    --border: rgba(197, 160, 89, 0.1);
+    --border-strong: rgba(197, 160, 89, 0.25);
+
+    /* Spacing System */
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 40px;
+    --space-xl: 64px;
+    --space-2xl: 100px;
+    --space-3xl: 160px;
+}
+
+/* Reset — scoped to .luxury-sanctuary to avoid leaking into the
+   rest of the React app. Spec's original global reset preserved
+   in spirit but contained within the route's root container. */
+.luxury-sanctuary, .luxury-sanctuary *, .luxury-sanctuary *::before, .luxury-sanctuary *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.luxury-sanctuary {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--black);
+    color: var(--ivory);
+    line-height: 1.7;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Scrollbar — applied globally only when /luxury route is mounted
+   via JS body-class toggle would be ideal; this is a soft override
+   that only kicks in when the page is rendered. */
+.luxury-sanctuary ::-webkit-scrollbar {
+    width: 4px;
+}
+.luxury-sanctuary ::-webkit-scrollbar-track {
+    background: var(--black);
+}
+.luxury-sanctuary ::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 2px;
+}
+
+/* ===================================
+   NAVIGATION
+   =================================== */
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav.scrolled {
+    padding: 18px 48px;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(20px);
+}
+
+.nav-brand-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ivory-soft);
+    text-decoration: none;
+    opacity: 0;
+    animation: fadeIn 2s 0.3s ease forwards;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    opacity: 0;
+    animation: fadeIn 2s 0.5s ease forwards;
+}
+
+.nav-link {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--ivory);
+}
+
+.nav-cta {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-decoration: none;
+    padding: 10px 28px;
+    border: 1px solid var(--brass-muted);
+    transition: all 0.4s ease;
+}
+
+.nav-cta:hover {
+    background: var(--brass-hover);
+    border-color: var(--brass-warm);
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.06);
+}
+
+/* ===================================
+   HERO SECTION
+   =================================== */
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-visual {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    opacity: 0;
+    filter: brightness(0.55) contrast(1.05);
+}
+
+.hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.95) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.4) 100%);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: var(--space-lg);
+    max-width: 700px;
+}
+
+.hero-whisper {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.72rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: var(--space-lg);
+    opacity: 0;
+}
+
+.hero-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+    opacity: 0;
+}
+
+.hero-subtext {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 48px;
+    opacity: 0;
+}
+
+.hero-cta {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-decoration: none;
+    padding: 14px 40px;
+    border: 1px solid var(--brass-muted);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.hero-cta:hover {
+    background: var(--brass-hover);
+    border-color: var(--brass-warm);
+    box-shadow: 0 0 24px rgba(197, 160, 89, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ===================================
+   SANCTUARY PRINCIPLES
+   =================================== */
+
+.principles {
+    padding: var(--space-3xl) 48px;
+    position: relative;
+}
+
+.principles-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section-whisper {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.68rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+}
+
+.principle {
+    text-align: center;
+    padding: var(--space-lg) 20px;
+}
+
+.principle-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: var(--space-md);
+}
+
+.principle-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--ivory);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.principle-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.9;
+    font-weight: 300;
+}
+
+/* ===================================
+   THE FOUR DOORS
+   =================================== */
+
+.doors {
+    padding: 120px 48px var(--space-3xl);
+    position: relative;
+}
+
+.doors::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--border));
+}
+
+.doors-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.doors-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--ivory);
+    margin-bottom: 20px;
+}
+
+.doors-subtext {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 80px;
+    font-weight: 300;
+}
+
+.doors-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+}
+
+.door {
+    display: block;
+    padding: 56px 40px;
+    text-decoration: none;
+    text-align: left;
+    border: 1px solid var(--brass-subtle);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.door::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.door:hover {
+    border-color: var(--brass-muted);
+    box-shadow: 0 4px 24px rgba(197, 160, 89, 0.04);
+}
+
+.door:hover::before {
+    opacity: 1;
+}
+
+.door-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: var(--space-sm);
+}
+
+.door-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--ivory);
+    margin-bottom: var(--space-xs);
+    letter-spacing: 0.5px;
+    transition: color 0.4s ease;
+}
+
+.door:hover .door-title {
+    color: var(--brass-warm);
+}
+
+.door-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--brass);
+    opacity: 0.7;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    transition: opacity 0.4s ease;
+}
+
+.door:hover .door-subtitle {
+    opacity: 1;
+}
+
+.door-hint {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+/* ===================================
+   OFFERINGS / PRICING
+   =================================== */
+
+.offerings {
+    padding: var(--space-3xl) 48px;
+    position: relative;
+}
+
+.offerings::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: var(--space-2xl);
+    background: linear-gradient(to bottom, transparent, var(--border));
+}
+
+.offerings-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.offerings-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--ivory);
+    margin-bottom: 20px;
+}
+
+.offerings-subtext {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 80px;
+    font-weight: 300;
+}
+
+.offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.offering-card {
+    text-align: left;
+    padding: 48px 36px;
+    border: 1px solid var(--brass-subtle);
+    border-radius: 2px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.offering-card:hover {
+    border-color: var(--brass-muted);
+    background: var(--brass-glow);
+    box-shadow: 0 8px 32px rgba(197, 160, 89, 0.04);
+}
+
+.offering-card--featured {
+    border-color: var(--brass-muted);
+    background: rgba(197, 160, 89, 0.03);
+}
+
+.offering-card--featured::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    right: 24px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--brass), transparent);
+}
+
+.offering-header {
+    margin-bottom: 28px;
+}
+
+.offering-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.68rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: block;
+    margin-bottom: var(--space-sm);
+}
+
+.offering-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ivory);
+    letter-spacing: 0.3px;
+}
+
+.offering-body {
+    flex: 1;
+    margin-bottom: var(--space-md);
+}
+
+.offering-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+    font-weight: 300;
+}
+
+.offering-includes {
+    list-style: none;
+    padding: 0;
+}
+
+.offering-includes li {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding: var(--space-xs) 0;
+    padding-left: var(--space-sm);
+    position: relative;
+    font-weight: 300;
+}
+
+.offering-includes li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--brass);
+    opacity: 0.5;
+}
+
+.offering-footer {
+    padding-top: 28px;
+    border-top: 1px solid var(--brass-subtle);
+}
+
+.offering-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--ivory);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.offering-period {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: var(--space-md);
+}
+
+.offering-cta {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-decoration: none;
+    padding: 12px 36px;
+    border: 1px solid var(--brass-muted);
+    transition: all 0.4s ease;
+}
+
+.offering-cta:hover {
+    background: var(--brass-hover);
+    border-color: var(--brass-warm);
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.06);
+}
+
+.offerings-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.3px;
+}
+
+/* ===================================
+   THRESHOLD / ENTRY
+   =================================== */
+
+.threshold {
+    padding: 180px 48px;
+    text-align: center;
+    position: relative;
+}
+
+.threshold::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: var(--space-2xl);
+    background: linear-gradient(to bottom, transparent, var(--border));
+}
+
+.threshold-inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.threshold-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 300;
+    color: var(--ivory);
+    margin-bottom: var(--space-lg);
+}
+
+.threshold-text {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 2;
+    margin-bottom: var(--space-md);
+    font-weight: 300;
+}
+
+.threshold-text-secondary {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 2.2;
+    margin-bottom: 56px;
+}
+
+.threshold-cta {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-decoration: none;
+    padding: 14px 44px;
+    border: 1px solid var(--brass-muted);
+    transition: all 0.5s ease;
+}
+
+.threshold-cta:hover {
+    background: var(--brass-hover);
+    border-color: var(--brass-warm);
+    box-shadow: 0 0 24px rgba(197, 160, 89, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.footer {
+    padding: 80px 48px;
+    border-top: 1px solid var(--brass-subtle);
+}
+
+.footer-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ivory-soft);
+    margin-bottom: var(--space-md);
+}
+
+.footer-trust {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+    margin-bottom: var(--space-sm);
+}
+
+.footer-warmth {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.5px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.footer-link {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--brass-warm);
+}
+
+.footer-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.footer-meta-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-meta-link:hover {
+    color: var(--brass-warm);
+}
+
+.footer-dot {
+    width: 3px;
+    height: 3px;
+    background: var(--brass);
+    border-radius: 50%;
+}
+
+/* ===================================
+   PAGE ENTRANCE — Quiet Arrival
+   Felt emotionally, not noticed consciously.
+   =================================== */
+
+.page-veil {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--black);
+    opacity: 1;
+    transition: opacity 2s ease;
+    pointer-events: none;
+}
+
+.page-veil.lifted {
+    opacity: 0;
+}
+
+/* Hero entrance — pure opacity, barely-there drift */
+.hero-content,
+.hero-image {
+    opacity: 0;
+}
+
+.hero-arrived .hero-image {
+    animation: heroReveal 2.2s ease forwards;
+}
+
+.hero-arrived .hero-whisper {
+    animation: gentleAppear 1.6s 0.6s ease forwards;
+}
+
+.hero-arrived .hero-headline {
+    animation: gentleAppear 1.6s 0.8s ease forwards;
+}
+
+.hero-arrived .hero-subtext {
+    animation: gentleAppear 1.6s 1.0s ease forwards;
+}
+
+.hero-arrived .hero-cta {
+    animation: gentleAppear 1.4s 1.2s ease forwards;
+}
+
+/* Reduced motion — instant reveal, no animation */
+@media (prefers-reduced-motion: reduce) {
+    .page-veil {
+        transition: none;
+        opacity: 0;
+    }
+    .hero-arrived .hero-image,
+    .hero-arrived .hero-whisper,
+    .hero-arrived .hero-headline,
+    .hero-arrived .hero-subtext,
+    .hero-arrived .hero-cta {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(16px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes heroReveal {
+    from { 
+        opacity: 0; 
+    }
+    to { 
+        opacity: 1; 
+    }
+}
+
+@keyframes gentleAppear {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered reveal for offering cards */
+.offering-card.reveal:nth-child(1) { transition-delay: 0s; }
+.offering-card.reveal:nth-child(2) { transition-delay: 0.15s; }
+.offering-card.reveal:nth-child(3) { transition-delay: 0.3s; }
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+    .offerings-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: var(--space-xl);
+    }
+
+    .offering-card--featured::after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --space-3xl: 100px;
+        --space-2xl: 72px;
+        --space-xl: 48px;
+    }
+
+    .nav {
+        padding: 20px 24px;
+    }
+
+    .nav.scrolled {
+        padding: 14px 24px;
+    }
+
+    .nav-links {
+        gap: var(--space-sm);
+    }
+
+    .nav-link {
+        display: none;
+    }
+
+    .hero-content {
+        padding: var(--space-md);
+    }
+
+    .hero-headline {
+        font-size: 2.4rem;
+    }
+
+    .principles {
+        padding: var(--space-2xl) 24px;
+    }
+
+    .principles-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .section-whisper {
+        margin-bottom: 56px;
+    }
+
+    .doors {
+        padding: 80px 24px 120px;
+    }
+
+    .doors-grid {
+        grid-template-columns: 1fr;
+        gap: 1px;
+    }
+
+    .door {
+        padding: var(--space-lg) 28px;
+    }
+
+    .offerings {
+        padding: var(--space-2xl) 24px;
+    }
+
+    .offerings-grid {
+        gap: var(--space-sm);
+    }
+
+    .offering-card {
+        padding: 36px 28px;
+    }
+
+    .threshold {
+        padding: var(--space-2xl) 24px;
+    }
+
+    .footer {
+        padding: 56px 24px;
+    }
+
+    .footer-links {
+        gap: var(--space-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-headline {
+        font-size: 2rem;
+    }
+
+    .doors-headline {
+        font-size: 1.8rem;
+    }
+
+    .offerings-headline {
+        font-size: 1.8rem;
+    }
+
+    .threshold-headline {
+        font-size: 1.8rem;
+    }
+
+    .offering-card {
+        padding: 32px 24px;
+    }
+
+    .offering-title {
+        font-size: 1.3rem;
+    }
+}

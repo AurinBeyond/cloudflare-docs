@@ -22,6 +22,7 @@ import WanderersAgreement from "@/pages/WanderersAgreement";
 import AuthCallback from "@/pages/AuthCallback";
 import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
+import LuxurySanctuaryLanding from "@/pages/LuxurySanctuaryLanding";
 import AurinPhilosophy from "@/pages/AurinPhilosophy";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
@@ -146,6 +147,11 @@ function AppRouter() {
         <Route path="/admin/outbound" element={<AdminOutbound />} />
         <Route path="/admin/content" element={<AdminContent />} />
       </Route>
+      {/* §2026-05-17 — /luxury preview route lives OUTSIDE the
+          standard Layout wrapper. It is a full-bleed sanctuary
+          landing experience with its own navigation and footer.
+          Founder Q1=b: do NOT replace the current `/` route. */}
+      <Route path="/luxury" element={<LuxurySanctuaryLanding />} />
     </Routes>
   );
 }
