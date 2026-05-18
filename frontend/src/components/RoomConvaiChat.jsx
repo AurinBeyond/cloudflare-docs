@@ -193,6 +193,10 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
 
   const conversation = useConversation({
     onConnect: () => {
+      // §STABILIZATION 2026-02-17 — Diagnostic log so the wanderer can
+      // copy the console output if the agent goes deaf again. Read-only.
+      // eslint-disable-next-line no-console
+      console.log("[ConvAI]", room, "onConnect — session live");
       setStatus("live");
       setErrorMsg("");
       // §STABILIZATION 2026-02-15 PM — Explicit mute state per mode.
@@ -217,10 +221,17 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         });
       }
     },
-    onDisconnect: () => {
+    onDisconnect: (details) => {
+      // §STABILIZATION 2026-02-17 — Surface disconnect reason so the
+      // wanderer can see whether the agent itself ended the call, the
+      // server timed out, or a transport error occurred.
+      // eslint-disable-next-line no-console
+      console.log("[ConvAI]", room, "onDisconnect", details);
       setStatus("idle");
     },
     onError: (err) => {
+      // eslint-disable-next-line no-console
+      console.warn("[ConvAI]", room, "onError", err);
       setStatus("error");
       // §STABILIZATION 2026-05-16 — Precise error-cause routing.
       // The SDK reports browser mic permission denial via a payload
@@ -331,7 +342,22 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
   // session is live MUST end the session — VOICE↔TEXT swap requires
   // a different underlying SDK class (TextConversation vs
   // VoiceConversation) which is decided at startSession time only.
+  //
+  // §STABILIZATION 2026-02-17 — Guard against the initial-mount fire.
+  // React fires this useEffect on every mount even when `mode` hasn't
+  // changed from its initial value. In React 18 StrictMode (dev) the
+  // effect fires twice on mount, and in some re-render edge cases the
+  // earlier endSession() inside this block could clobber a session
+  // that was opened a microtask earlier by `start()`. We now only
+  // act when the *previous* mode (kept in modeRef) differs from the
+  // incoming mode — i.e. a real, user-driven mode toggle.
   useEffect(() => {
+    if (modeRef.current === mode) {
+      // First mount, or a re-render with the same mode — keep the ref
+      // in sync but never tear down a session.
+      modeRef.current = mode;
+      return;
+    }
     modeRef.current = mode;
     if (status === "live" || status === "connecting") {
       try {
@@ -365,22 +391,17 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
     setTranscript([]);
     setMicLevel(0);
     setVadScore(0);
-    // §NUCLEAR KILL SWITCH (defensive) — even though room/mode
-    // change cleanup useEffects already call endSession(), the SDK
-    // teardown is async AND the React wrapper's `onDisconnect` may
-    // fire on the next tick. If the wanderer hits Speak again very
-    // quickly, the old AudioContext may still be draining its last
-    // buffered audio frames while a new session opens — manifesting
-    // as "two voices speak at once" (which the founder reported on
-    // a fresh /clarity-release session). Await a clean teardown
-    // here, then wait 220ms for the React state to propagate before
-    // opening the next socket.
-    try {
-      await conversation.endSession();
-    } catch {
-      /* prior session already torn down — fine */
-    }
-    await new Promise((resolve) => setTimeout(resolve, 220));
+    // §STABILIZATION 2026-02-17 — Removed pre-emptive `endSession()` +
+    // 220ms wait. Provider.startSession (see @elevenlabs/react
+    // ConversationProvider.js line 56-61) ALREADY bails silently if a
+    // session is in-flight or active, so the defensive teardown was
+    // redundant. Worse: in some renders it set `shouldEndRef=true`
+    // milliseconds before our own startSession reset it back to
+    // false — a race that, under StrictMode or rapid state updates,
+    // could mark the very-next-started session as "stale" and cause
+    // the agent to appear connected but never receive audio chunks
+    // (the "deaf agent" symptom). The SDK's own teardown chain
+    // handles any prior session cleanly when a new one starts.
     try {
       // §STABILIZATION 2026-02-15 — Mic permission is requested
       // INTERNALLY by VoiceConversation.startSession (see
@@ -399,6 +420,8 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       const lockedVoiceId = ROOM_VOICE_LOCK[room];
       modeRef.current = mode;
       const isTextMode = mode === "text";
+      // eslint-disable-next-line no-console
+      console.log("[ConvAI]", room, "startSession", { mode, isTextMode });
       conversation.startSession({
         signedUrl,
         connectionType: "websocket",

@@ -74,6 +74,25 @@ LEMONSQUEEZY_VARIANT_TOPUP_60MIN=""
 - Voice session of 3 seconds correctly returned `elapsed_seconds: 3`
 - Frontend smoke: no console errors, no audio auto-play, gate active
 
+### 2026-02-17 — P0 Hotfix: ElevenLabs Agent "Deafness"
+**Symptom:** Grec/Grace agent connected (status="live") but never heard the user's voice despite mic permissions being granted.
+
+**Root-cause hypothesis (surgical, no audio-core touch):**
+Two latent races in `RoomConvaiChat.jsx` that became reachable after the Phase-1 Presence Tracker re-render storm was introduced:
+1. **Redundant pre-emptive `await conversation.endSession()` + 220ms wait at the top of `start()`.** Provider.startSession (in `@elevenlabs/react`) already bails silently if a session exists, so the defensive teardown was redundant. Under StrictMode / rapid re-renders, it set `shouldEndRef=true` milliseconds before the new startSession reset it back to false — a race that, in some renders, marked the very-next-started session as "stale", leaving the agent connected but never wired to incoming audio chunks (the "deaf agent" symptom).
+2. **`[mode]` useEffect fired on initial mount AND in StrictMode dev double-mount**, and inside it the endSession() branch could clobber a session that `start()` had opened a microtask earlier. Now guarded by `if (modeRef.current === mode) { sync ref; return; }` so the teardown only fires on real, user-driven mode toggles.
+
+**Changes (RoomConvaiChat.jsx only — no SDK, audio, or WebSocket touch):**
+- Removed `await conversation.endSession()` + `setTimeout(220)` from `start()` (the SDK owns prior-session cleanup).
+- `[mode]` useEffect now early-returns when `modeRef.current === mode`.
+- Added passive `console.log` taps in `onConnect`, `onDisconnect`, `onError`, `startSession` for in-browser diagnostics (read-only; do not touch SDK state).
+
+**Untouched:** ConversationProvider, audio worklet, getUserMedia constraints, WebSocket transport, mic FFT / VAD bars, three-mode toggle, identity-lock voiceIds, ElevenLabs Dashboard agent config.
+
+**Verification:** Lint clean, /clarity-release renders, deep-mystical V6 visual locked intact.
+
+**Pending:** Founder live mic test on /clarity-release to confirm Grace hears speech.
+
 ### Untouched (sealed core)
 - RoomConvaiChat.jsx audio pipeline, SDK lifecycle, WebSocket — sacred ring
 - 4 ConvAI agents in ElevenLabs Dashboard
