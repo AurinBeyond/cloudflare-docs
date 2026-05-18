@@ -1,32 +1,31 @@
 /**
- * SanctuaryPreview — Founder review route (2026-05-18)
+ * SanctuaryPreview — Founder review route (2026-05-18 v2)
  *
  * Full-bleed polished landing experience.
  *
- * Scope (Founder lock, 2026-05-18):
- *   - ENGLISH ONLY
- *   - V6 baseline preserved + Atoms audit applied (85%, not 100%)
- *   - Mike's clean visual language: deep night palette, single warm
- *     brass accent only on CTA, distinctive serif headings
- *   - TWO-WORLDS architecture: Emotional (sanctuary, journeys) +
- *     Practical (rooms, learning paths) harmonized as ONE ecosystem
- *   - "FREE DURING LAUNCH" → "The doors are open this season"
- *   - "Real-time voice intelligence" → removed
- *   - Pricing locked: Free Open World · Quick Clarity $19 / Deep
- *     Release $49 / Full Breakthrough $89 · Voyager $39 · Eternal
- *     $89→$99 (180 min) · Divine $179→$199 (300 min, NOT 600)
- *   - Top-ups: +30min $25 · +60min $39 · +180min $99
+ * v2 changes (Founder + Mike + GPT + AH synthesis, 2026-05-18 PM):
+ *   - HERO replaced with Mike's reference: "Welcome back to yourself."
+ *     centered serif, "You do not have to perform here." subtitle,
+ *     bordered "STEP INSIDE" CTA, "MATRIX AURIN" wordmark left,
+ *     "ENTER" bordered nav button right. The mask image breathes
+ *     through with a softer vignette so the face is visible.
+ *   - NEW: The Open World section — Library, Bookstore, Reflections,
+ *     Kids Universe surfaced as the free layer, addressing GPT/AH
+ *     audit "practical product clarity is too soft".
+ *   - NEW: Ways to be here — Mike's EXACT prose-pricing copy in EUR
+ *     (€45 First Step · €120 Steady Presence · €380 Your Own Room).
+ *   - NEW: The Voice Meter — Tesla / fuel symbolism: platform
+ *     membership is the car, voice minutes are the separate fuel.
+ *     Top-ups visible but quiet.
+ *   - Stronger CTA hierarchy across the page (bordered for primary,
+ *     ghost underline for secondary).
  *
- * Untouched (sealed core):
+ * Untouched (sealed core, scope lock V2 honored):
  *   - audio pipeline (RoomConvaiChat.jsx)
- *   - ElevenLabs integration
+ *   - ElevenLabs integration / WebSocket / signed-url flow
  *   - backend session_cap / presence runtime
  *   - auth, WandererGate, route guards
  *   - production / Home.jsx
- *
- * This route lives OUTSIDE the Layout wrapper (no global nav/footer).
- * It owns its own minimal nav + footer so the wanderer experiences
- * a single, intentional world.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -37,8 +36,14 @@ const GROUNDED = "/sanctuary/grounded-presence.png";
 const WINGS = "/sanctuary/sanctuary-wings.png";
 const WARMTH = "/sanctuary/warmth-trust.png";
 
-// §Reveal-on-scroll observer — used by every section so content
-// breathes in as the wanderer descends.
+const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
+const BRASS = "#c4a46b";
+const BRASS_BRIGHT = "#d4b67d";
+const CREAM = "#f0eadd";
+const SOFT = "#bcb4a3";
+const MUTED = "#a59f93";
+const GREY = "#7a7468";
+
 function useReveal() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -79,43 +84,45 @@ function SanctuaryNav() {
   return (
     <nav
       data-testid="sanctuary-nav"
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.55)] border-b border-[rgba(196,164,107,0.08)]"
+      className="fixed top-[28px] left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]"
     >
-      <div className="max-w-[1280px] mx-auto px-6 sm:px-10 h-[68px] flex items-center justify-between">
+      <div className="max-w-[1320px] mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
         <Link
           to="/sanctuary-preview"
           data-testid="sanctuary-logo"
-          className="text-[12.5px] tracking-[0.32em] uppercase text-[#e8e1d5] font-light"
+          className="text-[13px] tracking-[0.42em] uppercase text-[#e8e1d5] font-light"
+          style={{ fontFamily: SERIF, letterSpacing: "0.42em" }}
         >
-          Pure&nbsp;Soul · Matrix Aurin
+          Matrix&nbsp;Aurin
         </Link>
-        <div className="hidden md:flex items-center gap-9 text-[12px] tracking-[0.22em] uppercase text-[#a59f93]">
-          <a href="#origin" className="hover:text-[#e8e1d5] transition-colors duration-500">Origin</a>
+        <div className="hidden md:flex items-center gap-9 text-[11.5px] tracking-[0.24em] uppercase text-[#a59f93]">
           <a href="#worlds" className="hover:text-[#e8e1d5] transition-colors duration-500">Worlds</a>
-          <a href="#thresholds" className="hover:text-[#e8e1d5] transition-colors duration-500">Thresholds</a>
+          <a href="#rooms" className="hover:text-[#e8e1d5] transition-colors duration-500">Rooms</a>
+          <a href="#open-world" className="hover:text-[#e8e1d5] transition-colors duration-500">Open World</a>
+          <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways to be here</a>
           <a href="#philosophy" className="hover:text-[#e8e1d5] transition-colors duration-500">Philosophy</a>
         </div>
         <Link
           to="/portal"
           data-testid="sanctuary-portal-btn"
-          className="text-[11.5px] tracking-[0.28em] uppercase text-[#0b0a08] bg-[#c4a46b] px-5 py-2.5 rounded-full hover:bg-[#d4b67d] transition-colors duration-500"
+          className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-7 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500"
         >
-          Enter Portal
+          Enter
         </Link>
       </div>
     </nav>
   );
 }
 
+// §HERO — Mike's reference: centered serif title, italic accent, bordered CTA.
 function HeroSection() {
   const { ref, visible } = useReveal();
   return (
     <section
       ref={ref}
       data-testid="sanctuary-hero"
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
     >
-      {/* Atmospheric backdrop — full-bleed mask portrait */}
       <div className="absolute inset-0">
         <img
           src={HERO}
@@ -126,67 +133,59 @@ function HeroSection() {
             visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
           }`}
         />
-        {/* Cinematic vignette to anchor copy in the lower-left */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,9,8,0.92)] via-[rgba(10,9,8,0.55)] to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(10,9,8,0.95)]" />
+        {/* Softer cinematic vignette — face must remain visible (Mike ref) */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(10,9,8,0.45)_0%,_rgba(10,9,8,0.78)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-[160px] bg-gradient-to-b from-[rgba(10,9,8,0.85)] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-[rgba(10,9,8,0.95)] to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 sm:px-10 pt-[180px] sm:pt-[220px] pb-32">
+      <div className="relative z-10 max-w-[1100px] mx-auto px-6 sm:px-10 pt-[180px] pb-32 text-center">
         <div
-          className={`max-w-[640px] transition-all duration-[1800ms] ease-out ${
+          className={`transition-all duration-[1800ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <p
-            data-testid="hero-eyebrow"
-            className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7"
-          >
-            — Matrix Aurin · Pure Soul Life
-          </p>
           <h1
             data-testid="hero-title"
-            className="font-serif text-[44px] sm:text-[64px] lg:text-[76px] leading-[1.04] text-[#f0eadd] tracking-[-0.012em] font-light"
-            style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}
+            className="font-light text-[44px] sm:text-[68px] lg:text-[88px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
           >
-            A sanctuary for the part of you<br />
-            <span className="italic text-[#d4b67d]">that never speaks aloud.</span>
+            Welcome back<br />
+            <span className="italic text-[#d4b67d]">to yourself.</span>
           </h1>
           <p
             data-testid="hero-subtitle"
-            className="mt-9 text-[16.5px] sm:text-[17.5px] leading-[1.78] text-[#bcb4a3] max-w-[520px] font-light"
+            className="mt-12 text-[15.5px] sm:text-[17px] tracking-[0.06em] text-[#bcb4a3] italic font-light"
+            style={{ fontFamily: SERIF }}
           >
-            Two layers, one intentional world. An emotional inner sanctuary
-            for reflection and clarity — and structured rooms for guided
-            practice. You arrive whenever you need quiet.
+            You do not have to perform here.
           </p>
-          <div className="mt-12 flex flex-wrap items-center gap-6">
+          <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
               to="/portal"
-              data-testid="hero-cta-portal"
-              className="inline-flex items-center gap-3 text-[12.5px] tracking-[0.26em] uppercase text-[#0b0a08] bg-[#c4a46b] px-8 py-4 rounded-full hover:bg-[#d4b67d] transition-all duration-500 hover:gap-5"
+              data-testid="hero-cta-step-inside"
+              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
-              Enter the Sanctuary
-              <span aria-hidden="true">→</span>
+              Step Inside
             </Link>
             <a
               href="#worlds"
-              data-testid="hero-cta-explore"
-              className="text-[12px] tracking-[0.26em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[6px] hover:underline"
+              data-testid="hero-cta-walk"
+              className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline"
             >
               Walk through first
             </a>
           </div>
           <p
             data-testid="hero-season"
-            className="mt-14 text-[11.5px] tracking-[0.24em] uppercase text-[#7a7468] font-light italic"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontStyle: "italic" }}
+            className="mt-20 text-[12.5px] tracking-[0.18em] italic text-[#7a7468] font-light"
+            style={{ fontFamily: SERIF }}
           >
             The doors are open this season.
           </p>
         </div>
       </div>
 
-      {/* Subtle scroll cue */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 text-[10px] tracking-[0.4em] uppercase text-[#7a7468] animate-pulse">
         ↓ &nbsp; descend
       </div>
@@ -194,9 +193,6 @@ function HeroSection() {
   );
 }
 
-// §TWO-WORLDS — the central architectural concept (Founder lock).
-// Emotional + Practical presented as ONE harmonized ecosystem,
-// never as separate websites.
 function TwoWorldsSection() {
   return (
     <section
@@ -210,8 +206,8 @@ function TwoWorldsSection() {
             — Two Worlds, One Sanctuary
           </p>
           <h2
-            className="text-center font-light text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] max-w-[820px] mx-auto tracking-[-0.012em]"
-            style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}
+            className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[840px] mx-auto tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
           >
             The inner world and the structured world,<br />
             <span className="italic text-[#d4b67d]">in the same breath.</span>
@@ -219,16 +215,15 @@ function TwoWorldsSection() {
         </RevealBlock>
 
         <div className="mt-24 grid md:grid-cols-2 gap-16 lg:gap-20">
-          {/* World I — Emotional */}
           <RevealBlock delay={120}>
             <div
               data-testid="world-emotional"
-              className="relative rounded-[2px] border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
+              className="relative border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
             >
               <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-6">I · Inner</p>
               <h3
-                className="text-[28px] sm:text-[32px] leading-[1.18] text-[#f0eadd] font-light mb-6"
-                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
+                style={{ fontFamily: SERIF }}
               >
                 The Sanctuary <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
               </h3>
@@ -236,48 +231,36 @@ function TwoWorldsSection() {
                 A quiet inner space for the moments when life asks too much.
                 Slow journeys. Honest reflection. A guide who listens without
                 hurry, without scoring, without storage of who you have been.
-                You return as often as quiet is needed.
               </p>
-              <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[12px] tracking-[0.18em] uppercase text-[#7a7468]">
-                Journeys · Sanctuary atmosphere · Reflection
+              <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
+                Journeys · Reflection · Sanctuary atmosphere
               </div>
             </div>
           </RevealBlock>
 
-          {/* World II — Practical */}
           <RevealBlock delay={220}>
             <div
               data-testid="world-practical"
-              className="relative rounded-[2px] border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
+              className="relative border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
             >
               <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-6">II · Rooms</p>
               <h3
-                className="text-[28px] sm:text-[32px] leading-[1.18] text-[#f0eadd] font-light mb-6"
-                style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
+                style={{ fontFamily: SERIF }}
               >
                 The Rooms <span className="italic text-[#bcb4a3]">— guided structure &amp; practice</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
                 Four distinct rooms, each with its own atmosphere and its own
                 guide. Move through what the moment asks of you — clarity,
-                the body, parenthood, or a quiet course of study. The
-                structure holds you so the practice can land.
+                the body, parenthood, or a quiet course of study.
               </p>
-              <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[12px] tracking-[0.18em] uppercase text-[#7a7468]">
+              <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
                 Rooms · Learning paths · Guided progression
               </div>
             </div>
           </RevealBlock>
         </div>
-
-        <RevealBlock delay={340}>
-          <p className="mt-20 text-center text-[14.5px] leading-[1.85] italic text-[#a59f93] max-w-[640px] mx-auto font-light"
-             style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
-            Neither layer asks anything of the other. Together they form
-            a single, quiet ecosystem — one you can enter from whichever
-            door is closest tonight.
-          </p>
-        </RevealBlock>
       </div>
     </section>
   );
@@ -330,8 +313,8 @@ function RoomsSection() {
             — Four Doors
           </p>
           <h2
-            className="text-[34px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] font-light max-w-[760px] tracking-[-0.012em]"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            className="text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
           >
             Each room holds its own atmosphere.<br />
             <span className="italic text-[#bcb4a3]">You choose which to open.</span>
@@ -347,7 +330,7 @@ function RoomsSection() {
                   i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
                 }`}
               >
-                <div className="md:col-span-5 relative aspect-[4/5] overflow-hidden rounded-[2px] border border-[rgba(196,164,107,0.14)]">
+                <div className="md:col-span-5 relative aspect-[4/5] overflow-hidden border border-[rgba(196,164,107,0.14)]">
                   <img
                     src={r.img}
                     alt=""
@@ -361,14 +344,277 @@ function RoomsSection() {
                     {r.n} · {r.sub}
                   </p>
                   <h3
-                    className="text-[36px] sm:text-[44px] leading-[1.08] text-[#f0eadd] font-light mb-7"
-                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                    className="text-[34px] sm:text-[42px] leading-[1.08] text-[#f0eadd] font-light mb-7"
+                    style={{ fontFamily: SERIF }}
                   >
                     {r.name}
                   </h3>
-                  <p className="text-[16.5px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
+                  <p className="text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
                     {r.body}
                   </p>
+                </div>
+              </div>
+            </RevealBlock>
+          ))}
+        </div>
+
+        {/* Kids Universe — soft mention (separate ecosystem, surfaced quietly) */}
+        <RevealBlock delay={400}>
+          <div className="mt-32 text-center border-t border-[rgba(196,164,107,0.12)] pt-14 max-w-[680px] mx-auto">
+            <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-5">
+              ✦ &nbsp; A quieter wing for younger hearts
+            </p>
+            <p
+              className="text-[18px] sm:text-[22px] leading-[1.6] text-[#bcb4a3] italic font-light"
+              style={{ fontFamily: SERIF }}
+            >
+              Kids Universe — angel stories, gentle coloring, and the
+              softest version of the sanctuary, held for the little ones.
+            </p>
+          </div>
+        </RevealBlock>
+      </div>
+    </section>
+  );
+}
+
+// §OPEN WORLD — addresses GPT/AH audit: practical product clarity was too soft.
+// Surfaces the FREE layer (Library, Bookstore, Reflections, Kids stories)
+// so visitors understand what they can explore before paying.
+function OpenWorldSection() {
+  const layers = [
+    {
+      title: "The Library",
+      body: "Reflections, journal entries, slow reads — open to anyone who wanders in.",
+      tag: "Free to read",
+    },
+    {
+      title: "The Bookstore",
+      body: "A small collection of original books and angel stories. Each title is its own quiet object.",
+      tag: "From €9 · once",
+    },
+    {
+      title: "The Courses",
+      body: "Self-paced studies — The Body Knows First, Beyond the Matrix, and others — read at your own rhythm.",
+      tag: "From €19 · once",
+    },
+    {
+      title: "Kids Universe",
+      body: "Angel stories, coloring pages, and the gentlest version of the sanctuary for the youngest visitors.",
+      tag: "Free entry",
+    },
+  ];
+
+  return (
+    <section
+      id="open-world"
+      data-testid="sanctuary-openworld"
+      className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
+    >
+      <div className="absolute inset-0 opacity-[0.10]">
+        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,9,8,0.85)] via-[rgba(10,9,8,0.95)] to-[rgba(10,9,8,1)]" />
+      </div>
+
+      <div className="relative z-10 max-w-[1180px] mx-auto px-6 sm:px-10">
+        <RevealBlock>
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
+            — The Open World
+          </p>
+          <h2
+            className="text-center text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.14] text-[#f0eadd] font-light max-w-[820px] mx-auto tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
+          >
+            What stays open<br />
+            <span className="italic text-[#d4b67d]">without asking anything in return.</span>
+          </h2>
+          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[600px] mx-auto font-light">
+            Before any threshold, there is a long, quiet exploration layer.
+            Read what is written. Read what has been thought through. Bring
+            your children. No invitation, no payment, no name required.
+          </p>
+        </RevealBlock>
+
+        <div className="mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {layers.map((l, i) => (
+            <RevealBlock key={l.title} delay={i * 90}>
+              <div
+                data-testid={`openworld-${l.title.toLowerCase().replace(/\s+/g, "-")}`}
+                className="h-full border border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)] p-8 hover:border-[rgba(196,164,107,0.32)] transition-colors duration-700"
+              >
+                <h3
+                  className="text-[22px] leading-[1.2] text-[#f0eadd] font-light mb-4"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {l.title}
+                </h3>
+                <p className="text-[14px] leading-[1.8] text-[#bcb4a3] font-light mb-7">
+                  {l.body}
+                </p>
+                <p
+                  className="text-[11px] tracking-[0.22em] uppercase text-[#c4a46b] pt-5 border-t border-[rgba(196,164,107,0.12)]"
+                >
+                  {l.tag}
+                </p>
+              </div>
+            </RevealBlock>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// §WAYS TO BE HERE — Mike's exact prose-pricing copy (EUR).
+// Architectural distinction: Platform Access (rooms, reading, text-to-text)
+// is SEPARATE from Live Voice Sessions (high-cost ElevenLabs runtime).
+// Each tier includes a BASELINE voice allotment; further voice = fuel (next section).
+function WaysToBeHereSection() {
+  const tiers = [
+    {
+      key: "first-step",
+      name: "A First Step",
+      tagline: "One session. One quiet hour. No commitment.",
+      lede: "Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.",
+      includes: [
+        "Access to one room of your choosing for this session",
+        "A guided live AI voice session at your pace",
+        "No subscription, no follow-up pressure",
+      ],
+      price: "€45",
+      cadence: "one session",
+      cta: "Begin quietly",
+    },
+    {
+      key: "steady-presence",
+      name: "A Steady Presence",
+      tagline: "All rooms. Monthly companionship. Return as often as you need.",
+      lede: "Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always.",
+      includes: [
+        "Unlimited access to all four rooms — reading, reflection, text-to-text chat",
+        "One private live AI voice session per month",
+        "Priority access to new spaces",
+        "The quiet community thread",
+      ],
+      price: "€120",
+      cadence: "per month",
+      cta: "Step in",
+      featured: true,
+    },
+    {
+      key: "your-own-room",
+      name: "Your Own Room",
+      tagline: "A space held only for you.",
+      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full sanctuary access, and a private channel — your own corner of this sanctuary.",
+      includes: [
+        "Full access to all rooms — reading, reflection, text-to-text chat",
+        "Weekly private live AI voice sessions — four sessions per month",
+        "Priority presence and response",
+        "Early access to future sanctuaries",
+        "Direct channel for quiet requests",
+      ],
+      price: "€380",
+      cadence: "per month",
+      cta: "Enter gently",
+    },
+  ];
+
+  return (
+    <section
+      id="ways"
+      data-testid="sanctuary-ways"
+      className="relative w-full bg-[#0b0a08] py-32 sm:py-40"
+    >
+      <div className="max-w-[1220px] mx-auto px-6 sm:px-10">
+        <RevealBlock>
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
+            — Ways to be here
+          </p>
+          <h2
+            className="text-center text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] font-light max-w-[820px] mx-auto tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
+          >
+            There is no wrong way<br />
+            <span className="italic text-[#d4b67d]">to arrive.</span>
+          </h2>
+          <p
+            className="mt-9 text-center text-[16px] leading-[1.85] text-[#a59f93] max-w-[640px] mx-auto italic font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            Each path holds space for you differently. Begin wherever feels true.
+          </p>
+        </RevealBlock>
+
+        <div className="mt-24 grid md:grid-cols-3 gap-7 lg:gap-9 items-stretch">
+          {tiers.map((t, i) => (
+            <RevealBlock key={t.key} delay={i * 120}>
+              <div
+                data-testid={`ways-${t.key}`}
+                className={`relative h-full flex flex-col p-10 sm:p-12 border ${
+                  t.featured
+                    ? "border-[rgba(196,164,107,0.45)] bg-[rgba(28,24,18,0.55)]"
+                    : "border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)]"
+                }`}
+              >
+                {t.featured ? (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] px-4 py-1"
+                  >
+                    Most chosen
+                  </span>
+                ) : null}
+
+                <h3
+                  className="text-[30px] sm:text-[34px] leading-[1.14] text-[#f0eadd] font-light mb-4"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.name}
+                </h3>
+                <p
+                  className="text-[14.5px] italic text-[#a59f93] leading-[1.7] mb-6"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.tagline}
+                </p>
+                <p className="text-[14.5px] leading-[1.82] text-[#bcb4a3] font-light mb-8">
+                  {t.lede}
+                </p>
+
+                <ul className="space-y-3.5 mb-10">
+                  {t.includes.map((line, j) => (
+                    <li
+                      key={j}
+                      className="flex items-start gap-3 text-[13.5px] leading-[1.7] text-[#bcb4a3] font-light"
+                    >
+                      <span className="text-[#c4a46b] mt-[6px] text-[8px]">◆</span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-auto pt-7 border-t border-[rgba(196,164,107,0.14)]">
+                  <div className="flex items-baseline gap-2 mb-7">
+                    <span
+                      className="text-[44px] leading-none text-[#f0eadd] font-light"
+                      style={{ fontFamily: SERIF }}
+                    >
+                      {t.price}
+                    </span>
+                    <span className="text-[12px] tracking-[0.16em] italic text-[#7a7468]" style={{ fontFamily: SERIF }}>
+                      / {t.cadence}
+                    </span>
+                  </div>
+                  <Link
+                    to="/portal"
+                    data-testid={`ways-cta-${t.key}`}
+                    className={`block text-center text-[11.5px] tracking-[0.32em] uppercase py-4 border transition-colors duration-700 ${
+                      t.featured
+                        ? "text-[#0b0a08] bg-[#c4a46b] border-[#c4a46b] hover:bg-[#d4b67d] hover:border-[#d4b67d]"
+                        : "text-[#c4a46b] border-[rgba(196,164,107,0.55)] hover:text-[#0b0a08] hover:bg-[#c4a46b]"
+                    }`}
+                  >
+                    {t.cta}
+                  </Link>
                 </div>
               </div>
             </RevealBlock>
@@ -379,134 +625,78 @@ function RoomsSection() {
   );
 }
 
-// §THRESHOLDS — pricing presented as atmospheric thresholds, not a
-// SaaS comparison grid. Homepage gives only HINTS — Portal shows
-// the full ledger (Founder Q4=c).
-function ThresholdsSection() {
+// §THE VOICE METER — Tesla/fuel symbolism (Founder directive).
+// Platform membership = the car. Voice minutes = separate, governed fuel.
+// Surfaces top-up structure quietly so visitors understand the runtime model
+// without it dominating the page.
+function VoiceMeterSection() {
+  const topups = [
+    { mins: "30 minutes", price: "€25", note: "a short return" },
+    { mins: "60 minutes", price: "€39", note: "a full hour, when you need more" },
+    { mins: "180 minutes", price: "€99", note: "a season's worth of presence" },
+  ];
+
   return (
     <section
-      id="thresholds"
-      data-testid="sanctuary-thresholds"
+      id="voice-meter"
+      data-testid="sanctuary-voice-meter"
       className="relative w-full bg-[#0b0a08] py-32"
     >
       <div className="max-w-[1080px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
-            — Thresholds of Time
+            — The Voice Meter
           </p>
           <h2
-            className="text-center text-[34px] sm:text-[44px] lg:text-[52px] leading-[1.1] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            className="text-center text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
           >
-            Three doorways into voice,<br />
-            <span className="italic text-[#d4b67d]">three rhythms of presence.</span>
+            Your sanctuary stays open.<br />
+            <span className="italic text-[#d4b67d]">Voice runs on its own quiet meter.</span>
           </h2>
-          <p className="mt-9 text-center text-[15px] leading-[1.85] text-[#a59f93] max-w-[560px] mx-auto font-light">
-            The Open World is always free. Voice time is held quietly,
-            measured by the minute. Full thresholds are revealed once
-            inside the portal.
+          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
+            Each path above includes a baseline of live voice presence.
+            When you need more, voice is added gently — measured by the
+            minute, never auto-renewed, never running quietly in the
+            background. Premium presence is always governed.
           </p>
         </RevealBlock>
 
-        {/* Three atmospheric tier hints — no checkmark list, no SaaS
-            comparison grid. Prose-led. Membership full details live
-            inside the portal (Founder Q4=c). */}
-        <div className="mt-24 grid md:grid-cols-3 gap-7 lg:gap-9">
-          {[
-            {
-              key: "voyager",
-              eyebrow: "I · Voyager",
-              price: "$39",
-              cadence: "monthly",
-              line: "Ongoing text guidance and the library.",
-              tone: "For those who arrive quietly, in writing.",
-            },
-            {
-              key: "eternal",
-              eyebrow: "II · Eternal",
-              price: "$89",
-              regular: "$99",
-              cadence: "monthly",
-              line: "180 minutes of voice each season, plus every course.",
-              tone: "The most chosen threshold.",
-              featured: true,
-            },
-            {
-              key: "divine",
-              eyebrow: "III · Divine",
-              price: "$179",
-              regular: "$199",
-              cadence: "monthly",
-              line: "300 minutes of voice, and early access to what arrives next.",
-              tone: "For those who walk this path with depth.",
-            },
-          ].map((t, i) => (
-            <RevealBlock key={t.key} delay={i * 100}>
+        <div className="mt-20 grid sm:grid-cols-3 gap-5">
+          {topups.map((t, i) => (
+            <RevealBlock key={t.mins} delay={i * 100}>
               <div
-                data-testid={`threshold-${t.key}`}
-                className={`relative h-full p-9 sm:p-10 rounded-[2px] border ${
-                  t.featured
-                    ? "border-[rgba(196,164,107,0.45)] bg-[rgba(28,24,18,0.55)]"
-                    : "border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)]"
-                }`}
+                data-testid={`voice-topup-${t.price.replace("€", "")}`}
+                className="border border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)] p-8 text-center hover:border-[rgba(196,164,107,0.32)] transition-colors duration-700"
               >
-                <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-6">
-                  {t.eyebrow}
+                <p
+                  className="text-[28px] leading-none text-[#f0eadd] font-light mb-3"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.price}
                 </p>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span
-                    className="text-[42px] leading-none text-[#f0eadd] font-light"
-                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                  >
-                    {t.price}
-                  </span>
-                  <span className="text-[12px] tracking-[0.18em] uppercase text-[#7a7468]">
-                    /{t.cadence}
-                  </span>
-                </div>
-                {t.regular ? (
-                  <p className="text-[11.5px] tracking-[0.16em] text-[#7a7468] italic mb-7">
-                    season opening · {t.regular} thereafter
-                  </p>
-                ) : (
-                  <p className="text-[11.5px] tracking-[0.16em] text-[#7a7468] italic mb-7">
-                    season opening
-                  </p>
-                )}
-                <p className="text-[15px] leading-[1.85] text-[#bcb4a3] font-light mb-5">
-                  {t.line}
+                <p className="text-[11px] tracking-[0.28em] uppercase text-[#c4a46b] mb-5">
+                  + {t.mins}
                 </p>
                 <p
-                  className="text-[14px] leading-[1.8] italic text-[#a59f93] font-light"
-                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                  className="text-[13px] italic text-[#a59f93] font-light"
+                  style={{ fontFamily: SERIF }}
                 >
-                  {t.tone}
+                  {t.note}
                 </p>
               </div>
             </RevealBlock>
           ))}
         </div>
 
-        {/* Quiet hint at one-off passes — no urgency, no upsell. */}
-        <RevealBlock delay={360}>
-          <div className="mt-20 max-w-[680px] mx-auto text-center">
-            <p
-              className="text-[14.5px] italic text-[#a59f93] leading-[1.85] font-light"
-              style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-            >
-              For a single visit — Quick Clarity, Deep Release, or a Full
-              Breakthrough are available within the portal, each with its
-              own measured threshold of time.
-            </p>
-            <Link
-              to="/portal"
-              data-testid="thresholds-portal-link"
-              className="mt-9 inline-flex items-center gap-3 text-[12px] tracking-[0.26em] uppercase text-[#c4a46b] hover:text-[#d4b67d] transition-colors duration-500 underline-offset-[6px] hover:underline"
-            >
-              Cross the threshold to see all
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
+        <RevealBlock delay={420}>
+          <p
+            className="mt-16 text-center text-[14px] italic text-[#7a7468] max-w-[560px] mx-auto leading-[1.85] font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            We hold the sanctuary. You hold the meter. Nothing is ever
+            on by accident.
+          </p>
         </RevealBlock>
       </div>
     </section>
@@ -520,14 +710,8 @@ function PhilosophySection() {
       data-testid="sanctuary-philosophy"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
-      {/* Soft atmospheric backdrop */}
       <div className="absolute inset-0 opacity-[0.22]">
-        <img
-          src={ATMOSPHERE}
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover"
-        />
+        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,9,8,0.55)] via-[rgba(10,9,8,0.85)] to-[rgba(10,9,8,1)]" />
       </div>
 
@@ -537,8 +721,8 @@ function PhilosophySection() {
             — Philosophy
           </p>
           <p
-            className="text-[26px] sm:text-[34px] lg:text-[40px] leading-[1.42] text-[#f0eadd] font-light italic"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            className="text-[24px] sm:text-[32px] lg:text-[38px] leading-[1.44] text-[#f0eadd] font-light italic"
+            style={{ fontFamily: SERIF }}
           >
             “None of this is urgent.<br />
             The rooms do not keep score.<br />
@@ -564,13 +748,13 @@ function ClosingSection() {
       <div className="max-w-[860px] mx-auto px-6 sm:px-10 text-center">
         <RevealBlock>
           <h2
-            className="text-[36px] sm:text-[52px] lg:text-[64px] leading-[1.1] text-[#f0eadd] font-light tracking-[-0.012em]"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            className="text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.12] text-[#f0eadd] font-light tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
           >
             When you are ready,<br />
             <span className="italic text-[#d4b67d]">a door is already open.</span>
           </h2>
-          <p className="mt-9 text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[540px] mx-auto font-light">
+          <p className="mt-9 text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[540px] mx-auto font-light">
             No urgency. No invitation required this season. The sanctuary
             keeps its own quiet hours, and the inner pages remember nothing
             of who has visited.
@@ -579,10 +763,9 @@ function ClosingSection() {
             <Link
               to="/portal"
               data-testid="closing-cta"
-              className="inline-flex items-center gap-3 text-[12.5px] tracking-[0.26em] uppercase text-[#0b0a08] bg-[#c4a46b] px-10 py-4 rounded-full hover:bg-[#d4b67d] transition-all duration-500 hover:gap-5"
+              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
-              Enter the Sanctuary
-              <span aria-hidden="true">→</span>
+              Step Inside
             </Link>
           </div>
         </RevealBlock>
@@ -597,10 +780,10 @@ function SanctuaryFooter() {
       data-testid="sanctuary-footer"
       className="relative w-full bg-[#0b0a08] border-t border-[rgba(196,164,107,0.08)] py-16"
     >
-      <div className="max-w-[1180px] mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+      <div className="max-w-[1220px] mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
         <p
-          className="text-[12.5px] tracking-[0.28em] uppercase text-[#a59f93] font-light"
-          style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontStyle: "italic" }}
+          className="text-[13px] tracking-[0.32em] uppercase text-[#a59f93] font-light italic"
+          style={{ fontFamily: SERIF }}
         >
           Pure Soul Life — Matrix Aurin
         </p>
@@ -618,15 +801,12 @@ function SanctuaryFooter() {
 }
 
 export default function SanctuaryPreview() {
-  // Preview ribbon — visible only on this isolated route so the
-  // founder always knows production is untouched.
   return (
     <div
       data-testid="sanctuary-preview-root"
       className="min-h-screen w-full bg-[#0b0a08] text-[#e8e1d5] antialiased"
       style={{ fontFamily: 'system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif' }}
     >
-      {/* Preview-only ribbon */}
       <div
         data-testid="sanctuary-preview-ribbon"
         className="fixed top-0 left-0 right-0 z-[60] bg-[#c4a46b] text-[#0b0a08] text-[10px] tracking-[0.32em] uppercase text-center py-1.5"
@@ -639,7 +819,9 @@ export default function SanctuaryPreview() {
           <HeroSection />
           <TwoWorldsSection />
           <RoomsSection />
-          <ThresholdsSection />
+          <OpenWorldSection />
+          <WaysToBeHereSection />
+          <VoiceMeterSection />
           <PhilosophySection />
           <ClosingSection />
         </main>
