@@ -65,6 +65,64 @@ function useReveal() {
   return { ref, visible };
 }
 
+// §POLISH 2026-05-18 PM — Hide the platform's "Made with Emergent"
+// badge on this preview route only. Restored automatically when the
+// founder navigates away. Does NOT affect production deployment
+// (prulesoul.site already strips the badge during native deploy).
+function useHidePlatformBadge() {
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.setAttribute("data-sanctuary-clean", "true");
+    style.textContent = `
+      /* Common Emergent preview badge patterns */
+      [class*="emergent" i][class*="badge" i],
+      a[href*="emergent.sh" i],
+      a[href*="emergentagent.com" i][target="_blank"],
+      div:has(> a[href*="emergent" i]) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      style.remove();
+    };
+  }, []);
+}
+
+// §POLISH 2026-05-18 PM — Subtle hero parallax. Mask backdrop drifts
+// 0 → -6% on first viewport scroll, no library, GPU-only transform.
+// Stops calculating once hero is off-screen so it costs nothing on
+// the rest of the page.
+function useHeroParallax(elRef) {
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return undefined;
+    let raf = 0;
+    let lastY = -1;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const y = window.scrollY;
+        if (y === lastY) return;
+        lastY = y;
+        if (y > window.innerHeight) return; // off-screen, skip
+        const k = Math.min(1, y / window.innerHeight);
+        el.style.transform = `translate3d(0, ${k * -6}%, 0) scale(${1 + k * 0.02})`;
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [elRef]);
+}
+
 function RevealBlock({ children, delay = 0, className = "" }) {
   const { ref, visible } = useReveal();
   return (
@@ -117,13 +175,15 @@ function SanctuaryNav() {
 // §HERO — Mike's reference: centered serif title, italic accent, bordered CTA.
 function HeroSection() {
   const { ref, visible } = useReveal();
+  const imgRef = useRef(null);
+  useHeroParallax(imgRef);
   return (
     <section
       ref={ref}
       data-testid="sanctuary-hero"
       className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 will-change-transform" ref={imgRef}>
         <img
           src={HERO}
           alt=""
@@ -147,7 +207,7 @@ function HeroSection() {
         >
           <h1
             data-testid="hero-title"
-            className="font-light text-[44px] sm:text-[68px] lg:text-[88px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
+            className="font-light text-[40px] sm:text-[62px] lg:text-[88px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             Welcome back<br />
@@ -155,16 +215,16 @@ function HeroSection() {
           </h1>
           <p
             data-testid="hero-subtitle"
-            className="mt-12 text-[15.5px] sm:text-[17px] tracking-[0.06em] text-[#bcb4a3] italic font-light"
+            className="mt-10 sm:mt-12 text-[15px] sm:text-[17px] tracking-[0.06em] text-[#bcb4a3] italic font-light"
             style={{ fontFamily: SERIF }}
           >
             You do not have to perform here.
           </p>
-          <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="mt-12 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6">
             <Link
               to="/portal"
               data-testid="hero-cta-step-inside"
-              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
+              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
               Step Inside
             </Link>
@@ -178,16 +238,12 @@ function HeroSection() {
           </div>
           <p
             data-testid="hero-season"
-            className="mt-20 text-[12.5px] tracking-[0.18em] italic text-[#7a7468] font-light"
+            className="mt-16 sm:mt-20 text-[12px] sm:text-[12.5px] tracking-[0.18em] italic text-[#7a7468] font-light"
             style={{ fontFamily: SERIF }}
           >
             The doors are open this season.
           </p>
         </div>
-      </div>
-
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 text-[10px] tracking-[0.4em] uppercase text-[#7a7468] animate-pulse">
-        ↓ &nbsp; descend
       </div>
     </section>
   );
@@ -747,23 +803,37 @@ function ClosingSection() {
     >
       <div className="max-w-[860px] mx-auto px-6 sm:px-10 text-center">
         <RevealBlock>
+          <p
+            data-testid="closing-thematic"
+            className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-10"
+          >
+            — Out of the Matrix · Into Aurin
+          </p>
           <h2
-            className="text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.12] text-[#f0eadd] font-light tracking-[-0.012em]"
+            className="text-[32px] sm:text-[46px] lg:text-[56px] leading-[1.12] text-[#f0eadd] font-light tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             When you are ready,<br />
             <span className="italic text-[#d4b67d]">a door is already open.</span>
           </h2>
-          <p className="mt-9 text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[540px] mx-auto font-light">
+          <p className="mt-9 text-[15px] sm:text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[560px] mx-auto font-light">
             No urgency. No invitation required this season. The sanctuary
             keeps its own quiet hours, and the inner pages remember nothing
             of who has visited.
+          </p>
+          <p
+            className="mt-7 text-[14.5px] italic text-[#a59f93] max-w-[520px] mx-auto leading-[1.85] font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            You are not here to be fixed. You are here to be met — as
+            you already are, in love and quiet respect for yourself,
+            for others, and for the world.
           </p>
           <div className="mt-14">
             <Link
               to="/portal"
               data-testid="closing-cta"
-              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
+              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
               Step Inside
             </Link>
@@ -801,6 +871,7 @@ function SanctuaryFooter() {
 }
 
 export default function SanctuaryPreview() {
+  useHidePlatformBadge();
   return (
     <div
       data-testid="sanctuary-preview-root"
