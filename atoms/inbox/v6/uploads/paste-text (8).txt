@@ -1,0 +1,67 @@
+Important clarification to avoid future architectural confusion:
+
+We currently have TWO DIFFERENT website layers with TWO DIFFERENT purposes.
+
+1.
+
+https://pure-soul-life.emergent.host
+= Landing Page / Entrance Layer
+
+Purpose:
+
+* first emotional contact
+* atmosphere
+* introduction
+* sanctuary invitation
+* trust and curiosity
+* softer onboarding
+
+This page CAN retain more landing-page qualities because it functions as the entrance experience.
+
+2.
+
+https://prulesoul.site
+= Actual Sanctuary Product Ecosystem
+
+Purpose:
+
+* real sanctuary world
+* product ecosystem
+* discovery
+* rooms
+* library
+* offerings
+* layered experiences
+* continuity
+* exploration
+* emotional world architecture
+
+This should NOT feel like a traditional landing page or aggressive funnel.
+
+Important:
+The product ecosystem should feel:
+alive,
+layered,
+discoverable,
+and emotionally immersive.
+
+NOT:
+like one long conversion-focused marketing page.
+
+So moving forward:
+
+PURE SOUL LIFE
+= emotional entrance / landing layer
+
+PRULESOUL
+= actual sanctuary product world
+
+This distinction is now extremely important and should remain architecturally clear moving forward.
+
+Current refinement focus:
+evolve the PRODUCT ECOSYSTEM experience on prulesoul.site
+while preserving the emotional atmosphere established by the landing layer.
+
+The goal:
+harmonize both worlds
+without turning the sanctuary product ecosystem into a funnel page.

@@ -1,0 +1,61 @@
+ADDITIONAL OPERATIONAL RULE — COST & RESOURCE DISCIPLINE
+
+All Atoms ↔ Emergent workflow decisions must remain aware of:
+
+* credit consumption
+* API/runtime costs
+* infrastructure expenses
+* startup-stage limitations
+
+Matrix Aurin is currently in an early startup phase.
+
+This means:
+
+* avoid unnecessary rebuilds
+* avoid endless redesign loops
+* avoid speculative architecture work
+* avoid expensive autonomous experimentation
+* avoid generating complexity without clear business value
+
+The system should prioritize:
+
+* lightweight solutions
+* efficient workflows
+* stable long-term structure
+* minimal operational waste
+* maximum reuse of existing systems
+* practical implementation over theoretical perfection
+
+Frontend refinement, marketing, funnels, campaigns, and brand positioning should be optimized for:
+
+* high perceived value
+* strong emotional positioning
+* efficient conversion
+* sustainable growth
+
+…without creating unnecessary infrastructure costs.
+
+IMPORTANT:
+Do not propose enterprise-scale systems unless there is a real operational need.
+
+Prefer:
+
+* simple
+* scalable
+* modular
+* cost-efficient
+* startup-realistic solutions
+
+The goal is:
+Build a premium luxury sanctuary brand with intelligent resource discipline — not burn credits trying to simulate a giant corporation before the business is fully established.
+
+Every technical or marketing proposal should consider:
+
+* implementation cost
+* maintenance cost
+* runtime/API cost
+* long-term sustainability
+* founder workload reduction
+
+The ideal mindset:
+Elegant startup efficiency with premium presentation.

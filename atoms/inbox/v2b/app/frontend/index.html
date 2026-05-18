@@ -1,0 +1,263 @@
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  INTEGRATION NOTES — Emergent Production Environment        ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║                                                              ║
+  ║  To integrate into prulesoul.site (Emergent backend):        ║
+  ║                                                              ║
+  ║  1. Copy the <body> contents into your Emergent page         ║
+  ║     template, preserving section order.                      ║
+  ║                                                              ║
+  ║  2. Include style.css in your asset pipeline or inline       ║
+  ║     the CSS variables into your global stylesheet.           ║
+  ║                                                              ║
+  ║  3. Include script.js as a module script at body end.        ║
+  ║                                                              ║
+  ║  4. Google Fonts (Cormorant Garamond + Inter) must be        ║
+  ║     loaded via <link> in <head> or your font pipeline.       ║
+  ║                                                              ║
+  ║  5. All internal links point to prulesoul.site subpages.     ║
+  ║     Adjust paths if your routing differs.                    ║
+  ║                                                              ║
+  ║  6. Pricing CTAs link to prulesoul.site/join with tier       ║
+  ║     query params. Connect to your payment processor.         ║
+  ║                                                              ║
+  ║  7. Hero image is served from CDN. Replace src with your     ║
+  ║     own asset URL if self-hosting.                           ║
+  ║                                                              ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon_atoms.ico" type="image/x-icon">
+    <title>Matrix Aurin — The room that reads you</title>
+    <meta name="description" content="A private sanctuary for those ready to meet themselves without performance. No tracking. No noise. Just presence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Page Entrance Veil — cinematic 2s fade-in -->
+    <div class="page-veil" id="page-veil"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-brand">
+            <a href="https://prulesoul.site" class="nav-brand-text">Matrix Aurin</a>
+        </div>
+        <div class="nav-links">
+            <a href="#sanctuary" class="nav-link">Sanctuary</a>
+            <a href="#doors" class="nav-link">Rooms</a>
+            <a href="#offerings" class="nav-link">Offerings</a>
+            <a href="#threshold" class="nav-cta">Enter</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-visual">
+            <img 
+                src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-17/owrskiyaagoq/hero-removing-digital-mask-authentic-self.png" 
+                alt="A person gently removing a digital mask, revealing their authentic self" 
+                class="hero-image"
+            >
+            <div class="hero-image-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <p class="hero-whisper">Matrix Aurin</p>
+            <h1 class="hero-headline">Welcome back<br>to yourself.</h1>
+            <p class="hero-subtext">You do not have to perform here.</p>
+            <a href="#threshold" class="hero-cta">Step inside</a>
+        </div>
+    </section>
+
+    <!-- Sanctuary Principles -->
+    <section class="principles" id="sanctuary">
+        <div class="principles-inner">
+            <p class="section-whisper">What this place holds</p>
+            <div class="principles-grid">
+                <div class="principle">
+                    <span class="principle-number">I</span>
+                    <h3 class="principle-title">Privacy</h3>
+                    <p class="principle-text">No pixels watch you here. No data leaves this room. Your journey stays yours — that is part of the design.</p>
+                </div>
+                <div class="principle">
+                    <span class="principle-number">II</span>
+                    <h3 class="principle-title">Presence</h3>
+                    <p class="principle-text">A room that listens more than it speaks. What you bring here is met with calm attention, not performance.</p>
+                </div>
+                <div class="principle">
+                    <span class="principle-number">III</span>
+                    <h3 class="principle-title">Silence</h3>
+                    <p class="principle-text">The noise stops working here. In the quiet, you begin to hear what you have always known.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Four Doors -->
+    <section class="doors" id="doors">
+        <div class="doors-inner">
+            <p class="section-whisper">The doors</p>
+            <h2 class="doors-headline">Four entries.<br>One quiet place.</h2>
+            <p class="doors-subtext">Each one has its own tone. None of them rush you.<br>Walk through the one that calls.</p>
+            
+            <div class="doors-grid">
+                <a href="https://prulesoul.site/the-beginning" class="door">
+                    <span class="door-number">01</span>
+                    <h3 class="door-title">The Beginning</h3>
+                    <p class="door-subtitle">Where you slow down and listen inward</p>
+                    <p class="door-hint">Find your own rhythm.</p>
+                </a>
+                <a href="https://prulesoul.site/body-room" class="door">
+                    <span class="door-number">02</span>
+                    <h3 class="door-title">Body Room</h3>
+                    <p class="door-subtitle">Where the body remembers what the mind forgot</p>
+                    <p class="door-hint">Let the body speak.</p>
+                </a>
+                <a href="https://prulesoul.site/parents-room" class="door">
+                    <span class="door-number">03</span>
+                    <h3 class="door-title">Parents' Room</h3>
+                    <p class="door-subtitle">Where inherited patterns become visible</p>
+                    <p class="door-hint">What was inherited. What is yours.</p>
+                </a>
+                <a href="https://prulesoul.site/course-room" class="door">
+                    <span class="door-number">04</span>
+                    <h3 class="door-title">Course Room</h3>
+                    <p class="door-subtitle">Where growth happens without pressure</p>
+                    <p class="door-hint">Mastery without performance.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offerings / Pricing -->
+    <section class="offerings" id="offerings">
+        <div class="offerings-inner">
+            <p class="section-whisper">Ways to be here</p>
+            <h2 class="offerings-headline">Choose how you wish to arrive.</h2>
+            <p class="offerings-subtext">There is no wrong door. Each path holds space for you differently.</p>
+
+            <div class="offerings-grid">
+                <!-- Tier 1 -->
+                <div class="offering-card">
+                    <div class="offering-header">
+                        <span class="offering-label">A First Step</span>
+                        <h3 class="offering-title">One session.<br>One quiet hour.</h3>
+                    </div>
+                    <div class="offering-body">
+                        <p class="offering-description">No commitment. Just curiosity. Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.</p>
+                        <ul class="offering-includes">
+                            <li>Access to one room of your choosing</li>
+                            <li>A guided session at your pace</li>
+                            <li>No subscription, no follow-up pressure</li>
+                        </ul>
+                    </div>
+                    <div class="offering-footer">
+                        <span class="offering-price">€45</span>
+                        <span class="offering-period">one session</span>
+                        <a href="https://prulesoul.site/join?tier=first-step" class="offering-cta">Begin quietly</a>
+                    </div>
+                </div>
+
+                <!-- Tier 2 -->
+                <div class="offering-card offering-card--featured">
+                    <div class="offering-header">
+                        <span class="offering-label">A Steady Presence</span>
+                        <h3 class="offering-title">All rooms.<br>Monthly companionship.</h3>
+                    </div>
+                    <div class="offering-body">
+                        <p class="offering-description">Return as often as you need. Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always.</p>
+                        <ul class="offering-includes">
+                            <li>Unlimited access to all four rooms</li>
+                            <li>One private voice session per month</li>
+                            <li>Priority access to new spaces</li>
+                            <li>The quiet community thread</li>
+                        </ul>
+                    </div>
+                    <div class="offering-footer">
+                        <span class="offering-price">€120</span>
+                        <span class="offering-period">per month</span>
+                        <a href="https://prulesoul.site/join?tier=steady" class="offering-cta">Step in</a>
+                    </div>
+                </div>
+
+                <!-- Tier 3 -->
+                <div class="offering-card">
+                    <div class="offering-header">
+                        <span class="offering-label">Your Own Room</span>
+                        <h3 class="offering-title">A space held<br>only for you.</h3>
+                    </div>
+                    <div class="offering-body">
+                        <p class="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary.</p>
+                        <ul class="offering-includes">
+                            <li>Unlimited access to all rooms</li>
+                            <li>Weekly private AI voice sessions</li>
+                            <li>Priority presence and response</li>
+                            <li>Early access to future sanctuaries</li>
+                            <li>Direct channel for quiet requests</li>
+                        </ul>
+                    </div>
+                    <div class="offering-footer">
+                        <span class="offering-price">€380</span>
+                        <span class="offering-period">per month</span>
+                        <a href="https://prulesoul.site/join?tier=own-room" class="offering-cta">Enter gently</a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="offerings-note">All paths include complete privacy. No data shared. No tracking. Cancel with a single word.</p>
+        </div>
+    </section>
+
+    <!-- Threshold / Entry -->
+    <section class="threshold" id="threshold">
+        <div class="threshold-inner">
+            <p class="section-whisper">A quiet invitation</p>
+            <h2 class="threshold-headline">You are welcome here.</h2>
+            <p class="threshold-text">
+                I want you to know — this is not a place you have to earn.<br>
+                It is a place you recognize. A place that has been waiting.
+            </p>
+            <p class="threshold-text threshold-text-secondary">
+                Something inside you already knows.<br>
+                Not everything you carry was chosen by you.<br><br>
+                This is where you begin to see that clearly —<br>
+                gently, without rush — and from there, choose what stays.
+            </p>
+            <a href="https://prulesoul.site/the-beginning" class="threshold-cta">Begin gently</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">Matrix Aurin</div>
+            <p class="footer-trust">No social-media pixels. No tracking cookies. No public feed.<br>Your journey through this work stays yours — that is part of the design.</p>
+            <p class="footer-warmth">Built with care. Held with silence.</p>
+            <div class="footer-links">
+                <a href="https://prulesoul.site/the-beginning" class="footer-link">The Beginning</a>
+                <a href="https://prulesoul.site/body-room" class="footer-link">Body Room</a>
+                <a href="https://prulesoul.site/parents-room" class="footer-link">Parents' Room</a>
+                <a href="https://prulesoul.site/course-room" class="footer-link">Course Room</a>
+            </div>
+            <div class="footer-meta">
+                <span>Est. 2026</span>
+                <span class="footer-dot"></span>
+                <span>Quiet by design</span>
+                <span class="footer-dot"></span>
+                <a href="https://prulesoul.site/privacy" class="footer-meta-link">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="./script.js"></script>
+</body>
+
+</html>

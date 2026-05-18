@@ -1,0 +1,60 @@
+SETUP REQUEST — ATOMS → EMERGENT PREVIEW HANDOFF PIPE
+
+I want Atoms to be able to send approved frontend updates into the Matrix Aurin website workflow automatically, but NOT directly into live production.
+
+Required workflow:
+
+1. Atoms prepares frontend updates:
+
+* copy
+* layout
+* CSS
+* component structure
+* images
+* pricing presentation
+* homepage refinements
+
+2. Emergent receives these updates through the existing handoff pipe.
+
+3. Emergent applies them ONLY to a preview/staging version first.
+
+4. I review the preview.
+
+5. Only after my explicit approval, Emergent may deploy to live production.
+
+Strict rule:
+Atoms must never directly modify production.
+
+Atoms may update:
+
+* preview homepage
+* frontend-only visual layer
+* copy
+* pricing presentation
+* CSS
+* layout
+
+Atoms may NOT update:
+
+* backend
+* auth
+* MongoDB
+* ElevenLabs
+* payments/webhooks
+* route guards
+* session runtime
+* AI room logic
+* agent persona/voice setup
+
+Required approval label:
+APPROVED FOR PREVIEW IMPLEMENTATION
+
+Live deployment requires separate approval:
+APPROVED FOR PRODUCTION DEPLOY
+
+Please set up or confirm this workflow and return:
+
+1. Where Atoms sends the frontend package
+2. Where I can preview it
+3. How I approve production deploy
+4. Confirmation that live production cannot be changed directly by Atoms

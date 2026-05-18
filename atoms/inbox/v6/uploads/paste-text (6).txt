@@ -1,0 +1,181 @@
+GLOBAL ALIGNMENT DIRECTIVE — SANCTUARY PRODUCT ECOSYSTEM
+
+Applies to:
+
+* Atoms
+* AH Agent
+* LP Layer
+
+IMPORTANT:
+A technical communication mismatch happened during the previous alignment phase, which caused partial role confusion and mixed assumptions between sanctuary-world direction and landing-page execution.
+
+This directive officially corrects and locks the proper structure moving forward.
+
+────────────────────────
+IMPORTANT PRODUCT CLARIFICATION
+────────────────────────
+
+We are NOT currently building a temporary landing page or isolated funnel.
+
+We are refining and harmonizing:
+THE ACTUAL PRODUCT ECOSYSTEM.
+
+This is now a sanctuary-world product architecture project, not a typical SaaS landing page project.
+
+The current direction is approved.
+
+────────────────────────
+ROLE STRUCTURE (LOCKED)
+────────────────────────
+
+Atoms:
+
+* sanctuary/world direction
+* luxury atmosphere
+* UX cohesion
+* emotional architecture
+* typography direction
+* navigation feeling
+* copy refinement
+* sanctuary continuity
+* world cohesion
+
+NOT:
+
+* backend
+* runtime
+* auth
+* infrastructure rewrites
+* payment architecture changes
+
+AH Agent:
+
+* core governance
+* runtime protection
+* infrastructure guardian
+* implementation safety
+* protected systems oversight
+* deployment governance
+* runtime economics protection
+
+NOT:
+
+* uncontrolled redesign
+* architecture churn
+* emotional worldbuilding ownership
+
+LP Layer:
+
+* frontend execution layer under AH supervision
+* preview integration
+* visual implementation
+* safe frontend refinement
+
+NOT:
+
+* backend mutation
+* infrastructure redesign
+* protected system modification
+
+Founder:
+
+* final emotional authority
+* strategic direction
+* approval / rejection
+
+────────────────────────
+CORE IMMUTABILITY RULE
+────────────────────────
+
+All currently functioning systems remain protected unless explicitly approved.
+
+Protected core:
+
+* auth
+* payments
+* Mongo
+* ConvAI
+* room logic
+* runtime protections
+* governance
+* onboarding
+* backend pricing logic
+* stable routes
+* production infrastructure
+
+NO:
+
+* backend rewrites
+* architecture churn
+* destructive replacement
+* hidden rebuilds
+* runtime redesigns
+* unnecessary migrations
+
+────────────────────────
+CURRENT DEVELOPMENT MODE
+────────────────────────
+
+SANCTUARY EXPANSION MODE
+
+Meaning:
+Expand through:
+
+* addition
+* refinement
+* emotional cohesion
+* atmosphere continuity
+* curated worlds
+
+NOT through:
+
+* replacement
+* destabilization
+* rebuilding working systems
+
+────────────────────────
+SANCTUARY WORLD STRUCTURE
+────────────────────────
+
+Luxury Landing
+= dignity / slowness / entrance
+
+Open Library
+= discovery / breathing space
+
+Kids Universe
+= softness / imagination / light
+
+Quiet Store
+= curated value
+
+Voice Sanctuary
+= deep presence
+
+These must feel like:
+different wings of the same sanctuary.
+
+NOT:
+separate disconnected websites or random products.
+
+────────────────────────
+CURRENT PRIORITY
+────────────────────────
+
+Priority order:
+
+1. stability
+2. world cohesion
+3. atmosphere refinement
+4. customer experience
+5. trust
+6. content
+7. conversion
+8. growth
+
+The system should now evolve:
+calmly,
+layer by layer,
+without destabilizing the living sanctuary.
+
+Please internally realign workflows and responsibilities accordingly so the previous communication mismatch is fully corrected moving forward.

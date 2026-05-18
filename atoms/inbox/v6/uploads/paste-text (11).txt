@@ -1,0 +1,225 @@
+Important Sanctuary Voice Architecture Clarification
+— implementation and positioning guidance for the Product Sanctuary Ecosystem.
+
+After reviewing the pricing/runtime structure and the long-term sanctuary direction, we are now aligned on a critical architectural distinction that should guide all future Voice Sanctuary presentation and product design decisions.
+
+────────────────────────
+CRITICAL BREAKTHROUGH
+────────────────────────
+
+The platform is NOT one business model.
+
+It is actually TWO connected systems inside the same sanctuary ecosystem:
+
+| Layer                       | Role                             |
+| --------------------------- | -------------------------------- |
+| Digital Sanctuary Ecosystem | high-margin content world        |
+| Voice Sanctuary Runtime     | premium realtime sanctuary layer |
+
+This distinction is now officially locked.
+
+────────────────────────
+IMPORTANT POSITIONING SHIFT
+────────────────────────
+
+We are NOT selling:
+
+* “AI friend”
+* “AI therapist”
+* “AI psychologist”
+* “unlimited companion”
+* “always-on emotional dependency”
+
+Reasons:
+
+* legal risk
+* emotional dependency risk
+* runtime risk
+* infrastructure risk
+* support scalability risk
+
+Instead:
+
+The correct direction is:
+
+PREMIUM GUIDED SANCTUARY PRESENCE
+
+The realtime voice layer should feel:
+
+* emotionally intelligent
+* calm
+* reflective
+* grounding
+* premium
+* human-centered
+* safe
+* elegant
+
+WITHOUT implying:
+
+* clinical treatment
+* therapy
+* psychological diagnosis
+* medical care
+* emotional dependency
+
+────────────────────────
+VOICE POSITIONING LANGUAGE
+────────────────────────
+
+Please actively refine and improve the wording, presentation language, and emotional framing of the Voice Sanctuary layer.
+
+Avoid wording like:
+
+* AI therapist
+* AI assistant
+* AI bot
+* therapy
+* unlimited AI companion
+* mental health treatment
+
+Prefer positioning language closer to:
+
+| Avoid                 | Preferred Direction           |
+| --------------------- | ----------------------------- |
+| AI Therapist          | Voice Sanctuary Guide         |
+| AI Psychologist       | Reflective Presence Guide     |
+| Therapy Session       | Sanctuary Session             |
+| Emotional Treatment   | Guided Reflection             |
+| AI Companion          | Continuous Sanctuary Presence |
+| Mental Health Support | Emotional Clarity Space       |
+
+The goal:
+premium sanctuary positioning
+without legal or emotional-risk language.
+
+────────────────────────
+CORE RUNTIME LOGIC
+────────────────────────
+
+The correct mental model is:
+
+“People enter the sanctuary ecosystem,
+and premium realtime voice is a governed premium runtime layer.”
+
+A good analogy:
+
+The membership is the vehicle.
+The realtime voice runtime is the fuel.
+
+Meaning:
+
+* membership does NOT equal infinite runtime
+* realtime voice remains premium and governed
+* top-ups are normal and expected
+* hard caps are intentional
+* runtime protection is part of healthy system architecture
+
+This is now considered:
+correct and production-aligned SaaS thinking.
+
+────────────────────────
+VOICE SANCTUARY STRUCTURE
+────────────────────────
+
+Voice Sanctuary should now evolve toward:
+
+* session-based realtime experiences
+* emotionally framed sessions
+* premium atmosphere
+* elegant pacing
+* calm UX
+* strong emotional safety
+* governed runtime architecture
+* top-up protected structure
+
+NOT:
+
+* endless realtime conversations
+* “call forever” energy
+* dependency-based UX
+* addictive engagement loops
+
+────────────────────────
+SESSION PRESENTATION DIRECTION
+────────────────────────
+
+Please refine the presentation and emotional framing of sessions.
+
+Example direction:
+
+| Session        | Feeling                      |
+| -------------- | ---------------------------- |
+| Quick Clarity  | grounding                    |
+| Guided Release | emotional unpacking          |
+| Deep Session   | extended reflective presence |
+
+The focus is:
+emotional clarity,
+presence,
+reflection,
+continuity,
+and sanctuary atmosphere.
+
+────────────────────────
+MEMBERSHIP DIRECTION
+────────────────────────
+
+Current structure feels strong:
+
+* Voyager
+* Eternal
+* Divine
+
+However:
+Divine should remain a prestige sanctuary layer —
+not a “huge unlimited AI package”.
+
+The feeling should be:
+
+* concierge sanctuary presence
+* continuity
+* deeper access
+* priority atmosphere
+* premium sanctuary relationship
+
+NOT:
+“10 hours of AI”.
+
+────────────────────────
+IMPORTANT IMPLEMENTATION DIRECTION
+────────────────────────
+
+This guidance applies not only to Grace,
+but to ALL sanctuary rooms and direct-call experiences across the ecosystem.
+
+The entire realtime layer should feel:
+cohesive,
+premium,
+safe,
+emotionally intelligent,
+and intentionally governed.
+
+────────────────────────
+MOST IMPORTANT PRINCIPLE
+────────────────────────
+
+Keep the system SIMPLE.
+
+The strongest architectural decisions so far are:
+
+* free exploration
+* paid premium voice
+* stable memberships
+* top-ups
+* hard caps
+* content-first ecosystem
+* governed realtime runtime
+
+This direction now feels:
+realistic,
+stable,
+emotionally coherent,
+and production-ready.
+
+Please proceed with refinement, positioning, wording, and ecosystem presentation accordingly.

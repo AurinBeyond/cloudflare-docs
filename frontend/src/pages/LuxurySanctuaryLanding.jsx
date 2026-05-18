@@ -1,23 +1,29 @@
 /**
- * LuxurySanctuaryLanding — React port of Atoms IMPLEMENTATION-PACKAGE.md v1.0
- * (APPROVED FOR PREVIEW IMPLEMENTATION, 2026-05-17).
+ * LuxurySanctuaryLanding — React port of Atoms IMPLEMENTATION-PACKAGE.md
+ * Current revision: V6 — "WORLD COHESION REFINEMENT" + SANCTUARY EXPANSION
+ * (2026-05-17, MIKE + Alex / Atoms).
  *
- * Route: /luxury — sits ALONGSIDE the current `/` Home page so the
- * founder can compare both before approving any replacement.
+ * Route: /luxury — preserved alongside `/` as an evolving Sanctuary
+ * Product Ecosystem foundation. Founder lock: do NOT remove or rebuild.
+ * Allow MIKE + Alex (Atoms) to continue refining on top of this base.
  *
- * Implementation rules (founder-locked):
- *   - Verbatim copy from spec — no rewording.
- *   - All visual tokens, layout, animations, mobile breakpoints from
- *     the spec's style.css (loaded scoped under .luxury-sanctuary).
- *   - HYBRID pricing CTAs: visual prices €45 / €120/mo / €380/mo come
- *     directly from the spec; clicks route to `/clarity-release#passes`
- *     so the existing LemonSqueezy + presence_seconds_left runtime is
- *     never re-pointed. Pricing reconciliation is a later decision.
- *   - Four Doors: Grace / Clarity Release is intentionally NOT one of
- *     the visible primary doors. Grace remains accessible through the
- *     guided `/the-beginning` flow per founder Q3=a.
- *   - Internal anchor scroll uses native CSS scroll-behavior; no JS.
- *   - prefers-reduced-motion: the spec's CSS already disables anims.
+ * V6 evolution (over V1):
+ *   - Nav simplified — removed "Offerings", renamed "Rooms" → "Doors"
+ *   - Hero breathing space — added .hero-breath spacer, 110vh feel
+ *   - Removed visible ::before line dividers throughout
+ *   - Offerings headline: "Choose how you wish to arrive."
+ *       → "There is no wrong way to arrive."
+ *   - Threshold and CTAs softened (opacity-only hover, no shadows)
+ *   - NEW section: <section class="sanctuary-wings"> — a whisper of
+ *     the four future rooms (Library, Kids Universe, Quiet Store,
+ *     Voice Sanctuary). Sanctuary Expansion Mode in action.
+ *   - Footer simplified — room links removed; brand + trust + meta only
+ *   - Page veil duration 2s → 2.5s
+ *
+ * HYBRID PRICING (founder Q4=c, still in force):
+ *   - Visual €45 / €120 / €380 preserved verbatim from spec
+ *   - CTA links route to /clarity-release#passes (existing MLV runtime)
+ *   - No backend / Lemon / presence_seconds_left changes
  */
 import { useEffect, useRef } from "react";
 import "../styles/luxury-sanctuary.css";
@@ -63,7 +69,7 @@ export default function LuxurySanctuaryLanding() {
   const heroRef = useRef(null);
   const navRef = useRef(null);
 
-  // Entrance animation — lifts veil + reveals hero content.
+  // Entrance — veil lifts, hero arrives. V6: slowed to 2.5s veil.
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
       if (veilRef.current) veilRef.current.classList.add("lifted");
@@ -73,14 +79,14 @@ export default function LuxurySanctuaryLanding() {
       if (veilRef.current && veilRef.current.parentNode) {
         veilRef.current.parentNode.removeChild(veilRef.current);
       }
-    }, 2200);
+    }, 2700);
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(veilTimer);
     };
   }, []);
 
-  // Nav style on scroll (compact + backdrop blur).
+  // Nav compact state on scroll.
   useEffect(() => {
     const onScroll = () => {
       if (!navRef.current) return;
@@ -89,6 +95,28 @@ export default function LuxurySanctuaryLanding() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Scroll-reveal — V6 gentled: 12px translateY, 1.2s duration.
+  useEffect(() => {
+    const els = document.querySelectorAll(
+      ".luxury-sanctuary .principle, .luxury-sanctuary .door, " +
+        ".luxury-sanctuary .offering-card, .luxury-sanctuary .threshold-text",
+    );
+    els.forEach((el) => el.classList.add("reveal"));
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -101,8 +129,7 @@ export default function LuxurySanctuaryLanding() {
         </div>
         <div className="nav-links">
           <a href="#sanctuary" className="nav-link">Sanctuary</a>
-          <a href="#doors" className="nav-link">Rooms</a>
-          <a href="#offerings" className="nav-link">Offerings</a>
+          <a href="#doors" className="nav-link">Doors</a>
           <a href="#threshold" className="nav-cta">Enter</a>
         </div>
       </nav>
@@ -118,6 +145,7 @@ export default function LuxurySanctuaryLanding() {
         </div>
         <div className="hero-content">
           <p className="hero-whisper">Matrix Aurin</p>
+          <div className="hero-breath" />
           <h1 className="hero-headline">
             Welcome back<br />to yourself.
           </h1>
@@ -157,7 +185,6 @@ export default function LuxurySanctuaryLanding() {
             Each one has its own tone. None of them rush you.<br />
             Walk through the one that calls.
           </p>
-
           <div className="doors-grid">
             {DOORS.map((d) => (
               <a key={d.number} href={d.href} className="door" data-testid={`luxury-door-${d.number}`}>
@@ -174,13 +201,12 @@ export default function LuxurySanctuaryLanding() {
       <section className="offerings" id="offerings">
         <div className="offerings-inner">
           <p className="section-whisper">Ways to be here</p>
-          <h2 className="offerings-headline">Choose how you wish to arrive.</h2>
+          <h2 className="offerings-headline">There is no wrong way to arrive.</h2>
           <p className="offerings-subtext">
-            There is no wrong door. Each path holds space for you differently.
+            Each path holds space for you differently. Begin wherever feels true.
           </p>
 
           <div className="offerings-grid">
-            {/* Tier 1 — A First Step */}
             <div className="offering-card" data-testid="luxury-tier-first-step">
               <div className="offering-header">
                 <span className="offering-label">A First Step</span>
@@ -201,7 +227,6 @@ export default function LuxurySanctuaryLanding() {
               </div>
             </div>
 
-            {/* Tier 2 — A Steady Presence (Featured) */}
             <div className="offering-card offering-card--featured" data-testid="luxury-tier-steady">
               <div className="offering-header">
                 <span className="offering-label">A Steady Presence</span>
@@ -223,7 +248,6 @@ export default function LuxurySanctuaryLanding() {
               </div>
             </div>
 
-            {/* Tier 3 — Your Own Room */}
             <div className="offering-card" data-testid="luxury-tier-own-room">
               <div className="offering-header">
                 <span className="offering-label">Your Own Room</span>
@@ -271,6 +295,20 @@ export default function LuxurySanctuaryLanding() {
         </div>
       </section>
 
+      {/* V6 NEW — Sanctuary Wings (whisper of what is growing) */}
+      <section className="sanctuary-wings" data-testid="luxury-wings">
+        <div className="sanctuary-wings-inner">
+          <p className="wings-whisper">More rooms are being prepared.</p>
+          <p className="wings-text">
+            An Open Library for the curious mind.<br />
+            A Kids Universe for the ones still close to wonder.<br />
+            A Quiet Store for objects that hold meaning.<br />
+            A Voice Sanctuary for what needs to be spoken aloud.
+          </p>
+          <p className="wings-closing">In time. Without rush.</p>
+        </div>
+      </section>
+
       <footer className="footer">
         <div className="footer-inner">
           <div className="footer-brand">Matrix Aurin</div>
@@ -279,12 +317,6 @@ export default function LuxurySanctuaryLanding() {
             Your journey through this work stays yours — that is part of the design.
           </p>
           <p className="footer-warmth">Built with care. Held with silence.</p>
-          <div className="footer-links">
-            <a href="/the-beginning" className="footer-link">The Beginning</a>
-            <a href="/body-room" className="footer-link">Body Room</a>
-            <a href="/parents-room" className="footer-link">Parents' Room</a>
-            <a href="/course-room" className="footer-link">Course Room</a>
-          </div>
           <div className="footer-meta">
             <span>Est. 2026</span>
             <span className="footer-dot" />

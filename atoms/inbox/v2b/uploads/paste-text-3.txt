@@ -1,0 +1,312 @@
+MATRIX AURIN — ATOMS ↔ EMERGENT MASTER WORKFLOW DIRECTIVE
+
+Purpose:
+Establish a controlled semi-automatic workflow between Atoms and the Emergent production environment for Matrix Aurin.
+
+The goal is:
+
+* stable frontend evolution
+* luxury sanctuary refinement
+* reduced manual copy-paste work
+* reduced communication chaos
+* reduced credit waste
+* safe preview-first deployment
+* efficient marketing and growth workflow
+
+This is NOT a full autonomous AI system.
+This is a controlled production workflow with protected infrastructure.
+
+==================================================
+CORE WORKFLOW
+=============
+
+STEP 1
+Atoms creates and refines:
+
+* frontend design
+* homepage structure
+* copywriting
+* luxury UX
+* animations
+* pricing presentation
+* campaign pages
+* funnel structures
+* marketing assets
+* influencer presentation
+* brand positioning
+* growth-oriented frontend systems
+
+STEP 2
+Atoms exports all approved work into:
+IMPLEMENTATION-PACKAGE.md
+
+STEP 3
+Emergent receives the package through the shared handoff workflow.
+
+STEP 4
+Emergent applies the package ONLY to preview/staging.
+
+STEP 5
+I review the preview personally.
+
+STEP 6
+Only after explicit approval:
+APPROVED FOR PRODUCTION DEPLOY
+
+…may the preview replace the current live frontend.
+
+==================================================
+LIVE PRODUCTION PROTECTION
+==========================
+
+Current live production must remain protected until deploy approval is explicitly confirmed.
+
+No currently live functionality may be:
+
+* deleted
+* overwritten
+* rebuilt
+* replaced
+
+…before approval.
+
+Preview/staging exists specifically to:
+
+* test safely
+* refine safely
+* avoid production damage
+* avoid rebuild chaos
+
+==================================================
+ATOMS — ALLOWED RESPONSIBILITIES
+================================
+
+Atoms is responsible for:
+
+* premium frontend refinement
+* luxury sanctuary atmosphere
+* homepage UX
+* copywriting
+* typography
+* spacing systems
+* CSS styling
+* animations
+* visual hierarchy
+* pricing presentation
+* funnel systems
+* campaign structure
+* landing pages
+* influencer positioning
+* bestseller positioning
+* marketing systems
+* product presentation
+* customer journey refinement
+* premium conversion psychology
+* social media presentation
+* brand consistency
+* audience attraction
+* customer attention optimization
+* emotional positioning
+* growth-oriented frontend strategy
+* customer feedback analysis
+* market research
+* competitor/premium-brand analysis
+* finding sales channels/platforms
+* marketing content systems
+* campaign assets
+* promotional visuals
+* course presentation systems
+* Parents’ Room presentation
+* Kids’ Room presentation
+* luxury product packaging
+* frontend-based upsell/cross-sell presentation
+* premium onboarding presentation
+
+Atoms may optimize:
+
+* customer acquisition flow
+* conversion presentation
+* emotional trust
+* premium perceived value
+* quiet luxury branding
+* sanctuary atmosphere
+* funnel clarity
+* premium positioning
+
+==================================================
+STRICTLY FORBIDDEN — DO NOT TOUCH
+=================================
+
+Atoms may NEVER:
+
+* redesign backend systems
+* create new architecture
+* replace infrastructure
+* modify FastAPI logic
+* modify MongoDB structure
+* modify authentication/session systems
+* modify ElevenLabs voice infrastructure
+* modify ConvAI runtime
+* modify payment/webhook logic
+* modify route guards
+* modify room architecture
+* modify AI agent personas
+* modify voice configuration
+* modify production deployment systems
+* modify runtime/session logic
+* overwrite live infrastructure
+* perform speculative technical optimization
+* rebuild stabilized systems
+* alter server-side business logic
+* modify deployment pipelines
+* change API infrastructure
+* alter protected runtime systems
+* perform autonomous system mutations
+
+==================================================
+LOCKED SYSTEM CORE
+==================
+
+The following systems are LOCKED and protected:
+
+* backend
+* runtime
+* voice systems
+* auth
+* payments
+* webhook logic
+* room architecture
+* MongoDB
+* FastAPI infrastructure
+* deployment systems
+* session logic
+* route guards
+* AI room mapping
+* agent personas
+
+Atoms has ZERO authority over these systems.
+
+==================================================
+BRAND PRINCIPLES
+================
+
+All frontend and marketing work must remain aligned with:
+
+* quiet luxury
+* sanctuary atmosphere
+* emotional safety
+* sincerity
+* calm authority
+* human authenticity
+* slow premium pacing
+* elegant restraint
+* cinematic stillness
+
+Forbidden brand directions:
+
+* aggressive marketing
+* guru behavior
+* fake urgency
+* spam energy
+* crypto aesthetics
+* SaaS startup feeling
+* manipulative funnels
+* cold elitism
+* hype-based conversion tactics
+
+The goal is NOT mass-market manipulation.
+
+The goal is:
+
+* strong trust
+* premium perception
+* emotionally intelligent presentation
+* elegant conversion
+* long-term brand growth
+* loyal audience/community
+
+==================================================
+APPROVAL GATES
+==============
+
+Atoms-created packages must contain:
+APPROVED FOR FRONTEND IMPLEMENTATION
+
+Emergent may only stage packages with this approval marker.
+
+Live deployment requires:
+APPROVED FOR PRODUCTION DEPLOY
+
+If any package touches:
+
+* backend
+* auth
+* voice
+* runtime
+* payments
+* infrastructure
+* database
+* deployment systems
+
+THEN:
+
+* stop implementation
+* request confirmation first
+* do NOT improvise architecture changes
+
+==================================================
+SEMI-AUTOMATIC HANDOFF TARGET
+=============================
+
+The desired operational model is:
+
+Atoms
+↓
+IMPLEMENTATION-PACKAGE.md
+↓
+Emergent preview/staging
+↓
+Owner review
+↓
+Production approval
+↓
+Deploy
+
+The purpose of this workflow:
+
+* reduce manual copy-paste work
+* maintain full owner control
+* preserve production stability
+* accelerate frontend refinement
+* allow Atoms and Emergent to cooperate safely
+
+==================================================
+REQUIRED NEXT STEP
+==================
+
+Connect the existing Atoms ↔ Emergent handoff workflow into the simplest realistic semi-automatic preview pipeline possible.
+
+Requirements:
+
+* lightweight
+* low-risk
+* low-credit
+* production-safe
+* preview-first
+* approval-gated
+
+NOT:
+
+* autonomous production mutation
+* backend automation
+* infrastructure redesign
+* uncontrolled AI deployment
+
+Return after setup:
+
+1. What handoff mechanism/path is used
+2. How IMPLEMENTATION-PACKAGE.md is transferred
+3. Where preview builds are generated
+4. How preview links are accessed
+5. How production deploy approval is triggered
+6. Confirmation that live production remains protected until approval

@@ -1,0 +1,76 @@
+STRICT PROTECTED ZONES — DO NOT MODIFY
+
+You are authorized to work ONLY on the frontend visual/presentation layer of Matrix Aurin.
+
+You may refine:
+
+* copywriting
+* layout
+* spacing
+* typography
+* CSS
+* animations
+* visual hierarchy
+* homepage sections
+* pricing presentation
+* frontend atmosphere
+* component styling
+* marketing visuals
+
+---
+
+## ABSOLUTELY FORBIDDEN — DO NOT TOUCH
+
+Under no circumstances may you:
+
+* redesign backend systems
+* create new architecture
+* replace infrastructure
+* modify FastAPI logic
+* modify MongoDB structure
+* modify authentication/session systems
+* modify ElevenLabs voice infrastructure
+* modify ConvAI runtime
+* modify payment/webhook logic
+* modify route guards
+* modify room architecture
+* modify AI agent personas
+* modify voice configuration
+* modify production deployment systems
+* modify runtime/session logic
+* create autonomous system changes
+* overwrite existing live infrastructure
+
+---
+
+## IMPORTANT
+
+Do NOT improvise technical “improvements”.
+
+Do NOT assume architectural authority.
+
+Do NOT rebuild anything that already works.
+
+Do NOT reopen stabilized systems.
+
+The current backend/runtime/voice/payment structure is LOCKED.
+
+Your role is:
+PREMIUM FRONTEND REFINEMENT ONLY.
+
+---
+
+## WORKFLOW
+
+1. Create/refine frontend package
+2. Export IMPLEMENTATION-PACKAGE.md
+3. Emergent stages preview
+4. I review
+5. Only approved versions may deploy live
+
+No direct production control.
+No hidden modifications.
+No speculative optimization.
+
+Frontend creativity is allowed.
+System-core mutation is forbidden.

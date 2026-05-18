@@ -1,0 +1,169 @@
+You have done very good work.
+The new luxury sanctuary direction is emotionally very close to the final vision.
+
+Now the next step is important:
+
+We are no longer in “system rebuild mode”.
+We are now in:
+SANCTUARY EXPANSION MODE.
+
+This is one of the most important architectural decisions of the entire project.
+
+The goal is:
+expand the Aurin world harmoniously
+WITHOUT destabilizing the existing working platform.
+
+Very important:
+our biggest problem in recent weeks was not vision or branding.
+It was:
+too much rebuilding inside the live system.
+
+So from now on:
+
+OLD APPROACH:
+
+* rebuild existing
+* replace routes
+* redesign core
+* architecture churn
+* everything at once
+
+NEW APPROACH:
+
+* layer on top
+* add curated worlds
+* extend atmosphere
+* preserve stable foundation
+* gradual integration
+
+NON-NEGOTIABLE:
+All currently working core systems must remain untouched unless explicitly approved.
+
+Protected core:
+
+* auth
+* payments
+* Mongo
+* ConvAI
+* room logic
+* runtime protections
+* governance
+* onboarding
+* backend pricing logic
+* stable routes
+* production infrastructure
+
+Your role now is NOT to redesign the entire system.
+
+Your role is:
+to harmonize and evolve the sanctuary experience visually and emotionally.
+
+Important realization:
+
+The `/luxury` page and the pricing/runtime system are NOT conflicting anymore.
+They simply represent two different layers.
+
+`/luxury` is:
+
+* emotional positioning
+* atmosphere
+* sanctuary entrance
+* luxury architecture
+* trust and feeling
+
+It is NOT the raw runtime-economics page.
+
+For example:
+“Unlimited access to all rooms”
+should emotionally mean:
+
+* sanctuary continuity
+* access to the ecosystem
+* reading, reflection, discovery, presence
+
+NOT:
+
+* unlimited realtime voice streaming
+* unlimited ElevenLabs runtime
+* infinite websocket usage
+
+The runtime governance layer remains protected separately.
+
+This distinction is now critical.
+
+Another very important realization:
+
+We do NOT want disconnected websites or random sections.
+
+We want:
+ONE coherent sanctuary ecosystem
+with multiple emotional worlds.
+
+Desired emotional structure:
+
+Luxury Landing
+= dignity / slowness / entrance
+
+Open Library
+= discovery / breathing space
+
+Kids Universe
+= softness / imagination / light
+
+Quiet Store
+= curated value
+
+Voice Sanctuary
+= deep presence
+
+These should feel like:
+different wings of the same sanctuary.
+
+NOT:
+separate products fighting each other.
+
+This means:
+
+* consistent typography
+* consistent emotional pacing
+* coherent navigation
+* shared atmosphere
+* layered discovery
+
+The user should slowly discover deeper worlds naturally.
+
+Please continue refining the platform in this direction:
+
+* calm luxury
+* warmth without pressure
+* spaciousness
+* emotional depth
+* visual cohesion
+* sanctuary continuity
+
+Avoid:
+
+* aggressive SaaS energy
+* hard segmentation
+* technical overexplanation
+* loud funnels
+* “AI startup” aesthetics
+* unnecessary rebuilding
+
+Most importantly:
+preserve stability while evolving the world.
+
+We are now entering:
+content-first growth phase.
+
+Priority:
+
+* customer experience
+* atmosphere
+* trust
+* conversion
+* visual harmony
+* discoverability
+* emotional continuity
+
+This direction is approved.

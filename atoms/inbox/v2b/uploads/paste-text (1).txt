@@ -1,0 +1,172 @@
+PROJECT: MATRIX AURIN — PREMIUM SANCTUARY HOMEPAGE REFINEMENT
+
+Goal:
+Create a refined luxury-minimal homepage redesign concept for prulesoul.site.
+
+The atmosphere must feel:
+
+* calm
+* intelligent
+* deeply human
+* private
+* emotionally safe
+* slow and intentional
+
+This is NOT a crypto brand, SaaS dashboard, coaching funnel, or aggressive luxury brand.
+
+The emotional direction is:
+“quiet sanctuary” + “editorial minimalism” + “warm human presence”.
+
+---
+
+## DESIGN PRINCIPLES
+
+1. VISUAL LANGUAGE
+
+Color palette:
+
+* Background: deep black (#000000)
+* Main text: soft ivory (#F5F5F3)
+* Accent: muted brass / aged gold (#C5A059)
+
+Accent color usage must remain extremely minimal.
+No glowing gold effects.
+No cyberpunk aesthetics.
+No crypto-guru visuals.
+
+Typography:
+
+* Headlines: elegant serif style
+  Suggested direction:
+
+  * Canela
+  * Freight Display
+  * Playfair Display
+  * Cormorant Garamond
+
+* Body text:
+  clean and highly readable sans-serif
+  Suggested:
+
+  * Inter
+  * Lato
+
+Whitespace:
+The layout must breathe.
+Large spacing between sections.
+Slow visual rhythm.
+Avoid dense information blocks.
+
+---
+
+## HOMEPAGE STRUCTURE
+
+SECTION 1 — HERO
+
+Purpose:
+Create emotional slowdown immediately.
+
+Visual:
+A cinematic, slow, atmospheric visual anchor.
+Suggested emotional direction:
+
+* removing a digital mask
+* soft shadows
+* candlelight on linen
+* architectural shadows
+* reflective water
+* quiet human presence
+
+Avoid:
+
+* stock-business visuals
+* futuristic neon
+* AI robot imagery
+* “tech startup” aesthetics
+
+Headline direction:
+calm, minimal, emotionally intelligent
+
+Examples of tone:
+
+* “Welcome back to yourself.”
+* “None of this is urgent.”
+* “You do not have to perform here.”
+
+CTA:
+Minimal outlined button with subtle brass accent.
+
+Examples:
+
+* “Enter”
+* “Begin”
+* “Step inside”
+
+No:
+
+* flashing effects
+* countdowns
+* aggressive conversion tactics
+* “FREE NOW” banners
+
+---
+
+SECTION 2 — SANCTUARY PRINCIPLES
+
+Purpose:
+Explain the emotional experience without technical jargon.
+
+Avoid phrases like:
+
+* “real-time voice intelligence”
+* “AI-powered transformation”
+* “advanced conversational architecture”
+
+Instead focus on:
+
+* privacy
+* presence
+* calm attention
+* emotional safety
+* reflection
+* silence
+* non-performative interaction
+
+The experience should feel curated, discreet, and emotionally grounded.
+
+---
+
+SECTION 3 — ENTRY EXPERIENCE
+
+Create a soft threshold feeling.
+
+Important:
+This must NOT feel elitist, manipulative, cult-like, or exclusionary.
+
+The feeling should be:
+“You are welcome here.”
+not:
+“Prove yourself.”
+
+Focus on:
+
+* privacy
+* intentionality
+* emotional safety
+* slower access
+
+---
+
+FOOTER
+
+Remove unnecessary platform branding and visual clutter.
+
+Maintain:
+
+* minimalism
+* privacy-oriented trust
+* quiet confidence
+
+---
+
+CR

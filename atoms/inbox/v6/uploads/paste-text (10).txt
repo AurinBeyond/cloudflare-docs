@@ -1,0 +1,91 @@
+Yes — this workflow is correct and approved.
+
+Workflow moving forward:
+
+MIKE + Alex
+↓
+active refinement work
+
+AH
+↓
+safe implementation governance
+(runtime/core protection)
+
+Founder
+↓
+preview review
+(APPROVED / NEEDS TWEAKS)
+
+This structure now feels stable and should remain the primary operating model moving forward.
+
+────────────────────────
+LANGUAGE RULE — IMPORTANT
+────────────────────────
+
+For now, BOTH websites must remain fully English-only in all public-facing experiences.
+
+This applies to:
+
+* https://pure-soul-life.emergent.host
+* https://prulesoul.site
+
+Important clarification:
+
+Internal chats, brainstorming, and instructions may sometimes accidentally contain:
+
+* Estonian
+* Norwegian
+* Russian
+* or mixed-language communication
+
+This is normal during internal collaboration.
+
+HOWEVER:
+
+Public-facing sanctuary experiences must NEVER mix languages accidentally.
+
+Meaning:
+
+* no mixed-language UI
+* no random Estonian/Norwegian/Russian fragments
+* no translation drift
+* no partially translated sections
+* no inconsistent multilingual layering
+
+All public-facing copy should remain:
+
+* polished
+* emotionally coherent
+* natural English
+* consistent across the ecosystem
+
+Reason:
+Our current audience and expected early users are English-speaking users.
+
+Future multilingual expansion is planned later.
+
+But multilingual support should happen:
+intentionally,
+professionally,
+and as properly separated language ecosystems —
+NOT through accidental mixed-language development.
+
+So for now:
+the entire sanctuary experience should feel linguistically unified and emotionally seamless in English.
+
+────────────────────────
+IMPORTANT EXECUTION NOTE
+────────────────────────
+
+At this stage, the goal is no longer more philosophical clarification.
+
+The vision, emotional architecture, world structure, sanctuary direction, pricing philosophy, and protected-core boundaries are already sufficiently established.
+
+Now the priority is:
+execution,
+refinement,
+cohesion,
+product-world completion,
+and monetization readiness.
+
+Please proceed confidently inside the already approved boundaries without waiting for constant additional clarification unless something truly critical or technically risky appears.

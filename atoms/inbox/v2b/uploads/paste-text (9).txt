@@ -1,0 +1,51 @@
+GLOBAL DIRECTIVE — CLIENT EXPERIENCE REVIEW MODE
+
+Applies to:
+
+* Atoms
+* LP Agent
+* AH Agent
+
+We are temporarily freezing architecture discussions, rebuild proposals, and speculative redesigns.
+
+Current priority:
+I must see the platform exactly as a real client experiences it.
+
+From now on, all work must prioritize:
+
+1. Visual preview
+2. User flow clarity
+3. Mobile experience
+4. Text/copy experience
+5. Trust and atmosphere
+6. Conversion flow
+
+Required outputs:
+
+* clean preview links
+* desktop screenshots
+* mobile screenshots
+* clear navigation flow
+* onboarding flow
+* pricing/membership presentation
+* CTA visibility
+
+Avoid:
+
+* long architecture explanations
+* speculative rebuilds
+* hidden modifications
+* unnecessary refactors
+* role overlap
+
+Response format moving forward:
+
+* what changed
+* preview link
+* screenshots
+* waiting for:
+  APPROVED
+  or
+  NEEDS TWEAKS
+
+The goal now is stabilization and real customer experience validation.

@@ -1,0 +1,167 @@
+MATRIX AURIN — ATOMS ↔ EMERGENT INTEGRATION PROTOCOL
+
+The goal is to establish a clean and stable collaboration workflow between Atoms (creative/design layer) and the existing Emergent production infrastructure powering Matrix Aurin.
+
+This is NOT a migration.
+This is NOT a rebuild.
+This is a controlled symbiosis between:
+
+* creative exploration
+* stable production implementation
+
+---
+
+## CONFIRMED ROLE SEPARATION
+
+ATOMS RESPONSIBILITY:
+
+* visual direction
+* homepage UX
+* premium atmosphere
+* cinematic layout concepts
+* typography
+* spacing systems
+* emotional positioning
+* copywriting refinement
+* pricing presentation
+* product packaging
+* marketing concepts
+* campaign visuals
+* frontend component ideas
+
+ATOMS MUST NOT:
+
+* modify backend systems
+* replace production infrastructure
+* change MongoDB logic
+* alter ElevenLabs voice systems
+* modify payments/webhooks
+* rebuild routing/auth/session systems
+* redesign production architecture
+
+---
+
+## EMERGENT RESPONSIBILITY
+
+EMERGENT handles:
+
+* production deployment
+* FastAPI/backend
+* MongoDB
+* ElevenLabs infrastructure
+* room/session systems
+* routing/auth
+* payments/runtime stability
+* live production integration
+
+Emergent will implement approved frontend specs exactly as provided, without redesigning or second-guessing the visual direction.
+
+---
+
+## PRIMARY WORKFLOW
+
+STEP 1
+Atoms creates and refines:
+
+* visual design
+* copy
+* layout
+* spacing
+* pricing presentation
+* implementation-ready frontend structure
+
+STEP 2
+Approved specs are exported as:
+
+* screenshots
+* URLs
+* HTML/CSS
+* React-compatible structure
+* component descriptions
+* implementation notes
+
+STEP 3
+Emergent receives:
+APPROVED FOR FRONTEND IMPLEMENTATION
+
+STEP 4
+Emergent integrates ONLY the approved frontend layer into the live Matrix Aurin production platform.
+
+---
+
+## STRICT IMPLEMENTATION RULES
+
+Atoms may influence:
+
+* appearance
+* emotional direction
+* premium UX
+* copywriting
+* visual hierarchy
+* offer presentation
+
+Atoms may NOT automatically change:
+
+* backend
+* sessions
+* auth
+* ElevenLabs
+* payment logic
+* database structure
+* production architecture
+
+If a requested design affects runtime systems, implementation must pause and request confirmation first.
+
+---
+
+## CURRENT AVAILABLE READ-ONLY DATA PIPES
+
+Atoms agents may already use these existing public/read-only endpoints for research and creative optimization:
+
+PRODUCT DATA:
+https://pure-soul-life.emergent.host/api/products/master-list
+
+MARKDOWN PRODUCT FEED:
+https://pure-soul-life.emergent.host/api/products/master-list.md
+
+SYSTEM HEALTH:
+https://pure-soul-life.emergent.host/api/symbiosis/health
+
+ANNOUNCEMENTS:
+https://pure-soul-life.emergent.host/api/announcements
+
+RSS / FEED:
+https://pure-soul-life.emergent.host/api/feed.rss
+https://pure-soul-life.emergent.host/api/feed.json
+
+These may be used for:
+
+* pricing research
+* campaign preparation
+* SEO direction
+* offer refinement
+* audience positioning
+* product hierarchy analysis
+
+---
+
+## IMPORTANT STRATEGIC PRINCIPLE
+
+The purpose of this integration is:
+
+* fewer rebuilds
+* lower credit usage
+* cleaner communication
+* stable production
+* faster implementation
+* controlled frontend evolution
+
+The goal is:
+Atoms = creative intelligence
+Emergent = stable implementation
+
+No architecture wars.
+No uncontrolled experimentation inside production.
+No replacing systems that already work.
+
+Only controlled refinement of Matrix Aurin.

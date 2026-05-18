@@ -1,0 +1,146 @@
+Atoms Team — Current Active Refinement Scope
+
+At this stage, the core architectural direction is sufficiently established.
+
+The priority is no longer large-scale redesign or new conceptual expansion.
+
+The current focus is:
+sanctuary ecosystem refinement,
+emotional cohesion,
+content harmonization,
+and product-world maturation.
+
+────────────────────────
+ACTIVE REFINEMENT AREAS
+────────────────────────
+
+Please focus on refining and harmonizing the following sanctuary ecosystem layers:
+
+* overall sanctuary product-world flow
+* discoverability and ecosystem navigation
+* emotional pacing between sanctuary worlds
+* room descriptions and presentation
+* product presentation structure
+* sanctuary wording consistency
+* luxury warmth and emotional coherence
+* premium positioning without aggressive SaaS energy
+
+────────────────────────
+IMPORTANT ROOM REFINEMENT
+────────────────────────
+
+Please specifically review and refine:
+
+* Parents Room
+* Body Room
+* Course Room
+* Voice Sanctuary
+* Kids Universe
+* Library experience
+
+The goal is:
+make all sanctuary rooms feel like part of the same emotionally coherent sanctuary world.
+
+Some sections may still carry:
+
+* older wording
+* inconsistent tone
+* generic AI language
+* funnel-style energy
+* overly technical phrasing
+* emotionally disconnected structure
+
+These should now gradually evolve into:
+a unified sanctuary atmosphere.
+
+────────────────────────
+VOICE SANCTUARY
+────────────────────────
+
+Continue refining:
+
+* session presentation
+* premium guided-presence feeling
+* emotionally intelligent wording
+* runtime presentation clarity
+* elegant top-up framing
+* non-clinical positioning
+
+Avoid:
+
+* therapy language
+* unlimited-AI framing
+* assistant/bot feeling
+* dependency energy
+
+────────────────────────
+PARENTS ROOM / BODY ROOM
+────────────────────────
+
+Please review:
+
+* wording tone
+* emotional safety
+* sanctuary pacing
+* clarity of purpose
+* emotional sophistication
+* premium calmness
+
+The rooms should feel:
+refined,
+safe,
+intentional,
+human,
+and emotionally grounded.
+
+────────────────────────
+COURSE ROOM
+────────────────────────
+
+Please review:
+
+* course structure
+* learning pathways
+* emotional pacing
+* presentation style
+* sanctuary integration
+
+The goal is:
+courses should feel like sanctuary journeys —
+not generic online courses.
+
+────────────────────────
+KIDS UNIVERSE
+────────────────────────
+
+Kids Universe now has active creative-expansion approval.
+
+Please continue exploring:
+
+* emotionally intelligent development concepts
+* imagination-based discovery
+* age-group structure
+* printable ecosystems
+* guided activities
+* family pathways
+* emotional growth tools
+
+This is considered a major future sanctuary wing.
+
+────────────────────────
+FINAL PRIORITY
+────────────────────────
+
+The overall objective now is:
+
+refinement,
+cohesion,
+clarity,
+stability,
+premium sanctuary atmosphere,
+and monetization readiness.
+
+NOT:
+constant rebuilding,
+large architectural changes,
+or disruptive redesign cycles.

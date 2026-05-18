@@ -30,17 +30,19 @@
     --space-3xl: 200px;
 }
 
-/* Reset — scoped to .luxury-sanctuary so the rest of the React app
-   (Home, ClarityRelease, etc.) is never affected. */
-.luxury-sanctuary, .luxury-sanctuary *, .luxury-sanctuary *::before, .luxury-sanctuary *::after {
+/* Reset */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.luxury-sanctuary {
+html {
     scroll-behavior: smooth;
     font-size: 16px;
+}
+
+body {
     font-family: 'Inter', -apple-system, sans-serif;
     background: var(--black);
     color: var(--ivory);
@@ -50,18 +52,16 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    width: 100%;
 }
 
-/* Scrollbar — only active when /luxury route is mounted */
-.luxury-sanctuary ::-webkit-scrollbar {
+/* Scrollbar */
+::-webkit-scrollbar {
     width: 3px;
 }
-.luxury-sanctuary ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: var(--black);
 }
-.luxury-sanctuary ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: var(--text-muted);
     border-radius: 2px;
 }

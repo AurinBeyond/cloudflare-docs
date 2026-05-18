@@ -1,0 +1,83 @@
+Please prepare a complete copy-ready implementation package for the current approved Matrix Aurin homepage refinement.
+
+I need this so the Emergent/AH production agent can integrate the design safely without guessing.
+
+Please include ALL current work, not only the latest summary.
+
+Output format:
+
+1. FULL HOMEPAGE STRUCTURE
+
+* section-by-section layout
+* exact order of sections
+* all headings
+* all subtitles
+* all CTA labels
+* all footer text
+
+2. COMPLETE COPYWRITING
+   Include the full final text exactly as it should appear on the homepage.
+
+3. PRICING / OFFER SECTION
+   Include the full approved package structure:
+
+* tier name
+* price
+* description
+* included access
+* CTA label
+* visual priority / featured tier if applicable
+
+4. FOUR DOORS SECTION
+   Include:
+
+* door name
+* emotional subtitle
+* target URL
+* short description if used
+
+5. DESIGN TOKENS
+   Include:
+
+* colors
+* typography
+* spacing variables
+* border radius
+* button styles
+* hover states
+* mobile breakpoints
+
+6. CSS PACKAGE
+   Provide the full CSS needed for the visual design.
+
+7. HTML / REACT STRUCTURE
+   Provide clean implementation-ready code.
+   If React components are available, include component code.
+   If not, provide clean HTML structure with class names matching the CSS.
+
+8. IMAGE / HERO VISUAL REQUIREMENTS
+   Describe exactly how the digital mask image should be placed:
+
+* section
+* size
+* positioning
+* overlay if used
+* mobile behavior
+
+9. INTEGRATION NOTES FOR EMERGENT
+   Include a short production-safe instruction block:
+
+* frontend only
+* no backend changes
+* no auth changes
+* no voice changes
+* no route changes except linking existing routes
+* preserve current production systems
+
+10. CHANGE SUMMARY
+    List everything changed from the previous version so nothing is missed.
+
+Important:
+Do not summarize vaguely.
+Do not only describe the work.
+Provide copy-ready assets and code that Emergent can paste or adapt directly.

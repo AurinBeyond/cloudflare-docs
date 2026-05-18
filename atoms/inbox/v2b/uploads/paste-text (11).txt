@@ -1,0 +1,80 @@
+CORE IMMUTABILITY + SANCTUARY EXPANSION DIRECTIVE
+
+Applies to:
+
+* Atoms
+* LP Agent
+* AH Agent
+
+The current direction is approved.
+
+We are now entering:
+SANCTUARY EXPANSION MODE
+—not—
+SYSTEM REBUILD MODE.
+
+Primary goal:
+Expand the Aurin world harmoniously without destabilizing the existing working platform.
+
+NON-NEGOTIABLE:
+All currently functioning core systems must remain untouched unless explicitly approved.
+
+Protected core:
+
+* auth
+* payments
+* Mongo
+* ConvAI
+* room logic
+* runtime protections
+* governance
+* existing onboarding
+* existing backend pricing logic
+* stable routes
+* production infrastructure
+
+From now on:
+new development should happen as layered sanctuary expansion.
+
+Meaning:
+
+* curated worlds
+* atmosphere refinement
+* visual cohesion
+* luxury positioning
+* Grace tuning
+* library discovery
+* Kids Universe integration
+* Quiet Store refinement
+* sanctuary continuity
+
+WITHOUT:
+
+* backend rewrites
+* architecture churn
+* route replacement
+* hidden rebuilds
+* runtime redesigns
+* unnecessary migrations
+
+Desired structure:
+One coherent sanctuary ecosystem
+with multiple emotional layers.
+
+The platform should evolve through:
+addition and refinement
+—not—
+destructive replacement.
+
+Priority now:
+
+* stability
+* visual cohesion
+* customer experience
+* content creation
+* conversion
+* trust
+* growth
+
+The goal is:
+continuous evolution without breaking the living sanctuary.

@@ -1,0 +1,135 @@
+SEMI-AUTOMATIC HANDOFF WORKFLOW — MATRIX AURIN
+
+We are now moving to a controlled semi-automatic frontend workflow between Atoms and Emergent.
+
+Goal:
+Atoms creates and refines the frontend experience.
+Emergent stages and deploys safely.
+I review and approve before production changes go live.
+
+This replaces the current confusing manual copy-paste workflow.
+
+---
+
+## TARGET WORKFLOW
+
+STEP 1
+Atoms creates/refines:
+
+* homepage copy
+* layout
+* CSS
+* pricing presentation
+* visual atmosphere
+* sections
+* animations
+* component structure
+* campaign/frontend assets
+
+STEP 2
+Atoms exports a structured implementation package:
+IMPLEMENTATION-PACKAGE.md
+
+STEP 3
+Emergent receives the package automatically or through a shared handoff location.
+
+STEP 4
+Emergent applies the package ONLY to preview/staging.
+
+STEP 5
+I review the preview myself.
+
+STEP 6
+Only after I explicitly confirm:
+APPROVED FOR PRODUCTION DEPLOY
+
+…may the preview replace the current live frontend.
+
+---
+
+## CRITICAL RULES
+
+Current live production must remain protected until deploy approval is confirmed.
+
+No existing live functionality may be deleted or overwritten before approval.
+
+Atoms may influence ONLY:
+
+* frontend
+* copy
+* CSS
+* layout
+* visual hierarchy
+* animations
+* pricing presentation
+* component structure
+
+Atoms may NEVER directly modify:
+
+* backend
+* auth
+* MongoDB
+* ElevenLabs
+* payment/webhook logic
+* runtime/session systems
+* route guards
+* room architecture
+* agent personas
+* production infrastructure
+
+---
+
+## GOAL OF THIS SYSTEM
+
+The purpose is:
+
+* reduce manual copy-paste work
+* reduce communication chaos
+* reduce implementation mistakes
+* reduce credit waste
+* stabilize the production workflow
+* allow Atoms to evolve the luxury sanctuary frontend safely
+
+Once the homepage/product presentation system is finalized according to the approved luxury sanctuary direction, it should become mostly stable and no longer require constant rebuilding.
+
+After stabilization, focus shifts toward:
+
+* marketing
+* campaigns
+* content
+* courses
+* Parents’ Room
+* Kids’ Room
+* product growth
+
+NOT endless redesign cycles.
+
+---
+
+## REQUIRED FROM EMERGENT
+
+Please propose the simplest realistic implementation for:
+
+* shared implementation package location
+* preview/staging generation
+* approval gating
+* protected live deployment
+
+Prefer:
+
+* lightweight
+* low-risk
+* low-credit
+* production-safe
+
+NOT:
+
+* complex autonomous AI systems
+* architecture rebuilds
+* experimental automation layers
+
+The desired result:
+Atoms creates.
+Emergent stages.
+I approve.
+Then deploy happens.

@@ -1,0 +1,153 @@
+PROJECT: MATRIX AURIN — LANDING PAGE INTEGRATION WITH EMERGENT HUB
+
+Goal:
+Connect and adapt the newly designed premium landing page concept into the existing Matrix Aurin infrastructure currently running on the Emergent production environment.
+
+Current production platform:
+https://prulesoul.site
+
+Important:
+This is NOT a full rebuild.
+This is a visual + structural integration project.
+
+---
+
+## CORE REQUIREMENTS
+
+1. KEEP EXISTING BACKEND STABLE
+
+Do NOT redesign or replace:
+
+* authentication
+* MongoDB logic
+* API routes
+* ElevenLabs voice infrastructure
+* room routing
+* payment architecture
+* session runtime
+* existing backend systems
+
+The Emergent backend already powers:
+
+* AI rooms
+* voice sessions
+* presence system
+* routing
+* user logic
+
+Atoms should only prepare:
+
+* frontend visual structure
+* refined layout
+* typography
+* spacing
+* premium UX layer
+* hero section integration
+
+---
+
+2. LANDING PAGE PURPOSE
+
+The homepage should feel like:
+
+* a quiet sanctuary
+* emotionally intelligent
+* premium but human
+* calm and slow
+* private and safe
+
+Avoid:
+
+* startup/SaaS feeling
+* crypto aesthetics
+* productivity-app energy
+* aggressive sales funnels
+* overexplaining technology
+
+---
+
+3. HERO SECTION
+
+Use the “digital mask removal” visual concept as the primary emotional anchor.
+
+Core meaning:
+A human being removes an artificial digital identity and returns to their real self.
+
+Main emotional direction:
+“Welcome back to yourself.”
+
+The image must feel:
+
+* cinematic
+* warm
+* atmospheric
+* emotionally grounded
+* minimal
+* premium
+
+Avoid:
+
+* cyberpunk
+* dystopian visuals
+* neon effects
+* AI robot aesthetics
+
+---
+
+4. DESIGN LANGUAGE
+
+Color palette:
+
+* deep black background (#000000)
+* soft ivory text (#F5F5F3)
+* muted brass accent (#C5A059)
+
+Typography:
+
+* elegant serif headlines
+* clean sans-serif body text
+
+Whitespace:
+Large spacing between sections.
+Slow visual rhythm.
+Minimal clutter.
+
+---
+
+5. IMPORTANT IMPLEMENTATION RULES
+
+Atoms should prepare:
+
+* clean reusable frontend sections
+* HTML/CSS/React-compatible structure
+* modular visual components
+* premium layout suggestions
+
+The result must be easy to hand over into Emergent for production implementation.
+
+DO NOT:
+
+* create a completely new backend
+* invent new architecture
+* replace production systems
+* rebuild runtime logic
+* touch voice/audio infrastructure
+
+---
+
+6. OUTPUT FORMAT
+
+Provide:
+
+1. Refined homepage visual structure
+2. Component hierarchy
+3. Typography recommendations
+4. CSS styling suggestions
+5. Spacing/layout system
+6. Hero section structure
+7. Mobile-friendly layout considerations
+8. Clean implementation-ready code blocks where possible
+
+The goal is:
+Atoms handles creative visual exploration.
+Emergent handles production-safe implementation.
