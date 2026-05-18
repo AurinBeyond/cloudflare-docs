@@ -889,6 +889,27 @@
 .offering-card.reveal:nth-child(2) { transition-delay: 0.2s; }
 .offering-card.reveal:nth-child(3) { transition-delay: 0.4s; }
 
+/* §STABILIZATION 2026-05-18 — Pure-CSS safety net.
+   If JavaScript is disabled, slow, or the IntersectionObserver
+   misses, every `.reveal` element becomes fully visible after
+   2.5s of page load. Animation still happens via CSS keyframe,
+   so reduced-motion users get a calm fade-in either way. */
+.luxury-sanctuary .reveal {
+    animation: revealSafe 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.5s forwards;
+}
+@keyframes revealSafe {
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .luxury-sanctuary .reveal,
+    .luxury-sanctuary .reveal.visible {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
 /* ===================================
    RESPONSIVE
    =================================== */

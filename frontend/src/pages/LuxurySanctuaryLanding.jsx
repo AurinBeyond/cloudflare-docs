@@ -98,25 +98,62 @@ export default function LuxurySanctuaryLanding() {
   }, []);
 
   // Scroll-reveal — V6 gentled: 12px translateY, 1.2s duration.
+  // §STABILIZATION 2026-05-18 — Safe-reveal fallback: ensure every
+  // `.reveal` element becomes `.visible` even if the IntersectionObserver
+  // misses (mid-page mount, prefers-reduced-motion, deep-link to anchor,
+  // older browser). After 1500ms any still-hidden element is force-
+  // revealed so the wanderer never sees an empty principles/doors/
+  // offerings grid.
   useEffect(() => {
     const els = document.querySelectorAll(
       ".luxury-sanctuary .principle, .luxury-sanctuary .door, " +
         ".luxury-sanctuary .offering-card, .luxury-sanctuary .threshold-text",
     );
     els.forEach((el) => el.classList.add("reveal"));
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+
+    // Honour reduced motion — instant-reveal everything, no observer.
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      els.forEach((el) => el.classList.add("visible"));
+      return undefined;
+    }
+
+    let obs;
+    if (typeof IntersectionObserver !== "undefined") {
+      obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.01, rootMargin: "0px 0px -5% 0px" },
+      );
+      els.forEach((el) => obs.observe(el));
+    } else {
+      // No observer support → reveal all immediately.
+      els.forEach((el) => el.classList.add("visible"));
+    }
+
+    // Hard safety net: anything still not `.visible` after 1.5s gets
+    // revealed regardless. Costs nothing if everything already fired.
+    const fallback = setTimeout(() => {
+      els.forEach((el) => {
+        if (!el.classList.contains("visible")) {
+          el.classList.add("visible");
+        }
+      });
+    }, 1500);
+
+    return () => {
+      clearTimeout(fallback);
+      if (obs) obs.disconnect();
+    };
   }, []);
 
   return (
