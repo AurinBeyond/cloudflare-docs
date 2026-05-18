@@ -74,18 +74,34 @@ LEMONSQUEEZY_VARIANT_TOPUP_60MIN=""
 - Voice session of 3 seconds correctly returned `elapsed_seconds: 3`
 - Frontend smoke: no console errors, no audio auto-play, gate active
 
-### 2026-02-17 — P0 Hotfix: ElevenLabs Agent "Deafness"
+### 2026-05-18 — P0 Hotfix: ElevenLabs Agent "Deafness" (Grec/Grace)
 **Symptom:** Grec/Grace agent connected (status="live") but never heard the user's voice despite mic permissions being granted.
 
-**Root-cause hypothesis (surgical, no audio-core touch):**
-Two latent races in `RoomConvaiChat.jsx` that became reachable after the Phase-1 Presence Tracker re-render storm was introduced:
-1. **Redundant pre-emptive `await conversation.endSession()` + 220ms wait at the top of `start()`.** Provider.startSession (in `@elevenlabs/react`) already bails silently if a session exists, so the defensive teardown was redundant. Under StrictMode / rapid re-renders, it set `shouldEndRef=true` milliseconds before the new startSession reset it back to false — a race that, in some renders, marked the very-next-started session as "stale", leaving the agent connected but never wired to incoming audio chunks (the "deaf agent" symptom).
-2. **`[mode]` useEffect fired on initial mount AND in StrictMode dev double-mount**, and inside it the endSession() branch could clobber a session that `start()` had opened a microtask earlier. Now guarded by `if (modeRef.current === mode) { sync ref; return; }` so the teardown only fires on real, user-driven mode toggles.
+**Founder hard-evidence:** A stable 4-minute voice call worked on 2026-05-13 morning. So the WebRTC credentials, mic access, and integration are all proven functional. Something committed between 2026-05-13 and now broke the audio bridge.
 
-**Changes (RoomConvaiChat.jsx only — no SDK, audio, or WebSocket touch):**
-- Removed `await conversation.endSession()` + `setTimeout(220)` from `start()` (the SDK owns prior-session cleanup).
-- `[mode]` useEffect now early-returns when `modeRef.current === mode`.
-- Added passive `console.log` taps in `onConnect`, `onDisconnect`, `onError`, `startSession` for in-browser diagnostics (read-only; do not touch SDK state).
+**Root-cause (git audit of 2026-05-13 → HEAD on RoomConvaiChat.jsx, 514 lines changed):**
+
+Primary breakage: **page-level mic pre-warm was removed** by a 2026-05-15 commit. The working 2026-05-13 version had at the top of `start()`:
+```js
+await navigator.mediaDevices.getUserMedia({ audio: true });
+```
+This was removed on the (now-disproven) theory that "SDK owns the full mic lifecycle". What the SDK actually does (verified in `@elevenlabs/client/VoiceConversation.js#startSession` and `utils/input.js#MediaDeviceInput.create`):
+  1. preliminary `getUserMedia({ audio: true })` — generic stream
+  2. immediately `MediaDeviceInput.create` → `getUserMedia({ audio: { voiceIsolation: true, ... } })` — the REAL stream feeding the worklet
+
+On macOS Sonoma + Chrome (Apple Silicon), if the underlying CoreAudio device hasn't fully opened by the time the `voiceIsolation` constraint is applied, the stream returns silence → agent is "live" but never receives audio chunks. The page-level pre-warm gave the OS the headroom it needed.
+
+Secondary safety improvements found in the same audit:
+- Redundant `await conversation.endSession()` + 220ms wait at top of `start()` (Provider.startSession already bails if a session exists; the redundant teardown caused a `shouldEndRef` race).
+- `[mode]` useEffect fired on initial mount + StrictMode double-mount, where the endSession branch could clobber a session opened a microtask earlier.
+
+**Surgical Changes (RoomConvaiChat.jsx only — no SDK, audio, WebSocket, layout, or copy touch):**
+1. **RESTORED page-level mic pre-warm** at top of `start()` — exact line that was present 2026-05-13 — wrapped with try/finally + skipped in TEXT mode + warmup tracks released immediately so SDK can re-acquire with its own constraints.
+2. Removed redundant pre-emptive `endSession()` + 220ms wait in `start()`.
+3. `[mode]` useEffect now early-returns when `modeRef.current === mode` (only acts on real mode toggles).
+4. Added passive `console.log` taps in `onConnect`, `onDisconnect`, `onError`, `startSession` for in-browser diagnostics.
+
+**Scope lock honored:** Zero changes to design, copy, layout, V6 baseline visuals, ConversationProvider, audio worklet, getUserMedia constraints, WebSocket transport, mic FFT / VAD bars, three-mode toggle, identity-lock voiceIds, ElevenLabs Dashboard agent config, or any other component file.
 
 **Untouched:** ConversationProvider, audio worklet, getUserMedia constraints, WebSocket transport, mic FFT / VAD bars, three-mode toggle, identity-lock voiceIds, ElevenLabs Dashboard agent config.
 

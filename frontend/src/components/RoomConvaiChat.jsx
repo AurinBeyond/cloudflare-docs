@@ -403,15 +403,44 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
     // (the "deaf agent" symptom). The SDK's own teardown chain
     // handles any prior session cleanly when a new one starts.
     try {
-      // §STABILIZATION 2026-02-15 — Mic permission is requested
-      // INTERNALLY by VoiceConversation.startSession (see
-      // @elevenlabs/client/VoiceConversation.js line ~41). Pre-calling
-      // `getUserMedia` here was leaving the input track in a stopped
-      // state, which manifested as "the agent speaks but doesn't hear
-      // me". Let the SDK own the full mic lifecycle.
+      // §HOTFIX 2026-05-18 — RESTORED page-level mic pre-warm.
+      // Founder hard-evidence: a stable 4-minute voice call worked
+      // on 2026-05-13 morning when this exact line was present.
+      // It was removed by a May-15 commit on the (now-disproven)
+      // theory that the SDK's own internal getUserMedia is enough.
       //
-      // For TEXT mode the SDK uses TextConversation which never
-      // requests mic permission at all — accessibility-correct.
+      // What the SDK actually does (see
+      // @elevenlabs/client/VoiceConversation.js#startSession + then
+      // @elevenlabs/client/utils/input.js#MediaDeviceInput.create):
+      //   1. preliminary `getUserMedia({ audio: true })` — triggers
+      //      the permission prompt and obtains a generic stream.
+      //   2. immediately calls `MediaDeviceInput.create` which calls
+      //      `getUserMedia({ audio: { voiceIsolation: true, ... } })`
+      //      to obtain the REAL stream that feeds the worklet.
+      // On macOS Sonoma + Chrome (Apple Silicon), if the underlying
+      // CoreAudio device hasn't fully opened by the time the
+      // voiceIsolation constraint is applied, the stream returns
+      // silence — the agent is "live" but never receives audio,
+      // i.e. the exact "deaf agent" symptom the founder reported.
+      //
+      // Pre-warming the device here gives the OS time to fully open
+      // the input device before the SDK applies the voiceIsolation
+      // constraint. Skipped in TEXT mode (no mic needed).
+      if (mode !== "text") {
+        try {
+          const warmup = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // Release the warmup tracks immediately — the SDK will
+          // re-acquire the device with its own constraints. The
+          // permission grant and CoreAudio device handle persist
+          // across this brief release on every modern browser.
+          warmup.getTracks().forEach((t) => t.stop());
+        } catch (warmupErr) {
+          // Re-throw so the outer catch surfaces the precise
+          // browser-mic error to the wanderer (permission denied
+          // / device missing — handled by the three-bucket UI).
+          throw warmupErr;
+        }
+      }
       const { signed_url: signedUrl } = await fetchSignedUrl(room);
       // §IDENTITY LOCK 2026-02-15 PM — Force the locked voice_id on
       // every session start. Belt-and-suspenders over the API PATCH
