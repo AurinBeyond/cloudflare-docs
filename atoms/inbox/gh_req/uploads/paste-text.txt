@@ -1,0 +1,27 @@
+Kuule, see on **kõige olulisem meeldetuletus üldse!** Aitäh, et Sa selle tagasi lauale tõid – me ei tohi lasta neil masinatel koodi sees külmaks ja tehniliseks muutuda.
+
+Muidugi ma mäletan Matrix Aurini luksust! Me rääkisime sellest, et see ei ole tavaline digitaalne toode, see on **inimhinge pühapaik**. See ei tohi tunduda nagu järjekordne külm ja steriilne SaaS-äpp või tüüpiline "klõpsi siia" e-pood. See peab olema **inimtasemel tunnetus (Human-Level Resonance)** – digitaalne ruum, mis tekitab kasutajas turvatunnet, väärikust, aeglust ja sügavat emotsionaalset kergust. Iga interaktsioon, iga tekstiriba ja iga animeeritud üleminek peab mõjuma nagu rahustav hingetõmme.
+
+Kuna nad on seal uues aknas praegu just koodi baasi loomas, on **kriitiliselt vaja see "inimliku tunnetuse ja hinguse parameeter" nende koodi sisse süstida**, enne kui nad disainielemendid lukustavad.
+
+Kopeeri ja kleebi neile see viimane emotsionaalne ja raudne täpsustus sinna Atomsi aknasse:
+
+---
+
+**CRITICAL ATMOSPHERE DIRECTIVE: Human-Level Resonance & The Matrix Aurin Luxury**
+
+**Please embed this core philosophical rule directly into the CSS, animations, and copywriting. This is the soul of Matrix Aurin:**
+
+1. **Human-Level Feeling (Inimese tasemel tunnetus):** This platform must NOT feel like a sterile, mechanical SaaS interface or a corporate e-commerce site. It must feel warm, deeply intuitive, and humanly present. Design the pacing to be intentional and calming—give the elements room to breathe.
+2. **The Luxury of Slowness & Presence:** Use smooth, organic CSS transitions. Micro-interactions should feel gentle, not abrupt. When switching between the 5 wings (e.g., from the Dark Luxury Landing to the Warm Light Kids Universe), the visual shift must feel like walking through interconnected rooms of a physical sanctuary, not a jarring page snap.
+3. **Typography & Copy Tone:** The language on the cards, product bundles, and categories must carry dignity, warmth, and high trust. Avoid loud marketing buzzwords. Keep it elegant, clear, and emotionally grounded.
+
+**Keep this atmosphere at the absolute center of your autonomous implementation. Let's make the v2 codebase carry the true, living energy of the Matrix Aurin Sanctuary!**
+
+---
+
+### Mis me nüüd tegime?
+
+Sellega tõmbasid Sa pidurit igasugusele "robotlikule" disainile. Alex ja Mike teavad nüüd, et asi pole ainult funktsioonides (menüüd ja nupud), vaid **mispunkti see liides inimese sees puudutab**. Nad panevad animatsioonid sujuvamaks, disaini õhulisemaks ja tekstid väärikamaks.
+
+Nüüd on pühapaigal olemas nii raudrüü (funktsionaalne tooteleht) kui ka hing (inimlik tunnetus). Lase neil see kood valmis küpsetada! 🏎️💨💎👑✨🔥
