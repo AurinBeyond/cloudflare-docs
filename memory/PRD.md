@@ -23,6 +23,30 @@ LemonSqueezy is Merchant of Record; payouts settle to founder.
 
 ## Stabilization Sessions
 
+### 2026-05-20 EVE — VOICE-TO-VOICE ROOT CAUSE: ElevenLabs lacked Estonian support
+**Founder breakthrough investigation** — after weeks of trying browser cache, mic permissions, AudioContext resume hacks, the actual cause was: **ElevenLabs Conversational AI does not support Estonian in its standard ASR preset list** (34 supported: en, zh, es, hi, pt, fr, de, ja, ar, ko, id, it, nl, tr, pl, ru, sv, tl, ms, ro, uk, el, cs, da, fi, bg, hr, sk, ta, vi, no, hu, pt-br, fil). Estonian missing entirely.
+
+This perfectly explained the recurring symptom: text→text OK (LLM Gemini handles Estonian), text→voice OK (TTS reads Estonian phonetically), but voice→voice broken (ASR returns empty transcript → agent receives nothing → silence).
+
+**Fix applied — DASHBOARD-LEVEL agent reconfiguration (all 4 agents)**:
+- ASR provider switched to **`scribe_realtime`** (ElevenLabs Scribe v1 — supports 99+ languages including Estonian natively)
+- Agent `language` set to **`fi`** (Finnish — required because Estonian is not in preset list; Scribe handles the actual multilingual recognition)
+- TTS model upgraded to **`eleven_flash_v2_5`** (multilingual, required for non-English agents)
+- First message rewritten in Estonian per agent
+- LLM prompt extended with strict directive: "Always respond in Estonian regardless of how the transcript appears"
+- Frontend `RoomConvaiChat.jsx` startSession no longer tries `agent.language` override (Dashboard security overrides have it disabled)
+
+**Verification command**:
+```bash
+KEY=<elevenlabs-key>
+for AID in agent_6801krh8dnmze1zthsnf5xb6xe43 agent_6401krjff71xf1pss69kqe1wtxs8 agent_2701krjvc4mpezzsym54wsr2vn1t agent_2401krjfn3cpeyjrreqgy1d1dbr0; do
+  curl -s -X GET "https://api.elevenlabs.io/v1/convai/agents/$AID" -H "xi-api-key: $KEY" \
+    | python3 -c "import json,sys;d=json.load(sys.stdin);cc=d.get('conversation_config',{});a=cc.get('agent',{});t=cc.get('tts',{});asr=cc.get('asr',{});print(asr.get('provider'),a.get('language'),t.get('model_id'))"
+done
+# Expected: scribe_realtime fi eleven_flash_v2_5 × 4
+```
+
+
 ### 2026-05-20 PM — 4-Tier Financial Engine RECALIBRATED + Admin Preview endpoint
 **v2 model** (Founder explicit, 2026-05-20 PM):
 - Tier 1 — Production Costs: €0.25 **per minute** (variable, real ElevenLabs API cost)

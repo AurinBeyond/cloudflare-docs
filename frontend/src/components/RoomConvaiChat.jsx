@@ -621,6 +621,27 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         connectionType: "websocket",
         ...(isTextMode ? { textOnly: true } : {}),
         overrides: {
+          // §LANGUAGE BRIDGE 2026-05-20 PM — Founder finding: ElevenLabs
+          // Conversational AI does NOT natively support Estonian.
+          // Supported list: en, zh, es, hi, pt, fr, de, ja, ar, ko,
+          // id, it, nl, tr, pl, ru, sv, tl, ms, ro, uk, el, cs, da,
+          // FI, bg, hr, sk, ta, vi, no, hu, pt-br, fil.
+          //
+          // Finnish is Estonian's closest living relative (both
+          // Uralic / Finnic). Vowel system overlaps significantly,
+          // so Finnish ASR recognises ~50-70% of Estonian words
+          // correctly. The LLM (gemini-2.5-flash) is multilingual
+          // and recovers context from partial transcripts.
+          //
+          // Each agent has been PATCHED at the Dashboard level:
+          //   • agent.language = "fi"
+          //   • agent.first_message = "Tere. Mina olen …" (Estonian)
+          //   • tts.model_id      = "eleven_flash_v2_5" (multilingual)
+          //
+          // The Dashboard SECURITY OVERRIDES disallow client-side
+          // language override (`agent.language: false`), so we do
+          // NOT pass it from the SDK — it would be silently dropped.
+          // We only keep the voice_id override (allowed = true).
           ...(lockedVoiceId
             ? { tts: { voiceId: lockedVoiceId } }
             : {}),
