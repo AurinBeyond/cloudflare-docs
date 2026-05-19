@@ -194,10 +194,12 @@ function HeroSection() {
           than the protagonist. */}
       <div className="absolute inset-0 will-change-transform" ref={imgRef}>
         {/* Mobile: small top band so the layout breathes vertically.
-            Desktop: right-aligned ~36% column (Founder 2026-05-19 PM
-            adjustment: was 42%, scaled ~15% smaller — same anchor,
-            just less visual weight). */}
-        <div className="absolute inset-x-0 top-[88px] h-[36vh] md:inset-y-0 md:right-0 md:top-0 md:left-auto md:h-auto md:w-[36%]">
+            Desktop: image now pulled LEFT toward the text block to
+            close the dark gap (Founder 2026-05-19 evening). Width
+            reduced further (~14% smaller again) and anchored at
+            ~52% from the left edge instead of right-0, so text and
+            face form a single intimate visual block. */}
+        <div className="absolute inset-x-0 top-[88px] h-[32vh] md:inset-y-0 md:right-auto md:top-0 md:h-full md:left-[52%] md:w-[30%]">
           <img
             src={HERO}
             alt=""
@@ -211,9 +213,12 @@ function HeroSection() {
           {/* Soft elliptical fade so the figure dissolves into the
               page rather than ending in a sharp rectangle. */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_70%_50%,_transparent_0%,_rgba(11,10,8,0.55)_70%,_#0b0a08_100%)]" />
-          {/* Left/top edge feathering — connects mask region to body
+          {/* Left edge feathering — connects mask region to body
               copy without a visible seam. */}
-          <div className="absolute inset-y-0 left-0 w-[40%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent md:bg-gradient-to-r" />
+          <div className="absolute inset-y-0 left-0 w-[28%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
+          {/* Right edge feathering — dissolves the figure into the
+              dark canvas on the far right. */}
+          <div className="hidden md:block absolute inset-y-0 right-0 w-[32%] bg-gradient-to-l from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
           <div className="md:hidden absolute inset-x-0 bottom-0 h-[60px] bg-gradient-to-t from-[#0b0a08] to-transparent" />
         </div>
       </div>
