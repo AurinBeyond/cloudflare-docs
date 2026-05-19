@@ -2475,7 +2475,7 @@ async def lemonsqueezy_webhook(request: Request):
     # Idempotency: each (external_order_id) is recorded once in
     # `presence_grants`. A duplicate webhook is a no-op.
     variant_id = _extract_lemonsqueezy_variant_id(data)
-    presence_seconds = _presence_seconds_for_variant(variant_id)
+    presence_seconds, grant_kind = _presence_seconds_for_variant(variant_id)
     if presence_seconds > 0:
         # Resolve target user: prefer explicit user_id, fall back to email.
         target_user = None
@@ -2520,13 +2520,38 @@ async def lemonsqueezy_webhook(request: Request):
                     "external_order_id": order_id,
                     "variant_id": variant_id,
                     "presence_seconds": presence_seconds,
+                    "grant_kind": grant_kind,
                     "source": "lemonsqueezy",
                     "granted_at": datetime.now(timezone.utc).isoformat(),
                 })
-                await db.users.update_one(
-                    {"user_id": target_user["user_id"]},
-                    {"$inc": {"presence_seconds_left": presence_seconds}},
-                )
+                # §STABILIZATION 2026-05-19 — Per-kind balance semantics.
+                # • monthly (Steady / Own Room): each renewal RESETS the
+                #   balance to at least the grant. Using max(grant,
+                #   current) protects users who bought top-ups inside
+                #   the cycle — their unspent top-up minutes survive
+                #   the renewal. Heavy users who consumed the cycle
+                #   are reset to the full grant. Founder directive
+                #   2026-05-19: "monthly minutes do not roll over".
+                # • oneoff (First Step) + topup (€25/€39/€99): grant is
+                #   purely additive — minutes never expire and stack.
+                if grant_kind == "monthly":
+                    current_doc = await db.users.find_one(
+                        {"user_id": target_user["user_id"]},
+                        {"_id": 0, "presence_seconds_left": 1},
+                    )
+                    current_balance = int(
+                        (current_doc or {}).get("presence_seconds_left") or 0
+                    )
+                    new_balance = max(presence_seconds, current_balance)
+                    await db.users.update_one(
+                        {"user_id": target_user["user_id"]},
+                        {"$set": {"presence_seconds_left": new_balance}},
+                    )
+                else:
+                    await db.users.update_one(
+                        {"user_id": target_user["user_id"]},
+                        {"$inc": {"presence_seconds_left": presence_seconds}},
+                    )
             except Exception as e:  # noqa: BLE001
                 logger.warning("presence grant insert failed: %s", e)
                 return {"status": "error", "reason": "grant_insert_failed"}
@@ -2700,23 +2725,53 @@ def _extract_lemonsqueezy_variant_id(data: dict) -> Optional[str]:
     return None
 
 
-def _presence_seconds_for_variant(variant_id: Optional[str]) -> int:
-    """Map a LemonSqueezy variant_id to a presence-seconds grant via ENV.
+def _presence_seconds_for_variant(variant_id: Optional[str]) -> tuple[int, str]:
+    """Map a LemonSqueezy variant_id to a presence-seconds grant + kind.
 
-    Returns 0 when the variant is not configured. Founder fills the
-    variant IDs in the Emergent Deploy panel after opening the Lemon
-    account; until then every variant returns 0 (no auto-grant).
+    Returns `(seconds, kind)` where `kind` is one of:
+      • "monthly" — recurring subscription (Steady / Own Room).
+                    Each successful renewal RESETS the balance to at
+                    least the grant (max(grant, current)) so top-up
+                    minutes are never destroyed.
+      • "oneoff"  — single purchase (First Step).
+                    Adds to the balance; never auto-renews.
+      • "topup"   — additional minutes (30 / 60 / 180 min).
+                    Adds to the balance; never expires.
+      • ""        — variant not recognised; webhook is a no-op.
+
+    Returns (0, "") when the variant is not configured. Founder fills
+    the variant IDs in the Emergent Deploy panel after opening the
+    Lemon account; until then every variant returns (0, "").
+
+    §STABILIZATION 2026-05-19 — Aligned with Mike's locked EUR pricing:
+        €45 First Step           → FIRST_STEP        (oneoff, 3600s)
+        €120 Steady Monthly      → STEADY_MONTHLY    (monthly, 3600s)
+        €380 Own Room Monthly    → OWN_ROOM_MONTHLY  (monthly, 14400s)
+        €25 / €39 / €99 Top-ups  → TOPUP_*           (topup, 1800/3600/10800s)
+    Old 2026-05-16 variants (VOICE_30MIN/60MIN/ETERNAL) are kept for
+    backwards compatibility with any pending test orders. New
+    production Lemon variants MUST use the FIRST_STEP / STEADY_MONTHLY
+    / OWN_ROOM_MONTHLY / TOPUP_180MIN keys.
     """
     if not variant_id:
-        return 0
-    mapping = {
-        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_30MIN"): 1800,
-        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_60MIN"): 3600,
-        _os.environ.get("LEMONSQUEEZY_VARIANT_ETERNAL"):     10800,
-        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_30MIN"): 1800,
-        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_60MIN"): 3600,
+        return (0, "")
+    vid = str(variant_id)
+    new_mapping: dict[Optional[str], tuple[int, str]] = {
+        # Mike's locked pricing (2026-05-19) — production-ready keys.
+        _os.environ.get("LEMONSQUEEZY_VARIANT_FIRST_STEP"):       (3600,  "oneoff"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_STEADY_MONTHLY"):   (3600,  "monthly"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_OWN_ROOM_MONTHLY"): (14400, "monthly"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_30MIN"):      (1800,  "topup"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_60MIN"):      (3600,  "topup"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_TOPUP_180MIN"):     (10800, "topup"),
+        # Legacy 2026-05-16 mappings — kept for backwards compat.
+        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_30MIN"): (1800,  "oneoff"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_VOICE_60MIN"): (3600,  "oneoff"),
+        _os.environ.get("LEMONSQUEEZY_VARIANT_ETERNAL"):     (10800, "monthly"),
     }
-    return mapping.get(str(variant_id), 0)
+    # None keys (when an ENV is unset) are filtered out so we never
+    # match a missing variant against an empty string.
+    return new_mapping.get(vid, (0, "")) if vid else (0, "")
 
 
 @api_router.get("/presence/balance")
@@ -4728,6 +4783,12 @@ _ROOM_TO_CONVAI_AGENT_ENV = {
 
 class ConvAISignedUrlInput(BaseModel):
     room: Literal["clarity", "body", "parents", "courses"]
+    # §STABILIZATION 2026-05-19 — Optional mode field so the backend
+    # knows whether the upcoming session will use voice (mic + TTS),
+    # hybrid (text input + TTS output, same cost as voice), or text
+    # (text input + text output, unmetered). Defaults to "voice" so
+    # any older client that doesn't send the field stays gated.
+    mode: Optional[Literal["voice", "hybrid", "text"]] = "voice"
 
 
 @api_router.post("/clarity/convai/signed-url")
@@ -4740,17 +4801,23 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
     """
     user = await _require_user(request)  # auth gate — sign-in required
     room = inp.room
+    mode = inp.mode or "voice"
     env_name = _ROOM_TO_CONVAI_AGENT_ENV.get(room)
     if not env_name:
         raise HTTPException(status_code=400, detail="Unknown room")
 
-    # §STABILIZATION 2026-05-16 — Session-cap layer.
+    # §STABILIZATION 2026-05-19 — Mode-aware cap gating.
+    # Text mode is unmetered (low-cost LLM tokens only — acquisition
+    # layer per Founder directive). Voice + hybrid both stream TTS
+    # output through ElevenLabs and bill at the SAME per-minute rate,
+    # so both must consume `presence_seconds_left`.
+    #
     # Phase 1 rollout: gate ONLY Grace / Private Room. Body Room,
     # Parents Room, and Course Room remain uncapped. The cap module
-    # is a passive read-only check over the existing clarity_passes
-    # collection; it never mutates state and never affects an already
+    # is a passive read-only check over the existing presence + pass
+    # collections; it never mutates state and never affects an already
     # running session.
-    if room == "clarity":
+    if room == "clarity" and mode != "text":
         try:
             from session_cap import compute_voice_window
             user_doc = await db.users.find_one(

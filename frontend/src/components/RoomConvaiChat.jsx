@@ -75,7 +75,7 @@ const MODES = [
  * Mint a fresh signed URL from our backend.
  * Returns { signed_url } or throws.
  */
-async function fetchSignedUrl(room) {
+async function fetchSignedUrl(room, mode) {
   const token =
     typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null;
   if (!token) throw new Error("Not signed in");
@@ -86,7 +86,10 @@ async function fetchSignedUrl(room) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ room }),
+    // §STABILIZATION 2026-05-19 — Send mode so the backend can apply
+    // mode-aware cap gating. Text mode is unmetered (acquisition
+    // layer); hybrid + voice both consume `presence_seconds_left`.
+    body: JSON.stringify({ room, mode: mode || "voice" }),
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
@@ -441,7 +444,7 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
           throw warmupErr;
         }
       }
-      const { signed_url: signedUrl } = await fetchSignedUrl(room);
+      const { signed_url: signedUrl } = await fetchSignedUrl(room, mode);
       // §IDENTITY LOCK 2026-02-15 PM — Force the locked voice_id on
       // every session start. Belt-and-suspenders over the API PATCH
       // already applied to the agent's Dashboard. Founder directive:
