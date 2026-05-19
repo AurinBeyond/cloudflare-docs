@@ -228,15 +228,29 @@ function HeroSection() {
               filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
             }}
           />
-          {/* Face contour spotlight — opened up so the unmasked side
-              breathes through the dark canvas. Founder cue 2026-05-19:
-              "hoia nägu nii avatud nagu pildil". */}
+          {/* Face contour spotlight — anchored on the RIGHT-CENTER of
+              the figure (the unmasked face: eye + cheek + smile).
+              Founder cue 2026-05-19 late: "ava see näo osa mis on
+              vaba maskist, et silm ja naeratus oleks näha". The
+              spotlight is now positioned at ~70% horizontally so the
+              warm soft-light lands precisely on the unmasked half. */}
           <div
             aria-hidden="true"
             className="absolute inset-0 pointer-events-none mix-blend-soft-light"
             style={{
               background:
-                "radial-gradient(ellipse 50% 70% at 30% 55%, rgba(248,236,210,0.55) 0%, rgba(212,182,125,0.22) 50%, transparent 78%)",
+                "radial-gradient(ellipse 42% 65% at 72% 55%, rgba(252,242,220,0.85) 0%, rgba(248,236,210,0.45) 35%, rgba(212,182,125,0.18) 60%, transparent 82%)",
+            }}
+          />
+          {/* Secondary screen-blend bloom — only on the eye/smile
+              zone (top-right of unmasked side). Keeps the brass
+              palette but lifts the highlights so the smile reads. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none mix-blend-screen"
+            style={{
+              background:
+                "radial-gradient(ellipse 28% 40% at 75% 55%, rgba(255,238,205,0.18) 0%, rgba(212,182,125,0.06) 50%, transparent 75%)",
             }}
           />
           {/* Vignette — softer than before (0.50 → 0.32) so the eyes
