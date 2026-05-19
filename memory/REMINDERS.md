@@ -1,3 +1,26 @@
+# 🔮 SCHEDULED RESURFACE — Iceboxed concepts to revisit
+
+## Aurin Pet Sanctuary — review on 2026-06-19
+
+- **archived_on:** 2026-05-19
+- **resurface_at:** 2026-06-19
+- **archive_file:** `/app/memory/backlog_pet_sanctuary.md`
+- **founder_intent:** "hetkel ma ei soovi seda arendada, vaid palun
+  mulle 1 kuu pärast meelde tuletada et me seda hakkaksime arendama"
+- **surface_prompt to use when due:**
+  > "Tuletan meelde — kuu aega tagasi (2026-05-19) panid riiulile
+  > 'Aurin Pet Sanctuary' kontseptsiooni (ultra-luksuslik koeranduse/
+  > kassianduse psühhosomaatika UHNW omanikele, €500–€1500/kuu). Lugesin
+  > selle uuesti läbi. Kas tahad seda nüüd arendama hakata, või lükkame
+  > veel ühe kuu edasi?"
+
+**Agent handoff rule:** check today's date against every `resurface_at`
+above on session start. If today >= resurface_at, surface the prompt
+BEFORE picking up any other work.
+
+---
+
+
 # 🔔 PENDING — Anna's TODO (last update: 2026-02-14)
 
 ## TOMORROW (2026-02-15) — Create Sara + Alistair ConvAI agents
