@@ -431,8 +431,6 @@ function RoomsSection() {
         sub: "The Private Room",
         body: "A confidential space for what cannot be said aloud yet. The room keeps no score.",
         img: GROUNDED,
-        href: "/clarity-release",
-        testid: "room-enter-clarity",
       },
       {
         n: "II",
@@ -440,8 +438,6 @@ function RoomsSection() {
         sub: "The Listening Room",
         body: "Where the body is asked first. Slow attention to what carries underneath the words.",
         img: WINGS,
-        href: "/body-room",
-        testid: "room-enter-body",
       },
       {
         n: "III",
@@ -449,8 +445,6 @@ function RoomsSection() {
         sub: "The Hearth Room",
         body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
         img: WARMTH,
-        href: "/parents-room",
-        testid: "room-enter-parents",
       },
       {
         n: "IV",
@@ -458,8 +452,6 @@ function RoomsSection() {
         sub: "The Study Room",
         body: "Structured study and gentle progression. Books, practices, and a measured rhythm.",
         img: ATMOSPHERE,
-        href: "/course-room",
-        testid: "room-enter-courses",
       },
     ],
     [],
@@ -517,19 +509,6 @@ function RoomsSection() {
                   <p className="text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
                     {r.body}
                   </p>
-                  {/* §ENTER 2026-05-19 — Founder directive: every room
-                      description gets a single, calm ENTER affordance
-                      that takes the wanderer directly to the room's
-                      session entry (WandererGate-protected). No doors,
-                      no extra ceremony — one click, one room. */}
-                  <Link
-                    to={r.href}
-                    data-testid={r.testid}
-                    className="inline-flex items-center gap-3 mt-9 px-7 py-3 border border-[rgba(196,164,107,0.45)] text-[#f0eadd] text-[11px] tracking-[0.42em] uppercase hover:bg-[rgba(196,164,107,0.08)] hover:border-[rgba(196,164,107,0.7)] transition-colors duration-500"
-                  >
-                    <span>Enter</span>
-                    <span className="text-[#c4a46b]" aria-hidden="true">→</span>
-                  </Link>
                 </div>
               </div>
             </RevealBlock>
