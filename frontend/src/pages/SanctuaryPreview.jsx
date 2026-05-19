@@ -194,20 +194,19 @@ function HeroSection() {
           than the protagonist. */}
       <div className="absolute inset-0 will-change-transform" ref={imgRef}>
         {/* Mobile: small top band so the layout breathes vertically.
-            Desktop: right-aligned ~38% column. */}
-        <div className="absolute inset-x-0 top-[88px] h-[42vh] md:inset-y-0 md:right-0 md:top-0 md:left-auto md:h-auto md:w-[42%]">
+            Desktop: right-aligned ~36% column (Founder 2026-05-19 PM
+            adjustment: was 42%, scaled ~15% smaller — same anchor,
+            just less visual weight). */}
+        <div className="absolute inset-x-0 top-[88px] h-[36vh] md:inset-y-0 md:right-0 md:top-0 md:left-auto md:h-auto md:w-[36%]">
           <img
             src={HERO}
             alt=""
             aria-hidden="true"
             data-testid="hero-mask-image"
             className={`w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-              visible ? "opacity-[0.72] scale-100" : "opacity-0 scale-[1.04]"
+              visible ? "opacity-90 scale-100" : "opacity-0 scale-[1.04]"
             }`}
-            style={{
-              filter: "contrast(1.02) saturate(0.92) brightness(0.92)",
-              objectPosition: "30% center",
-            }}
+            style={{ filter: "contrast(1.06) saturate(1.06) brightness(0.97)" }}
           />
           {/* Soft elliptical fade so the figure dissolves into the
               page rather than ending in a sharp rectangle. */}

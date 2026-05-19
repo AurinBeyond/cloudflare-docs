@@ -432,6 +432,23 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       if (mode !== "text") {
         try {
           const warmup = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // §DIAGNOSTIC 2026-05-19 — Log the device-side sample rate
+          // the browser actually negotiated, plus channel count. This
+          // tells us in production logs whether the user's hardware
+          // gave us 44.1k / 48k stereo / 16k mono so we can debug
+          // any future "agent doesn't hear me" reports without
+          // guessing. Read-only — does NOT touch the SDK or stream.
+          try {
+            const track = warmup.getAudioTracks()[0];
+            const settings = track?.getSettings?.() || {};
+            // eslint-disable-next-line no-console
+            console.log("[ConvAI]", room, "mic settings", {
+              sampleRate: settings.sampleRate,
+              channelCount: settings.channelCount,
+              deviceId: settings.deviceId ? "***" : null,
+              label: track?.label || "(unlabeled)",
+            });
+          } catch { /* diagnostics best-effort */ }
           // Release the warmup tracks immediately — the SDK will
           // re-acquire the device with its own constraints. The
           // permission grant and CoreAudio device handle persist
