@@ -260,9 +260,21 @@ function TwoWorldsSection() {
     <section
       id="worlds"
       data-testid="sanctuary-worlds"
-      className="relative w-full bg-[#0b0a08] py-32 sm:py-44"
+      className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
-      <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
+      {/* §POLISH 2026-05-19 — Soft warm radial behind the heading.
+          Prevents the section from feeling like a cold "dark cult
+          chamber". No color shift to the palette — just a very low-
+          opacity warm glow that breathes through the brass system. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-[18%] h-[420px] opacity-[0.22]"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 80% at 50% 30%, rgba(196,164,107,0.22) 0%, rgba(196,164,107,0.06) 40%, transparent 70%)",
+        }}
+      />
+      <div className="relative z-10 max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
             — Two Worlds, One Sanctuary
@@ -836,9 +848,17 @@ function ClosingSection() {
     <section
       id="origin"
       data-testid="sanctuary-closing"
-      className="relative w-full bg-[#0b0a08] py-32"
+      className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
-      <div className="max-w-[860px] mx-auto px-6 sm:px-10 text-center">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-[24%] h-[440px] opacity-[0.20]"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 70% at 50% 40%, rgba(196,164,107,0.24) 0%, rgba(196,164,107,0.05) 45%, transparent 75%)",
+        }}
+      />
+      <div className="relative z-10 max-w-[860px] mx-auto px-6 sm:px-10 text-center">
         <RevealBlock>
           <p
             data-testid="closing-thematic"
