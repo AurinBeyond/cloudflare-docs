@@ -23,7 +23,21 @@ LemonSqueezy is Merchant of Record; payouts settle to founder.
 
 ## Stabilization Sessions
 
-### 2026-05-20 — Voice-to-voice deafness HOTFIX + hero opened up
+### 2026-05-20 PM — 4-Tier Financial Engine + Audio Path Verified indicator
+**P0 — 4-Tier Financial Engine (dry-run logged)**
+- Added `compute_financial_split(amount_eur, voice_minutes, label)` pure function in `server.py` near `_presence_seconds_for_variant`.
+- Rates (Founder-confirmed 2026-05-20): T1 production costs €0.25/min · T2 reserve €2.00/min · T3 loyalty €1.00/min · T4 profit = gross − allocated.
+- Env-overridable: `FIN_SPLIT_COST_EUR_PER_MIN`, `FIN_SPLIT_RESERVE_EUR_PER_MIN`, `FIN_SPLIT_LOYALTY_EUR_PER_MIN`.
+- Dry-run emitted ONCE on module load to `/var/log/supervisor/backend.err.log` with prefix `[FIN-SPLIT] ctx=dry-run` for all 4 scenarios (€45 / €90 / €380 / €20).
+- Live webhook now logs `[FIN-SPLIT] ctx=live label=variant=… kind=… order=…` on every recognised grant, BEFORE any DB writes (observability-only, does not affect grant flow).
+- **Finding from dry-run**: at the confirmed rates, ALL 4 products are net-negative — Founder must adjust either rates, minutes-per-tier, or prices before flipping `SESSION_CAP_ENABLED=true`.
+
+**P1 — Audio Path Verified dev indicator**
+- New dev-only signal in `RoomConvaiChat.jsx`: requires `?dev=1` in URL. Becomes "✓ Audio Path Verified" pill when BOTH conditions hold at least once in the session: (a) `inputCtx.state === "running"`, (b) VAD score ever > 0.1. Resets on every `start()`. Never visible to regular wanderers.
+- Three-state pill: emerald (verified) · amber (partial: ctx ok OR VAD ok) · grey (auditing). Includes title-tooltip with raw state for debugging.
+
+### 2026-05-20 AM — Voice-to-voice deafness HOTFIX + hero opened up
+
 **P0** — Founder reported persistent bug: text→text works, text→voice (hybrid) works, but voice→voice fails even after 5 config-check attempts. Root cause located by reading `@elevenlabs/client/utils/input.js#L60`:
 
 The SDK calls `await context.resume()` AFTER several async hops (`getUserMedia` + `loadRawAudioProcessor` + worklet module add). On Chrome (macOS + founder's primary profile), the user-gesture token can expire before resume() runs → INPUT AudioContext silently stays `suspended` while OUTPUT context resumes correctly. AudioWorklet never processes PCM frames, mic chunks sent over WebSocket are silence → ElevenLabs sees a connected client that never speaks.

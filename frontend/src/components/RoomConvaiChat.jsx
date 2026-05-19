@@ -221,6 +221,30 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
   const [micLevel, setMicLevel] = useState(0);
   const [vadScore, setVadScore] = useState(0);
 
+  // §AUDIO PATH VERIFIED 2026-05-20 — Dev-only confidence signal.
+  // Founder requested a single, sticky "✓ Audio Path Verified"
+  // indicator that becomes true when BOTH conditions are observed at
+  // least once in this session:
+  //   1. Input AudioContext.state === "running"
+  //   2. Server-side VAD score has crossed 0.1 (i.e. ElevenLabs
+  //      acknowledged real audio reaching their endpoint)
+  //
+  // The indicator only renders when ?dev=1 is in the URL — it must
+  // never be visible to a regular wanderer. Once true, it stays
+  // true for the lifetime of the session (resets on next start()).
+  const [audioInputRunning, setAudioInputRunning] = useState(false);
+  const [vadEverHigh, setVadEverHigh] = useState(false);
+  const showDev = (() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return new URLSearchParams(window.location.search).get("dev") === "1";
+    } catch { return false; }
+  })();
+  useEffect(() => {
+    if (vadScore > 0.1 && !vadEverHigh) setVadEverHigh(true);
+  }, [vadScore, vadEverHigh]);
+  const audioPathVerified = audioInputRunning && vadEverHigh;
+
   const conversation = useConversation({
     onConnect: () => {
       // §STABILIZATION 2026-02-17 — Diagnostic log so the wanderer can
@@ -358,11 +382,25 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       }
     };
     resumeIfSuspended();
+    // §AUDIO PATH VERIFIED — flip the dev indicator true once the
+    // input context is confirmed running. Re-check every 500 ms
+    // alongside the suspended-flip guard below so the indicator
+    // stays accurate if Chrome ever pushes the ctx back to
+    // suspended mid-session.
+    const verifyTick = () => {
+      if (inputCtx && inputCtx.state === "running") {
+        setAudioInputRunning(true);
+      } else {
+        setAudioInputRunning(false);
+      }
+    };
+    verifyTick();
     // 5-second guard — if Chrome flips the context back to suspended
     // (rare, documented for tab-focus loss mid-handshake), re-resume
     // within 500 ms so the wanderer doesn't have to re-click.
     const guard = setInterval(() => {
       if (cancelled) return;
+      verifyTick();
       if (inputCtx && inputCtx.state === "suspended") {
         // eslint-disable-next-line no-console
         console.warn("[ConvAI]", room, "↺ input ctx flipped to suspended — re-resuming");
@@ -498,6 +536,9 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
     setTranscript([]);
     setMicLevel(0);
     setVadScore(0);
+    // §AUDIO PATH VERIFIED — reset dev indicator for the new session.
+    setAudioInputRunning(false);
+    setVadEverHigh(false);
     // §STABILIZATION 2026-02-17 — Removed pre-emptive `endSession()` +
     // 220ms wait. Provider.startSession (see @elevenlabs/react
     // ConversationProvider.js line 56-61) ALREADY bails silently if a
@@ -640,6 +681,36 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
                   ? "Quiet for now"
                   : "Ready"}
           </span>
+          {/* §AUDIO PATH VERIFIED 2026-05-20 — dev-only confidence
+              indicator. Appears only when ?dev=1 is in the URL.
+              Three states reflect the two-condition audit
+              (input ctx running + VAD ever > 0.1):
+                • verified (both true) — solid emerald pill
+                • partial (one true)   — amber pill
+                • idle (none)          — dim grey pill
+              Never visible to a regular wanderer. */}
+          {showDev && isLive ? (
+            <span
+              data-testid="convai-audio-path-verified"
+              data-verified={audioPathVerified ? "true" : "false"}
+              title={`input.running=${audioInputRunning} vadEverHigh=${vadEverHigh}`}
+              className={`ml-2 inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-[10px] tracking-[0.18em] uppercase border ${
+                audioPathVerified
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/40"
+                  : audioInputRunning || vadEverHigh
+                    ? "bg-amber-500/15 text-amber-300 border-amber-400/40"
+                    : "bg-[hsl(var(--aurin-text))/0.06] text-[hsl(var(--aurin-text))/0.5] border-[hsl(var(--aurin-text))/0.15]"
+              }`}
+            >
+              {audioPathVerified
+                ? "✓ Audio Path Verified"
+                : audioInputRunning
+                  ? "ctx ok · awaiting VAD"
+                  : vadEverHigh
+                    ? "VAD ok · ctx pending"
+                    : "auditing…"}
+            </span>
+          ) : null}
         </div>
         {isLive ? (
           <button

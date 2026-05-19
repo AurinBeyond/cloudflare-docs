@@ -2481,6 +2481,27 @@ async def lemonsqueezy_webhook(request: Request):
     # `presence_grants`. A duplicate webhook is a no-op.
     variant_id = _extract_lemonsqueezy_variant_id(data)
     presence_seconds, grant_kind = _presence_seconds_for_variant(variant_id)
+
+    # §FIN-SPLIT 2026-05-20 — Live 4-tier financial logging for every
+    # recognised grant, BEFORE any DB writes. This is observability-
+    # only; it does not affect grant flow. Each line lands in
+    # /var/log/supervisor/backend.err.log with prefix `[FIN-SPLIT]
+    # ctx=live` so the Founder can reconcile real margin per order.
+    if presence_seconds > 0:
+        try:
+            gross_eur = _extract_lemonsqueezy_amount_eur(data)
+            minutes = presence_seconds / 60.0
+            _log_financial_split(
+                compute_financial_split(
+                    gross_eur,
+                    minutes,
+                    label=f"variant={variant_id} kind={grant_kind} order={order_id}",
+                ),
+                context="live",
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning("FIN-SPLIT live log failed: %s", e)
+
     if presence_seconds > 0:
         # Resolve target user: prefer explicit user_id, fall back to email.
         target_user = None
@@ -2793,6 +2814,180 @@ async def _accrue_loyalty(user_id: Optional[str], currency: str) -> None:
         logger.warning(
             "loyalty accrual failed user=%s cur=%s: %s", user_id, currency, e
         )
+
+
+def _extract_lemonsqueezy_amount_eur(data: dict) -> float:
+    """Pull the gross order amount in EUR (cents → euros) from the payload.
+
+    §FIN-SPLIT 2026-05-20 — LemonSqueezy stores amounts as integer
+    cents under `data.attributes.total` (order) or `total_in_cents`
+    (varies by event). Currency comes from `_extract_lemonsqueezy_currency`.
+    If the order is in USD, we convert at a Founder-locked rate of
+    1 USD = 0.93 EUR so the financial-split numbers stay in a single
+    base unit (EUR) — bookkeeping clarity over micro-precision.
+    """
+    attrs = (data.get("attributes") or {}) if isinstance(data, dict) else {}
+    cents = (
+        attrs.get("total")
+        or attrs.get("total_in_cents")
+        or attrs.get("subtotal")
+        or 0
+    )
+    try:
+        amount = float(cents) / 100.0
+    except (TypeError, ValueError):
+        amount = 0.0
+    cur = _extract_lemonsqueezy_currency(data)
+    if cur == "USD":
+        amount = amount * 0.93
+    return round(amount, 2)
+
+
+# ---------------------------------------------------------------
+# §FIN-SPLIT 2026-05-20 — 4-Tier Financial & Operations Engine
+# ---------------------------------------------------------------
+# Founder directive (2026-05-20, confirmed numbers):
+#   Tier 1 — Production Costs:    €0.25 / voice minute  (API: ElevenLabs + LLM)
+#   Tier 2 — Reserve Fund:        €2.00 / voice minute  (stability + growth buffer)
+#   Tier 3 — Loyalty Presence Bank: €1.00 / voice minute  (user-facing gift fuel)
+#   Tier 4 — Net Profit:          gross  − (Tier1 + Tier2 + Tier3)
+#
+# Voice minutes are the COST DRIVER for all subscription/oneoff tiers
+# because every minute of live ElevenLabs presence is a real €0.25
+# upstream API charge. Top-ups, books, and digital products that do
+# not consume voice still pass through this function with
+# voice_minutes=0 → Tier 1/2/3 are zero, and the full gross becomes
+# Tier 4 (Profit) minus any future product-COGS we plug in.
+#
+# This is a PURE function. It does not write to the database, does
+# not touch the user. Output is a structured dict that the webhook
+# handler logs to stderr (which supervisor pipes to backend.err.log)
+# with a `[FIN-SPLIT]` prefix so the Founder can grep:
+#
+#     tail -f /var/log/supervisor/backend.err.log | grep FIN-SPLIT
+#
+# Dry-run output is also emitted ONCE on module load below — the
+# four locked scenarios (€45 / €90 / €380 / €20) show what the split
+# looks like for each real product the Founder is about to ship.
+
+
+_FIN_SPLIT_COST_PER_MIN = float(_os.environ.get("FIN_SPLIT_COST_EUR_PER_MIN") or "0.25")
+_FIN_SPLIT_RESERVE_PER_MIN = float(_os.environ.get("FIN_SPLIT_RESERVE_EUR_PER_MIN") or "2.00")
+_FIN_SPLIT_LOYALTY_PER_MIN = float(_os.environ.get("FIN_SPLIT_LOYALTY_EUR_PER_MIN") or "1.00")
+
+
+def compute_financial_split(
+    amount_eur: float,
+    voice_minutes: float,
+    label: str = "",
+) -> dict:
+    """Split an incoming gross amount into the 4-tier financial engine.
+
+    Args:
+        amount_eur:     gross order amount in EUR
+        voice_minutes:  voice minutes the product unlocks (0 for non-voice)
+        label:          optional label for the log line ("First Step / €45")
+
+    Returns:
+        dict with all 4 tiers and the derived health flags. Always
+        returns the same keys so downstream logging stays uniform.
+    """
+    gross = round(float(amount_eur or 0.0), 2)
+    minutes = max(0.0, float(voice_minutes or 0.0))
+
+    tier1 = round(minutes * _FIN_SPLIT_COST_PER_MIN, 2)
+    tier2 = round(minutes * _FIN_SPLIT_RESERVE_PER_MIN, 2)
+    tier3 = round(minutes * _FIN_SPLIT_LOYALTY_PER_MIN, 2)
+    allocated = round(tier1 + tier2 + tier3, 2)
+    tier4 = round(gross - allocated, 2)
+
+    margin_pct = round((tier4 / gross) * 100.0, 1) if gross > 0 else 0.0
+    is_solvent = tier4 >= 0
+    is_healthy = tier4 >= round(gross * 0.20, 2)  # 20% profit threshold
+
+    return {
+        "label": label,
+        "gross_eur": gross,
+        "voice_minutes": minutes,
+        "tier1_production_costs_eur": tier1,
+        "tier2_reserve_fund_eur": tier2,
+        "tier3_loyalty_bank_eur": tier3,
+        "tier4_net_profit_eur": tier4,
+        "allocated_to_costs_eur": allocated,
+        "margin_pct": margin_pct,
+        "is_solvent": is_solvent,
+        "is_healthy_margin": is_healthy,
+        "rates_used": {
+            "cost_per_min": _FIN_SPLIT_COST_PER_MIN,
+            "reserve_per_min": _FIN_SPLIT_RESERVE_PER_MIN,
+            "loyalty_per_min": _FIN_SPLIT_LOYALTY_PER_MIN,
+        },
+    }
+
+
+def _log_financial_split(split: dict, context: str = "live") -> None:
+    """Emit a one-line FIN-SPLIT log entry to backend.err.log.
+
+    Format is grep-friendly:
+        [FIN-SPLIT] ctx=live label=… gross=45.00 mins=60.0 t1=15.00 t2=120.00 t3=60.00 t4=-150.00 margin=-333.3% solvent=False
+    """
+    line = (
+        f"[FIN-SPLIT] ctx={context} "
+        f"label={split.get('label') or '-'} "
+        f"gross={split['gross_eur']:.2f}€ "
+        f"mins={split['voice_minutes']:.1f} "
+        f"t1_costs={split['tier1_production_costs_eur']:.2f}€ "
+        f"t2_reserve={split['tier2_reserve_fund_eur']:.2f}€ "
+        f"t3_loyalty={split['tier3_loyalty_bank_eur']:.2f}€ "
+        f"t4_profit={split['tier4_net_profit_eur']:.2f}€ "
+        f"margin={split['margin_pct']:.1f}% "
+        f"solvent={split['is_solvent']} "
+        f"healthy={split['is_healthy_margin']}"
+    )
+    # logger.warning routes to stderr → /var/log/supervisor/backend.err.log
+    logger.warning(line)
+
+
+# §FIN-SPLIT DRY-RUN — emitted once on module import so the Founder
+# sees the locked-pricing economic shape in backend.err.log without
+# needing to send a real webhook. Scenarios reflect the 6-tier
+# pricing model as currently implemented in `_presence_seconds_for_variant`:
+#   €45  First Step          → 3600 sec = 60 min  (oneoff)
+#   €90  Steady Monthly      → 60 min       (founder-confirmed shorthand)
+#   €380 Own Room Monthly    → 14400 sec = 240 min (4 weekly sessions)
+#   €20  Top-up shorthand    → ~30 min
+def _emit_financial_dry_run() -> None:
+    logger.warning("=" * 78)
+    logger.warning("[FIN-SPLIT] DRY-RUN BOOT — 4-Tier Financial Engine v1 (2026-05-20)")
+    logger.warning(
+        "[FIN-SPLIT] rates: cost=€%.2f/min  reserve=€%.2f/min  loyalty=€%.2f/min",
+        _FIN_SPLIT_COST_PER_MIN,
+        _FIN_SPLIT_RESERVE_PER_MIN,
+        _FIN_SPLIT_LOYALTY_PER_MIN,
+    )
+    scenarios = [
+        ("First Step / €45",            45.0,  60.0),
+        ("Steady Monthly / €90",        90.0,  60.0),
+        ("Your Own Room Monthly / €380", 380.0, 240.0),
+        ("Top-up / €20",                20.0,  30.0),
+    ]
+    for label, amount, minutes in scenarios:
+        _log_financial_split(
+            compute_financial_split(amount, minutes, label=label),
+            context="dry-run",
+        )
+    logger.warning("[FIN-SPLIT] DRY-RUN END")
+    logger.warning("=" * 78)
+
+
+# Fire the dry-run on import. Guard with a flag so reloads (uvicorn
+# --reload) don't spam the log file dozens of times during dev.
+if not _os.environ.get("_FIN_SPLIT_DRY_RUN_DONE"):
+    try:
+        _emit_financial_dry_run()
+        _os.environ["_FIN_SPLIT_DRY_RUN_DONE"] = "1"
+    except Exception as e:  # noqa: BLE001
+        logger.warning("FIN-SPLIT dry-run emission failed: %s", e)
 
 
 def _presence_seconds_for_variant(variant_id: Optional[str]) -> tuple[int, str]:
