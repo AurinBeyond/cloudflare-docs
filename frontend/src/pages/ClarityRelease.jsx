@@ -103,6 +103,13 @@ export default function ClarityRelease() {
   // visitors. Fetched on mount; the room stays open if the call fails.
   const [freeAccessWindow, setFreeAccessWindow] = useState({ active: false, until: null });
 
+  // §TEXT-FREE 2026-05-19 — Track the live ConvAI mode at this level so
+  // VoiceSessionCountdown (above the panel) and ConvaiPresenceTracker
+  // (which wraps RoomConvaiChat) share one source of truth. When the
+  // wanderer flips to text, the countdown is hidden and the ledger
+  // is bypassed. Founder directive: writing is always free.
+  const [convaiMode, setConvaiMode] = useState("voice");
+
   // Past quiet hours (cross-session memory) — sessions the user explicitly
   // opted into keep_thread for. Surfaced on the HUB phase as a soft "resume"
   // panel. Empty list = first-time visitor or user who never enabled keep_thread.
@@ -1136,15 +1143,17 @@ function ChatPanel({
                 Renders nothing when SESSION_CAP_ENABLED=false (default
                 first deploy) or when the wanderer holds an unlimited /
                 free-access tier. NEVER touches RoomConvaiChat's audio,
-                SDK, or WebSocket state. */}
-            <VoiceSessionCountdown />
+                SDK, or WebSocket state.
+                §TEXT-FREE 2026-05-19 — Hidden entirely when the wanderer
+                is in text-only mode so writing feels truly free. */}
+            <VoiceSessionCountdown mode={convaiMode} />
             {/* §STABILIZATION 2026-05-16 PM — Presence Tracker wraps
                 RoomConvaiChat with realtime ledger updates and the
                 Voice Recovery Card. The tracker is a passive observer:
                 it reads status via `onStatusChange` (read-only emit)
                 and posts /api/presence/* without touching the SDK or
                 audio. RoomConvaiChat's audio core remains sealed. */}
-            <ConvaiPresenceTracker room="clarity" />
+            <ConvaiPresenceTracker room="clarity" onModeChange={setConvaiMode} />
           </div>
         ) : null}
 

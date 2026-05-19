@@ -2957,7 +2957,7 @@ def _emit_financial_dry_run() -> None:
     )
     scenarios = [
         ("First Step / €45",            45.0,  60.0),
-        ("Steady Monthly / €120",        120.0,  60.0),
+        ("Steady Monthly / €90",        90.0,  60.0),
         ("Your Own Room Monthly / €380", 380.0, 240.0),
         ("Top-up / €20",                20.0,  30.0),
     ]

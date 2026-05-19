@@ -38,8 +38,15 @@ const TIER_LABEL = {
   pending: "Ready to begin",
 };
 
-export function VoiceSessionCountdown({ enabled = true }) {
+export function VoiceSessionCountdown({ enabled = true, mode = "voice" }) {
   const cap = useVoiceSessionCap({ enabled });
+
+  // §TEXT-FREE 2026-05-19 — Writing is free for every wanderer.
+  // When the wanderer has flipped to text mode in RoomConvaiChat we
+  // hide the entire countdown UX so the experience does not feel
+  // metered. The cap layer itself is bypassed at the backend for
+  // text mode (see /api/clarity/convai/signed-url).
+  if (mode === "text") return null;
 
   // States 1 & 2 — invisible.
   if (cap.loading) return null;

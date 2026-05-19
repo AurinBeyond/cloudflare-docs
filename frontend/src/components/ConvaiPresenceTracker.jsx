@@ -22,18 +22,31 @@ import VoiceRecoveryCard from "./VoiceRecoveryCard";
 
 const HEARTBEAT_INTERVAL_MS = 30_000;
 
-export function ConvaiPresenceTracker({ room = "clarity" }) {
+export function ConvaiPresenceTracker({ room = "clarity", onModeChange }) {
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [mode, setMode] = useState("voice");
   const sessionIdRef = useRef(null);
   const heartbeatRef = useRef(null);
   const prevStatusRef = useRef("idle");
+  // §TEXT-FREE 2026-05-19 — Hold the "live" mode in a ref so the
+  // transition effect can read the most up-to-date mode without
+  // needing it as a dependency (which would re-fire the effect).
+  const modeRef = useRef("voice");
 
   // Passive status emit from RoomConvaiChat.
-  const onStatusChange = useCallback((nextStatus, nextError) => {
-    setStatus(nextStatus);
-    setErrorMsg(nextError || "");
-  }, []);
+  const onStatusChange = useCallback(
+    (nextStatus, nextError, nextMode) => {
+      setStatus(nextStatus);
+      setErrorMsg(nextError || "");
+      if (nextMode && nextMode !== modeRef.current) {
+        modeRef.current = nextMode;
+        setMode(nextMode);
+        if (typeof onModeChange === "function") onModeChange(nextMode);
+      }
+    },
+    [onModeChange],
+  );
 
   // Drive presence ledger off status transitions.
   useEffect(() => {
@@ -41,7 +54,11 @@ export function ConvaiPresenceTracker({ room = "clarity" }) {
     prevStatusRef.current = status;
 
     // Entering live → start session + heartbeat loop.
-    if (prev !== "live" && status === "live") {
+    // §TEXT-FREE 2026-05-19 — text mode bypasses the ledger entirely.
+    // The SDK still flips to "live" for text-only conversations, but
+    // we do NOT open a `voice_sessions` row, so no presence_seconds
+    // are decremented. Founder directive: writing is always free.
+    if (prev !== "live" && status === "live" && modeRef.current !== "text") {
       (async () => {
         try {
           const res = await api.post("/presence/start", { room });

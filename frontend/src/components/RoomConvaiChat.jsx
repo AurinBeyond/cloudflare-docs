@@ -145,11 +145,16 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
   // parent (e.g. ClarityRelease) can render the Voice Recovery Card
   // when an unexpected disconnect occurs. Never used to influence
   // the SDK, WebSocket, or audio pipeline.
+  //
+  // §TEXT-FREE 2026-05-19 — onStatusChange signature now also emits
+  // the current `mode` ("voice"|"text"|"hybrid"). Downstream consumers
+  // (ConvaiPresenceTracker, VoiceSessionCountdown) use it to skip
+  // credit-ledger updates and hide the countdown in text mode.
   useEffect(() => {
     if (typeof onStatusChange === "function") {
-      onStatusChange(status, errorMsg);
+      onStatusChange(status, errorMsg, mode);
     }
-  }, [status, errorMsg, onStatusChange]);
+  }, [status, errorMsg, mode, onStatusChange]);
 
 
   const pushTranscript = useCallback((role, text) => {

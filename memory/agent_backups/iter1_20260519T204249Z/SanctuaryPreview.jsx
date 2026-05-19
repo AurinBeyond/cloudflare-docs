@@ -430,8 +430,6 @@ function RoomsSection() {
         name: "Clarity Release",
         sub: "The Private Room",
         body: "A confidential space for what cannot be said aloud yet. The room keeps no score.",
-        intro: "Your place for clarity and quiet. Grace is here to listen. This is a room where you can bring the thoughts that haven't found their words yet. You have three ways to speak with her — choose the one that feels right for this moment. If the call ever falters, simply write; Grace will answer aloud, so nothing has to be left unsaid. This is a real-time meeting where you are truly heard.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
         img: GROUNDED,
         href: "/clarity-release",
         testid: "room-enter-clarity",
@@ -441,8 +439,6 @@ function RoomsSection() {
         name: "Body Room",
         sub: "The Listening Room",
         body: "Where the body is asked first. Slow attention to what carries underneath the words.",
-        intro: "A way back to yourself. Kaelan helps you reconnect with your body and what it carries. This room is for the moments you need grounding and presence. There are three ways to be together here — speak, or be spoken to, whichever you need. If the call should break, just write; Kaelan will answer aloud. This is a living conversation that happens right here, right now.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
         img: WINGS,
         href: "/body-room",
         testid: "room-enter-body",
@@ -452,8 +448,6 @@ function RoomsSection() {
         name: "Parents' Room",
         sub: "The Hearth Room",
         body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
-        intro: "Understanding, warmth, and quiet support. Sara is here to offer a place where you are held and met. This room is made for the tender questions of parenting and growth. Three ways to talk are open to you — pick the one that fits today. Do not worry if the line falters; write your thought, and Sara will speak her answer back to you. This is real and living sharing — your questions are always welcome here.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
         img: WARMTH,
         href: "/parents-room",
         testid: "room-enter-parents",
@@ -463,8 +457,6 @@ function RoomsSection() {
         name: "Course Room",
         sub: "The Study Room",
         body: "Structured study and gentle progression. Books, practices, and a measured rhythm.",
-        intro: "Wisdom and the deeper knowing. Alistair is here to guide you and bring clarity to complex understanding. This room is for the moments you want to explore, learn, or go deeper. We will choose together one of three ways to talk. If the call breaks while you wonder, just write — Alistair will answer aloud. This is a real-time dialogue where thoughts are shared and answers are found together.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
         img: ATMOSPHERE,
         href: "/course-room",
         testid: "room-enter-courses",
@@ -524,26 +516,6 @@ function RoomsSection() {
                   </h3>
                   <p className="text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
                     {r.body}
-                  </p>
-                  {/* §INTRO 2026-05-19 — Founder directive: a soft,
-                      non-technical introduction that names the room's
-                      keeper and the three ways to converse. Stays
-                      brand-aligned (no "AI", "bot", "model"). */}
-                  <p
-                    className="mt-6 text-[14px] leading-[1.8] italic font-light text-[#bcb4a3] max-w-[520px]"
-                    style={{ fontFamily: SERIF }}
-                    data-testid={`room-intro-${r.n.toLowerCase()}`}
-                  >
-                    {r.intro}
-                  </p>
-                  {/* §CREDIT-HINT 2026-05-19 — discrete, brass-accent
-                      line so the wanderer knows text is free and
-                      voice begins at the credit threshold. */}
-                  <p
-                    className="mt-4 text-[11px] tracking-[0.28em] uppercase text-[#c4a46b]/80"
-                    data-testid={`room-credit-${r.n.toLowerCase()}`}
-                  >
-                    {r.creditNote}
                   </p>
                   {/* §ENTER 2026-05-19 — Founder directive: every room
                       description gets a single, calm ENTER affordance
@@ -1027,130 +999,6 @@ function ClosingSection() {
   );
 }
 
-// §TWO PATHS 2026-05-19 — Founder directive: a compact summary that
-// frames the wanderer's two ways to pay (one-time + top-ups vs.
-// monthly subscription) right after the rooms section, before the
-// fuller WaysToBeHereSection grid. Minimalist, two-column, no CTAs
-// (the actual purchase paths live in WaysToBeHereSection below).
-function TwoPathsSection() {
-  const paths = [
-    {
-      key: "credits",
-      kicker: "Path I",
-      name: "The Wanderer's Credits",
-      tagline: "Pay only for what you use. No subscription.",
-      lines: [
-        { label: "First Step", value: "€45", note: "1 hour of voice presence" },
-        { label: "Top-up · 30 min", value: "€25", note: "a brief return" },
-        { label: "Top-up · 60 min", value: "€39", note: "a full hour" },
-        { label: "Top-up · 180 min", value: "€99", note: "a season's worth" },
-      ],
-    },
-    {
-      key: "subscription",
-      kicker: "Path II",
-      name: "The Aurin Subscription",
-      tagline: "Monthly companionship. Move freely between all rooms.",
-      lines: [
-        { label: "Steady Monthly", value: "€120", note: "1 hour of voice / month" },
-        { label: "Your Own Room", value: "€380", note: "4 hours of voice / month" },
-      ],
-      featured: true,
-    },
-  ];
-  return (
-    <section
-      id="two-paths"
-      data-testid="sanctuary-two-paths"
-      className="relative w-full bg-[#0b0a08] py-28 border-t border-[rgba(196,164,107,0.08)]"
-    >
-      <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
-        <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-6 text-center">
-            — Two Paths
-          </p>
-          <h2
-            className="text-center text-[28px] sm:text-[36px] lg:text-[42px] leading-[1.18] text-[#f0eadd] font-light max-w-[760px] mx-auto"
-            style={{ fontFamily: SERIF }}
-          >
-            Writing is always free.<br />
-            <span className="italic text-[#bcb4a3]">Voice opens through one of two doors.</span>
-          </h2>
-          <p
-            className="mt-7 text-center text-[14px] leading-[1.85] italic text-[#a59f93] max-w-[560px] mx-auto font-light"
-            style={{ fontFamily: SERIF }}
-          >
-            Choose the rhythm that fits your life — a single hour, or a quiet monthly presence.
-          </p>
-        </RevealBlock>
-        <div className="mt-20 grid md:grid-cols-2 gap-7 lg:gap-12">
-          {paths.map((p, i) => (
-            <RevealBlock key={p.key} delay={i * 120}>
-              <div
-                data-testid={`two-paths-${p.key}`}
-                className={`h-full p-10 sm:p-12 border ${
-                  p.featured
-                    ? "border-[rgba(196,164,107,0.55)] bg-[rgba(28,24,18,0.6)]"
-                    : "border-[rgba(196,164,107,0.22)] bg-[rgba(18,16,13,0.55)]"
-                }`}
-              >
-                <p className="text-[10px] tracking-[0.42em] uppercase text-[#c4a46b] mb-5">
-                  {p.kicker}
-                </p>
-                <h3
-                  className="text-[26px] sm:text-[30px] leading-[1.16] text-[#f0eadd] font-light mb-3"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {p.name}
-                </h3>
-                <p
-                  className="text-[13.5px] italic leading-[1.7] text-[#a59f93] mb-9 font-light"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {p.tagline}
-                </p>
-                <ul className="space-y-3.5">
-                  {p.lines.map((l, j) => (
-                    <li
-                      key={j}
-                      className="flex items-baseline justify-between gap-4 pb-3.5 border-b border-[rgba(196,164,107,0.1)] last:border-b-0"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-[13.5px] text-[#f0eadd] font-light">
-                          {l.label}
-                        </span>
-                        <span
-                          className="text-[12px] italic text-[#7a7468] font-light"
-                          style={{ fontFamily: SERIF }}
-                        >
-                          {l.note}
-                        </span>
-                      </div>
-                      <span
-                        className="text-[20px] text-[#c4a46b] font-light"
-                        style={{ fontFamily: SERIF }}
-                      >
-                        {l.value}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </RevealBlock>
-          ))}
-        </div>
-        <RevealBlock delay={240}>
-          <p
-            className="mt-14 text-center text-[12px] tracking-[0.28em] uppercase text-[#7a7468]"
-          >
-            Reading, reflection, and text conversation remain free for every wanderer.
-          </p>
-        </RevealBlock>
-      </div>
-    </section>
-  );
-}
-
 function SanctuaryFooter() {
   return (
     <footer
@@ -1199,7 +1047,6 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <HeroSection />
           <TwoWorldsSection />
           <RoomsSection />
-          <TwoPathsSection />
           <OpenWorldSection />
           <WaysToBeHereSection />
           <VoiceMeterSection />
