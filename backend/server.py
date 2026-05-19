@@ -2428,6 +2428,11 @@ async def lemonsqueezy_webhook(request: Request):
                     "expires_at": exp,
                     "consumed": consumed,
                 })
+                # §LOYALTY 2026-05-19 — Silent Loyalty Presence Bank accrual.
+                # Background ledger only; not exposed to frontend yet.
+                await _accrue_loyalty(
+                    user_id, _extract_lemonsqueezy_currency(data)
+                )
                 # §8.4 — auto-issue magic link so buyer lands directly in
                 # the Cabinet without any login friction.
                 magic = None
@@ -2568,6 +2573,13 @@ async def lemonsqueezy_webhook(request: Request):
                 })
             except Exception:
                 pass
+
+            # §LOYALTY 2026-05-19 — Silent Loyalty Presence Bank accrual.
+            # Background ledger only; not exposed to frontend yet.
+            await _accrue_loyalty(
+                target_user["user_id"],
+                _extract_lemonsqueezy_currency(data),
+            )
 
             # Issue magic link so the buyer lands directly in Private Room.
             magic = None
@@ -2723,6 +2735,64 @@ def _extract_lemonsqueezy_variant_id(data: dict) -> Optional[str]:
     if vid:
         return str(vid)
     return None
+
+
+def _extract_lemonsqueezy_currency(data: dict) -> str:
+    """Pull the buyer's currency from a LemonSqueezy webhook payload.
+
+    §STABILIZATION 2026-05-19 — Founder directive: every successful
+    purchase silently accrues 1-2 base units into the buyer's Loyalty
+    Presence Bank in their detected currency. Lemon stores the order
+    currency under `data.attributes.currency` (3-letter ISO code).
+
+    Returns "EUR" or "USD" (uppercase). Anything else (including
+    GBP/CAD/etc.) collapses to "EUR" as the conservative default —
+    Founder rule: bank is strictly EUR/USD bookkeeping.
+    """
+    attrs = (data.get("attributes") or {}) if isinstance(data, dict) else {}
+    cur = (attrs.get("currency") or "").strip().upper()
+    return cur if cur in ("EUR", "USD") else "EUR"
+
+
+def _loyalty_accrual_for_currency(currency: str) -> int:
+    """Founder-tunable accrual rate from ENV.
+
+    Defaults to 2 base units per successful purchase, per Founder
+    spec (1-2 base units depending on currency). Configure in .env:
+        LOYALTY_ACCRUAL_EUR=2
+        LOYALTY_ACCRUAL_USD=2
+    Setting the value to 0 disables accrual silently for that
+    currency without redeploy.
+    """
+    env_key = f"LOYALTY_ACCRUAL_{currency.upper()}"
+    try:
+        return max(0, int(_os.environ.get(env_key) or "2"))
+    except (ValueError, TypeError):
+        return 2
+
+
+async def _accrue_loyalty(user_id: Optional[str], currency: str) -> None:
+    """Silent Loyalty Presence Bank accrual for any successful purchase.
+
+    Founder directive 2026-05-19: background ledger only. NOT exposed
+    to the frontend yet, NOT spendable yet — we are simply laying
+    the data foundation so future features (loyalty gifts, surprise
+    voice minutes) can read from `users.loyalty_currency_balance.EUR`
+    and `users.loyalty_currency_balance.USD` once the founder turns
+    the bank visible.
+    """
+    accrual = _loyalty_accrual_for_currency(currency)
+    if accrual <= 0 or not user_id:
+        return
+    try:
+        await db.users.update_one(
+            {"user_id": user_id},
+            {"$inc": {f"loyalty_currency_balance.{currency}": accrual}},
+        )
+    except Exception as e:  # noqa: BLE001
+        logger.warning(
+            "loyalty accrual failed user=%s cur=%s: %s", user_id, currency, e
+        )
 
 
 def _presence_seconds_for_variant(variant_id: Optional[str]) -> tuple[int, str]:
@@ -8181,6 +8251,104 @@ async def admin_heartbeat_test(request: Request):
     if not admin_token or sent != admin_token:
         raise HTTPException(status_code=401, detail="Admin token required.")
     return await _send_one_heartbeat()
+
+
+# ----------------------------------------------------------------
+# §STABILIZATION 2026-05-19 — Admin presence-grant endpoint.
+# Founder tool for manually gifting / withdrawing voice minutes
+# without going through Lemon Squeezy (VIP, influencer, press,
+# refund flows). Idempotent via an auto-generated `external_order_id`
+# so duplicate calls create independent audit records — safe and
+# repeatable.
+# ----------------------------------------------------------------
+
+class AdminPresenceGrantInput(BaseModel):
+    """Body for POST /api/admin/presence/grant.
+
+    Identify the recipient by EITHER `user_id` OR `email` (at least
+    one required). `seconds` may be negative to subtract minutes
+    (e.g. refund or correction); balance is floored at 0.
+    """
+    user_id: Optional[str] = None
+    email: Optional[str] = None
+    seconds: int  # positive to add, negative to subtract
+    reason: Optional[str] = "founder_gift"
+    note: Optional[str] = None  # free-form audit note, never shown to user
+
+
+@api_router.post("/admin/presence/grant")
+async def admin_presence_grant(inp: AdminPresenceGrantInput, request: Request):
+    """Founder-only — manual presence-seconds grant or correction.
+
+    Use cases:
+      • VIP / influencer gift (positive seconds)
+      • Press review window (positive seconds)
+      • Refund / correction (negative seconds)
+      • Test seeding (positive seconds)
+
+    Authentication: ADMIN_TOKEN header `X-Admin-Token` or query `token`.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    if not (inp.user_id or inp.email):
+        raise HTTPException(
+            status_code=400, detail="user_id or email required."
+        )
+
+    user_doc = None
+    if inp.user_id:
+        user_doc = await db.users.find_one(
+            {"user_id": inp.user_id}, {"_id": 0}
+        )
+    if not user_doc and inp.email:
+        user_doc = await db.users.find_one(
+            {"email": inp.email.strip().lower()}, {"_id": 0}
+        )
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    current_balance = int(user_doc.get("presence_seconds_left") or 0)
+    new_balance = max(0, current_balance + int(inp.seconds))
+
+    await db.users.update_one(
+        {"user_id": user_doc["user_id"]},
+        {"$set": {"presence_seconds_left": new_balance}},
+    )
+
+    # Audit record — same collection as Lemon-driven grants so the
+    # founder's analytics view sees a complete ledger.
+    try:
+        await db.presence_grants.insert_one({
+            "id": str(uuid.uuid4()),
+            "user_id": user_doc["user_id"],
+            "external_order_id": f"founder_gift_{uuid.uuid4().hex[:12]}",
+            "variant_id": None,
+            "presence_seconds": int(inp.seconds),
+            "grant_kind": "founder_gift",
+            "source": "admin",
+            "reason": inp.reason or "founder_gift",
+            "note": inp.note or None,
+            "granted_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as e:  # noqa: BLE001
+        logger.warning("admin presence grant audit insert failed: %s", e)
+
+    return {
+        "status": "ok",
+        "user_id": user_doc["user_id"],
+        "email": user_doc.get("email"),
+        "seconds_delta": int(inp.seconds),
+        "previous_balance": current_balance,
+        "presence_seconds_left": new_balance,
+        "reason": inp.reason or "founder_gift",
+    }
 
 
 # ----------------------------------------------------------------
