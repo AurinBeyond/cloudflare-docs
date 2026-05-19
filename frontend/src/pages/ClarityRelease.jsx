@@ -407,7 +407,7 @@ export default function ClarityRelease() {
   };
 
   return (
-    <div data-testid="page-clarity-release">
+    <div data-testid="page-clarity-release" className="sanctuary-room">
       <PageHeader
         tone="default"
         eyebrow="Clarity Release"

@@ -195,25 +195,25 @@ function HeroSection() {
       <div className="absolute inset-0 will-change-transform" ref={imgRef}>
         {/* Mobile: small top band so the layout breathes vertically.
             Desktop: image pulled LEFT toward the text block. Founder
-            2026-05-19 evening evolution:
-              • face side opened ~10% wider (left edge moved from 52%
-                → 48%, width 30% → 32%) so more of the unmasked face
-                breathes through
-              • a quiet sunrise glow now bleeds from below the face
-                contour — a hazy luminous warmth, never a hard light. */}
+            2026-05-19 night refinement:
+              • face contour emerges MORE from the dark — image
+                brightness/contrast nudged so the unmasked side
+                breathes through the dark canvas
+              • mask fragments dissolve faster into the distance —
+                strengthened right-edge fade so the broken shards
+                become a silhouette rather than a hard edge
+              • sunrise glow REDUCED so it complements the new
+                contour rather than competing with it */}
         <div className="absolute inset-x-0 top-[88px] h-[32vh] md:inset-y-0 md:right-auto md:top-0 md:h-full md:left-[48%] md:w-[32%]">
-          {/* Sunrise glow — sits BENEATH the image so the face
-              contour appears to emerge from a soft warm horizon.
-              Founder cue 2026-05-19: "nagu päikese tõus". Brass-
-              keyed (#d4b67d → #c4a46b) so it stays inside the
-              established Aurin palette. */}
+          {/* Quiet sunrise glow — reduced intensity per Founder cue
+              "ei tohi jääda häirivaks". Brass-keyed, blurred. */}
           <div
             aria-hidden="true"
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 75% 50% at 38% 90%, rgba(212,182,125,0.28) 0%, rgba(196,164,107,0.14) 30%, rgba(11,10,8,0) 70%)",
-              filter: "blur(2px)",
+                "radial-gradient(ellipse 70% 45% at 36% 92%, rgba(212,182,125,0.18) 0%, rgba(196,164,107,0.08) 35%, rgba(11,10,8,0) 72%)",
+              filter: "blur(3px)",
             }}
           />
           <img
@@ -222,29 +222,34 @@ function HeroSection() {
             aria-hidden="true"
             data-testid="hero-mask-image"
             className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-              visible ? "opacity-90 scale-100" : "opacity-0 scale-[1.04]"
+              visible ? "opacity-95 scale-100" : "opacity-0 scale-[1.04]"
             }`}
-            style={{ filter: "contrast(1.06) saturate(1.06) brightness(0.97)" }}
-          />
-          {/* Soft elliptical fade so the figure dissolves into the
-              page rather than ending in a sharp rectangle. */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_70%_50%,_transparent_0%,_rgba(11,10,8,0.55)_70%,_#0b0a08_100%)]" />
-          {/* Left edge feathering — connects mask region to body
-              copy without a visible seam. */}
-          <div className="absolute inset-y-0 left-0 w-[24%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
-          {/* Right edge feathering. */}
-          <div className="hidden md:block absolute inset-y-0 right-0 w-[28%] bg-gradient-to-l from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
-          {/* Additional sunrise bloom layered ON TOP at very low
-              opacity — gives the contour the "luminous emerging
-              from the horizon" quality the founder asked for. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none mix-blend-screen"
             style={{
-              background:
-                "radial-gradient(ellipse 60% 100% at 40% 100%, rgba(212,182,125,0.18) 0%, rgba(196,164,107,0.08) 35%, transparent 70%)",
+              filter: "contrast(1.10) saturate(1.08) brightness(1.02)",
             }}
           />
+          {/* Face contour spotlight — a soft, focused inner glow on
+              the unmasked face area so the contour emerges from the
+              dark canvas instead of getting lost in it. Subtle:
+              opacity 0.10 max, anchored to the cheek/jaw region. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none mix-blend-soft-light"
+            style={{
+              background:
+                "radial-gradient(ellipse 38% 55% at 32% 55%, rgba(248,236,210,0.32) 0%, rgba(212,182,125,0.12) 45%, transparent 75%)",
+            }}
+          />
+          {/* Soft elliptical vignette so the figure dissolves into the
+              page rather than ending in a sharp rectangle. */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_50%,_transparent_0%,_rgba(11,10,8,0.50)_75%,_#0b0a08_100%)]" />
+          {/* Left edge feathering — connects mask region to body
+              copy without a visible seam. */}
+          <div className="absolute inset-y-0 left-0 w-[22%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
+          {/* Right edge feathering — STRENGTHENED (was 28% / now 42%)
+              so the mask fragments truly dissolve into the distance
+              instead of cutting against the dark canvas. */}
+          <div className="hidden md:block absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#0b0a08] via-[rgba(11,10,8,0.80)] via-[rgba(11,10,8,0.40)] to-transparent" />
           <div className="md:hidden absolute inset-x-0 bottom-0 h-[60px] bg-gradient-to-t from-[#0b0a08] to-transparent" />
         </div>
       </div>

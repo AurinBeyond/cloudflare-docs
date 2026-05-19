@@ -132,7 +132,7 @@ export default function ParentsRoom() {
   const activeLensObj = lenses.find((l) => l.id === activeLens) || lenses.find((l) => l.id === DEFAULT_LENS);
 
   return (
-    <div data-testid="page-parents-room">
+    <div data-testid="page-parents-room" className="sanctuary-room">
       <PageHeader
         eyebrow="Parents' Room · Wisdom Weaver"
         title="Three wisdom traditions, one calm room for parents."

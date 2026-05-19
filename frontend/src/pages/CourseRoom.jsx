@@ -64,7 +64,7 @@ export default function CourseRoom() {
   }, []);
 
   return (
-    <div data-testid="course-room-page">
+    <div data-testid="course-room-page" className="sanctuary-room">
       <PageHeader
         eyebrow="Course Room"
         title="Quiet"

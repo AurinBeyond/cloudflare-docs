@@ -869,3 +869,84 @@
     }
 }
 
+
+/* ──────────────────────────────────────────────────────────────────
+   §SANCTUARY ROOM THEME — 2026-05-19
+   Adds when a page wrapper has `.sanctuary-room` (or its parent
+   has it). Re-keys the Aurin palette to match the new /sanctuary
+   landing on `/`: deep #0b0a08 canvas, brass #c4a46b accents,
+   Cormorant Garamond on headings. Does NOT touch the ConvAI
+   mic/transcript module — that lives in its own DOM subtree with
+   its own internal styling that we leave alone.
+   Apply: <div className="sanctuary-room">…room content…</div>
+   ────────────────────────────────────────────────────────────── */
+
+.sanctuary-room {
+    /* deep canvas */
+    --aurin-bg: 38 12% 5%;            /* near #0b0a08 */
+    --aurin-surface: 38 10% 7%;
+    --aurin-surface-2: 38 9% 10%;
+    --aurin-border: 38 10% 16%;
+    --aurin-border-soft: 38 10% 13%;
+    /* warm cream text */
+    --aurin-text: 40 30% 91%;         /* near #f0eadd */
+    --aurin-text-muted: 38 14% 64%;   /* near #a59f93 */
+    /* brass accent replaces sage */
+    --aurin-sage: 36 42% 60%;         /* near #c4a46b */
+    --aurin-sand: 36 50% 67%;         /* near #d4b67d */
+}
+
+.sanctuary-room {
+    background-color: hsl(var(--aurin-bg));
+    color: hsl(var(--aurin-text));
+}
+
+/* Headings inside a sanctuary room — Cormorant Garamond serif,
+   light weight, italic accent for emphasized phrases. */
+.sanctuary-room h1,
+.sanctuary-room h2,
+.sanctuary-room h3,
+.sanctuary-room .aurin-section-title {
+    font-family: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+    font-weight: 300;
+    letter-spacing: -0.012em;
+}
+
+.sanctuary-room em,
+.sanctuary-room .sanctuary-accent {
+    font-style: italic;
+    color: hsl(var(--aurin-sand));
+}
+
+/* Eyebrow / section meta — the brass micro-caps signature line we
+   use across the sanctuary landing. */
+.sanctuary-room .sanctuary-eyebrow {
+    color: hsl(var(--aurin-sage));
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+/* Bordered CTAs adopt the brass-pill style automatically. */
+.sanctuary-room .aurin-btn-secondary {
+    border-color: hsl(var(--aurin-sage) / 0.55);
+    color: hsl(var(--aurin-sage));
+    background: transparent;
+}
+
+.sanctuary-room .aurin-btn-secondary:hover {
+    background: hsl(var(--aurin-sage));
+    color: hsl(var(--aurin-bg));
+}
+
+/* Strip out any inline preview/SaaS banners the founder doesn't
+   want surfacing inside a sanctuary room — Emergent badge,
+   "Made with…" pills, free-launch banners are hidden the same way
+   the landing route hides them. */
+.sanctuary-room [class*="emergent" i][class*="badge" i],
+.sanctuary-room a[href*="emergent.sh" i],
+.sanctuary-room a[href*="emergentagent.com" i][target="_blank"] {
+    display: none !important;
+}
+

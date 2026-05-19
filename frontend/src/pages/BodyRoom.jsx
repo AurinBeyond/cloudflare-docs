@@ -120,7 +120,7 @@ export default function BodyRoom() {
   };
 
   return (
-    <div data-testid="page-body-room">
+    <div data-testid="page-body-room" className="sanctuary-room">
       <PageHeader
         tone="default"
         eyebrow="The Body Room"
