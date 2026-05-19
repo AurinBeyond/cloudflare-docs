@@ -192,11 +192,17 @@ function HeroSection() {
           className={`w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
             visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
           }`}
+          style={{ filter: "contrast(1.08) saturate(1.06) brightness(0.96)" }}
         />
-        {/* Softer cinematic vignette — face must remain visible (Mike ref) */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(10,9,8,0.45)_0%,_rgba(10,9,8,0.78)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-[160px] bg-gradient-to-b from-[rgba(10,9,8,0.85)] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-[rgba(10,9,8,0.95)] to-transparent" />
+        {/* §POLISH 2026-05-18 PM — Cinematic vignette, no muddy blur.
+            Replaced the soft radial with a deliberate three-layer mask:
+            (1) side darkening so the face anchors the center sharply,
+            (2) tight top fade for nav anchor, (3) decisive bottom fade
+            that resolves into pure #0b0a08 — no gray smear, no
+            washed-out fog. */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,_rgba(8,7,6,0.78)_0%,_rgba(10,9,8,0.20)_28%,_rgba(10,9,8,0.20)_72%,_rgba(8,7,6,0.78)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#0b0a08] via-[rgba(10,9,8,0.55)] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-[#0b0a08] via-[rgba(10,9,8,0.65)] to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-[1100px] mx-auto px-6 sm:px-10 pt-[180px] pb-32 text-center">
@@ -262,11 +268,11 @@ function TwoWorldsSection() {
             — Two Worlds, One Sanctuary
           </p>
           <h2
-            className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[840px] mx-auto tracking-[-0.012em]"
+            className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[860px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            The inner world and the structured world,<br />
-            <span className="italic text-[#d4b67d]">in the same breath.</span>
+            A space where reflection and structure<br />
+            <span className="italic text-[#d4b67d]">quietly bring you back to yourself.</span>
           </h2>
         </RevealBlock>
 
@@ -274,8 +280,11 @@ function TwoWorldsSection() {
           <RevealBlock delay={120}>
             <div
               data-testid="world-emotional"
-              className="relative border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
+              className="relative border border-[rgba(196,164,107,0.32)] bg-[rgba(18,16,13,0.62)] p-10 sm:p-12 h-full"
             >
+              {/* §POLISH — sharp brass corner accent for visual certainty */}
+              <span aria-hidden="true" className="absolute top-0 left-0 w-12 h-px bg-[#c4a46b]" />
+              <span aria-hidden="true" className="absolute top-0 left-0 w-px h-12 bg-[#c4a46b]" />
               <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-6">I · Inner</p>
               <h3
                 className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
@@ -297,8 +306,10 @@ function TwoWorldsSection() {
           <RevealBlock delay={220}>
             <div
               data-testid="world-practical"
-              className="relative border border-[rgba(196,164,107,0.18)] bg-[rgba(20,18,15,0.45)] p-10 sm:p-12 h-full"
+              className="relative border border-[rgba(196,164,107,0.32)] bg-[rgba(18,16,13,0.62)] p-10 sm:p-12 h-full"
             >
+              <span aria-hidden="true" className="absolute top-0 right-0 w-12 h-px bg-[#c4a46b]" />
+              <span aria-hidden="true" className="absolute top-0 right-0 w-px h-12 bg-[#c4a46b]" />
               <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-6">II · Rooms</p>
               <h3
                 className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
@@ -386,14 +397,15 @@ function RoomsSection() {
                   i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
                 }`}
               >
-                <div className="md:col-span-5 relative aspect-[4/5] overflow-hidden border border-[rgba(196,164,107,0.14)]">
+                <div className="md:col-span-5 relative aspect-[4/5] overflow-hidden border border-[rgba(196,164,107,0.28)]">
                   <img
                     src={r.img}
                     alt=""
                     aria-hidden="true"
                     className="w-full h-full object-cover transition-transform duration-[2400ms] ease-out hover:scale-[1.03]"
+                    style={{ filter: "contrast(1.08) saturate(1.05) brightness(0.97)" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,9,8,0.6)] to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(8,7,6,0.7)] via-[rgba(10,9,8,0.18)] to-transparent" />
                 </div>
                 <div className="md:col-span-7">
                   <p className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-5">
@@ -437,27 +449,34 @@ function RoomsSection() {
 // §OPEN WORLD — addresses GPT/AH audit: practical product clarity was too soft.
 // Surfaces the FREE layer (Library, Bookstore, Reflections, Kids stories)
 // so visitors understand what they can explore before paying.
+// §POLISH 2026-05-18 PM — Each card now carries a high-contrast badge
+// at the TOP-LEFT (not bottom muted-tracking text) so the visitor
+// instantly maps: green-brass = enter freely, ivory = paid threshold.
 function OpenWorldSection() {
   const layers = [
     {
       title: "The Library",
       body: "Reflections, journal entries, slow reads — open to anyone who wanders in.",
-      tag: "Free to read",
+      badge: "Free to enter",
+      tone: "free",
     },
     {
       title: "The Bookstore",
       body: "A small collection of original books and angel stories. Each title is its own quiet object.",
-      tag: "From €9 · once",
+      badge: "From €9 · once",
+      tone: "paid",
     },
     {
       title: "The Courses",
       body: "Self-paced studies — The Body Knows First, Beyond the Matrix, and others — read at your own rhythm.",
-      tag: "From €19 · once",
+      badge: "From €19 · once",
+      tone: "paid",
     },
     {
       title: "Kids Universe",
       body: "Angel stories, coloring pages, and the gentlest version of the sanctuary for the youngest visitors.",
-      tag: "Free entry",
+      badge: "Free to enter",
+      tone: "free",
     },
   ];
 
@@ -468,7 +487,7 @@ function OpenWorldSection() {
       className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
       <div className="absolute inset-0 opacity-[0.10]">
-        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" style={{ filter: "contrast(1.06) saturate(1.04)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,9,8,0.85)] via-[rgba(10,9,8,0.95)] to-[rgba(10,9,8,1)]" />
       </div>
 
@@ -484,10 +503,20 @@ function OpenWorldSection() {
             What stays open<br />
             <span className="italic text-[#d4b67d]">without asking anything in return.</span>
           </h2>
-          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[600px] mx-auto font-light">
+          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[640px] mx-auto font-light">
             Before any threshold, there is a long, quiet exploration layer.
             Read what is written. Read what has been thought through. Bring
             your children. No invitation, no payment, no name required.
+          </p>
+          {/* §POLISH 2026-05-18 PM — Visitor orientation: free now vs.
+              voice-token later. Spelled out gently but clearly. */}
+          <p
+            data-testid="openworld-orientation"
+            className="mt-6 text-center text-[13.5px] italic text-[#7a7468] max-w-[600px] mx-auto leading-[1.85] font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            Live voice presence with the guides is held separately —
+            a small token of time, for the moments you wish to speak aloud.
           </p>
         </RevealBlock>
 
@@ -496,21 +525,29 @@ function OpenWorldSection() {
             <RevealBlock key={l.title} delay={i * 90}>
               <div
                 data-testid={`openworld-${l.title.toLowerCase().replace(/\s+/g, "-")}`}
-                className="h-full border border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)] p-8 hover:border-[rgba(196,164,107,0.32)] transition-colors duration-700"
+                className="relative h-full border border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)] p-8 pt-12 hover:border-[rgba(196,164,107,0.5)] transition-colors duration-700"
               >
+                {/* §POLISH — High-contrast badge anchored at TOP for instant
+                    scan: free items get a brass-filled chip, paid items get
+                    a bordered ivory chip. */}
+                <span
+                  data-testid={`openworld-badge-${l.tone}`}
+                  className={
+                    l.tone === "free"
+                      ? "absolute -top-3 left-7 text-[10px] tracking-[0.32em] uppercase text-[#0b0a08] bg-[#c4a46b] px-3.5 py-1.5"
+                      : "absolute -top-3 left-7 text-[10px] tracking-[0.28em] uppercase text-[#e8e1d5] bg-[#0b0a08] border border-[rgba(232,225,213,0.55)] px-3.5 py-1.5"
+                  }
+                >
+                  {l.badge}
+                </span>
                 <h3
                   className="text-[22px] leading-[1.2] text-[#f0eadd] font-light mb-4"
                   style={{ fontFamily: SERIF }}
                 >
                   {l.title}
                 </h3>
-                <p className="text-[14px] leading-[1.8] text-[#bcb4a3] font-light mb-7">
+                <p className="text-[14px] leading-[1.82] text-[#bcb4a3] font-light">
                   {l.body}
-                </p>
-                <p
-                  className="text-[11px] tracking-[0.22em] uppercase text-[#c4a46b] pt-5 border-t border-[rgba(196,164,107,0.12)]"
-                >
-                  {l.tag}
                 </p>
               </div>
             </RevealBlock>
@@ -608,8 +645,8 @@ function WaysToBeHereSection() {
                 data-testid={`ways-${t.key}`}
                 className={`relative h-full flex flex-col p-10 sm:p-12 border ${
                   t.featured
-                    ? "border-[rgba(196,164,107,0.45)] bg-[rgba(28,24,18,0.55)]"
-                    : "border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)]"
+                    ? "border-[rgba(196,164,107,0.6)] bg-[rgba(28,24,18,0.72)]"
+                    : "border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)]"
                 }`}
               >
                 {t.featured ? (
@@ -723,7 +760,7 @@ function VoiceMeterSection() {
             <RevealBlock key={t.mins} delay={i * 100}>
               <div
                 data-testid={`voice-topup-${t.price.replace("€", "")}`}
-                className="border border-[rgba(196,164,107,0.14)] bg-[rgba(20,18,15,0.45)] p-8 text-center hover:border-[rgba(196,164,107,0.32)] transition-colors duration-700"
+                className="border border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)] p-8 text-center hover:border-[rgba(196,164,107,0.5)] transition-colors duration-700"
               >
                 <p
                   className="text-[28px] leading-none text-[#f0eadd] font-light mb-3"
@@ -766,9 +803,9 @@ function PhilosophySection() {
       data-testid="sanctuary-philosophy"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-[0.22]">
-        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,9,8,0.55)] via-[rgba(10,9,8,0.85)] to-[rgba(10,9,8,1)]" />
+      <div className="absolute inset-0 opacity-[0.28]">
+        <img src={ATMOSPHERE} alt="" aria-hidden="true" className="w-full h-full object-cover" style={{ filter: "contrast(1.10) saturate(1.05)" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(8,7,6,0.55)] via-[rgba(10,9,8,0.88)] to-[#0b0a08]" />
       </div>
 
       <div className="relative z-10 max-w-[820px] mx-auto px-6 sm:px-10 text-center">
