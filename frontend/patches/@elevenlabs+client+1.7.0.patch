@@ -1,0 +1,53 @@
+diff --git a/node_modules/@elevenlabs/client/dist/lib.iife.js b/node_modules/@elevenlabs/client/dist/lib.iife.js
+index ccf241d..c5c8d92 100644
+--- a/node_modules/@elevenlabs/client/dist/lib.iife.js
++++ b/node_modules/@elevenlabs/client/dist/lib.iife.js
+@@ -13575,7 +13575,7 @@ var ElevenLabsClient = (function(exports) {
+ 		autoGainControl: true,
+ 		echoCancellation: true,
+ 		noiseSuppression: true,
+-		voiceIsolation: true
++		_voiceIsolationRemoved: false
+ 	};
+ 	const videoDefaults = {
+ 		deviceId: { ideal: "default" },
+@@ -22776,7 +22776,7 @@ registerProcessor("audioConcatProcessor", AudioConcatProcessor);
+ 				if (!supportsSampleRateConstraint) await addLibsamplerateModule(context, libsampleratePath);
+ 				await loadRawAudioProcessor(context.audioWorklet, workletPaths?.rawAudioProcessor);
+ 				const constraints = {
+-					voiceIsolation: true,
++					_voiceIsolationRemoved: false,
+ 					...options
+ 				};
+ 				inputStream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
+@@ -22866,7 +22866,7 @@ registerProcessor("audioConcatProcessor", AudioConcatProcessor);
+ 				const options = { ...defaultConstraints };
+ 				if (inputDeviceId) options.deviceId = MediaDeviceInput.getDeviceIdConstraint(inputDeviceId);
+ 				const constraints = {
+-					voiceIsolation: true,
++					_voiceIsolationRemoved: false,
+ 					...options
+ 				};
+ 				const newInputStream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
+diff --git a/node_modules/@elevenlabs/client/dist/utils/input.js b/node_modules/@elevenlabs/client/dist/utils/input.js
+index 59a562d..12f5467 100644
+--- a/node_modules/@elevenlabs/client/dist/utils/input.js
++++ b/node_modules/@elevenlabs/client/dist/utils/input.js
+@@ -48,7 +48,7 @@ export class MediaDeviceInput {
+                 await addLibsamplerateModule(context, libsampleratePath);
+             }
+             await loadRawAudioProcessor(context.audioWorklet, workletPaths?.rawAudioProcessor);
+-            const constraints = { voiceIsolation: true, ...options };
++            const constraints = { ...options };  // §SDK-PATCH 2026-05-19 voiceIsolation removed (founder authorized)
+             inputStream = await navigator.mediaDevices.getUserMedia({
+                 audio: constraints,
+             });
+@@ -154,7 +154,7 @@ export class MediaDeviceInput {
+                     MediaDeviceInput.getDeviceIdConstraint(inputDeviceId);
+             }
+             // If inputDeviceId is undefined, don't set deviceId constraint - browser uses default
+-            const constraints = { voiceIsolation: true, ...options };
++            const constraints = { ...options };  // §SDK-PATCH 2026-05-19 voiceIsolation removed (founder authorized)
+             // Get new media stream with the specified device before forgetting the old one
+             // this prevents unintended interruption of the audio stream in case the new stream isn't obtained
+             const newInputStream = await navigator.mediaDevices.getUserMedia({
