@@ -30,6 +30,7 @@ import {
   ConversationProvider,
   useConversation,
   useConversationInput,
+  useRawConversation,
 } from "@elevenlabs/react";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -172,6 +173,32 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
   // agent's turn detector.
   const { setMuted } = useConversationInput();
 
+  // §VOICE-TO-VOICE DEAFNESS HOTFIX 2026-05-20 — Raw conversation
+  // instance grants us read/write access to the SDK's INPUT
+  // AudioContext (`rawConversation.input.context`). This is the
+  // surgical channel for the long-running "agent hears nothing in
+  // voice mode while text-to-voice works fine" bug. Root cause
+  // identified after reading @elevenlabs/client/utils/input.js#60:
+  //
+  //   The SDK calls `await context.resume()` AFTER several async
+  //   hops (getUserMedia + loadRawAudioProcessor). On some machines
+  //   (notably Chrome on macOS with strict autoplay policy + the
+  //   founder's primary profile), the user-gesture token expires
+  //   before resume() runs, so the OUTPUT context resumes (because
+  //   it's created/touched on the synchronous click path) but the
+  //   INPUT context silently stays in `suspended` state. The
+  //   AudioWorklet then never processes incoming PCM frames, so the
+  //   mic chunks sent over the WebSocket are silence — ElevenLabs
+  //   sees a connected client that never speaks. This matches the
+  //   exact symptom: text-to-text works, text-to-voice works, only
+  //   voice-to-voice fails.
+  //
+  // We do NOT touch the SDK's mic constraints, format, or worklet.
+  // We only inspect AudioContext state on `live` and call
+  // `inputCtx.resume()` if it stayed suspended. Belt-and-suspenders
+  // over the SDK's own resume call.
+  const rawConversation = useRawConversation();
+
   // §MIC DIAGNOSTIC 2026-02-15 PM — Two independent signals:
   //
   //   micLevel    : local FFT spectrum sum from the browser's own
@@ -272,6 +299,83 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       }
     },
   });
+
+  // §VOICE-TO-VOICE DEAFNESS HOTFIX 2026-05-20 — AudioContext audit
+  // + auto-resume. Fires on every status flip into `live` (and on
+  // rawConversation identity change). Root cause documented above
+  // at rawConversation declaration. Three responsibilities:
+  //
+  //   1. LOG the negotiated state of BOTH AudioContexts (input +
+  //      output) so we have ground-truth telemetry in the console.
+  //   2. RESUME the input AudioContext if it stayed `suspended`
+  //      after the SDK's own resume() call (autoplay-policy race).
+  //   3. Re-emit setMuted once contexts are confirmed running, so
+  //      any queued worklet message is flushed against a live
+  //      audio graph (not against a suspended port).
+  useEffect(() => {
+    if (status !== "live" || !rawConversation) return undefined;
+    const inputCtx = rawConversation?.input?.context;
+    const outputCtx = rawConversation?.output?.context;
+    // eslint-disable-next-line no-console
+    console.log("[ConvAI]", room, "AudioContext audit", {
+      mode: modeRef.current,
+      input: inputCtx
+        ? {
+            state: inputCtx.state,
+            sampleRate: inputCtx.sampleRate,
+            baseLatency: inputCtx.baseLatency,
+          }
+        : "(no input context — text mode?)",
+      output: outputCtx
+        ? {
+            state: outputCtx.state,
+            sampleRate: outputCtx.sampleRate,
+            baseLatency: outputCtx.baseLatency,
+          }
+        : "(no output context)",
+    });
+    let cancelled = false;
+    const resumeIfSuspended = async () => {
+      try {
+        if (inputCtx && inputCtx.state === "suspended") {
+          // eslint-disable-next-line no-console
+          console.warn("[ConvAI]", room, "⚠ INPUT AudioContext was suspended — resuming");
+          await inputCtx.resume();
+          // eslint-disable-next-line no-console
+          console.log("[ConvAI]", room, "✓ INPUT AudioContext resumed; state =", inputCtx.state);
+        }
+        if (outputCtx && outputCtx.state === "suspended") {
+          await outputCtx.resume().catch(() => {});
+        }
+        if (!cancelled && modeRef.current !== "text") {
+          try {
+            setMuted(modeRef.current === "hybrid");
+          } catch { /* SDK detaching — ignore */ }
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn("[ConvAI]", room, "AudioContext resume failed", err);
+      }
+    };
+    resumeIfSuspended();
+    // 5-second guard — if Chrome flips the context back to suspended
+    // (rare, documented for tab-focus loss mid-handshake), re-resume
+    // within 500 ms so the wanderer doesn't have to re-click.
+    const guard = setInterval(() => {
+      if (cancelled) return;
+      if (inputCtx && inputCtx.state === "suspended") {
+        // eslint-disable-next-line no-console
+        console.warn("[ConvAI]", room, "↺ input ctx flipped to suspended — re-resuming");
+        inputCtx.resume().catch(() => {});
+      }
+    }, 500);
+    const stop = setTimeout(() => clearInterval(guard), 5000);
+    return () => {
+      cancelled = true;
+      clearInterval(guard);
+      clearTimeout(stop);
+    };
+  }, [status, rawConversation, room, setMuted]);
 
   // Auto-scroll transcript
   useEffect(() => {

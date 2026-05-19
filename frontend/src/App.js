@@ -24,6 +24,7 @@ import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
 import LuxurySanctuaryLanding from "@/pages/LuxurySanctuaryLanding";
 import SanctuaryPreview from "@/pages/SanctuaryPreview";
+import TestMic from "@/pages/TestMic";
 import AurinPhilosophy from "@/pages/AurinPhilosophy";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
@@ -162,6 +163,14 @@ function AppRouter() {
           locked pricing structure visible as atmospheric "Thresholds".
           Production / Home.jsx remains untouched. */}
       <Route path="/sanctuary-preview" element={<SanctuaryPreview />} />
+      {/* §2026-05-20 — /test-mic is a brutal isolation test page for
+          the voice-to-voice deafness bug. No custom CSS, no overlays,
+          no focus-stealing elements. If voice works here but fails on
+          /clarity-release, the bug lives in our overlay stack. If it
+          fails here too, the bug is in the browser profile or
+          upstream WebSocket. Login required (uses signed-url like
+          the production rooms). */}
+      <Route path="/test-mic" element={<TestMic />} />
       {/* §2026-05-19 — Production Sanctuary landing. The /sanctuary-preview
           component is mounted with `production` so the preview ribbon
           is hidden, the nav docks to the very top, and visitors arrive

@@ -23,6 +23,22 @@ LemonSqueezy is Merchant of Record; payouts settle to founder.
 
 ## Stabilization Sessions
 
+### 2026-05-20 — Voice-to-voice deafness HOTFIX + hero opened up
+**P0** — Founder reported persistent bug: text→text works, text→voice (hybrid) works, but voice→voice fails even after 5 config-check attempts. Root cause located by reading `@elevenlabs/client/utils/input.js#L60`:
+
+The SDK calls `await context.resume()` AFTER several async hops (`getUserMedia` + `loadRawAudioProcessor` + worklet module add). On Chrome (macOS + founder's primary profile), the user-gesture token can expire before resume() runs → INPUT AudioContext silently stays `suspended` while OUTPUT context resumes correctly. AudioWorklet never processes PCM frames, mic chunks sent over WebSocket are silence → ElevenLabs sees a connected client that never speaks.
+
+**Fix**: `RoomConvaiChat.jsx` now imports `useRawConversation` → gains access to `raw.input.context` and `raw.output.context`. On every `status → live`, runs an AudioContext audit + auto-resume + 5-second guard interval. Telemetry log: state, sampleRate, baseLatency printed to console. Re-emits `setMuted` after context confirmed running so the worklet's MessagePort flushes any queued message against a live audio graph. Pure additive — does NOT touch the existing audio pipeline, worklet, format, or constraints.
+
+**Diagnostic page**: new `/test-mic` route renders the bare ElevenLabs SDK with NO custom CSS, NO overlays, NO focus-stealing div. If voice-to-voice fails here too → bug is browser/profile or upstream ElevenLabs WebSocket. If it works here but fails on `/clarity-release` → bug is in the CSS/overlay stack.
+
+**Hero**: photo zone widened (32% → 44%), right-edge feather reduced (42% → 22%) per founder's yellow-curve sketch — eye, cheek, jawline, and smile of the unmasked face are now fully visible before fade.
+
+### 2026-05-19 — V6 polish merged to production
+- `/sanctuary-preview` mounted as `/` with `production` flag
+- `.sanctuary-room` wrapper applied to all 4 internal rooms
+- New 6-tier pricing model rendered in WaysToBeHere + VoiceMeter sections
+
 ### 2026-05-16 AM — Layers 1-5 (voice stabilization)
 1. `.gitignore` cleanup — production env delivery restored
 2. `RoomConvaiChat.jsx` — 4-bucket error UI for mic-permission diagnostics

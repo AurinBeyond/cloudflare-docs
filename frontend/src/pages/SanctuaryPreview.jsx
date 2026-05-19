@@ -204,7 +204,13 @@ function HeroSection() {
                 become a silhouette rather than a hard edge
               • sunrise glow REDUCED so it complements the new
                 contour rather than competing with it */}
-        <div className="absolute inset-x-0 top-[88px] h-[32vh] md:inset-y-0 md:right-auto md:top-0 md:h-full md:left-[48%] md:w-[32%]">
+        {/* §HERO WIDTH 2026-05-20 — Founder explicit (yellow-curve
+            screenshot 2026-05-20): the unmasked face was being clipped
+            on the right by the previous right-edge feather. Widened
+            the photo zone (32% → 44%) and reduced the right feather
+            (42% → 22%) so the full face contour — eye, cheek, smile,
+            jawline — breathes through without a hard right cut. */}
+        <div className="absolute inset-x-0 top-[88px] h-[32vh] md:inset-y-0 md:right-auto md:top-0 md:h-full md:left-[44%] md:w-[44%]">
           {/* Quiet sunrise glow — reduced intensity per Founder cue
               "ei tohi jääda häirivaks". Brass-keyed, blurred. */}
           <div
@@ -260,10 +266,12 @@ function HeroSection() {
           {/* Left edge feathering — connects mask region to body
               copy without a visible seam. */}
           <div className="absolute inset-y-0 left-0 w-[22%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
-          {/* Right edge feathering — STRENGTHENED (was 28% / now 42%)
-              so the mask fragments truly dissolve into the distance
-              instead of cutting against the dark canvas. */}
-          <div className="hidden md:block absolute inset-y-0 right-0 w-[42%] bg-gradient-to-l from-[#0b0a08] via-[rgba(11,10,8,0.80)] via-[rgba(11,10,8,0.40)] to-transparent" />
+          {/* Right edge feathering — REDUCED (was 42% / now 22%) per
+              Founder 2026-05-20 yellow-curve directive. Previous
+              feather was eating into the unmasked face zone. Now the
+              fragments still dissolve into distance but the smile +
+              jawline remain fully visible before the fade begins. */}
+          <div className="hidden md:block absolute inset-y-0 right-0 w-[22%] bg-gradient-to-l from-[#0b0a08] via-[rgba(11,10,8,0.70)] to-transparent" />
           <div className="md:hidden absolute inset-x-0 bottom-0 h-[60px] bg-gradient-to-t from-[#0b0a08] to-transparent" />
         </div>
       </div>
