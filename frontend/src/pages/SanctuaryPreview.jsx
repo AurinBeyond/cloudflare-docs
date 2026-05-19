@@ -222,27 +222,27 @@ function HeroSection() {
             aria-hidden="true"
             data-testid="hero-mask-image"
             className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-              visible ? "opacity-95 scale-100" : "opacity-0 scale-[1.04]"
+              visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
             }`}
             style={{
-              filter: "contrast(1.10) saturate(1.08) brightness(1.02)",
+              filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
             }}
           />
-          {/* Face contour spotlight — a soft, focused inner glow on
-              the unmasked face area so the contour emerges from the
-              dark canvas instead of getting lost in it. Subtle:
-              opacity 0.10 max, anchored to the cheek/jaw region. */}
+          {/* Face contour spotlight — opened up so the unmasked side
+              breathes through the dark canvas. Founder cue 2026-05-19:
+              "hoia nägu nii avatud nagu pildil". */}
           <div
             aria-hidden="true"
             className="absolute inset-0 pointer-events-none mix-blend-soft-light"
             style={{
               background:
-                "radial-gradient(ellipse 38% 55% at 32% 55%, rgba(248,236,210,0.32) 0%, rgba(212,182,125,0.12) 45%, transparent 75%)",
+                "radial-gradient(ellipse 50% 70% at 30% 55%, rgba(248,236,210,0.55) 0%, rgba(212,182,125,0.22) 50%, transparent 78%)",
             }}
           />
-          {/* Soft elliptical vignette so the figure dissolves into the
-              page rather than ending in a sharp rectangle. */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_50%,_transparent_0%,_rgba(11,10,8,0.50)_75%,_#0b0a08_100%)]" />
+          {/* Vignette — softer than before (0.50 → 0.32) so the eyes
+              and cheekbones of the unmasked face are no longer
+              swallowed by the central darkening. */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_45%_50%,_transparent_0%,_rgba(11,10,8,0.32)_80%,_#0b0a08_100%)]" />
           {/* Left edge feathering — connects mask region to body
               copy without a visible seam. */}
           <div className="absolute inset-y-0 left-0 w-[22%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent" />
