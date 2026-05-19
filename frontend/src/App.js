@@ -63,7 +63,11 @@ function AppRouter() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+        {/* §2026-05-19 — Home was moved OUT of Layout (below) so the
+            new Sanctuary landing can own its full-bleed nav + footer
+            without doubling. The previous classic Home now lives at
+            /home-legacy for instant rollback safety. */}
+        <Route path="/home-legacy" element={<Home />} />
         <Route path="/start" element={<Start />} />
         <Route path="/about" element={<About />} />
         <Route path="/wanderers-agreement" element={<WanderersAgreement />} />
@@ -158,6 +162,13 @@ function AppRouter() {
           locked pricing structure visible as atmospheric "Thresholds".
           Production / Home.jsx remains untouched. */}
       <Route path="/sanctuary-preview" element={<SanctuaryPreview />} />
+      {/* §2026-05-19 — Production Sanctuary landing. The /sanctuary-preview
+          component is mounted with `production` so the preview ribbon
+          is hidden, the nav docks to the very top, and visitors arrive
+          on the polished V6 / Mike experience the moment they land on
+          the domain. Rollback path: change `<SanctuaryPreview production />`
+          to `<Home />` (still imported above) — instant revert.       */}
+      <Route path="/" element={<SanctuaryPreview production />} />
     </Routes>
   );
 }

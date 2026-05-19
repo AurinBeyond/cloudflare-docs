@@ -138,11 +138,11 @@ function RevealBlock({ children, delay = 0, className = "" }) {
   );
 }
 
-function SanctuaryNav() {
+function SanctuaryNav({ production = false }) {
   return (
     <nav
       data-testid="sanctuary-nav"
-      className="fixed top-[28px] left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]"
+      className={`fixed ${production ? "top-0" : "top-[28px]"} left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]`}
     >
       <div className="max-w-[1320px] mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
         <Link
@@ -172,7 +172,12 @@ function SanctuaryNav() {
   );
 }
 
-// §HERO — Mike's reference: centered serif title, italic accent, bordered CTA.
+// §HERO — Quiet composition (2026-05-19 Founder refinement):
+// The masked figure was previously dominating the entire screen,
+// creating an unintended "dark luxury chamber" pressure. Per Founder:
+// the mask now lives as a calm 1/3 atmospheric accent on the right
+// while the wordmark + opening line breathe on the left. Elegance
+// through restraint, not visual force.
 function HeroSection() {
   const { ref, visible } = useReveal();
   const imgRef = useRef(null);
@@ -181,39 +186,54 @@ function HeroSection() {
     <section
       ref={ref}
       data-testid="sanctuary-hero"
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative w-full overflow-hidden bg-[#0b0a08] min-h-screen flex items-center"
     >
+      {/* §QUIET HERO — Mask is now anchored to the right ~38% on
+          desktop, top-band on mobile. The text block carries the
+          page; the figure becomes an atmospheric companion rather
+          than the protagonist. */}
       <div className="absolute inset-0 will-change-transform" ref={imgRef}>
-        <img
-          src={HERO}
-          alt=""
-          aria-hidden="true"
-          data-testid="hero-mask-image"
-          className={`w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-            visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
-          }`}
-          style={{ filter: "contrast(1.08) saturate(1.06) brightness(0.96)" }}
-        />
-        {/* §POLISH 2026-05-18 PM — Cinematic vignette, no muddy blur.
-            Replaced the soft radial with a deliberate three-layer mask:
-            (1) side darkening so the face anchors the center sharply,
-            (2) tight top fade for nav anchor, (3) decisive bottom fade
-            that resolves into pure #0b0a08 — no gray smear, no
-            washed-out fog. */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,_rgba(8,7,6,0.78)_0%,_rgba(10,9,8,0.20)_28%,_rgba(10,9,8,0.20)_72%,_rgba(8,7,6,0.78)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#0b0a08] via-[rgba(10,9,8,0.55)] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-[#0b0a08] via-[rgba(10,9,8,0.65)] to-transparent" />
+        {/* Mobile: small top band so the layout breathes vertically.
+            Desktop: right-aligned ~38% column. */}
+        <div className="absolute inset-x-0 top-[88px] h-[42vh] md:inset-y-0 md:right-0 md:top-0 md:left-auto md:h-auto md:w-[42%]">
+          <img
+            src={HERO}
+            alt=""
+            aria-hidden="true"
+            data-testid="hero-mask-image"
+            className={`w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
+              visible ? "opacity-[0.72] scale-100" : "opacity-0 scale-[1.04]"
+            }`}
+            style={{
+              filter: "contrast(1.02) saturate(0.92) brightness(0.92)",
+              objectPosition: "30% center",
+            }}
+          />
+          {/* Soft elliptical fade so the figure dissolves into the
+              page rather than ending in a sharp rectangle. */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_70%_50%,_transparent_0%,_rgba(11,10,8,0.55)_70%,_#0b0a08_100%)]" />
+          {/* Left/top edge feathering — connects mask region to body
+              copy without a visible seam. */}
+          <div className="absolute inset-y-0 left-0 w-[40%] bg-gradient-to-r from-[#0b0a08] via-[rgba(11,10,8,0.65)] to-transparent md:bg-gradient-to-r" />
+          <div className="md:hidden absolute inset-x-0 bottom-0 h-[60px] bg-gradient-to-t from-[#0b0a08] to-transparent" />
+        </div>
       </div>
 
-      <div className="relative z-10 max-w-[1100px] mx-auto px-6 sm:px-10 pt-[180px] pb-32 text-center">
+      <div className="relative z-10 w-full max-w-[1240px] mx-auto px-6 sm:px-10 pt-[260px] md:pt-[180px] pb-32 md:pb-40">
         <div
-          className={`transition-all duration-[1800ms] ease-out ${
+          className={`max-w-[640px] transition-all duration-[1800ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
+          <p
+            data-testid="hero-eyebrow"
+            className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-9 font-light"
+          >
+            — Matrix Aurin · Pure Soul Life
+          </p>
           <h1
             data-testid="hero-title"
-            className="font-light text-[40px] sm:text-[62px] lg:text-[88px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
+            className="font-light text-[38px] sm:text-[56px] lg:text-[72px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             Welcome back<br />
@@ -221,30 +241,30 @@ function HeroSection() {
           </h1>
           <p
             data-testid="hero-subtitle"
-            className="mt-10 sm:mt-12 text-[15px] sm:text-[17px] tracking-[0.06em] text-[#bcb4a3] italic font-light"
+            className="mt-10 text-[15px] sm:text-[17px] tracking-[0.04em] text-[#bcb4a3] italic font-light max-w-[520px]"
             style={{ fontFamily: SERIF }}
           >
             You do not have to perform here.
           </p>
-          <div className="mt-12 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6">
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
             <Link
               to="/portal"
               data-testid="hero-cta-step-inside"
-              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
+              className="inline-flex items-center justify-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
               Step Inside
             </Link>
             <a
               href="#worlds"
               data-testid="hero-cta-walk"
-              className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline"
+              className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline self-start sm:self-auto"
             >
               Walk through first
             </a>
           </div>
           <p
             data-testid="hero-season"
-            className="mt-16 sm:mt-20 text-[12px] sm:text-[12.5px] tracking-[0.18em] italic text-[#7a7468] font-light"
+            className="mt-20 sm:mt-24 text-[12px] tracking-[0.18em] italic text-[#7a7468] font-light"
             style={{ fontFamily: SERIF }}
           >
             The doors are open this season.
@@ -927,22 +947,24 @@ function SanctuaryFooter() {
   );
 }
 
-export default function SanctuaryPreview() {
+export default function SanctuaryPreview({ production = false } = {}) {
   useHidePlatformBadge();
   return (
     <div
-      data-testid="sanctuary-preview-root"
+      data-testid={production ? "sanctuary-home-root" : "sanctuary-preview-root"}
       className="min-h-screen w-full bg-[#0b0a08] text-[#e8e1d5] antialiased"
       style={{ fontFamily: 'system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif' }}
     >
-      <div
-        data-testid="sanctuary-preview-ribbon"
-        className="fixed top-0 left-0 right-0 z-[60] bg-[#c4a46b] text-[#0b0a08] text-[10px] tracking-[0.32em] uppercase text-center py-1.5"
-      >
-        Preview · /sanctuary-preview · production unchanged
-      </div>
-      <div className="pt-[28px]">
-        <SanctuaryNav />
+      {production ? null : (
+        <div
+          data-testid="sanctuary-preview-ribbon"
+          className="fixed top-0 left-0 right-0 z-[60] bg-[#c4a46b] text-[#0b0a08] text-[10px] tracking-[0.32em] uppercase text-center py-1.5"
+        >
+          Preview · /sanctuary-preview · production unchanged
+        </div>
+      )}
+      <div className={production ? "" : "pt-[28px]"}>
+        <SanctuaryNav production={production} />
         <main>
           <HeroSection />
           <TwoWorldsSection />
