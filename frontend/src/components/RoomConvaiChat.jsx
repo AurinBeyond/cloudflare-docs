@@ -133,6 +133,10 @@ const ROOM_VOICE_LOCK = {
 function ConvaiPanel({ room, onFallback, onStatusChange }) {
   const [status, setStatus] = useState("idle"); // idle | connecting | live | error
   const [errorMsg, setErrorMsg] = useState("");
+  // §HARD-LOCK 2026-05-20 PM — separate "no presence balance" UI state
+  // so the generic VoiceRecoveryCard ("A small connection issue …")
+  // never appears on 402. One calm banner only.
+  const [blocked, setBlocked] = useState(false);
   const [transcript, setTranscript] = useState([]); // [{role:"user"|"agent", text}]
   const [textInput, setTextInput] = useState("");
   const [mode, setMode] = useState("voice"); // "voice" | "text" | "hybrid"
@@ -685,20 +689,20 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         },
       });
     } catch (err) {
-      setStatus("error");
-      // §HARD-LOCK 2026-05-20 PM — When the backend returns 402
-      // (no_presence_balance) for voice/hybrid, do NOT keep trying.
-      // Auto-fall to text mode + a calm top-up message. Voice is
-      // gated server-side; retrying just spams 402 → 520 cascades
-      // and stresses ElevenLabs' WebSocket layer for no value.
-      if (err?.status === 402 || /402/.test(err?.message || "")) {
+      // §HARD-LOCK 2026-05-20 PM — 402 = no_presence_balance. Detect
+      // FIRST and short-circuit BEFORE setStatus("error") so the
+      // generic VoiceRecoveryCard ("A small connection issue …")
+      // never appears. Show only the calm "Presence Time is empty"
+      // banner via the new `blocked` state and silently fall to text.
+      if (err?.status === 402 || /\b402\b/.test(err?.message || "")) {
         modeRef.current = "text";
         setMode("text");
-        setErrorMsg(
-          "Presence Time is empty — voice is paused. Writing stays free. Top up to open voice again.",
-        );
+        setStatus("idle");
+        setBlocked(true);
+        setErrorMsg("");
         return;
       }
+      setStatus("error");
       const detail = err?.message || "Could not connect to the room.";
       setErrorMsg(detail);
     }
@@ -726,6 +730,37 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       data-status={status}
       className="rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.55] p-5 sm:p-6 backdrop-blur"
     >
+      {blocked ? (
+        <div
+          data-testid="convai-blocked-card"
+          className="mb-4 rounded-2xl border border-amber-400/40 bg-amber-50/[0.04] p-4"
+        >
+          <p className="aurin-serif text-[15px] text-[hsl(var(--aurin-text))/0.92]">
+            Presence Time is empty — voice is paused.
+          </p>
+          <p className="mt-1 text-[12.5px] text-[hsl(var(--aurin-text))/0.65] leading-relaxed">
+            Writing stays free. Top up to open voice again whenever you
+            are ready.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <a
+              href="/pricing"
+              data-testid="convai-blocked-topup"
+              className="aurin-btn-primary text-[12.5px]"
+            >
+              Add Presence Time
+            </a>
+            <button
+              type="button"
+              data-testid="convai-blocked-dismiss"
+              onClick={() => setBlocked(false)}
+              className="aurin-btn-ghost text-[12.5px]"
+            >
+              Continue in text
+            </button>
+          </div>
+        </div>
+      ) : null}
       <div className="flex items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">
           <span
