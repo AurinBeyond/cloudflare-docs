@@ -18,13 +18,17 @@ export const getSessionToken = _getSessionToken;
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
-  // §AUDIT-P1 2026-05-20 — Backend CORS now whitelists the exact
-  // origins (prulesoul.site + preview), so credentialed requests are
-  // allowed by the browser. Cookies (incl. Partitioned) ride along on
-  // every call; Bearer header is still attached as the primary
-  // identity. If CORS_ORIGINS is ever set back to "*", the browser
-  // will reject these credentials — keep the allow-list updated.
-  withCredentials: true,
+  // §AUDIT-CORS 2026-05-20 — withCredentials forced OFF.
+  // The Emergent platform ingress rewrites every response to
+  // `Access-Control-Allow-Origin: *`, which the browser refuses to
+  // pair with `withCredentials: true` (CORS spec: wildcard + creds is
+  // a hard error → fetch sees `Network Error`, no response body, and
+  // the UI falls back to "Service is warming up"). Bearer token in
+  // the Authorization header is the canonical identity for this app
+  // (see request interceptor below); cookies were only a soft
+  // secondary channel. Turning withCredentials off restores all
+  // calls AND keeps auth working through the Bearer header.
+  withCredentials: false,
 });
 
 api.interceptors.request.use((cfg) => {
