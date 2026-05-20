@@ -1726,6 +1726,17 @@ async def auth_session(inp: AuthSessionRequest, response: Response):
         })
 
     session_token = data.get("session_token") or uuid.uuid4().hex
+    # §AUTH-DEFENSE 2026-05-20 — Trace empty session_token from the
+    # Emergent OAuth proxy. If the upstream returns "" or null, we
+    # still fall back to a fresh UUID (above), so the wanderer never
+    # gets logged out — but we want a clean signal in the logs so we
+    # can correlate "user reports Google sign-in didn't work" with
+    # actual upstream payload anomalies.
+    if not data.get("session_token"):
+        logger.warning(
+            "auth/session: upstream payload missing session_token (email=%s, name=%s) — falling back to local UUID",
+            (email or "")[:64], (data.get("name") or "")[:64],
+        )
     expires_at = _seven_days_from_now()
     await db.user_sessions.insert_one({
         "user_id": user_id,
@@ -1751,6 +1762,16 @@ async def auth_session(inp: AuthSessionRequest, response: Response):
 async def auth_me(request: Request):
     user = await _resolve_current_user(request)
     if not user:
+        # §AUTH-DEFENSE 2026-05-20 — Diagnostic: log when an authenticated
+        # API call lands without a resolvable token. Helps separate
+        # "Google flow handed us nothing" from "session expired".
+        has_cookie = bool(request.cookies.get("session_token"))
+        auth_hdr = request.headers.get("authorization", "")
+        has_bearer = auth_hdr.lower().startswith("bearer ") and len(auth_hdr) > 12
+        logger.info(
+            "auth/me 401: cookie=%s bearer=%s ua=%s",
+            has_cookie, has_bearer, request.headers.get("user-agent", "")[:80],
+        )
         raise HTTPException(status_code=401, detail="Not authenticated")
     return user.model_dump()
 
