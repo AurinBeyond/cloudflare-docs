@@ -16,10 +16,12 @@
  * No new architecture. No new ecosystem layer.
  */
 import { useState } from "react";
+// §AUDIT-P2 2026-05-20 — Centralised token storage.
+import { setSessionToken } from "@/lib/auth";
 import axios from "axios";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
-const TOKEN_KEY = "aurin_session_token";
+// §AUDIT-P2 2026-05-20 — Centralised token storage.
 const WANDERER_KEY = "wanderer_accepted_1.0-2026-02-07_private";
 
 const GUIDES = [

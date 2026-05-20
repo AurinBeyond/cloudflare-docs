@@ -17,7 +17,7 @@ Future GitHub sync would populate the same two collections from repo
 contents. See `/api/content/sync/github` (stub) for the integration point.
 """
 
-from fastapi import FastAPI, APIRouter, HTTPException, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -60,20 +60,32 @@ db = client[os.environ["DB_NAME"]]
 
 app = FastAPI(title="Matrix Aurin API", version="0.2.0")
 
-# CORS — must be added immediately after FastAPI() so every request,
-# including the OPTIONS preflight, gets the right headers. Without it
-# the live custom domain (prulesoul.site) cannot reach /api/* even
-# though the backend itself is healthy.
-_cors_origins_env = os.environ.get("CORS_ORIGINS", "*").strip()
-_cors_origins = (
-    [o.strip() for o in _cors_origins_env.split(",") if o.strip()]
-    if _cors_origins_env and _cors_origins_env != "*"
-    else ["*"]
-)
+# §AUDIT-P1 2026-05-20 — CORS hardening for production scale.
+# Previously CORS_ORIGINS defaulted to "*", which disabled credentialed
+# requests (browser spec forbids cookies with wildcard origin). For
+# 1M+ wanderer scale we want cookies AND Bearer to ride together, so
+# the default is now an explicit allow-list of prulesoul.site and
+# the preview tunnel. Operators can still override with the env var
+# (comma-separated) for staging or local-dev.
+_DEFAULT_CORS_ORIGINS = [
+    "https://prulesoul.site",
+    "https://www.prulesoul.site",
+    "https://aurin-hub.preview.emergentagent.com",
+]
+_cors_origins_env = os.environ.get("CORS_ORIGINS", "").strip()
+if _cors_origins_env and _cors_origins_env != "*":
+    _cors_origins = [o.strip() for o in _cors_origins_env.split(",") if o.strip()]
+elif _cors_origins_env == "*":
+    # Legacy wildcard escape hatch — credentials forced off.
+    _cors_origins = ["*"]
+else:
+    _cors_origins = list(_DEFAULT_CORS_ORIGINS)
+
+_CORS_ALLOW_CREDENTIALS = _cors_origins != ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_credentials=True if _cors_origins != ["*"] else False,
+    allow_credentials=_CORS_ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["ETag"],
@@ -86,6 +98,34 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+
+# §AUDIT-W6 2026-05-20 — Partitioned cookies (CHIPS) for Chrome 118+.
+# Chrome's third-party cookie deprecation rejects SameSite=None cookies
+# unless they carry the `Partitioned` flag. Starlette's set_cookie does
+# not yet expose this attribute, so we craft the Set-Cookie header by
+# hand. This keeps Bearer + cookie auth viable when the wanderer's
+# browser is in strict-privacy mode (Brave, Safari ITP, Chrome 118+).
+def _set_session_cookie(
+    response: Response,
+    value: str,
+    *,
+    max_age: int = 7 * 24 * 3600,
+    delete: bool = False,
+) -> None:
+    parts = [f"session_token={'' if delete else value}"]
+    parts.append("Path=/")
+    if delete:
+        parts.append("Max-Age=0")
+        parts.append("Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+    else:
+        parts.append(f"Max-Age={max_age}")
+    parts.append("HttpOnly")
+    parts.append("Secure")
+    parts.append("SameSite=None")
+    # `Partitioned` only meaningful for SameSite=None secure cookies.
+    parts.append("Partitioned")
+    response.headers.append("Set-Cookie", "; ".join(parts))
 
 # =============================================================
 # Core health
@@ -1754,8 +1794,8 @@ async def auth_session(inp: AuthSessionRequest, response: Response):
         secure=True,
         samesite="none",
     )
-    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
-    return {"user": user_doc, "session_token": session_token}
+    # §AUDIT-W6 — also emit Partitioned cookie for Chrome 118+.
+    _set_session_cookie(response, session_token)
 
 
 @api_router.get("/auth/me")
@@ -1879,6 +1919,8 @@ async def auth_logout(request: Request, response: Response):
     if token:
         await db.user_sessions.delete_one({"session_token": token})
     response.delete_cookie("session_token", path="/")
+    # §AUDIT-W6 — also clear the Partitioned variant for Chrome 118+.
+    _set_session_cookie(response, "", delete=True)
     return {"status": "ok"}
 
 
@@ -7970,6 +8012,8 @@ async def magic_link_verify(token: str, response: Response):
         secure=True,
         samesite="none",
     )
+    # §AUDIT-W6 — also emit Partitioned cookie for Chrome 118+.
+    _set_session_cookie(response, session_token)
     return {
         "session_token": session_token,
         "redirect_to": row.get("redirect_to") or "/portal",
@@ -8069,6 +8113,8 @@ async def auth_guest(inp: GuestEntryInput, response: Response):
         secure=True,
         samesite="none",
     )
+    # §AUDIT-W6 — also emit Partitioned cookie for Chrome 118+.
+    _set_session_cookie(response, session_token, max_age=24 * 3600)
 
     return {
         "session_token": session_token,

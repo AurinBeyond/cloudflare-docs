@@ -47,13 +47,13 @@ import {
   useRawConversation,
   useConversationInput,
 } from "@elevenlabs/react";
+// §AUDIT-P2 2026-05-20 — Centralised token storage.
+import { getSessionToken } from "@/lib/auth";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
-const TOKEN_KEY = "aurin_session_token";
 
 async function fetchSignedUrl() {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null;
+  const token = getSessionToken();
   if (!token) throw new Error("Not signed in (open /portal first)");
   if (!BACKEND) throw new Error("Backend URL not configured");
   const res = await fetch(`${BACKEND}/api/clarity/convai/signed-url`, {

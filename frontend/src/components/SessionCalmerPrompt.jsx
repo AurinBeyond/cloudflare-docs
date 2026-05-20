@@ -19,10 +19,11 @@
  *   - Honors prefers-reduced-motion (no slide animation).
  */
 import React, { useEffect, useRef, useState } from "react";
+// §AUDIT-P2 2026-05-20 — Centralised token storage.
+import { getSessionToken } from "@/lib/auth";
 
 const STORAGE_KEY_PREFIX = "aurin_calmer_feedback_";
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
-const TOKEN_KEY = "aurin_session_token";
 
 export default function SessionCalmerPrompt({
   room = "clarity",
@@ -64,7 +65,7 @@ export default function SessionCalmerPrompt({
     // Fire-and-forget — the wanderer never sees an error from this.
     // The acknowledgement is purely visual.
     try {
-      const token = window.localStorage.getItem(TOKEN_KEY);
+      const token = getSessionToken();
       const headers = { "Content-Type": "application/json" };
       // Token is optional. The endpoint is intentionally token-free
       // (anonymous), but if the wanderer is signed in we still

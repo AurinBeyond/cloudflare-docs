@@ -1,34 +1,30 @@
 import axios from "axios";
+// §AUDIT-P2 2026-05-20 — Token storage is centralised in lib/auth.js.
+// api.js re-exports the helpers so existing imports (`from "./api"`)
+// keep working — no breaking change for the 30+ call sites that import
+// setSessionToken / getSessionToken from here.
+import {
+  getSessionToken as _getSessionToken,
+  setSessionToken as _setSessionToken,
+} from "@/lib/auth";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const API_BASE = `${BACKEND_URL}/api`;
 
-const TOKEN_KEY = "aurin_session_token";
-
-export function setSessionToken(t) {
-  if (t) localStorage.setItem(TOKEN_KEY, t);
-  else localStorage.removeItem(TOKEN_KEY);
-}
-
-export function getSessionToken() {
-  try {
-    return localStorage.getItem(TOKEN_KEY);
-  } catch {
-    return null;
-  }
-}
+export const setSessionToken = _setSessionToken;
+export const getSessionToken = _getSessionToken;
 
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
-  // §AUTH-DEFENSE 2026-05-20 — NOTE: withCredentials cannot be true
-  // while backend CORS_ORIGINS="*" (browser spec forbids credentials
-  // with wildcard origin). Identity rides on the Bearer header from
-  // localStorage; the httpOnly cookie is set as a server-side back-up
-  // only. To enable cookie-based auth in the future, set CORS_ORIGINS
-  // to the exact origin (https://prulesoul.site) AND flip this flag.
-  // withCredentials: true,
+  // §AUDIT-P1 2026-05-20 — Backend CORS now whitelists the exact
+  // origins (prulesoul.site + preview), so credentialed requests are
+  // allowed by the browser. Cookies (incl. Partitioned) ride along on
+  // every call; Bearer header is still attached as the primary
+  // identity. If CORS_ORIGINS is ever set back to "*", the browser
+  // will reject these credentials — keep the allow-list updated.
+  withCredentials: true,
 });
 
 api.interceptors.request.use((cfg) => {

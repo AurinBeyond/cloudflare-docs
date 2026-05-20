@@ -18,8 +18,10 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
+// §AUDIT-P2 2026-05-20 — Use centralised token storage instead of
+// inlining the localStorage key.
+import { getSessionToken } from "@/lib/auth";
 
-const TOKEN_KEY = "aurin_session_token";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 /**
@@ -393,8 +395,7 @@ function LetterTtsButton({ letterId, text, gender }) {
       return;
     }
     // Fetch fresh audio.
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null;
+    const token = getSessionToken();
     if (!token || !BACKEND_URL) {
       setState("error");
       return;

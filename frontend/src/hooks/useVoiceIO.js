@@ -17,9 +17,10 @@
  *    user) plus the chosen voice gender — bound by bearer token.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+// §AUDIT-P2 2026-05-20 — Centralised token storage.
+import { getSessionToken } from "@/lib/auth";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
-const TOKEN_KEY = "aurin_session_token";
 
 // Native browser SpeechRecognition — kept only as ultimate fallback.
 const SR =
@@ -201,10 +202,7 @@ export default function useVoiceIO({
         setTranscribing(false);
         return;
       }
-      const token =
-        typeof window !== "undefined"
-          ? window.localStorage.getItem(TOKEN_KEY)
-          : null;
+      const token = getSessionToken();
       if (!token || !BACKEND) {
         setTranscribing(false);
         setVoiceError("Sign in to use voice input.");
@@ -504,8 +502,7 @@ export default function useVoiceIO({
   const speak = useCallback(
     async (text) => {
       if (!AUDIO_SUPPORTED || !text || muted) return;
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null;
+      const token = getSessionToken();
       if (!token || !BACKEND) return; // signed-out users get text-only
 
       stopSpeaking();
