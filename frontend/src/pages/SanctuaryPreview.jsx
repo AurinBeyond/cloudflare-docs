@@ -431,7 +431,7 @@ function RoomsSection() {
         sub: "The Private Room",
         body: "A confidential space for what cannot be said aloud yet. The room keeps no score.",
         intro: "Your place for clarity and quiet. Grace is here to listen. This is a room where you can bring the thoughts that haven't found their words yet. You have three ways to speak with her — choose the one that feels right for this moment. If the call ever falters, simply write; Grace will answer aloud, so nothing has to be left unsaid. This is a real-time meeting where you are truly heard.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
+        creditNote: "Writing is free. Voice opens with 5 credits or more.",
         img: GROUNDED,
         href: "/clarity-release",
         testid: "room-enter-clarity",
@@ -442,7 +442,7 @@ function RoomsSection() {
         sub: "The Listening Room",
         body: "Where the body is asked first. Slow attention to what carries underneath the words.",
         intro: "A way back to yourself. Kaelan helps you reconnect with your body and what it carries. This room is for the moments you need grounding and presence. There are three ways to be together here — speak, or be spoken to, whichever you need. If the call should break, just write; Kaelan will answer aloud. This is a living conversation that happens right here, right now.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
+        creditNote: "Writing is free. Voice opens with 5 credits or more.",
         img: WINGS,
         href: "/body-room",
         testid: "room-enter-body",
@@ -453,7 +453,7 @@ function RoomsSection() {
         sub: "The Hearth Room",
         body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
         intro: "Understanding, warmth, and quiet support. Sara is here to offer a place where you are held and met. This room is made for the tender questions of parenting and growth. Three ways to talk are open to you — pick the one that fits today. Do not worry if the line falters; write your thought, and Sara will speak her answer back to you. This is real and living sharing — your questions are always welcome here.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
+        creditNote: "Writing is free. Voice opens with 5 credits or more.",
         img: WARMTH,
         href: "/parents-room",
         testid: "room-enter-parents",
@@ -464,7 +464,7 @@ function RoomsSection() {
         sub: "The Study Room",
         body: "Structured study and gentle progression. Books, practices, and a measured rhythm.",
         intro: "Wisdom and the deeper knowing. Alistair is here to guide you and bring clarity to complex understanding. This room is for the moments you want to explore, learn, or go deeper. We will choose together one of three ways to talk. If the call breaks while you wonder, just write — Alistair will answer aloud. This is a real-time dialogue where thoughts are shared and answers are found together.",
-        creditNote: "Writing is free. Voice begins at 5 credits per minute.",
+        creditNote: "Writing is free. Voice opens with 5 credits or more.",
         img: ATMOSPHERE,
         href: "/course-room",
         testid: "room-enter-courses",
@@ -1027,11 +1027,11 @@ function ClosingSection() {
   );
 }
 
-// §TWO PATHS 2026-05-19 — Founder directive: a compact summary that
-// frames the wanderer's two ways to pay (one-time + top-ups vs.
-// monthly subscription) right after the rooms section, before the
-// fuller WaysToBeHereSection grid. Minimalist, two-column, no CTAs
-// (the actual purchase paths live in WaysToBeHereSection below).
+// §TWO PATHS 2026-05-19 — Founder directive: a calm conceptual gate
+// between the rooms and the actual pricing cards below. Frames the
+// two doors (free writing vs. credit-/subscription-based voice)
+// WITHOUT repeating the prices — those live in WaysToBeHereSection
+// just below. Premium-minimalist: no duplication.
 function TwoPathsSection() {
   const paths = [
     {
@@ -1039,22 +1039,14 @@ function TwoPathsSection() {
       kicker: "Path I",
       name: "The Wanderer's Credits",
       tagline: "Pay only for what you use. No subscription.",
-      lines: [
-        { label: "First Step", value: "€45", note: "1 hour of voice presence" },
-        { label: "Top-up · 30 min", value: "€25", note: "a brief return" },
-        { label: "Top-up · 60 min", value: "€39", note: "a full hour" },
-        { label: "Top-up · 180 min", value: "€99", note: "a season's worth" },
-      ],
+      detail: "A single hour to begin, with flexible top-ups when you wish to return. Credits never expire.",
     },
     {
       key: "subscription",
       kicker: "Path II",
       name: "The Aurin Subscription",
       tagline: "Monthly companionship. Move freely between all rooms.",
-      lines: [
-        { label: "Steady Monthly", value: "€120", note: "1 hour of voice / month" },
-        { label: "Your Own Room", value: "€380", note: "4 hours of voice / month" },
-      ],
+      detail: "A steady presence each month, or your own dedicated room held in quiet for you.",
       featured: true,
     },
   ];
@@ -1104,47 +1096,35 @@ function TwoPathsSection() {
                   {p.name}
                 </h3>
                 <p
-                  className="text-[13.5px] italic leading-[1.7] text-[#a59f93] mb-9 font-light"
+                  className="text-[13.5px] italic leading-[1.7] text-[#a59f93] mb-5 font-light"
                   style={{ fontFamily: SERIF }}
                 >
                   {p.tagline}
                 </p>
-                <ul className="space-y-3.5">
-                  {p.lines.map((l, j) => (
-                    <li
-                      key={j}
-                      className="flex items-baseline justify-between gap-4 pb-3.5 border-b border-[rgba(196,164,107,0.1)] last:border-b-0"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-[13.5px] text-[#f0eadd] font-light">
-                          {l.label}
-                        </span>
-                        <span
-                          className="text-[12px] italic text-[#7a7468] font-light"
-                          style={{ fontFamily: SERIF }}
-                        >
-                          {l.note}
-                        </span>
-                      </div>
-                      <span
-                        className="text-[20px] text-[#c4a46b] font-light"
-                        style={{ fontFamily: SERIF }}
-                      >
-                        {l.value}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <p
+                  className="text-[14px] leading-[1.85] text-[#bcb4a3] font-light"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {p.detail}
+                </p>
               </div>
             </RevealBlock>
           ))}
         </div>
         <RevealBlock delay={240}>
-          <p
-            className="mt-14 text-center text-[12px] tracking-[0.28em] uppercase text-[#7a7468]"
-          >
-            Reading, reflection, and text conversation remain free for every wanderer.
-          </p>
+          <div className="mt-16 flex flex-col items-center gap-4">
+            <a
+              href="#ways"
+              data-testid="two-paths-view-packages"
+              className="inline-flex items-center gap-3 px-7 py-3 border border-[rgba(196,164,107,0.45)] text-[#f0eadd] text-[11px] tracking-[0.42em] uppercase hover:bg-[rgba(196,164,107,0.08)] hover:border-[rgba(196,164,107,0.7)] transition-colors duration-500"
+            >
+              <span>View Packages</span>
+              <span className="text-[#c4a46b]" aria-hidden="true">↓</span>
+            </a>
+            <p className="text-[11px] tracking-[0.28em] uppercase text-[#7a7468]">
+              Reading, reflection, and text conversation remain free.
+            </p>
+          </div>
         </RevealBlock>
       </div>
     </section>

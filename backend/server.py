@@ -5066,6 +5066,48 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
     if not env_name:
         raise HTTPException(status_code=400, detail="Unknown room")
 
+    # §VOICE-MIN-CREDITS 2026-05-19 — Founder directive: voice opens
+    # only when the wanderer holds at least 5 credits (5 seconds of
+    # voice presence). Text mode is unmetered acquisition. The check
+    # is bypassed for unlimited-voice accounts (founder, admin) and
+    # during the free-access window so launch-day visitors are never
+    # blocked. Writing remains free for everyone, always.
+    VOICE_MIN_CREDITS = 5
+    if mode != "text":
+        try:
+            user_doc_min = await db.users.find_one(
+                {"user_id": user.user_id},
+                {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
+            ) or {}
+            if not user_doc_min.get("unlimited_voice"):
+                from session_cap import _free_access_window_active  # noqa: WPS433
+                in_free_window = False
+                try:
+                    in_free_window = _free_access_window_active()
+                except Exception:  # noqa: BLE001
+                    in_free_window = False
+                if not in_free_window:
+                    seconds_left = int(user_doc_min.get("presence_seconds_left") or 0)
+                    if seconds_left < VOICE_MIN_CREDITS:
+                        raise HTTPException(
+                            status_code=402,
+                            detail={
+                                "reason": "below_voice_minimum",
+                                "credits_left": seconds_left,
+                                "credits_needed": VOICE_MIN_CREDITS,
+                                "soft_close": True,
+                                "refill_url": "/clarity-release#passes",
+                            },
+                        )
+        except HTTPException:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            # Minimum-credits gate must never crash the realtime core.
+            logging.warning(
+                "voice min-credits soft-failed for user=%s: %s",
+                user.user_id, exc,
+            )
+
     # §STABILIZATION 2026-05-19 — Mode-aware cap gating.
     # Text mode is unmetered (low-cost LLM tokens only — acquisition
     # layer per Founder directive). Voice + hybrid both stream TTS

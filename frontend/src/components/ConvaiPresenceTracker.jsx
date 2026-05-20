@@ -104,6 +104,29 @@ export function ConvaiPresenceTracker({ room = "clarity", onModeChange }) {
     }
   }, [status, errorMsg, room]);
 
+  // §TEXT-FREE 2026-05-19 — Mid-session mode switch watchdog.
+  // If the wanderer flips voice→text WHILE a presence row is open,
+  // close the ledger immediately so credits stop draining the moment
+  // they stop speaking. The room itself keeps running; only the
+  // billed presence row ends. When they flip back to voice, the
+  // status→live transition (or the next "live" tick) will reopen
+  // a fresh presence row.
+  useEffect(() => {
+    if (mode === "text" && sessionIdRef.current) {
+      if (heartbeatRef.current) {
+        clearInterval(heartbeatRef.current);
+        heartbeatRef.current = null;
+      }
+      const sid = sessionIdRef.current;
+      sessionIdRef.current = null;
+      api
+        .post("/presence/end", { session_id: sid, reason: "mode_switch_text" })
+        .catch(() => {});
+    }
+    // Voice→Hybrid→Voice transitions keep the ledger open. Only the
+    // explicit drop to "text" closes the row.
+  }, [mode]);
+
   // Tab close / page unload — flush the close beacon.
   useEffect(() => {
     const flush = () => {
