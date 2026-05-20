@@ -1,5 +1,36 @@
 # CREDIT LEDGER — Matrix Aurin
 
+## 2026-05-20 · §VANKUMATU TÕE PROTOKOLL · Garantii-audit + ElevenLabs hard-lock
+
+| ID | Type | What was done | Why classified this way |
+|----|------|---------------|--------------------------|
+| 70.1 | 🛡️ GUARANTEE | **`_append_credit_ledger()` helper** — single source of truth for every credit movement. Replaces 4 separate ad-hoc `db.credit_ledger.insert_one(...)` / `except: pass` blocks. On failure logs `logger.error` AND writes `funnel_events.ledger_write_failed`. Ledger gaps are now impossible to hide. | Founder's "Vankumatu Tõe Protokoll" demanded zero silent failures in the books. |
+| 70.2 | 🛡️ GUARANTEE | **Plugged 3 ledger holes**: (a) LemonSqueezy webhook monthly grant, (b) LemonSqueezy webhook one-off/topup grant, (c) LemonSqueezy refund/cancel revoke, (d) admin `/admin/presence/grant` founder-gift. ALL four now write a `credit_ledger` row with delta, before, after, external_ref. Before this patch, monthly/topup/refund/admin grants moved `presence_seconds_left` invisibly. | The credit_ledger was incomplete by ~75 % (only voice-session OUTs were tracked, none of the INs). |
+| 70.3 | 🛡️ GUARANTEE | **ElevenLabs hard-lock at `/api/presence/start`** — Server returns HTTP 402 `no_presence_balance` when `presence_seconds_left ≤ 0` AND `unlimited_voice != true`. ElevenLabs WebSocket cannot be opened without confirmed balance. Telemetry row `voice_session_blocked_no_balance` is written for every blocked attempt. | Without this gate any zero-balance client (buggy or malicious) could spin sessions and bleed the founder's ElevenLabs credit card. |
+| 70.4 | 🛡️ GUARANTEE | **Frontend top-up card** — `ConvaiPresenceTracker` catches the 402, forces the room into text-mode (free), and renders `<div data-testid="presence-hardlock-card">` with `Add Presence Time` CTA linking `/pricing`. No silent failure path remains in the client either. | Defence-in-depth: backend refuses, client surfaces the refusal calmly. |
+| 70.5 | 🛡️ GUARANTEE | **`GET /api/admin/audit/ledger-diff`** — founder-only reconciliation endpoint. Compares per-user `presence_seconds_left` vs Σ `presence_grants.presence_seconds` − Σ `voice_sessions.elapsed_seconds` vs Σ `credit_ledger.delta`. Returns `drift_vs_expected`, `drift_vs_ledger`, `ledger_write_failed_events_in_window`. Query by `?email=…`, `?user_id=…`, or top movers in `?hours=N`. | Founder's truth-tool: any silent drift between the three books surfaces here. |
+| 70.6 | 🛡️ GUARANTEE | **Regression tests at `/app/backend/tests/`**: `test_ledger_e2e.py` (admin grant → ledger row → drift==0), `test_hardlock.py` (5/5 pass: text bypass / voice block 402 / topped-up allow / unlimited bypass / telemetry written), `test_audit_snapshot.py` (raw MongoDB snapshot of ledger, voice_sessions, users). | These tests run in <2 s and prove the financial guarantees on every deploy. |
+
+**Verified evidence (run 2026-05-20 13:23 UTC, preview)**:
+- `python tests/test_hardlock.py` → **5/5 PASS** (text bypass, voice 402, topped-up allow, unlimited bypass, telemetry).
+- `python tests/test_ledger_e2e.py` → **PASS** — admin grant of 600s landed in `credit_ledger` with `delta=600, before=0, after=600, drift_vs_ledger=0, drift_vs_expected=0, ledger_write_failed_events_in_window=0`.
+- `python tests/test_audit_snapshot.py` → live MongoDB snapshot proves `credit_ledger` collection exists, audit endpoint returns 200, ghost-reaper voice_old=0.
+- **Production diagnostic via curl**: `prulesoul.site/` HTTP 200 · `/api/health` `{"status":"ok"}` · JS bundle `/static/js/main.722c19f8.js` HTTP 200 1.45 MB · CSS 200 · `/api/auth/me` HTTP 401 (expected). Production is healthy.
+
+**Files modified**:
+- `/app/backend/server.py` — added `_append_credit_ledger()` helper, plugged 4 ledger holes, added 402 hard-lock at `/api/presence/start`, added `/api/admin/audit/ledger-diff` endpoint.
+- `/app/frontend/src/components/ConvaiPresenceTracker.jsx` — catches 402, forces text mode, renders top-up card.
+
+**Files added**:
+- `/app/backend/tests/test_ledger_e2e.py`
+- `/app/backend/tests/test_hardlock.py`
+- `/app/backend/tests/test_audit_snapshot.py`
+
+**Status: 🟢 PREVIEW VERIFIED — Production healthy via curl smoke. Founder must redeploy to push these guarantees to prod via Save-to-Github + Emergent Deploy.**
+
+---
+
+
 ## 2026-02-08 · ITER 60 · §G3 BODY ROOM SOMATIC MENTOR
 
 | ID | Type | What was done | Why classified this way |

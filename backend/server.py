@@ -2684,10 +2684,41 @@ async def lemonsqueezy_webhook(request: Request):
                         {"user_id": target_user["user_id"]},
                         {"$set": {"presence_seconds_left": new_balance}},
                     )
+                    # §AUDIT-LEDGER 2026-05-20 — Webhook grants must
+                    # land in credit_ledger so the founder's books
+                    # reconcile to the cent.
+                    await _append_credit_ledger(
+                        user_id=target_user["user_id"],
+                        delta=new_balance - current_balance,
+                        before=current_balance,
+                        after=new_balance,
+                        reason=f"lemonsqueezy_{grant_kind}_{event_name}",
+                        external_ref=str(order_id) if order_id else None,
+                        extra={"variant_id": variant_id, "grant_kind": grant_kind},
+                    )
                 else:
+                    before_doc = await db.users.find_one(
+                        {"user_id": target_user["user_id"]},
+                        {"_id": 0, "presence_seconds_left": 1},
+                    )
+                    before_bal = int((before_doc or {}).get("presence_seconds_left") or 0)
                     await db.users.update_one(
                         {"user_id": target_user["user_id"]},
                         {"$inc": {"presence_seconds_left": presence_seconds}},
+                    )
+                    after_doc = await db.users.find_one(
+                        {"user_id": target_user["user_id"]},
+                        {"_id": 0, "presence_seconds_left": 1},
+                    )
+                    after_bal = int((after_doc or {}).get("presence_seconds_left") or 0)
+                    await _append_credit_ledger(
+                        user_id=target_user["user_id"],
+                        delta=after_bal - before_bal,
+                        before=before_bal,
+                        after=after_bal,
+                        reason=f"lemonsqueezy_{grant_kind}_{event_name}",
+                        external_ref=str(order_id) if order_id else None,
+                        extra={"variant_id": variant_id, "grant_kind": grant_kind},
                     )
             except Exception as e:  # noqa: BLE001
                 logger.warning("presence grant insert failed: %s", e)
@@ -2755,6 +2786,16 @@ async def lemonsqueezy_webhook(request: Request):
                     {"$set": {"presence_seconds_left": new_value}},
                 )
                 await db.presence_grants.delete_one({"id": grant["id"]})
+                # §AUDIT-LEDGER 2026-05-20 — Revokes must be tracked.
+                await _append_credit_ledger(
+                    user_id=target_user["user_id"],
+                    delta=new_value - current,
+                    before=current,
+                    after=new_value,
+                    reason=f"lemonsqueezy_revoke_{event_name}",
+                    external_ref=str(order_id) if order_id else None,
+                    extra={"original_seconds": seconds},
+                )
             return {"status": "revoked", "presence_seconds": presence_seconds}
 
         return {"status": "ignored", "reason": f"event {event_name} not handled for presence"}
@@ -3188,6 +3229,43 @@ async def presence_start(inp: PresenceStartInput, request: Request):
     # request must not be allowed to open a billable row.
     if (inp.mode or "voice") == "text":
         return {"session_id": None, "started_at": None, "skipped": "text_mode"}
+
+    # §HARD-LOCK 2026-05-20 — Refuse to open a billable voice session
+    # when the user has no balance and isn't unlimited. ElevenLabs
+    # charges the founder's card the moment the WebSocket opens, so a
+    # zero-balance user MUST be blocked here. Without this gate a
+    # buggy/malicious client could open hundreds of sessions and bleed
+    # the operator account. Defence-in-depth alongside the frontend
+    # tracker. Returns 402 (Payment Required) so the UI can surface a
+    # clear "top up to continue" prompt.
+    balance_doc = await db.users.find_one(
+        {"user_id": user.user_id},
+        {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
+    ) or {}
+    is_unlimited = bool(balance_doc.get("unlimited_voice"))
+    sec_left = int(balance_doc.get("presence_seconds_left") or 0)
+    if not is_unlimited and sec_left <= 0:
+        # Telemetry so the funnel surfaces every blocked attempt.
+        try:
+            await db.funnel_events.insert_one({
+                "id": str(uuid.uuid4()),
+                "event": "voice_session_blocked_no_balance",
+                "user_id": user.user_id,
+                "room": inp.room,
+                "occurred_at": datetime.now(timezone.utc).isoformat(),
+            })
+        except Exception:  # noqa: BLE001
+            pass
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "code": "no_presence_balance",
+                "message": "Top up to start a voice session.",
+                "presence_seconds_left": 0,
+                "room": inp.room,
+            },
+        )
+
     # Close any orphaned previous session: deduct elapsed time based on
     # last_ping_at so a tab-crash never costs more than ~30 seconds.
     prior = await db.voice_sessions.find_one(
@@ -3257,6 +3335,79 @@ async def presence_end(inp: PresenceEndInput, request: Request):
     if not sess:
         return {"status": "already_closed"}
     return await _close_voice_session_safe(sess, user.user_id, reason=inp.reason or "user_end")
+
+
+async def _append_credit_ledger(
+    *,
+    user_id: str,
+    delta: int,
+    before: int,
+    after: int,
+    reason: str,
+    session_id: str | None = None,
+    room: str | None = None,
+    external_ref: str | None = None,
+    unlimited: bool = False,
+    extra: dict | None = None,
+) -> bool:
+    """§AUDIT-LEDGER 2026-05-20 — Single source of truth for ALL credit
+    movements. Every place that touches `users.presence_seconds_left`
+    MUST call this immediately after the write.
+
+    Never raises. If the ledger insert fails the failure is logged
+    AND a `funnel_events.ledger_write_failed` row is appended so the
+    founder's audit dashboard can surface every silent gap.
+
+    Returns True if the ledger row landed, False otherwise.
+    """
+    now_iso = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id,
+        "delta": int(delta),
+        "before": int(before),
+        "after": int(after),
+        "reason": reason or "unspecified",
+        "session_id": session_id,
+        "room": room,
+        "external_ref": external_ref,
+        "unlimited": bool(unlimited),
+        "occurred_at": now_iso,
+    }
+    if extra:
+        # Never let extra fields shadow the canonical keys.
+        for k, v in extra.items():
+            if k not in doc:
+                doc[k] = v
+    try:
+        await db.credit_ledger.insert_one(doc)
+        return True
+    except Exception as exc:  # noqa: BLE001
+        # Log loudly — no `except: pass` ever again.
+        logger.error(
+            "credit_ledger insert FAILED user=%s delta=%s reason=%s "
+            "session=%s ref=%s err=%s",
+            user_id, delta, reason, session_id, external_ref, exc,
+        )
+        try:
+            await db.funnel_events.insert_one({
+                "id": str(uuid.uuid4()),
+                "event": "ledger_write_failed",
+                "user_id": user_id,
+                "delta": int(delta),
+                "before": int(before),
+                "after": int(after),
+                "reason": reason,
+                "session_id": session_id,
+                "external_ref": external_ref,
+                "error": str(exc)[:500],
+                "occurred_at": now_iso,
+            })
+        except Exception:  # noqa: BLE001
+            # If even funnel_events is down, the OS-level logger.error
+            # above is the last-resort trace.
+            pass
+        return False
 
 
 async def _close_voice_session_safe(
@@ -3347,24 +3498,19 @@ async def _close_voice_session_safe(
             ) or {}
             after_balance = int(user_doc.get("presence_seconds_left") or 0)
             # §AUDIT-LEDGER 2026-05-20 — Append an immutable audit row
-            # to credit_ledger for every credit movement. This is the
-            # founder's "raamatupidamisraamat" — any future dispute
-            # can be resolved by replaying these rows.
-            try:
-                await db.credit_ledger.insert_one({
-                    "id": str(uuid.uuid4()),
-                    "user_id": user_id,
-                    "delta": -elapsed if not was_unlimited else 0,
-                    "before": before_balance,
-                    "after": after_balance,
-                    "reason": reason or "session_end",
-                    "session_id": sess.get("id"),
-                    "room": sess.get("room"),
-                    "unlimited": was_unlimited,
-                    "occurred_at": now_iso,
-                })
-            except Exception:  # noqa: BLE001
-                pass
+            # to credit_ledger for every credit movement via the
+            # `_append_credit_ledger` helper, which never silently
+            # swallows failures (logs + funnel_events.ledger_write_failed).
+            await _append_credit_ledger(
+                user_id=user_id,
+                delta=-elapsed if not was_unlimited else 0,
+                before=before_balance,
+                after=after_balance,
+                reason=reason or "session_end",
+                session_id=sess.get("id"),
+                room=sess.get("room"),
+                unlimited=was_unlimited,
+            )
             if (
                 not user_doc.get("unlimited_voice")
                 and after_balance == 0
@@ -8797,6 +8943,17 @@ async def admin_presence_grant(inp: AdminPresenceGrantInput, request: Request):
         {"$set": {"presence_seconds_left": new_balance}},
     )
 
+    # §AUDIT-LEDGER 2026-05-20 — Founder gifts must also hit the ledger.
+    await _append_credit_ledger(
+        user_id=user_doc["user_id"],
+        delta=new_balance - current_balance,
+        before=current_balance,
+        after=new_balance,
+        reason=inp.reason or "founder_gift",
+        external_ref=f"founder_gift_{uuid.uuid4().hex[:12]}",
+        extra={"source": "admin", "note": inp.note or None},
+    )
+
     # Audit record — same collection as Lemon-driven grants so the
     # founder's analytics view sees a complete ledger.
     try:
@@ -8823,6 +8980,152 @@ async def admin_presence_grant(inp: AdminPresenceGrantInput, request: Request):
         "previous_balance": current_balance,
         "presence_seconds_left": new_balance,
         "reason": inp.reason or "founder_gift",
+    }
+
+
+# ----------------------------------------------------------------
+# §AUDIT-LEDGER 2026-05-20 — Founder's truth tool. Compares the
+# canonical `users.presence_seconds_left` movement against the
+# `credit_ledger` sum so any silent drift becomes visible.
+# ----------------------------------------------------------------
+@api_router.get("/admin/audit/ledger-diff")
+async def admin_audit_ledger_diff(
+    request: Request,
+    email: str | None = None,
+    user_id: str | None = None,
+    hours: int = 24,
+    limit: int = 50,
+):
+    """Founder-only — reconciliation report.
+
+    For one specific user (by email or user_id) OR for the top-N most
+    active users in the last `hours`, returns:
+      • Current `presence_seconds_left`
+      • Sum of `presence_grants.presence_seconds` (lifetime ins)
+      • Sum of `voice_sessions.elapsed_seconds` (lifetime outs)
+      • Sum of `credit_ledger.delta` (lifetime, signed)
+      • Expected vs. actual balance + drift in seconds
+      • Last N ledger rows for the user(s)
+
+    Drift > 0 ⇒ ledger UNDER-reports (real money moved with no record).
+    Drift < 0 ⇒ ledger OVER-reports.
+    A healthy system shows |drift| == 0 for every user.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    targets: list[dict] = []
+    if email or user_id:
+        q: dict = {}
+        if user_id:
+            q["user_id"] = user_id
+        elif email:
+            q["email"] = email.strip().lower()
+        u = await db.users.find_one(q, {"_id": 0})
+        if not u:
+            raise HTTPException(status_code=404, detail="User not found.")
+        targets = [u]
+    else:
+        # Top movers in the window by ledger row count.
+        since = datetime.now(timezone.utc) - timedelta(hours=hours)
+        pipe = [
+            {"$match": {"occurred_at": {"$gte": since.isoformat()}}},
+            {"$group": {"_id": "$user_id", "n": {"$sum": 1}}},
+            {"$sort": {"n": -1}},
+            {"$limit": int(limit)},
+        ]
+        ids = [d["_id"] async for d in db.credit_ledger.aggregate(pipe)]
+        if ids:
+            async for u in db.users.find({"user_id": {"$in": ids}}, {"_id": 0}):
+                targets.append(u)
+
+    rows: list[dict] = []
+    for u in targets:
+        uid = u["user_id"]
+        cur_balance = int(u.get("presence_seconds_left") or 0)
+
+        # Ins: presence_grants sum
+        grants_total = 0
+        async for g in db.presence_grants.find({"user_id": uid}, {"presence_seconds": 1}):
+            grants_total += int(g.get("presence_seconds") or 0)
+
+        # Outs: voice_sessions elapsed sum (closed only)
+        outs_total = 0
+        async for v in db.voice_sessions.find(
+            {"user_id": uid, "closed": True},
+            {"elapsed_seconds": 1},
+        ):
+            outs_total += int(v.get("elapsed_seconds") or 0)
+
+        # Ledger delta sum
+        ledger_sum = 0
+        ledger_count = 0
+        async for d in db.credit_ledger.aggregate([
+            {"$match": {"user_id": uid}},
+            {"$group": {
+                "_id": None,
+                "s": {"$sum": "$delta"},
+                "n": {"$sum": 1},
+            }},
+        ]):
+            ledger_sum = int(d.get("s") or 0)
+            ledger_count = int(d.get("n") or 0)
+
+        # Expected balance from real movements (capped at zero like the app does).
+        expected = max(0, grants_total - outs_total)
+        drift_vs_expected = cur_balance - expected
+        # Ledger-implied delta should equal (cur - 0) if user started at 0.
+        # We assume start=0 baseline; drift_vs_ledger surfaces anything
+        # the ledger missed or double-counted.
+        drift_vs_ledger = cur_balance - ledger_sum
+
+        # Last 5 ledger rows for forensic context.
+        recent = []
+        async for r in db.credit_ledger.find(
+            {"user_id": uid}, {"_id": 0}
+        ).sort("occurred_at", -1).limit(5):
+            recent.append(r)
+
+        rows.append({
+            "user_id": uid,
+            "email": u.get("email"),
+            "balance_now": cur_balance,
+            "grants_in_total": grants_total,
+            "voice_out_total": outs_total,
+            "ledger_delta_sum": ledger_sum,
+            "ledger_row_count": ledger_count,
+            "expected_balance_from_movements": expected,
+            "drift_vs_expected": drift_vs_expected,
+            "drift_vs_ledger": drift_vs_ledger,
+            "unlimited_voice": bool(u.get("unlimited_voice")),
+            "recent_ledger": recent,
+        })
+
+    # Top-line summary: how many users have non-zero drift?
+    drift_count = sum(1 for r in rows if r["drift_vs_ledger"] != 0)
+    drift_max = max((abs(r["drift_vs_ledger"]) for r in rows), default=0)
+
+    # Recent ledger-write-failed events (the silent gap canary).
+    since = datetime.now(timezone.utc) - timedelta(hours=hours)
+    failed_writes = await db.funnel_events.count_documents({
+        "event": "ledger_write_failed",
+        "occurred_at": {"$gte": since.isoformat()},
+    })
+
+    return {
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "window_hours": hours,
+        "users_audited": len(rows),
+        "users_with_drift": drift_count,
+        "max_drift_seconds": drift_max,
+        "ledger_write_failed_events_in_window": failed_writes,
+        "rows": rows,
     }
 
 

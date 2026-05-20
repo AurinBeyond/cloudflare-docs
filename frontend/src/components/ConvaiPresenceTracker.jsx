@@ -26,6 +26,10 @@ export function ConvaiPresenceTracker({ room = "clarity", onModeChange }) {
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [mode, setMode] = useState("voice");
+  // §HARD-LOCK 2026-05-20 — When backend returns 402 no_presence_balance
+  // we surface a calm top-up card and force the room into text mode so
+  // ElevenLabs cannot bill the founder for a balance-less session.
+  const [blocked, setBlocked] = useState(false);
   const sessionIdRef = useRef(null);
   const heartbeatRef = useRef(null);
   const prevStatusRef = useRef("idle");
@@ -63,8 +67,17 @@ export function ConvaiPresenceTracker({ room = "clarity", onModeChange }) {
         try {
           const res = await api.post("/presence/start", { room });
           sessionIdRef.current = res?.data?.session_id || null;
-        } catch {
-          // Soft-fail — voice still works, just no presence tracking.
+        } catch (err) {
+          // §HARD-LOCK 2026-05-20 — 402 = no_presence_balance. Show the
+          // top-up card AND force the room into text mode so the live
+          // ElevenLabs WebSocket cannot bill the founder. Any other
+          // error is soft-failed (voice keeps working, ledger paused).
+          if (err?.response?.status === 402) {
+            setBlocked(true);
+            modeRef.current = "text";
+            setMode("text");
+            if (typeof onModeChange === "function") onModeChange("text");
+          }
           sessionIdRef.current = null;
         }
       })();
@@ -169,6 +182,40 @@ export function ConvaiPresenceTracker({ room = "clarity", onModeChange }) {
         errorMsg={errorMsg}
         onDismiss={() => setStatus("idle")}
       />
+      {blocked ? (
+        <div
+          role="alert"
+          aria-live="polite"
+          data-testid="presence-hardlock-card"
+          className="my-4 rounded-xl border border-amber-400/40 bg-amber-50/90 px-5 py-4 text-amber-900 backdrop-blur"
+        >
+          <div className="text-sm font-medium tracking-wide">
+            Presence Time is empty
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-amber-900/80">
+            Voice and hybrid modes are paused until you top up. Writing
+            stays free — keep going at your own pace, or open a fresh
+            window of voice time below.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <a
+              href="/pricing"
+              data-testid="presence-hardlock-topup"
+              className="inline-flex items-center rounded-full bg-amber-900 px-4 py-2 text-sm font-medium text-amber-50 transition hover:bg-amber-800"
+            >
+              Add Presence Time
+            </a>
+            <button
+              type="button"
+              data-testid="presence-hardlock-dismiss"
+              onClick={() => setBlocked(false)}
+              className="inline-flex items-center rounded-full border border-amber-700/40 px-4 py-2 text-sm text-amber-900 transition hover:bg-amber-100"
+            >
+              Continue in text
+            </button>
+          </div>
+        </div>
+      ) : null}
       <RoomConvaiChat room={room} onStatusChange={onStatusChange} />
     </>
   );
