@@ -19,8 +19,9 @@ import { useState } from "react";
 // §AUDIT-P2 2026-05-20 — Centralised token storage.
 import { setSessionToken } from "@/lib/auth";
 import axios from "axios";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const BACKEND = __BACKEND_URL__;
 // §AUDIT-P2 2026-05-20 — Centralised token storage.
 const WANDERER_KEY = "wanderer_accepted_1.0-2026-02-07_private";
 

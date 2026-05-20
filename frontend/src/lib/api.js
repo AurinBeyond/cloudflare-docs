@@ -7,8 +7,8 @@ import {
   getSessionToken as _getSessionToken,
   setSessionToken as _setSessionToken,
 } from "@/lib/auth";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// §AUDIT-PROD-URL 2026-05-20 — runtime backend resolver — see backendUrl.js.
+import { BACKEND_URL } from "@/lib/backendUrl";
 
 export const API_BASE = `${BACKEND_URL}/api`;
 

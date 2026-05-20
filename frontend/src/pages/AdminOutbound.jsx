@@ -11,8 +11,9 @@
  * X / FB / IG / LinkedIn / Discord / blog manually.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 
 const CHANNELS = [
   { key: "email", label: "Email", auto: true },

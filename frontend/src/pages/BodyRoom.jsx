@@ -21,6 +21,7 @@ import {
 } from "@/lib/api";
 import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass } from "lucide-react";
 import { track } from "@/lib/telemetry";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 
 /**
@@ -856,7 +857,7 @@ function HotspotModal({ spot, user, savedFlash, onNoted, onClose }) {
             className="-mx-1 md:-mx-2 overflow-hidden rounded-2xl aspect-square bg-[hsl(var(--aurin-bg))]/60"
           >
             <img
-              src={`${process.env.REACT_APP_BACKEND_URL}/api/body-room/image/${spot.image_slug}`}
+              src={`${__BACKEND_URL__}/api/body-room/image/${spot.image_slug}`}
               alt=""
               loading="lazy"
               onError={() => setImgFailed(true)}

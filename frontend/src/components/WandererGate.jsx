@@ -17,8 +17,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 const AGREEMENT_VERSION = "1.1-2026-02-11-psych-exclusion";
 
 function getOrCreateVisitorId() {

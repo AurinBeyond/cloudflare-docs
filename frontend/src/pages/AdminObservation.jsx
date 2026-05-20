@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { RefreshCw, AlertCircle } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 /**
  * AdminObservation — calm 30-day post-launch observation dashboard.
@@ -32,7 +33,7 @@ export default function AdminObservation() {
     setError(null);
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/admin/observation`,
+        `${__BACKEND_URL__}/api/admin/observation`,
         { headers: { "X-Admin-Token": token } }
       );
       if (!res.ok) {

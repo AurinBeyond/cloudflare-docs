@@ -22,8 +22,9 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import GuidePresence from "@/components/GuidePresence";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const BACKEND = __BACKEND_URL__;
 
 // Curated sample line for the demo. Short, calm, breathy. Embodies
 // the "Ultimate Human Warmth" the founder agreed on.

@@ -9,8 +9,9 @@
  * raw uuid leaks here.
  */
 import { useCallback, useEffect, useState } from "react";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 
 function todayIso() {
   const d = new Date();

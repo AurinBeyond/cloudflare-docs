@@ -9168,15 +9168,6 @@ class TelemetryEventInput(BaseModel):
 
 @api_router.post("/telemetry/crash")
 async def telemetry_crash(request: Request):
-    """§AUDIT-CRASH 2026-05-20 — Public crash beacon endpoint.
-
-    Receives one document per React `ErrorBoundary` trip. No auth,
-    no PII validation beyond truncation. Sent via `navigator.sendBeacon`
-    from the frontend so a crashed page never re-throws.
-
-    Founder reads these via:
-      `db.funnel_events.find({event: "react_error_boundary"}).sort({occurred_at:-1})`
-    """
     try:
         payload = await request.json()
     except Exception:  # noqa: BLE001
@@ -9201,6 +9192,58 @@ async def telemetry_crash(request: Request):
     except Exception as exc:  # noqa: BLE001
         logger.warning("telemetry/crash insert failed: %s", exc)
     return {"ok": True}
+
+
+# §AUDIT-CRASH 2026-05-20 — Admin reader for production React crashes.
+# Founder runs:
+#   curl -H "X-Admin-Token: $TOKEN" "https://prulesoul.site/api/admin/audit/crashes?path=/clarity-release&limit=20"
+# to see EXACTLY which line of which component crashed in production.
+@api_router.get("/admin/audit/crashes")
+async def admin_audit_crashes(
+    request: Request,
+    path: str | None = None,
+    hours: int = 24,
+    limit: int = 20,
+):
+    """Founder-only — list latest React Error Boundary trips."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    since = datetime.now(timezone.utc) - timedelta(hours=int(hours))
+    q: dict = {
+        "event": "react_error_boundary",
+        "occurred_at": {"$gte": since.isoformat()},
+    }
+    if path:
+        q["path"] = path
+
+    rows = []
+    async for d in db.funnel_events.find(q, {"_id": 0}).sort("occurred_at", -1).limit(int(limit)):
+        rows.append(d)
+
+    # Top message / path histograms
+    msg_hist: dict[str, int] = {}
+    path_hist: dict[str, int] = {}
+    for r in rows:
+        m = (r.get("message") or "")[:200]
+        p = r.get("path") or ""
+        msg_hist[m] = msg_hist.get(m, 0) + 1
+        path_hist[p] = path_hist.get(p, 0) + 1
+
+    return {
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "window_hours": int(hours),
+        "count": len(rows),
+        "by_message_top": sorted(msg_hist.items(), key=lambda x: -x[1])[:10],
+        "by_path_top": sorted(path_hist.items(), key=lambda x: -x[1])[:10],
+        "rows": rows,
+    }
 
 
 @api_router.post("/telemetry/event")

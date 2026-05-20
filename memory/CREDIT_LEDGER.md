@@ -1,5 +1,35 @@
 # CREDIT LEDGER — Matrix Aurin
 
+## 2026-05-20 (afternoon) · §AUDIT-PROD-URL · "Quiet ripple" prod-i crash juurpõhjus
+
+| ID | Type | What was done | Why classified this way |
+|----|------|---------------|--------------------------|
+| 71.1 | 🛡️ GUARANTEE | **Runtime backend resolver** `/frontend/src/lib/backendUrl.js`. Kui kasutaja külastab `prulesoul.site` või `www.prulesoul.site`, kasutab frontend SAMA hostname-i kui backend (same-origin). Build-aja `REACT_APP_BACKEND_URL` jääb fallbackiks ainult preview/localhost-i jaoks. | Production deploy oli ehitatud `REACT_APP_BACKEND_URL=https://aurin-hub.emergent.host`-iga, mistõttu kõik prod-i API kutsed läksid `aurin-hub.emergent.host`-i poole. Session cookie on aga `.prulesoul.site` domeenil ehk cross-origin → cookie ei riide kaasa → kasutaja näis logged-out → komponendid crashisid undefined data peal → ErrorBoundary näitas "A quiet ripple". |
+| 71.2 | 🛡️ GUARANTEE | Migreerinud kõik 19 faili (`pages/`, `components/`, `hooks/`, `lib/`) `process.env.REACT_APP_BACKEND_URL` → `import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl"`. Sealhulgas `WandererGate`, `ErrorBoundary`, `RealtimeCompanion`, `RoomConvaiChat`, `telemetry.js`, `useVoiceIO`. | One-shot fix — ükski tulevane vale env-iga deploy ei saa enam prod-i URL-i mürgitada. |
+| 71.3 | 🛡️ GUARANTEE | **Crash telemetry endpoint** `/api/telemetry/crash` + `POST` beacon `ErrorBoundary.jsx`-st. Iga edaspidine prod-i React crash kirjutab `funnel_events.react_error_boundary` rea: message, stack, component_stack, path, user_agent. | Pole enam pimet oletamist — iga prod-crash on DB-s tõestatud. |
+| 71.4 | 🛡️ GUARANTEE | **Admin reader** `GET /api/admin/audit/crashes?path=...&hours=24&limit=20`. Tagastab crashide top message + top path + viimased 20 toorerada. | Founderi tööriist `curl -H "X-Admin-Token: $TOKEN" https://prulesoul.site/api/admin/audit/crashes`. |
+
+**Verified evidence (run 2026-05-20 14:39 UTC, preview)**:
+- Pre-fix: prod JS bundle `grep https | sort -u` → `https://aurin-hub.emergent.host` (vale URL hardcoded).
+- Post-fix Playwright on preview `/clarity-release`: `CRASHED? False`, 0 page errors, 0 console errors, "Before You Enter" plokk renderdub.
+- `curl /api/admin/audit/crashes` → HTTP 200, JSON sisaldab `count`, `by_message_top`, `by_path_top`, `rows`.
+- Lint puhas: `mcp_lint_javascript` ✅ No issues found.
+
+**Files added**:
+- `/app/frontend/src/lib/backendUrl.js` (runtime resolver)
+
+**Files modified (19 total)**:
+- `/app/frontend/src/lib/api.js`, `/app/frontend/src/lib/telemetry.js`
+- `/app/frontend/src/components/ErrorBoundary.jsx`, `WandererGate.jsx`, `RealtimeCompanion.jsx`, `RoomConvaiChat.jsx`, `BodyRoomChat.jsx`, `SessionCalmerPrompt.jsx`
+- `/app/frontend/src/pages/AdminObservation.jsx`, `Presence.jsx`, `LibraryHub.jsx`, `AdminScheduler.jsx`, `CourseDetail.jsx`, `BodyRoom.jsx`, `SixNights.jsx`, `Guest.jsx`, `KidsUniverse.jsx`, `AdminOutbound.jsx`, `TestMic.jsx`
+- `/app/frontend/src/hooks/useVoiceIO.js`
+- `/app/backend/server.py` — `/api/telemetry/crash`, `/api/admin/audit/crashes`
+
+**Status: 🟢 PREVIEW VERIFIED — founder peab deploy'ima preview → production, et need parandused jõuaksid `prulesoul.site` peale.**
+
+---
+
+
 ## 2026-05-20 · §VANKUMATU TÕE PROTOKOLL · Garantii-audit + ElevenLabs hard-lock
 
 | ID | Type | What was done | Why classified this way |

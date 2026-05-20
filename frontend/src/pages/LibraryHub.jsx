@@ -4,8 +4,9 @@ import PageHeader from "@/components/layout/PageHeader";
 import InstagramCTA from "@/components/InstagramCTA";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { Compass, BookOpen, Sparkles, ArrowRight } from "lucide-react";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 
 function ShelfCard({ shelf }) {
   return (

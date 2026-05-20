@@ -21,8 +21,9 @@ import {
 // §AUDIT-P2 2026-05-20 — Use centralised token storage instead of
 // inlining the localStorage key.
 import { getSessionToken } from "@/lib/auth";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = __BACKEND_URL__;
 
 /**
  * /course-room/:slug — single course detail.

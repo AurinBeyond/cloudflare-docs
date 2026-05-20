@@ -8,7 +8,8 @@
  * Allowed events are enforced server-side; an unknown name returns
  * 400 and we just swallow it.
  */
-const BACKEND = process.env.REACT_APP_BACKEND_URL || "";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
+const BACKEND = __BACKEND_URL__ || "";
 const CID_KEY = "aurin_client_id_v1";
 
 function getClientId() {

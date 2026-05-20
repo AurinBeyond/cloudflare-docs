@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 
 function NightCard({ n, onOpen }) {
   return (

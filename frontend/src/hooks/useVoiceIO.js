@@ -19,8 +19,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 // §AUDIT-P2 2026-05-20 — Centralised token storage.
 import { getSessionToken } from "@/lib/auth";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const BACKEND = __BACKEND_URL__;
 
 // Native browser SpeechRecognition — kept only as ultimate fallback.
 const SR =

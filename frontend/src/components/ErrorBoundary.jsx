@@ -11,6 +11,7 @@
  * no "Error" tone — the wanderer is gently invited to start fresh.
  */
 import { Component } from "react";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class ErrorBoundary extends Component {
     // sendBeacon is fire-and-forget — never re-throws, never blocks
     // the boundary render.
     try {
-      const backend = process.env.REACT_APP_BACKEND_URL;
+      const backend = __BACKEND_URL__;
       if (backend && typeof navigator !== "undefined" && navigator.sendBeacon) {
         const payload = {
           event: "react_error_boundary",

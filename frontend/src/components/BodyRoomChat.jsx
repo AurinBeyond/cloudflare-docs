@@ -21,10 +21,11 @@ import useVoiceIO from "@/hooks/useVoiceIO";
 import { LENS_STORE_KEY, LENS_EVENT, DEFAULT_LENS } from "@/components/BodyLensSelector";
 // §AUDIT-P2 2026-05-20 — Centralised token storage.
 import { getSessionToken } from "@/lib/auth";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 const STORE_KEY = "aurin_body_chat_v1";
 const MAX_TURNS = 30;
-const TTS_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "";
+const TTS_BACKEND_URL = __BACKEND_URL__ || "";
 
 function readStored() {
   try {

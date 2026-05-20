@@ -18,8 +18,9 @@
  * single env flag can roll back any time.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = __BACKEND_URL__;
 
 export default function RealtimeCompanion({
   gender = "female",

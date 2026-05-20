@@ -21,9 +21,10 @@
 import React, { useEffect, useRef, useState } from "react";
 // §AUDIT-P2 2026-05-20 — Centralised token storage.
 import { getSessionToken } from "@/lib/auth";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 const STORAGE_KEY_PREFIX = "aurin_calmer_feedback_";
-const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const BACKEND = __BACKEND_URL__;
 
 export default function SessionCalmerPrompt({
   room = "clarity",

@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { Sprout, Heart, BookHeart, ShieldCheck, Wand2, ArrowRight } from "lucide-react";
 import useFreeAccess from "@/hooks/useFreeAccess";
+import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = __BACKEND_URL__;
 
 const AGE_GROUPS = [
   {
