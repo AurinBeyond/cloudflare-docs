@@ -523,6 +523,8 @@ export default function ClarityRelease() {
           usageKey={usageKey}
           toneTag={toneTag}
           audioPlaying={audioPlaying}
+          convaiMode={convaiMode}
+          setConvaiMode={setConvaiMode}
         />
       )}
 
@@ -1011,6 +1013,8 @@ function ChatPanel({
   usageKey,
   toneTag,
   audioPlaying,
+  convaiMode,
+  setConvaiMode,
 }) {
   const pendingAutoSendRef = useRef(false);
   // §Phase 1 STABILIZATION (2026-02-14) — ConvAI live-dialogue panel.
