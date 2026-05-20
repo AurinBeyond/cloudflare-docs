@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import FirstLetterWidget from "@/components/FirstLetterWidget";
-import RoomConvaiChat from "@/components/RoomConvaiChat";
+import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
+// §AUDIT-SCALE 2026-05-20 — Course Room joins Clarity in tracking
+// presence_seconds so Alistair's voice sessions decrement credits.
+import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import { fetchCourses } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
@@ -80,7 +83,9 @@ export default function CourseRoom() {
           / Sara. */}
       <section className="aurin-section-sm" data-testid="course-room-alistair">
         <div className="aurin-container max-w-[760px]">
-          <RoomConvaiChat room="courses" />
+          {/* §AUDIT-SCALE 2026-05-20 — Tracker wraps RoomConvaiChat
+              internally so we do not double-mount the SDK. */}
+          <ConvaiPresenceTracker room="courses" />
         </div>
       </section>
 

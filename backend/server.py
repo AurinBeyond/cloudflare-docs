@@ -3249,17 +3249,51 @@ async def _close_voice_session_safe(
         }},
     )
     # Decrement balance, never below zero.
+    # §AUDIT-SCALE 2026-05-20 — Atomic single-write update to prevent
+    # the read-modify-write race that previously let parallel session
+    # closes (e.g. two rooms ending simultaneously) leak credits in
+    # either direction. The aggregation-pipeline `$set` clamps at zero
+    # with `$max` and is honoured atomically by Mongo. unlimited_voice
+    # accounts are matched out at the filter level, so the write
+    # simply does not fire for them.
     if elapsed > 0:
-        user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
-        if user_doc and not user_doc.get("unlimited_voice"):
-            current = int(user_doc.get("presence_seconds_left") or 0)
-            new_value = max(0, current - elapsed)
+        try:
             await db.users.update_one(
-                {"user_id": user_id},
-                {"$set": {"presence_seconds_left": new_value}},
+                {
+                    "user_id": user_id,
+                    "$or": [
+                        {"unlimited_voice": {"$exists": False}},
+                        {"unlimited_voice": False},
+                        {"unlimited_voice": None},
+                    ],
+                },
+                [
+                    {
+                        "$set": {
+                            "presence_seconds_left": {
+                                "$max": [
+                                    0,
+                                    {
+                                        "$subtract": [
+                                            {"$ifNull": ["$presence_seconds_left", 0]},
+                                            elapsed,
+                                        ]
+                                    },
+                                ]
+                            }
+                        }
+                    }
+                ],
             )
-            # §Telemetry: drained event when balance hits zero.
-            if new_value == 0 and current > 0:
+            # Re-read for the drained-event telemetry (cheap, indexed).
+            user_doc = await db.users.find_one(
+                {"user_id": user_id},
+                {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
+            ) or {}
+            if (
+                not user_doc.get("unlimited_voice")
+                and int(user_doc.get("presence_seconds_left") or 0) == 0
+            ):
                 try:
                     await db.funnel_events.insert_one({
                         "id": str(uuid.uuid4()),
@@ -3268,8 +3302,10 @@ async def _close_voice_session_safe(
                         "session_id": sess["id"],
                         "occurred_at": now_iso,
                     })
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("atomic balance decrement failed for %s: %s", user_id, exc)
     # §Telemetry: session_ended.
     try:
         await db.funnel_events.insert_one({
@@ -11602,6 +11638,69 @@ async def on_startup():
         unique=True,
         name="uniq_user_book",
     )
+    # §AUDIT-SCALE 2026-05-20 — Hot-path indexes for 1M-wanderer scale.
+    # Every login / API call touches users + user_sessions; without
+    # these indexes Mongo does a COLLSCAN which collapses ~10K active
+    # users. All indexes are idempotent (create_index is a no-op if it
+    # already exists with the same spec) and built in the background
+    # so they do not block live traffic during the migration.
+    try:
+        await db.users.create_index(
+            [("user_id", 1)], unique=True, background=True, name="uniq_user_id"
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("users.user_id unique index skipped: %s", exc)
+    # NOTE: NOT yet enforcing unique email — would fail loudly if any
+    # case-sensitive duplicates exist (the C2 migration handles that
+    # separately). Plain ascending index is safe and gives the same
+    # 10-100x speed-up for find_one({"email": ...}).
+    try:
+        await db.users.create_index([("email", 1)], background=True, name="idx_user_email")
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("users.email index skipped: %s", exc)
+    try:
+        await db.user_sessions.create_index(
+            [("session_token", 1)], unique=True, background=True,
+            name="uniq_session_token",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("user_sessions.session_token unique index skipped: %s", exc)
+    try:
+        await db.user_sessions.create_index(
+            [("expires_at", 1)], background=True, name="idx_session_expires",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("user_sessions.expires_at index skipped: %s", exc)
+    try:
+        await db.voice_sessions.create_index(
+            [("id", 1)], unique=True, background=True, name="uniq_voice_id",
+        )
+        await db.voice_sessions.create_index(
+            [("user_id", 1), ("closed", 1)], background=True,
+            name="idx_voice_user_closed",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("voice_sessions indexes skipped: %s", exc)
+    try:
+        await db.magic_link_tokens.create_index(
+            [("token", 1)], unique=True, background=True, name="uniq_magic_token",
+        )
+        await db.magic_link_tokens.create_index(
+            [("expires_at", 1)], background=True, name="idx_magic_expires",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("magic_link_tokens indexes skipped: %s", exc)
+    try:
+        await db.agreement_acceptances.create_index(
+            [("user_id", 1), ("scope", 1)], background=True,
+            name="idx_agreement_user_scope",
+        )
+        await db.agreement_acceptances.create_index(
+            [("visitor_id", 1), ("scope", 1)], background=True,
+            name="idx_agreement_visitor_scope",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("agreement_acceptances indexes skipped: %s", exc)
     # Clarity Release: index for fast active-pass lookup + audit log queries.
     await db.clarity_passes.create_index([("user_id", 1), ("expires_at", -1)])
     await db.clarity_passes.create_index([("external_order_id", 1)])

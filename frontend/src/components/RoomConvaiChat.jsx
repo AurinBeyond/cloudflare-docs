@@ -156,6 +156,37 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
     }
   }, [status, errorMsg, mode, onStatusChange]);
 
+  // §AUDIT-SCALE 2026-05-20 — Graceful degradation when ElevenLabs is
+  // unreachable. If the SDK lands in "error" while the wanderer is in
+  // voice (or hybrid) mode, after a brief breath we soft-switch them
+  // to text mode so the room keeps speaking through the keyboard.
+  // The wanderer can always switch back to voice from the mode-toggle
+  // when the upstream returns. This does not throw — only flips a
+  // local state and (via onStatusChange) tells the tracker to close
+  // any open ledger row.
+  const fallbackTimerRef = useRef(null);
+  useEffect(() => {
+    if (status !== "error" || mode === "text") {
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+      return undefined;
+    }
+    fallbackTimerRef.current = setTimeout(() => {
+      modeRef.current = "text";
+      setMode("text");
+      setStatus("idle");
+      setErrorMsg("");
+    }, 4500);
+    return () => {
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+    };
+  }, [status, mode]);
+
 
   const pushTranscript = useCallback((role, text) => {
     if (!text) return;

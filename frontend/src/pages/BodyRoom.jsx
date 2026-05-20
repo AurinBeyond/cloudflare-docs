@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import BodyRoomChat from "@/components/BodyRoomChat";
-import RoomConvaiChat from "@/components/RoomConvaiChat";
+import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
+// §AUDIT-SCALE 2026-05-20 — Body Room joins Clarity in tracking
+// presence_seconds. Without this Kaelan would never decrement
+// credits, leaking value once the free-access window closes.
+import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import BodyLensSelector from "@/components/BodyLensSelector";
 import LensForRegion from "@/components/LensForRegion";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -184,7 +188,11 @@ export default function BodyRoom() {
           Grace, Sara, or Alistair. */}
       <section className="aurin-section-sm" data-testid="body-room-kaelan">
         <div className="aurin-container max-w-[760px]">
-          <RoomConvaiChat room="body" />
+          {/* §AUDIT-SCALE 2026-05-20 — Wrapped in ConvaiPresenceTracker
+              so Kaelan's voice sessions decrement credits. The tracker
+              itself renders RoomConvaiChat internally — do NOT also
+              render it here, that would mount the SDK twice. */}
+          <ConvaiPresenceTracker room="body" />
         </div>
       </section>
 

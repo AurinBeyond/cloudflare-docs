@@ -32,7 +32,10 @@ import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { useAuth } from "@/contexts/AuthProvider";
 import ParentsRoomChat from "@/components/ParentsRoomChat";
-import RoomConvaiChat from "@/components/RoomConvaiChat";
+import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
+// §AUDIT-SCALE 2026-05-20 — Parents' Room joins Clarity in tracking
+// presence_seconds so Sara's voice sessions decrement credits.
+import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -145,7 +148,9 @@ export default function ParentsRoom() {
           strictly isolated from Grace / Kaelan / Alistair. */}
       <section className="aurin-section-sm" data-testid="parents-room-sara">
         <div className="aurin-container max-w-[760px]">
-          <RoomConvaiChat room="parents" />
+          {/* §AUDIT-SCALE 2026-05-20 — Tracker wraps RoomConvaiChat
+              internally so we do not double-mount the SDK. */}
+          <ConvaiPresenceTracker room="parents" />
         </div>
       </section>
 
