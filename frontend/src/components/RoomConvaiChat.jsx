@@ -686,6 +686,19 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       });
     } catch (err) {
       setStatus("error");
+      // §HARD-LOCK 2026-05-20 PM — When the backend returns 402
+      // (no_presence_balance) for voice/hybrid, do NOT keep trying.
+      // Auto-fall to text mode + a calm top-up message. Voice is
+      // gated server-side; retrying just spams 402 → 520 cascades
+      // and stresses ElevenLabs' WebSocket layer for no value.
+      if (err?.status === 402 || /402/.test(err?.message || "")) {
+        modeRef.current = "text";
+        setMode("text");
+        setErrorMsg(
+          "Presence Time is empty — voice is paused. Writing stays free. Top up to open voice again.",
+        );
+        return;
+      }
       const detail = err?.message || "Could not connect to the room.";
       setErrorMsg(detail);
     }

@@ -9145,7 +9145,7 @@ async def admin_audit_ledger_diff(
 
 ALLOWED_FUNNEL_EVENTS = {
     "lp_visit", "lp_cta_click",
-    "portal_open", "magic_link_sent", "signed_in",
+    "portal_open", "portal_magic_link_request", "magic_link_sent", "signed_in",
     "catalogue_open", "faq_open", "faq_question_open",
     "wanderers_agreement_open", "agreement_accepted",
     "clarity_threshold_open", "clarity_session_started",
@@ -9156,6 +9156,15 @@ ALLOWED_FUNNEL_EVENTS = {
     "checkout_clicked",
     "enroll_click", "enroll_complete",
     "exit_emergency",
+    # §AUDIT-TELEMETRY 2026-05-20 — events fired by Catalogue /
+    # MembershipTiers cards that were missing from the whitelist and
+    # returned 400 on every render. Adding them so the funnel report
+    # actually shows conversion intent.
+    "cabinet_paywall_view", "cabinet_paywall_cta",
+    "tier_cta_click", "tier_support_click",
+    "waitlist_join_submit",
+    # Hard-lock block surfaced on /presence/start when balance == 0.
+    "voice_session_blocked_no_balance",
 }
 
 class TelemetryEventInput(BaseModel):
