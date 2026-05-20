@@ -37,54 +37,28 @@ api.interceptors.request.use((cfg) => {
   return cfg;
 });
 
-// §AUDIT-W3 2026-05-20 — 401 graceful response interceptor.
-// When the wanderer's Bearer token has expired (or been revoked
-// server-side), the previous behaviour left the UI in a half-signed
-// state: header showed the avatar but every action silently failed.
-// Now: on the first 401 from any authenticated endpoint we clear the
-// stale token AND (if the wanderer is currently sitting in an auth-
-// required page) bounce them to /portal so they can sign back in.
+// §AUDIT-W3 2026-05-20 (revised after prod-side ErrorBoundary trip
+// on 2026-05-20) — 401 response handling is now PASSIVE:
+//   - We do NOT clear the session token here (AuthProvider does its
+//     own /auth/me probe and will call setSessionToken(null) on 401).
+//   - We do NOT navigate. A mid-render window.location.assign() was
+//     able to trip the ErrorBoundary in production when called from
+//     inside React state updates. AuthProvider + page-level "Sign in
+//     to continue" empty states already cover the UX.
+//   - We DO log the 401 in dev console once per request, so devtools
+//     screenshots tell us which endpoint actually 401'd.
 //
-// Carefully scoped to avoid loops:
-//   - public endpoints (/auth/me probing on cold mount) MUST still
-//     surface their 401 to AuthProvider, which already handles it
-//     (setUser(null)). We DO NOT redirect on every 401 — only when
-//     a real action call was attempted from a private surface.
-//   - /auth/* endpoints are excluded from the redirect path to keep
-//     the sign-in flow itself working when tokens are missing.
+// The Promise.reject is the only behaviour — callers see the original
+// AxiosError just like before iter1. NULL-RISK change.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
-    const url = error?.config?.url || "";
     if (status === 401) {
-      const isAuthProbe = url.includes("/auth/");
-      if (!isAuthProbe) {
-        // Token is stale for a non-auth request — clear it so the
-        // header/avatar resets, and AuthProvider's next refresh
-        // catches up. Soft-redirect only if we're on a route that
-        // requires identity (private rooms). Public pages remain.
-        try {
-          setSessionToken(null);
-        } catch {
-          /* localStorage blocked in private mode — safe to ignore */
-        }
-        if (typeof window !== "undefined") {
-          const path = window.location.pathname || "";
-          const privatePaths = [
-            "/clarity-release",
-            "/body-room",
-            "/parents-room",
-            "/course-room",
-            "/cabinet",
-            "/portal",
-          ];
-          const onPrivate = privatePaths.some((p) => path.startsWith(p));
-          if (onPrivate && path !== "/portal") {
-            const next = encodeURIComponent(path + (window.location.search || ""));
-            window.location.assign(`/portal?next=${next}&reason=session_ended`);
-          }
-        }
+      const url = error?.config?.url || "";
+      // eslint-disable-next-line no-console
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[api] 401 on", url);
       }
     }
     return Promise.reject(error);
