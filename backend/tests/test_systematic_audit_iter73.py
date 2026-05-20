@@ -175,6 +175,15 @@ def test_admin_ledger_diff():
 
 # ─── 8. Presence hard-lock ──────────────────────────────────────────
 def test_presence_zero_balance_voice_returns_402():
+    # §FREE-VOICE-BETA 2026-05-20 — While the env flag is set, the
+    # hard-lock is intentionally bypassed so the founder can test
+    # live voice before LemonSqueezy is open. Skip this assertion
+    # when the flag is active; restore the moment payments are live.
+    import os as _os
+    if (_os.environ.get("FREE_VOICE_BETA") or "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }:
+        pytest.skip("FREE_VOICE_BETA is active — hard-lock intentionally bypassed.")
     async def run():
         uid, email, token, client, db = await mk_user(presence_seconds_left=0, unlimited_voice=False)
         try:
@@ -274,6 +283,11 @@ def test_clarity_passes_endpoint():
 
 # ─── 10. Clarity convai signed-url hard-lock ────────────────────────
 def test_clarity_signed_url_zero_balance_voice_returns_402():
+    import os as _os
+    if (_os.environ.get("FREE_VOICE_BETA") or "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }:
+        pytest.skip("FREE_VOICE_BETA is active — signed-url hard-lock intentionally bypassed.")
     async def run():
         uid, email, token, client, db = await mk_user(presence_seconds_left=0, unlimited_voice=False)
         try:

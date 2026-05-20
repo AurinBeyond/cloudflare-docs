@@ -3244,7 +3244,29 @@ async def presence_start(inp: PresenceStartInput, request: Request):
     ) or {}
     is_unlimited = bool(balance_doc.get("unlimited_voice"))
     sec_left = int(balance_doc.get("presence_seconds_left") or 0)
-    if not is_unlimited and sec_left <= 0:
+    # §FREE-VOICE-BETA 2026-05-20 — Founder runway switch.
+    # While LemonSqueezy is not yet open, voice must remain accessible
+    # for live-mode founder testing across all 4 rooms. Set
+    # FREE_VOICE_BETA=true in /app/backend/.env to bypass the
+    # hard-lock; set to false (or remove) the instant payments are
+    # online. Every bypass writes a `free_voice_beta_session` funnel
+    # row so the founder can audit how much "free" voice was minted.
+    free_beta = (os.environ.get("FREE_VOICE_BETA") or "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }
+    if free_beta:
+        try:
+            await db.funnel_events.insert_one({
+                "id": str(uuid.uuid4()),
+                "event": "free_voice_beta_session",
+                "user_id": user.user_id,
+                "room": inp.room,
+                "mode": (inp.mode or "voice"),
+                "occurred_at": datetime.now(timezone.utc).isoformat(),
+            })
+        except Exception:  # noqa: BLE001
+            pass
+    if not free_beta and not is_unlimited and sec_left <= 0:
         # Telemetry so the funnel surfaces every blocked attempt.
         try:
             await db.funnel_events.insert_one({
@@ -5413,7 +5435,14 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
                 {"user_id": user.user_id},
                 {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
             ) or {}
-            if not user_doc_min.get("unlimited_voice"):
+            # §FREE-VOICE-BETA 2026-05-20 — Same runway switch as
+            # /presence/start. If FREE_VOICE_BETA=true, mint signed
+            # URLs for any signed-in user. Audit row already written
+            # by /presence/start when the front-end pairs the two.
+            free_beta = (os.environ.get("FREE_VOICE_BETA") or "").strip().lower() in {
+                "1", "true", "yes", "on",
+            }
+            if not free_beta and not user_doc_min.get("unlimited_voice"):
                 from session_cap import _free_access_window_active  # noqa: WPS433
                 in_free_window = False
                 try:
@@ -9207,6 +9236,45 @@ async def telemetry_crash(request: Request):
 # Founder runs:
 #   curl -H "X-Admin-Token: $TOKEN" "https://prulesoul.site/api/admin/audit/crashes?path=/clarity-release&limit=20"
 # to see EXACTLY which line of which component crashed in production.
+@api_router.get("/admin/audit/free-voice-beta")
+async def admin_audit_free_voice_beta(request: Request, hours: int = 72):
+    """§FREE-VOICE-BETA 2026-05-20 — Founder visibility while
+    LemonSqueezy is not yet open. Shows how much "free" voice was
+    minted while FREE_VOICE_BETA=true, broken down by room. The
+    instant payments are online: set FREE_VOICE_BETA=false in
+    /app/backend/.env and the hard-lock fully reactivates."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    since = datetime.now(timezone.utc) - timedelta(hours=int(hours))
+    q = {"event": "free_voice_beta_session", "occurred_at": {"$gte": since.isoformat()}}
+    count = await db.funnel_events.count_documents(q)
+    by_room: dict[str, int] = {}
+    by_user: dict[str, int] = {}
+    async for d in db.funnel_events.find(q, {"_id": 0, "room": 1, "user_id": 1}):
+        r = d.get("room") or "unknown"
+        u = d.get("user_id") or "anon"
+        by_room[r] = by_room.get(r, 0) + 1
+        by_user[u] = by_user.get(u, 0) + 1
+    flag_value = (os.environ.get("FREE_VOICE_BETA") or "").strip().lower()
+    return {
+        "as_of": datetime.now(timezone.utc).isoformat(),
+        "window_hours": int(hours),
+        "FREE_VOICE_BETA_flag": flag_value or "(unset)",
+        "is_active": flag_value in {"1", "true", "yes", "on"},
+        "sessions_minted": count,
+        "by_room": sorted(by_room.items(), key=lambda x: -x[1]),
+        "by_user_top": sorted(by_user.items(), key=lambda x: -x[1])[:10],
+        "instructions_to_close": "Set FREE_VOICE_BETA=false (or remove) in /app/backend/.env and restart backend.",
+    }
+
+
 @api_router.get("/admin/audit/crashes")
 async def admin_audit_crashes(
     request: Request,
