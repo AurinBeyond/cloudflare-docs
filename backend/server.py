@@ -3074,6 +3074,12 @@ async def presence_balance(request: Request):
 
 class PresenceStartInput(BaseModel):
     room: Literal["clarity", "body", "parents", "courses"] = "clarity"
+    # §AUDIT-W5 2026-05-20 — Mode hint mirrors the frontend toggle.
+    # Optional & defaults to "voice" so any legacy client still works.
+    # Text mode is unmetered per Founder directive; the server refuses
+    # to open a billable session_row when mode=="text" even if a
+    # malicious or buggy client still posts. Defence-in-depth.
+    mode: Optional[Literal["voice", "text", "hybrid"]] = "voice"
 
 
 @api_router.post("/presence/start")
@@ -3085,6 +3091,13 @@ async def presence_start(inp: PresenceStartInput, request: Request):
     crash, reaped by the next `presence_start` call from the same user).
     """
     user = await _require_user(request)
+
+    # §AUDIT-W5 2026-05-20 — Server-side text-mode bypass. Founder
+    # directive: writing is always free. The frontend tracker already
+    # skips this endpoint when mode=="text", but a buggy or replayed
+    # request must not be allowed to open a billable row.
+    if (inp.mode or "voice") == "text":
+        return {"session_id": None, "started_at": None, "skipped": "text_mode"}
     # Close any orphaned previous session: deduct elapsed time based on
     # last_ping_at so a tab-crash never costs more than ~30 seconds.
     prior = await db.voice_sessions.find_one(

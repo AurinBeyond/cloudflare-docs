@@ -52,6 +52,7 @@ import AdminScheduler from "@/pages/AdminScheduler";
 import AdminOutbound from "@/pages/AdminOutbound";
 import AdminBadge from "@/components/AdminBadge";
 import WandererGate from "@/components/WandererGate";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { Navigate } from "react-router-dom";
 
 function AppRouter() {
@@ -185,13 +186,15 @@ function AppRouter() {
 function App() {
   return (
     <div className="App" data-testid="app-root">
-      <BrowserRouter>
-        <AuthProvider>
-          <WhispersTracker />
-          <AdminBadge />
-          <AppRouter />
-        </AuthProvider>
-      </BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <AuthProvider>
+            <WhispersTracker />
+            <AdminBadge />
+            <AppRouter />
+          </AuthProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
     </div>
   );
 }
