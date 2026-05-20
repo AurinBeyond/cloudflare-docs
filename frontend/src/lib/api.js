@@ -22,13 +22,13 @@ export function getSessionToken() {
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
-  // §AUTH-DEFENSE 2026-05-20 — Allow same-site / cross-origin cookies
-  // to ride along on every request. Required for Google /auth/session
-  // recovery: if the Emergent OAuth proxy ever returns an empty
-  // session_token in the JSON body (so Bearer fails to mount), the
-  // httpOnly cookie set by the backend still grants identity. Magic-
-  // link path remains unchanged.
-  withCredentials: true,
+  // §AUTH-DEFENSE 2026-05-20 — NOTE: withCredentials cannot be true
+  // while backend CORS_ORIGINS="*" (browser spec forbids credentials
+  // with wildcard origin). Identity rides on the Bearer header from
+  // localStorage; the httpOnly cookie is set as a server-side back-up
+  // only. To enable cookie-based auth in the future, set CORS_ORIGINS
+  // to the exact origin (https://prulesoul.site) AND flip this flag.
+  // withCredentials: true,
 });
 
 api.interceptors.request.use((cfg) => {
