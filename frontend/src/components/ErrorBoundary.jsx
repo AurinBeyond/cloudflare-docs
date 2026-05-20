@@ -34,6 +34,31 @@ class ErrorBoundary extends Component {
       error,
       info?.componentStack,
     );
+
+    // §AUDIT-CRASH 2026-05-20 — Beacon the crash to the backend so the
+    // founder can see EVERY production React error via:
+    //   GET /api/admin/audit/ledger-diff (writes to funnel_events) and
+    //   db.funnel_events.find({event:"react_error_boundary"})
+    // sendBeacon is fire-and-forget — never re-throws, never blocks
+    // the boundary render.
+    try {
+      const backend = process.env.REACT_APP_BACKEND_URL;
+      if (backend && typeof navigator !== "undefined" && navigator.sendBeacon) {
+        const payload = {
+          event: "react_error_boundary",
+          message: String(error?.message || "").slice(0, 500),
+          stack: String(error?.stack || "").slice(0, 2000),
+          component_stack: String(info?.componentStack || "").slice(0, 2000),
+          path: typeof window !== "undefined" ? window.location.pathname : "",
+          user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 200) : "",
+          occurred_at: new Date().toISOString(),
+        };
+        const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+        navigator.sendBeacon(`${backend}/api/telemetry/crash`, blob);
+      }
+    } catch {
+      /* swallowed — boundary must not crash */
+    }
   }
 
   handleHardRefresh = () => {

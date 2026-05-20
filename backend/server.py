@@ -9166,6 +9166,43 @@ class TelemetryEventInput(BaseModel):
     meta: Optional[dict] = None  # max 256 chars after json.dumps
 
 
+@api_router.post("/telemetry/crash")
+async def telemetry_crash(request: Request):
+    """§AUDIT-CRASH 2026-05-20 — Public crash beacon endpoint.
+
+    Receives one document per React `ErrorBoundary` trip. No auth,
+    no PII validation beyond truncation. Sent via `navigator.sendBeacon`
+    from the frontend so a crashed page never re-throws.
+
+    Founder reads these via:
+      `db.funnel_events.find({event: "react_error_boundary"}).sort({occurred_at:-1})`
+    """
+    try:
+        payload = await request.json()
+    except Exception:  # noqa: BLE001
+        payload = {}
+    ip = (
+        request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        or (request.client.host if request.client else "unknown")
+    )
+    doc = {
+        "id": str(uuid.uuid4()),
+        "event": "react_error_boundary",
+        "message": str(payload.get("message") or "")[:500],
+        "stack": str(payload.get("stack") or "")[:2000],
+        "component_stack": str(payload.get("component_stack") or "")[:2000],
+        "path": str(payload.get("path") or "")[:200],
+        "user_agent": str(payload.get("user_agent") or "")[:200],
+        "ip_hash": _hashlib.sha1(ip.encode("utf-8")).hexdigest()[:12],
+        "occurred_at": datetime.now(timezone.utc).isoformat(),
+    }
+    try:
+        await db.funnel_events.insert_one(doc)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("telemetry/crash insert failed: %s", exc)
+    return {"ok": True}
+
+
 @api_router.post("/telemetry/event")
 async def telemetry_event(inp: TelemetryEventInput, request: Request):
     """Write one funnel event. Public, anonymous, throttled."""
