@@ -91,6 +91,54 @@ app.add_middleware(
     expose_headers=["ETag"],
 )
 
+
+# §AUDIT-RATELIMIT 2026-05-20 — Per-IP token-bucket rate limit middleware.
+# Defends against accidental loops, scrapers, and DoS bursts. NOT a
+# substitute for Cloudflare / nginx-level WAF — this is the "first
+# elementary brake" running in-process. Free tier: 30 requests / 10s
+# per remote_addr. Bypass list for healthchecks. State is in-memory
+# (process-local) — fine for a single supervisor worker; if we scale
+# to multi-worker / multi-pod, swap for a Redis token store.
+import time as _ratelimit_time
+
+_RATE_LIMIT_BUCKET: dict = {}
+_RATE_LIMIT_MAX = int(os.environ.get("RATE_LIMIT_MAX", "30"))
+_RATE_LIMIT_WINDOW_S = int(os.environ.get("RATE_LIMIT_WINDOW_S", "10"))
+_RATE_LIMIT_BYPASS = ("/api/health", "/api/agreement/status")
+
+
+@app.middleware("http")
+async def _ratelimit_middleware(request, call_next):
+    path = request.url.path
+    # Always allow OPTIONS preflight — browsers retry rapidly.
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    if not path.startswith("/api/") or any(path.startswith(b) for b in _RATE_LIMIT_BYPASS):
+        return await call_next(request)
+    ip = (
+        request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        or (request.client.host if request.client else "unknown")
+    )
+    now = _ratelimit_time.time()
+    bucket = _RATE_LIMIT_BUCKET.get(ip)
+    if not bucket or now - bucket["window_start"] > _RATE_LIMIT_WINDOW_S:
+        _RATE_LIMIT_BUCKET[ip] = {"window_start": now, "count": 1}
+    else:
+        bucket["count"] += 1
+        if bucket["count"] > _RATE_LIMIT_MAX:
+            from fastapi.responses import JSONResponse
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "Too many requests. Please slow down."},
+            )
+    # Soft GC: prune expired buckets every ~256 requests.
+    if len(_RATE_LIMIT_BUCKET) > 4096:
+        cutoff = now - _RATE_LIMIT_WINDOW_S
+        for k in list(_RATE_LIMIT_BUCKET.keys()):
+            if _RATE_LIMIT_BUCKET[k]["window_start"] < cutoff:
+                _RATE_LIMIT_BUCKET.pop(k, None)
+    return await call_next(request)
+
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(
@@ -3258,6 +3306,13 @@ async def _close_voice_session_safe(
     # simply does not fire for them.
     if elapsed > 0:
         try:
+            # Snapshot BEFORE the atomic write for the ledger row.
+            before_doc = await db.users.find_one(
+                {"user_id": user_id},
+                {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
+            ) or {}
+            before_balance = int(before_doc.get("presence_seconds_left") or 0)
+            was_unlimited = bool(before_doc.get("unlimited_voice"))
             await db.users.update_one(
                 {
                     "user_id": user_id,
@@ -3290,9 +3345,30 @@ async def _close_voice_session_safe(
                 {"user_id": user_id},
                 {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1},
             ) or {}
+            after_balance = int(user_doc.get("presence_seconds_left") or 0)
+            # §AUDIT-LEDGER 2026-05-20 — Append an immutable audit row
+            # to credit_ledger for every credit movement. This is the
+            # founder's "raamatupidamisraamat" — any future dispute
+            # can be resolved by replaying these rows.
+            try:
+                await db.credit_ledger.insert_one({
+                    "id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "delta": -elapsed if not was_unlimited else 0,
+                    "before": before_balance,
+                    "after": after_balance,
+                    "reason": reason or "session_end",
+                    "session_id": sess.get("id"),
+                    "room": sess.get("room"),
+                    "unlimited": was_unlimited,
+                    "occurred_at": now_iso,
+                })
+            except Exception:  # noqa: BLE001
+                pass
             if (
                 not user_doc.get("unlimited_voice")
-                and int(user_doc.get("presence_seconds_left") or 0) == 0
+                and after_balance == 0
+                and before_balance > 0
             ):
                 try:
                     await db.funnel_events.insert_one({
@@ -11701,6 +11777,19 @@ async def on_startup():
         )
     except Exception as exc:  # noqa: BLE001
         logger.warning("agreement_acceptances indexes skipped: %s", exc)
+    # §AUDIT-LEDGER 2026-05-20 — credit_ledger indexes for fast audit
+    # queries (per-user, by time). Required for the "show me my recent
+    # credit movements" view and admin dispute resolution.
+    try:
+        await db.credit_ledger.create_index(
+            [("user_id", 1), ("occurred_at", -1)], background=True,
+            name="idx_ledger_user_time",
+        )
+        await db.credit_ledger.create_index(
+            [("occurred_at", -1)], background=True, name="idx_ledger_time",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("credit_ledger indexes skipped: %s", exc)
     # Clarity Release: index for fast active-pass lookup + audit log queries.
     await db.clarity_passes.create_index([("user_id", 1), ("expires_at", -1)])
     await db.clarity_passes.create_index([("external_order_id", 1)])
@@ -11815,18 +11904,63 @@ async def on_startup():
     # §Stage 2.9 — Courses daily-letter dispatcher (hourly). Idempotent.
     asyncio.create_task(_courses_dispatch_loop())
 
+    # §AUDIT-GHOST 2026-05-20 — Ghost-session reaper. Every 6 hours
+    # deletes user_sessions / magic_link_tokens whose `expires_at`
+    # is in the past. Indexes already exist on these fields so the
+    # delete is O(log N). Without this, sessions accumulate forever
+    # and find_one(session_token) gradually degrades even with the
+    # uniq_session_token index in place.
+    asyncio.create_task(_ghost_session_reaper_loop())
+
     # Background one-shot: copy any local /app/backend/storage/ files
     # into MongoDB so they survive future production deploys. Idempotent —
     # files already present in `binary_assets` are skipped.
     asyncio.create_task(_auto_migrate_assets_to_mongo())
 
 
+async def _ghost_session_reaper_loop() -> None:
+    """§AUDIT-GHOST 2026-05-20 — Periodic cleanup of expired sessions.
+
+    Runs every 6 hours. Deletes:
+      - user_sessions where expires_at < now  (and is not None)
+      - magic_link_tokens where expires_at < now (and used or expired)
+      - voice_sessions where closed == True AND started_at < (now - 90d)
+        — old closed rows keep accumulating; the index on (user_id, closed)
+        makes the live "open session?" lookup fast even with millions of
+        rows, but the table itself is a disk-space drag long-term.
+    Soft-fails on any collection-level error so a single bad row never
+    halts the loop.
+    """
+    await asyncio.sleep(60)  # let other startup tasks finish first
+    while True:
+        try:
+            now = datetime.now(timezone.utc)
+            cutoff_iso = now.isoformat()
+            ninety_days_ago = (now - timedelta(days=90)).isoformat()
+            r1 = await db.user_sessions.delete_many({
+                "expires_at": {"$lt": cutoff_iso, "$ne": None},
+            })
+            r2 = await db.magic_link_tokens.delete_many({
+                "expires_at": {"$lt": cutoff_iso},
+            })
+            r3 = await db.voice_sessions.delete_many({
+                "closed": True,
+                "started_at": {"$lt": ninety_days_ago},
+            })
+            if (r1.deleted_count or r2.deleted_count or r3.deleted_count):
+                logger.info(
+                    "[ghost-reaper] sessions=%d magic_links=%d voice_old=%d",
+                    r1.deleted_count, r2.deleted_count, r3.deleted_count,
+                )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[ghost-reaper] cycle failed: %s", exc)
+        await asyncio.sleep(6 * 3600)
+
+
 async def _auto_migrate_assets_to_mongo() -> None:
     """Best-effort: ensure every PDF / cover / body-room / coloring
     asset on disk is mirrored into MongoDB. Safe to run on every boot.
     Runs in the background so it never blocks startup.
-
-    Looks in TWO places:
         1. ``/app/backend/storage/``    — preview env (gitignored)
         2. ``/app/backend/seed_assets/``— production seed (in git, ships with deploy)
 
