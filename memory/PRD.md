@@ -198,6 +198,23 @@ Secondary safety improvements found in the same audit:
 - CDN / autoscale-ready hosting
 - WebRTC migration for ConvAI
 
+## 2026-05-21 — Pre-launch sweep (LemonSqueezy demo submitted)
+
+**Founder status:** Demo video successfully submitted to LemonSqueezy (real product clip + AI-promo combined). Awaiting LS approval. Tomorrow's plan: joint review of entire site, final polish.
+
+**Fixed today (surgical):**
+- **P0 — `/pricing` blank page**: Route was missing in `App.js`. Three components (`RoomConvaiChat`, `ConvaiPresenceTracker`, `AurinsRoomChat`) linked to `/pricing` but no route was registered → blank black page when users clicked "Add Presence Time". Added `<Route path="/pricing" element={<Navigate to="/clarity-release" replace />} />`. Revenue path now restored.
+
+**Pending founder approval (P1, tomorrow):**
+1. OpenWorld cards (Library/Bookstore/Courses/Kids Universe) missing "Enter →" CTAs.
+2. Static agent portraits inside chat surface (Grace, Kaelan, Sara, Alistair, Aurin).
+3. Per-age-group visual differentiation in Aurin's Room.
+4. Course Room walkthrough.
+
+Full audit: `/app/memory/AUDIT_2026-05-21_PRE_LAUNCH_REVIEW.md`
+
+**Crash telemetry status:** No real `/aurins-room` "A quiet ripple" crashes captured in `funnel_events` over last 72h. The route loads cleanly through Wanderer's Agreement gate in preview. If founder sees crash again, hard-refresh first, then check `/api/admin/audit/crashes` for stack trace.
+
 ## Key Files
 - `/app/backend/server.py` — FastAPI, webhook, presence endpoints
 - `/app/backend/session_cap.py` — cap helper (read-only)

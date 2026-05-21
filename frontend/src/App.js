@@ -96,6 +96,12 @@ function AppRouter() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/private-room" element={<Navigate to="/clarity-release" replace />} />
+        {/* §AUDIT 2026-05-21 — `/pricing` was referenced from 3 places
+            (RoomConvaiChat blocked-card, ConvaiPresenceTracker, AurinsRoomChat)
+            but the route was NEVER registered → users hit a blank black
+            page when topping up credits. Redirect to /clarity-release
+            where the real Wanderer Passes + LemonSqueezy checkout live. */}
+        <Route path="/pricing" element={<Navigate to="/clarity-release" replace />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/portal/guest" element={<Guest />} />
         <Route
