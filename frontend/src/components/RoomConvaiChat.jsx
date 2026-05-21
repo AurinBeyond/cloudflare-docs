@@ -50,6 +50,12 @@ const ROOM_AGENT_NAME = {
   body: "Kaelan",
   parents: "Sara",
   courses: "Alistair",
+  // §AURIN 2026-05-20 — Children's guardian. Single agent across all
+  // three age tracks (3-5, 6-8, 9-12). Voice timbre is set on the
+  // ElevenLabs side (Hope / cjVigY5qzO86Huf0OWal); we do NOT lock a
+  // voice_id override here because the Aurin Dashboard allows the
+  // prompt + tts overrides to flow from `AurinsRoomChat` instead.
+  aurin: "Aurin",
 };
 
 // §ACCESSIBILITY 2026-02-15 — Three-mode toggle (founder directive,

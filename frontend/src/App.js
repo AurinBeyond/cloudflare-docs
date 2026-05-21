@@ -36,6 +36,8 @@ import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
 import ParentsRoom from "@/pages/ParentsRoom";
+import AurinsRoom from "@/pages/AurinsRoom";
+import AurinsRoomChat from "@/pages/AurinsRoomChat";
 import BetaTestGroup from "@/pages/BetaTestGroup";
 import CourseRoom from "@/pages/CourseRoom";
 import CourseDetail from "@/pages/CourseDetail";
@@ -121,6 +123,22 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <ParentsRoom />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/aurins-room"
+          element={
+            <WandererGate scope="private">
+              <AurinsRoom />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/aurins-room/:ageGroup"
+          element={
+            <WandererGate scope="private">
+              <AurinsRoomChat />
             </WandererGate>
           }
         />

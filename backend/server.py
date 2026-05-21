@@ -3204,7 +3204,7 @@ async def presence_balance(request: Request):
 
 
 class PresenceStartInput(BaseModel):
-    room: Literal["clarity", "body", "parents", "courses"] = "clarity"
+    room: Literal["clarity", "body", "parents", "courses", "aurin"] = "clarity"
     # §AUDIT-W5 2026-05-20 — Mode hint mirrors the frontend toggle.
     # Optional & defaults to "voice" so any legacy client still works.
     # Text mode is unmetered per Founder directive; the server refuses
@@ -5385,6 +5385,11 @@ _ROOM_TO_CONVAI_AGENT_ENV = {
     "body":    "ELEVENLABS_CONVAI_AGENT_KAELAN",
     "parents": "ELEVENLABS_CONVAI_AGENT_SARA",
     "courses": "ELEVENLABS_CONVAI_AGENT_ALISTAIR",
+    # §AURIN 2026-05-20 — Children's room. Single agent, three age
+    # groups (3-5, 6-8, 9-12) selected by the frontend, prompt
+    # differentiation injected via SDK overrides (allowed in the
+    # Aurin Dashboard ONLY — the other four agents stay zero-override).
+    "aurin":   "ELEVENLABS_CONVAI_AGENT_AURIN",
 }
 
 # §2026-02-15 PM — ZERO-OVERRIDE POLICY (founder directive).
@@ -5398,7 +5403,7 @@ _ROOM_TO_CONVAI_AGENT_ENV = {
 
 
 class ConvAISignedUrlInput(BaseModel):
-    room: Literal["clarity", "body", "parents", "courses"]
+    room: Literal["clarity", "body", "parents", "courses", "aurin"]
     # §STABILIZATION 2026-05-19 — Optional mode field so the backend
     # knows whether the upcoming session will use voice (mic + TTS),
     # hybrid (text input + TTS output, same cost as voice), or text

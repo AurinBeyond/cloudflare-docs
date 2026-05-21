@@ -304,3 +304,57 @@ def test_clarity_signed_url_zero_balance_voice_returns_402():
         finally:
             await cleanup(client, db, uid)
     asyncio.run(run())
+
+
+# ─── 11. Aurin's Room — agent mapping + signed-url ───────────────────
+def test_aurin_agent_env_present():
+    # The .env value must be loaded into the running backend process.
+    import re
+    with open("/app/backend/.env") as f:
+        content = f.read()
+    m = re.search(r"^ELEVENLABS_CONVAI_AGENT_AURIN=(.+)$", content, re.M)
+    assert m, "ELEVENLABS_CONVAI_AGENT_AURIN missing from /app/backend/.env"
+    assert m.group(1).startswith("agent_"), f"Aurin agent id malformed: {m.group(1)[:40]}"
+
+
+def test_aurin_signed_url_accepts_room():
+    """A signed-in user MUST be able to POST room=aurin to the
+    signed-url endpoint. Either they get a real URL (balance > 0) or
+    a clean 402 (hard-lock); a 400 / 422 would indicate the new room
+    is not accepted by the Pydantic validator."""
+    async def run():
+        uid, email, token, client, db = await mk_user()
+        try:
+            r = httpx.post(
+                f"{BASE_INTERNAL}/api/clarity/convai/signed-url",
+                headers={"Authorization": f"Bearer {token}"},
+                json={"room": "aurin", "mode": "text"},
+                timeout=10,
+            )
+            assert r.status_code in (200, 402), (
+                f"room=aurin must be accepted by the validator (got {r.status_code}: {r.text[:300]})"
+            )
+        finally:
+            await cleanup(client, db, uid)
+    asyncio.run(run())
+
+
+def test_aurin_presence_start_accepts_room():
+    """/presence/start must accept room=aurin for the new room."""
+    async def run():
+        # Text mode is free even under hard-lock, so this works
+        # regardless of FREE_VOICE_BETA flag state.
+        uid, email, token, client, db = await mk_user()
+        try:
+            r = httpx.post(
+                f"{BASE_INTERNAL}/api/presence/start",
+                headers={"Authorization": f"Bearer {token}"},
+                json={"room": "aurin", "mode": "text"},
+                timeout=10,
+            )
+            assert r.status_code == 200, (
+                f"text-mode presence-start must succeed for room=aurin (got {r.status_code}: {r.text[:300]})"
+            )
+        finally:
+            await cleanup(client, db, uid)
+    asyncio.run(run())

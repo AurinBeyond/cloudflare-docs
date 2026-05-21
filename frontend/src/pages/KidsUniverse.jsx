@@ -111,6 +111,39 @@ export default function KidsUniverse() {
         </div>
       </section>
 
+      {/* §AURIN 2026-05-20 — Soft entry into Aurin's Room. Companion
+          surface for the same age groups shown above. */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="kids-aurins-room-link"
+      >
+        <div className="aurin-container">
+          <div className="aurin-card p-8 md:p-10">
+            <div className="aurin-eyebrow mb-3">A gentle companion</div>
+            <h2 className="aurin-display text-3xl md:text-4xl max-w-[28ch] mb-4">
+              Talk with{" "}
+              <span className="aurin-serif-italic" style={{ color: "#E3B48C" }}>
+                Aurin
+              </span>
+              .
+            </h2>
+            <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[60ch] mb-6">
+              A quiet friend who listens, plays, and remembers that
+              childhood deserves to feel safe. Three paths — choose the
+              one that fits the child.
+            </p>
+            <Link
+              to="/aurins-room"
+              data-testid="kids-aurins-room-cta"
+              className="aurin-btn-primary inline-flex items-center gap-1.5"
+            >
+              Open Aurin's Room
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Children's Books — discovery layer.
           NO commerce duplication: each card links to the central Bookstore. */}
       <section
