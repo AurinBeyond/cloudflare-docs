@@ -511,32 +511,48 @@ export default function ClarityRelease() {
               feels a face is with them. PURE ADDITION: ChatPanel
               receives the exact props it always has — no legacy
               voice/text/billing logic is touched. Hidden if the
-              portrait file fails to load (onError → display:none). */}
+              portrait file fails to load (onError → display:none).
+              §FOUNDER 2026-05-22 (v2) — Upgraded to hero card style
+              that matches the other 4 rooms: large portrait on top,
+              name + "Clarity Guide · Light Keeper" subtitle below. */}
           <section className="aurin-section-xs">
-            <div className="aurin-container max-w-[860px]">
+            <div className="aurin-container max-w-[820px]">
               <figure
                 data-testid="clarity-grace-portrait"
-                className="flex items-center gap-4 rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.4] p-4 backdrop-blur"
+                className="relative overflow-hidden rounded-3xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.5] backdrop-blur"
               >
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--aurin-border-soft))]">
-                  <img
-                    src="/assets/portraits/grace.png"
-                    alt="Grace — your guide in Clarity Release"
-                    data-testid="clarity-grace-portrait-img"
-                    loading="eager"
-                    className="h-full w-full object-cover"
-                    style={{ objectPosition: "left center" }}
-                    onError={(e) => {
-                      const fig = e.currentTarget.closest("figure");
-                      if (fig) fig.style.display = "none";
+                {/* §FOUNDER 2026-05-22 (v3) — background-image so the
+                    composite mockup (face on left, chat preview on right)
+                    crops correctly. 1.85x zoom anchored left-center shows
+                    only the clean face. */}
+                <div
+                  role="img"
+                  aria-label="Grace — your guide in Clarity Release"
+                  data-testid="clarity-grace-portrait-img"
+                  className="relative h-[380px] md:h-[480px] w-full"
+                  style={{
+                    backgroundImage: "url(/assets/portraits/grace.png)",
+                    backgroundSize: "200% auto",
+                    backgroundPosition: "0% 28%",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
+                    style={{
+                      background:
+                        "linear-gradient(to top, hsl(var(--aurin-bg-elev)) 5%, transparent 100%)",
                     }}
                   />
                 </div>
-                <figcaption>
-                  <p className="text-[11px] tracking-[0.32em] uppercase text-[hsl(var(--aurin-text-muted))]">
+                <figcaption className="px-6 py-5 md:px-8 md:py-6 text-center">
+                  <p className="aurin-serif text-[26px] md:text-[30px] leading-none text-[hsl(var(--aurin-text))]">
                     Grace
                   </p>
-                  <p className="mt-1 text-[13px] leading-snug text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic">
+                  <p className="mt-2 text-[10.5px] md:text-[11px] tracking-[0.36em] uppercase text-[hsl(var(--aurin-text-muted))]">
+                    Clarity Guide · Light Keeper
+                  </p>
+                  <p className="mt-3 text-[13px] md:text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic max-w-[480px] mx-auto">
                     Listens for the quiet beneath the noise.
                   </p>
                 </figcaption>

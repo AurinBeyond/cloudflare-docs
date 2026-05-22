@@ -67,11 +67,18 @@ const ROOM_AGENT_NAME = {
 // bubble area) — a deliberate UX choice to keep voice/text quality
 // untouched. Aurin remains symbolic (no human face) because the
 // children's room intentionally protects imagination.
+//
+// §FOUNDER 2026-05-22 (v2) — Founder uploaded new composite portrait
+// mockups. For Grace + Alistair we now use those source files. Since
+// the source includes a chat mockup on the right side, we use
+// object-position to show only the LEFT ~55% of the image — that is
+// where the clean portrait sits. Other agents keep the standalone
+// portraits already in /assets/portraits/.
 const ROOM_AGENT_PORTRAIT = {
-  clarity: { src: "/assets/portraits/grace.png", focus: "left center" },
-  body: { src: "/assets/portraits/kaelan.png", focus: "center" },
-  parents: { src: "/assets/portraits/sara.png", focus: "center" },
-  courses: { src: "/assets/portraits/alistair.png", focus: "center" },
+  clarity: { src: "/assets/portraits/grace.png", focus: "20% center", crop: "left" },
+  body: { src: "/assets/portraits/kaelan.png", focus: "22% center", crop: "left" },
+  parents: { src: "/assets/portraits/sara.png", focus: "22% center", crop: "left" },
+  courses: { src: "/assets/portraits/alistair.png", focus: "20% center", crop: "left" },
   // aurin: intentionally omitted — children's room is symbolic light, no face.
 };
 
@@ -84,6 +91,15 @@ const ROOM_AGENT_TAGLINE = {
   parents: "Warmth for the questions parenting brings.",
   courses: "A patient guide through what you study.",
   aurin: "A gentle friend who listens.",
+};
+
+// §FOUNDER 2026-05-22 (v2) — "Guide & Keeper" subtitle requested for
+// the larger portrait hero card (mockup parity).
+const ROOM_AGENT_SUBTITLE = {
+  clarity: "Clarity Guide · Light Keeper",
+  body: "Soul Guide · Wisdom Keeper",
+  parents: "Heart Guide · Soul Confidant",
+  courses: "Courage Guide · Truth Keeper",
 };
 
 // §ACCESSIBILITY 2026-02-15 — Three-mode toggle (founder directive,
@@ -1109,72 +1125,104 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
  * portrait is rendered as a separate sibling — the inner ConvaiPanel
  * is untouched, so voice/text/billing logic is bit-for-bit unchanged.
  * If a portrait fails to load it hides silently via onError.
+ *
+ * §FOUNDER 2026-05-22 (v2) — Layout shifted from side-by-side to
+ * portrait-on-top (hero card). Founder shared new portrait mockups
+ * where the agent's face fills the top half and the chat lives below
+ * with the agent's name + "Guide & Keeper" subtitle. ConvaiPanel
+ * remains untouched; only the surrounding wrapper changed.
  */
 function AgentPortraitPanel({ room }) {
   const name = ROOM_AGENT_NAME[room] || "Mentor";
   const portrait = ROOM_AGENT_PORTRAIT[room];
   const tagline = ROOM_AGENT_TAGLINE[room];
+  const subtitle = ROOM_AGENT_SUBTITLE[room];
   if (!portrait) return null;
+  // §FOUNDER 2026-05-22 (v2) — Some uploaded portraits are composite
+  // mockups (face on the LEFT, chat preview on the RIGHT). We slice
+  // off the right side with object-position when crop === "left", so
+  // wanderers see only the clean face. Aspect ratio is locked tall to
+  // keep the framing intimate.
+  //
+  // §FOUNDER 2026-05-22 (v3) — Switched to background-image because
+  // `object-fit: cover` on a 1:1 source image inside a wide container
+  // does NOT crop horizontally — `object-position` only worked
+  // vertically. Background-image with explicit `background-size`
+  // lets us zoom in and show only the LEFT ~55% (the clean face).
+  const isComposite = portrait.crop === "left";
   return (
-    <aside
+    <section
       data-testid={`agent-portrait-panel-${room}`}
-      className="shrink-0 md:sticky md:top-24 self-start"
+      className="mx-auto w-full max-w-[820px] mb-6"
     >
-      {/* Desktop: vertical card with portrait + name + tagline. */}
-      <div className="hidden md:flex md:w-[260px] flex-col items-center gap-4 rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.4] p-5 backdrop-blur">
-        <div className="relative h-[200px] w-[200px] overflow-hidden rounded-2xl border border-[hsl(var(--aurin-border-soft))]">
-          <img
-            src={portrait.src}
-            alt={`${name} — your guide in this room`}
+      <figure className="relative overflow-hidden rounded-3xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.5] backdrop-blur">
+        {isComposite ? (
+          // Composite mockup: zoom 1.85x, anchor left-center → shows
+          // only the portrait portion of the source image.
+          <div
+            role="img"
+            aria-label={`${name} — your guide in this room`}
             data-testid={`agent-portrait-img-${room}`}
-            loading="eager"
-            className="h-full w-full object-cover"
-            style={{ objectPosition: portrait.focus || "center" }}
-            onError={(e) => {
-              const wrap = e.currentTarget.closest("aside");
-              if (wrap) wrap.style.display = "none";
+            className="relative h-[380px] md:h-[480px] w-full"
+            style={{
+              backgroundImage: `url(${portrait.src})`,
+              backgroundSize: "200% auto",
+              backgroundPosition: "0% 28%",
+              backgroundRepeat: "no-repeat",
             }}
-          />
-        </div>
-        <div className="text-center">
+          >
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
+              style={{
+                background:
+                  "linear-gradient(to top, hsl(var(--aurin-bg-elev)) 5%, transparent 100%)",
+              }}
+            />
+          </div>
+        ) : (
+          // Plain standalone portrait — straightforward cover crop.
+          <div className="relative h-[340px] md:h-[420px] w-full overflow-hidden">
+            <img
+              src={portrait.src}
+              alt={`${name} — your guide in this room`}
+              data-testid={`agent-portrait-img-${room}`}
+              loading="eager"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: portrait.focus || "center" }}
+              onError={(e) => {
+                const fig = e.currentTarget.closest("section");
+                if (fig) fig.style.display = "none";
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
+              style={{
+                background:
+                  "linear-gradient(to top, hsl(var(--aurin-bg-elev)) 5%, transparent 100%)",
+              }}
+            />
+          </div>
+        )}
+        <figcaption className="px-6 py-5 md:px-8 md:py-6 text-center">
           <p
-            className="text-[11px] tracking-[0.32em] uppercase text-[hsl(var(--aurin-text-muted))]"
+            className="aurin-serif text-[26px] md:text-[30px] leading-none text-[hsl(var(--aurin-text))]"
             data-testid={`agent-portrait-name-${room}`}
           >
             {name}
           </p>
+          {subtitle ? (
+            <p className="mt-2 text-[10.5px] md:text-[11px] tracking-[0.36em] uppercase text-[hsl(var(--aurin-text-muted))]">
+              {subtitle}
+            </p>
+          ) : null}
           {tagline ? (
-            <p className="mt-2 text-[12.5px] leading-[1.55] text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic">
+            <p className="mt-3 text-[13px] md:text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic max-w-[480px] mx-auto">
               {tagline}
             </p>
           ) : null}
-        </div>
-      </div>
-      {/* Mobile: small circular avatar + name inline above the chat. */}
-      <div className="flex md:hidden items-center gap-3 mb-4">
-        <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[hsl(var(--aurin-border-soft))]">
-          <img
-            src={portrait.src}
-            alt={`${name} — your guide in this room`}
-            data-testid={`agent-portrait-img-mobile-${room}`}
-            loading="eager"
-            className="h-full w-full object-cover"
-            style={{ objectPosition: portrait.focus || "center" }}
-            onError={(e) => { e.currentTarget.style.display = "none"; }}
-          />
-        </div>
-        <div>
-          <p className="text-[10.5px] tracking-[0.28em] uppercase text-[hsl(var(--aurin-text-muted))]">
-            {name}
-          </p>
-          {tagline ? (
-            <p className="text-[12px] leading-tight text-[hsl(var(--aurin-text))/0.7] aurin-serif-italic">
-              {tagline}
-            </p>
-          ) : null}
-        </div>
-      </div>
-    </aside>
+        </figcaption>
+      </figure>
+    </section>
   );
 }
 
@@ -1182,11 +1230,9 @@ export default function RoomConvaiChat({ room = "clarity", onFallback, onStatusC
   if (!ALLOWED_ROOMS.has(room)) return null;
   return (
     <ConversationProvider>
-      <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-6">
+      <div className="flex flex-col gap-0">
         <AgentPortraitPanel room={room} />
-        <div className="flex-1 min-w-0">
-          <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
-        </div>
+        <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
       </div>
     </ConversationProvider>
   );
