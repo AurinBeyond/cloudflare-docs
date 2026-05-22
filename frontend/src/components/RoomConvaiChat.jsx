@@ -1138,50 +1138,34 @@ function AgentPortraitPanel({ room }) {
   const tagline = ROOM_AGENT_TAGLINE[room];
   const subtitle = ROOM_AGENT_SUBTITLE[room];
   if (!portrait) return null;
-  // §FOUNDER 2026-05-22 (v2) — Some uploaded portraits are composite
-  // mockups (face on the LEFT, chat preview on the RIGHT). We slice
-  // off the right side with object-position when crop === "left", so
-  // wanderers see only the clean face. Aspect ratio is locked tall to
-  // keep the framing intimate.
-  //
-  // §FOUNDER 2026-05-22 (v3) — Switched to background-image because
-  // `object-fit: cover` on a 1:1 source image inside a wide container
-  // does NOT crop horizontally — `object-position` only worked
-  // vertically. Background-image with explicit `background-size`
-  // lets us zoom in and show only the LEFT ~55% (the clean face).
+  // §FOUNDER 2026-05-22 (v4) — DIRECTIVE: portrait on LEFT, chat on
+  // RIGHT. NOT full-screen face. The composite source images have the
+  // portrait + name on the left ~55% and a chat preview on the right.
+  // We render only the left portion via background-image, sized to the
+  // card. Founder also asked for a very subtle breathing animation —
+  // CSS only, transform: scale, 8s cycle, no JS loops.
   const isComposite = portrait.crop === "left";
   return (
-    <section
+    <aside
       data-testid={`agent-portrait-panel-${room}`}
-      className="mx-auto w-full max-w-[820px] mb-6"
+      className="shrink-0 md:sticky md:top-24 self-start"
     >
-      <figure className="relative overflow-hidden rounded-3xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.5] backdrop-blur">
+      <figure className="relative w-full md:w-[340px] lg:w-[380px] overflow-hidden rounded-3xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.5] backdrop-blur">
         {isComposite ? (
-          // Composite mockup: zoom 1.85x, anchor left-center → shows
-          // only the portrait portion of the source image.
           <div
             role="img"
             aria-label={`${name} — your guide in this room`}
             data-testid={`agent-portrait-img-${room}`}
-            className="relative h-[380px] md:h-[480px] w-full"
+            className="relative aurin-breathe h-[440px] md:h-[520px] w-full"
             style={{
               backgroundImage: `url(${portrait.src})`,
-              backgroundSize: "200% auto",
-              backgroundPosition: "0% 28%",
+              backgroundSize: "182% auto",
+              backgroundPosition: "0% 18%",
               backgroundRepeat: "no-repeat",
             }}
-          >
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
-              style={{
-                background:
-                  "linear-gradient(to top, hsl(var(--aurin-bg-elev)) 5%, transparent 100%)",
-              }}
-            />
-          </div>
+          />
         ) : (
-          // Plain standalone portrait — straightforward cover crop.
-          <div className="relative h-[340px] md:h-[420px] w-full overflow-hidden">
+          <div className="relative aurin-breathe h-[440px] md:h-[520px] w-full overflow-hidden">
             <img
               src={portrait.src}
               alt={`${name} — your guide in this room`}
@@ -1190,39 +1174,32 @@ function AgentPortraitPanel({ room }) {
               className="h-full w-full object-cover"
               style={{ objectPosition: portrait.focus || "center" }}
               onError={(e) => {
-                const fig = e.currentTarget.closest("section");
+                const fig = e.currentTarget.closest("aside");
                 if (fig) fig.style.display = "none";
-              }}
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
-              style={{
-                background:
-                  "linear-gradient(to top, hsl(var(--aurin-bg-elev)) 5%, transparent 100%)",
               }}
             />
           </div>
         )}
-        <figcaption className="px-6 py-5 md:px-8 md:py-6 text-center">
+        <figcaption className="px-5 py-5 md:px-6 md:py-5 text-center border-t border-[hsl(var(--aurin-border-soft))]">
           <p
-            className="aurin-serif text-[26px] md:text-[30px] leading-none text-[hsl(var(--aurin-text))]"
+            className="aurin-serif text-[24px] md:text-[28px] leading-none text-[hsl(var(--aurin-text))]"
             data-testid={`agent-portrait-name-${room}`}
           >
             {name}
           </p>
           {subtitle ? (
-            <p className="mt-2 text-[10.5px] md:text-[11px] tracking-[0.36em] uppercase text-[hsl(var(--aurin-text-muted))]">
+            <p className="mt-2 text-[10.5px] tracking-[0.34em] uppercase text-[hsl(var(--aurin-text-muted))]">
               {subtitle}
             </p>
           ) : null}
           {tagline ? (
-            <p className="mt-3 text-[13px] md:text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic max-w-[480px] mx-auto">
+            <p className="mt-3 text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic">
               {tagline}
             </p>
           ) : null}
         </figcaption>
       </figure>
-    </section>
+    </aside>
   );
 }
 
@@ -1230,9 +1207,11 @@ export default function RoomConvaiChat({ room = "clarity", onFallback, onStatusC
   if (!ALLOWED_ROOMS.has(room)) return null;
   return (
     <ConversationProvider>
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col md:flex-row md:items-start gap-6 lg:gap-8">
         <AgentPortraitPanel room={room} />
-        <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
+        <div className="flex-1 min-w-0">
+          <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
+        </div>
       </div>
     </ConversationProvider>
   );
