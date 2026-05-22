@@ -282,8 +282,14 @@ export default function BodyRoomChat({
       <div className="aurin-container max-w-[680px]">
         <div className="aurin-card p-6 md:p-7 space-y-4">
           {/* §Stage 2.7 — compact concierge presence layer for Body Room. */}
+          {/* §BUGFIX 2026-05-22 — Pass a sensible default ("male" — Kaelan
+              is Body Room's male agent) instead of raw `guideGender`
+              which initialises to `undefined`. The undefined leaked into
+              the portrait URL → /api/clarity/guide-face/undefined → 404
+              in production console. PURE FALLBACK — once the agent
+              actually identifies gender, `guideGender` takes over. */}
           <GuidePresence
-            gender={guideGender}
+            gender={guideGender || "male"}
             sending={sending}
             toneTag={toneTag}
             runtimeState={

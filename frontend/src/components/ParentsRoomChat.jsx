@@ -245,8 +245,11 @@ export default function ParentsRoomChat({
     <section className="aurin-section-sm" data-testid="parents-room-chat">
       <div className="aurin-container max-w-[680px]">
         <div className="aurin-card p-6 md:p-7 space-y-4">
+          {/* §BUGFIX 2026-05-22 — same undefined gender bug as Body Room.
+              Parents Room agent (Sara) is female. Fallback prevents
+              404 on /api/clarity/guide-face/undefined. */}
           <GuidePresence
-            gender={guideGender}
+            gender={guideGender || "female"}
             sending={sending}
             toneTag={toneTag}
             runtimeState={

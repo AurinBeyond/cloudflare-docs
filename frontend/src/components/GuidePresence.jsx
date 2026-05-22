@@ -63,9 +63,16 @@ export default function GuidePresence({
   // breathes & blinks — never breaks).
   mouthOpenRef = null,
 }) {
-  const portraitSrc = `/api/clarity/guide-face/${gender}`;
+  // §BUGFIX 2026-05-22 — Defensive: if `gender` arrives undefined / null
+  // / unknown, fall back to "female" rather than emitting a 404 to
+  // /api/clarity/guide-face/undefined. Anna saw the 404 in console
+  // logs on Body & Parents rooms in production. Body and Parents have
+  // ALSO been patched at the call-site; this is belt-and-suspenders.
+  const safeGender =
+    gender === "male" || gender === "female" ? gender : "female";
+  const portraitSrc = `/api/clarity/guide-face/${safeGender}`;
   const fallbackSrc =
-    gender === "male"
+    safeGender === "male"
       ? "/assets/illustrations/guide-male.jpg"
       : "/assets/illustrations/guide-female.jpg";
 
