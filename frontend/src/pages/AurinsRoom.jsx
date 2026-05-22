@@ -13,7 +13,7 @@
 
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Sprout, BookHeart, Stars, ArrowRight } from "lucide-react";
+import { Sprout, BookHeart, Stars, ArrowRight, BookOpen } from "lucide-react";
 import { AURIN_AGE_GROUPS } from "@/lib/aurinPrompts";
 
 const GROUP_ICON = {
@@ -80,6 +80,38 @@ export default function AurinsRoom() {
           talk to a trusted grown-up. Voice sessions are recorded for
           seven days and then automatically deleted.
         </p>
+
+        {/* §AURIN STORY WORLD 2026-05-22 — Founder directive: a quiet
+            shelf of static bedtime stories, organised by the same age
+            taxonomy as the conversation rooms. Browseable without
+            a session — gentle entry point for parents. */}
+        <Link
+          to="/aurins-room/stories"
+          data-testid="aurin-story-world-cta"
+          className="group mt-10 block rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.55] p-6 backdrop-blur transition hover:border-[hsl(var(--aurin-amber))/0.6] hover:bg-[hsl(var(--aurin-bg-elev))/0.75]"
+        >
+          <div className="flex items-start gap-4">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(var(--aurin-amber))/0.4] bg-[hsl(var(--aurin-bg))/0.55] shrink-0">
+              <BookOpen className="h-5 w-5 text-[hsl(var(--aurin-amber))]" />
+            </span>
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--aurin-text))/0.55]">
+                A quieter shelf
+              </p>
+              <h3 className="aurin-serif text-lg text-[hsl(var(--aurin-text))] mt-0.5">
+                Aurin's Story World
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--aurin-text))/0.7]">
+                Short, gentle bedtime stories to read or listen to — no
+                conversation, no pressure. Sorted by age, added slowly.
+              </p>
+              <div className="mt-4 inline-flex items-center gap-1 text-sm text-[hsl(var(--aurin-amber))/0.9] transition group-hover:gap-2">
+                Open the story shelf
+                <ArrowRight className="h-4 w-4" />
+              </div>
+            </div>
+          </div>
+        </Link>
       </section>
     </div>
   );

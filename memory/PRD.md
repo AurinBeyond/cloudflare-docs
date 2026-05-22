@@ -227,3 +227,34 @@ Full audit: `/app/memory/AUDIT_2026-05-21_PRE_LAUNCH_REVIEW.md`
 - `/app/frontend/src/hooks/useVoiceSessionCap.js` — cap poll hook
 - `/app/frontend/src/pages/ClarityRelease.jsx` — Private Room page (Grace)
 - `/app/.gitignore` — sentinel-protected against re-corruption
+
+## 2026-02-08 — Founder Trust + Aurin Story World
+
+**Anna's directive:** Replace AI anonymity with real founder identity, and add a lightweight Kids Story World subpage (no realtime AI, static audio/PDF — easy to grow gradually).
+
+**Shipped today:**
+
+1. **About Anna page** (`/about`) — Complete rewrite of `/app/frontend/src/pages/About.jsx`. Removed the mystical "I spent fifty years observing the matrix" narrative; replaced with Anna's actual warm trust-building text. Uses real assets: `anna-original.jpg` (hero), `anna-storybook-intro.mp4` (Aurin world strip, autoplay-muted-loop), `anna-trailer-60s.mp4` (60s click-to-play intro), `anna-portrait.jpg` (signature avatar). Layout: hero + narrative blocks + promise band + trailer + children's universe block + storybook strip + core idea + signature + quiet CTA. All sections carry `data-testid` for testing.
+
+2. **Aurin's Story World** (`/aurins-room/stories`) — New lightweight subpage (`AurinStoryWorld.jsx` + `AurinStoryRead.jsx`) per founder's "Mini Story World" architecture brief. Static MP3 + optional PDF slots, no streaming infra, no realtime AI. Five starter stories scaffolded across three age groups:
+   - **Little Dreamers (3–5):** Little Star, The Moon Boat
+   - **Explorers (6–8):** The Night Forest, The Quiet Dragon
+   - **Dreamweavers (9–12):** Aurin and the Lantern
+   Story data lives in `/app/frontend/src/data/aurinStories.js` — Anna can add new stories by appending one object. Audio shows "Audio coming soon" badge until an MP3 path is set. PDF link hidden until set.
+
+3. **Aurin's Room CTA** — Added a "Story World" card below the three age groups in `AurinsRoom.jsx`.
+
+4. **Routes** (`App.js`) — Added two new routes (`/aurins-room/stories`, `/aurins-room/stories/:storySlug`). Both public (no WandererGate) so parents can browse before committing.
+
+**Verified by smoke test (screenshot tool):**
+- `/about` headline + real photo + signature render correctly
+- `/aurins-room/stories` shows all 3 age groups + 5 cards
+- `/aurins-room/stories/little-star` shows body + "Audio coming soon" + Next story link
+
+**Pending (tracked in `/app/memory/PENDING_REMINDERS.md`, repeat every 12h):**
+- 🟡 P1 — Meta Pixel + CAPI integration. Blocked on Anna's Pixel ID + CAPI token.
+- 🟡 P2 — Plan B payment (Stripe / PayPal). Anna will decide "tomorrow or next few days".
+
+**Still open from previous session:**
+- 🔴 P0 — Prod STT 500 error. `OPENAI_API_KEY` missing/invalid in production env panel. Preview is fine.
+- 🔴 P0 — `FREE_VOICE_BETA=true` in preview env — flip to `false` before live launch.

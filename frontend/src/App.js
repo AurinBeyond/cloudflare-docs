@@ -38,6 +38,8 @@ import BodyRoom from "@/pages/BodyRoom";
 import ParentsRoom from "@/pages/ParentsRoom";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
+import AurinStoryWorld from "@/pages/AurinStoryWorld";
+import AurinStoryRead from "@/pages/AurinStoryRead";
 import BetaTestGroup from "@/pages/BetaTestGroup";
 import CourseRoom from "@/pages/CourseRoom";
 import CourseDetail from "@/pages/CourseDetail";
@@ -140,6 +142,12 @@ function AppRouter() {
             </WandererGate>
           }
         />
+        {/* §AURIN STORY WORLD 2026-05-22 — Founder directive: a
+            lightweight, low-cost subpage for static bedtime stories.
+            Public (no WandererGate) so parents can browse before
+            committing. Individual story pages are also public. */}
+        <Route path="/aurins-room/stories" element={<AurinStoryWorld />} />
+        <Route path="/aurins-room/stories/:storySlug" element={<AurinStoryRead />} />
         <Route
           path="/aurins-room/:ageGroup"
           element={
