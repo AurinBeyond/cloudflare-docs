@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { useConversation } from "@elevenlabs/react";
+import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import PageHeader from "@/components/layout/PageHeader";
 import { ArrowLeft } from "lucide-react";
 import { getSessionToken } from "@/lib/auth";
@@ -51,6 +51,20 @@ async function fetchSignedUrl(mode) {
 }
 
 export default function AurinsRoomChat() {
+  // §AURIN 2026-05-22 — `useConversation` hook from the ElevenLabs
+  // SDK requires a surrounding <ConversationProvider> at runtime
+  // (the SDK changed this in a recent version → resulted in the
+  // "A quiet ripple" crashes the founder kept hitting). Wrapping
+  // here mirrors the exact pattern used by the working
+  // RoomConvaiChat.jsx (4 adult rooms). PURE ADDITIVE.
+  return (
+    <ConversationProvider>
+      <AurinsRoomChatInner />
+    </ConversationProvider>
+  );
+}
+
+function AurinsRoomChatInner() {
   const { ageGroup: slug } = useParams();
   const group = useMemo(() => getAgeGroup(slug), [slug]);
   const promptText = useMemo(() => buildAurinPrompt(group.slug), [group.slug]);
@@ -133,12 +147,56 @@ export default function AurinsRoomChat() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--aurin-bg))] text-[hsl(var(--aurin-text))]">
+    <div
+      className="min-h-screen bg-[hsl(var(--aurin-bg))] text-[hsl(var(--aurin-text))]"
+      data-testid={`aurin-page-${group.slug}`}
+      style={group.theme?.accent ? { "--aurin-age-accent": group.theme.accent } : undefined}
+    >
       <PageHeader
         eyebrow={group.age}
         title={`${group.label} · with Aurin`}
         subtitle={group.description}
       />
+
+      {/* §AURIN 2026-05-22 — Per-age visual hero panel. PURE ADDITION:
+          rendered between PageHeader and the existing chat section.
+          Existing chat logic, billing, signed-URL flow and presence
+          tracker are 100% untouched. If hero image fails to load the
+          onError handler hides the figure quietly — no crash, no
+          layout shift visible to the child. */}
+      {group.theme?.hero && (
+        <section
+          data-testid={`aurin-hero-${group.slug}`}
+          className="mx-auto max-w-4xl px-6 pt-2"
+        >
+          <figure
+            className="overflow-hidden rounded-2xl border"
+            style={{
+              borderColor: `${group.theme.accent}55`,
+              background: group.theme.bg || "transparent",
+            }}
+          >
+            <img
+              src={group.theme.hero}
+              alt={`Aurin · ${group.label}`}
+              loading="eager"
+              className="w-full h-auto block"
+              onError={(e) => {
+                e.currentTarget.parentElement.style.display = "none";
+              }}
+            />
+          </figure>
+          {group.theme.tagline && (
+            <p
+              data-testid={`aurin-tagline-${group.slug}`}
+              className="mt-3 text-center text-[12.5px] tracking-[0.18em] uppercase"
+              style={{ color: group.theme.accent }}
+            >
+              {group.theme.tagline}
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="mx-auto max-w-3xl px-6 pb-24">
         <Link

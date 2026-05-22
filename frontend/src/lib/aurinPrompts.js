@@ -25,6 +25,16 @@ export const AURIN_AGE_GROUPS = [
     ttsSpeed: 0.92,
     ttsStability: 0.65,
     firstMessage: "Hello. I'm Aurin. Want to be quiet together for a moment?",
+    // §AURIN 2026-05-22 — per-age visual theme (founder-approved).
+    // ADDITIVE only — old consumers ignore this field. Used by
+    // AurinsRoomChat to paint the hero panel and accent strip.
+    theme: {
+      hero: "/assets/aurin/little-dreamers-hero.png",
+      accent: "#F4D9C2",     // soft peach-gold — safety, mother's warmth
+      accent2: "#A8C69F",    // calm sage green — growth, balance
+      bg: "linear-gradient(180deg, #FFFDD0 0%, #F4D9C2 100%)",
+      tagline: "Bringing calm to little minds.",
+    },
   },
   {
     slug: "explorers",
@@ -34,6 +44,13 @@ export const AURIN_AGE_GROUPS = [
     ttsSpeed: 0.95,
     ttsStability: 0.60,
     firstMessage: "Hello! I'm Aurin. What did you discover today?",
+    theme: {
+      hero: "/assets/aurin/explorers-hero.png",
+      accent: "#7BA888",     // emerald — independence, nature, exploration
+      accent2: "#C19A6B",    // warm bronze — curiosity, history
+      bg: "linear-gradient(180deg, #2B3A4F 0%, #1f2b3d 100%)",
+      tagline: "Guiding positive explorers to light and wisdom.",
+    },
   },
   {
     slug: "dreamweavers",
@@ -43,6 +60,13 @@ export const AURIN_AGE_GROUPS = [
     ttsSpeed: 1.0,
     ttsStability: 0.55,
     firstMessage: "Hello. I am Aurin. Take your time — I'm here to listen.",
+    theme: {
+      hero: "/assets/aurin/dreamweavers-hero.png",
+      accent: "#7E6B9C",     // amethyst — wisdom, introspection
+      accent2: "#FFD700",    // star-gold — inspiration (used sparingly)
+      bg: "linear-gradient(180deg, #1A237E 0%, #0f1342 100%)",
+      tagline: "Navigating deep dreams and future visions.",
+    },
   },
 ];
 
