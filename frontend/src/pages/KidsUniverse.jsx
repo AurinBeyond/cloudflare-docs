@@ -23,8 +23,12 @@ const AGE_GROUPS = [
     icon: BookHeart,
   },
   {
+    // §FOUNDER 2026-05-22 — unified from "Future Builders" to
+    // "Dreamweavers" to match Aurin's Room taxonomy. Same age group,
+    // one name across the brand. Slug stays "9-12" so backend filters
+    // and existing /kids-universe DB references keep working.
     slug: "9-12",
-    title: "Future Builders",
+    title: "Dreamweavers",
     age: "Ages 9–12",
     description: "More detailed pictures, room for imagination, and quiet themes that grow with the reader.",
     icon: Heart,
@@ -229,7 +233,7 @@ export default function KidsUniverse() {
         <div className="aurin-container grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-7">
             <div className="aurin-eyebrow mb-4 flex items-center gap-2">
-              <Wand2 size={12} /> Coloring Studio · Coming soon
+              <Wand2 size={12} /> Coloring Studio
             </div>
             <h2 className="aurin-display text-3xl md:text-4xl max-w-[22ch]">
               Read a story.{" "}
