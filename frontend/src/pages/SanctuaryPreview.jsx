@@ -35,6 +35,9 @@ const ATMOSPHERE = "/sanctuary/atmosphere.png";
 const GROUNDED = "/sanctuary/grounded-presence.png";
 const WINGS = "/sanctuary/sanctuary-wings.png";
 const WARMTH = "/sanctuary/warmth-trust.png";
+// §AURIN 2026-05-22 — fifth room hero image. Re-uses the existing
+// AurinBeyond brand hero so we do not introduce a parallel art style.
+const AURIN_HERO = "/assets/brand/aurinbeyond-hero.png";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -407,9 +410,10 @@ function TwoWorldsSection() {
                 The Rooms <span className="italic text-[#bcb4a3]">— guided structure &amp; practice</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
-                Four distinct rooms, each with its own atmosphere and its own
+                Five distinct rooms, each with its own atmosphere and its own
                 guide. Move through what the moment asks of you — clarity,
-                the body, parenthood, or a quiet course of study.
+                the body, parenthood, a quiet course of study, or a gentle
+                room for the children.
               </p>
               <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
                 Rooms · Learning paths · Guided progression
@@ -469,6 +473,23 @@ function RoomsSection() {
         href: "/course-room",
         testid: "room-enter-courses",
       },
+      {
+        // §AURIN 2026-05-22 — Fifth room. Aurin is the children's
+        // companion. Surfaced at the same level as the other four
+        // rooms (founder directive: "if the heading says Rooms, all
+        // five must be there"). Kept last so adult visitors meet the
+        // primary four rooms first, then discover Aurin as a softer
+        // extension for younger hearts.
+        n: "V",
+        name: "Aurin's Room",
+        sub: "A Room for Children",
+        body: "A gentle companion who listens, plays, and remembers that childhood deserves to feel safe. Three age tracks — chosen by the parent or the child.",
+        intro: "A warm presence for the little ones. Aurin is here to listen, imagine, and dream alongside the child. Three small rooms wait inside — for Little Dreamers (3–5), Explorers (6–8), and Dreamweavers (9–12) — so the words always fit the age. Aurin is a companion, never a teacher or a parent. If a heavier feeling arises, Aurin will gently invite the child to share it with a trusted grown-up.",
+        creditNote: "Writing is free. Voice opens with 5 credits or more.",
+        img: AURIN_HERO,
+        href: "/aurins-room",
+        testid: "room-enter-aurin",
+      },
     ],
     [],
   );
@@ -482,7 +503,7 @@ function RoomsSection() {
       <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7">
-            — Four Doors
+            — Five Doors
           </p>
           <h2
             className="text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] tracking-[-0.012em]"
