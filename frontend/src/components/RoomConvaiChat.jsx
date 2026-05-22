@@ -712,27 +712,29 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         connectionType: "websocket",
         ...(isTextMode ? { textOnly: true } : {}),
         overrides: {
-          // §LANGUAGE BRIDGE 2026-05-20 PM — Founder finding: ElevenLabs
-          // Conversational AI does NOT natively support Estonian.
-          // Supported list: en, zh, es, hi, pt, fr, de, ja, ar, ko,
-          // id, it, nl, tr, pl, ru, sv, tl, ms, ro, uk, el, cs, da,
-          // FI, bg, hr, sk, ta, vi, no, hu, pt-br, fil.
+          // §FOUNDER 2026-05-22 — CRITICAL: 100% English product.
+          // Earlier comments here mentioned a Finnish-as-Estonian-proxy
+          // workaround. That was Agent's solo improvisation, never
+          // authorised. Founder has confirmed: the product is and has
+          // always been English-only. Any Finnish/Estonian configuration
+          // surviving on an agent's Dashboard is a residual from that
+          // unauthorised period and MUST be removed at the Dashboard.
           //
-          // Finnish is Estonian's closest living relative (both
-          // Uralic / Finnic). Vowel system overlaps significantly,
-          // so Finnish ASR recognises ~50-70% of Estonian words
-          // correctly. The LLM (gemini-2.5-flash) is multilingual
-          // and recovers context from partial transcripts.
-          //
-          // Each agent has been PATCHED at the Dashboard level:
-          //   • agent.language = "fi"
-          //   • agent.first_message = "Tere. Mina olen …" (Estonian)
-          //   • tts.model_id      = "eleven_flash_v2_5" (multilingual)
-          //
-          // The Dashboard SECURITY OVERRIDES disallow client-side
-          // language override (`agent.language: false`), so we do
-          // NOT pass it from the SDK — it would be silently dropped.
-          // We only keep the voice_id override (allowed = true).
+          // We add three defensive SDK-side overrides below. Dashboard
+          // SECURITY OVERRIDES may silently drop them (Anna's prior
+          // setting set agent.language override = false), in which case
+          // the Dashboard is the source of truth — but if she enables
+          // the override on the new agent SECURITY page, these kick in
+          // immediately without redeploy of agent config.
+          agent: {
+            // Force the agent to speak nothing until the wanderer speaks
+            // first. Removes the "ghost voice" that played intros.
+            firstMessage: "",
+            // Force English in case any agent's Dashboard still carries
+            // the Finnish residual. Silently ignored if Dashboard
+            // forbids client override.
+            language: "en",
+          },
           ...(lockedVoiceId
             ? { tts: { voiceId: lockedVoiceId } }
             : {}),
