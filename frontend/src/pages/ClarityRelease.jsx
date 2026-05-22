@@ -1163,27 +1163,15 @@ function ChatPanel({
           )}
         </div>
 
-        {/* §Faas 2 — Mentor call layout. Grace large in the centre,
-            the chat log small and translucent below. Feels like a
-            Zoom call, not a chat. */}
-        <GuideHologram
-          gender={guideGender}
-          sending={sending}
-          toneTag={toneTag}
-          variant="call"
-          mouthOpenRef={voice.mouthOpenRef}
-          runtimeState={
-            voice.listening
-              ? "listening"
-              : voice.transcribing || sending
-              ? "thinking"
-              : audioPlaying
-              ? "speaking"
-              : input.trim().length > 0
-              ? "listening"
-              : "idle"
-          }
-        />
+        {/* §FOUNDER 2026-05-22 — Removed legacy circular GuideHologram
+            (the small "GUIDE PRESENCE · GRACE" avatar). The new full
+            portrait card lower in this same PHASES.CHAT block is the
+            canonical Grace presence now. Old hologram looked stale
+            beside the new portrait. ChatPanel + ConvAI + voice engine
+            untouched.
+            -- Removed block --
+            <GuideHologram gender={...} variant="call" ... />
+        */}
 
         {/* §Phase 1 STABILIZATION (2026-02-14) — Grace via ElevenLabs
             Conversational AI. Mounted ONLY in Private Room (room="clarity").
