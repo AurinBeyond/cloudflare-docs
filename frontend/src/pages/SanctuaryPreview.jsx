@@ -38,6 +38,14 @@ const WARMTH = "/sanctuary/warmth-trust.png";
 // §AURIN 2026-05-22 — fifth room hero image. Re-uses the existing
 // AurinBeyond brand hero so we do not introduce a parallel art style.
 const AURIN_HERO = "/assets/brand/aurinbeyond-hero.png";
+// §FOUNDER 2026-05-22 — message-style room imagery. Founder request:
+// rooms should carry an emotional message-image (humans in scene),
+// not abstract atmosphere alone. Parents' Room uses the new asset
+// below. The Grace mirror asset upload had a URL/content mismatch in
+// the artifact store (URL served door72_grace instead of the mirror
+// the founder wanted) — kept on hold pending a fresh upload.
+//   parents-message.png    — parent and child looking up at sunset
+const PARENTS_MESSAGE = "/assets/sanctuary/parents-message.png";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -458,7 +466,7 @@ function RoomsSection() {
         body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
         intro: "Understanding, warmth, and quiet support. Sara is here to offer a place where you are held and met. This room is made for the tender questions of parenting and growth. Three ways to talk are open to you — pick the one that fits today. Do not worry if the line falters; write your thought, and Sara will speak her answer back to you. This is real and living sharing — your questions are always welcome here.",
         creditNote: "Writing is free. Voice opens with 5 credits or more.",
-        img: WARMTH,
+        img: PARENTS_MESSAGE,
         href: "/parents-room",
         testid: "room-enter-parents",
       },
@@ -618,24 +626,32 @@ function OpenWorldSection() {
       body: "Reflections, journal entries, slow reads — open to anyone who wanders in.",
       badge: "Free to enter",
       tone: "free",
+      href: "/library",
+      testid: "openworld-enter-library",
     },
     {
       title: "The Bookstore",
       body: "A small collection of original books and angel stories. Each title is its own quiet object.",
       badge: "From €9 · once",
       tone: "paid",
+      href: "/bookstore",
+      testid: "openworld-enter-bookstore",
     },
     {
       title: "The Courses",
       body: "Self-paced studies — The Body Knows First, Beyond the Matrix, and others — read at your own rhythm.",
       badge: "From €19 · once",
       tone: "paid",
+      href: "/course-room",
+      testid: "openworld-enter-courses",
     },
     {
       title: "Kids Universe",
       body: "Angel stories, coloring pages, and the gentlest version of the sanctuary for the youngest visitors.",
       badge: "Free to enter",
       tone: "free",
+      href: "/kids-universe",
+      testid: "openworld-enter-kids",
     },
   ];
 
@@ -708,6 +724,19 @@ function OpenWorldSection() {
                 <p className="text-[14px] leading-[1.82] text-[#bcb4a3] font-light">
                   {l.body}
                 </p>
+                {/* §FOUNDER 2026-05-22 — Each OpenWorld card carries a
+                    discreet brass-accent Enter link. Routes go directly
+                    to the FREE / preview surface (no auth gate, no
+                    /pricing redirect). Visual: small inline text link,
+                    not a heavy button — preserves sanctuary tone. */}
+                <Link
+                  to={l.href}
+                  data-testid={l.testid}
+                  className="mt-7 inline-flex items-center gap-2 text-[11px] tracking-[0.38em] uppercase text-[#c4a46b] hover:text-[#e0c585] transition-colors duration-500"
+                >
+                  <span>Enter</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </RevealBlock>
           ))}
