@@ -505,7 +505,45 @@ export default function ClarityRelease() {
       )}
 
       {phase === PHASES.CHAT && user && (
-        <ChatPanel
+        <>
+          {/* §FOUNDER 2026-05-22 — Static Grace portrait card.
+              Shown ABOVE ChatPanel during a live talk so the wanderer
+              feels a face is with them. PURE ADDITION: ChatPanel
+              receives the exact props it always has — no legacy
+              voice/text/billing logic is touched. Hidden if the
+              portrait file fails to load (onError → display:none). */}
+          <section className="aurin-section-xs">
+            <div className="aurin-container max-w-[860px]">
+              <figure
+                data-testid="clarity-grace-portrait"
+                className="flex items-center gap-4 rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.4] p-4 backdrop-blur"
+              >
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--aurin-border-soft))]">
+                  <img
+                    src="/assets/portraits/grace.png"
+                    alt="Grace — your guide in Clarity Release"
+                    data-testid="clarity-grace-portrait-img"
+                    loading="eager"
+                    className="h-full w-full object-cover"
+                    style={{ objectPosition: "left center" }}
+                    onError={(e) => {
+                      const fig = e.currentTarget.closest("figure");
+                      if (fig) fig.style.display = "none";
+                    }}
+                  />
+                </div>
+                <figcaption>
+                  <p className="text-[11px] tracking-[0.32em] uppercase text-[hsl(var(--aurin-text-muted))]">
+                    Grace
+                  </p>
+                  <p className="mt-1 text-[13px] leading-snug text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic">
+                    Listens for the quiet beneath the noise.
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+          <ChatPanel
           messages={messages}
           input={input}
           setInput={setInput}
@@ -526,6 +564,7 @@ export default function ClarityRelease() {
           convaiMode={convaiMode}
           setConvaiMode={setConvaiMode}
         />
+        </>
       )}
 
       {/* Emergency Exit — visible on every signed-in surface */}

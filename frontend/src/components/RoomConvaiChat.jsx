@@ -58,6 +58,34 @@ const ROOM_AGENT_NAME = {
   aurin: "Aurin",
 };
 
+// §FOUNDER 2026-05-22 — Static agent portraits.
+// Founder directive: each speaking agent must wear a human face so
+// the wanderer feels they are with a real person, not an AI. Portraits
+// are displayed ALWAYS (not only during a live call) so the trust
+// signal is present from the first moment the room loads. They sit
+// BESIDE the chat surface as a separate panel (NOT inside the chat
+// bubble area) — a deliberate UX choice to keep voice/text quality
+// untouched. Aurin remains symbolic (no human face) because the
+// children's room intentionally protects imagination.
+const ROOM_AGENT_PORTRAIT = {
+  clarity: { src: "/assets/portraits/grace.png", focus: "left center" },
+  body: { src: "/assets/portraits/kaelan.png", focus: "center" },
+  parents: { src: "/assets/portraits/sara.png", focus: "center" },
+  courses: { src: "/assets/portraits/alistair.png", focus: "center" },
+  // aurin: intentionally omitted — children's room is symbolic light, no face.
+};
+
+// §FOUNDER 2026-05-22 — Short, NOT-mystical taglines that sit under
+// each portrait. Mission: feel supportive so the wanderer can open
+// up. No spiritual / religious / esoteric language. Plain English.
+const ROOM_AGENT_TAGLINE = {
+  clarity: "Listens for the quiet beneath the noise.",
+  body: "A steady voice for the body's first signals.",
+  parents: "Warmth for the questions parenting brings.",
+  courses: "A patient guide through what you study.",
+  aurin: "A gentle friend who listens.",
+};
+
 // §ACCESSIBILITY 2026-02-15 — Three-mode toggle (founder directive,
 // long-standing request). Each mode controls the SDK + UI behaviour:
 //   - voice  : full voice-to-voice. Mic captured, agent speaks back.
@@ -1075,12 +1103,91 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
  * Outer component — guards the `room` prop and wraps the panel in the
  * SDK's ConversationProvider. If the prop is malformed, renders
  * nothing rather than risk loading a wrong agent.
+ *
+ * §FOUNDER 2026-05-22 — The outer layout now hosts a static portrait
+ * panel BESIDE the chat surface (desktop) or above it (mobile). The
+ * portrait is rendered as a separate sibling — the inner ConvaiPanel
+ * is untouched, so voice/text/billing logic is bit-for-bit unchanged.
+ * If a portrait fails to load it hides silently via onError.
  */
+function AgentPortraitPanel({ room }) {
+  const name = ROOM_AGENT_NAME[room] || "Mentor";
+  const portrait = ROOM_AGENT_PORTRAIT[room];
+  const tagline = ROOM_AGENT_TAGLINE[room];
+  if (!portrait) return null;
+  return (
+    <aside
+      data-testid={`agent-portrait-panel-${room}`}
+      className="shrink-0 md:sticky md:top-24 self-start"
+    >
+      {/* Desktop: vertical card with portrait + name + tagline. */}
+      <div className="hidden md:flex md:w-[260px] flex-col items-center gap-4 rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.4] p-5 backdrop-blur">
+        <div className="relative h-[200px] w-[200px] overflow-hidden rounded-2xl border border-[hsl(var(--aurin-border-soft))]">
+          <img
+            src={portrait.src}
+            alt={`${name} — your guide in this room`}
+            data-testid={`agent-portrait-img-${room}`}
+            loading="eager"
+            className="h-full w-full object-cover"
+            style={{ objectPosition: portrait.focus || "center" }}
+            onError={(e) => {
+              const wrap = e.currentTarget.closest("aside");
+              if (wrap) wrap.style.display = "none";
+            }}
+          />
+        </div>
+        <div className="text-center">
+          <p
+            className="text-[11px] tracking-[0.32em] uppercase text-[hsl(var(--aurin-text-muted))]"
+            data-testid={`agent-portrait-name-${room}`}
+          >
+            {name}
+          </p>
+          {tagline ? (
+            <p className="mt-2 text-[12.5px] leading-[1.55] text-[hsl(var(--aurin-text))/0.78] aurin-serif-italic">
+              {tagline}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      {/* Mobile: small circular avatar + name inline above the chat. */}
+      <div className="flex md:hidden items-center gap-3 mb-4">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[hsl(var(--aurin-border-soft))]">
+          <img
+            src={portrait.src}
+            alt={`${name} — your guide in this room`}
+            data-testid={`agent-portrait-img-mobile-${room}`}
+            loading="eager"
+            className="h-full w-full object-cover"
+            style={{ objectPosition: portrait.focus || "center" }}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+          />
+        </div>
+        <div>
+          <p className="text-[10.5px] tracking-[0.28em] uppercase text-[hsl(var(--aurin-text-muted))]">
+            {name}
+          </p>
+          {tagline ? (
+            <p className="text-[12px] leading-tight text-[hsl(var(--aurin-text))/0.7] aurin-serif-italic">
+              {tagline}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 export default function RoomConvaiChat({ room = "clarity", onFallback, onStatusChange }) {
   if (!ALLOWED_ROOMS.has(room)) return null;
   return (
     <ConversationProvider>
-      <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
+      <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-6">
+        <AgentPortraitPanel room={room} />
+        <div className="flex-1 min-w-0">
+          <ConvaiPanel room={room} onFallback={onFallback} onStatusChange={onStatusChange} />
+        </div>
+      </div>
     </ConversationProvider>
   );
 }
