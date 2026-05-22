@@ -1,6 +1,7 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Headphones, FileText, Heart } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import StoryShareStrip from "@/components/StoryShareStrip";
 import {
   STORIES,
   getStoryBySlug,
@@ -57,15 +58,18 @@ export default function AurinStoryRead() {
       </div>
 
       <article className="mx-auto max-w-3xl px-6 pb-24 pt-6 space-y-8">
-        {/* Cover illustration */}
+        {/* Cover illustration — object-position:left keeps the Aurin
+            character on-screen while cropping the right-side branding
+            text that lives inside the marketing asset. */}
         <div
-          className="rounded-2xl overflow-hidden border border-[hsl(var(--aurin-border-soft))]"
+          className="rounded-2xl overflow-hidden border border-[hsl(var(--aurin-border-soft))] aspect-[16/9] bg-[hsl(var(--aurin-bg))]"
           data-testid="story-cover"
         >
           <img
             src={cover}
             alt={story.title}
-            className="w-full h-auto block"
+            style={{ objectPosition: "left center" }}
+            className="w-full h-full object-cover block"
             loading="eager"
           />
         </div>
@@ -150,6 +154,15 @@ export default function AurinStoryRead() {
             you want to come back.
           </div>
         </div>
+
+        {/* §AURIN 2026-02-08 — share row. Quiet trust-transfer growth
+            channel: a parent forwarding a calm bedtime story to another
+            family is worth more than any paid impression. */}
+        <StoryShareStrip
+          url={typeof window !== "undefined" ? window.location.href : ""}
+          title={`${story.title} — a quiet story from Aurin`}
+          message={`A calm bedtime story from Aurin's Story World. I thought you might enjoy "${story.title}" with your little one.`}
+        />
 
         {/* Next story prompt */}
         {nextStory && nextStory.slug !== story.slug && (

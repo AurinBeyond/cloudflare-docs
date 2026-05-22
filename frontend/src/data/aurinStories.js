@@ -52,7 +52,7 @@ export const STORIES = [
     minutes: 3,
     intro:
       "A tiny star learns that being small is not the same as being unseen.",
-    cover: "/assets/aurin/little-dreamers-hero.png",
+    cover: "/assets/aurin/aurin-companion.png",
     audio: null,
     pdf: null,
     body: [
@@ -71,7 +71,7 @@ export const STORIES = [
     minutes: 3,
     intro:
       "A sleepy boat made of moonlight carries quiet dreams across the night sea.",
-    cover: "/assets/aurin/little-dreamers-hero.png",
+    cover: "/assets/aurin/aurin-companion.png",
     audio: null,
     pdf: null,
     body: [
@@ -90,7 +90,7 @@ export const STORIES = [
     minutes: 4,
     intro:
       "A small explorer discovers that the forest at night is not scary — it is listening.",
-    cover: "/assets/aurin/explorers-hero.png",
+    cover: "/assets/aurin/aurin-companion.png",
     audio: null,
     pdf: null,
     body: [
@@ -111,7 +111,7 @@ export const STORIES = [
     minutes: 4,
     intro:
       "Most dragons roar. This one chose to listen — and changed a whole village.",
-    cover: "/assets/aurin/explorers-hero.png",
+    cover: "/assets/aurin/aurin-companion.png",
     audio: null,
     pdf: null,
     body: [
@@ -133,7 +133,7 @@ export const STORIES = [
     minutes: 5,
     intro:
       "Aurin learns the difference between a light that shows the way and a light that pretends.",
-    cover: "/assets/aurin/dreamweavers-hero.png",
+    cover: "/assets/aurin/aurin-companion.png",
     audio: null,
     pdf: null,
     body: [

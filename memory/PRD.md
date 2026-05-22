@@ -258,3 +258,23 @@ Full audit: `/app/memory/AUDIT_2026-05-21_PRE_LAUNCH_REVIEW.md`
 **Still open from previous session:**
 - 🔴 P0 — Prod STT 500 error. `OPENAI_API_KEY` missing/invalid in production env panel. Preview is fine.
 - 🔴 P0 — `FREE_VOICE_BETA=true` in preview env — flip to `false` before live launch.
+
+## 2026-02-08 (later) — Aurin Storyteller Angel + Share Growth-Loop
+
+**Anna's directive:** Position Aurin as a "storytelling angel" (universal, suits every age, decouples kids' world from Anna personally). Add multi-channel share buttons for organic trust-transfer growth (WhatsApp / Telegram / Facebook).
+
+**Shipped:**
+
+1. **Storyteller-angel intro hero** on `/aurins-room/stories` — "Meet your storyteller" card with the `aurin-companion.png` character image (cropped via `object-position: left center` so the right-side branding text from the marketing asset is hidden). Title rebranded to "Stories from Aurin — your gentle storytelling angel". Copy positions Aurin as a soft, imaginary friend, not a teacher / not a robot.
+
+2. **Story covers** — All 5 starter stories now use the Aurin character image (`/assets/aurin/aurin-companion.png`) with left-center crop. Consistent visual identity across the shelf until Anna creates per-story illustrations.
+
+3. **Share row** on every story page — New component `StoryShareStrip.jsx` with 6 channels: WhatsApp, Telegram, Facebook, X, Email, Copy link. Pre-fills a calm message ("A calm bedtime story from Aurin's Story World. I thought you might enjoy …"). Auto-picks up `window.location.href` so the URL stays correct once the live domain is deployed — no code change required at launch.
+
+4. **Anna's name boundary** — Confirmed Anna's name appears ONLY in `/about` (founder section). The entire Aurin Story World (page + cards + story bodies + share strip) makes zero reference to Anna. Brand identity for the kids' universe stays purely "Aurin".
+
+**Verified by smoke test:**
+- `/aurins-room/stories` shows angel intro + 3 age groups + cards with character image
+- `/aurins-room/stories/little-star` shows share strip with all 6 buttons functional
+
+**Still open:** see `/app/memory/PENDING_REMINDERS.md`.

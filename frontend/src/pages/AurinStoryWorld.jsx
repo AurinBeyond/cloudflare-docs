@@ -26,8 +26,8 @@ export default function AurinStoryWorld() {
     >
       <PageHeader
         eyebrow="Aurin's Story World"
-        title="Quiet stories for imagination and calm moments"
-        subtitle="Short, gentle stories children can read with a grown-up or listen to before sleep. New stories are added slowly, story by story."
+        title="Stories from Aurin — your gentle storytelling angel"
+        subtitle="Short, calm bedtime stories told by Aurin. Read together, listen quietly, or simply pause for a moment. New stories are added slowly, one at a time."
       />
 
       {/* Back to Aurin's Room */}
@@ -41,7 +41,48 @@ export default function AurinStoryWorld() {
         </Link>
       </div>
 
-      <section className="mx-auto max-w-5xl px-6 pb-24 pt-6 space-y-14">
+      {/* §AURIN 2026-02-08 — Founder directive: position Aurin as the
+          "storytelling angel" character at the top of the shelf. Uses
+          object-position:left so the right-side branding text from the
+          marketing asset is cropped out. */}
+      <section className="mx-auto max-w-5xl px-6 pt-8">
+        <div
+          data-testid="aurin-angel-intro"
+          className="rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.55] overflow-hidden backdrop-blur grid grid-cols-1 md:grid-cols-12 items-stretch"
+        >
+          <div className="md:col-span-5 aspect-[4/3] md:aspect-auto overflow-hidden bg-[hsl(var(--aurin-bg))]">
+            <img
+              src="/assets/aurin/aurin-companion.png"
+              alt="Aurin — a gentle storytelling angel"
+              loading="eager"
+              style={{ objectPosition: "left center" }}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="md:col-span-7 p-6 md:p-8 flex flex-col justify-center">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-amber))/0.9] mb-2">
+              Meet your storyteller
+            </p>
+            <h2 className="aurin-serif text-2xl md:text-3xl text-[hsl(var(--aurin-text))] leading-snug">
+              Aurin — the storytelling angel
+            </h2>
+            <p className="mt-3 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.78]">
+              Aurin is not a teacher and not a robot. Aurin is a gentle,
+              imaginary friend — an angel of stories who whispers calm tales
+              for children of every age. The little ones, the curious ones,
+              the dreamers.
+            </p>
+            <p className="mt-3 text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.78]">
+              Each story below is told in Aurin's quiet voice. Some you can
+              read together. Others you can listen to before sleep. There is
+              no rush, no ads, no noise — just a small, safe shelf for
+              imagination to rest.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 pb-24 pt-12 space-y-14">
         {STORY_AGE_GROUPS.map((group) => {
           const stories = getStoriesByGroup(group.slug);
           return (
@@ -91,10 +132,10 @@ export default function AurinStoryWorld() {
           data-testid="story-world-footnote"
           className="text-[12px] leading-relaxed text-[hsl(var(--aurin-text))/0.5] pt-6 border-t border-[hsl(var(--aurin-border-soft))]"
         >
-          These stories are written to be calm, kind, and free of fear. They
-          are meant to be shared between a child and a trusted grown-up. No
-          autoplay, no ads, no tracking — just a quiet shelf you can return
-          to.
+          Every story Aurin tells is written to be calm, kind, and free of
+          fear. They are meant to be shared between a child and a trusted
+          grown-up — read together, listened to before sleep, or simply
+          opened on a quiet afternoon.
         </p>
       </section>
     </div>
@@ -114,6 +155,7 @@ function StoryCard({ story, accent }) {
           src={cover}
           alt={story.title}
           loading="lazy"
+          style={{ objectPosition: "left center" }}
           className="w-full h-full object-cover transition duration-700 group-hover:scale-[1.03]"
         />
       </div>
