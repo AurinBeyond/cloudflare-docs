@@ -2,6 +2,7 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Headphones, FileText, Heart } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import StoryShareStrip from "@/components/StoryShareStrip";
+import GiftStoryCard from "@/components/GiftStoryCard";
 import {
   STORIES,
   getStoryBySlug,
@@ -155,13 +156,17 @@ export default function AurinStoryRead() {
           </div>
         </div>
 
-        {/* §AURIN 2026-02-08 — share row. Quiet trust-transfer growth
-            channel: a parent forwarding a calm bedtime story to another
-            family is worth more than any paid impression. */}
+        {/* §AURIN 2026-02-08 — Gift CTA + share row. The Gift card uses
+            intimate channels (WhatsApp / Telegram / Email) with a
+            gift-coded message; ShareStrip below offers the wider
+            social options for parents who want to broadcast. */}
+        <GiftStoryCard
+          url={typeof window !== "undefined" ? window.location.href : ""}
+          title={story.title}
+        />
         <StoryShareStrip
           url={typeof window !== "undefined" ? window.location.href : ""}
           title={`${story.title} — a quiet story from Aurin`}
-          message={`A calm bedtime story from Aurin's Story World. I thought you might enjoy "${story.title}" with your little one.`}
         />
 
         {/* Next story prompt */}

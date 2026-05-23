@@ -278,3 +278,19 @@ Full audit: `/app/memory/AUDIT_2026-05-21_PRE_LAUNCH_REVIEW.md`
 - `/aurins-room/stories/little-star` shows share strip with all 6 buttons functional
 
 **Still open:** see `/app/memory/PENDING_REMINDERS.md`.
+
+## 2026-02-08 (later again) — "Gift this story" emotional CTA
+
+**Anna's directive:** Turn the share row into an emotional act — "gift" framing rather than "share" framing — because parents respond to kindness, not advertising.
+
+**Shipped:**
+
+1. **`GiftStoryCard.jsx`** — New emotional hero CTA above the share row. Amber border + soft warm glow. Two-step interaction:
+   - Closed state: gift icon + "A small kindness · Gift this story to another family" headline + warm explanatory copy + single "Choose how to send it" button.
+   - Opened state: three intimate channels (Send via WhatsApp / Send via Telegram / Send by Email) with a pre-filled gift letter, not a URL dump: *"Hello — I wanted to send you something quiet. It's a calm bedtime story called '<Title>' from Aurin's Story World — a soft place we found that feels different from everything else online. Maybe you and your little one will enjoy reading it together one evening. With warmth, <url>"*
+
+2. **`StoryShareStrip.jsx` simplified** — Removed WhatsApp / Telegram / Email (they live in the Gift card now). Stripped down to a compact secondary row: "Or share more widely: Facebook · X · Copy link". Avoids channel duplication and keeps the visual hierarchy clean — gift first, broadcast second.
+
+**Verified by smoke test:** Closed gift card → click → 3 intimate channels appear → ShareStrip below with FB/X/Copy. All data-testids visible.
+
+**Why this matters:** Parents share kindness, not advertisements. The gift framing means the receiving family opens it expecting a quiet moment, not a sales pitch — which is exactly how Anna's trust-first brand wants to acquire users (zero CAC, high LTV).
