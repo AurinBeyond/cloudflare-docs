@@ -228,6 +228,32 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       }
       return undefined;
     }
+    // §DEAFNESS-FIX 2026-05-23 — Skip silent fallback for microphone
+    // errors. If the wanderer's mic is blocked or missing, flipping
+    // them silently to "text" mode hides the actual problem — they
+    // see only a "text to voice" badge, type messages, and assume
+    // the agent is deaf. The agent is not deaf; their mic was never
+    // opened. By keeping `status === "error"` for mic-class errors,
+    // the explanatory message ("Microphone is blocked... click the
+    // lock icon → Site settings → Microphone → Allow") stays visible
+    // until the wanderer fixes it at the OS/browser level. Other
+    // transient errors (signed-url, network) still fall back so the
+    // room is never fully unusable.
+    const lower = (errorMsg || "").toLowerCase();
+    const isMicBlocked =
+      lower.includes("permission") ||
+      lower.includes("denied") ||
+      lower.includes("notallowed") ||
+      lower.includes("not allowed");
+    const isMicMissing =
+      lower.includes("notfound") ||
+      lower.includes("not found") ||
+      lower.includes("device") ||
+      lower.includes("no microphone");
+    if (isMicBlocked || isMicMissing) {
+      // Keep the error visible — do NOT auto-fallback to text.
+      return undefined;
+    }
     fallbackTimerRef.current = setTimeout(() => {
       modeRef.current = "text";
       setMode("text");
@@ -240,7 +266,7 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         fallbackTimerRef.current = null;
       }
     };
-  }, [status, mode]);
+  }, [status, mode, errorMsg]);
 
 
   const pushTranscript = useCallback((role, text) => {
@@ -1047,6 +1073,28 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
               </>
             );
           })()}
+          {/* §DEAFNESS-FIX 2026-05-23 — "Try voice again" button.
+              For mic-class errors the silent auto-fallback to text
+              is now skipped, so the wanderer needs a way to retry
+              voice once they've fixed the permission at the browser
+              level — without losing their progress to a full page
+              refresh. */}
+          <button
+            type="button"
+            data-testid="convai-retry-voice-btn"
+            onClick={() => {
+              setErrorMsg("");
+              setStatus("idle");
+              modeRef.current = "voice";
+              setMode("voice");
+              // small delay so React commits the state reset
+              // before we re-attempt start()
+              setTimeout(() => { start(); }, 50);
+            }}
+            className="mt-3 inline-flex items-center gap-2 px-3 h-8 rounded-full border border-[hsl(var(--aurin-border))] text-[12px] text-[hsl(var(--aurin-text))/0.85] hover:text-[hsl(var(--aurin-sage))] hover:border-[hsl(var(--aurin-sage))/0.5] transition-colors"
+          >
+            Try voice again
+          </button>
         </div>
       ) : null}
 
