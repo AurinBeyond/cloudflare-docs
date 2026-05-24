@@ -779,17 +779,21 @@ function HubPanel({
           </div>
         )}
 
-        {/* Pricing tiers — hidden whenever the global gift window is
-            active (so guests + signed-in visitors both walk in without
-            seeing the $15 / $30 / $50 paywall). */}
+        {/* §VARIANT-C 2026-02-09 — Pricing tiers as a compact list,
+            not a 3-up grid of large cards. Founder directive: less
+            "paywall feeling", more "quiet menu". Each row is a single
+            line of warm copy + price + a small action button. Same
+            data, same testids, same LemonSqueezy checkout path —
+            only the visual layout changed. */}
         {!giftActive && (
-          <div data-testid="clarity-tiers" className="space-y-4">
+          <div data-testid="clarity-tiers" className="space-y-3">
             <div className="aurin-eyebrow">Choose a depth</div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {passes.map((p) => (
-                <TierCard
+            <div className="rounded-2xl border border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg-elev))/0.35] overflow-hidden">
+              {passes.map((p, i) => (
+                <TierRow
                   key={p.tier}
                   pass={p}
+                  isLast={i === passes.length - 1}
                   betaActive={betaActive}
                   alreadyHasPass={alreadyHasPass}
                   betaGrantingTier={betaGrantingTier}
@@ -797,6 +801,12 @@ function HubPanel({
                 />
               ))}
             </div>
+            <p
+              data-testid="clarity-tiers-footnote"
+              className="text-[11.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] pt-1"
+            >
+              No subscription is required for the first two options. Cancel any time on the Season Pass.
+            </p>
           </div>
         )}
 
@@ -834,6 +844,106 @@ function formatBetaEnd(iso) {
   }
 }
 
+function TierRow({ pass, isLast, betaActive, alreadyHasPass, betaGrantingTier, onBetaGrant }) {
+  const isSub = pass.is_subscription;
+  const betaEligible = betaActive && !alreadyHasPass;
+  const thisBusy = betaGrantingTier === pass.tier;
+  const checkoutUrl = !betaEligible ? buildLemonCheckoutUrl(pass.lemonsqueezy_variant_id) : null;
+  return (
+    <div
+      data-testid={`clarity-tier-${pass.tier}`}
+      className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 px-5 py-4 ${
+        isLast ? "" : "border-b border-[hsl(var(--aurin-border-soft))]"
+      } transition-colors hover:bg-[hsl(var(--aurin-bg-elev))/0.55]`}
+    >
+      {/* Left: title + blurb. Compact, single-line on desktop. */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <h3
+            className="aurin-serif text-[16px] leading-tight text-[hsl(var(--aurin-text))]"
+            data-testid={`clarity-tier-${pass.tier}-label`}
+          >
+            {pass.label}
+          </h3>
+          {isSub ? (
+            <span className="text-[10px] tracking-[0.18em] uppercase text-[hsl(var(--aurin-sage))/0.85] border border-[hsl(var(--aurin-sage))/0.35] rounded-full px-2 py-[1px]">
+              Monthly
+            </span>
+          ) : null}
+        </div>
+        <p
+          data-testid={`clarity-tier-${pass.tier}-blurb`}
+          className="mt-1 text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
+        >
+          {pass.blurb}
+        </p>
+      </div>
+
+      {/* Right: price + action. Stays right-aligned on desktop. */}
+      <div className="flex items-center gap-4 shrink-0">
+        <div className="text-right">
+          {betaEligible ? (
+            <>
+              <div
+                data-testid={`clarity-tier-${pass.tier}-price-beta`}
+                className="aurin-display text-[20px] text-[hsl(var(--aurin-sage))] leading-none"
+              >
+                Free
+              </div>
+              <div className="text-[10.5px] line-through text-[hsl(var(--aurin-text-muted))] mt-0.5">
+                ${pass.price}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="aurin-display text-[20px] leading-none">
+                ${pass.price}
+              </div>
+              <div className="text-[10.5px] text-[hsl(var(--aurin-text-muted))] mt-0.5">
+                {pass.currency}
+                {isSub ? " / 30 days" : ""}
+              </div>
+            </>
+          )}
+        </div>
+        {betaEligible ? (
+          <button
+            type="button"
+            disabled={thisBusy || !!betaGrantingTier}
+            onClick={() => onBetaGrant && onBetaGrant(pass.tier)}
+            data-testid={`clarity-tier-${pass.tier}-beta-activate`}
+            className="aurin-btn aurin-btn-ghost text-[12px] px-3 py-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {thisBusy ? "Opening…" : "Activate"}
+          </button>
+        ) : checkoutUrl ? (
+          <a
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid={`clarity-tier-${pass.tier}-buy`}
+            className="aurin-btn aurin-btn-ghost text-[12px] px-3 py-1.5 inline-flex items-center gap-1"
+          >
+            Continue <ArrowRight size={12} />
+          </a>
+        ) : (
+          <a
+            href="/catalogue#7-days-of-clarity"
+            data-testid={`clarity-tier-${pass.tier}-buy`}
+            className="aurin-btn aurin-btn-ghost text-[12px] px-3 py-1.5 inline-flex items-center gap-1"
+          >
+            Waitlist <ArrowRight size={12} />
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// §VARIANT-C 2026-02-09 — Old TierCard kept for any external import
+// that may still reference it; not used in render. Safe to remove
+// once we confirm nothing else points at it.
+// eslint-disable-next-line no-unused-vars
 function TierCard({ pass, betaActive, alreadyHasPass, betaGrantingTier, onBetaGrant }) {
   const isSub = pass.is_subscription;
   const betaEligible = betaActive && !alreadyHasPass;

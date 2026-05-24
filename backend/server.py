@@ -4701,7 +4701,10 @@ SEED_PASSES: List[dict] = [
         "is_subscription": False,
         "price": 15.0,
         "currency": "USD",
-        "blurb": "A focused half-hour. Land, listen, release.",
+        # §VARIANT-C 2026-02-09 — Empathetic, legally-safe blurb
+        # (100-150 chars). Avoids medical/therapeutic claims, names
+        # what the session actually offers: time + presence.
+        "blurb": "A small opening. Half an hour of reflective listening — enough to land, name what's there, and step out lighter.",
         "lemonsqueezy_variant_id": "1606274",
     },
     {
@@ -4711,7 +4714,7 @@ SEED_PASSES: List[dict] = [
         "is_subscription": False,
         "price": 30.0,
         "currency": "USD",
-        "blurb": "A deeper hour for what's been waiting.",
+        "blurb": "A full hour to slow down. For the days when something has been waiting longer than usual and asks for room.",
         "lemonsqueezy_variant_id": "1606349",
     },
     {
@@ -4721,7 +4724,7 @@ SEED_PASSES: List[dict] = [
         "is_subscription": True,
         "price": 70.0,
         "currency": "USD",
-        "blurb": "Open access for thirty days. Walk in whenever you need to.",
+        "blurb": "Quiet companionship for a month. Walk in whenever the week tightens — no booking, no urgency, just the room when you need it.",
         "lemonsqueezy_variant_id": "1606394",
     },
 ]
