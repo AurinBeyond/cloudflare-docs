@@ -279,6 +279,74 @@ Full audit: `/app/memory/AUDIT_2026-05-21_PRE_LAUNCH_REVIEW.md`
 
 **Still open:** see `/app/memory/PENDING_REMINDERS.md`.
 
+## 2026-02-09 — Aurin Crash Fix + Adult Agent Identity Boundary Protocol
+
+**Two P0 production bugs Anna reported after going live on prulesoul.site:**
+
+1. **Aurin's Room kicks users out immediately** (all 3 age groups).
+2. **Adult agents hallucinate roles:** they adopt the user's greeting as their own name ("Hello Grace" → agent thinks its name is Grace), switch voices, mix rooms.
+
+**Root cause of Aurin crash (founder-visible "kick-out"):**
+The Aurin Dashboard had ALL overrides disabled (`platform_settings.overrides.conversation_config_override.agent.prompt.prompt: false`, `first_message: false`, `tts.speed: false`, `tts.stability: false`). The `AurinsRoomChat.jsx` code was sending exactly those four override fields → ElevenLabs rejected the session on open → "kicked out" symptom.
+
+**Fix #1 — Aurin Dashboard PATCH (server-side, idempotent):**
+```bash
+PATCH /v1/convai/agents/<aurin_agent_id>
+{ platform_settings.overrides.conversation_config_override: {
+    agent: { first_message:true, language:true, prompt:{prompt:true, llm:false,...} },
+    tts:   { speed:true, stability:true, voice_id:false, similarity_boost:false },
+    conversation: { text_only:true }
+}}
+```
+This enabled the four overrides Aurin requires (age-specific prompts via `aurinPrompts.js`, first_message, tts.speed, tts.stability) while keeping voice_id locked at Dashboard level.
+
+**Fix #2 — Defensive retry in `AurinsRoomChat.jsx`:**
+- Added mic pre-warm at top of `start()` (matches the working adult-room pattern from RoomConvaiChat.jsx)
+- Added `retryWithoutOverridesRef`: on first error that is NOT a mic-class issue, the SDK is re-invoked once with overrides STRIPPED. Salvages sessions if Dashboard rejects a field in the future.
+- Added detailed `console.log` taps in onConnect / onDisconnect / onError so the next agent has ground-truth telemetry.
+
+**Fix #3 — Aurin character portrait LEFT, chat RIGHT** (founder explicit ask):
+Replaced the full-width hero banner above the chat with a side-by-side layout matching the four adult rooms. Per-age `theme.hero` images (`little-dreamers-hero.png` etc.) are rendered as `background-image` with `background-size:180%` + `background-position:0% 20%` so the chat-mockup half of the marketing composite falls off-frame. Below the portrait: "Aurin" name + age tag (e.g. "EXPLORERS · AGES 6-8") + tagline.
+
+**Fix #4 — Adult Agent IDENTITY & BOUNDARY PROTOCOL (Dashboard prepend, non-destructive):**
+Built `/app/scripts/inject_agent_boundaries.py` which:
+1. GETs each agent's current Dashboard `conversation_config.agent.prompt.prompt`
+2. SAVES timestamped backup to `/app/memory/agent_prompt_backups/<name>__YYYY-MM-DD.txt`
+3. PREPENDS (does NOT replace) a strict agent-specific boundary block:
+   - "Your name is [Name]. Always [Name]. Only [Name]."
+   - "You are NOT [the other three guides]."
+   - "If the user greets you with another name, do not adopt it."
+   - "You do NOT mention any other room."
+   - "You speak ENGLISH only."
+   - "You never claim to be an AI/robot/machine/program/chatbot."
+   - "Your voice is constant. You do NOT switch voice, accent, or gender."
+4. PATCHes the agent
+
+Idempotent (skips if marker already present). Backups in `/app/memory/agent_prompt_backups/`:
+| Agent    | Original | After Inject |
+|----------|----------|--------------|
+| Grace    | 8919     | 9990         |
+| Kaelan   | 8576     | 9647         |
+| Sara     | 13393    | 14462        |
+| Alistair | 11605    | 12688        |
+
+Anna's curated personalities are 100% preserved — boundary rules are simply the new FIRST section the agent reads.
+
+**Fix #5 — Aurin prompt code-side boundary (`aurinPrompts.js`)**:
+Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDARY_PREAMBLE` constant prepended in `buildAurinPrompt(slug)` before the base + age overlay. Same protocol shape as adult agents, adapted for child voice.
+
+**Frontend test (iteration_74):**
+- All 3 Aurin age groups load without crash (little-dreamers, explorers, dreamweavers)
+- Portrait LEFT confirmed (bounding-box x=408 < chat-panel x=820)
+- Auto-retry-without-overrides path verified by console telemetry on text-mode start
+- 3/4 adult rooms (body, parents, course) confirmed unchanged after Dashboard prepend
+- Clarity-release Grace mount is below-the-fold inside `ConvaiPresenceTracker room="clarity"` (line 1196) — not a regression, just scroll position
+- Wanderer gate bypass works with documented localStorage keys
+
+**Mic in headless caveat:** Voice-mode end-to-end audio cannot be exercised in headless Chromium ("Requested device not found"). The auto-retry intentionally skips mic-class errors so the user sees the precise instruction. Anna must verify voice-to-voice on her own device(s).
+
+**Still open:** see `/app/memory/PENDING_REMINDERS.md`.
+
 ## 2026-02-08 (later again) — "Gift this story" emotional CTA
 
 **Anna's directive:** Turn the share row into an emotional act — "gift" framing rather than "share" framing — because parents respond to kindness, not advertising.
