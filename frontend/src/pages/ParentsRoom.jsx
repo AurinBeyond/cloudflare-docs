@@ -31,7 +31,9 @@ import { api } from "@/lib/api";
 import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
 import { useAuth } from "@/contexts/AuthProvider";
-import ParentsRoomChat from "@/components/ParentsRoomChat";
+// §GHOST-FIX 2026-05-23 — Old <ParentsRoomChat> import removed.
+// Sara now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
+// The file ParentsRoomChat.jsx is preserved in the repo for rollback.
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
 // §AUDIT-SCALE 2026-05-20 — Parents' Room joins Clarity in tracking
 // presence_seconds so Sara's voice sessions decrement credits.
@@ -410,14 +412,13 @@ export default function ParentsRoom() {
         </div>
       </section>
 
-      {/* §Stage 3.3 — Live parents' companion chat. Same daily ceiling
-          as Body Room + Cabinet. Cross-Room "quiet teadmine" bridge is
-          loaded server-side; the parent never sees the bookkeeping. */}
-      <ParentsRoomChat
-        user={user}
-        activeLens={activeLens}
-        activeSituation={openSituation}
-      />
+      {/* §GHOST-FIX 2026-05-23 — Old <ParentsRoomChat> mount removed.
+          Reason: it ran a parallel `useVoiceIO` loop with autoVoice:true
+          + an auto-speak useEffect, producing the "second/third female
+          voice" the founder heard. Sara (ConvaiPresenceTracker, see
+          above, line ~153) is now the sole voice for this room. The
+          ParentsRoomChat.jsx file stays in the repo as a rollback option
+          but is no longer rendered anywhere. */}
 
       {/* Situation modal */}
       {openSituation && activeLensObj && (

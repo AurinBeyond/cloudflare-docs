@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
-import BodyRoomChat from "@/components/BodyRoomChat";
+// §GHOST-FIX 2026-05-23 — Old <BodyRoomChat> import removed.
+// Kaelan now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
+// The file BodyRoomChat.jsx is preserved in the repo for rollback.
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
 // §AUDIT-SCALE 2026-05-20 — Body Room joins Clarity in tracking
 // presence_seconds. Without this Kaelan would never decrement
@@ -556,23 +558,14 @@ export default function BodyRoom() {
         </section>
       )}
 
-      {/* §G3 Somatic Mentor — quiet hand at the edge of the room */}
-      <BodyRoomChat
-        user={user}
-        bodyContext={
-          active
-            ? {
-                region: active.label || active.region || null,
-                pattern_label: active.brief_label || null,
-              }
-            : null
-        }
-        transientContext={
-          recent && recent.length
-            ? recent.slice(0, 5).map((r) => `${r.region || ""}${r.note ? ` — ${r.note}` : ""}`.trim())
-            : null
-        }
-      />
+      {/* §GHOST-FIX 2026-05-23 — Old <BodyRoomChat> mount removed.
+          Reason: same dual-voice pattern that affected Parents Room
+          (useVoiceIO with autoVoice:true + auto-speak useEffect on
+          every guide message → parallel browser TTS while Kaelan
+          ConvAI was already speaking). Kaelan now flows solely
+          through ConvaiPresenceTracker above. The component file
+          BodyRoomChat.jsx remains in the repo as a rollback option
+          but is no longer rendered anywhere. */}
 
       {/* Newsletter — for the deeper Body Room releases later */}
       <section className="aurin-section-sm" data-testid="body-room-waitlist">
