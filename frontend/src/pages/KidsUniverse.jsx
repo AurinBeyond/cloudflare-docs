@@ -1,11 +1,121 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { Sprout, Heart, BookHeart, ShieldCheck, Wand2, ArrowRight } from "lucide-react";
+import {
+  Sprout,
+  Heart,
+  BookHeart,
+  ShieldCheck,
+  Wand2,
+  ArrowRight,
+  ChevronDown,
+  Headphones,
+  Palette,
+  Puzzle,
+  Sparkles,
+  Send,
+  CheckCircle2,
+} from "lucide-react";
 import useFreeAccess from "@/hooks/useFreeAccess";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
 const API = __BACKEND_URL__;
+
+// §KIDS-UNIVERSE-V2 2026-02-09 — Per-age "warm-up" treats. Founder
+// directive: free page must FEEL like a doorway, not a dead end.
+// Each age-group card expands to show three small free items + a
+// clear path into the paid Aurin's Room. Items marked `status:
+// "soon"` show a soft "Coming this week" pill so we never link to
+// broken downloads — Anna fills the real assets at her own pace.
+const AGE_TREATS = {
+  "3-5": {
+    aurinSlug: "little-dreamers",
+    treats: [
+      {
+        icon: Headphones,
+        title: "A tiny bedtime audio",
+        body: "Three soft minutes — Aurin says hello and tells one small story.",
+        cta: "Listen",
+        href: "/aurins-room/stories",
+        status: "ready",
+      },
+      {
+        icon: Palette,
+        title: "A coloring page to print",
+        body: "A simple, gentle scene — print at home, color together.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+      {
+        icon: Puzzle,
+        title: "Cut-and-fold puzzle",
+        body: "Print, glue to cardboard, cut into six pieces — a slow-craft hour.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+    ],
+  },
+  "6-8": {
+    aurinSlug: "explorers",
+    treats: [
+      {
+        icon: Headphones,
+        title: "A short adventure story",
+        body: "Five minutes — Aurin's voice tells one of the explorer tales.",
+        cta: "Listen",
+        href: "/aurins-room/stories",
+        status: "ready",
+      },
+      {
+        icon: Palette,
+        title: "Coloring sheet · explorer's map",
+        body: "Print at home — a winding path through forest and stars to color.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+      {
+        icon: Puzzle,
+        title: "Word-search printable",
+        body: "Twelve gentle words hidden in the page — slow, quiet, screen-free.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+    ],
+  },
+  "9-12": {
+    aurinSlug: "dreamweavers",
+    treats: [
+      {
+        icon: Headphones,
+        title: "A reflective audio",
+        body: "Seven minutes — Aurin invites the listener to notice their own thoughts.",
+        cta: "Listen",
+        href: "/aurins-room/stories",
+        status: "ready",
+      },
+      {
+        icon: Palette,
+        title: "Mandala-style printable",
+        body: "An intricate page that rewards patience — print and color.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+      {
+        icon: Puzzle,
+        title: "Riddle & guess game",
+        body: "A page of riddles to solve with a parent or sibling — no screen needed.",
+        cta: "Coming this week",
+        href: null,
+        status: "soon",
+      },
+    ],
+  },
+};
 
 const AGE_GROUPS = [
   {
@@ -38,6 +148,43 @@ const AGE_GROUPS = [
 export default function KidsUniverse() {
   const freeAccess = useFreeAccess();
   const [kidsBooks, setKidsBooks] = useState([]);
+  // §KIDS-UNIVERSE-V2 — Track which age card is currently expanded.
+  // Only one open at a time so the page never feels overwhelming.
+  const [openAge, setOpenAge] = useState(null);
+
+  // §KIDS-UNIVERSE-V2 — Parent suggestion box state. Anna's directive:
+  // give parents a small inviting voice. We reuse the existing
+  // /api/reach-out endpoint with topic=feature_request so the
+  // suggestion lands in the same support inbox without a new schema.
+  const [suggestion, setSuggestion] = useState({ name: "", email: "", message: "" });
+  const [suggestionSent, setSuggestionSent] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
+
+  const submitSuggestion = async (e) => {
+    e.preventDefault();
+    if (!suggestion.message.trim()) return;
+    setSuggesting(true);
+    try {
+      await fetch(`${API}/api/reach-out`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: suggestion.name || "Parent (Kids Universe)",
+          email: suggestion.email || "noreply@kids-universe.local",
+          topic: "kids",
+          message: `[Kids Universe Suggestion]\n\n${suggestion.message.trim()}`,
+          issue_tags: ["feature_request"],
+        }),
+      });
+      setSuggestionSent(true);
+    } catch {
+      // Soft-fail — don't alarm the parent. Anna sees nothing in the
+      // inbox if it failed but we won't crash the page.
+    } finally {
+      setSuggesting(false);
+    }
+  };
+
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -86,19 +233,37 @@ export default function KidsUniverse() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {AGE_GROUPS.map((g, i) => {
               const Icon = g.icon;
+              const treats = AGE_TREATS[g.slug];
+              const isOpen = openAge === g.slug;
               return (
                 <div
                   key={g.slug}
                   data-testid={`kids-age-${g.slug}`}
-                  className="aurin-card p-8 relative overflow-hidden"
+                  className={`aurin-card relative overflow-hidden transition-all duration-300 ${
+                    isOpen ? "md:col-span-3 md:row-span-2" : ""
+                  }`}
                 >
                   <div
-                    className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-25 blur-2xl"
+                    className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-25 blur-2xl pointer-events-none"
                     style={{ background: i % 2 === 0 ? "#A8C09A" : "#E3B48C" }}
                   />
-                  <div className="relative">
-                    <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))]">
-                      <Icon size={18} strokeWidth={1.4} />
+                  <button
+                    type="button"
+                    onClick={() => setOpenAge(isOpen ? null : g.slug)}
+                    data-testid={`kids-age-${g.slug}-toggle`}
+                    className="relative w-full text-left p-8 cursor-pointer"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))]">
+                        <Icon size={18} strokeWidth={1.4} />
+                      </div>
+                      <ChevronDown
+                        size={18}
+                        className={`text-[hsl(var(--aurin-text-muted))] transition-transform duration-300 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
                     </div>
                     <div className="mt-7 text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
                       {g.age}
@@ -107,7 +272,86 @@ export default function KidsUniverse() {
                     <p className="mt-4 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
                       {g.description}
                     </p>
-                  </div>
+                    <div className="mt-5 text-[12px] tracking-[0.16em] uppercase text-[hsl(var(--aurin-sage))] flex items-center gap-1.5">
+                      {isOpen ? "Close" : "See what's free for this age"}
+                      <ArrowRight size={11} />
+                    </div>
+                  </button>
+
+                  {/* §KIDS-UNIVERSE-V2 — Expanded treats panel. Three small
+                      free items per age + a clear paid path into Aurin's
+                      Room. Items not yet seeded by Anna show a "Coming
+                      this week" pill so nothing dead-links. */}
+                  {isOpen && treats && (
+                    <div
+                      data-testid={`kids-age-${g.slug}-treats`}
+                      className="relative px-8 pb-8 border-t border-[hsl(var(--aurin-border-soft))] pt-7"
+                    >
+                      <div className="aurin-eyebrow mb-4">A few free things to start with</div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {treats.treats.map((t, idx) => {
+                          const TIcon = t.icon;
+                          return (
+                            <div
+                              key={idx}
+                              data-testid={`kids-age-${g.slug}-treat-${idx}`}
+                              className="rounded-xl border border-[hsl(var(--aurin-border-soft))] p-5 bg-[hsl(var(--aurin-bg-elev))/0.45] flex flex-col"
+                            >
+                              <div className="w-9 h-9 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))] mb-3">
+                                <TIcon size={15} strokeWidth={1.4} />
+                              </div>
+                              <h4 className="aurin-serif text-[15.5px] leading-snug text-[hsl(var(--aurin-text))]">
+                                {t.title}
+                              </h4>
+                              <p className="mt-2 text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] flex-1">
+                                {t.body}
+                              </p>
+                              {t.status === "ready" && t.href ? (
+                                <Link
+                                  to={t.href}
+                                  className="mt-4 aurin-btn aurin-btn-ghost text-[12px] px-3 py-1.5 inline-flex items-center gap-1.5 self-start"
+                                >
+                                  {t.cta}
+                                  <ArrowRight size={11} />
+                                </Link>
+                              ) : (
+                                <span className="mt-4 inline-flex items-center gap-1.5 self-start text-[11px] tracking-[0.18em] uppercase text-[hsl(var(--aurin-amber))/0.85] border border-[hsl(var(--aurin-amber))/0.35] rounded-full px-3 py-1.5">
+                                  <Sparkles size={10} />
+                                  {t.cta}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Clear paid path */}
+                      <div className="mt-7 rounded-xl border border-[hsl(var(--aurin-sage))/0.35] bg-[hsl(var(--aurin-sage))/0.06] p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex-1">
+                          <p className="text-[11px] tracking-[0.22em] uppercase text-[hsl(var(--aurin-sage))] mb-1.5">
+                            When the child is ready
+                          </p>
+                          <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.94]">
+                            Open the full Aurin's Room — voice or text, gentle
+                            conversation, made for this age.
+                          </p>
+                        </div>
+                        <Link
+                          to={`/aurins-room/${treats.aurinSlug}`}
+                          data-testid={`kids-age-${g.slug}-enter-aurin`}
+                          className="aurin-btn aurin-btn-primary text-[13px] inline-flex items-center gap-1.5 shrink-0"
+                        >
+                          Open Aurin's Room
+                          <ArrowRight size={12} />
+                        </Link>
+                      </div>
+
+                      <p className="mt-5 text-[11px] italic text-[hsl(var(--aurin-text-muted))]">
+                        Come back next week — there's always one new gentle
+                        thing waiting here.
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -315,6 +559,96 @@ export default function KidsUniverse() {
                 preload="metadata"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* §KIDS-UNIVERSE-V2 2026-02-09 — Parent suggestion box.
+          Anna's directive: invite parents to co-build the Kids Universe.
+          Suggestions land in the same Reach Out inbox under topic
+          "kids" with issue_tag "feature_request" so triage stays
+          organised. Two friendly fields (name + suggestion) — email
+          is optional. On success we show a calm thank-you state. */}
+      <section
+        className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]"
+        data-testid="kids-suggestion-box"
+      >
+        <div className="aurin-container">
+          <div className="aurin-card p-8 md:p-10 max-w-[760px] mx-auto">
+            <div className="aurin-eyebrow mb-3">For the parents</div>
+            <h2 className="aurin-display text-2xl md:text-3xl max-w-[26ch] mb-4">
+              What would make this corner{" "}
+              <span className="aurin-serif-italic" style={{ color: "#E3B48C" }}>
+                better for your child?
+              </span>
+            </h2>
+            <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-[58ch] mb-7">
+              We're building this slowly, with parents. If you have an idea, a
+              theme your child loves, a small thing missing — please tell us.
+              We read every suggestion.
+            </p>
+
+            {suggestionSent ? (
+              <div
+                data-testid="kids-suggestion-sent"
+                className="flex items-start gap-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-sage))]"
+              >
+                <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
+                <span>
+                  Thank you. Your idea reached us — it joins the list we read
+                  every week. If you've left your email, we may write back.
+                </span>
+              </div>
+            ) : (
+              <form
+                onSubmit={submitSuggestion}
+                className="space-y-4"
+                data-testid="kids-suggestion-form"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="Your name (optional)"
+                    value={suggestion.name}
+                    onChange={(e) => setSuggestion((s) => ({ ...s, name: e.target.value }))}
+                    data-testid="kids-suggestion-name"
+                    className="reach-input"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your email (optional)"
+                    value={suggestion.email}
+                    onChange={(e) => setSuggestion((s) => ({ ...s, email: e.target.value }))}
+                    data-testid="kids-suggestion-email"
+                    className="reach-input"
+                  />
+                </div>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Your idea, theme, or small thing missing…"
+                  value={suggestion.message}
+                  onChange={(e) => setSuggestion((s) => ({ ...s, message: e.target.value }))}
+                  data-testid="kids-suggestion-message"
+                  className="reach-input"
+                />
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-[11.5px] text-[hsl(var(--aurin-text-muted))] max-w-[44ch]">
+                    We're a small team — we may not reply to every note, but
+                    every idea is read.
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={suggesting || !suggestion.message.trim()}
+                    data-testid="kids-suggestion-submit"
+                    className="aurin-btn aurin-btn-primary text-[13px] inline-flex items-center gap-1.5 disabled:opacity-60 shrink-0"
+                  >
+                    {suggesting ? "Sending…" : "Send"}
+                    <Send size={12} />
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>
