@@ -1,0 +1,30 @@
+{
+  "summary": "Frontend-only verification of the two P0 production fixes Anna reported. (1) Aurin's Room: all three age groups (little-dreamers, explorers, dreamweavers) now load cleanly without the previous immediate-crash. Portrait sits LEFT of the chat surface on desktop (verified via bounding-box: portrait x=408 < panel x=820), Aurin name='Aurin' is constant across all three slugs, taglines + mode toggles (voice/text/hybrid) all render with the documented data-testid suffixes. (2) Start-button click in voice mode no longer crashes the page — it surfaces a soft error state ('Requested device not found' — mic is not available in headless Chromium, treated as isMicIssue, so retry is intentionally skipped per code). Text-mode start path triggers the auto-retry-without-overrides fallback (console.warn '[Aurin] explorers auto-retry without overrides' observed), confirming the retry plumbing works. Wanderer gate is correctly bypassed with the documented localStorage keys. Adult rooms /body-room, /parents-room, /course-room load with both portrait + convai-panel testids — Dashboard IDENTITY & BOUNDARY PROTOCOL prepend did NOT regress connection wiring. /clarity-release rendered as a landing/marketing page without the agent-portrait-panel-clarity / convai-panel testids; this may be by design (Grace lives on a different route) but is flagged below.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "/clarity-release adult room (Grace)", "issue": "Page renders without crash but neither data-testid='agent-portrait-panel-clarity' nor data-testid='convai-panel' is present in the DOM. The other three adult rooms (/body-room, /parents-room, /course-room) DO expose both testids. Either (a) /clarity-release is a marketing landing page and Grace's chat lives elsewhere, or (b) the page is missing the ConvAI mount. Main agent should confirm intended behaviour — if Grace's chat is on a different path, please document the route in the test request so future agents can verify her room.", "affected_selectors": ["[data-testid='agent-portrait-panel-clarity']", "[data-testid='convai-panel']"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Confirm intended chat-mount route for Grace — /clarity-release does not expose convai-panel testid while the other 3 adult rooms do.",
+    "Optional UX: in headless / no-mic environments the voice-mode error 'Requested device not found' is shown via aurin-error. The auto-retry skip logic correctly identifies this as a mic issue (contains 'device'), so no retry fires. For end users this is correct; for SDET runs you may want a synthetic-mic flag (--use-fake-device-for-media-stream) documented in /app/auth_testing.md."
+  ],
+  "critical_code_review_comments": [
+    "AurinsRoomChat.jsx is 438 lines — still readable but approaching the 700-line split threshold; consider extracting the mode-toggle + status-dot block into a small Presentational sub-component to keep the main flow lean.",
+    "useEffect cleanup at line 214 calls stop() with an empty dep array and eslint-disable-next-line — fine, but be aware stop() closes over the latest conversation ref only because useCallback rebuilds it. If you ever swap the ref pattern, this cleanup could end up calling a stale endSession.",
+    "BOUNDARY_PREAMBLE injection is correct and the order (boundary → base → age overlay) is sound. Good defensive design.",
+    "fetchSignedUrl throws with err.status only for non-ok responses; if the network drops entirely the catch in start() will surface a generic message — acceptable, but a tiny user-facing tweak ('please check your connection') would be friendlier."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (frontend-only)", "frontend": "95% (3/3 Aurin age groups OK, 3/4 adult rooms confirmed, start-click no longer crashes, retry fallback fires)"},
+  "test_credentials": "localStorage 'wanderer_accepted_1.1-2026-02-11-psych-exclusion_private'='1' and 'aurin_session_token'='ccb7b5b6-...287340cd' — set before navigation.",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Both P0 fixes verified in headless Chromium against the public preview URL. The only open question is whether /clarity-release is supposed to expose the Grace agent panel or whether Grace lives on a separate sub-route. If main agent confirms a different path, re-run the adult-room block of the existing test script with that path swapped in. No mic is available in headless — voice-mode end-to-end audio cannot be exercised here; ElevenLabs websocket open + status transition is the deepest we can verify without a real device.",
+  "rca of the issue": "Original Aurin crash root-caused (per main agent's notes) to Dashboard rejecting overrides — code now (a) wraps the inner component in <ConversationProvider>, (b) pre-warms the mic before SDK constraints kick in, (c) on first error transparently retries with overrides stripped (unless the error is mic-permission/device related). Verified: pages stay mounted after the click, console.warn auto-retry path fires when expected, and the boundary preamble is injected first in buildAurinPrompt so it survives later instruction."
+}
