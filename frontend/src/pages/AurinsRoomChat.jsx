@@ -430,6 +430,56 @@ function AurinsRoomChatInner() {
           to talk to a trusted grown-up. Sessions are recorded for
           seven days, then automatically deleted.
         </p>
+
+        {/* §BRAND-SAFETY 2026-02-09 — Parent-facing disclaimer that
+            sits BENEATH Aurin's child-friendly note. Founder directive:
+            protect against future malicious refund claims. The wording
+            is gentle so it does not alarm — but it makes the contract
+            explicit for the responsible adult in the room. */}
+        <div
+          data-testid="aurin-safety-disclaimer"
+          className="mt-4 pt-4 border-t border-[hsl(var(--aurin-border-soft))/0.5] text-[11px] leading-relaxed text-[hsl(var(--aurin-text))/0.55] space-y-1.5"
+        >
+          <p>
+            <span className="uppercase tracking-[0.18em] text-[10px] text-[hsl(var(--aurin-text))/0.55]">
+              For the grown-up
+            </span>
+            <br />
+            Aurin is an AI companion — not a teacher, doctor, or
+            therapist. Replies are AI-generated and may be imprecise;
+            please supervise younger children and contact a qualified
+            human professional for clinical, safety, or developmental
+            questions.
+          </p>
+          <p>
+            By continuing, you acknowledge the{" "}
+            <a
+              href="/wanderers-agreement"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-dotted hover:text-[hsl(var(--aurin-amber))]"
+            >
+              Wanderer&apos;s Agreement
+            </a>
+            {" "}and our{" "}
+            <a
+              href="/legal#refund-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-dotted hover:text-[hsl(var(--aurin-amber))]"
+            >
+              Refund Policy
+            </a>
+            . Anything concerning? Please{" "}
+            <a
+              href="/reach-out"
+              className="underline decoration-dotted hover:text-[hsl(var(--aurin-amber))]"
+            >
+              Reach Out
+            </a>
+            {" "}— a real person reads every note.
+          </p>
+        </div>
           </div>
         </div>
       </section>

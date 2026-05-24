@@ -1980,26 +1980,134 @@ class ReachOutMessage(BaseModel):
     email: str
     topic: Optional[str] = "general"
     message: str
+    # §SUPPORT-V2 2026-02-09 — Structured issue tags. Frontend
+    # ReachOut form lets the wanderer pick one or more common
+    # situations from a checklist. We store them as a flat array
+    # so future filtering / reporting can group complaints by
+    # category (voice issues vs billing vs kids vs etc.).
+    issue_tags: Optional[List[str]] = None
 
 
 @api_router.post("/reach-out")
 async def reach_out(inp: ReachOutMessage):
-    """Persist the message. Email delivery wires up later when REACH_OUT_EMAIL
-    is configured + a transactional provider is connected."""
+    """Persist the message + deliver via Resend if configured.
+
+    §SUPPORT-V2 2026-02-09 — Two-channel delivery:
+      1. Anna (the support inbox) gets the full message + structured
+         tags, with subject line that triages instantly.
+      2. The wanderer gets a calm auto-reply confirming receipt and
+         setting the 24-72h expectation. Never marketing copy.
+
+    DB row always persists regardless of email outcome — so the
+    Resend outage never silently swallows a real complaint.
+    """
     doc = {
         "id": str(uuid.uuid4()),
         "name": inp.name.strip()[:200],
         "email": inp.email.strip().lower()[:200],
         "topic": (inp.topic or "general").strip()[:50],
         "message": inp.message.strip()[:5000],
+        "issue_tags": list(inp.issue_tags or [])[:16],
         "destination": os.environ.get("REACH_OUT_EMAIL", ""),
         "delivered": False,
+        "delivery_error": None,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
+
+    destination = (os.environ.get("REACH_OUT_EMAIL") or "").strip()
+    delivered = False
+    delivery_error: Optional[str] = None
+
+    if destination:
+        try:
+            from email_service import (
+                send_email as _send_email,
+                is_configured as _resend_configured,
+            )
+            if _resend_configured():
+                # Build a triage-friendly subject + body for Anna.
+                tag_summary = ""
+                if doc["issue_tags"]:
+                    tag_summary = " · " + ", ".join(doc["issue_tags"])
+                subject_for_owner = (
+                    f"[Reach Out] {doc['topic']}{tag_summary} — from {doc['name'] or doc['email']}"
+                )[:200]
+                from html import escape as _esc
+                tag_block_html = ""
+                if doc["issue_tags"]:
+                    tag_block_html = (
+                        "<p><strong>Reported issues:</strong></p>\n<ul>\n"
+                        + "\n".join(f"<li>{_esc(t)}</li>" for t in doc["issue_tags"])
+                        + "\n</ul>\n"
+                    )
+                html_for_owner = (
+                    f"<p><strong>From:</strong> {_esc(doc['name'])} &lt;{_esc(doc['email'])}&gt;</p>\n"
+                    f"<p><strong>Topic:</strong> {_esc(doc['topic'])}</p>\n"
+                    + tag_block_html
+                    + f"<hr/>\n<pre style=\"white-space:pre-wrap;font-family:inherit\">{_esc(doc['message'])}</pre>\n"
+                    f"<hr/>\n<p style=\"color:#888;font-size:12px\">ID: {doc['id']}</p>"
+                )
+                text_for_owner = (
+                    f"From: {doc['name']} <{doc['email']}>\n"
+                    f"Topic: {doc['topic']}\n"
+                    + (f"Reported issues: {', '.join(doc['issue_tags'])}\n" if doc["issue_tags"] else "")
+                    + f"\n---\n{doc['message']}\n\n---\nID: {doc['id']}"
+                )
+                await _send_email(
+                    to=destination,
+                    subject=subject_for_owner,
+                    html=html_for_owner,
+                    text=text_for_owner,
+                    sender="support",
+                    reply_to=doc["email"],  # Anna's reply goes directly back to the wanderer.
+                    tags=[
+                        {"name": "kind", "value": "reach_out"},
+                        {"name": "topic", "value": doc["topic"][:32]},
+                    ],
+                )
+                # Calm auto-reply to the wanderer.
+                ack_subject = "We received your message · Pure Soul Life"
+                ack_text = (
+                    f"Hi {doc['name'] or 'there'},\n\n"
+                    "Your message reached us. A real person reads every note here, so a reply may take 24-72 hours, sometimes sooner.\n\n"
+                    "If something becomes urgent in the meantime, just write back to this email and we'll see it.\n\n"
+                    "Warmly,\n"
+                    "Anna\n"
+                    "Pure Soul Life · prulesoul.site\n"
+                )
+                ack_html = (
+                    f"<p>Hi {_esc(doc['name']) or 'there'},</p>\n"
+                    "<p>Your message reached us. A real person reads every note here, so a reply may take 24-72 hours, sometimes sooner.</p>\n"
+                    "<p>If something becomes urgent in the meantime, just write back to this email and we'll see it.</p>\n"
+                    "<p>Warmly,<br/>Anna<br/><em>Pure Soul Life · prulesoul.site</em></p>\n"
+                )
+                try:
+                    await _send_email(
+                        to=doc["email"],
+                        subject=ack_subject,
+                        html=ack_html,
+                        text=ack_text,
+                        sender="support",
+                        reply_to=destination,
+                        tags=[{"name": "kind", "value": "reach_out_ack"}],
+                    )
+                except Exception as ack_err:  # noqa: BLE001
+                    # Owner email already went through — ack-failure is not fatal.
+                    logger.warning("reach_out ack-email failed: %s", ack_err)
+                delivered = True
+            else:
+                delivery_error = "resend_not_configured"
+        except Exception as e:  # noqa: BLE001
+            logger.warning("reach_out delivery failed: %s", e)
+            delivery_error = type(e).__name__
+
+    doc["delivered"] = delivered
+    doc["delivery_error"] = delivery_error
     await db.reach_out_messages.insert_one(doc)
     return {
         "status": "received",
-        "destination_configured": bool(os.environ.get("REACH_OUT_EMAIL")),
+        "destination_configured": bool(destination),
+        "delivered": delivered,
         "id": doc["id"],
     }
 

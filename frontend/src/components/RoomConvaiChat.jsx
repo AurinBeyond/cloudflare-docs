@@ -1161,6 +1161,54 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
             ? " Your mic stays muted — only what you type is sent."
             : " No microphone is requested."}
       </p>
+
+      {/* §BRAND-SAFETY 2026-02-09 — Persistent legal/empathic disclaimer
+          shown beneath every chat panel. Founder directive: protect
+          against future malicious refund claims of the form
+          "the AI said something inappropriate". This block makes the
+          contract explicit and visible to every wanderer, every
+          session, in plain English. The wording is calm so it does
+          not feel like a "lawyer's box". */}
+      <div
+        data-testid="convai-safety-disclaimer"
+        className="mt-5 pt-4 border-t border-[hsl(var(--aurin-border-soft))/0.5] text-[11px] leading-relaxed text-[hsl(var(--aurin-text))/0.55] space-y-1.5"
+      >
+        <p>
+          This is a reflective companion — not a doctor, therapist,
+          counsellor, legal or financial advisor. Conversations are
+          AI-generated and may be imprecise; always use your own
+          judgement and seek qualified human help for crises or
+          clinical questions.
+        </p>
+        <p>
+          By continuing, you acknowledge the{" "}
+          <a
+            href="/wanderers-agreement"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dotted hover:text-[hsl(var(--aurin-sage))]"
+          >
+            Wanderer&apos;s Agreement
+          </a>
+          {" "}and our{" "}
+          <a
+            href="/legal#refund-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dotted hover:text-[hsl(var(--aurin-sage))]"
+          >
+            Refund Policy
+          </a>
+          . If something goes wrong, the kindest path is to{" "}
+          <a
+            href="/reach-out"
+            className="underline decoration-dotted hover:text-[hsl(var(--aurin-sage))]"
+          >
+            Reach Out
+          </a>{" "}
+          — we read every note.
+        </p>
+      </div>
     </div>
   );
 }

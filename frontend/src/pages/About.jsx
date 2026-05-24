@@ -308,7 +308,123 @@ export default function About() {
             </div>
           </div>
 
-          {/* ──────────────── SIGNATURE ──────────────── */}
+          {/* ──────────────── A SMALL STORY (Carrot) ────────────────
+              §FOUNDER 2026-02-09 — Personal story shared by Anna.
+              Frames her parenting philosophy as a single warm memory
+              rather than a rulebook. Gilded-frame + handwriting feel
+              so it reads like a page from her own journal pinned to
+              the wall. Lightly polished from her original wording. */}
+          <div
+            data-testid="about-carrot-story"
+            className="relative mx-auto max-w-[680px] my-4"
+          >
+            <div
+              className="relative p-6 md:p-10"
+              style={{
+                background: "linear-gradient(135deg, #f7f1e3 0%, #f4ead0 50%, #ede0b8 100%)",
+                border: "12px solid",
+                borderImage:
+                  "linear-gradient(135deg, #c8a96a 0%, #e8d28a 40%, #b8924a 80%, #d4b06a 100%) 1",
+                boxShadow:
+                  "0 0 0 1px rgba(184,146,74,0.4), 0 20px 50px rgba(0,0,0,0.45), inset 0 0 60px rgba(184,146,74,0.08)",
+                borderRadius: "4px",
+              }}
+            >
+              <div
+                aria-hidden
+                className="absolute inset-0 pointer-events-none opacity-[0.06]"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 30% 20%, rgba(0,0,0,0.4) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(0,0,0,0.3) 0%, transparent 50%)",
+                }}
+              />
+              <div className="relative">
+                <p
+                  className="text-center text-[10px] tracking-[0.35em] uppercase mb-5"
+                  style={{ color: "#8a6a2c", fontFamily: "serif" }}
+                >
+                  — A small story —
+                </p>
+                <h3
+                  data-testid="about-carrot-title"
+                  className="text-center text-[26px] md:text-[32px] leading-tight mb-6"
+                  style={{
+                    fontFamily: "'Caveat', cursive",
+                    color: "#3d2a14",
+                    fontWeight: 600,
+                  }}
+                >
+                  The carrots
+                </h3>
+                <div
+                  data-testid="about-carrot-body"
+                  className="space-y-4 text-[17px] md:text-[19px] leading-[1.8]"
+                  style={{
+                    fontFamily: "'Caveat', cursive",
+                    color: "#3d2a14",
+                  }}
+                >
+                  <p>
+                    We lived in the countryside then. My daughter was three.
+                    It was June — the very first young vegetables were
+                    appearing in the garden, but the main rows were planted
+                    for winter storage.
+                  </p>
+                  <p>
+                    One sunny afternoon I was sitting indoors with my mother
+                    and my sister&apos;s children, when we heard a frightening
+                    clatter at the door. The door opened — and first a huge
+                    green washtub rolled in, and behind it appeared my tiny
+                    three-year-old daughter.
+                  </p>
+                  <p>
+                    We had a hundred square metres of carrots planted. The
+                    roots had barely begun to form. She had wanted to make us
+                    a surprise — she had pulled out every single carrot.
+                  </p>
+                  <p>
+                    I felt my chest go cold. My first instinct was to shout.
+                    But I held it inside, because I understood — she had
+                    wanted to do something good. She had worked so hard to
+                    pull them out of the ground and carry them in that green
+                    tub, all the way home, to show us.
+                  </p>
+                  <p>
+                    I lifted her into my lap. I told her: <em>that you
+                    wanted to help is a beautiful thing — but pulling the
+                    carrots up so early is a lesson for next time. Before
+                    we harvest, the carrots must be allowed to grow up.</em>
+                  </p>
+                  <p>
+                    If I had shouted at her that day, she would never have
+                    tried to help me again.
+                  </p>
+                  <p
+                    className="text-center pt-3"
+                    style={{ color: "#6b4f24", fontStyle: "italic" }}
+                  >
+                    To this day we remember those carrots and laugh. She
+                    says they felt huge to her at the time — she even fell
+                    on her bottom once, because a carrot wouldn&apos;t come
+                    out.
+                  </p>
+                </div>
+                <p
+                  className="text-right mt-6 text-[15px]"
+                  style={{
+                    fontFamily: "'Caveat', cursive",
+                    color: "#6b4f24",
+                  }}
+                >
+                  — Anna
+                </p>
+              </div>
+            </div>
+            {/* Tiny hint below the frame */}
+            <p className="text-center text-[11px] text-[hsl(var(--aurin-text-muted))] mt-3 italic">
+              A memory pinned to the wall of why this work exists.
+            </p>
+          </div>
           <div
             data-testid="about-signature"
             className="flex flex-col md:flex-row gap-6 items-start md:items-center pt-4"

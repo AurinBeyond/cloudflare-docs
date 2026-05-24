@@ -347,6 +347,36 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 
 **Still open:** see `/app/memory/PENDING_REMINDERS.md`.
 
+## 2026-02-09 (PM) — Safety Net Etapp 1 (pre-launch hardening)
+
+**Anna's directive:** Before opening to paying customers, three things must be airtight: (1) customer support actually emails Anna, (2) every chat surface carries explicit AI-disclaimer + Refund/Wanderer's-Agreement links, (3) the About page gets Anna's personal Carrot Story to break the "AI mystic" perception.
+
+**Shipped today:**
+
+1. **Customer Support v2 (`/reach-out`)** — Live and verified.
+   - 8-option known-issue checklist on top of existing topic dropdown + free-text
+   - Backend accepts `issue_tags: List[str]`
+   - Resend two-channel delivery: (a) Anna gets triage email with reply-to set to wanderer, (b) wanderer gets calm auto-reply
+   - DB persists even when Resend is down
+   - Verified via curl: `delivered: true`
+
+2. **Brand-safety disclaimer on every chat panel** — adult rooms (`RoomConvaiChat.jsx`) + Kids room (`AurinsRoomChat.jsx`). Explicit "AI may speak imprecisely" language + dotted-underline links to Wanderer's Agreement (`/wanderers-agreement`) + Refund Policy (`/legal#refund-policy`) + Reach Out (`/reach-out`). Kids version adds "FOR THE GROWN-UP" header.
+
+3. **Carrot Story on `/about`** — gilded picture-frame card, Caveat handwriting font, sepia paper, sign-off "— Anna". Pinned between "core idea" and signature card.
+
+**Untouched:** Wanderer Gate, voice engine, billing webhook, agent prompts, all 5 ConvAI agents, signed-URL endpoint, presence ledger.
+
+**Pending (next session, queued in order):**
+- 🔴 Auto-refund handler when voice session crashes <30s after credit deduct
+- 🔴 Monthly sales report cron → email to Anna 1st of each month
+- 🔴 `/admin/comp` daily-minute cap for influencer free codes
+- 🔵 Free Kids Universe upgrade (audio + puzzle + coloring + free text-to-text Aurin)
+- 🟢 Paid Kids Universe per-age-group detail pages
+- ⭐ Angel Stars MVP (DB + 15 actions + mystery rewards + photo album + Aurin celebration)
+- 🌍 Marketing kickoff (USA + Canada microinfluencer list + $5 referral + voice-only reels)
+
+**Still open:** see `/app/memory/PENDING_REMINDERS.md`.
+
 ## 2026-02-08 (later again) — "Gift this story" emotional CTA
 
 **Anna's directive:** Turn the share row into an emotional act — "gift" framing rather than "share" framing — because parents respond to kindness, not advertising.
