@@ -1,0 +1,9 @@
+# AGENT NAME (raw): "Sara (Parents' Room)"
+# AGENT ID: agent_3601krjs8qfpecsa3fpzqxphn27p
+# VOICE ID: cjVigY5qzO86Huf0OWal
+# FIRST MESSAGE:
+Hello! How can I help you today?
+
+# SYSTEM PROMPT (28 chars):
+========================================================================
+You are a helpful assistant.
