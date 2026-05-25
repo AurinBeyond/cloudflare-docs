@@ -13,7 +13,10 @@ import KidsUniverse from "@/pages/KidsUniverse";
 import KidsColoringStudio from "@/pages/KidsColoringStudio";
 import KidsHub from "@/pages/KidsHub";
 import KidsStarsView from "@/pages/KidsStarsView";
+import KidsDaily from "@/pages/KidsDaily";
+import KidsActivities from "@/pages/KidsActivities";
 import ParentStars from "@/pages/ParentStars";
+import ParentWellness from "@/pages/ParentWellness";
 import MeditationCorner from "@/pages/MeditationCorner";
 import UserPortal from "@/pages/UserPortal";
 import PortalMagicVerify from "@/pages/PortalMagicVerify";
@@ -97,7 +100,11 @@ function AppRouter() {
             dreamweavers) and legacy "3-5" / "6-8" / "9-12". */}
         <Route path="/kids-universe/:ageGroup/hub" element={<KidsHub />} />
         <Route path="/kids-universe/:ageGroup/stars" element={<KidsStarsView />} />
+        <Route path="/kids-universe/:ageGroup/daily" element={<KidsDaily />} />
+        <Route path="/kids-universe/:ageGroup/activities" element={<KidsActivities />} />
+        <Route path="/kids-universe/:ageGroup/activities/:slug" element={<KidsActivities />} />
         <Route path="/parent-portal/stars" element={<ParentStars />} />
+        <Route path="/parent-portal/wellness" element={<ParentWellness />} />
         <Route path="/meditation-corner" element={<MeditationCorner />} />
         <Route path="/the-beginning" element={<TheBeginning />} />
         <Route path="/the-beginning/step" element={<TheBeginningStep />} />

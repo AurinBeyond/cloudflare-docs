@@ -13,7 +13,7 @@
 
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { MessageCircleHeart, BookHeart, Palette, Sparkles, ArrowRight, Heart } from "lucide-react";
+import { MessageCircleHeart, BookHeart, Palette, Sparkles, ArrowRight, Heart, Sun, Compass } from "lucide-react";
 import AurinSparkle from "@/components/AurinSparkle";
 import { resolveHubTheme } from "@/lib/kidsHubThemes";
 import { api } from "@/lib/api";
@@ -158,6 +158,40 @@ export default function KidsHub() {
           </p>
         </header>
 
+        {/* ─── Today's invitation (Daily Check-in hero) ─── */}
+        <section
+          className="rounded-2xl p-6 sm:p-7 mb-7 flex flex-col sm:flex-row sm:items-center gap-5"
+          style={{
+            background: palette.accent,
+            color: "#FFFFFF",
+            boxShadow: `0 18px 36px -18px ${palette.accent}`,
+          }}
+          data-testid="kids-hub-today"
+        >
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="inline-flex items-center justify-center rounded-full"
+                  style={{ width: 48, height: 48, background: "rgba(255,255,255,0.22)" }}>
+              <Sun size={22} strokeWidth={1.6} />
+            </span>
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.28em] opacity-80">A small daily ritual</p>
+              <p className="font-serif text-[22px] sm:text-[24px] leading-snug">
+                How are you, really, today?
+              </p>
+            </div>
+          </div>
+          <Link to={`/kids-universe/${theme.slug}/daily`}
+                data-testid="kids-hub-today-cta"
+                className="ml-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-[14px] font-medium transition shrink-0"
+                style={{
+                  background: "rgba(255,255,255,0.94)",
+                  color: palette.accent,
+                  boxShadow: "0 6px 14px -6px rgba(0,0,0,0.15)",
+                }}>
+            Open daily check-in <ArrowRight size={14} />
+          </Link>
+        </section>
+
         {/* ─── Action cards ─── */}
         <section
           ref={cardsRef}
@@ -180,6 +214,14 @@ export default function KidsHub() {
             title={theme.cards.story.title}
             body={theme.cards.story.body}
             testid="kids-hub-card-story"
+          />
+          <HubCard
+            theme={theme}
+            to={`/kids-universe/${theme.slug}/activities`}
+            icon={Compass}
+            title="Quiet activities"
+            body="Reflect, cook, kindness quests, creative hands — pick what feels right."
+            testid="kids-hub-card-activities"
           />
           <HubCard
             theme={theme}

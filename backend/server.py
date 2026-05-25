@@ -114,6 +114,11 @@ _RATE_LIMIT_BYPASS = (
     # is safe. /catalog is public + static so we bypass it too to
     # keep the Kids Hub paint instant.
     "/api/angel-stars/",
+    # §KIDS-CURRICULUM 2026-02-09 — Curriculum + mood endpoints
+    # paint the Hub on first visit and burst on quiz completion;
+    # same bypass rationale as Angel Stars.
+    "/api/kids-curriculum/",
+    "/api/kids-mood/",
 )
 
 
@@ -2543,6 +2548,272 @@ async def angel_stars_parent_portal(request: Request):
         h["child_title"] = CHILD_TITLES.get(h.get("child_slug"), ("?", ""))[0]
 
     return {"children": children, "pending": pending, "history": history}
+
+
+# =============================================================
+# §KIDS-CURRICULUM 2026-02-09 — Clarity Curriculum: 4 thematic
+# modules (Reflect / Kitchen / Quest / Create) + daily mood
+# check-in. Founder directive: holistic emotional + life-skill
+# development surfaces with a clean free-vs-premium split (~12
+# free starter activities; rest gated for the €60h package).
+#
+# Persistence:
+#   kids_mood_checkins  — one row per child check-in (auto-awards 1 star)
+#   angel_stars_actions — re-used for activity completion requests
+# =============================================================
+from kids_curriculum import (
+    KIDS_ACTIVITIES,
+    KIDS_MODULES,
+    MOOD_AURIN_REPLY,
+    VALID_MOODS,
+    VALID_MODULES,
+    activities_filtered,
+    get_activity,
+    recommend_for_mood,
+)
+
+
+class KidsMoodInput(BaseModel):
+    child_slug: str
+    mood: str
+    note: Optional[str] = None
+
+
+class KidsActivityCompleteInput(BaseModel):
+    child_slug: str
+    activity_slug: str
+
+
+def _public_activity(a: Dict[str, Any], premium_user: bool = False) -> Dict[str, Any]:
+    """Strip server-only fields and (for non-premium users) gate the
+    instructions / full body on premium activities — they can SEE
+    the activity exists but cannot perform it until they unlock the
+    package."""
+    is_premium = bool(a.get("is_premium"))
+    locked = is_premium and not premium_user
+    return {
+        "slug": a["slug"],
+        "module": a["module"],
+        "age_slugs": a["age_slugs"],
+        "title": a["title"],
+        "body": a["body"] if not locked else "Inside the 60-hour Sanctuary package. A small premium activity from the Clarity Curriculum.",
+        "instructions": a["instructions"] if not locked else [],
+        "duration_min": a["duration_min"],
+        "with_parent": a["with_parent"],
+        "is_premium": is_premium,
+        "locked": locked,
+        "reward_stars": a["reward_stars"],
+        "mood_tags": a.get("mood_tags", []),
+    }
+
+
+async def _user_has_premium(user_id: str) -> bool:
+    """Premium = user holds ANY paid clarity pass or has unlimited_voice.
+    For MVP we treat presence_seconds_left > 0 OR an active pass as
+    'premium' so any paying parent unlocks the full curriculum."""
+    try:
+        u = await db.users.find_one({"user_id": user_id}, {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1})
+        if u and (u.get("unlimited_voice") or int(u.get("presence_seconds_left") or 0) > 0):
+            return True
+        pass_doc = await db.clarity_passes.find_one(
+            {"user_id": user_id, "source": {"$nin": ["admin-grant", "free_voice_beta"]}},
+            {"_id": 0, "_id": 0},
+        )
+        return bool(pass_doc)
+    except Exception:
+        return False
+
+
+@api_router.get("/kids-curriculum/modules")
+async def kids_curriculum_modules():
+    """Public. Module catalog used by the Hub & activity browser."""
+    return {"modules": list(KIDS_MODULES.values())}
+
+
+@api_router.get("/kids-curriculum/activities")
+async def kids_curriculum_activities(
+    request: Request,
+    age_slug: str = "explorers",
+    module: str = "",
+    free_only: bool = False,
+):
+    """Filtered activity list. Public — non-premium users see locked
+    cards (title + reward visible, instructions gated)."""
+    slug = normalise_age_slug(age_slug)
+    mod = module if module in VALID_MODULES else None
+
+    user = await _resolve_current_user(request)
+    premium = await _user_has_premium(user.user_id) if user else False
+
+    activities = activities_filtered(slug, module=mod, free_only=bool(free_only))
+    return {
+        "age_slug": slug,
+        "module": mod,
+        "is_premium_user": premium,
+        "activities": [_public_activity(a, premium) for a in activities],
+    }
+
+
+@api_router.get("/kids-curriculum/activities/{activity_slug}")
+async def kids_curriculum_activity_detail(activity_slug: str, request: Request):
+    a = get_activity(activity_slug)
+    if not a:
+        raise HTTPException(status_code=404, detail="Activity not found.")
+    user = await _resolve_current_user(request)
+    premium = await _user_has_premium(user.user_id) if user else False
+    return _public_activity(a, premium)
+
+
+@api_router.post("/kids-curriculum/complete")
+async def kids_curriculum_complete(inp: KidsActivityCompleteInput, request: Request):
+    """Child reports completion of a curriculum activity → creates a
+    pending Angel Stars request the parent can approve in
+    /parent-portal/stars. Premium activities require the parent
+    account to hold a paid pass."""
+    user = await _require_user(request)
+    slug = normalise_age_slug(inp.child_slug)
+    activity = get_activity(inp.activity_slug)
+    if not activity or slug not in activity["age_slugs"]:
+        raise HTTPException(status_code=400, detail="Unknown activity for this age.")
+    if activity.get("is_premium") and not await _user_has_premium(user.user_id):
+        raise HTTPException(status_code=402, detail="This activity is part of the 60h Sanctuary package.")
+
+    await _get_or_create_stars_doc(user.user_id, slug)
+    now_iso = datetime.now(timezone.utc).isoformat()
+    row = {
+        "id": f"asreq_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "child_slug": slug,
+        "action_slug": f"curriculum:{activity['slug']}",
+        "action_label": activity["title"],
+        "stars": int(activity["reward_stars"]),
+        "status": "pending",
+        "source": "curriculum_activity",
+        "module": activity["module"],
+        "created_at": now_iso,
+        "approved_at": None,
+    }
+    await db.angel_stars_actions.insert_one({**row})
+    return {"ok": True, "id": row["id"], "status": "pending", "reward_stars": activity["reward_stars"]}
+
+
+@api_router.post("/kids-mood/checkin")
+async def kids_mood_checkin(inp: KidsMoodInput, request: Request):
+    """Daily mood check-in — auto-awards 1 ★ per day (rituals must
+    not be parent-gated) and stamps the emotion calendar."""
+    user = await _require_user(request)
+    slug = normalise_age_slug(inp.child_slug)
+    mood = inp.mood if inp.mood in VALID_MOODS else "okay"
+    note = (inp.note or "")[:600]
+
+    now = datetime.now(timezone.utc)
+    today_str = now.date().isoformat()
+
+    # One auto-star per (user, child, day). Subsequent same-day
+    # check-ins are accepted (the kid can revisit) but only the FIRST
+    # awards a star — keeps the ritual honest.
+    existing = await db.kids_mood_checkins.find_one(
+        {"user_id": user.user_id, "child_slug": slug, "day": today_str},
+        {"_id": 0, "id": 1, "awarded_star": 1},
+    )
+    star_awarded_now = False
+    if not existing:
+        await _get_or_create_stars_doc(user.user_id, slug)
+        await db.angel_stars.update_one(
+            {"user_id": user.user_id, "child_slug": slug},
+            {
+                "$inc": {"balance": 1, "total_earned": 1},
+                "$set": {"updated_at": now.isoformat()},
+            },
+            upsert=True,
+        )
+        await db.angel_stars_actions.insert_one({
+            "id": f"asreq_{uuid.uuid4().hex[:12]}",
+            "user_id": user.user_id,
+            "child_slug": slug,
+            "action_slug": "daily_checkin",
+            "action_label": "A daily check-in with Aurin",
+            "stars": 1,
+            "status": "approved",
+            "source": "daily_checkin_auto",
+            "created_at": now.isoformat(),
+            "approved_at": now.isoformat(),
+        })
+        star_awarded_now = True
+
+    doc = {
+        "id": f"mood_{uuid.uuid4().hex[:10]}",
+        "user_id": user.user_id,
+        "child_slug": slug,
+        "day": today_str,
+        "mood": mood,
+        "note": note,
+        "created_at": now.isoformat(),
+        "awarded_star": star_awarded_now,
+    }
+    await db.kids_mood_checkins.insert_one({**doc})
+
+    recommendations = recommend_for_mood(slug, mood)
+    premium = await _user_has_premium(user.user_id)
+    return {
+        "ok": True,
+        "mood": mood,
+        "aurin_reply": MOOD_AURIN_REPLY.get(mood, MOOD_AURIN_REPLY["okay"]),
+        "star_awarded": star_awarded_now,
+        "recommendations": [_public_activity(a, premium) for a in recommendations],
+    }
+
+
+@api_router.get("/kids-mood/me")
+async def kids_mood_me(request: Request, child_slug: str = "explorers", days: int = 7):
+    user = await _require_user(request)
+    slug = normalise_age_slug(child_slug)
+    days = max(1, min(int(days), 30))
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    cursor = db.kids_mood_checkins.find(
+        {"user_id": user.user_id, "child_slug": slug, "created_at": {"$gte": cutoff}},
+        {"_id": 0},
+    ).sort("created_at", -1).limit(60)
+    rows = await cursor.to_list(length=60)
+    return {"child_slug": slug, "days": days, "checkins": rows}
+
+
+@api_router.get("/kids-mood/parent-portal")
+async def kids_mood_parent_portal(request: Request, days: int = 7):
+    """Aggregated 7-day wellness trend for the parent dashboard."""
+    user = await _require_user(request)
+    days = max(1, min(int(days), 30))
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    cursor = db.kids_mood_checkins.find(
+        {"user_id": user.user_id, "created_at": {"$gte": cutoff}},
+        {"_id": 0},
+    ).sort("created_at", -1).limit(200)
+    rows = await cursor.to_list(length=200)
+
+    # Per-child aggregates: count by mood, last note.
+    by_child: Dict[str, Dict[str, Any]] = {}
+    for r in rows:
+        cs = r.get("child_slug")
+        if cs not in by_child:
+            title, age_range = CHILD_TITLES.get(cs, ("?", ""))
+            by_child[cs] = {
+                "child_slug": cs,
+                "title": title,
+                "age_range": age_range,
+                "counts": {m: 0 for m in VALID_MOODS},
+                "total": 0,
+                "last": None,
+                "recent_notes": [],
+            }
+        bucket = by_child[cs]
+        bucket["counts"][r.get("mood", "okay")] = bucket["counts"].get(r.get("mood", "okay"), 0) + 1
+        bucket["total"] += 1
+        if bucket["last"] is None:
+            bucket["last"] = r
+        if r.get("note") and len(bucket["recent_notes"]) < 3:
+            bucket["recent_notes"].append({"day": r.get("day"), "mood": r.get("mood"), "note": r.get("note")})
+
+    return {"days": days, "children": list(by_child.values()), "checkins": rows[:50]}
 
 
 # =============================================================

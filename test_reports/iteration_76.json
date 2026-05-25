@@ -1,0 +1,44 @@
+{
+  "summary": "Iteration 76 — Kids Clarity Curriculum + Daily Mood Check-in. 29/29 backend pytest tests pass and every frontend flow (hub Today strip, daily mood-picker → aurin reply + 3 recs + star awarded, activities list with module tabs + premium banner, free activity detail with instructions + complete CTA, premium-locked detail, parent-portal/wellness signed-in bars + unauth signin fallback) renders and integrates correctly against the live backend. Regression on /api/angel-stars/me + gateway + /parent-portal/stars + little-dreamers gratitude block all clean. No critical or minor bugs found.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "/parent-portal/wellness",
+        "issues": [
+          "Header sits on the global dark Matrix chrome while the bar-chart panel underneath is on cream — visual break between hero band and the children grid. Matches the iter75 note about gateway sitting on dark; not a blocker."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_kids_curriculum_iter76.py",
+    "/app/test_reports/pytest/iter76_kids_curriculum.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "/app/backend/server.py is now >13.6k lines. The new /kids-curriculum/* and /kids-mood/* endpoints (lines ~2627-2820) plus shared helpers (_user_has_premium, _public_activity, normalise_age_slug) should move into a kids_curriculum_router.py module — consistent with the angel_stars catalog extraction already done. Same separation suggestion was raised in iter75 for angel-stars; this iteration doubled the surface area.",
+    "_user_has_premium() builds {'_id': 0, '_id': 0} in the projection (duplicate key). Harmless to PyMongo but a code smell — replace with {'_id': 0}.",
+    "_user_has_premium has no caching; every activities list call does two DB lookups per user per request. For a list of ~10 activities this is fine, but if the Hub ever fans out parallel activity fetches consider a request-scoped cache or a single payload field returned by the list endpoint (which already returns is_premium_user).",
+    "KidsDaily.jsx — submit posts to /kids-mood/checkin without disabling the submit button during in-flight request → a fast double-tap could fire two POSTs; only the first will award a star (server is idempotent) but the second response would overwrite the in-page state. Add a 'submitting' guard.",
+    "ParentWellness.jsx uses /assets/aurin/*-hero.png pattern in the wellness hero — same 404 issue flagged in iter75. Acceptable for parent surfaces but noted again."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_kids_curriculum_iter76.py"
+  ],
+  "success_rate": {
+    "backend": "100% (29/29 pytest)",
+    "frontend": "100% on all listed flows (hub, daily, activities list+detail+locked, parent wellness signed-in + unauth, regression: little-dreamers hub, gateway, parent-portal/stars)"
+  },
+  "test_credentials": "Bearer test_token_6489e6cf1440 (non-premium). Test also creates an ephemeral premium token (presence_seconds_left=3600) via Mongo seeding inside the fixture; teardown removes the user + token + per-user mood/star docs.",
+  "seed_data_creation": "Test fixture inserts one throwaway premium user per pytest session (user_prem_test_*) into db.users + db.user_sessions, drives /kids-mood/checkin against it, and tears it down at session end. For test_token_6489e6cf1440 the non-premium tests toggle presence_seconds_left=0 and post one curriculum_activity request on explorers (status pending in angel_stars_actions); main agent can either approve or delete that record.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Premium-gate testing requires either toggling users.presence_seconds_left or seeding a fresh session — the fixture _ensure_user_premium and premium_token in test_kids_curriculum_iter76.py do both. The kitchen-module activity catalog contains exactly 6 slugs (yogurt_smoothie, happy_sandwich, fruit_kebab, energy_balls, tea_for_someone, no_bake_cookies) — the explorers age sees 5 of them. The Aurin reply for mood=good contains 'glad' and is rendered in Caveat font. /kids-mood/checkin is fully idempotent per (user, child, day) — second-call returns star_awarded=false but still returns a fresh aurin_reply + 3 recommendations. Curriculum endpoints are correctly excluded from the angel-stars rate limit.",
+  "rca_of_the_issue": "Not applicable — no bugs found."
+}
