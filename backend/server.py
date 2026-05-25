@@ -2286,6 +2286,256 @@ async def refund_flag(inp: RefundFlagInput):
 
 
 # =============================================================
+# §KIDS-HUBS 2026-02-09 — Angel Stars MVP. Founder directive:
+# a gentle gamified retention engine for the Kids Universe.
+# The catalog (15 actions + 4 mystery tiers) is static and lives
+# in angel_stars.py. Persistent state lives in three Mongo
+# collections:
+#   angel_stars            — one summary per (user_id, child_slug)
+#   angel_stars_actions    — one row per child-requested star
+#   angel_stars_rewards    — one row per redeemed tier
+#
+# Auth model for MVP: the SAME parent user account is both the
+# child's surface (KidsStarsView taps "I did this") and the
+# approving surface (/parent-portal/stars). Multi-profile per
+# family is a Phase-2 concern; for now `child_slug` (age band)
+# acts as the child key under one user_id.
+# =============================================================
+from angel_stars import (
+    ANGEL_STARS_ACTIONS,
+    ANGEL_STARS_TIERS,
+    CHILD_TITLES,
+    actions_for_age,
+    get_action,
+    normalise_age_slug,
+)
+
+
+class AngelStarsRequestInput(BaseModel):
+    child_slug: str
+    action_slug: str
+
+
+class AngelStarsDecideInput(BaseModel):
+    request_id: str
+
+
+class AngelStarsRedeemInput(BaseModel):
+    child_slug: str
+    tier_index: int
+
+
+async def _get_or_create_stars_doc(user_id: str, child_slug: str) -> dict:
+    doc = await db.angel_stars.find_one(
+        {"user_id": user_id, "child_slug": child_slug}, {"_id": 0}
+    )
+    if doc:
+        return doc
+    fresh = {
+        "user_id": user_id,
+        "child_slug": child_slug,
+        "balance": 0,
+        "total_earned": 0,
+        "redeemed_tiers": [],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.angel_stars.insert_one({**fresh})
+    return fresh
+
+
+@api_router.get("/angel-stars/catalog")
+async def angel_stars_catalog(age_slug: str = ""):
+    """Static catalog. Public (no auth) so the Kids Hub can show it
+    even before the child's grown-up has signed in."""
+    canonical = normalise_age_slug(age_slug) if age_slug else None
+    actions = actions_for_age(canonical) if canonical else ANGEL_STARS_ACTIONS
+    return {"actions": actions, "tiers": ANGEL_STARS_TIERS}
+
+
+@api_router.get("/angel-stars/me")
+async def angel_stars_me(request: Request, child_slug: str = "explorers"):
+    user = await _require_user(request)
+    slug = normalise_age_slug(child_slug)
+    summary = await _get_or_create_stars_doc(user.user_id, slug)
+
+    # Last 8 actions for this child profile, newest first.
+    recent_cursor = db.angel_stars_actions.find(
+        {"user_id": user.user_id, "child_slug": slug},
+        {"_id": 0},
+    ).sort("created_at", -1).limit(8)
+    recent = await recent_cursor.to_list(length=8)
+
+    return {
+        "child_slug": slug,
+        "balance": int(summary.get("balance", 0)),
+        "total_earned": int(summary.get("total_earned", 0)),
+        "redeemed_tiers": list(summary.get("redeemed_tiers", [])),
+        "recent": recent,
+    }
+
+
+@api_router.post("/angel-stars/request")
+async def angel_stars_request(inp: AngelStarsRequestInput, request: Request):
+    user = await _require_user(request)
+    slug = normalise_age_slug(inp.child_slug)
+    action = get_action(inp.action_slug)
+    if not action or slug not in action.get("age_slugs", []):
+        raise HTTPException(status_code=400, detail="Unknown action for this age.")
+
+    # Ensure summary exists.
+    await _get_or_create_stars_doc(user.user_id, slug)
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    row = {
+        "id": f"asreq_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "child_slug": slug,
+        "action_slug": action["slug"],
+        "action_label": action["label"],
+        "stars": int(action["stars"]),
+        "status": "pending",
+        "source": "child_self_report",
+        "created_at": now_iso,
+        "approved_at": None,
+    }
+    await db.angel_stars_actions.insert_one({**row})
+    return {"ok": True, "id": row["id"], "status": "pending"}
+
+
+@api_router.post("/angel-stars/approve")
+async def angel_stars_approve(inp: AngelStarsDecideInput, request: Request):
+    user = await _require_user(request)
+    row = await db.angel_stars_actions.find_one(
+        {"id": inp.request_id, "user_id": user.user_id}, {"_id": 0}
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Request not found.")
+    if row.get("status") != "pending":
+        return {"ok": True, "already": row.get("status")}
+
+    stars = int(row.get("stars", 0))
+    slug = row.get("child_slug")
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    await db.angel_stars_actions.update_one(
+        {"id": inp.request_id, "user_id": user.user_id},
+        {"$set": {"status": "approved", "approved_at": now_iso}},
+    )
+    await db.angel_stars.update_one(
+        {"user_id": user.user_id, "child_slug": slug},
+        {
+            "$inc": {"balance": stars, "total_earned": stars},
+            "$set": {"updated_at": now_iso},
+        },
+        upsert=True,
+    )
+    summary = await db.angel_stars.find_one(
+        {"user_id": user.user_id, "child_slug": slug}, {"_id": 0}
+    )
+    return {
+        "ok": True,
+        "balance": int((summary or {}).get("balance", 0)),
+        "total_earned": int((summary or {}).get("total_earned", 0)),
+    }
+
+
+@api_router.post("/angel-stars/reject")
+async def angel_stars_reject(inp: AngelStarsDecideInput, request: Request):
+    user = await _require_user(request)
+    row = await db.angel_stars_actions.find_one(
+        {"id": inp.request_id, "user_id": user.user_id}, {"_id": 0}
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Request not found.")
+    if row.get("status") != "pending":
+        return {"ok": True, "already": row.get("status")}
+    await db.angel_stars_actions.update_one(
+        {"id": inp.request_id, "user_id": user.user_id},
+        {"$set": {"status": "rejected", "approved_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True}
+
+
+@api_router.post("/angel-stars/redeem")
+async def angel_stars_redeem(inp: AngelStarsRedeemInput, request: Request):
+    user = await _require_user(request)
+    slug = normalise_age_slug(inp.child_slug)
+    tier = next((t for t in ANGEL_STARS_TIERS if t["tier_index"] == inp.tier_index), None)
+    if not tier:
+        raise HTTPException(status_code=400, detail="Unknown tier.")
+    summary = await _get_or_create_stars_doc(user.user_id, slug)
+    if int(summary.get("balance", 0)) < int(tier["threshold"]):
+        raise HTTPException(status_code=400, detail="Not enough stars yet.")
+    if inp.tier_index in (summary.get("redeemed_tiers") or []):
+        return {"ok": True, "already_redeemed": True, "payload": tier["payload"]}
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    await db.angel_stars.update_one(
+        {"user_id": user.user_id, "child_slug": slug},
+        {
+            "$addToSet": {"redeemed_tiers": int(tier["tier_index"])},
+            "$set": {"updated_at": now_iso},
+        },
+        upsert=True,
+    )
+    reward_doc = {
+        "id": f"asrwd_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "child_slug": slug,
+        "tier_index": int(tier["tier_index"]),
+        "title": tier["title"],
+        "redeemed_at": now_iso,
+    }
+    await db.angel_stars_rewards.insert_one({**reward_doc})
+    return {"ok": True, "payload": tier["payload"], "title": tier["title"]}
+
+
+@api_router.get("/angel-stars/parent-portal")
+async def angel_stars_parent_portal(request: Request):
+    """Aggregated view: per-child summary + pending requests + recent
+    approved history. Used by /parent-portal/stars."""
+    user = await _require_user(request)
+
+    # Per-child summary (rows that already exist; the page also shows
+    # placeholders for ages the child hasn't opened yet).
+    rows = await db.angel_stars.find(
+        {"user_id": user.user_id}, {"_id": 0}
+    ).to_list(length=20)
+    summary_by_slug = {r.get("child_slug"): r for r in rows}
+
+    children = []
+    for slug in ("little-dreamers", "explorers", "dreamweavers"):
+        s = summary_by_slug.get(slug) or {}
+        title, age_range = CHILD_TITLES[slug]
+        pending_count = await db.angel_stars_actions.count_documents(
+            {"user_id": user.user_id, "child_slug": slug, "status": "pending"}
+        )
+        children.append({
+            "child_slug": slug,
+            "title": title,
+            "age_range": age_range,
+            "balance": int(s.get("balance", 0)),
+            "total_earned": int(s.get("total_earned", 0)),
+            "pending_count": int(pending_count),
+        })
+
+    pending = await db.angel_stars_actions.find(
+        {"user_id": user.user_id, "status": "pending"}, {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(length=50)
+    for p in pending:
+        p["child_title"] = CHILD_TITLES.get(p.get("child_slug"), ("?", ""))[0]
+
+    history = await db.angel_stars_actions.find(
+        {"user_id": user.user_id, "status": "approved"}, {"_id": 0}
+    ).sort("approved_at", -1).limit(20).to_list(length=20)
+    for h in history:
+        h["child_title"] = CHILD_TITLES.get(h.get("child_slug"), ("?", ""))[0]
+
+    return {"children": children, "pending": pending, "history": history}
+
+
+# =============================================================
 # The Beginning — Guided Experience (7 hidden steps)
 # -------------------------------------------------------------
 # Internally a 7-step structure. Externally never exposed as a

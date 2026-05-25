@@ -280,6 +280,19 @@ export default function KidsUniverse() {
                     </div>
                   </button>
 
+                  {/* §KIDS-HUBS 2026-02-09 — direct doorway into the
+                      warm age-themed Hub (Talk / Story / Color / Stars).
+                      Sits below the free-treats toggle so parents can
+                      either preview or step straight inside. */}
+                  <Link
+                    to={`/kids-universe/${g.slug}/hub`}
+                    data-testid={`kids-age-${g.slug}-open-hub`}
+                    className="relative mx-8 mb-6 -mt-1 inline-flex items-center gap-1.5 text-[12px] tracking-[0.16em] uppercase text-[hsl(var(--aurin-amber))] hover:text-[hsl(var(--aurin-amber))] transition"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Open the warm room <ArrowRight size={11} />
+                  </Link>
+
                   {/* §KIDS-UNIVERSE-V2 — Expanded treats panel. Three small
                       free items per age + a clear paid path into Aurin's
                       Room. Items not yet seeded by Anna show a "Coming

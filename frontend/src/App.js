@@ -11,6 +11,9 @@ import BookDetail from "@/pages/BookDetail";
 import ReachOut from "@/pages/ReachOut";
 import KidsUniverse from "@/pages/KidsUniverse";
 import KidsColoringStudio from "@/pages/KidsColoringStudio";
+import KidsHub from "@/pages/KidsHub";
+import KidsStarsView from "@/pages/KidsStarsView";
+import ParentStars from "@/pages/ParentStars";
 import MeditationCorner from "@/pages/MeditationCorner";
 import UserPortal from "@/pages/UserPortal";
 import PortalMagicVerify from "@/pages/PortalMagicVerify";
@@ -89,6 +92,12 @@ function AppRouter() {
         <Route path="/learning" element={<Learning />} />
         <Route path="/kids-universe" element={<KidsUniverse />} />
         <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
+        {/* §KIDS-HUBS 2026-02-09 — age-themed Hubs + Angel Stars MVP.
+            Slug accepts both modern names (little-dreamers, explorers,
+            dreamweavers) and legacy "3-5" / "6-8" / "9-12". */}
+        <Route path="/kids-universe/:ageGroup/hub" element={<KidsHub />} />
+        <Route path="/kids-universe/:ageGroup/stars" element={<KidsStarsView />} />
+        <Route path="/parent-portal/stars" element={<ParentStars />} />
         <Route path="/meditation-corner" element={<MeditationCorner />} />
         <Route path="/the-beginning" element={<TheBeginning />} />
         <Route path="/the-beginning/step" element={<TheBeginningStep />} />
