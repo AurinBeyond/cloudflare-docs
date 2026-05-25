@@ -4,6 +4,7 @@ import { Library as LibraryIcon, LineChart, UserCircle2, LogIn, LogOut, ShieldCh
 import { useAuth } from "@/contexts/AuthProvider";
 import { resetAgeConfirmation } from "@/components/AgeGate";
 import StudentCabinet from "@/components/StudentCabinet";
+import CycleBanner, { GuestKeyRedeemer } from "@/components/CycleBanner";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/telemetry";
 import { api } from "@/lib/api";
@@ -108,6 +109,13 @@ export default function UserPortal() {
           </div>
         )}
       </PageHeader>
+
+      {/* §INFLUENCER-SWARM 2026-02-09 — Cycle 01 wave-logic banner +
+          ?key=MUSE… guest-key welcome + ?ref= conversion tracking.
+          Mounted directly under the header so every portal visitor
+          sees the calm scarcity signal first. Pure additive. */}
+      <CycleBanner />
+      {user && <GuestKeyRedeemer user={user} />}
 
       {/* Purpose */}
       <section className="aurin-section-sm border-b border-[hsl(var(--aurin-border-soft))]">

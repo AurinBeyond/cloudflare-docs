@@ -2611,7 +2611,10 @@ def _public_activity(a: Dict[str, Any], premium_user: bool = False) -> Dict[str,
 async def _user_has_premium(user_id: str) -> bool:
     """Premium = user holds ANY paid clarity pass or has unlimited_voice.
     For MVP we treat presence_seconds_left > 0 OR an active pass as
-    'premium' so any paying parent unlocks the full curriculum."""
+    'premium' so any paying parent unlocks the full curriculum.
+
+    §INFLUENCER-SWARM 2026-02-09 — also unlock for users who have
+    redeemed a guest key with the body_temple_unlock perk."""
     try:
         u = await db.users.find_one({"user_id": user_id}, {"_id": 0, "presence_seconds_left": 1, "unlimited_voice": 1})
         if u and (u.get("unlimited_voice") or int(u.get("presence_seconds_left") or 0) > 0):
@@ -2620,7 +2623,12 @@ async def _user_has_premium(user_id: str) -> bool:
             {"user_id": user_id, "source": {"$nin": ["admin-grant", "free_voice_beta"]}},
             {"_id": 0},
         )
-        return bool(pass_doc)
+        if pass_doc:
+            return True
+        bt_unlock = await db.body_temple_unlocks.find_one(
+            {"user_id": user_id}, {"_id": 1}
+        )
+        return bool(bt_unlock)
     except Exception:
         return False
 
@@ -3847,6 +3855,272 @@ async def voice_mood_recent(request: Request, days: int = 14):
         {"_id": 0},
     ).sort("created_at", -1).limit(50)
     return {"signals": [doc async for doc in cursor]}
+
+
+# =============================================================
+# §INFLUENCER-SWARM 2026-02-09 — Marketing-agent synchronisation:
+# 50 micro-influencer guest keys + Cycle 01 wave-logic + ?ref=
+# conversion analytics. All additive — does NOT touch existing
+# AURIN<digits> parent-referral pathway.
+# =============================================================
+
+import secrets as _secrets
+
+
+def _new_muse_code() -> str:
+    alpha = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    return "MUSE" + "".join(_secrets.choice(alpha) for _ in range(6))
+
+
+def _admin_ok(request: Request) -> bool:
+    expected = os.environ.get("ADMIN_TOKEN") or ""
+    if not expected:
+        return False
+    got = (request.headers.get("X-Admin-Token") or "").strip()
+    return bool(got) and got == expected
+
+
+class GuestKeyMintInput(BaseModel):
+    name: str
+    handle: Optional[str] = None
+    max_uses: int = 25
+    perks: Optional[List[str]] = None
+    notes: Optional[str] = None
+    expires_in_days: int = 60
+
+
+@api_router.post("/admin/guest-keys/mint")
+async def admin_guest_keys_mint(inp: GuestKeyMintInput, request: Request):
+    if not _admin_ok(request):
+        raise HTTPException(status_code=403, detail="Admin token required.")
+    code = _new_muse_code()
+    for _ in range(5):
+        if not await db.guest_keys.find_one({"code": code}, {"_id": 1}):
+            break
+        code = _new_muse_code()
+    now = datetime.now(timezone.utc)
+    doc = {
+        "code": code,
+        "name": inp.name.strip()[:80],
+        "handle": (inp.handle or "").strip()[:80] or None,
+        "max_uses": max(1, min(inp.max_uses, 1000)),
+        "remaining_uses": max(1, min(inp.max_uses, 1000)),
+        "perks": [p.strip() for p in (inp.perks or []) if p.strip()],
+        "notes": (inp.notes or "").strip()[:400] or None,
+        "created_at": now.isoformat(),
+        "expires_at": (now + timedelta(days=max(1, inp.expires_in_days))).isoformat(),
+        "cycle": "cycle-01",
+    }
+    await db.guest_keys.insert_one(doc)
+    return {"ok": True, "code": code, "max_uses": doc["max_uses"],
+            "expires_at": doc["expires_at"],
+            "share_url": f"{os.environ.get('PUBLIC_BASE_URL', 'https://prulesoul.site')}/portal?key={code}"}
+
+
+@api_router.get("/guest-keys/validate")
+async def guest_keys_validate(code: str):
+    code = (code or "").strip().upper()
+    if not code.startswith("MUSE"):
+        return {"valid": False, "reason": "format"}
+    doc = await db.guest_keys.find_one({"code": code}, {"_id": 0})
+    if not doc:
+        return {"valid": False, "reason": "not_found"}
+    try:
+        expires = datetime.fromisoformat(doc["expires_at"])
+    except Exception:
+        expires = None
+    expired = bool(expires and expires < datetime.now(timezone.utc))
+    exhausted = int(doc.get("remaining_uses", 0)) <= 0
+    return {
+        "valid": (not expired) and (not exhausted),
+        "reason": "expired" if expired else ("exhausted" if exhausted else "ok"),
+        "name": doc.get("name"),
+        "handle": doc.get("handle"),
+        "perks": doc.get("perks") or [],
+        "remaining_uses": doc.get("remaining_uses"),
+        "cycle": doc.get("cycle"),
+    }
+
+
+class GuestKeyRedeemInput(BaseModel):
+    code: str
+
+
+@api_router.post("/guest-keys/redeem")
+async def guest_keys_redeem(inp: GuestKeyRedeemInput, request: Request):
+    user = await _require_user(request)
+    code = (inp.code or "").strip().upper()
+    doc = await db.guest_keys.find_one({"code": code}, {"_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Guest key not found.")
+    try:
+        expires = datetime.fromisoformat(doc["expires_at"])
+    except Exception:
+        expires = None
+    if expires and expires < datetime.now(timezone.utc):
+        raise HTTPException(status_code=410, detail="Guest key expired.")
+    if int(doc.get("remaining_uses", 0)) <= 0:
+        raise HTTPException(status_code=410, detail="Guest key has reached its limit.")
+
+    already = await db.guest_key_redemptions.find_one(
+        {"code": code, "user_id": user.user_id},
+        {"_id": 0, "id": 1, "perks_granted": 1},
+    )
+    if already:
+        return {"ok": True, "already_redeemed": True, **already}
+
+    granted: List[str] = []
+    now = datetime.now(timezone.utc)
+    for perk in (doc.get("perks") or []):
+        p = perk.strip()
+        if p == "body_temple_unlock":
+            await db.body_temple_unlocks.update_one(
+                {"user_id": user.user_id},
+                {"$set": {"user_id": user.user_id, "source": code,
+                          "granted_at": now.isoformat()}},
+                upsert=True,
+            )
+            granted.append(p)
+        elif p.startswith("presence_minutes:"):
+            try:
+                minutes = int(p.split(":", 1)[1])
+            except Exception:
+                continue
+            seconds = max(0, min(minutes, 600)) * 60
+            await db.users.update_one(
+                {"user_id": user.user_id},
+                {"$inc": {"presence_seconds_left": seconds}},
+            )
+            granted.append(f"presence_minutes:{minutes}")
+
+    await db.guest_keys.update_one({"code": code}, {"$inc": {"remaining_uses": -1}})
+    redemption_id = f"gkr_{uuid.uuid4().hex[:12]}"
+    await db.guest_key_redemptions.insert_one({
+        "id": redemption_id,
+        "code": code,
+        "user_id": user.user_id,
+        "perks_granted": granted,
+        "redeemed_at": now.isoformat(),
+        "cycle": doc.get("cycle"),
+    })
+    return {"ok": True, "id": redemption_id, "perks_granted": granted,
+            "cycle": doc.get("cycle"), "influencer_name": doc.get("name")}
+
+
+@api_router.get("/marketing/cycle")
+async def marketing_cycle_status():
+    cycle = await db.marketing_cycles.find_one(
+        {"_id": "cycle-01"}, {"_id": 0}
+    )
+    if not cycle:
+        cycle = {
+            "id": "cycle-01",
+            "label": "Cycle 01",
+            "subtitle": "The first quiet wave.",
+            "total_spots": 250,
+            "opened_at": datetime.now(timezone.utc).isoformat(),
+            "closes_at": None,
+            "tone_line": "A small first wave is now open. We open future cycles slowly, so the rooms stay calm.",
+        }
+        await db.marketing_cycles.update_one(
+            {"_id": "cycle-01"}, {"$set": cycle}, upsert=True
+        )
+
+    taken = await db.guest_key_redemptions.count_documents({"cycle": "cycle-01"})
+    remaining = max(0, int(cycle.get("total_spots", 0)) - taken)
+    return {**cycle, "taken_spots": taken, "remaining_spots": remaining}
+
+
+class CycleConfigInput(BaseModel):
+    label: Optional[str] = None
+    subtitle: Optional[str] = None
+    total_spots: Optional[int] = None
+    tone_line: Optional[str] = None
+    closes_at: Optional[str] = None
+
+
+@api_router.post("/admin/marketing/cycle")
+async def admin_marketing_cycle(inp: CycleConfigInput, request: Request):
+    if not _admin_ok(request):
+        raise HTTPException(status_code=403, detail="Admin token required.")
+    update: Dict[str, Any] = {"id": "cycle-01"}
+    for k in ("label", "subtitle", "tone_line", "closes_at"):
+        v = getattr(inp, k)
+        if v is not None:
+            update[k] = v
+    if inp.total_spots is not None:
+        update["total_spots"] = max(1, min(int(inp.total_spots), 100000))
+    await db.marketing_cycles.update_one(
+        {"_id": "cycle-01"}, {"$set": update}, upsert=True
+    )
+    return {"ok": True, **update}
+
+
+class RefHitInput(BaseModel):
+    code: str
+    path: Optional[str] = None
+    user_agent: Optional[str] = None
+    referer: Optional[str] = None
+
+
+@api_router.post("/marketing/ref-hit")
+async def marketing_ref_hit(inp: RefHitInput, request: Request):
+    code = (inp.code or "").strip().upper()[:32]
+    if not code:
+        return {"ok": False, "reason": "no_code"}
+    doc = {
+        "id": f"hit_{uuid.uuid4().hex[:12]}",
+        "code": code,
+        "code_kind": "muse" if code.startswith("MUSE") else (
+            "aurin" if code.startswith("AURIN") else "other"),
+        "path": (inp.path or "").strip()[:200] or None,
+        "ua": (inp.user_agent or request.headers.get("user-agent") or "")[:200] or None,
+        "referer": (inp.referer or request.headers.get("referer") or "")[:200] or None,
+        "ip_prefix": (request.client.host.rsplit(".", 1)[0] + ".0"
+                      if request.client and request.client.host and "." in request.client.host
+                      else None),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.referral_hits.insert_one(doc)
+    return {"ok": True, "id": doc["id"]}
+
+
+@api_router.get("/admin/marketing/analytics")
+async def admin_marketing_analytics(request: Request):
+    if not _admin_ok(request):
+        raise HTTPException(status_code=403, detail="Admin token required.")
+    pipeline_hits = [
+        {"$group": {"_id": {"code": "$code", "kind": "$code_kind"},
+                    "hits": {"$sum": 1}}},
+        {"$sort": {"hits": -1}},
+        {"$limit": 100},
+    ]
+    hits = [
+        {"code": doc["_id"]["code"], "kind": doc["_id"].get("kind"),
+         "hits": doc["hits"]}
+        async for doc in db.referral_hits.aggregate(pipeline_hits)
+    ]
+    pipeline_redeem = [
+        {"$group": {"_id": "$code", "redemptions": {"$sum": 1}}},
+        {"$sort": {"redemptions": -1}},
+        {"$limit": 100},
+    ]
+    redemptions = [
+        {"code": doc["_id"], "redemptions": doc["redemptions"]}
+        async for doc in db.guest_key_redemptions.aggregate(pipeline_redeem)
+    ]
+    total_hits = sum(h["hits"] for h in hits)
+    total_redemptions = sum(r["redemptions"] for r in redemptions)
+    return {
+        "total_hits": total_hits,
+        "total_redemptions": total_redemptions,
+        "conversion_rate": (round(total_redemptions / total_hits, 4)
+                            if total_hits else 0),
+        "top_hits": hits,
+        "top_redemptions": redemptions,
+    }
+
+
 
 
 
