@@ -3601,7 +3601,10 @@ async def presence_start(inp: PresenceStartInput, request: Request):
                 {"_id": 0, "id": 1},
             )
             if not paid_pass:
-                # Sum voice_sessions duration_seconds for today (UTC).
+                # Sum voice_sessions elapsed_seconds for today (UTC).
+                # §AUDIT-FIX 2026-02-09 — field is `elapsed_seconds`,
+                # not `duration_seconds`. The wrong name would silently
+                # sum to 0 forever and the cap would never trigger.
                 today_utc = datetime.now(timezone.utc).replace(
                     hour=0, minute=0, second=0, microsecond=0
                 )
@@ -3616,7 +3619,7 @@ async def presence_start(inp: PresenceStartInput, request: Request):
                     {
                         "$group": {
                             "_id": None,
-                            "secs": {"$sum": {"$ifNull": ["$duration_seconds", 0]}},
+                            "secs": {"$sum": {"$ifNull": ["$elapsed_seconds", 0]}},
                         }
                     },
                 ]

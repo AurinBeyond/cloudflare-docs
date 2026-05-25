@@ -40,12 +40,14 @@ const AGE_TREATS = {
         status: "ready",
       },
       {
+        // §AUDIT-FIX 2026-02-09 — 23 coloring pages exist in DB for this
+        // age group. The old "Coming this week" badge was lying to parents.
         icon: Palette,
-        title: "A coloring page to print",
-        body: "A simple, gentle scene — print at home, color together.",
-        cta: "Coming this week",
-        href: null,
-        status: "soon",
+        title: "Coloring pages — a new one every day",
+        body: "A growing library of soft scenes. Print and color together — slow, screen-free.",
+        cta: "Open coloring studio",
+        href: "/kids-universe/coloring",
+        status: "ready",
       },
       {
         icon: Puzzle,
@@ -70,11 +72,11 @@ const AGE_TREATS = {
       },
       {
         icon: Palette,
-        title: "Coloring sheet · explorer's map",
-        body: "Print at home — a winding path through forest and stars to color.",
-        cta: "Coming this week",
-        href: null,
-        status: "soon",
+        title: "Coloring pages — adventure scenes",
+        body: "A library of winding paths, forest meetings, and small heroes. New ones added every day.",
+        cta: "Open coloring studio",
+        href: "/kids-universe/coloring",
+        status: "ready",
       },
       {
         icon: Puzzle,
@@ -99,11 +101,11 @@ const AGE_TREATS = {
       },
       {
         icon: Palette,
-        title: "Mandala-style printable",
-        body: "An intricate page that rewards patience — print and color.",
-        cta: "Coming this week",
-        href: null,
-        status: "soon",
+        title: "Coloring pages — reflective & intricate",
+        body: "Inner compass, dreamweavers, gentle mandalas — built for older minds. Fresh page every day.",
+        cta: "Open coloring studio",
+        href: "/kids-universe/coloring",
+        status: "ready",
       },
       {
         icon: Puzzle,
