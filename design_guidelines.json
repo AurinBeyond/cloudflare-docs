@@ -1,0 +1,38 @@
+{
+  "instructions_to_main_agent": "Implement the following CSS-only static micro-polish ideas to elevate the Kids Hub spatiality. All existing components, layouts, and data-testids MUST be preserved. No DOM destruction. No motion or animations.",
+  "top_recommendation": "Idea 2: The Guiding Thread (Static Path) - Ship this first! It directly solves the missing 'stepping stones' feeling by connecting the staggered cards into a journey, creating a room out of a list without touching the DOM.",
+  "ideas": [
+    {
+      "id": 1,
+      "name": "The Sanctuary Vignette (Spatial Frame)",
+      "why_it_raises_wow": "It instantly transforms the viewport from a flat scrolling webpage into a 'room' by adding ambient grounding and edge-darkening, framing the content.",
+      "css_technique": "Add a pointer-events-none fixed overlay with 'box-shadow: inset 0 0 120px rgba(...)' and a bottom-anchored 'radial-gradient' that creates a static 'floor' for the cards to float above.",
+      "per_age_variation": "Little Dreamers: Warm peach/cream inset glow. Explorers: Soft sage/moss inset shadow. Dreamweavers: Ethereal lavender/mint edge blur.",
+      "brand_risk_check": "Low risk. If the inset shadow is too dark, it might feel claustrophobic; keep opacity under 10-15% to maintain the airy sanctuary tone."
+    },
+    {
+      "id": 2,
+      "name": "The Guiding Thread (Static Path)",
+      "why_it_raises_wow": "It visually connects the already-staggered cards, turning a list into a cohesive 'journey' and mimicking the requested stepping-stone path.",
+      "css_technique": "Apply a '::before' pseudo-element on the card grid container using a static, inline SVG background (a curving dashed/dotted path) positioned absolutely behind the cards (z-index: -1).",
+      "per_age_variation": "Little Dreamers: Soft, rounded, close-knit dots (cream). Explorers: Slightly organic, leaf-like dashes (forest green). Dreamweavers: Varying sized star-dust dots (mint).",
+      "brand_risk_check": "Low risk. Must remain low-contrast (10-15% opacity). If too prominent, it risks feeling like a gamified FOMO map."
+    },
+    {
+      "id": 3,
+      "name": "Aurin's Anchor (Sticky Sparkle)",
+      "why_it_raises_wow": "It solves the 'Aurin disappears on scroll' issue by keeping a tiny, abstracted piece of Aurin's presence in the viewport at all times.",
+      "css_technique": "Add a fixed 'bottom-8 right-8' div containing the existing static sparkle SVG, styled with 'backdrop-blur-md', a 1px 'border-white/20', and a soft inner shadow.",
+      "per_age_variation": "Little Dreamers: Golden/peach sparkle. Explorers: Earthy green/gold sparkle. Dreamweavers: Silver/lavender sparkle.",
+      "brand_risk_check": "Moderate risk. It must NOT look like a 'chat bubble' or notification. Keep it purely decorative with no hover state or unread badges."
+    },
+    {
+      "id": 4,
+      "name": "Foreground Depth Bleed (Atmospheric Perspective)",
+      "why_it_raises_wow": "It creates a massive sense of 3D spatiality (depth of field) by placing heavily blurred static shapes in the extreme foreground corners, like looking through a magical lens.",
+      "css_technique": "Use fixed 'pointer-events-none' divs in the bottom corners with 'filter: blur(40px)' and subtle opacity, overlapping the page edges slightly.",
+      "per_age_variation": "Little Dreamers: A soft peach 'light leak' blur. Explorers: A muted sage 'leaf canopy' blur. Dreamweavers: A cool lavender 'mist' blur.",
+      "brand_risk_check": "Low risk. Keep it purely atmospheric; z-index must be carefully managed to float over the background but remain strictly transparent so it never obscures text."
+    }
+  ]
+}
