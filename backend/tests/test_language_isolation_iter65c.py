@@ -53,8 +53,12 @@ def main():
         assert r.status_code == 200
         d = r.json()
         slugs = [c["slug"] for c in d["courses"]]
+        # §LANG-ISOLATION 2026-02-09 — historical assertion preserved
+        # for safety: the original ET slug must remain absent from the
+        # public catalog. The course has since been translated to EN
+        # and now appears under "money-and-consciousness-module-1".
         assert "raha-ja-teadvus-moodul-1" not in slugs, \
-            "Estonian course must not appear in public /api/courses"
+            "Stale Estonian course slug must not appear in public /api/courses"
         total_leaks += _scan("/api/courses", d)
 
         # 2. Each course detail must be ET-free.

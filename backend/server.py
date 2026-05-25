@@ -9784,154 +9784,154 @@ SEED_COURSES: List[dict] = [
         ],
     },
     {
-        "slug": "raha-ja-teadvus-moodul-1",
-        "title": "Raha ja Teadvus — Moodul 1: Vaikne algus",
+        "slug": "money-and-consciousness-module-1",
+        "title": "Money & Consciousness — Module 1: A Quiet Beginning",
         "audience": "adult",
         "duration_days": 7,
-        "blurb": "Seitsmepäevane vaikne kursus, mis aitab märgata raha ümber olevaid sisemisi mustreid: puuduse häält, turvatunde vajadust, päritud lauseid, eneseväärtust ja lubamist.",
+        "blurb": "A seven-day quiet course that helps you notice the inner patterns around money: the voice of scarcity, the need for safety, inherited sentences, self-worth, and what you allow yourself to receive.",
         "price": 0.0,
         "lemonsqueezy_variant_id": None,
         "audio_companion": None,
         "audio_title": None,
-        "theme": "raha-ja-teadvus",
-        "language": "et",
+        "theme": "money-and-consciousness",
+        "language": "en",
         "letters": [
             {
                 "day": 1,
-                "title": "Raha ei ole ainult raha",
+                "title": "Money is not only money",
                 "body": (
-                    "Tere tulemast esimesse päeva. Täna ei pea sa midagi lahendama. Sa ei pea tegema uut plaani. "
-                    "Sa ei pea tõestama, et oled valmis muutuma. Täna piisab ühest asjast: vaata, kuidas raha sinu sees elab.\n\n"
-                    "Raha võib olla rahu. Raha võib olla surve. Raha võib olla vabadus. Raha võib olla süü. "
-                    "Raha võib olla kontroll. Raha võib olla tõestus. Raha võib olla häbi. Raha võib olla asi, "
-                    "mida inimene igatseb ja samal ajal kardab.\n\n"
-                    "Aurini vaates ei ole raha jumal. Raha ei ole vaenlane. Raha ei ole inimese väärtuse mõõdupuu. "
-                    "Raha on peegel. Mitte kogu sinu peegel. Aga üks peegel.\n\n"
-                    "Ja täna me ei lähe seda peeglit lõhkuma. Me lihtsalt vaatame, mida ta näitab.\n\n"
-                    "**Päeva praktika:** Kirjuta lause: *Kui ma mõtlen rahale, siis ma tunnen…* Lase vastustel tulla "
-                    "kiiresti, ilma parandamata. Seejärel: *Raha minu elus tähendab praegu…* — kirjuta see, mis on päriselt. "
-                    "Ja: *Ma sooviksin, et raha teema tunneks minu sees rohkem nagu…* Sinu aus vastus on selle kursuse alguspunkt.\n\n"
-                    "**Vaikne lause:** *Ma ei pea täna raha parandama. Ma võin alustada sellest, et näen, mida ta minus puudutab.*"
+                    "Welcome to the first day. Today, you don't have to solve anything. You don't have to make a new plan. "
+                    "You don't have to prove that you're ready to change. Today, one thing is enough: notice how money lives inside you.\n\n"
+                    "Money can be peace. Money can be pressure. Money can be freedom. Money can be guilt. "
+                    "Money can be control. Money can be proof. Money can be shame. Money can be the thing "
+                    "a person longs for and fears at the same time.\n\n"
+                    "In Aurin's view, money is not a god. Money is not an enemy. Money is not the measure of a person's worth. "
+                    "Money is a mirror. Not your whole mirror. But one mirror.\n\n"
+                    "And today we're not going to break this mirror. We're just going to look at what it shows.\n\n"
+                    "**Today's practice:** Write the sentence: *When I think about money, I feel…* Let the answers come "
+                    "quickly, without correction. Then: *Money in my life right now means…* — write what is actually true. "
+                    "And: *I would like the topic of money to feel more like…* Your honest answer is the starting point of this course.\n\n"
+                    "**Quiet sentence:** *I don't have to fix money today. I can begin by seeing what it touches in me.*"
                 ),
-                "prompt": "Mis oli esimene tunne, mis tekkis, kui lugesid sõna „raha\"?",
+                "prompt": "What was the first feeling that arose when you read the word \"money\"?",
             },
             {
                 "day": 2,
-                "title": "Puuduse hääl",
+                "title": "The voice of scarcity",
                 "body": (
-                    "Täna vaatame häält, mis ütleb: *„Ei piisa.\"* See hääl võib olla vaikne. Ta ei pruugi karjuda. "
-                    "Aga ta võib olla kohal väga paljudes otsustes. Ta ütleb: ära küsi liiga palju. Ära looda. "
-                    "Ära alusta. Ära kuluta. Ära puhka. Ära riski. Ära võta vastu. Ära usu, et sinu jaoks jätkub.\n\n"
-                    "Puuduse hääl on sageli vana kaitsemehhanism. Ta üritab inimest kaitsta pettumuse, häbi, kaotuse "
-                    "või nähtavaks saamise eest. Aga kaitse, mis kunagi aitas ellu jääda, võib hiljem hakata elu kitsaks tegema.\n\n"
-                    "Sinu ülesanne täna ei ole puuduse häält vaigistada. Sinu ülesanne on ta ära tunda. Sest kui sa kuuled "
-                    "teda teadlikult, ei pea sa enam automaatselt tema järgi liikuma.\n\n"
-                    "**Päeva praktika:** Lõpeta laused: *Kui ma tahan midagi endale lubada, siis see hääl ütleb…* "
-                    "*Kui ma tahan rohkem küsida, siis see hääl ütleb…* *Kui ma näen, et kellelgi teisel läheb hästi, siis…* "
-                    "Seejärel: *See hääl püüab mind kaitsta selle eest, et…* Lõpuks: *Aitäh, et oled püüdnud mind kaitsta. "
-                    "Aga ma ei pea enam kõike sinu hirmu järgi otsustama.*\n\n"
-                    "**Vaikne lause:** *Ma võin kuulda puuduse häält, ilma et ma annaksin talle kogu otsustusõiguse.*"
+                    "Today we look at the voice that says: *\"It's not enough.\"* This voice can be quiet. It may not shout. "
+                    "But it can be present in very many decisions. It says: don't ask for too much. Don't hope. "
+                    "Don't begin. Don't spend. Don't rest. Don't risk. Don't receive. Don't believe there is enough for you.\n\n"
+                    "The voice of scarcity is often an old defence mechanism. It tries to protect a person from disappointment, "
+                    "shame, loss, or being seen. But protection that once helped you survive can later begin to make life narrow.\n\n"
+                    "Your task today is not to silence the voice of scarcity. Your task is to recognise it. Because when you hear "
+                    "it consciously, you no longer have to move automatically by its rhythm.\n\n"
+                    "**Today's practice:** Complete the sentences: *When I want to allow myself something, this voice says…* "
+                    "*When I want to ask for more, this voice says…* *When I see someone else doing well, then…* "
+                    "Then: *This voice is trying to protect me from…* Finally: *Thank you for trying to protect me. "
+                    "But I no longer have to decide everything according to your fear.*\n\n"
+                    "**Quiet sentence:** *I can hear the voice of scarcity without giving it all the deciding power.*"
                 ),
-                "prompt": "Millistes olukordades kõlab sinu puuduse hääl kõige tugevamalt?",
+                "prompt": "In which situations does your voice of scarcity sound loudest?",
             },
             {
                 "day": 3,
-                "title": "Raha ja turvatunne",
+                "title": "Money and safety",
                 "body": (
-                    "Väga sageli inimene ei taha tegelikult raha. Ta tahab tunnet, mida ta loodab raha kaudu saada. "
-                    "Ta tahab hingata. Ta tahab mitte karta. Ta tahab olla valmis. Ta tahab tunda, et elu ei kuku kohe kokku.\n\n"
-                    "Raha võib toetada turvatunnet — see on tõsi. Aga raha ei saa olla ainus sisemise turva allikas. "
-                    "Kui inimese sees ei ole ühtegi muud turvakohta, siis iga rahaline kõikumine tundub nagu eksistentsiaalne oht.\n\n"
-                    "Turvatunde taastamine ei tähenda naiivsust. See tähendab, et inimene loob endasse rohkem kui ühe "
-                    "tugipunkti. Raha võib olla üks tugipunkt. Aga mitte ainus. Teised on: oskus rahulikult vaadata olukorda, "
-                    "oskus küsida abi, oskus teha üks järgmine samm, oskus eristada fakti hirmust, oskus hoida keha pingelises hetkes kohal.\n\n"
-                    "**Päeva praktika:** Jaga leht kaheks. Vasakule: *Kui raha teema aktiveerub, siis ma tavaliselt…* "
-                    "Paremale: *Rahulikum tugipunkt võiks olla…* Lõpuks vali ÜKS uus tugipunkt — mitte kümmet. "
-                    "Üks päriselt kasutatav on rohkem väärt kui ilus nimekiri.\n\n"
-                    "**Vaikne lause:** *Raha võib toetada minu turvatunnet, aga minu sisemine turva ei pea täielikult tema käes olema.*"
+                    "Very often a person does not actually want money. They want the feeling they hope to receive through money. "
+                    "They want to breathe. They want to not be afraid. They want to be ready. They want to feel that life is not about to collapse.\n\n"
+                    "Money can support a sense of safety — this is true. But money cannot be the only source of inner safety. "
+                    "If there is no other place of safety inside a person, then every financial fluctuation feels like an existential threat.\n\n"
+                    "Restoring a sense of safety does not mean naivety. It means that a person creates more than one "
+                    "anchor inside themselves. Money can be one anchor. But not the only one. Others are: the ability to look at a situation calmly, "
+                    "the ability to ask for help, the ability to take one next step, the ability to separate fact from fear, the ability to stay present in your body during a tense moment.\n\n"
+                    "**Today's practice:** Divide a page in two. On the left: *When the topic of money activates, I usually…* "
+                    "On the right: *A calmer anchor could be…* Finally, choose ONE new anchor — not ten. "
+                    "One that you actually use is worth more than a beautiful list.\n\n"
+                    "**Quiet sentence:** *Money can support my sense of safety, but my inner safety does not have to be entirely in its hands.*"
                 ),
-                "prompt": "Milline mitte-rahaline asi loob sinus päriselt turvatunnet?",
+                "prompt": "What non-financial thing actually creates a sense of safety in you?",
             },
             {
                 "day": 4,
-                "title": "Raha ja eneseväärtus",
+                "title": "Money and self-worth",
                 "body": (
-                    "Mõne inimese jaoks ei ole kõige raskem raha teenida. Kõige raskem on vastu võtta ilma süüta. "
-                    "Küsida ilma vabandamata. Olla nähtav ilma end väiksemaks tegemata. Lubada endale paremat ilma tundeta, "
-                    "et keegi teine jääb seetõttu ilma.\n\n"
-                    "Eneseväärtus ei ole hind. Inimese väärtus ei kasva ega kahane tema sissetuleku järgi. Aga inimese "
-                    "suhe oma väärtusesse mõjutab sageli seda, mida ta julgeb küsida, vastu võtta, hoida ja valida.\n\n"
-                    "Aurini ruumis me ei ütle: *„Sa oled kuninganna, nõua kõike.\"* Me ütleme midagi vaiksemat ja tugevamat: "
-                    "*„Sa ei pea ennast vähendama selleks, et olla hea inimene.\"*\n\n"
-                    "Väärikus ei pressi. Väärikus ei alanda. Väärikus ei tõesta üle. Väärikus ütleb: *„See on minu töö. "
-                    "See on minu aeg. See on minu piir. See on minu hind. Ja ma võin öelda seda rahulikult.\"*\n\n"
-                    "**Päeva praktika:** Kirjuta vastused ausalt: *Kus ma annan rohkem, kui suudan?* "
-                    "*Kus ma vabandan oma hinna, vajaduse või soovi pärast?* *Kus ma kardan, et kui küsin õiglaselt, "
-                    "siis mind ei armastata või ei valita?* Seejärel üks uus väärikas lause oma valdkonna kohta.\n\n"
-                    "**Vaikne lause:** *Ma ei pea ennast vähendama, et jääda heaks inimeseks.*"
+                    "For some people, the hardest thing is not to earn money. The hardest thing is to receive it without guilt. "
+                    "To ask without apologising. To be visible without making yourself smaller. To allow yourself something better without the feeling "
+                    "that someone else will go without because of it.\n\n"
+                    "Self-worth is not a price. A person's worth does not grow or shrink according to their income. But a person's "
+                    "relationship with their own worth often affects what they dare to ask for, receive, keep, and choose.\n\n"
+                    "In Aurin's room we do not say: *\"You are a queen, demand everything.\"* We say something quieter and stronger: "
+                    "*\"You don't have to diminish yourself in order to be a good person.\"*\n\n"
+                    "Dignity does not press. Dignity does not lower. Dignity does not over-prove. Dignity says: *\"This is my work. "
+                    "This is my time. This is my boundary. This is my price. And I can say it calmly.\"*\n\n"
+                    "**Today's practice:** Write honest answers: *Where do I give more than I can?* "
+                    "*Where do I apologise for my price, need, or wish?* *Where am I afraid that if I ask fairly, "
+                    "I won't be loved or chosen?* Then one new dignified sentence about your own field.\n\n"
+                    "**Quiet sentence:** *I don't have to diminish myself to stay a good person.*"
                 ),
-                "prompt": "Millise hinnaga oled sa oma rahu ostnud?",
+                "prompt": "At what price have you bought your peace?",
             },
             {
                 "day": 5,
-                "title": "Perekonna nähtamatud laused",
+                "title": "The invisible sentences of family",
                 "body": (
-                    "Igal perel on oma rahakeel. Mõnes peres öeldi: *„Raha tuleb raske tööga.\"* Mõnes: *„Rikkad inimesed "
-                    "ei ole ausad.\"* Mõnes: *„Meie sugused ei saa sellist elu.\"* Mõnes: *„Ära paista välja.\"* "
-                    "Mõnes ei räägitud rahast üldse. Aga vaikimine ise rääkis palju.\n\n"
-                    "Laps ei õpi raha kohta ainult sõnadest. Ta õpib ka nägudest. Häältoonist. Pingest köögilaua ääres. "
-                    "Sellest, kas arveid peideti. Sellest, kas raha pärast tülitseti. Sellest, kas keegi pidi alati loobuma. "
-                    "Sellest, kas rõõm oli lubatud ainult siis, kui kõik oli „teenitud\".\n\n"
-                    "Need laused võivad hiljem liikuda inimese sees nagu faktid. Aga nad ei pruugi olla faktid. "
-                    "Nad võivad olla päritud ellujäämiskeel.\n\n"
-                    "Lojaalsus perekonnale ei pea tähendama, et sa kordad kõiki nende hirme. Sa võid austada seda, "
-                    "millest nad läbi tulid — ja samal ajal mitte ehitada oma elu ainult nende piirangute sisse.\n\n"
-                    "**Päeva praktika:** Kirjuta kolm päritud rahalauset. Iga lause alla: *Kust see võis tulla? "
-                    "Keda see lause kunagi kaitses? Kuidas see lause mind täna piirab? Milline võiks olla uus rahulikum lause?*\n\n"
-                    "**Vaikne lause:** *Ma võin austada seda, kust ma tulen, ilma et ma peaksin kordama kõiki vanu hirme.*"
+                    "Every family has its own language of money. In some families they said: *\"Money comes from hard work.\"* "
+                    "In some: *\"Rich people are not honest.\"* In some: *\"People like us don't have that kind of life.\"* "
+                    "In some: *\"Don't stand out.\"* In some, money was not spoken of at all. But the silence itself spoke loudly.\n\n"
+                    "A child does not learn about money only from words. They also learn from faces. From tones of voice. "
+                    "From the tension at the kitchen table. From whether bills were hidden. From whether there was conflict over money. "
+                    "From whether someone always had to give up. From whether joy was allowed only when everything had been \"earned\".\n\n"
+                    "These sentences can later move inside a person like facts. But they may not be facts. "
+                    "They may be inherited survival language.\n\n"
+                    "Loyalty to a family does not have to mean that you repeat all of their fears. You can honour what "
+                    "they came through — and at the same time not build your whole life inside their limitations.\n\n"
+                    "**Today's practice:** Write three inherited money-sentences. Under each one: *Where could this have come from? "
+                    "Who did this sentence once protect? How does this sentence limit me today? What could a new, calmer sentence be?*\n\n"
+                    "**Quiet sentence:** *I can honour where I come from without having to repeat all the old fears.*"
                 ),
-                "prompt": "Milline rahaga seotud lause on sinu sees kõige vanem?",
+                "prompt": "Which money-sentence inside you is the oldest?",
             },
             {
                 "day": 6,
-                "title": "Lubamine ilma ahnuseta",
+                "title": "Allowing without greed",
                 "body": (
-                    "Paljud tundlikud inimesed kardavad rohkem tahta. Nad kardavad, et soov muudab nad ahneks. "
-                    "Nad kardavad, et kui nad lubavad endale rohkem, siis nad kaotavad lihtsuse, headuse või südamlikkuse.\n\n"
-                    "Aga rohkem lubamine ei pea tähendama ahnust. Mõnikord tähendab see lihtsalt seda, et inimene lõpetab "
-                    "enda elu hoidmise liiga väikeses ruumis.\n\n"
-                    "Ahnus ütleb: *„Mulle peab kuuluma rohkem kui teistele.\"* Lubamine ütleb: *„Ka mina võin olla osa heast, "
-                    "mis liigub.\"* Lubamine ei tähenda piiri kaotust. Lubamine tähendab sisemiselt: "
-                    "*„Ma ei pea elu headust automaatselt tagasi lükkama.\"*\n\n"
-                    "**Päeva praktika:** Lõpeta laused: *Ma ei luba endale rohkem raha, sest…* *Ma ei luba endale rohkem "
-                    "puhkust, sest…* *Ma ei luba endale paremat tuge, sest…* *Ma ei luba endale nähtavust, sest…* "
-                    "Seejärel: *Kui ma lubaksin natuke rohkem, siis ma kardaksin, et…* "
-                    "Lõpuks vali ÜKS väike lubamine selleks nädalaks.\n\n"
-                    "**Vaikne lause:** *Ma võin lubada elul avarduda, ilma et ma kaotaksin oma südant.*"
+                    "Many sensitive people are afraid to want more. They fear that wanting will turn them greedy. "
+                    "They fear that if they allow themselves more, they will lose their simplicity, their kindness, or their warmth.\n\n"
+                    "But allowing more does not have to mean greed. Sometimes it simply means that a person stops "
+                    "holding their life in too small a room.\n\n"
+                    "Greed says: *\"I must have more than others.\"* Allowing says: *\"I too can be part of the good "
+                    "that moves through the world.\"* Allowing does not mean losing boundaries. Allowing means inwardly: "
+                    "*\"I don't have to automatically push away the goodness of life.\"*\n\n"
+                    "**Today's practice:** Complete the sentences: *I don't allow myself more money, because…* *I don't allow myself more "
+                    "rest, because…* *I don't allow myself better support, because…* *I don't allow myself visibility, because…* "
+                    "Then: *If I allowed a little more, I would fear that…* "
+                    "Finally, choose ONE small allowance for this week.\n\n"
+                    "**Quiet sentence:** *I can let life widen without losing my heart.*"
                 ),
-                "prompt": "Mida tähendab sinu jaoks väärikas küllus?",
+                "prompt": "What does dignified abundance mean to you?",
             },
             {
                 "day": 7,
-                "title": "Uus sisemine leping",
+                "title": "A new inner agreement",
                 "body": (
-                    "Täna ei lõpeta me raha teemat. Me lõpetame esimese ringi.\n\n"
-                    "Seitsme päeva jooksul oled vaadanud: mida raha sinus puudutab, kuidas kõlab puuduse hääl, "
-                    "kus raha on seotud turvatundega, kuidas eneseväärtus mõjutab vastuvõtmist, milliseid lauseid "
-                    "sa oled kaasa saanud, mida sa ei ole endale lubanud.\n\n"
-                    "Täna paneme selle kokku üheks sisemiseks lepinguks. Mitte juriidiliseks. Mitte lubaduseks olla täiuslik. "
-                    "Vaid vaikseks otsuseks: *„Ma ei taha enam olla raha teema ees pime.\"*\n\n"
-                    "**Minu uus sisemine leping rahaga:** Ma ei vaata raha enam ainult hirmu kaudu. Ma luban endal märgata, "
-                    "millal minus räägib puudus, vana perekonna lause, süü, häbi või kontrollivajadus. Ma ei pea ennast "
-                    "raha pärast vähendama. Ma ei pea raha pärast muutuma külmaks. Ma võin küsida õiglaselt. "
-                    "Ma võin vastu võtta väärikalt. Ma võin öelda *ei* sellele, mis võtab minult liiga palju. "
-                    "Ma võin öelda *jah* sellele, mis toetab elu ja selgust.\n\n"
-                    "Minu väärtus ei ole number. Aga minu elu vajab praktilist austust. Ma ei pea kõike kohe oskama. "
-                    "Ma võin alustada sellest, et ma ei põgene enam.\n\n"
-                    "**Päeva praktika:** Kirjuta see leping käsitsi enda jaoks ümber. Allkirjasta. Kuupäev.\n\n"
-                    "**Vaikne lause:** *Ma ei pea raha kartma ega kummardama. Ma võin õppida temaga teadlikult kohtuma.*"
+                    "Today we are not ending the topic of money. We are ending the first round.\n\n"
+                    "Over seven days you have looked at: what money touches in you, how the voice of scarcity sounds, "
+                    "where money is tied to a sense of safety, how self-worth affects receiving, what sentences "
+                    "you have carried with you, what you have not allowed yourself.\n\n"
+                    "Today we gather it into one inner agreement. Not a legal one. Not a promise to be perfect. "
+                    "Just a quiet decision: *\"I no longer want to be blind to the topic of money.\"*\n\n"
+                    "**My new inner agreement with money:** I no longer look at money only through fear. I allow myself to notice "
+                    "when scarcity, an old family sentence, guilt, shame, or a need to control is speaking inside me. I don't have to diminish myself "
+                    "for the sake of money. I don't have to turn cold for the sake of money. I can ask fairly. "
+                    "I can receive with dignity. I can say *no* to what takes too much from me. "
+                    "I can say *yes* to what supports life and clarity.\n\n"
+                    "My worth is not a number. But my life needs practical respect. I don't have to know everything immediately. "
+                    "I can begin by simply not running away anymore.\n\n"
+                    "**Today's practice:** Write this agreement out by hand for yourself. Sign it. Date it.\n\n"
+                    "**Quiet sentence:** *I don't have to fear money or worship it. I can learn to meet it consciously.*"
                 ),
-                "prompt": "Mis on üks praktiline rahaline samm, mida sa saad teha rahulikult?",
+                "prompt": "What is one practical financial step you can take calmly?",
             },
         ],
     },
@@ -12608,7 +12608,7 @@ _THEME_BY_SLUG = {
     "the-language-you-forgot": "vaimne-suverignsus",
     "seven-quiet-evenings-with-children": "suhted-ja-sagedus",
     "the-body-knows-first": "keha-atlas",
-    "raha-ja-teadvus-moodul-1": "raha-ja-teadvus",
+    "money-and-consciousness-module-1": "raha-ja-teadvus",
 }
 
 # Cross-listings — items already shelved under a primary theme that *also*

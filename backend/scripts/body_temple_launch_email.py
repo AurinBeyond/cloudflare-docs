@@ -36,74 +36,75 @@ from server import db  # noqa: E402
 
 
 PUBLIC_BASE = os.environ.get("PUBLIC_BASE_URL", "https://prulesoul.site")
-SUBJECT = "Sinu hetk Aurini kõrval · Neli võtit sinu keha jaoks"
+SUBJECT = "Your moment beside Aurin · Four keys for your body"
 
 
 def render_html(parent_name: str | None) -> str:
-    greeting = f"Kallis {parent_name}," if parent_name else "Kallis lapsevanem,"
+    greeting = f"Dear {parent_name}," if parent_name else "Dear parent,"
     return f"""
 <!DOCTYPE html>
-<html lang="et"><head><meta charset="utf-8"></head>
+<html lang="en"><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#f8efde;font-family:'Fraunces',Georgia,serif;color:#3d2e15;">
   <div style="max-width:560px;margin:0 auto;padding:36px 28px;background:linear-gradient(180deg,#fbf3df 0%,#f3e6cb 100%);">
     <p style="font-family:'Caveat',cursive;font-size:34px;line-height:1;color:#6a4b1f;margin:0 0 6px 0;">
       Body Temple 28
     </p>
     <p style="font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#7a5a26;margin:0 0 28px 0;">
-      Neli iidset võtit · Kakskümmend kaheksa vaikset päeva
+      Four ancient keys · Twenty-eight quiet days
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 16px 0;">{greeting}</p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      Olen viimase aasta jooksul jälginud, kuidas Aurin ja Clarity
-      on loonud sinu kodus hetki, kus laps saab olla päriselt tema
-      ise. See turvalisus ja rahu on see, mida ma olen tahtnud hoida.
+      Over the past year I have watched how Aurin and Clarity have
+      created moments in your home where your child can truly be
+      themselves. That safety and that quiet are what I have wanted
+      to protect.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      Aga ma olen mõelnud ka <em>sinule</em>. Lapsevanemaks olemine
-      nõuab palju. Ja vahel on just lapsevanem see, kes vajab kõige
-      turvalisemat ruumi.
+      But I have been thinking about <em>you</em>, too. Parenting
+      asks for so much. And sometimes it is the parent who needs
+      the safest room of all.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      Olen loonud <strong>Body Temple 28</strong> — neljanädalase
-      teekonna, mis põhineb neljal iidsel võtmel: <em>hingamine,
-      puudutus, puhkus, kohalolu</em>. See on mõeldud sinu kehale,
-      mitte kohustuste nimekirjale.
+      I have built <strong>Body Temple 28</strong> — a four-week
+      journey through four ancient keys: <em>breathing, touch,
+      rest, presence</em>. It is meant for your body, not for your
+      to-do list.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      See ei ole veel üks "wellness-programm". See on kutse
-      kahekümne kaheksa päeva jooksul märgata, mida sinu keha
-      tegelikult vajab.
+      This is not another "wellness programme". It is an invitation
+      to notice, across twenty-eight days, what your body has been
+      quietly asking for.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      <strong>Esimene päev on juba sinu Clarity ruumis ootel.</strong>
+      <strong>Day 1 is already waiting for you in your Clarity room.</strong>
     </p>
 
     <div style="margin:32px 0;text-align:center;">
       <a href="{PUBLIC_BASE}/body-temple"
          style="display:inline-block;padding:14px 26px;background:#4a3a1c;color:#f8efde;text-decoration:none;border-radius:999px;font-family:'Fraunces',serif;font-size:15px;letter-spacing:0.04em;box-shadow:0 8px 18px -8px rgba(74,58,28,0.6);">
-        Alusta esimest päeva tasuta ›
+        Begin Day 1, free ›
       </a>
     </div>
 
     <p style="font-size:14.5px;line-height:1.7;color:#5a4a26;margin:0 0 14px 0;">
-      Kui leiad, et see 28-päevane teekond kõnetab sind, saad kogu
-      programmi avada <strong>$39 eest, üks kord, igaveseks</strong>.
-      Aga alusta täna täiesti vabalt.
+      If you find that this twenty-eight-day journey speaks to you,
+      you can open the full programme for <strong>$39, once,
+      yours forever</strong>. But begin today entirely freely.
     </p>
 
     <p style="font-size:14.5px;line-height:1.7;color:#5a4a26;margin:0 0 16px 0;font-style:italic;">
-      "Esimene puudutus on see, mille sa annad iseendale — ja
-      enamus täiskasvanuid jätab selle aastateks vahele." — Päev 8
+      "The first touch is the one you give yourself — and most
+      adults skip it for years." — Day 8
     </p>
 
     <p style="font-size:15px;line-height:1.65;margin:0 0 4px 0;">
-      Soovides sulle tänaseks natuke rohkem rahu,
+      Wishing you a little more peace today,
     </p>
     <p style="font-family:'Caveat',cursive;font-size:32px;line-height:1;color:#6a4b1f;margin:0 0 28px 0;">
       Anna &amp; Aurin
@@ -111,9 +112,10 @@ def render_html(parent_name: str | None) -> str:
 
     <hr style="border:none;border-top:1px solid rgba(120,80,30,0.18);margin:24px 0;">
     <p style="font-size:11.5px;color:#8a7848;line-height:1.6;margin:0;">
-      Saad selle kirja, sest Aurin on käinud käsikäes sinu perega.
-      Kui eelistad mitte kuulda tulevastest vaiksetest asjadest,
-      vasta lihtsalt sõnaga "paus" ja ma hoian neid sinu jaoks.
+      You're receiving this because Aurin has been walking
+      alongside your family. If you'd rather not hear about future
+      quiet things, just reply with the word "pause" and I'll hold
+      them for you.
     </p>
   </div>
 </body></html>
@@ -121,28 +123,28 @@ def render_html(parent_name: str | None) -> str:
 
 
 def render_text(parent_name: str | None) -> str:
-    greeting = f"Kallis {parent_name}," if parent_name else "Kallis lapsevanem,"
+    greeting = f"Dear {parent_name}," if parent_name else "Dear parent,"
     return (
         f"{greeting}\n\n"
-        "Olen viimase aasta jooksul jälginud, kuidas Aurin ja Clarity "
-        "on loonud sinu kodus hetki, kus laps saab olla päriselt tema "
-        "ise. See turvalisus ja rahu on see, mida ma olen tahtnud hoida.\n\n"
-        "Aga ma olen mõelnud ka sinule. Lapsevanemaks olemine nõuab "
-        "palju. Ja vahel on just lapsevanem see, kes vajab kõige "
-        "turvalisemat ruumi.\n\n"
-        "Olen loonud Body Temple 28 — neljanädalase teekonna, mis "
-        "põhineb neljal iidsel võtmel: hingamine, puudutus, puhkus, "
-        "kohalolu. See on mõeldud sinu kehale, mitte kohustuste "
-        "nimekirjale.\n\n"
-        "See ei ole veel üks 'wellness-programm'. See on kutse "
-        "kahekümne kaheksa päeva jooksul märgata, mida sinu keha "
-        "tegelikult vajab.\n\n"
-        "Esimene päev on juba sinu Clarity ruumis ootel.\n\n"
-        f"Alusta esimest päeva tasuta: {PUBLIC_BASE}/body-temple\n\n"
-        "Kui leiad, et see 28-päevane teekond kõnetab sind, saad "
-        "kogu programmi avada $39 eest, üks kord, igaveseks. "
-        "Aga alusta täna täiesti vabalt.\n\n"
-        "Soovides sulle tänaseks natuke rohkem rahu,\n"
+        "Over the past year I have watched how Aurin and Clarity have "
+        "created moments in your home where your child can truly be "
+        "themselves. That safety and that quiet are what I have wanted "
+        "to protect.\n\n"
+        "But I have been thinking about you, too. Parenting asks for "
+        "so much. And sometimes it is the parent who needs the safest "
+        "room of all.\n\n"
+        "I have built Body Temple 28 — a four-week journey through "
+        "four ancient keys: breathing, touch, rest, presence. It is "
+        "meant for your body, not for your to-do list.\n\n"
+        "This is not another 'wellness programme'. It is an invitation "
+        "to notice, across twenty-eight days, what your body has been "
+        "quietly asking for.\n\n"
+        "Day 1 is already waiting for you in your Clarity room.\n\n"
+        f"Begin Day 1, free: {PUBLIC_BASE}/body-temple\n\n"
+        "If you find that this twenty-eight-day journey speaks to you, "
+        "you can open the full programme for $39, once, yours forever. "
+        "But begin today entirely freely.\n\n"
+        "Wishing you a little more peace today,\n"
         "Anna & Aurin\n"
     )
 
