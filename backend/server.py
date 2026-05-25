@@ -2112,6 +2112,179 @@ async def reach_out(inp: ReachOutMessage):
     }
 
 
+@api_router.post("/admin/sales-report")
+async def admin_sales_report(request: Request, year: int = 0, month: int = 0):
+    """Trigger a sales-report email on demand (admin-only).
+
+    With no params, sends the report for the *previous* month — exactly
+    what the monthly cron would have sent. With `year=` and `month=`,
+    sends an arbitrary historical month.
+
+    Helper functions `_build_sales_report` and `_send_monthly_sales_report`
+    are defined later in the file; Python's late-binding for module-level
+    names lets us declare the route here (before `include_router`) while
+    keeping the implementations next to the monthly cron loop.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = request.headers.get("X-Admin-Token") or request.query_params.get("token")
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    if year and month:
+        report = await _build_sales_report(year, month)
+        return {"ok": True, "report": report, "mailed": False}
+    await _send_monthly_sales_report()
+    return {"ok": True, "mailed": True}
+
+
+# =============================================================
+# §REFUND-FLAG 2026-02-09 — Safe manual-review pipeline. Founder
+# directive: if a voice/text session crashes within the first 30
+# seconds AND the user has a freshly-activated paid pass (<5 min
+# old), flag for Anna's manual refund review. We deliberately do
+# NOT auto-execute the LemonSqueezy refund — that risks refunding
+# a perfectly legitimate user whose mic permission popped up late.
+# Anna decides; the system surfaces the candidate.
+#
+# How it triggers:
+#   1. Frontend `onDisconnect` measures session length.
+#   2. If length < 30s, frontend POSTs /api/refund-flag with
+#      reason + duration.
+#   3. Backend looks up the user's latest pass.
+#   4. If pass created_at < 5 min ago, inserts into
+#      `refund_review_queue` + emails Anna.
+# =============================================================
+class RefundFlagInput(BaseModel):
+    user_id: Optional[str] = None
+    user_email: Optional[str] = None
+    room: Optional[str] = None
+    duration_seconds: float
+    reason: Optional[str] = None
+    error_message: Optional[str] = None
+
+
+@api_router.post("/refund-flag")
+async def refund_flag(inp: RefundFlagInput):
+    """Receive a short-session signal from the chat client.
+
+    Only emails Anna when the user holds a fresh paid pass. Otherwise
+    silently records the event (useful telemetry, no spam to Anna).
+    """
+    now = datetime.now(timezone.utc)
+    duration = max(0.0, float(inp.duration_seconds or 0.0))
+    reason = (inp.reason or "")[:120]
+    error_message = (inp.error_message or "")[:500]
+    room = (inp.room or "")[:32]
+
+    # Resolve user_id from email if frontend sent only the email.
+    user_id = (inp.user_id or "").strip()
+    user_email = (inp.user_email or "").strip().lower()
+    if not user_id and user_email:
+        u = await db.users.find_one({"email": user_email}, {"_id": 0, "user_id": 1})
+        if u:
+            user_id = u.get("user_id") or ""
+
+    # Find the user's most recent paid clarity_pass (skip admin-grants).
+    fresh_pass = None
+    if user_id:
+        cursor = db.clarity_passes.find(
+            {
+                "user_id": user_id,
+                "source": {"$nin": ["admin-grant", "free_voice_beta"]},
+            },
+            {"_id": 0},
+        ).sort("granted_at", -1).limit(1)
+        candidates = await cursor.to_list(length=1)
+        if candidates:
+            cand = candidates[0]
+            try:
+                granted_at = datetime.fromisoformat(
+                    cand.get("granted_at", "").replace("Z", "+00:00")
+                )
+                age_seconds = (now - granted_at).total_seconds()
+                if age_seconds < 5 * 60:  # 5 min freshness window
+                    fresh_pass = cand
+            except Exception:  # noqa: BLE001
+                pass
+
+    flag_doc = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id or None,
+        "user_email": user_email or None,
+        "room": room,
+        "duration_seconds": duration,
+        "reason": reason,
+        "error_message": error_message,
+        "fresh_pass": fresh_pass,
+        "needs_review": bool(fresh_pass),
+        "created_at": now.isoformat(),
+    }
+    try:
+        await db.refund_review_queue.insert_one(flag_doc)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("refund-flag insert failed: %s", exc)
+
+    # Only email Anna for cases that look like legit refund candidates.
+    if fresh_pass:
+        destination = (os.environ.get("REACH_OUT_EMAIL") or "").strip()
+        if destination:
+            try:
+                from email_service import (
+                    send_email as _send_email,
+                    is_configured as _resend_configured,
+                )
+                if _resend_configured():
+                    tier = fresh_pass.get("tier", "?")
+                    ext_order = fresh_pass.get("external_order_id", "?")
+                    granted = fresh_pass.get("granted_at", "?")
+                    from html import escape as _esc
+                    subj = f"[Refund Review] {tier} · {room or 'room'} · crashed in {duration:.1f}s"
+                    body_html = (
+                        f"<p>A paid session ended very quickly after activation. Worth a manual look.</p>"
+                        f"<table style=\"font-family:monospace;font-size:12px\"><tbody>"
+                        f"<tr><td>User ID:</td><td>{_esc(user_id or '(unknown)')}</td></tr>"
+                        f"<tr><td>Email:</td><td>{_esc(user_email or '(unknown)')}</td></tr>"
+                        f"<tr><td>Tier:</td><td>{_esc(str(tier))}</td></tr>"
+                        f"<tr><td>LS Order ID:</td><td>{_esc(str(ext_order))}</td></tr>"
+                        f"<tr><td>Granted at:</td><td>{_esc(str(granted))}</td></tr>"
+                        f"<tr><td>Room:</td><td>{_esc(room or '(unknown)')}</td></tr>"
+                        f"<tr><td>Session length:</td><td>{duration:.2f}s</td></tr>"
+                        f"<tr><td>Reason:</td><td>{_esc(reason or '(none)')}</td></tr>"
+                        f"<tr><td>Error:</td><td>{_esc(error_message or '(none)')}</td></tr>"
+                        f"</tbody></table>"
+                        f"<p style=\"margin-top:16px\">"
+                        f"<strong>Manual refund:</strong> LemonSqueezy dashboard → Orders → "
+                        f"<a href=\"https://app.lemonsqueezy.com/orders\">find {_esc(str(ext_order))}</a> → Refund."
+                        f"</p>"
+                        f"<p style=\"color:#888;font-size:12px\">Review ID: {flag_doc['id']}</p>"
+                    )
+                    body_text = (
+                        f"Paid session ended in {duration:.1f}s.\n\n"
+                        f"User: {user_id or '?'} <{user_email or '?'}>\n"
+                        f"Tier: {tier} · Order: {ext_order}\n"
+                        f"Granted: {granted}\n"
+                        f"Room: {room or '?'}\n"
+                        f"Reason: {reason or '(none)'}\n"
+                        f"Error: {error_message or '(none)'}\n\n"
+                        f"Manually refund via LemonSqueezy dashboard if appropriate.\n"
+                        f"Review ID: {flag_doc['id']}\n"
+                    )
+                    await _send_email(
+                        to=destination,
+                        subject=subj,
+                        html=body_html,
+                        text=body_text,
+                        sender="support",
+                        tags=[
+                            {"name": "kind", "value": "refund_review"},
+                            {"name": "tier", "value": str(tier)[:32]},
+                        ],
+                    )
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("refund-flag email failed: %s", exc)
+
+    return {"ok": True, "needs_review": bool(fresh_pass), "id": flag_doc["id"]}
+
+
 # =============================================================
 # The Beginning — Guided Experience (7 hidden steps)
 # -------------------------------------------------------------
@@ -3395,6 +3568,93 @@ async def presence_start(inp: PresenceStartInput, request: Request):
                 "room": inp.room,
             },
         )
+
+    # §COMP-DAILY-CAP 2026-02-09 — Influencer protection layer.
+    # When a user holds ONLY an admin-grant pass (no paid pass), we
+    # enforce a per-day voice-minute ceiling so an influencer's free
+    # 30-day code can't be burned through in 24h × 30d straight.
+    # The cap lives on the pass document as `daily_minute_cap` (int);
+    # absence = no cap (legacy passes keep their old behaviour).
+    # Paid passes are NEVER capped here. Voice-only — text is free.
+    try:
+        comp_pass = await db.clarity_passes.find_one(
+            {
+                "user_id": user.user_id,
+                "source": "admin-grant",
+                "consumed": True,
+            },
+            {"_id": 0, "daily_minute_cap": 1, "id": 1, "expires_at": 1},
+            sort=[("granted_at", -1)],
+        )
+        cap_minutes = (
+            int(comp_pass.get("daily_minute_cap") or 0) if comp_pass else 0
+        )
+        # Only apply when comp pass is the ACTIVE access path. If the
+        # user also has a paid pass, the paid one wins — skip cap.
+        if comp_pass and cap_minutes > 0:
+            paid_pass = await db.clarity_passes.find_one(
+                {
+                    "user_id": user.user_id,
+                    "source": {"$nin": ["admin-grant", "free_voice_beta"]},
+                    "consumed": True,
+                },
+                {"_id": 0, "id": 1},
+            )
+            if not paid_pass:
+                # Sum voice_sessions duration_seconds for today (UTC).
+                today_utc = datetime.now(timezone.utc).replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                )
+                today_iso = today_utc.isoformat()
+                pipeline = [
+                    {
+                        "$match": {
+                            "user_id": user.user_id,
+                            "started_at": {"$gte": today_iso},
+                        }
+                    },
+                    {
+                        "$group": {
+                            "_id": None,
+                            "secs": {"$sum": {"$ifNull": ["$duration_seconds", 0]}},
+                        }
+                    },
+                ]
+                used_secs = 0
+                async for row in db.voice_sessions.aggregate(pipeline):
+                    used_secs = int(row.get("secs") or 0)
+                cap_secs = cap_minutes * 60
+                if used_secs >= cap_secs:
+                    try:
+                        await db.funnel_events.insert_one({
+                            "id": str(uuid.uuid4()),
+                            "event": "voice_session_blocked_daily_cap",
+                            "user_id": user.user_id,
+                            "room": inp.room,
+                            "used_secs": used_secs,
+                            "cap_secs": cap_secs,
+                            "occurred_at": datetime.now(timezone.utc).isoformat(),
+                        })
+                    except Exception:  # noqa: BLE001
+                        pass
+                    raise HTTPException(
+                        status_code=402,
+                        detail={
+                            "code": "daily_cap_reached",
+                            "message": (
+                                f"You've used your {cap_minutes} free minutes "
+                                "for today. Please come back tomorrow."
+                            ),
+                            "used_minutes": round(used_secs / 60, 1),
+                            "cap_minutes": cap_minutes,
+                            "room": inp.room,
+                        },
+                    )
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        # Cap calculation must never break the live-session opening.
+        logger.warning("comp daily-cap check failed: %s", exc)
 
     # Close any orphaned previous session: deduct elapsed time based on
     # last_ping_at so a tab-crash never costs more than ~30 seconds.
@@ -10123,6 +10383,11 @@ async def whispers_summary(request: Request):
 class AdminGrantInput(BaseModel):
     email: str
     days: Optional[int] = 30
+    # §COMP-DAILY-CAP 2026-02-09 — Optional per-day voice-minute
+    # ceiling. Default 60 minutes/day. Set to 0 to disable the cap
+    # (legacy unlimited behaviour). 60 min/day × 30 days = 30h max
+    # voice — keeps influencer cost predictable.
+    daily_minute_cap: Optional[int] = 60
 
 
 @api_router.post("/admin/grant-clarity")
@@ -10144,6 +10409,9 @@ async def admin_grant_clarity(inp: AdminGrantInput, request: Request):
     expires_at = (
         datetime.now(timezone.utc) + timedelta(days=days)
     ).isoformat()
+    # Clamp the cap to a sane range: 0 (unlimited) or 5-480 minutes/day.
+    raw_cap = int(inp.daily_minute_cap if inp.daily_minute_cap is not None else 60)
+    daily_cap = 0 if raw_cap <= 0 else max(5, min(480, raw_cap))
     await db.clarity_passes.insert_one({
         "id": str(uuid.uuid4()),
         "user_id": user["user_id"],
@@ -10153,6 +10421,7 @@ async def admin_grant_clarity(inp: AdminGrantInput, request: Request):
         "expires_at": expires_at,
         "external_order_id": f"admin-grant-{uuid.uuid4().hex[:8]}",
         "source": "admin-grant",
+        "daily_minute_cap": daily_cap,
     })
     return {
         "status": "granted",
@@ -10160,6 +10429,7 @@ async def admin_grant_clarity(inp: AdminGrantInput, request: Request):
         "user_id": user["user_id"],
         "expires_at": expires_at,
         "days": days,
+        "daily_minute_cap": daily_cap,
     }
 
 
@@ -12492,6 +12762,237 @@ async def on_startup():
     # into MongoDB so they survive future production deploys. Idempotent —
     # files already present in `binary_assets` are skipped.
     asyncio.create_task(_auto_migrate_assets_to_mongo())
+
+    # §SALES-REPORT 2026-02-09 — Monthly sales report dispatcher.
+    # Sleeps until the 1st day of next month at 09:00 UTC, then emails
+    # Anna a structured breakdown of last month's revenue & costs.
+    asyncio.create_task(_monthly_sales_report_loop())
+
+
+async def _monthly_sales_report_loop() -> None:
+    """§SALES-REPORT 2026-02-09 — Once a month, on the 1st at 09:00 UTC,
+    email Anna a sales breakdown of the PREVIOUS calendar month.
+
+    Soft-fails on any error so the loop never dies. Only runs when
+    `REACH_OUT_EMAIL` is configured and Resend is online.
+    """
+    await asyncio.sleep(120)  # let startup settle
+    while True:
+        try:
+            now = datetime.now(timezone.utc)
+            # Compute next dispatch: first of next month at 09:00 UTC.
+            if now.month == 12:
+                next_run = datetime(now.year + 1, 1, 1, 9, 0, 0, tzinfo=timezone.utc)
+            else:
+                next_run = datetime(now.year, now.month + 1, 1, 9, 0, 0, tzinfo=timezone.utc)
+            sleep_seconds = max(60.0, (next_run - now).total_seconds())
+            await asyncio.sleep(sleep_seconds)
+            try:
+                await _send_monthly_sales_report()
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("monthly sales report dispatch failed: %s", exc)
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("monthly sales report loop hiccup: %s", exc)
+            await asyncio.sleep(3600)
+
+
+async def _build_sales_report(year: int, month: int) -> dict:
+    """Compute a structured report for the given calendar month.
+
+    Returns a dict with totals + per-tier breakdown + refund-review
+    candidates. Reads from `clarity_passes` (the canonical paid-pass
+    table) and `refund_review_queue` (today's short-session flags).
+    """
+    start = datetime(year, month, 1, tzinfo=timezone.utc)
+    if month == 12:
+        end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+    else:
+        end = datetime(year, month + 1, 1, tzinfo=timezone.utc)
+    start_iso = start.isoformat()
+    end_iso = end.isoformat()
+
+    # PAID PASSES — exclude admin grants and free-voice beta.
+    paid_cursor = db.clarity_passes.find(
+        {
+            "granted_at": {"$gte": start_iso, "$lt": end_iso},
+            "source": {"$nin": ["admin-grant", "free_voice_beta"]},
+        },
+        {"_id": 0},
+    )
+    paid_passes = await paid_cursor.to_list(length=10_000)
+
+    # Tier pricing (mirror SEED_PASSES so the math matches Stripe).
+    tier_prices = {
+        "30min": 15.0,
+        "60min": 30.0,
+        "season_30days": 70.0,
+    }
+    per_tier = {t: {"count": 0, "gross_usd": 0.0} for t in tier_prices}
+    for p in paid_passes:
+        t = p.get("tier")
+        if t in per_tier:
+            per_tier[t]["count"] += 1
+            per_tier[t]["gross_usd"] += tier_prices[t]
+
+    gross_total = sum(v["gross_usd"] for v in per_tier.values())
+    # LemonSqueezy typical fee ≈ 5% + $0.50/order on transactions
+    ls_fee_estimated = sum(
+        (v["gross_usd"] * 0.05) + (v["count"] * 0.50) for v in per_tier.values()
+    )
+    # Voice cost ≈ €0.25/min (conservative). 30min = $7.50, 60min = $15,
+    # season pass usage is variable — use 60-min as conservative proxy.
+    voice_cost_estimated = (
+        per_tier["30min"]["count"] * 7.50
+        + per_tier["60min"]["count"] * 15.0
+        + per_tier["season_30days"]["count"] * 15.0
+    )
+    net_estimated = gross_total - ls_fee_estimated - voice_cost_estimated
+
+    # Refund-review candidates (short sessions on fresh paid passes).
+    refunds_cursor = db.refund_review_queue.find(
+        {
+            "created_at": {"$gte": start_iso, "$lt": end_iso},
+            "needs_review": True,
+        },
+        {"_id": 0},
+    )
+    refund_candidates = await refunds_cursor.to_list(length=200)
+
+    return {
+        "year": year,
+        "month": month,
+        "window": {"start": start_iso, "end": end_iso},
+        "per_tier": per_tier,
+        "totals": {
+            "gross_usd": round(gross_total, 2),
+            "ls_fee_estimated_usd": round(ls_fee_estimated, 2),
+            "voice_cost_estimated_usd": round(voice_cost_estimated, 2),
+            "net_estimated_usd": round(net_estimated, 2),
+            "paid_orders": sum(v["count"] for v in per_tier.values()),
+        },
+        "refund_candidates": [
+            {
+                "id": r.get("id"),
+                "email": r.get("user_email"),
+                "room": r.get("room"),
+                "duration_seconds": r.get("duration_seconds"),
+                "tier": (r.get("fresh_pass") or {}).get("tier"),
+                "order_id": (r.get("fresh_pass") or {}).get("external_order_id"),
+                "created_at": r.get("created_at"),
+            }
+            for r in refund_candidates
+        ],
+    }
+
+
+async def _send_monthly_sales_report() -> None:
+    """Render + dispatch the previous month's report. No-op if env missing."""
+    destination = (os.environ.get("REACH_OUT_EMAIL") or "").strip()
+    if not destination:
+        logger.info("monthly sales report: REACH_OUT_EMAIL not set, skipping")
+        return
+
+    now = datetime.now(timezone.utc)
+    # Report covers the PREVIOUS month (we run on the 1st of the next).
+    if now.month == 1:
+        target_year, target_month = now.year - 1, 12
+    else:
+        target_year, target_month = now.year, now.month - 1
+
+    report = await _build_sales_report(target_year, target_month)
+    try:
+        from email_service import (
+            send_email as _send_email,
+            is_configured as _resend_configured,
+        )
+        if not _resend_configured():
+            logger.info("monthly sales report: Resend not configured, skipping")
+            return
+
+        from html import escape as _esc
+        totals = report["totals"]
+        per_tier = report["per_tier"]
+        subject = (
+            f"[Sales Report] {target_year}-{target_month:02d} · "
+            f"${totals['gross_usd']:.2f} gross · "
+            f"{totals['paid_orders']} orders"
+        )
+
+        rows_html = "".join(
+            f"<tr><td>{_esc(t)}</td>"
+            f"<td style=\"text-align:right\">{v['count']}</td>"
+            f"<td style=\"text-align:right\">${v['gross_usd']:.2f}</td></tr>"
+            for t, v in per_tier.items()
+        )
+        refund_block = ""
+        if report["refund_candidates"]:
+            rows = "".join(
+                f"<tr>"
+                f"<td>{_esc(str(r.get('email') or '?'))}</td>"
+                f"<td>{_esc(str(r.get('tier') or '?'))}</td>"
+                f"<td>{r.get('duration_seconds', 0):.1f}s</td>"
+                f"<td><a href=\"https://app.lemonsqueezy.com/orders\">{_esc(str(r.get('order_id') or '?'))}</a></td>"
+                f"</tr>"
+                for r in report["refund_candidates"]
+            )
+            refund_block = (
+                f"<h3 style=\"margin-top:24px\">Refund-review candidates ({len(report['refund_candidates'])})</h3>"
+                f"<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse:collapse;font-size:12px\">"
+                f"<thead><tr><th>Email</th><th>Tier</th><th>Session</th><th>LS Order</th></tr></thead>"
+                f"<tbody>{rows}</tbody></table>"
+            )
+
+        body_html = (
+            f"<h2>Sales Report · {target_year}-{target_month:02d}</h2>"
+            f"<p>Window: {_esc(report['window']['start'][:10])} → {_esc(report['window']['end'][:10])}</p>"
+            f"<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse:collapse\">"
+            f"<thead><tr><th>Tier</th><th>Orders</th><th>Gross USD</th></tr></thead>"
+            f"<tbody>{rows_html}</tbody></table>"
+            f"<h3 style=\"margin-top:24px\">Totals</h3>"
+            f"<ul>"
+            f"<li><strong>Gross:</strong> ${totals['gross_usd']:.2f}</li>"
+            f"<li>LemonSqueezy fee (est.): ${totals['ls_fee_estimated_usd']:.2f}</li>"
+            f"<li>Voice cost (est.): ${totals['voice_cost_estimated_usd']:.2f}</li>"
+            f"<li><strong>Net (est.):</strong> ${totals['net_estimated_usd']:.2f}</li>"
+            f"<li>Paid orders: {totals['paid_orders']}</li>"
+            f"</ul>"
+            f"{refund_block}"
+            f"<p style=\"color:#888;font-size:12px;margin-top:24px\">"
+            f"Estimates use 5% + $0.50/order for LS fees and conservative voice-minute pricing. "
+            f"Cross-check exact figures in LemonSqueezy dashboard → Reports."
+            f"</p>"
+        )
+        body_text = (
+            f"Sales Report · {target_year}-{target_month:02d}\n"
+            f"Window: {report['window']['start'][:10]} → {report['window']['end'][:10]}\n\n"
+            + "\n".join(
+                f"  {t}: {v['count']} orders · ${v['gross_usd']:.2f}"
+                for t, v in per_tier.items()
+            )
+            + (
+                f"\n\nGross: ${totals['gross_usd']:.2f}"
+                f"\nLS fee (est.): ${totals['ls_fee_estimated_usd']:.2f}"
+                f"\nVoice cost (est.): ${totals['voice_cost_estimated_usd']:.2f}"
+                f"\nNet (est.): ${totals['net_estimated_usd']:.2f}"
+                f"\nPaid orders: {totals['paid_orders']}"
+            )
+        )
+        await _send_email(
+            to=destination,
+            subject=subject,
+            html=body_html,
+            text=body_text,
+            sender="support",
+            tags=[
+                {"name": "kind", "value": "monthly_sales_report"},
+                {"name": "month", "value": f"{target_year}-{target_month:02d}"},
+            ],
+        )
+        logger.info("monthly sales report dispatched for %s-%02d", target_year, target_month)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("monthly sales report send failed: %s", exc)
 
 
 async def _ghost_session_reaper_loop() -> None:

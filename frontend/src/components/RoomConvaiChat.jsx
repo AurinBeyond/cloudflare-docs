@@ -191,6 +191,11 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
   const [textInput, setTextInput] = useState("");
   const [mode, setMode] = useState("voice"); // "voice" | "text" | "hybrid"
   const modeRef = useRef("voice"); // capture mode for onConnect handler
+  // §REFUND-FLAG 2026-02-09 — Wall-clock timestamp of last onConnect.
+  // Read by onDisconnect to compute session length and decide whether
+  // to ping `/api/refund-flag`. Resets to null after each disconnect
+  // so an idle tab never accidentally fires the flag.
+  const sessionStartedAtRef = useRef(null);
   const scrollRef = useRef(null);
   const agentName = ROOM_AGENT_NAME[room] || "the guide";
 
@@ -370,6 +375,11 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       console.log("[ConvAI]", room, "onConnect — session live");
       setStatus("live");
       setErrorMsg("");
+      // §REFUND-FLAG 2026-02-09 — Mark the wall-clock moment the
+      // session went live so onDisconnect can compute a duration
+      // and ask the backend whether this looks like a paid-session
+      // crash worth Anna's manual review.
+      sessionStartedAtRef.current = Date.now();
       // §STABILIZATION 2026-02-15 PM — Explicit mute state per mode.
       // VOICE: ensure mic is UNMUTED (the SDK's setMuted state may
       //        persist across sessions; without this an earlier
@@ -399,6 +409,36 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
       // eslint-disable-next-line no-console
       console.log("[ConvAI]", room, "onDisconnect", details);
       setStatus("idle");
+
+      // §REFUND-FLAG 2026-02-09 — If the session lasted < 30s,
+      // signal the backend so Anna can review whether the user is a
+      // legitimate refund candidate. Pure telemetry — never
+      // auto-refunds. Backend cross-checks against a fresh paid
+      // pass before emailing Anna, so silent disconnects on free
+      // sessions never spam her inbox.
+      try {
+        const started = sessionStartedAtRef.current;
+        if (started) {
+          const duration = (Date.now() - started) / 1000;
+          sessionStartedAtRef.current = null;
+          if (duration < 30) {
+            const reason =
+              typeof details === "string"
+                ? details
+                : (details && (details.reason || details.code)) || "short_session";
+            fetch(`${__BACKEND_URL__}/api/refund-flag`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                room,
+                duration_seconds: duration,
+                reason: String(reason).slice(0, 120),
+              }),
+              credentials: "include",
+            }).catch(() => { /* never bubble */ });
+          }
+        }
+      } catch { /* never bubble */ }
     },
     onError: (err) => {
       // eslint-disable-next-line no-console

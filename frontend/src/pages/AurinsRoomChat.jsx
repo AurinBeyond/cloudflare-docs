@@ -76,6 +76,11 @@ function AurinsRoomChatInner() {
   const [blocked, setBlocked] = useState(false);
   const modeRef = useRef("voice");
   const sessionIdRef = useRef(null);
+  // §REFUND-FLAG 2026-02-09 — Same short-session detector as the
+  // adult RoomConvaiChat. Aurin's room is paid territory too, so a
+  // parent who buys a pack and the SDK crashes inside 30s deserves
+  // Anna's manual review just the same.
+  const sessionStartedAtRef = useRef(null);
   // §AURIN 2026-02-09 — Defensive retry counter. If startSession fails
   // with overrides (Dashboard security rejection or transient network
   // glitch), we transparently retry ONCE without overrides so the
@@ -89,11 +94,35 @@ function AurinsRoomChatInner() {
       console.log("[Aurin]", group.slug, "onConnect — session live");
       setStatus("live");
       setErrorMsg("");
+      sessionStartedAtRef.current = Date.now();
     },
     onDisconnect: (details) => {
       // eslint-disable-next-line no-console
       console.log("[Aurin]", group.slug, "onDisconnect", details);
       setStatus("idle");
+      try {
+        const started = sessionStartedAtRef.current;
+        if (started) {
+          const duration = (Date.now() - started) / 1000;
+          sessionStartedAtRef.current = null;
+          if (duration < 30) {
+            const reason =
+              typeof details === "string"
+                ? details
+                : (details && (details.reason || details.code)) || "short_session";
+            fetch(`${BACKEND_URL}/api/refund-flag`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                room: `aurin-${group.slug}`,
+                duration_seconds: duration,
+                reason: String(reason).slice(0, 120),
+              }),
+              credentials: "include",
+            }).catch(() => {});
+          }
+        }
+      } catch { /* never bubble */ }
     },
     onError: (e) => {
       // eslint-disable-next-line no-console
