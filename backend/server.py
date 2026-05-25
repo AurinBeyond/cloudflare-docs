@@ -4061,21 +4061,31 @@ class RefHitInput(BaseModel):
     path: Optional[str] = None
     user_agent: Optional[str] = None
     referer: Optional[str] = None
+    utm_source: Optional[str] = None
+    utm_medium: Optional[str] = None
+    utm_campaign: Optional[str] = None
 
 
 @api_router.post("/marketing/ref-hit")
 async def marketing_ref_hit(inp: RefHitInput, request: Request):
     code = (inp.code or "").strip().upper()[:32]
+    # Permit UTM-only hits (email-funnel clicks without a code).
     if not code:
-        return {"ok": False, "reason": "no_code"}
+        if not (inp.utm_source or inp.utm_campaign):
+            return {"ok": False, "reason": "no_code"}
+        code = "UTM_ONLY"
     doc = {
         "id": f"hit_{uuid.uuid4().hex[:12]}",
         "code": code,
         "code_kind": "muse" if code.startswith("MUSE") else (
-            "aurin" if code.startswith("AURIN") else "other"),
+            "aurin" if code.startswith("AURIN") else (
+                "utm" if code == "UTM_ONLY" else "other")),
         "path": (inp.path or "").strip()[:200] or None,
         "ua": (inp.user_agent or request.headers.get("user-agent") or "")[:200] or None,
         "referer": (inp.referer or request.headers.get("referer") or "")[:200] or None,
+        "utm_source": (inp.utm_source or "").strip()[:60] or None,
+        "utm_medium": (inp.utm_medium or "").strip()[:60] or None,
+        "utm_campaign": (inp.utm_campaign or "").strip()[:80] or None,
         "ip_prefix": (request.client.host.rsplit(".", 1)[0] + ".0"
                       if request.client and request.client.host and "." in request.client.host
                       else None),

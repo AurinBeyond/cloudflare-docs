@@ -33,13 +33,20 @@ export default function CycleBanner() {
     useEffect(() => {
         const keyParam = (params.get("key") || "").trim().toUpperCase();
         const refParam = (params.get("ref") || "").trim().toUpperCase();
+        const utmSource = (params.get("utm_source") || "").trim();
+        const utmMedium = (params.get("utm_medium") || "").trim();
+        const utmCampaign = (params.get("utm_campaign") || "").trim();
 
-        // Log the ref-hit (fire-and-forget).
-        if (refParam) {
+        // Log the ref-hit (fire-and-forget). Includes UTM so email
+        // clicks ?utm_source=email also land in analytics.
+        if (refParam || utmSource || utmCampaign) {
             api.post("/marketing/ref-hit", {
                 code: refParam,
                 path: window.location.pathname,
                 referer: document.referrer || null,
+                utm_source: utmSource || null,
+                utm_medium: utmMedium || null,
+                utm_campaign: utmCampaign || null,
             }).catch(() => {});
         }
         // Also count a key= visit as a hit.
@@ -48,10 +55,11 @@ export default function CycleBanner() {
                 code: keyParam,
                 path: window.location.pathname,
                 referer: document.referrer || null,
+                utm_source: utmSource || null,
+                utm_medium: utmMedium || null,
+                utm_campaign: utmCampaign || null,
             }).catch(() => {});
-            // Stash for the post-sign-in redeem flow.
             try { sessionStorage.setItem(STASH_KEY, keyParam); } catch {}
-            // Validate so we can show a personalised welcome.
             api.get(`/guest-keys/validate?code=${encodeURIComponent(keyParam)}`)
                .then((r) => setKey(r.data || null))
                .catch(() => setKey(null));

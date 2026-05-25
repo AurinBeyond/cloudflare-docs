@@ -86,7 +86,7 @@ def render_html(parent_name: str | None) -> str:
     </p>
 
     <div style="margin:32px 0;text-align:center;">
-      <a href="{PUBLIC_BASE}/body-temple"
+      <a href="{PUBLIC_BASE}/portal?utm_source=email&utm_medium=resend&utm_campaign=body-temple-launch"
          style="display:inline-block;padding:14px 26px;background:#4a3a1c;color:#f8efde;text-decoration:none;border-radius:999px;font-family:'Fraunces',serif;font-size:15px;letter-spacing:0.04em;box-shadow:0 8px 18px -8px rgba(74,58,28,0.6);">
         Begin Day 1, free ›
       </a>
@@ -140,7 +140,7 @@ def render_text(parent_name: str | None) -> str:
         "to notice, across twenty-eight days, what your body has been "
         "quietly asking for.\n\n"
         "Day 1 is already waiting for you in your Clarity room.\n\n"
-        f"Begin Day 1, free: {PUBLIC_BASE}/body-temple\n\n"
+        f"Begin Day 1, free: {PUBLIC_BASE}/portal?utm_source=email&utm_medium=resend&utm_campaign=body-temple-launch\n\n"
         "If you find that this twenty-eight-day journey speaks to you, "
         "you can open the full programme for $39, once, yours forever. "
         "But begin today entirely freely.\n\n"

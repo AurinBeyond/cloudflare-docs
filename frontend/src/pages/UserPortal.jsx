@@ -117,6 +117,43 @@ export default function UserPortal() {
       <CycleBanner />
       {user && <GuestKeyRedeemer user={user} />}
 
+      {/* §BODY-TEMPLE-FUNNEL 2026-02-09 — Marketing-agent ask:
+          parents arriving from the launch email must see a direct,
+          quiet path to Body Temple 28. Always visible — works
+          whether the visitor is signed in or not. */}
+      <section className="aurin-section-sm" data-testid="portal-body-temple-cta">
+        <div className="aurin-container max-w-[820px]">
+          <Link
+            to="/body-temple?utm_source=portal"
+            data-testid="portal-body-temple-link"
+            className="sanctuary-wood block p-6 md:p-7 no-underline"
+          >
+            <div className="flex items-start gap-4 relative z-[1]">
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.22em]"
+                   style={{ color: "#7a5a26" }}>
+                  Body Temple 28 · Day 1 is free
+                </p>
+                <p className="sanctuary-wood-title text-[30px] md:text-[34px] mt-1">
+                  A small thing for you.
+                </p>
+                <p className="text-[13.5px] mt-2 leading-relaxed max-w-[55ch]"
+                   style={{ color: "#5a4a26" }}>
+                  Four ancient keys — breathing, touch, rest, presence —
+                  walked across twenty-eight quiet days. Read Day 1
+                  before you decide anything. $39 once, yours forever
+                  if you continue.
+                </p>
+                <p className="text-[13px] mt-3 inline-flex items-center gap-1.5"
+                   style={{ color: "#3d2e15" }}>
+                  Open Day 1 →
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Purpose */}
       <section className="aurin-section-sm border-b border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container grid grid-cols-1 md:grid-cols-12 gap-10">
