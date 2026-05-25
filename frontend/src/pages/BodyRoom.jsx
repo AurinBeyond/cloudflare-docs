@@ -12,6 +12,7 @@ import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import BodyLensSelector from "@/components/BodyLensSelector";
 import LensForRegion from "@/components/LensForRegion";
+import PostSessionMoodReflect from "@/components/PostSessionMoodReflect";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
   fetchBodyHotspots,
@@ -258,6 +259,18 @@ export default function BodyRoom() {
           </div>
         </div>
       </section>
+
+      {/* §VOICE-MOOD-NLP 2026-02-09 — Phase 2 mood detection. A
+          gentle one-sentence reflection prompt after Kaelan's voice
+          session. Privacy-preserving (text discarded, only mood
+          label kept). Renders only for signed-in users. */}
+      {user && (
+        <section className="aurin-section-sm" data-testid="body-room-mood-reflect">
+          <div className="aurin-container max-w-[760px]">
+            <PostSessionMoodReflect room="kaelan" />
+          </div>
+        </section>
+      )}
 
       {/* If signed in, show a soft "the room remembers" panel. The
           cross-link to Clarity Release is preserved here ONLY as a

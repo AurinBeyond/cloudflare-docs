@@ -6,6 +6,7 @@ import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line
 // §AUDIT-SCALE 2026-05-20 — Course Room joins Clarity in tracking
 // presence_seconds so Alistair's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
+import AlistairModeSelector from "@/components/AlistairModeSelector";
 import { fetchCourses } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
@@ -86,6 +87,14 @@ export default function CourseRoom() {
           {/* §AUDIT-SCALE 2026-05-20 — Tracker wraps RoomConvaiChat
               internally so we do not double-mount the SDK. */}
           <ConvaiPresenceTracker room="courses" />
+        </div>
+      </section>
+
+      {/* §ALISTAIR-PERSONA 2026-02-09 — Adult-clarity persona MVP.
+          Optional pre-session focus selector for Alistair. */}
+      <section className="aurin-section-sm" data-testid="course-room-mode-section">
+        <div className="aurin-container max-w-[760px]">
+          <AlistairModeSelector />
         </div>
       </section>
 

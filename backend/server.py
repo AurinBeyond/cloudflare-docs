@@ -24,6 +24,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import asyncio
 import os
 import re
+import json
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
@@ -3637,6 +3638,216 @@ async def grace_mode_get(request: Request):
     u = await db.users.find_one({"user_id": user.user_id}, {"_id": 0, "grace_mode": 1})
     mode = (u or {}).get("grace_mode") or ""
     return {"mode": mode, "frame": GRACE_MODES.get(mode) if mode else None}
+
+
+
+# =============================================================
+# §ALISTAIR-PERSONA 2026-02-09 — High-Performers / Burnout
+# persona MVP for the Course Room (Alistair). Mirrors the Grace
+# mode pattern: three modes, persistence in users.alistair_mode,
+# a pre-session frame surfaced in the UI.
+#
+# Never clinical. Never measuring. Strategic-mentor tone that
+# fits Alistair's existing voice ("a steady voice for those who
+# carry hard things forward").
+# =============================================================
+
+ALISTAIR_MODES = {
+    "focus": {
+        "key": "focus",
+        "title": "One Honest Hour",
+        "subtitle": "Pick the one thing that matters today.",
+        "blurb": "Today, Alistair listens to your task-list — and helps you find the single move that, done well, makes the rest matter less.",
+        "first_message": (
+            "Welcome back. Before you list what's on your plate today, "
+            "tell me this: if only one thing got done before sundown, "
+            "which one would let you sleep? Just one. We'll start there."
+        ),
+        "icon": "Target",
+        "color": "#B89B6E",
+    },
+    "decompression": {
+        "key": "decompression",
+        "title": "Carry Less",
+        "subtitle": "Setting down what isn't yours.",
+        "blurb": "Today we look at what you've been quietly carrying — and which of those weights belong to someone else's hands.",
+        "first_message": (
+            "I see the weight you came in with. Let's name three "
+            "things on your shoulders right now — and for each one, "
+            "we'll ask one quiet question: is this mine to carry, "
+            "or did someone hand it to me when I wasn't looking?"
+        ),
+        "icon": "FeatherIcon",
+        "color": "#7BA888",
+    },
+    "decision": {
+        "key": "decision",
+        "title": "Standing at a Door",
+        "subtitle": "When the next move is unclear.",
+        "blurb": "Today we sit with a single decision you've been postponing. Alistair won't make it for you — he'll just help you hear which way your body already leans.",
+        "first_message": (
+            "Welcome. Tell me about the door you've been standing in "
+            "front of — the one you keep almost opening. We won't "
+            "decide today. We'll just listen to where your body "
+            "wants to go when no one is watching."
+        ),
+        "icon": "Compass",
+        "color": "#9B7BA8",
+    },
+}
+
+
+@api_router.get("/alistair/modes")
+async def alistair_modes_list():
+    return {"modes": list(ALISTAIR_MODES.values())}
+
+
+class AlistairModeSelectInput(BaseModel):
+    mode: str
+
+
+@api_router.post("/alistair/mode")
+async def alistair_mode_set(inp: AlistairModeSelectInput, request: Request):
+    if inp.mode not in ALISTAIR_MODES and inp.mode != "":
+        raise HTTPException(status_code=400, detail="Unknown Alistair mode.")
+    user = await _require_user(request)
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"alistair_mode": inp.mode,
+                  "alistair_mode_set_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True, "mode": inp.mode, "frame": ALISTAIR_MODES.get(inp.mode)}
+
+
+@api_router.get("/alistair/mode")
+async def alistair_mode_get(request: Request):
+    user = await _resolve_current_user(request)
+    if not user:
+        return {"mode": "", "frame": None}
+    u = await db.users.find_one({"user_id": user.user_id}, {"_id": 0, "alistair_mode": 1})
+    mode = (u or {}).get("alistair_mode") or ""
+    return {"mode": mode, "frame": ALISTAIR_MODES.get(mode) if mode else None}
+
+
+# =============================================================
+# §VOICE-MOOD-NLP 2026-02-09 — Phase 2 of mood detection.
+# Reads a free-form post-session reflection (or a transcript
+# snippet) and asks Claude for a single calibrated mood label.
+# Stored as voice_mood_signals so Today's Quest can blend
+# voice-derived signals with the manual daily check-in.
+#
+# Privacy: we DO NOT persist the raw text — only the extracted
+# mood label and confidence. This is the founder's hard rule.
+# =============================================================
+
+VALID_VOICE_MOODS = ("sad", "worried", "okay", "good", "sparkly")
+
+_VOICE_MOOD_PROMPT = (
+    "You are reading one short reflection a person has just written "
+    "after a quiet voice session with their inner mentor. Your only "
+    "job is to choose ONE mood label that best fits this moment.\n\n"
+    "Valid labels (lowercase, exactly one):\n"
+    "  sad     — heavy, tearful, low, grieving\n"
+    "  worried — anxious, busy mind, racing\n"
+    "  okay    — neutral, holding steady, middle\n"
+    "  good    — lighter, more open, gently positive\n"
+    "  sparkly — luminous, joyful, expansive\n\n"
+    "Return JSON only: {\"mood\": \"<one of the labels>\", "
+    "\"confidence\": <float 0..1>}. "
+    "No prose, no explanation, no markdown."
+)
+
+
+async def _extract_mood_from_text(text: str) -> Optional[Dict[str, Any]]:
+    """Call Claude via Emergent LLM key to get a calibrated mood
+    label. Returns None on any failure — caller treats as 'no signal'."""
+    api_key = os.getenv("EMERGENT_LLM_KEY")
+    if not api_key or not text or len(text.strip()) < 4:
+        return None
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"voice-mood-{uuid.uuid4().hex[:10]}",
+            system_message=_VOICE_MOOD_PROMPT,
+        ).with_model("anthropic", "claude-sonnet-4-5-20250929")
+        reply = await chat.send_message(UserMessage(text=text.strip()[:1200]))
+        raw = reply if isinstance(reply, str) else (
+            getattr(reply, "content", None) or getattr(reply, "text", None) or ""
+        )
+        if not raw:
+            return None
+        import re
+        m = re.search(r"\{.*\}", str(raw), flags=re.S)
+        if not m:
+            return None
+        parsed = json.loads(m.group(0))
+        mood = (parsed.get("mood") or "").strip().lower()
+        conf = parsed.get("confidence")
+        try:
+            conf = float(conf)
+        except Exception:
+            conf = 0.5
+        if mood not in VALID_VOICE_MOODS:
+            return None
+        return {"mood": mood, "confidence": max(0.0, min(1.0, conf))}
+    except Exception as e:
+        logger.warning("voice mood extraction failed: %s", e)
+        return None
+
+
+class VoiceMoodInput(BaseModel):
+    text: str
+    room: Optional[str] = None  # grace / kaelan / sara / alistair (free-form)
+    session_id: Optional[str] = None
+
+
+@api_router.post("/voice-mood/extract")
+async def voice_mood_extract(inp: VoiceMoodInput, request: Request):
+    """Authed. Receives a short post-session reflection, asks the
+    LLM for a mood label, stores ONLY the label + confidence (NOT
+    the text). Returns the mood + a soft Aurin-tone reply."""
+    user = await _require_user(request)
+    extracted = await _extract_mood_from_text(inp.text or "")
+    if not extracted:
+        # Soft-fail: store nothing, return a graceful no-op so the
+        # caller can decide whether to retry or just thank the user.
+        return {"stored": False, "reason": "no_signal", "mood": None}
+
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "user_id": user.user_id,
+        "mood": extracted["mood"],
+        "confidence": extracted["confidence"],
+        "room": (inp.room or "").lower()[:24] or None,
+        "session_id": (inp.session_id or "").strip()[:64] or None,
+        "created_at": now,
+        # NEVER store inp.text. Founder's privacy guarantee.
+        "source": "voice_reflection",
+    }
+    await db.voice_mood_signals.insert_one(doc)
+    aurin_line = MOOD_AURIN_REPLY.get(extracted["mood"], MOOD_AURIN_REPLY["okay"])
+    return {
+        "stored": True,
+        "mood": extracted["mood"],
+        "confidence": extracted["confidence"],
+        "aurin_line": aurin_line,
+    }
+
+
+@api_router.get("/voice-mood/recent")
+async def voice_mood_recent(request: Request, days: int = 14):
+    """Returns voice-derived mood signals for the last N days,
+    most recent first. Used by Today's Quest to blend with the
+    manual daily check-in."""
+    user = await _require_user(request)
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=max(1, min(days, 60)))).isoformat()
+    cursor = db.voice_mood_signals.find(
+        {"user_id": user.user_id, "created_at": {"$gte": cutoff}},
+        {"_id": 0},
+    ).sort("created_at", -1).limit(50)
+    return {"signals": [doc async for doc in cursor]}
+
 
 
 

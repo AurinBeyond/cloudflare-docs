@@ -232,8 +232,9 @@ export default function KidsActivities() {
         <header className="mb-9 max-w-[44ch]">
           <p className="text-[11px] uppercase tracking-[0.28em] mb-2"
              style={{ color: palette.textMuted }}>A clarity curriculum</p>
-          <h1 className="font-serif text-[34px] sm:text-[40px] leading-[1.05]"
-              data-testid="kids-activities-title">
+          <h1 className="text-[40px] sm:text-[48px] leading-[1]"
+              data-testid="kids-activities-title"
+              style={{ fontFamily: "Caveat, Fraunces, serif", fontWeight: 600, color: palette.accent }}>
             Quiet things to do today.
           </h1>
           <p className="mt-3 text-[15px] leading-relaxed"
@@ -303,18 +304,27 @@ export default function KidsActivities() {
               <Link key={a.slug}
                     to={`/kids-universe/${theme.slug}/activities/${a.slug}`}
                     data-testid={`kids-activity-card-${a.slug}`}
-                    className="block rounded-2xl p-5 transition hover:-translate-y-0.5 relative"
+                    className="kids-activity-card group block rounded-2xl p-5 transition hover:-translate-y-1 relative overflow-hidden"
                     style={{
-                      background: palette.cardBg,
+                      background: `linear-gradient(180deg, #ffffff 0%, ${palette.cardBg} 100%)`,
                       border: `1.5px solid ${palette.cardBorder}`,
+                      boxShadow: `0 10px 22px -14px ${palette.accent}66, 0 0 0 1px ${palette.accent}22, inset 0 1px 0 rgba(255,255,255,0.85)`,
                       opacity: a.locked ? 0.85 : 1,
                     }}>
-                <div className="flex items-start justify-between mb-3">
-                  <span className="inline-flex items-center justify-center rounded-full"
+                <span aria-hidden="true"
+                      className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-2xl"
+                      style={{
+                        height: "38%",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%)",
+                      }} />
+                <div className="relative flex items-start justify-between mb-3">
+                  <span className="inline-flex items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
                         style={{
-                          width: 36, height: 36,
-                          background: `${palette.accent}1A`,
+                          width: 38, height: 38,
+                          background: `linear-gradient(180deg, #ffffff 0%, ${palette.accent}22 100%)`,
                           color: palette.accent,
+                          border: `1px solid ${palette.cardBorder}`,
+                          boxShadow: `0 3px 8px -3px ${palette.accent}55, inset 0 1px 0 rgba(255,255,255,0.7)`,
                         }}>
                     <ModuleIcon size={16} strokeWidth={1.6} />
                   </span>
@@ -322,11 +332,11 @@ export default function KidsActivities() {
                     <Lock size={14} style={{ color: palette.textMuted }} />
                   )}
                 </div>
-                <h3 className="font-serif text-[17.5px] leading-snug mb-2"
-                    style={{ color: palette.text }}>{a.title}</h3>
-                <p className="text-[13px] leading-relaxed mb-4"
+                <h3 className="relative text-[20px] leading-snug mb-2"
+                    style={{ color: palette.text, fontFamily: "Caveat, Fraunces, serif", fontWeight: 600 }}>{a.title}</h3>
+                <p className="relative text-[13px] leading-relaxed mb-4"
                    style={{ color: palette.textMuted }}>{a.body}</p>
-                <div className="flex items-center gap-3 text-[11.5px]"
+                <div className="relative flex items-center gap-3 text-[11.5px]"
                      style={{ color: palette.textMuted }}>
                   <span className="inline-flex items-center gap-1">
                     <Clock size={11} /> {a.duration_min} min
@@ -335,7 +345,7 @@ export default function KidsActivities() {
                     <Users size={11} /> {a.with_parent}
                   </span>
                   <span className="ml-auto inline-flex items-center gap-1"
-                        style={{ color: palette.accent }}>
+                        style={{ color: palette.accent, fontWeight: 600 }}>
                     <Sparkles size={11} /> +{a.reward_stars} ★
                   </span>
                 </div>

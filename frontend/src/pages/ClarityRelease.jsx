@@ -19,6 +19,7 @@ import VoiceTopupSlider from "@/components/VoiceTopupSlider";
 import UniversalMinuteBank from "@/components/UniversalMinuteBank";
 import TodaysQuestCard from "@/components/TodaysQuestCard";
 import GraceModeSelector from "@/components/GraceModeSelector";
+import PostSessionMoodReflect from "@/components/PostSessionMoodReflect";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -474,6 +475,13 @@ export default function ClarityRelease() {
           <section className="aurin-section-sm" data-testid="grace-mode-section">
             <div className="aurin-container max-w-[860px]">
               <GraceModeSelector />
+            </div>
+          </section>
+          {/* §VOICE-MOOD-NLP 2026-02-09 — Phase 2 mood detection.
+              Privacy-preserving post-session reflection. */}
+          <section className="aurin-section-sm" data-testid="grace-mood-reflect">
+            <div className="aurin-container max-w-[860px]">
+              <PostSessionMoodReflect room="grace" />
             </div>
           </section>
           <HubPanel
