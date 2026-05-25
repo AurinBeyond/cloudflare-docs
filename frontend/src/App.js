@@ -44,6 +44,7 @@ import ClarityRelease from "@/pages/ClarityRelease";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
+import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -148,6 +149,11 @@ function AppRouter() {
             </WandererGate>
           }
         />
+        {/* §BODY-TEMPLE 2026-02-09 — Public route so the course page
+            is visible to non-signed-in visitors as a marketing surface;
+            Day 1 is free preview, days 2-28 gate via the existing
+            premium logic (clarity_passes + presence_seconds_left). */}
+        <Route path="/body-temple" element={<BodyTemple />} />
         <Route
           path="/parents-room"
           element={

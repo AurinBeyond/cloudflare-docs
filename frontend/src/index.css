@@ -967,3 +967,137 @@
     display: none !important;
 }
 
+
+
+/* =========================================================
+ * §SANCTUARY-VISUAL 2026-02-09 — Body Temple + Kids Hub.
+ * Founder's mood-board (warm wooden panels, Caveat handwriting,
+ * golden Aurin aura). Opt-in via .sanctuary-wood / .sanctuary-aura
+ * so existing pages stay untouched.
+ * ========================================================= */
+
+.font-sanctuary-hand,
+.sanctuary-hand {
+    font-family: "Caveat", "Fraunces", cursive;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+}
+
+/* Warm wooden panel — soft sand gradient + faint grain. Pairs
+   with a handwritten Caveat label or icon. Use on cards that
+   should feel "carved" rather than "rendered". */
+.sanctuary-wood {
+    position: relative;
+    background:
+        linear-gradient(180deg,
+            #f6e3c2 0%,
+            #ecd0a2 60%,
+            #d9b577 100%);
+    border: 1px solid rgba(120, 84, 36, 0.28);
+    border-radius: 18px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.5) inset,
+        0 14px 30px -22px rgba(80, 50, 10, 0.55),
+        0 2px 0 rgba(0, 0, 0, 0.06) inset;
+    color: #4a3a1c;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.sanctuary-wood::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(
+            115deg,
+            rgba(120, 80, 30, 0.06) 0 2px,
+            transparent 2px 7px
+        );
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+}
+
+.sanctuary-wood:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+        0 22px 40px -22px rgba(80, 50, 10, 0.65),
+        0 2px 0 rgba(0, 0, 0, 0.06) inset;
+}
+
+.sanctuary-wood .sanctuary-wood-icon {
+    color: #6a4b1f;
+    flex-shrink: 0;
+}
+
+.sanctuary-wood .sanctuary-wood-title {
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    color: #3d2e15;
+    line-height: 1;
+}
+
+/* Golden aura — soft radial halo. Use on Aurin's portrait or
+   any avatar inside the sanctuary frame. */
+.sanctuary-aura {
+    position: relative;
+    isolation: isolate;
+}
+
+.sanctuary-aura::before {
+    content: "";
+    position: absolute;
+    inset: -18%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 215, 145, 0.62) 0%,
+        rgba(255, 200, 120, 0.32) 35%,
+        rgba(255, 200, 120, 0.0) 70%
+    );
+    filter: blur(8px);
+    z-index: -1;
+    pointer-events: none;
+    animation: sanctuaryAuraPulse 6s ease-in-out infinite;
+}
+
+@keyframes sanctuaryAuraPulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.04); }
+}
+
+/* Cream cream-bg variant for body-temple page (warmer than the
+   rooms' default near-black). Activated by a body-class so the
+   whole page reads like the founder's mood-board photos. */
+.sanctuary-cream {
+    background:
+        radial-gradient(120% 80% at 10% 0%, rgba(255, 230, 195, 0.55), transparent 60%),
+        radial-gradient(120% 80% at 90% 100%, rgba(232, 200, 155, 0.45), transparent 55%),
+        linear-gradient(180deg, #f8efde 0%, #f3e6cb 100%);
+    color: #3d2e15;
+    min-height: 100vh;
+}
+
+.sanctuary-cream h1,
+.sanctuary-cream h2,
+.sanctuary-cream h3 {
+    color: #2c1f0a;
+}
+
+.sanctuary-cream .sanctuary-muted {
+    color: #6a5836;
+}
+
+/* Soft glow bubble for the meditating-child mockup style — a
+   tall amber arc used as a "sacred space" frame. */
+.sanctuary-bubble {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 218, 158, 0.55) 0%,
+        rgba(255, 218, 158, 0.18) 55%,
+        rgba(255, 218, 158, 0.0) 85%
+    );
+    border-radius: 50% / 60%;
+    filter: blur(0.5px);
+}

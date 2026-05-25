@@ -18,6 +18,7 @@ import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import VoiceTopupSlider from "@/components/VoiceTopupSlider";
 import UniversalMinuteBank from "@/components/UniversalMinuteBank";
 import TodaysQuestCard from "@/components/TodaysQuestCard";
+import GraceModeSelector from "@/components/GraceModeSelector";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -468,6 +469,13 @@ export default function ClarityRelease() {
               resumingId={resumingThreadId}
             />
           )}
+          {/* §GRACE-BOUNDARIES 2026-02-09 — Adult-clarity persona MVP.
+              Optional pre-session focus selector. Pure addition. */}
+          <section className="aurin-section-sm" data-testid="grace-mode-section">
+            <div className="aurin-container max-w-[860px]">
+              <GraceModeSelector />
+            </div>
+          </section>
           <HubPanel
           passes={passes}
           betaNote={betaNote}

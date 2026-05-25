@@ -199,6 +199,40 @@ export default function BodyRoom() {
         </div>
       </section>
 
+      {/* §BODY-TEMPLE 2026-02-09 — Course entry card. Sits between
+          the Kaelan voice and the silhouette so it surfaces early
+          but doesn't pre-empt the interactive map. Wood-panel
+          aesthetic from the founder's mood-board. */}
+      <section className="aurin-section-sm" data-testid="body-room-temple-entry">
+        <div className="aurin-container max-w-[760px]">
+          <Link
+            to="/body-temple"
+            data-testid="body-room-temple-cta"
+            className="sanctuary-wood block p-6 md:p-7 no-underline"
+          >
+            <div className="flex items-start gap-4 relative z-[1]">
+              <Sprout size={28} className="sanctuary-wood-icon" />
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.18em]" style={{color: "#7a5a26"}}>
+                  Premium · 4 weeks
+                </p>
+                <p className="sanctuary-wood-title text-[30px] md:text-[34px] mt-0.5">
+                  Body Temple 28
+                </p>
+                <p className="text-[13.5px] mt-2 leading-relaxed max-w-[52ch]" style={{color: "#5a4a26"}}>
+                  Four ancient keys — breathing, touch, rest, presence —
+                  walked across twenty-eight quiet days. Yours forever
+                  after one $39 unlock.
+                </p>
+                <p className="text-[13px] mt-3 inline-flex items-center gap-1.5" style={{color: "#3d2e15"}}>
+                  Walk the temple <ArrowRight size={13} />
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Interactive silhouette */}
       <section className="aurin-section-sm" data-testid="body-room-silhouette">
         <div className="aurin-container max-w-[860px]">

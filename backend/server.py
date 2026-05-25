@@ -3425,6 +3425,221 @@ async def aurin_today_quest(request: Request):
     }
 
 
+
+# =============================================================
+# §BODY-TEMPLE 2026-02-09 — Body Temple 28-day curriculum.
+# A premium adult course living inside the Kaelan (Body) room.
+# Founder directive: integrate ancient body-wisdom (breathing,
+# touch, rest, presence) as Anna's first paid adult course.
+#
+# Free preview: Day 1 visible to everyone.
+# Paid unlock: $39 via existing ClarityPass / premium gating
+# (any active paying parent unlocks all 28 days — same gating
+# logic as the Clarity Curriculum premium activities).
+# =============================================================
+
+from body_temple_curriculum import (  # noqa: E402
+    BODY_TEMPLE_DAYS,
+    BODY_TEMPLE_WEEKS,
+    BODY_TEMPLE_PRICE_USD,
+    BODY_TEMPLE_TOTAL_DAYS,
+    get_day as _bt_get_day,
+    get_week_days as _bt_get_week_days,
+    course_overview as _bt_overview,
+)
+
+
+def _bt_public_day(d: Dict[str, Any], unlocked: bool) -> Dict[str, Any]:
+    """Strip server-only fields. Locked days return only the
+    teaser (title + week) — no body, no practice, no reflection."""
+    locked = bool(d.get("is_premium")) and not unlocked
+    return {
+        "day": d["day"],
+        "week_key": d["week_key"],
+        "week_number": d["week_number"],
+        "title": d["title"],
+        "body": d["body"] if not locked else
+            "A gentle practice inside Body Temple 28. Unlock the course to walk this day with Aurin.",
+        "practice": d["practice"] if not locked else [],
+        "duration_min": d["duration_min"],
+        "reflection": d["reflection"] if not locked else None,
+        "is_premium": bool(d.get("is_premium")),
+        "locked": locked,
+    }
+
+
+@api_router.get("/body-temple/overview")
+async def body_temple_overview(request: Request):
+    """Public. Returns course shape + per-day completion if signed in."""
+    user = await _resolve_current_user(request)
+    unlocked = False
+    completed_days: list[int] = []
+    if user:
+        unlocked = await _user_has_premium(user.user_id)
+        cursor = db.body_temple_progress.find(
+            {"user_id": user.user_id}, {"_id": 0, "day": 1},
+        )
+        completed_days = [doc["day"] async for doc in cursor]
+
+    overview = _bt_overview()
+    return {
+        **overview,
+        "unlocked": unlocked,
+        "completed_days": sorted(completed_days),
+        "completed_count": len(completed_days),
+        "days_preview": [
+            {
+                "day": d["day"],
+                "week_key": d["week_key"],
+                "title": d["title"],
+                "duration_min": d["duration_min"],
+                "is_premium": bool(d.get("is_premium")),
+            }
+            for d in BODY_TEMPLE_DAYS
+        ],
+    }
+
+
+@api_router.get("/body-temple/day/{day}")
+async def body_temple_day(day: int, request: Request):
+    d = _bt_get_day(day)
+    if not d:
+        raise HTTPException(status_code=404, detail="Day not found.")
+    user = await _resolve_current_user(request)
+    unlocked = False
+    completed = False
+    if user:
+        unlocked = await _user_has_premium(user.user_id)
+        completed = bool(await db.body_temple_progress.find_one(
+            {"user_id": user.user_id, "day": day}, {"_id": 1},
+        ))
+    return {
+        "day": _bt_public_day(d, unlocked),
+        "unlocked": unlocked,
+        "completed": completed,
+        "week": BODY_TEMPLE_WEEKS.get(d["week_key"]),
+    }
+
+
+class BodyTempleCompleteInput(BaseModel):
+    day: int
+
+
+@api_router.post("/body-temple/complete")
+async def body_temple_complete(inp: BodyTempleCompleteInput, request: Request):
+    user = await _require_user(request)
+    d = _bt_get_day(inp.day)
+    if not d:
+        raise HTTPException(status_code=404, detail="Day not found.")
+    # Locked days cannot be completed; require unlock.
+    if d.get("is_premium") and not await _user_has_premium(user.user_id):
+        raise HTTPException(status_code=403, detail="Day is part of the premium Body Temple 28 unlock.")
+    now = datetime.now(timezone.utc).isoformat()
+    await db.body_temple_progress.update_one(
+        {"user_id": user.user_id, "day": inp.day},
+        {"$set": {"user_id": user.user_id, "day": inp.day, "completed_at": now,
+                  "week_key": d["week_key"]}},
+        upsert=True,
+    )
+    total = await db.body_temple_progress.count_documents({"user_id": user.user_id})
+    return {"ok": True, "day": inp.day, "completed_total": total,
+            "total_days": BODY_TEMPLE_TOTAL_DAYS}
+
+
+# =============================================================
+# §GRACE-BOUNDARIES 2026-02-09 — Adult Clarity persona MVP.
+# Lightweight mode selector that runs ON TOP OF the existing
+# Grace (Clarity Release) room. Picking a mode does not swap
+# the ElevenLabs agent — it stores a session-scoped "mode_hint"
+# the Grace prompt can read and which the UI surfaces as a
+# gentle pre-session frame ("Today we sit with: Boundaries").
+# Three modes, all sanctuary-tone (zero clinical language):
+#   • boundaries     — saying no without guilt
+#   • energy         — who took / who gave today
+#   • grey_rocking   — surviving toxic rooms without leaving
+# =============================================================
+
+GRACE_MODES = {
+    "boundaries": {
+        "key": "boundaries",
+        "title": "Boundaries Architect",
+        "subtitle": "Saying no without guilt.",
+        "blurb": "Today, Grace listens to where your yeses cost more than they should — and helps you find one sentence that protects you.",
+        "first_message": (
+            "I'm here with you. Tell me about one moment this week where "
+            "you said yes when something inside you whispered no. Just one. "
+            "We'll find the kinder sentence together."
+        ),
+        "icon": "Shield",
+        "color": "#B89B6E",
+    },
+    "energy": {
+        "key": "energy",
+        "title": "Energy Inventory",
+        "subtitle": "Who took. Who gave.",
+        "blurb": "Today we map your day in two columns — the people who lent you energy, and the ones who borrowed it without returning.",
+        "first_message": (
+            "Welcome back. Let's do something quiet together — name "
+            "one person who left you brighter today, and one who left "
+            "you a little heavier. No blame, just light."
+        ),
+        "icon": "Sparkles",
+        "color": "#E3B48C",
+    },
+    "grey_rocking": {
+        "key": "grey_rocking",
+        "title": "Grey Rocking",
+        "subtitle": "Quiet in loud rooms.",
+        "blurb": "When you can't leave the room yet — Grace helps you stay small, stay still, and keep your inner sanctuary intact.",
+        "first_message": (
+            "I see you. You're in a room you can't leave right now — "
+            "and you need to stay yourself inside it. Let's practise "
+            "one small phrase that gives nothing away, and one breath "
+            "that keeps you whole."
+        ),
+        "icon": "Mountain",
+        "color": "#7C9DB0",
+    },
+}
+
+
+@api_router.get("/grace/modes")
+async def grace_modes():
+    """Public — returns the three available Grace boundary modes."""
+    return {"modes": list(GRACE_MODES.values())}
+
+
+class GraceModeSelectInput(BaseModel):
+    mode: str
+
+
+@api_router.post("/grace/mode")
+async def grace_mode_set(inp: GraceModeSelectInput, request: Request):
+    """Stores the selected mode in the user's profile so the next
+    Grace session opens with the mode's framing. Idempotent."""
+    if inp.mode not in GRACE_MODES and inp.mode != "":
+        raise HTTPException(status_code=400, detail="Unknown Grace mode.")
+    user = await _require_user(request)
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"grace_mode": inp.mode,
+                  "grace_mode_set_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True, "mode": inp.mode,
+            "frame": GRACE_MODES.get(inp.mode)}
+
+
+@api_router.get("/grace/mode")
+async def grace_mode_get(request: Request):
+    user = await _resolve_current_user(request)
+    if not user:
+        return {"mode": "", "frame": None}
+    u = await db.users.find_one({"user_id": user.user_id}, {"_id": 0, "grace_mode": 1})
+    mode = (u or {}).get("grace_mode") or ""
+    return {"mode": mode, "frame": GRACE_MODES.get(mode) if mode else None}
+
+
+
 # =============================================================
 # §STARS-PHASE-2 2026-02-09 — Three new mechanics:
 #

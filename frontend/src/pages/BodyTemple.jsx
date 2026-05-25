@@ -1,0 +1,353 @@
+/**
+ * BodyTemple.jsx — /body-temple
+ *
+ * §BODY-TEMPLE 2026-02-09 — Founder directive: a 4-week ($39
+ * one-time unlock) adult course inside the Body Room, born from
+ * the "Эти ЗНАНИЯ о теле" video. Four ancient keys, 28 quiet days.
+ *
+ * Visual language: cream sanctuary background, wooden module
+ * cards (matching the founder's mood-board), Caveat handwriting
+ * for titles, Aurin avatar with golden aura.
+ *
+ * Day 1 is freely viewable as a tone-preview. Days 2-28 surface
+ * the title + "locked" state for non-premium users; clicking
+ * routes them to the existing Clarity/topup checkout pathway.
+ */
+
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "@/lib/api";
+import {
+    ArrowLeft, ArrowRight, Wind, Hand, Moon, Compass,
+    Lock, Check, Sparkles,
+} from "lucide-react";
+
+const WEEK_ICONS = {
+    breathing: Wind,
+    touch: Hand,
+    rest: Moon,
+    presence: Compass,
+};
+
+export default function BodyTemple() {
+    const [overview, setOverview] = useState(null);
+    const [activeDay, setActiveDay] = useState(null);
+    const [activeDayPayload, setActiveDayPayload] = useState(null);
+    const [loadingDay, setLoadingDay] = useState(false);
+    const [completing, setCompleting] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        api.get("/body-temple/overview")
+            .then((r) => setOverview(r.data))
+            .catch(() => setOverview({ error: true }));
+    }, []);
+
+    useEffect(() => {
+        if (activeDay == null) {
+            setActiveDayPayload(null);
+            return;
+        }
+        setLoadingDay(true);
+        api.get(`/body-temple/day/${activeDay}`)
+            .then((r) => setActiveDayPayload(r.data))
+            .catch(() => setActiveDayPayload(null))
+            .finally(() => setLoadingDay(false));
+    }, [activeDay]);
+
+    const daysByWeek = useMemo(() => {
+        const out = { breathing: [], touch: [], rest: [], presence: [] };
+        if (!overview?.days_preview) return out;
+        for (const d of overview.days_preview) {
+            out[d.week_key]?.push(d);
+        }
+        return out;
+    }, [overview]);
+
+    const completedSet = useMemo(
+        () => new Set(overview?.completed_days || []),
+        [overview],
+    );
+
+    const handleComplete = async () => {
+        if (!activeDay || completing) return;
+        setCompleting(true);
+        try {
+            await api.post("/body-temple/complete", { day: activeDay });
+            // Refresh overview to update progress.
+            const ov = await api.get("/body-temple/overview");
+            setOverview(ov.data);
+        } catch (e) {
+            if (e?.response?.status === 401) {
+                navigate("/portal");
+            }
+        } finally {
+            setCompleting(false);
+        }
+    };
+
+    if (!overview) {
+        return (
+            <div className="sanctuary-cream flex items-center justify-center" style={{minHeight: "60vh"}}>
+                <p className="sanctuary-muted">Opening the temple…</p>
+            </div>
+        );
+    }
+
+    if (overview.error) {
+        return (
+            <div className="sanctuary-cream flex items-center justify-center px-6" style={{minHeight: "60vh"}}>
+                <p className="sanctuary-muted">The temple is resting. Try again in a moment.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="sanctuary-cream" data-testid="body-temple-page">
+            {/* Hero */}
+            <section className="px-6 pt-12 md:pt-16 pb-10 max-w-[920px] mx-auto">
+                <Link to="/body-room"
+                      data-testid="body-temple-back-to-room"
+                      className="inline-flex items-center gap-2 text-[13px] sanctuary-muted hover:text-[#3d2e15] transition mb-6">
+                    <ArrowLeft size={14} /> Back to the Body Room
+                </Link>
+
+                <div className="grid md:grid-cols-[1fr_220px] gap-8 items-center">
+                    <div>
+                        <p className="sanctuary-hand text-[34px] md:text-[42px] leading-[0.95] mb-1"
+                           style={{color: "#6a4b1f"}}>
+                            Body Temple 28
+                        </p>
+                        <h1 className="text-2xl md:text-3xl font-light mb-4" style={{fontFamily: "Fraunces, serif"}}>
+                            {overview.subtitle}
+                        </h1>
+                        <p className="text-[15px] leading-relaxed sanctuary-muted max-w-[55ch]">
+                            {overview.blurb}
+                        </p>
+
+                        <div className="mt-7 flex flex-wrap items-center gap-3">
+                            {!overview.unlocked ? (
+                                <Link to="/clarity-release"
+                                      data-testid="body-temple-unlock-cta"
+                                      className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-medium transition"
+                                      style={{
+                                          background: "#4a3a1c",
+                                          color: "#f8efde",
+                                          boxShadow: "0 8px 20px -10px rgba(74,58,28,0.6)",
+                                      }}>
+                                    <Sparkles size={14} />
+                                    Unlock all 28 days — ${overview.price_usd}
+                                    <ArrowRight size={14} />
+                                </Link>
+                            ) : (
+                                <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full"
+                                     data-testid="body-temple-unlocked-badge"
+                                     style={{ background: "rgba(123, 168, 136, 0.25)", color: "#3d2e15" }}>
+                                    <Check size={14} /> Unlocked — {overview.completed_count} / {overview.total_days} days
+                                </div>
+                            )}
+                            <button type="button"
+                                    onClick={() => setActiveDay(1)}
+                                    data-testid="body-temple-preview-day1"
+                                    className="text-[13.5px] underline decoration-dotted underline-offset-4 sanctuary-muted hover:text-[#3d2e15]">
+                                Read Day 1 first (free)
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Aurin avatar with golden aura — matches mood-board */}
+                    <div className="hidden md:flex items-center justify-center">
+                        <div className="sanctuary-aura w-[180px] h-[180px] rounded-full overflow-hidden"
+                             style={{
+                                 background: "linear-gradient(180deg, #fff7e3, #f0d8a4)",
+                                 border: "2px solid rgba(196, 156, 80, 0.4)",
+                             }}>
+                            <img src="/sanctuary-visuals/body-temple-4keys.png"
+                                 alt="Aurin guides the four keys of body wisdom"
+                                 className="w-full h-full object-cover object-left scale-[1.6] -translate-x-3"
+                                 loading="eager" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Four weeks grid */}
+            <section className="px-6 pb-16 max-w-[920px] mx-auto">
+                <p className="sanctuary-hand text-[26px] mb-2" style={{color: "#6a4b1f"}}>
+                    Four ancient keys.
+                </p>
+                <p className="text-[13.5px] sanctuary-muted mb-7 max-w-[55ch]">
+                    Each week is one key. Walk in order, or wander — but the keys
+                    work best when held one after the other.
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-5">
+                    {overview.weeks.map((w) => {
+                        const Icon = WEEK_ICONS[w.key] || Sparkles;
+                        const days = daysByWeek[w.key] || [];
+                        const doneInWeek = days.filter((d) => completedSet.has(d.day)).length;
+                        return (
+                            <div key={w.key}
+                                 data-testid={`body-temple-week-${w.key}`}
+                                 className="sanctuary-wood p-5 md:p-6">
+                                <div className="flex items-start gap-3 mb-3 relative z-[1]">
+                                    <Icon size={26} className="sanctuary-wood-icon" />
+                                    <div className="flex-1">
+                                        <p className="text-[11px] uppercase tracking-[0.18em]" style={{color: "#7a5a26"}}>
+                                            Week {w.number}
+                                        </p>
+                                        <p className="sanctuary-wood-title text-[26px] md:text-[30px]">
+                                            {w.title}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p className="text-[13px] leading-relaxed mb-4 relative z-[1]" style={{color: "#5a4a26"}}>
+                                    {w.blurb}
+                                </p>
+                                <div className="flex flex-wrap gap-1.5 relative z-[1]">
+                                    {days.map((d) => {
+                                        const done = completedSet.has(d.day);
+                                        const locked = d.is_premium && !overview.unlocked;
+                                        return (
+                                            <button key={d.day}
+                                                    type="button"
+                                                    onClick={() => setActiveDay(d.day)}
+                                                    data-testid={`body-temple-day-${d.day}`}
+                                                    className="px-2.5 py-1.5 text-[12px] rounded-md border transition flex items-center gap-1.5"
+                                                    style={{
+                                                        background: done
+                                                            ? "rgba(123, 168, 136, 0.35)"
+                                                            : "rgba(255, 247, 227, 0.55)",
+                                                        borderColor: "rgba(120, 80, 30, 0.35)",
+                                                        color: "#3d2e15",
+                                                    }}>
+                                                Day {d.day}
+                                                {done && <Check size={11} />}
+                                                {locked && !done && <Lock size={10} />}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                {overview.unlocked && (
+                                    <p className="text-[11.5px] mt-3 relative z-[1]" style={{color: "#7a5a26"}}>
+                                        {doneInWeek} / {days.length} walked
+                                    </p>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* What's included strip */}
+                <div className="mt-10 sanctuary-wood p-6 md:p-7">
+                    <p className="sanctuary-wood-title text-[28px] mb-3 relative z-[1]">
+                        What lives inside
+                    </p>
+                    <ul className="space-y-2 text-[13.5px] relative z-[1]" style={{color: "#3d2e15"}}>
+                        <li>· 28 quiet days, each 3–15 minutes — never longer than your patience.</li>
+                        <li>· One Socratic question per day, to close it gently.</li>
+                        <li>· Aurin's voice in tone, never clinical, never measuring.</li>
+                        <li>· Yours forever after one unlock. No subscription.</li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* Day modal */}
+            {activeDay != null && (
+                <div role="dialog"
+                     data-testid="body-temple-day-modal"
+                     className="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-4 md:p-8"
+                     style={{ background: "rgba(40, 28, 10, 0.55)", backdropFilter: "blur(6px)" }}
+                     onClick={() => setActiveDay(null)}>
+                    <div className="max-w-[640px] w-full max-h-[92vh] overflow-auto rounded-2xl p-6 md:p-8"
+                         onClick={(e) => e.stopPropagation()}
+                         style={{
+                             background: "linear-gradient(180deg, #fbf3df 0%, #f3e6cb 100%)",
+                             border: "1px solid rgba(120, 80, 30, 0.3)",
+                             boxShadow: "0 30px 60px -20px rgba(40, 28, 10, 0.5)",
+                         }}>
+                        {loadingDay && <p className="sanctuary-muted text-center py-8">Opening…</p>}
+                        {!loadingDay && activeDayPayload && (
+                            <>
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="text-[11px] uppercase tracking-[0.2em]" style={{color: "#7a5a26"}}>
+                                        Day {activeDayPayload.day.day} · Week {activeDayPayload.week?.number} · {activeDayPayload.week?.title}
+                                    </p>
+                                    <button onClick={() => setActiveDay(null)}
+                                            data-testid="body-temple-modal-close"
+                                            className="text-[18px] sanctuary-muted hover:text-[#3d2e15]">×</button>
+                                </div>
+                                <h2 className="sanctuary-hand text-[36px] leading-tight mb-3" style={{color: "#3d2e15"}}>
+                                    {activeDayPayload.day.title}
+                                </h2>
+
+                                {activeDayPayload.day.locked ? (
+                                    <div className="space-y-4">
+                                        <p className="text-[14.5px] leading-relaxed sanctuary-muted">
+                                            {activeDayPayload.day.body}
+                                        </p>
+                                        <div className="mt-2">
+                                            <Link to="/clarity-release"
+                                                  data-testid="body-temple-modal-unlock"
+                                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium"
+                                                  style={{ background: "#4a3a1c", color: "#f8efde" }}>
+                                                <Lock size={13} />
+                                                Unlock Body Temple 28 — ${overview.price_usd}
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-5">
+                                        <p className="text-[15px] leading-relaxed" style={{color: "#3d2e15"}}>
+                                            {activeDayPayload.day.body}
+                                        </p>
+                                        <div>
+                                            <p className="sanctuary-hand text-[22px] mb-2" style={{color: "#6a4b1f"}}>
+                                                The practice
+                                            </p>
+                                            <ol className="space-y-1.5 list-decimal pl-5 text-[14px]" style={{color: "#3d2e15"}}>
+                                                {activeDayPayload.day.practice.map((step, i) => (
+                                                    <li key={i}>{step}</li>
+                                                ))}
+                                            </ol>
+                                            <p className="text-[12.5px] mt-2" style={{color: "#7a5a26"}}>
+                                                ~{activeDayPayload.day.duration_min} min
+                                            </p>
+                                        </div>
+                                        {activeDayPayload.day.reflection && (
+                                            <div className="sanctuary-wood p-4 mt-2">
+                                                <p className="text-[11px] uppercase tracking-[0.18em] mb-1 relative z-[1]"
+                                                   style={{color: "#7a5a26"}}>
+                                                    Aurin asks
+                                                </p>
+                                                <p className="sanctuary-hand text-[22px] leading-snug relative z-[1]"
+                                                   style={{color: "#3d2e15"}}>
+                                                    {activeDayPayload.day.reflection}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {overview.unlocked && (
+                                            <button onClick={handleComplete}
+                                                    disabled={completing || activeDayPayload.completed}
+                                                    data-testid="body-temple-day-complete-btn"
+                                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition disabled:opacity-60"
+                                                    style={{
+                                                        background: activeDayPayload.completed ? "rgba(123, 168, 136, 0.4)" : "#4a3a1c",
+                                                        color: activeDayPayload.completed ? "#3d2e15" : "#f8efde",
+                                                    }}>
+                                                <Check size={13} />
+                                                {activeDayPayload.completed
+                                                    ? "Walked"
+                                                    : completing ? "Marking…" : "Mark this day walked"}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
