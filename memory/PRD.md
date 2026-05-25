@@ -655,3 +655,61 @@ immediately to existing parents.
 2026-02-09 EVE directive). All further visual unification (Kindness
 Quest, Quiet Corner, Creative Spark, etc.) deferred to 2026-03-02+
 per `/app/memory/ROADMAP.md`. Sales-focus mode active.
+
+
+### 2026-02-09 NIGHT — Iter 81 FINAL PRE-LAUNCH
+
+**Founder directive (Anna)**: complete the 3 originally deferred items
+TODAY, then run a final critical audit. She is deploying tonight.
+
+**Shipped (testing_agent_v3_fork iter 81 — 16/16 pass, 100% across the board)**:
+
+1. **Alistair High-Performers persona** — 3 modes for Course Room
+   (`focus` / `decompression` / `decision`). Pattern mirrors Grace
+   Boundaries Mode exactly so cognitive load is zero across rooms.
+   - Backend: `/api/alistair/{modes,mode}` GET/POST with persistence
+   - Frontend: `components/AlistairModeSelector.jsx` mounted on
+     `/course-room` above the course catalog
+
+2. **Voice Transcript Mood Detection (Phase 2 NLP)** — Claude-powered
+   mood extractor with HARDENED PRIVACY (raw text never persisted —
+   only the extracted mood label, confidence, room, session_id).
+   - Backend: `_extract_mood_from_text()` calls Claude sonnet-4-5
+     via Emergent LLM key; `/api/voice-mood/extract` (auth) and
+     `/api/voice-mood/recent` endpoints
+   - Frontend: `components/PostSessionMoodReflect.jsx` — opt-in
+     reflection prompt mounted on `/body-room` and `/clarity-release`
+   - Iter 81 testing agent VERIFIED via direct MongoDB inspection
+     that `voice_mood_signals` docs contain only:
+     ['user_id','mood','confidence','room','session_id','created_at','source']
+     — `text` key absent. Anna's privacy promise tech-guaranteed.
+
+3. **Kids Activities visual unification** — `KidsActivities.jsx`
+   (the catalog of all 27 Clarity Curriculum activities) re-styled
+   with Caveat handwriting on titles, gradient + top sheen + per-age
+   palette tint (peach/sage/mint), preserving all module-tab and
+   navigation behaviour.
+
+**Files added**:
+- `/app/frontend/src/components/AlistairModeSelector.jsx`
+- `/app/frontend/src/components/PostSessionMoodReflect.jsx`
+- `/app/memory/PRE_LAUNCH_AUDIT_2026-02-09.md` (FINAL audit report,
+  96/100 score, deploy recommendation)
+
+**Files touched (additive)**:
+- `/app/backend/server.py` (+1 import json at module top; 3 new
+  endpoint blocks: Alistair, Voice Mood NLP)
+- `/app/frontend/src/pages/CourseRoom.jsx` (AlistairModeSelector wired)
+- `/app/frontend/src/pages/BodyRoom.jsx` (PostSessionMoodReflect)
+- `/app/frontend/src/pages/ClarityRelease.jsx` (PostSessionMoodReflect)
+- `/app/frontend/src/pages/KidsActivities.jsx` (Caveat titles + tinted
+  gradient + sheen on activity cards)
+- `/app/frontend/src/pages/KidsHub.jsx` (gradient tint visibility fix)
+
+**FINAL AUDIT OUTCOME**: 🟢 READY TO DEPLOY (96/100).
+- Navigation: 12/12 routes 200, 14/14 critical API endpoints 200.
+- Privacy: voice mood text-discard pattern audit-verified.
+- Brand voice: 100% sanctuary tone; zero "AI slop" detected.
+- Two pre-launch founder actions flagged in audit doc (test the
+  launch email via `--to anna --send`, confirm Body Temple LS variant
+  binding). Both are minor and post-deploy-safe.

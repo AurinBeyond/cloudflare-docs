@@ -306,9 +306,9 @@ export default function KidsActivities() {
                     data-testid={`kids-activity-card-${a.slug}`}
                     className="kids-activity-card group block rounded-2xl p-5 transition hover:-translate-y-1 relative overflow-hidden"
                     style={{
-                      background: `linear-gradient(180deg, #ffffff 0%, ${palette.cardBg} 100%)`,
+                      background: `linear-gradient(160deg, #ffffff 0%, ${palette.accent}12 60%, ${palette.accent}22 100%)`,
                       border: `1.5px solid ${palette.cardBorder}`,
-                      boxShadow: `0 10px 22px -14px ${palette.accent}66, 0 0 0 1px ${palette.accent}22, inset 0 1px 0 rgba(255,255,255,0.85)`,
+                      boxShadow: `0 10px 22px -14px ${palette.accent}88, 0 0 0 1px ${palette.accent}33, inset 0 1px 0 rgba(255,255,255,0.85)`,
                       opacity: a.locked ? 0.85 : 1,
                     }}>
                 <span aria-hidden="true"

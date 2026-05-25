@@ -348,12 +348,12 @@ function HubCard({ theme, to, icon: Icon, title, body, testid, primary, badge })
       style={{
         background: primary
           ? `linear-gradient(160deg, ${palette.accent2 || palette.accent} 0%, ${palette.accent} 100%)`
-          : `linear-gradient(180deg, #ffffff 0%, ${palette.cardBg} 100%)`,
+          : `linear-gradient(160deg, #ffffff 0%, ${palette.accent}12 60%, ${palette.accent}22 100%)`,
         border: `1.5px solid ${primary ? palette.accent : palette.cardBorder}`,
         color: primary ? "#FFFFFF" : palette.text,
         boxShadow: primary
           ? `0 16px 36px -14px ${palette.accent}cc, 0 0 0 1px ${palette.accent}44, inset 0 1px 0 rgba(255,255,255,0.4)`
-          : `0 10px 24px -14px ${palette.accent}66, 0 0 0 1px ${palette.accent}22, inset 0 1px 0 rgba(255,255,255,0.85)`,
+          : `0 10px 24px -14px ${palette.accent}88, 0 0 0 1px ${palette.accent}33, inset 0 1px 0 rgba(255,255,255,0.85)`,
         minHeight: 168,
       }}
     >

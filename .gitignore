@@ -402,3 +402,4 @@ credentials.json
 *.key
 .credentials
 frontend/public/assets/about/anna-trailer-60s.mp4
+frontend/node_modules/.cache/default-development/15.pack
