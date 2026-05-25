@@ -1,0 +1,42 @@
+{
+  "summary": "Iter 78 backend + frontend testing. 18/18 backend pytest cases pass after fixing a real bug in /api/angel-stars/approve-with-photo (put_binary/get_binary called positionally where they require keyword-only args — photo uploads were silently failing). Frontend: 9/10 observable surfaces verified (signin fallback, album grid with 1 photo, parent-stamps section + 5 cards, photo upload modal opens, album link, reciprocal stars section + 5 buttons on /kids-universe, /origin → /about redirect, /portal/referral). Only Clarity Release Hub view (with UniversalMinuteBank + TodaysQuestCard) could not be observed in automation because the test user is past the hub view — same known state-limitation flagged in iter 77. Code review confirms both components are correctly imported and rendered in ClarityRelease.jsx (lines 19-20, 834-836) above the tier ladder.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/angel-stars/approve-with-photo", "issue": "FIXED by testing agent — put_binary/get_binary were called with positional args (db, 'memory_album', photo_key, ...) but binary_storage.py defines kind/slug as keyword-only. Photo upload was silently failing (caught by broad except Exception → logger.warning only). Fix: call sites updated to use kind=, slug=, data= kwargs in /app/backend/server.py."},
+      {"endpoint": "/api/angel-stars/approve-with-photo", "issue": "Broad `except Exception` swallows photo-upload errors with only a warning log; caller gets {approved: true} even when photo persistence fails. Consider returning a structured warning so UI can surface 'photo not saved'."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Clarity Release Hub visibility", "issue": "UniversalMinuteBank + TodaysQuestCard could not be observed live because the test_token_6489e6cf1440 user has progressed past the hub view (still on the Wanderer Threshold step). Components are wired correctly in code at ClarityRelease.jsx:834-836. Same limitation reported in iter 77.", "affected_selectors": ["universal-minute-bank", "todays-quest-card"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_iteration_78.py", "/app/test_reports/pytest/iter78.xml"],
+  "action_items": [
+    "Confirm fix applied by testing agent to put_binary/get_binary call sites in /app/backend/server.py (approve-with-photo + memory-album/photo endpoints).",
+    "Consider returning a soft warning in approve-with-photo response when the photo persistence step fails so UI can show 'photo not saved' instead of silent loss.",
+    "Optional: provide a query-flag or admin reset so the clarity-release Hub view can be re-entered by an existing test user for automated UI verification of UMB+Quest cards.",
+    "Review request mentioned 'POST /api/agreement/accept with 5 boolean fields' — current AgreementAcceptIn model only has scope/locale/visitor_id; the 5-truth checkboxes are handled by a different flow (frontend localStorage). Doc-vs-code drift, worth aligning."
+  ],
+  "critical_code_review_comments": [
+    "server.py reached ~14.5k lines. Iter 78 added ~330 more lines (§UNIVERSAL-BANK + §TODAYS-QUEST + §STARS-PHASE-2). Strongly recommend extracting to backend/minute_bank.py, backend/aurin_quest.py, backend/parent_stamps.py modules.",
+    "approve-with-photo: silent failure mode on photo upload (broad `except Exception` only logs warning) masked the put_binary call-convention bug from production — added unit tests would have caught it. The fix is mechanical (positional → keyword args).",
+    "memory-album/photo/{photo_key} uses substring containment check (`user.user_id[:10] not in photo_key`) — works for the current key format but is fragile if photo_key generation changes. Prefer storing owner explicitly in meta and validating against that.",
+    "TodaysQuestCard.jsx silently returns null on error/empty activities — good graceful degradation but parents who haven't checked in may wonder why nothing appears; consider rendering the default_no_checkin headline+aurin_line even when activities array is empty.",
+    "UniversalMinuteBank.jsx returns null while loading; minor UX nit — a brief skeleton would feel less jumpy on the Hub grid."
+  ],
+  "updated_files": [
+    "/app/backend/server.py (fixed put_binary/get_binary kw-arg call sites in approve-with-photo + memory-album/photo)",
+    "/app/backend/tests/test_iteration_78.py (new — 18 pytest cases)"
+  ],
+  "success_rate": {"backend": "100% (18/18)", "frontend": "90% (9/10 observable surfaces; UMB+Quest on Hub unobservable due to test-user state, not code)"},
+  "test_credentials": "Bearer test_token_6489e6cf1440 (user_angel_test_c01ba5). After this run the user has: ~2 additional listener stamps + 1 additional patient + 1 additional played + 1 read_story = +5 reciprocal stamps; 1 new memory_album row with caption TEST_iter78_caption_*.",
+  "seed_data_creation": "Several angel_stars_actions rows (reciprocal pending → approved) + parent_stamps rows + 1 memory_album row + 1 binary_assets photo (~1KB) on test_token_6489e6cf1440 user.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Reusable pytest at /app/backend/tests/test_iteration_78.py — run: pytest backend/tests/test_iteration_78.py -v. Hot-path verified: minute-bank/starter, today-quest (preview + mood_checkin), reciprocal catalog + give-to-parent + approve-with-photo (no-photo, oversized=413, valid photo), parent-stamps/me, memory-album/me, memory-album/photo (owner+blocked cross). To observe ClarityRelease hub UMB+Quest cards live, use a fresh user (not test_token_6489e6cf1440) — that user has been advanced past the hub view.",
+  "rca of the issue": "Photo upload silent-fail RCA: binary_storage.put_binary/get_binary signatures use keyword-only args after `*` in the function def (def put_binary(db, *, kind, slug, data, ...)). server.py approve-with-photo and memory-album/photo handlers called them positionally → TypeError caught by the broad `except Exception` block that only logs a warning. Reproduction: POST /api/angel-stars/approve-with-photo with photo_base64 → response returns {approved: true} but no memory_album row is created. Mitigation: switched the two call sites to keyword args (kind=, slug=, data=). Verified end-to-end via test_iteration_78 (photo persists, GET /memory-album/me returns it, GET /memory-album/photo/{key} returns image bytes)."
+}

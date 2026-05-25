@@ -16,6 +16,8 @@ import RoomConvaiChat from "@/components/RoomConvaiChat";
 import VoiceSessionCountdown from "@/components/VoiceSessionCountdown";
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import VoiceTopupSlider from "@/components/VoiceTopupSlider";
+import UniversalMinuteBank from "@/components/UniversalMinuteBank";
+import TodaysQuestCard from "@/components/TodaysQuestCard";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -824,6 +826,14 @@ function HubPanel({
             Without a pass, the room offers a few quiet reflections so you can
             feel the space before deciding.
           </p>
+        </div>
+
+        {/* §UNIVERSAL-BANK + §TODAYS-QUEST 2026-02-09 — Soft entry
+            point for hesitant visitors + Aurin's quest of the day.
+            Both surface above the tier ladder. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
+          <UniversalMinuteBank />
+          <TodaysQuestCard />
         </div>
 
         {/* §CUSTOM-TOPUP 2026-02-09 — Flexible voice top-up. Lives

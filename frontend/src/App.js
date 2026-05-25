@@ -17,6 +17,7 @@ import KidsDaily from "@/pages/KidsDaily";
 import KidsActivities from "@/pages/KidsActivities";
 import ParentStars from "@/pages/ParentStars";
 import ParentWellness from "@/pages/ParentWellness";
+import ParentAlbum from "@/pages/ParentAlbum";
 import Referral from "@/pages/Referral";
 import NotFound from "@/pages/NotFound";
 import MeditationCorner from "@/pages/MeditationCorner";
@@ -107,6 +108,7 @@ function AppRouter() {
         <Route path="/kids-universe/:ageGroup/activities/:slug" element={<KidsActivities />} />
         <Route path="/parent-portal/stars" element={<ParentStars />} />
         <Route path="/parent-portal/wellness" element={<ParentWellness />} />
+        <Route path="/parent-portal/album" element={<ParentAlbum />} />
         <Route path="/meditation-corner" element={<MeditationCorner />} />
         <Route path="/the-beginning" element={<TheBeginning />} />
         <Route path="/the-beginning/step" element={<TheBeginningStep />} />

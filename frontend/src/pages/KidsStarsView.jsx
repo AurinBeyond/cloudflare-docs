@@ -18,7 +18,7 @@
 
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Sparkles, CheckCircle2, Clock, Gift, Lock } from "lucide-react";
+import { ArrowLeft, Sparkles, CheckCircle2, Clock, Gift, Lock, Heart } from "lucide-react";
 import AurinSparkle from "@/components/AurinSparkle";
 import { resolveHubTheme } from "@/lib/kidsHubThemes";
 import { api } from "@/lib/api";
@@ -29,6 +29,7 @@ export default function KidsStarsView() {
   const { palette } = theme;
 
   const [catalog, setCatalog] = useState({ actions: [], tiers: [] });
+  const [reciprocalCatalog, setReciprocalCatalog] = useState([]);
   const [mine, setMine] = useState({ balance: 0, total_earned: 0, recent: [] });
   const [pendingSlug, setPendingSlug] = useState(null);
   const [celebrationFor, setCelebrationFor] = useState(null);
@@ -51,11 +52,33 @@ export default function KidsStarsView() {
         if (alive) setCatalog(r.data);
       })
       .catch(() => {});
+    api.get(`/angel-stars/reciprocal/catalog`)
+      .then((r) => {
+        if (alive) setReciprocalCatalog(r.data.actions || []);
+      })
+      .catch(() => {});
     refresh();
     return () => {
       alive = false;
     };
   }, [theme.slug, refresh]);
+
+  const giveStarToParent = async (action) => {
+    setPendingSlug(action.slug);
+    try {
+      await api.post(`/angel-stars/give-to-parent`, {
+        child_slug: theme.slug,
+        action_slug: action.slug,
+      });
+      setCelebrationFor({ slug: action.slug, label: action.label });
+      await refresh();
+      setTimeout(() => setCelebrationFor(null), 3200);
+    } catch (e) {
+      if (e?.response?.status === 401) setAuthError(true);
+    } finally {
+      setPendingSlug(null);
+    }
+  };
 
   const requestStar = async (action) => {
     setPendingSlug(action.slug);
@@ -281,6 +304,49 @@ export default function KidsStarsView() {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {/* §STARS-PHASE-2 2026-02-09 — Reciprocal stars. Child can
+            give a star to their grown-up. Visually separated so it
+            doesn't compete with the "earn for myself" lane. */}
+        {reciprocalCatalog.length > 0 && (
+          <section className="mt-14" data-testid="kids-stars-reciprocal-section">
+            <h2 className="font-serif text-[22px] mb-1.5"
+                style={{ color: palette.text }}>
+              Give a star to your grown-up
+            </h2>
+            <p className="text-[14px] mb-6"
+               style={{ color: palette.textMuted }}>
+              Did your grown-up do something kind today? Send them a star.
+              They'll know it came from you.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5"
+                 data-testid="kids-stars-reciprocal-actions">
+              {reciprocalCatalog.map((a) => (
+                <button
+                  key={a.slug} type="button"
+                  disabled={pendingSlug === a.slug}
+                  onClick={() => giveStarToParent(a)}
+                  data-testid={`kids-stars-reciprocal-${a.slug}`}
+                  className="group text-left rounded-xl p-5 transition disabled:opacity-60"
+                  style={{
+                    background: palette.cardBg,
+                    border: `1px solid ${palette.cardBorder}`,
+                    color: palette.text,
+                  }}>
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="text-[15px] leading-snug flex-1">{a.label}</span>
+                    <Heart size={14}
+                           style={{ color: palette.accent }} className="shrink-0 mt-0.5" />
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[12.5px] tracking-wide"
+                        style={{ color: palette.accent }}>
+                    Send this <Sparkles size={11} className="transition-transform group-hover:rotate-12" />
+                  </span>
+                </button>
+              ))}
+            </div>
           </section>
         )}
 

@@ -2997,7 +2997,11 @@ TOPUP_PRICE_PER_MIN_EUR = float(os.environ.get("TOPUP_PRICE_PER_MIN_EUR", "0.60"
 TOPUP_MIN_MINUTES = int(os.environ.get("TOPUP_MIN_MINUTES", "10"))
 TOPUP_MAX_MINUTES = int(os.environ.get("TOPUP_MAX_MINUTES", "300"))
 
-_TOPUP_LADDER_MINS = [10, 15, 30, 45, 60, 90, 120, 180, 300]
+_TOPUP_LADDER_MINS = [10, 15, 20, 30, 45, 60, 90, 120, 180, 300]
+# §UNIVERSAL-BANK 2026-02-09 — 20-min rung is the founder's
+# "Universal Minute Bank" starter price-point (€12 @ €0.60/min).
+# Purchasable the moment LEMONSQUEEZY_VARIANT_TOPUP_20MIN is set.
+UNIVERSAL_BANK_MINUTES = 20
 
 
 def _topup_ladder_with_env() -> list[dict]:
@@ -3282,6 +3286,346 @@ async def admin_annas_letter(request: Request, user_id: str = "", dry_run: bool 
         except Exception:
             results["errors"] += 1
     return results
+
+
+# =============================================================
+# §UNIVERSAL-BANK 2026-02-09 — Featured $12 / 20-min starter
+# top-up. Wraps the existing topup endpoint so the marketing
+# language stays distinct ("Universal Minute Bank — your first
+# taste of Aurin") while the plumbing reuses the same LS variant.
+# =============================================================
+
+@api_router.get("/minute-bank/starter")
+async def minute_bank_starter():
+    """Public. Returns the featured starter pack info."""
+    nearest_rung = next(
+        (r for r in _topup_ladder_with_env() if r["minutes"] == UNIVERSAL_BANK_MINUTES),
+        None,
+    )
+    return {
+        "minutes": UNIVERSAL_BANK_MINUTES,
+        "price_eur": round(UNIVERSAL_BANK_MINUTES * TOPUP_PRICE_PER_MIN_EUR, 2),
+        "tagline": "Universal Minute Bank · your first taste of Aurin",
+        "blurb": (
+            "Twenty quiet minutes you can spend in any room — Grace, "
+            "Aurin's Room, the Body Room. No subscription, no commitment. "
+            "A small first taste."
+        ),
+        "checkout_url": (nearest_rung or {}).get("checkout_url"),
+        "purchasable": bool((nearest_rung or {}).get("checkout_url")),
+    }
+
+
+# =============================================================
+# §TODAYS-QUEST 2026-02-09 — Voice-room "mood detection MVP".
+# Reads the user's most recent kids_mood_checkin (any child) and
+# returns 1-3 curriculum activity recommendations + a parent-
+# facing quote in Aurin's voice. UI surfaces this card on the
+# Clarity Release Hub after a voice session and on the Wellness
+# portal so the parent always sees something gentle waiting.
+#
+# Full NLP mood detection from voice transcripts is Phase 3 — this
+# MVP uses the explicit mood signal the child has already given
+# during their daily check-in, which is the highest-quality data
+# we have and avoids speculative interpretation.
+# =============================================================
+
+AURIN_QUEST_HEADLINES = {
+    "sad":     "A small quest for a heavy day",
+    "worried": "A small quest for a busy mind",
+    "okay":    "A small quest for an in-between day",
+    "good":    "A small quest to keep the warmth going",
+    "sparkly": "A small quest to catch the sparkle",
+    "default": "A small quest for today",
+}
+
+
+@api_router.get("/aurin/today-quest")
+async def aurin_today_quest(request: Request):
+    """Returns the gentlest curriculum activity match for the parent's
+    family right now. Falls back to a universal default when there's
+    no check-in to read from."""
+    user = await _resolve_current_user(request)
+    if not user:
+        # Public preview: surface a hard-coded gentle starter so the
+        # marketing page can show what the feature looks like.
+        return {
+            "source": "preview",
+            "headline": AURIN_QUEST_HEADLINES["default"],
+            "aurin_line": "Today is whatever you decide it is. Pick something tiny.",
+            "child_slug": None,
+            "mood": None,
+            "activities": [_public_activity(a, premium_user=False) for a in (
+                [get_activity("three_breaths"), get_activity("compliment_today"), get_activity("today_color")]
+            ) if a is not None],
+        }
+
+    # Latest mood check-in for this user (any child).
+    latest = await db.kids_mood_checkins.find_one(
+        {"user_id": user.user_id}, {"_id": 0},
+        sort=[("created_at", -1)],
+    )
+    premium = await _user_has_premium(user.user_id)
+
+    if not latest:
+        # Authed but no check-in yet — gentle default.
+        default_slugs = ["three_breaths", "compliment_today", "today_color"]
+        activities = [a for a in (get_activity(s) for s in default_slugs) if a is not None]
+        return {
+            "source": "default_no_checkin",
+            "headline": AURIN_QUEST_HEADLINES["default"],
+            "aurin_line": "Begin with a daily check-in — that's how I'll know what to suggest next.",
+            "child_slug": None,
+            "mood": None,
+            "activities": [_public_activity(a, premium) for a in activities],
+        }
+
+    mood = latest.get("mood", "okay")
+    slug = latest.get("child_slug") or "explorers"
+    recs = recommend_for_mood(slug, mood)
+    return {
+        "source": "mood_checkin",
+        "headline": AURIN_QUEST_HEADLINES.get(mood, AURIN_QUEST_HEADLINES["default"]),
+        "aurin_line": MOOD_AURIN_REPLY.get(mood, MOOD_AURIN_REPLY["okay"]),
+        "child_slug": slug,
+        "child_title": CHILD_TITLES.get(slug, ("?", ""))[0],
+        "mood": mood,
+        "checkin_at": latest.get("created_at"),
+        "activities": [_public_activity(a, premium) for a in recs],
+    }
+
+
+# =============================================================
+# §STARS-PHASE-2 2026-02-09 — Three new mechanics:
+#
+#   (a) RECIPROCAL STARS — Child can give a star to their grown-up.
+#       Curated 5-action list ("my grown-up listened to me",
+#       "my grown-up apologised", "my grown-up was patient with
+#       me", "my grown-up played with me", "my grown-up read me a
+#       story"). Pending → parent approves themselves (yes, child
+#       acknowledges first; parent confirms gracefully). Approval
+#       creates a PARENT STAMP, not a voice-credit reward — the
+#       reward IS the recognition.
+#
+#   (b) PARENT STAMPS — collection ledger per parent. 5 stamp
+#       types earned from:
+#         • listener      → reciprocal star approved
+#         • playful       → ≥3 child curriculum approvals in a week
+#         • patient       → ≥5 child mood check-ins in a week (you
+#                            held space for the ritual)
+#         • present       → opened the Wellness portal twice in a week
+#         • champion      → received Anna's letter twice (deep parent)
+#
+#   (c) PHOTO ALBUM — quiet gallery. Parent can attach an optional
+#       photo when approving a star OR upload one to mark a
+#       memory tied to a curriculum activity completion. Stored
+#       via binary_storage (Mongo binary_assets collection),
+#       capped at 2 MB per upload.
+#
+# Schema:
+#   parent_stamps        {user_id, stamp_slug, awarded_at, source_ref}
+#   memory_album         {user_id, child_slug, photo_key, caption,
+#                         tied_to:{action_id,star_label}, created_at}
+# =============================================================
+
+RECIPROCAL_ACTIONS = [
+    {"slug": "rec_listened",     "label": "My grown-up listened to me today",        "stamp": "listener"},
+    {"slug": "rec_apologised",   "label": "My grown-up said sorry when it counted",  "stamp": "patient"},
+    {"slug": "rec_patient",      "label": "My grown-up was patient with me",         "stamp": "patient"},
+    {"slug": "rec_played",       "label": "My grown-up played with me",              "stamp": "playful"},
+    {"slug": "rec_read_story",   "label": "My grown-up read me a story",             "stamp": "present"},
+]
+
+
+def _reciprocal_action(slug: str) -> dict | None:
+    for a in RECIPROCAL_ACTIONS:
+        if a["slug"] == slug:
+            return a
+    return None
+
+
+PARENT_STAMP_DEFS = {
+    "listener":  {"title": "Listener",  "description": "Your child noticed you listened today.", "icon": "Ear"},
+    "patient":   {"title": "Patient",   "description": "You held a soft pause when it was hard.", "icon": "Heart"},
+    "playful":   {"title": "Playful",   "description": "You showed up for play this week.",       "icon": "Sparkles"},
+    "present":   {"title": "Present",   "description": "You opened the wellness portal twice.",  "icon": "Eye"},
+    "champion":  {"title": "Champion",  "description": "Anna's letter arrived twice — you stayed.","icon": "Award"},
+}
+
+
+class ReciprocalStarInput(BaseModel):
+    child_slug: str
+    action_slug: str
+
+
+class StarApproveWithPhotoInput(BaseModel):
+    request_id: str
+    photo_base64: Optional[str] = None
+    photo_content_type: Optional[str] = "image/jpeg"
+    caption: Optional[str] = None
+
+
+@api_router.get("/angel-stars/reciprocal/catalog")
+async def reciprocal_catalog():
+    """Public — child-side catalog of stars the child can give to a parent."""
+    return {"actions": RECIPROCAL_ACTIONS}
+
+
+@api_router.post("/angel-stars/give-to-parent")
+async def give_star_to_parent(inp: ReciprocalStarInput, request: Request):
+    """Child taps a reciprocal star → pending parent stamp."""
+    user = await _require_user(request)
+    slug = normalise_age_slug(inp.child_slug)
+    action = _reciprocal_action(inp.action_slug)
+    if not action:
+        raise HTTPException(status_code=400, detail="Unknown reciprocal action.")
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    row = {
+        "id": f"asreq_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "child_slug": slug,
+        "action_slug": action["slug"],
+        "action_label": action["label"],
+        "stars": 0,           # no voice credit on this lane
+        "stamp_slug": action["stamp"],
+        "status": "pending",
+        "source": "reciprocal_child_to_parent",
+        "direction": "child_to_parent",
+        "created_at": now_iso,
+        "approved_at": None,
+    }
+    await db.angel_stars_actions.insert_one({**row})
+    return {"ok": True, "id": row["id"], "status": "pending"}
+
+
+async def _award_parent_stamp(user_id: str, stamp_slug: str, source_ref: str | None) -> bool:
+    if stamp_slug not in PARENT_STAMP_DEFS:
+        return False
+    now_iso = datetime.now(timezone.utc).isoformat()
+    await db.parent_stamps.insert_one({
+        "id": f"stamp_{uuid.uuid4().hex[:12]}",
+        "user_id": user_id,
+        "stamp_slug": stamp_slug,
+        "awarded_at": now_iso,
+        "source_ref": source_ref,
+    })
+    return True
+
+
+@api_router.post("/angel-stars/approve-with-photo")
+async def approve_with_photo(inp: StarApproveWithPhotoInput, request: Request):
+    """Extension of the standard approve flow. If a base64 photo is
+    attached, it's stored in binary_assets and tied to the action via
+    a memory_album row. If the request was a reciprocal star, the
+    parent stamp is awarded instead of voice-seconds."""
+    user = await _require_user(request)
+    row = await db.angel_stars_actions.find_one(
+        {"id": inp.request_id, "user_id": user.user_id}, {"_id": 0}
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Request not found.")
+    if row.get("status") != "pending":
+        return {"ok": True, "already": row.get("status")}
+
+    is_reciprocal = row.get("direction") == "child_to_parent"
+    stars = int(row.get("stars", 0))
+    slug = row.get("child_slug")
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    # Mark approved
+    await db.angel_stars_actions.update_one(
+        {"id": inp.request_id, "user_id": user.user_id},
+        {"$set": {"status": "approved", "approved_at": now_iso}},
+    )
+
+    # Reward path: voice-credit for regular stars; stamp for reciprocal.
+    if is_reciprocal:
+        stamp_slug = row.get("stamp_slug") or "listener"
+        await _award_parent_stamp(user.user_id, stamp_slug, source_ref=row["id"])
+    elif stars > 0:
+        await db.angel_stars.update_one(
+            {"user_id": user.user_id, "child_slug": slug},
+            {"$inc": {"balance": stars, "total_earned": stars},
+             "$set": {"updated_at": now_iso}},
+            upsert=True,
+        )
+
+    # Optional photo upload to album.
+    if inp.photo_base64:
+        try:
+            import base64 as _b64
+            raw = _b64.b64decode(inp.photo_base64.split(",")[-1])  # strip dataURL prefix if any
+            if len(raw) > 2 * 1024 * 1024:
+                raise HTTPException(status_code=413, detail="Photo too large (max 2MB).")
+            photo_key = f"album_{user.user_id[:10]}_{uuid.uuid4().hex[:8]}"
+            from binary_storage import put_binary
+            await put_binary(
+                db, kind="memory_album", slug=photo_key, data=raw,
+                content_type=inp.photo_content_type or "image/jpeg",
+                meta={"user_id": user.user_id, "action_id": row["id"]},
+            )
+            await db.memory_album.insert_one({
+                "id": f"mem_{uuid.uuid4().hex[:12]}",
+                "user_id": user.user_id,
+                "child_slug": slug,
+                "photo_key": photo_key,
+                "caption": (inp.caption or "")[:200],
+                "tied_to_action_id": row["id"],
+                "tied_to_label": row.get("action_label"),
+                "created_at": now_iso,
+            })
+        except HTTPException:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("photo upload failed: %s", exc)
+
+    return {"ok": True, "approved": True, "reciprocal": is_reciprocal}
+
+
+@api_router.get("/parent-stamps/me")
+async def parent_stamps_me(request: Request, days: int = 30):
+    user = await _require_user(request)
+    days = max(1, min(int(days), 365))
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    rows = await db.parent_stamps.find(
+        {"user_id": user.user_id, "awarded_at": {"$gte": cutoff}}, {"_id": 0}
+    ).sort("awarded_at", -1).limit(200).to_list(length=200)
+    counts: dict[str, int] = {}
+    for r in rows:
+        s = r.get("stamp_slug", "")
+        counts[s] = counts.get(s, 0) + 1
+    stamps = []
+    for slug, defn in PARENT_STAMP_DEFS.items():
+        stamps.append({
+            "slug": slug,
+            "title": defn["title"],
+            "description": defn["description"],
+            "icon": defn["icon"],
+            "count": counts.get(slug, 0),
+        })
+    return {"days": days, "stamps": stamps, "total": sum(counts.values()), "recent": rows[:10]}
+
+
+@api_router.get("/memory-album/me")
+async def memory_album_me(request: Request, limit: int = 30):
+    user = await _require_user(request)
+    rows = await db.memory_album.find(
+        {"user_id": user.user_id}, {"_id": 0}
+    ).sort("created_at", -1).limit(max(1, min(int(limit), 100))).to_list(length=100)
+    return {"album": rows}
+
+
+@api_router.get("/memory-album/photo/{photo_key}")
+async def memory_album_photo(photo_key: str, request: Request):
+    user = await _require_user(request)
+    if not photo_key.startswith("album_") or user.user_id[:10] not in photo_key:
+        raise HTTPException(status_code=403, detail="Not your photo.")
+    from binary_storage import get_binary
+    asset = await get_binary(db, kind="memory_album", slug=photo_key)
+    if not asset:
+        raise HTTPException(status_code=404, detail="Photo not found.")
+    return Response(content=asset["data"], media_type=asset.get("content_type", "image/jpeg"))
 
 
 # =============================================================
