@@ -3154,7 +3154,8 @@ async def _build_weekly_letter(user_id: str) -> Optional[dict]:
     }
 
 
-def _render_weekly_letter_html(digest: dict, parent_name: Optional[str]) -> str:
+def _render_weekly_letter_html(digest: dict, parent_name: Optional[str],
+                                *, show_body_temple_ps: bool = False) -> str:
     name = (parent_name or "").strip().split()[0] if parent_name else ""
     greeting = f"Hello {name}," if name else "Hello,"
     children_html = []
@@ -3207,6 +3208,14 @@ def _render_weekly_letter_html(digest: dict, parent_name: Optional[str]) -> str:
           <a href="https://prulesoul.site/parent-portal/wellness" style="color:#a65a2f;text-decoration:none;border-bottom:1px dotted #a65a2f">Wellness portal</a>
           — the bars and notes live there.
         </p>
+        {('<div style="margin-top:22px;padding:18px 20px;background:#fbf2e0;border:1px solid #e8d2a8;border-radius:12px">'
+          '<p style="margin:0 0 6px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8a6428">For you, Anna writes —</p>'
+          '<p style="margin:0;font-family:Georgia,serif;font-size:16px;line-height:1.55;color:#3d2a1e;font-style:italic">'
+          'P.S. If your week was loud too — there is a quiet room here for you. '
+          '<a href="https://prulesoul.site/body-temple?utm_source=annas_letter" '
+          'style="color:#a65a2f;text-decoration:none;border-bottom:1px dotted #a65a2f">Body Temple 28</a> '
+          'opens Day 1 freely; the rest is $39, walked at your own pace.</p>'
+          '</div>') if show_body_temple_ps else ''}
         <p style="font-size:14px;line-height:1.6;color:#7a5e4a;margin-top:12px">
           With warmth,<br>
           <span style="font-family:'Caveat',cursive,Georgia,serif;font-size:22px;color:#a65a2f">— Anna</span>
@@ -3237,7 +3246,12 @@ async def _send_annas_letter(user_id: str, *, dry_run: bool = False) -> dict:
     if sent_already and not dry_run:
         return {"sent": False, "reason": "already_sent_this_week", "year_week": year_week}
 
-    html = _render_weekly_letter_html(digest, user_doc.get("name"))
+    # §SYNERGY-1 2026-02-10 — Quiet Body Temple invitation in Anna's letter
+    # only when the parent has NOT yet unlocked it. Non-premium parents
+    # see one soft P.S. card at the bottom. Premium parents see none.
+    show_body_temple_ps = not await _user_has_premium(user_id)
+    html = _render_weekly_letter_html(digest, user_doc.get("name"),
+                                      show_body_temple_ps=show_body_temple_ps)
     email = user_doc.get("email")
     if not email:
         return {"sent": False, "reason": "no_email"}
@@ -3610,6 +3624,71 @@ GRACE_MODES = {
         "color": "#7C9DB0",
     },
 }
+
+
+# =============================================================
+# §MENTOR-HOOK 2026-02-10 — Parental Synergy #2.
+# After a non-premium parent has spent quiet time in any of the
+# three adult voice rooms (Grace/Body/Parents), surface ONE soft
+# Body Temple 28 invitation. Threshold-gated, dismissable, never
+# repeated once a user dismisses or unlocks.
+#
+# Eligibility:
+#   • signed-in user
+#   • NOT already premium (Body Temple unlocks, paid pass, etc.)
+#   • ≥ MENTOR_HOOK_THRESHOLD closed voice_sessions in adult rooms
+#   • has NOT dismissed the hook before
+# =============================================================
+MENTOR_HOOK_THRESHOLD = int(os.environ.get("MENTOR_HOOK_THRESHOLD", "3"))
+_ADULT_VOICE_ROOMS = ("clarity", "body", "parents")
+
+
+@api_router.get("/marketing/mentor-hook")
+async def mentor_hook_status(request: Request):
+    """Return whether the user is eligible for the soft Body Temple
+    invitation. Public-safe: signed-out callers receive eligible=False
+    so the frontend simply renders nothing."""
+    user = await _resolve_current_user(request)
+    if not user:
+        return {"eligible": False, "reason": "anonymous"}
+
+    # Premium parents have already crossed the threshold — silence.
+    if await _user_has_premium(user.user_id):
+        return {"eligible": False, "reason": "already_premium",
+                "voice_sessions": None, "threshold": MENTOR_HOOK_THRESHOLD}
+
+    user_doc = await db.users.find_one(
+        {"user_id": user.user_id},
+        {"_id": 0, "mentor_hook_dismissed_at": 1},
+    ) or {}
+    if user_doc.get("mentor_hook_dismissed_at"):
+        return {"eligible": False, "reason": "dismissed",
+                "voice_sessions": None, "threshold": MENTOR_HOOK_THRESHOLD}
+
+    count = await db.voice_sessions.count_documents({
+        "user_id": user.user_id,
+        "room": {"$in": list(_ADULT_VOICE_ROOMS)},
+        "closed": True,
+    })
+    eligible = count >= MENTOR_HOOK_THRESHOLD
+    return {
+        "eligible": eligible,
+        "reason": "ready" if eligible else "below_threshold",
+        "voice_sessions": count,
+        "threshold": MENTOR_HOOK_THRESHOLD,
+        "cta_url": "/body-temple?utm_source=mentor_hook",
+    }
+
+
+@api_router.post("/marketing/mentor-hook/dismiss")
+async def mentor_hook_dismiss(request: Request):
+    """The wanderer chose 'not yet' — record it once, never resurface."""
+    user = await _require_user(request)
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"mentor_hook_dismissed_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True}
 
 
 @api_router.get("/grace/modes")

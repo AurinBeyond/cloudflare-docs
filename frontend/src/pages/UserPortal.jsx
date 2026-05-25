@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 import { resetAgeConfirmation } from "@/components/AgeGate";
 import StudentCabinet from "@/components/StudentCabinet";
 import CycleBanner, { GuestKeyRedeemer } from "@/components/CycleBanner";
+import MentorHookCard from "@/components/MentorHookCard";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/telemetry";
 import { api } from "@/lib/api";
@@ -153,6 +154,11 @@ export default function UserPortal() {
           </Link>
         </div>
       </section>
+
+      {/* §SYNERGY-2 2026-02-10 — Mentor Hook (only shown to signed-in,
+          non-premium parents who have ≥3 closed adult voice sessions
+          and haven't dismissed before). */}
+      <MentorHookCard />
 
       {/* Purpose */}
       <section className="aurin-section-sm border-b border-[hsl(var(--aurin-border-soft))]">

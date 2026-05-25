@@ -44,6 +44,29 @@ export default function BodyTemple() {
             .catch(() => setOverview({ error: true }));
     }, []);
 
+    // §SYNERGY-ANALYTICS 2026-02-10 — Fire one quiet ref-hit so every
+    // arrival from /portal (annas_letter, mentor_hook, kids_hub) lands
+    // in the marketing analytics table. Fire-and-forget; no UI impact.
+    useEffect(() => {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const utmSource = (params.get("utm_source") || "").trim();
+            const utmMedium = (params.get("utm_medium") || "").trim();
+            const utmCampaign = (params.get("utm_campaign") || "").trim();
+            const refParam = (params.get("ref") || "").trim().toUpperCase();
+            if (refParam || utmSource || utmCampaign) {
+                api.post("/marketing/ref-hit", {
+                    code: refParam,
+                    path: window.location.pathname,
+                    referer: document.referrer || null,
+                    utm_source: utmSource || null,
+                    utm_medium: utmMedium || null,
+                    utm_campaign: utmCampaign || null,
+                }).catch(() => {});
+            }
+        } catch { /* noop */ }
+    }, []);
+
     useEffect(() => {
         if (activeDay == null) {
             setActiveDayPayload(null);

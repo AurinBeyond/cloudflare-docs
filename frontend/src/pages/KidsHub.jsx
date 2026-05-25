@@ -444,6 +444,45 @@ export default function KidsHub() {
             feels heavy, please tell a grown-up you trust.
           </p>
         </footer>
+
+        {/* §SYNERGY-4 2026-02-10 — Cross-sell whisper for grown-ups.
+            A small, quiet doorway to Parental Sanctuary placed AFTER
+            the child's footer so it never competes with the child's
+            warm room. Adult tone, sage-muted, single line. */}
+        <aside
+          className="mt-8 mb-4 pt-6 border-t"
+          style={{ borderColor: `${palette.cardBorder}66` }}
+          data-testid="kids-hub-parent-cross-sell"
+        >
+          <Link
+            to="/body-temple?utm_source=kids_hub"
+            data-testid="kids-hub-parent-sanctuary-link"
+            className="group block"
+            style={{ color: palette.textMuted }}
+          >
+            <p
+              className="text-[10.5px] uppercase tracking-[0.24em] mb-1"
+              style={{ color: palette.textMuted, opacity: 0.85 }}
+            >
+              For the grown-up reading this
+            </p>
+            <p
+              className="text-[15.5px] leading-snug max-w-[52ch]"
+              style={{
+                fontFamily: "'Caveat', cursive",
+                color: palette.handwritten || palette.text,
+              }}
+            >
+              You held space all week. There is a quiet room for you too —{" "}
+              <span
+                className="border-b border-dotted transition-opacity group-hover:opacity-80"
+                style={{ borderColor: palette.accent, color: palette.accent }}
+              >
+                Body Temple 28 →
+              </span>
+            </p>
+          </Link>
+        </aside>
       </div>
     </div>
   );

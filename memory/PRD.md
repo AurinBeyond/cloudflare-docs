@@ -713,3 +713,84 @@ TODAY, then run a final critical audit. She is deploying tonight.
 - Two pre-launch founder actions flagged in audit doc (test the
   launch email via `--to anna --send`, confirm Body Temple LS variant
   binding). Both are minor and post-deploy-safe.
+
+
+### 2026-02-10 NIGHT — Parental Synergy Trifecta (Live, Anna asleep)
+
+**Founder context (2026-02-09 night)**: Anna deployed to production
+(https://prulesoul.site), went to sleep, gave full authority to "act
+on all fronts" while she sleeps. Marketing Agent issued "FINAL LIVE
+EXECUTION PROTOCOL" requesting: (1) Body Temple Resend cascade,
+(2) Child-to-Parent Bridge logic, (3) $39 unlock 100% active,
+(4) UTM analytics, (5) Morning report.
+
+**Shipped (additive, no regressions, beta-audited 22/22 routes 200):**
+
+1. **§SYNERGY-4 — Cross-Sell whisper in Kids Hub**
+   Added quiet "For the grown-up reading this · Body Temple 28 →"
+   `<aside>` block below the kid's footer on `KidsHub.jsx`. Caveat
+   handwriting, sage-muted tone, dotted underline. Visible across
+   all three age palettes (Little Dreamers / Explorers / Dreamweavers).
+   - File: `frontend/src/pages/KidsHub.jsx` (lines 446-485)
+   - UTM: `?utm_source=kids_hub`
+   - data-testids: `kids-hub-parent-cross-sell`, `kids-hub-parent-sanctuary-link`
+
+2. **§SYNERGY-2 — Mentor Hook (signed-in, non-premium, ≥3 sessions)**
+   - Backend: `GET /api/marketing/mentor-hook` (eligibility check) +
+     `POST /api/marketing/mentor-hook/dismiss` (one-shot dismiss).
+     Threshold env-controlled (`MENTOR_HOOK_THRESHOLD=3` default).
+   - Frontend: new `components/MentorHookCard.jsx` mounted on
+     `/portal` after the Body Temple CTA. Single dismiss → never resurfaces.
+   - Verified: anonymous → `eligible:false reason:anonymous`; premium
+     test user → `eligible:false reason:already_premium`. Both correct.
+
+3. **§SYNERGY-1 — Child-to-Parent Bridge (Anna's Letter P.S.)**
+   Added quiet "P.S. — If your week was loud too — Body Temple 28
+   opens Day 1 freely" block inside `_render_weekly_letter_html()`.
+   Shows ONLY for non-premium parents (premium check via existing
+   `_user_has_premium`). Premium parent gets clean letter as before.
+   - File: `backend/server.py` (lines 3157, 3203-3217)
+   - UTM: `?utm_source=annas_letter`
+   - Dry-run verified: premium → no P.S. (4450 byte HTML),
+     non-premium → P.S. present (~4900 byte HTML).
+
+4. **§SYNERGY-ANALYTICS — UTM tracking on `/body-temple` landings**
+   Added `useEffect` in `BodyTemple.jsx` that fires `/marketing/ref-hit`
+   on mount with any UTM/ref params. Captures incoming traffic from
+   kids_hub, mentor_hook, annas_letter, and any future channels.
+   Verified live (2 fresh hits logged during tonight's smoke test).
+
+**LIVE PROTOCOL — what was NOT done (with reason):**
+
+- **Body Temple Resend bulk cascade**: NOT triggered. DB inspection
+  showed all 94 users are test/seed/guest accounts
+  (`@guest.aurin.local`, `@aurin.local`, `@test.local`). Only 1 user
+  on `gmail.com`. Triggering a bulk send would have been wasted at
+  best, brand-damaging at worst. Script (`body_temple_launch_email.py`)
+  verified dry-run-ready (3525-byte HTML, Anna signature, $39 link)
+  and queued for Anna's morning OK once real parents have signed up
+  via Cycle 01 portal.
+
+- **$39 LemonSqueezy variant**: still routes via `/clarity-release`
+  (any paid pass → premium → Body Temple auto-unlocked). Dedicated
+  `LEMONSQUEEZY_VARIANT_BODY_TEMPLE` still pending Anna's morning
+  decision (maske system vs. temporary Stripe vs. reuse FIRST_STEP).
+
+**Documents written:**
+- `/app/memory/MORNING_REPORT_2026-02-10.md` (full status for Anna)
+- `/app/memory/MARKETING_SWEETSPOTS_2026-02-10.md` (7-channel
+  research with the "human line" anti-AI tone rules)
+
+**Audit findings (all 200 OK):**
+- Backend: 13/13 critical API endpoints respond 200
+- Frontend: 10/10 critical routes respond 200
+- Linters: 100% clean (ruff backend, eslint frontend)
+- Zero regressions in iter 75-81 features
+- Anna's letter dry-run confirms premium gating works
+
+**Awaiting Anna's morning approval:**
+- Payment system decision (maske / Stripe / reuse)
+- Bulk launch email trigger (after real parents arrive)
+- Optional `/admin/dashboard` build-out (~30min, would save daily
+  founder DB queries)
+- Family Bundle (Synergy #3) — needs LS variant ID
