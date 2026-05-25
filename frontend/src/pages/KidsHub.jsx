@@ -81,7 +81,15 @@ export default function KidsHub() {
             • soft sun-rays from upper-left
             • a warm floor-glow at bottom
             • two blurred orbs that suggest a room's lights
-          All purely CSS — zero impact on functionality. */}
+          All purely CSS — zero impact on functionality.
+
+          §KIDS-SPATIAL-v2 2026-02-09 LATE — Artist agent additions
+          (approved ideas 1 + 2 from /app/design_guidelines.json):
+            • Sanctuary Vignette — inset shadow + bottom radial
+              floor to transform the viewport from a webpage into
+              a "room"
+          Idea 2 (Guiding Thread) is rendered as a separate SVG
+          below the cards grid (see the .kids-hub-cards-grid block). */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div
           className="absolute"
@@ -126,6 +134,27 @@ export default function KidsHub() {
           <polygon points="220,0 320,0 140,600 60,600" fill={`url(#ray-${theme.slug})`} opacity="0.4"/>
         </svg>
       </div>
+
+      {/* §SANCTUARY-VIGNETTE 2026-02-09 — Artist agent idea 1.
+          Inset edge-darkening + bottom radial "floor" turns the
+          viewport into a room. Fixed so the framing persists
+          when the user scrolls. Pointer-events-none keeps
+          everything clickable. Per-age tint via palette.accent. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[1]"
+        style={{
+          boxShadow: `inset 0 0 140px ${palette.accent}24, inset 0 -80px 120px -40px ${palette.accent}1f`,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[1]"
+        style={{
+          height: "32vh",
+          background: `radial-gradient(120% 80% at 50% 100%, ${palette.accent}1f 0%, ${palette.accent}10 30%, transparent 65%)`,
+        }}
+      />
 
       <div className="relative mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
         {/* ─── Hero ─── */}
@@ -247,9 +276,43 @@ export default function KidsHub() {
         {/* ─── Action cards (staggered for spatial feel) ─── */}
         <section
           ref={cardsRef}
-          className="kids-hub-cards-grid grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-7"
+          className="kids-hub-cards-grid relative grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-7"
           data-testid="kids-hub-cards"
         >
+          {/* §GUIDING-THREAD 2026-02-09 — Artist idea 2 (top pick).
+              Curving SVG path behind the staggered cards that
+              connects them as a small "journey", echoing Anna's
+              stein-på-stein wish without adding new components.
+              Pointer-events-none + z-0 keeps it strictly decorative. */}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 400 700"
+            preserveAspectRatio="none"
+            className="hidden sm:block pointer-events-none absolute inset-0 w-full h-full z-0"
+            style={{ opacity: 0.32 }}
+          >
+            <defs>
+              <linearGradient id={`thread-${theme.slug}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor={palette.accent} stopOpacity="0.55"/>
+                <stop offset="100%" stopColor={palette.accent2 || palette.accent} stopOpacity="0.35"/>
+              </linearGradient>
+            </defs>
+            <path
+              d="M 90 60 Q 180 120 300 130 T 110 280 Q 60 360 320 410 T 130 600"
+              fill="none"
+              stroke={`url(#thread-${theme.slug})`}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeDasharray="2 9"
+            />
+            {/* Tiny waypoint dots at the natural rest points along
+                the curve — like quiet stones in a garden path. */}
+            <circle cx="90"  cy="60"  r="3.5" fill={palette.accent} opacity="0.55"/>
+            <circle cx="300" cy="130" r="3.5" fill={palette.accent} opacity="0.55"/>
+            <circle cx="110" cy="280" r="3.5" fill={palette.accent} opacity="0.55"/>
+            <circle cx="320" cy="410" r="3.5" fill={palette.accent} opacity="0.55"/>
+            <circle cx="130" cy="600" r="3.5" fill={palette.accent} opacity="0.55"/>
+          </svg>
           <HubCard
             theme={theme}
             to={`/aurins-room/${theme.slug}`}
@@ -396,7 +459,7 @@ function HubCard({ theme, to, icon: Icon, title, body, testid, primary, badge })
     <Link
       to={to}
       data-testid={testid}
-      className="hub-card-shine group relative block rounded-2xl p-6 sm:p-7 transition duration-300 hover:-translate-y-1 overflow-hidden"
+      className="hub-card-shine group relative block rounded-2xl p-6 sm:p-7 transition duration-300 hover:-translate-y-1 overflow-hidden z-[1]"
       style={{
         background: primary
           ? `linear-gradient(160deg, ${palette.accent2 || palette.accent} 0%, ${palette.accent} 100%)`
