@@ -1065,6 +1065,34 @@
    any avatar inside the sanctuary frame. */
 .sanctuary-aura {
     position: relative;
+
+/* §KIDS-SPATIAL 2026-02-09 — Card stagger to create the
+   "spatial / playful" feel Anna asked for. NO animations —
+   pure static offset + tilt so the layout itself reads as a
+   small room instead of a spreadsheet. */
+.kids-hub-cards-grid > * {
+    transition: transform 0.35s ease;
+}
+
+@media (min-width: 640px) {
+    .kids-hub-cards-grid > *:nth-child(1) { transform: translateY(0) rotate(-0.5deg); }
+    .kids-hub-cards-grid > *:nth-child(2) { transform: translateY(22px) rotate(0.6deg); }
+    .kids-hub-cards-grid > *:nth-child(3) { transform: translateY(-12px) rotate(0.4deg); }
+    .kids-hub-cards-grid > *:nth-child(4) { transform: translateY(14px) rotate(-0.4deg); }
+    .kids-hub-cards-grid > *:nth-child(5) { transform: translateY(-6px) rotate(-0.6deg); }
+
+    .kids-hub-cards-grid > *:nth-child(1):hover { transform: translateY(-6px) rotate(-0.5deg) scale(1.01); }
+    .kids-hub-cards-grid > *:nth-child(2):hover { transform: translateY(16px) rotate(0.6deg) scale(1.01); }
+    .kids-hub-cards-grid > *:nth-child(3):hover { transform: translateY(-18px) rotate(0.4deg) scale(1.01); }
+    .kids-hub-cards-grid > *:nth-child(4):hover { transform: translateY(8px) rotate(-0.4deg) scale(1.01); }
+    .kids-hub-cards-grid > *:nth-child(5):hover { transform: translateY(-12px) rotate(-0.6deg) scale(1.01); }
+}
+
+/* Soft "floating" extra glow on Kids Hub cards — adds depth */
+.kids-hub-cards-grid .hub-card-shine {
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.06));
+}
+
     isolation: isolate;
 }
 

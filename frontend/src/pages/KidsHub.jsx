@@ -69,24 +69,76 @@ export default function KidsHub() {
   return (
     <div
       data-testid={`kids-hub-${theme.slug}`}
-      className="min-h-screen"
+      className="min-h-screen relative overflow-hidden"
       style={{
         background: palette.bgGradient,
         color: palette.text,
       }}
     >
-      <div className="mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
+      {/* §KIDS-SPATIAL 2026-02-09 — Founder ask: "ruumilisus ja
+          mänguline taju". Static-only decorative layers that
+          create depth without a single animation frame:
+            • soft sun-rays from upper-left
+            • a warm floor-glow at bottom
+            • two blurred orbs that suggest a room's lights
+          All purely CSS — zero impact on functionality. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute"
+          style={{
+            top: "-10%",
+            left: "-15%",
+            width: "70%",
+            height: "60%",
+            background: `radial-gradient(ellipse at center, ${palette.accent}1A 0%, transparent 65%)`,
+            filter: "blur(40px)",
+          }}
+        />
+        <div
+          className="absolute"
+          style={{
+            top: "20%",
+            right: "-20%",
+            width: "60%",
+            height: "55%",
+            background: `radial-gradient(ellipse at center, ${palette.accent2 || palette.accent}1A 0%, transparent 65%)`,
+            filter: "blur(50px)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-0"
+          style={{
+            height: "30%",
+            background: `linear-gradient(180deg, transparent 0%, ${palette.accent}10 100%)`,
+          }}
+        />
+        {/* Sun-ray streaks — three thin diagonals like window light */}
+        <svg viewBox="0 0 800 600" preserveAspectRatio="none"
+             className="absolute inset-0 w-full h-full opacity-[0.18]">
+          <defs>
+            <linearGradient id={`ray-${theme.slug}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={palette.accent} stopOpacity="0.4"/>
+              <stop offset="100%" stopColor={palette.accent} stopOpacity="0"/>
+            </linearGradient>
+          </defs>
+          <polygon points="0,0 320,0 80,600 0,600" fill={`url(#ray-${theme.slug})`}/>
+          <polygon points="120,0 240,0 60,600 0,600" fill={`url(#ray-${theme.slug})`} opacity="0.55"/>
+          <polygon points="220,0 320,0 140,600 60,600" fill={`url(#ray-${theme.slug})`} opacity="0.4"/>
+        </svg>
+      </div>
+
+      <div className="relative mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16">
         {/* ─── Hero ─── */}
         <header className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="relative inline-flex items-center justify-center mb-5">
             <div
               className="sanctuary-aura rounded-full overflow-hidden flex items-center justify-center"
               style={{
-                width: 132,
-                height: 132,
+                width: 172,
+                height: 172,
                 background: palette.cardBg,
-                border: `2px solid ${palette.cardBorder}`,
-                boxShadow: `0 18px 40px -18px ${palette.accent}66, inset 0 2px 0 rgba(255,255,255,0.5)`,
+                border: `3px solid ${palette.cardBorder}`,
+                boxShadow: `0 24px 50px -22px ${palette.accent}aa, inset 0 2px 0 rgba(255,255,255,0.6), 0 0 0 6px ${palette.accent}1a`,
               }}
               data-testid="kids-hub-aurin-portrait"
             >
@@ -192,10 +244,10 @@ export default function KidsHub() {
           </Link>
         </section>
 
-        {/* ─── Action cards ─── */}
+        {/* ─── Action cards (staggered for spatial feel) ─── */}
         <section
           ref={cardsRef}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6"
+          className="kids-hub-cards-grid grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-7"
           data-testid="kids-hub-cards"
         >
           <HubCard
