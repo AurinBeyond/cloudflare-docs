@@ -392,3 +392,33 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 **Verified by smoke test:** Closed gift card → click → 3 intimate channels appear → ShareStrip below with FB/X/Copy. All data-testids visible.
 
 **Why this matters:** Parents share kindness, not advertisements. The gift framing means the receiving family opens it expecting a quiet moment, not a sales pitch — which is exactly how Anna's trust-first brand wants to acquire users (zero CAC, high LTV).
+
+## 2026-02-09 (iteration 75) — Kids Hubs + Angel Stars MVP
+
+**Anna's directive:** Replace the "dark void" a child stepped into after the Kids Universe gateway with warm, age-themed Hubs. Add a gentle gamified retention engine (Angel Stars) with parent-approval. Approved 3 hand-authored Lottie animations (ambient sparkle, celebration burst, mystery unlock).
+
+**Shipped:**
+
+1. **`/kids-universe/:ageGroup/hub`** — three cream-themed Hubs (peach for 3–5 Little Dreamers, sage for 6–8 Explorers, mint for 9–12 Dreamweavers). Per-age palette via `kidsHubThemes.js` ThemeManager. Aurin portrait + ambient Lottie sparkle, four large action cards (Talk, Story, Color, My Stars), gratitude micro-prompt on the 3–5 hub only. Legacy slugs `3-5`/`6-8`/`9-12` alias to canonical names.
+
+2. **`/kids-universe/:ageGroup/stars`** — child-facing "My Angel Stars" page. Balance card with ambient sparkle, 5 age-tuned tap-to-earn actions, 4 mystery reward tiers (hint shown locked, full title + redeem button when threshold met). Celebration Lottie burst plays on each tap.
+
+3. **`/parent-portal/stars`** — calm sanctuary-styled parent dashboard. Per-child summary (balance / total / pending count), pending approval queue with Approve / Not-yet buttons, recent history. Single-user MVP (parent and child surfaces share user_id).
+
+4. **`/api/angel-stars/*`** — 6 endpoints (catalog, me, request, approve, reject, redeem, parent-portal). Catalog of 15 actions + 4 tiers static in `angel_stars.py`. Persistent state in `angel_stars` / `angel_stars_actions` / `angel_stars_rewards` Mongo collections. Rate-limit bypass added for `/api/angel-stars/*` so parent batch-approval doesn't 429.
+
+5. **3 hand-authored Lottie JSONs** — `sparkle-ambient.json`, `star-celebration.json`, `mystery-unlock.json` in `/public/assets/lottie/`. All in the Sanctuary warm-gold palette, ~2–4KB each, no external CDN dependency. Rendered via the new `<AurinSparkle variant>` wrapper using `lottie-react@2.4.1`.
+
+**Verified by testing agent (iteration 75):**
+- Backend: 17/17 pytest passed end-to-end (catalog, request → approve → balance, redeem under/over threshold, parent-portal aggregation, legacy slug aliasing).
+- Frontend: 100% on the listed flows (3 hubs render with correct themes, gratitude block 3–5-only, child stars view, parent portal, auth fallback, gateway "Open the warm room" link added per age card).
+- Minor: catalog returns 6 (not 5) for explorers/dreamweavers because two actions (`told_truth`, `anon_kindness`) intentionally belong to both bands — kept as-is (pedagogically correct cross-age values).
+
+**Untouched:** All adult rooms, ConvAI agents, billing, presence ledger, existing /kids-universe gateway (only additive change: per-age "Open the warm room" link).
+
+**Pending (queued in order):**
+- 🟡 (P1) $5 Referral viral loop (frontend + auto-credit DB)
+- 🟡 (P1) Flexible Custom Top-up slider (10-min minimum @ €0.60/min)
+- 🔵 (P2) $12 Universal Minute Bank
+- 🔵 (P2) Angel Stars Phase 2 — reciprocal stars (child awards parent), photo-album, parent reward "stamps"
+- 🟢 (P2) Future Agent Multiverse architecture

@@ -80,7 +80,7 @@ export default function KidsHub() {
         <header className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="relative inline-flex items-center justify-center mb-5">
             <div
-              className="rounded-full overflow-hidden"
+              className="rounded-full overflow-hidden flex items-center justify-center"
               style={{
                 width: 132,
                 height: 132,
@@ -96,8 +96,31 @@ export default function KidsHub() {
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
+                  if (e.currentTarget.nextElementSibling) {
+                    e.currentTarget.nextElementSibling.style.display = "flex";
+                  }
                 }}
               />
+              {/* §KIDS-HUBS 2026-02-09 — SVG initial fallback when
+                  the Aurin portrait 404s (preview env or first
+                  paint). Keeps the frame from looking empty. */}
+              <span
+                aria-hidden="true"
+                style={{
+                  display: "none",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                  background: `linear-gradient(135deg, ${palette.accent} 0%, ${palette.accent2} 100%)`,
+                  color: "#FFFFFF",
+                  fontFamily: "Caveat, cursive",
+                  fontSize: 64,
+                  lineHeight: 1,
+                }}
+              >
+                A
+              </span>
             </div>
             <span
               className="absolute -top-2 -right-2"

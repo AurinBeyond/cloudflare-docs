@@ -104,7 +104,17 @@ import time as _ratelimit_time
 _RATE_LIMIT_BUCKET: dict = {}
 _RATE_LIMIT_MAX = int(os.environ.get("RATE_LIMIT_MAX", "30"))
 _RATE_LIMIT_WINDOW_S = int(os.environ.get("RATE_LIMIT_WINDOW_S", "10"))
-_RATE_LIMIT_BYPASS = ("/api/health", "/api/agreement/status")
+_RATE_LIMIT_BYPASS = (
+    "/api/health",
+    "/api/agreement/status",
+    # §KIDS-HUBS 2026-02-09 — parent batch-approving a stack of
+    # pending Angel Stars hits the 30 req / 10s ceiling. These
+    # endpoints are already auth-gated (per-user, not per-IP) and
+    # idempotent on duplicate, so bypassing the global brake here
+    # is safe. /catalog is public + static so we bypass it too to
+    # keep the Kids Hub paint instant.
+    "/api/angel-stars/",
+)
 
 
 @app.middleware("http")
