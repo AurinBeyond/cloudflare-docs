@@ -422,3 +422,39 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 - 🔵 (P2) $12 Universal Minute Bank
 - 🔵 (P2) Angel Stars Phase 2 — reciprocal stars (child awards parent), photo-album, parent reward "stamps"
 - 🟢 (P2) Future Agent Multiverse architecture
+
+## 2026-02-09 (iteration 76) — Clarity Curriculum (4 modules) + Mood
+
+**Anna's directive:** Expand the Kids Hubs with the four-module curriculum from her ideas PDF — Aurin's Daily Reflection, Kitchen Lab, Growth Quest, Creative Corner. Build all four at once. Add daily mood check-in (auto-awards 1★/day), parent wellness 7-day portal, and apply Caveat handwriting font globally on kids surfaces. Approved free/premium split: 12 free starter activities (3 per module), rest gated for the €60h Sanctuary package.
+
+**Shipped:**
+
+1. **`/kids-universe/:ageGroup/daily`** — mood check-in (5 emoji moods + Caveat-font note field). On submit: Aurin's mood-matched reply + 3 mood/age-tuned activity recommendations + auto 1★ once per (child, day).
+
+2. **`/kids-universe/:ageGroup/activities` + `/activities/:slug`** — module browser with 4 tabs (Reflect / Kitchen / Quest / Create), free + locked-premium cards, full activity detail with numbered instructions and "I did this" CTA that creates a pending Angel Stars request the parent approves. Premium completion attempt by non-paying user returns 402 with CTA to /clarity-release.
+
+3. **`/parent-portal/wellness`** — 7-day mood dashboard. Per-child bar chart (5 mood counts), 3 most recent notes (only if child wrote any).
+
+4. **Hub redesign** — Today hero strip ("How are you, really, today?") prepended to the cards. New "Quiet activities" card added (5 cards total). Existing gratitude prompt on 3–5 retained.
+
+5. **23 curriculum activities** seeded in `kids_curriculum.py`: 5 Reflect + 6 Kitchen + 7 Quest + 8 Create, age-gated, mood-tagged, premium-tagged, with reward_stars per activity.
+
+6. **Mood → activity recommendation** mapping (`MOOD_TO_MODULES`) for Aurin's "Today's Quest" pick.
+
+7. **8 new endpoints** under `/api/kids-curriculum/*` (modules, activities list/detail, complete) and `/api/kids-mood/*` (checkin, me, parent-portal). All bypass the global 429 rate-limit.
+
+8. **`/app/memory/CLARITY_CURRICULUM_CHEAT_SHEET.md`** — 1-page reference for Anna's launch marketing: module table, free/premium split, Aurin's mood-reply logic, 3 copy-paste influencer DMs, 7-day post-launch checklist.
+
+**Verified by testing agent (iteration 76):**
+- Backend: **29/29 pytest passed**. Modules / catalog / filters / premium gating / mood checkin idempotency / 402 on premium completion / parent-portal aggregation all clean.
+- Frontend: **100% on all listed flows**. Hub Today hero, daily mood picker → reply + recs + star, activities list with module tabs + premium banner, free activity detail with instructions + complete CTA, premium-locked detail with /clarity-release CTA, parent wellness signed-in bars, unauth signin fallback. Regression: gateway, /parent-portal/stars, little-dreamers gratitude block all still clean.
+- Zero critical, zero minor bugs.
+
+**Pending (queued in order):**
+- 🟡 (P1) $5 Referral viral loop (frontend + auto-credit DB)
+- 🟡 (P1) Flexible Custom Top-up slider (10-min minimum @ €0.60/min)
+- 🟡 (P1) Weekly "Anna's small letter" email — Friday digest of child's week (mood + stars + 1 quiet Aurin sentence)
+- 🔵 (P2) $12 Universal Minute Bank
+- 🔵 (P2) Angel Stars Phase 2 — reciprocal stars (child awards parent), photo album, parent stamps
+- 🔵 (P2) Aurin chat-driven "today's quest" suggestion (voice room mood detection)
+- 🟢 (P2) Future Agent Multiverse architecture
