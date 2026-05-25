@@ -25,6 +25,7 @@ import argparse
 import asyncio
 import os
 import sys
+from datetime import datetime, timezone
 
 sys.path.insert(0, "/app/backend")
 from dotenv import load_dotenv
@@ -172,7 +173,7 @@ async def dispatch_to_existing_parents(dry_run: bool = True, limit: int | None =
                 await db.users.update_one(
                     {"user_id": uid},
                     {"$set": {"body_temple_launch_sent_at":
-                              asyncio.get_event_loop().time()}},
+                              datetime.now(timezone.utc).isoformat()}},
                 )
             else:
                 results["skipped"] += 1

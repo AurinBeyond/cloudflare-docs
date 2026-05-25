@@ -604,3 +604,54 @@ lives in `/app/memory/ROADMAP.md` with a 2026-03-02 resume date.
 (19 pytest cases — re-runnable), `/app/test_reports/iteration_79.json`.
 Test user `test_token_6489e6cf1440` now has `body_temple_progress`
 rows for days 2 + 5; grace_mode cleared.
+
+
+### 2026-02-09 LATE — Iter 80 Visual Polish + Body Temple Launch Email
+
+**Founder directive (Anna)**: Norwegian "stein på stein" — stepping
+stones, step by step. Also: "klar / mitte matt" — visuals must feel
+clear and shiny, not matte. AND start selling Body Temple 28
+immediately to existing parents.
+
+**Shipped (testing_agent_v3_fork iter 80 — 100% pass, 0 console errors)**:
+1. **StonePath component** (`components/StonePath.jsx`) — reusable
+   stepping-stones row. Pulsing-gold current day, sage check for
+   walked, padlock for locked. Inline SVG dashed guide-line behind
+   the stones for the "path" feel.
+2. **Body Temple 28 stones** — chip rows inside each week card
+   replaced by StonePath. `currentDay` computed as first unlocked
+   non-walked day (falls back to Day 1 for guests).
+3. **Brighter sanctuary-wood** — gradient extended (#fff4d7→#d9b577),
+   top sheen `::after` overlay, inner highlight, golden glow on hover.
+   Anna's "klar" requirement satisfied.
+4. **Kids Hub HubCard re-style** — white→palette gradient, top
+   sheen overlay, Caveat handwriting titles, hover glow + scale,
+   per-age palette PRESERVED (peach/sage/lavender all distinct per
+   verification details in iter 80 report).
+5. **Aurin portrait golden aura** on all 3 Kids Hub age groups.
+6. **Body Temple launch email script**
+   (`backend/scripts/body_temple_launch_email.py`) — short, intimate,
+   "Anna"-signed email for existing parents. `--to <email>` for test,
+   `--send` for real bulk dispatch, respects `annas_letter_opt_out`,
+   stores `body_temple_launch_sent_at` ISO timestamp to prevent
+   duplicate sends. Dry-run is the default.
+
+**Files added**:
+- `/app/frontend/src/components/StonePath.jsx`
+- `/app/backend/scripts/body_temple_launch_email.py`
+- `/app/memory/VISUAL_VISION_2026-02-09.md` (mood-board reference)
+
+**Files touched (additive only)**:
+- `/app/frontend/src/pages/BodyTemple.jsx` (StonePath wired, currentDay memo)
+- `/app/frontend/src/pages/KidsHub.jsx` (HubCard re-styled, portrait aura)
+- `/app/frontend/src/index.css` (sanctuary-wood brightened with ::after sheen)
+
+**Per-age palette VERIFIED distinct** (iter 80 verification_details):
+- little-dreamers: peach/cream bg (rgb 255,247,238 → rgb 252,233,213)
+- explorers: sage/cream bg (rgb 251,246,236 → rgb 232,230,210)
+- dreamweavers: mint/cream bg (rgb 244,248,242 → rgb 221,233,218)
+
+**Decision held**: NO further development for 3 weeks (per Anna's
+2026-02-09 EVE directive). All further visual unification (Kindness
+Quest, Quiet Corner, Creative Spark, etc.) deferred to 2026-03-02+
+per `/app/memory/ROADMAP.md`. Sales-focus mode active.
