@@ -40,6 +40,19 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    // §REFERRAL 2026-02-09 — Capture ?ref=AURIN... from any landing
+    // URL into localStorage. Auto-claim it the moment the user has
+    // a valid session (via the secondary effect below). This keeps
+    // the share link click → reward chain unbroken across the
+    // OAuth / magic-link round-trips.
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref && /^AURIN[A-Z0-9]+$/i.test(ref)) {
+        localStorage.setItem("aurin_pending_ref", ref.toUpperCase());
+      }
+    } catch {}
+
     if (typeof window !== "undefined" && window.location.hash?.includes("session_id=")) {
       // AuthCallback will handle it.
       setLoading(false);
@@ -47,6 +60,23 @@ export function AuthProvider({ children }) {
     }
     refresh();
   }, [refresh]);
+
+  // Once we have an authenticated user, fire any pending referral
+  // claim ONCE. Fail-soft: the user never sees a referral error.
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    try {
+      const pending = localStorage.getItem("aurin_pending_ref");
+      if (!pending) return;
+      api.post("/referral/claim", { code: pending })
+        .catch(() => {})
+        .finally(() => {
+          if (alive) localStorage.removeItem("aurin_pending_ref");
+        });
+    } catch {}
+    return () => { alive = false; };
+  }, [user]);
 
   return (
     <AuthCtx.Provider value={{ user, loading, refresh, logout }}>

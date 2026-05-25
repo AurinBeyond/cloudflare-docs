@@ -17,6 +17,7 @@ import KidsDaily from "@/pages/KidsDaily";
 import KidsActivities from "@/pages/KidsActivities";
 import ParentStars from "@/pages/ParentStars";
 import ParentWellness from "@/pages/ParentWellness";
+import Referral from "@/pages/Referral";
 import MeditationCorner from "@/pages/MeditationCorner";
 import UserPortal from "@/pages/UserPortal";
 import PortalMagicVerify from "@/pages/PortalMagicVerify";
@@ -122,6 +123,8 @@ function AppRouter() {
         <Route path="/pricing" element={<Navigate to="/clarity-release" replace />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/portal/guest" element={<Guest />} />
+        <Route path="/portal/referral" element={<Referral />} />
+        <Route path="/refer-a-friend" element={<Navigate to="/portal/referral" replace />} />
         <Route
           path="/clarity-release"
           element={

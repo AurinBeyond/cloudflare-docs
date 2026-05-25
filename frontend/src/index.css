@@ -227,6 +227,23 @@
         letter-spacing: 0.02em;
     }
 
+    /* §REFERRAL 2026-02-09 — numbered step badge used in the
+       Referral and onboarding "how it works" lists. */
+    .aurin-step-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: hsl(var(--aurin-amber) / 0.15);
+        color: hsl(var(--aurin-amber));
+        font-family: Georgia, serif;
+        font-size: 14px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
     /* Dotted/structured grid background (for page headers) */
     .aurin-grid-bg {
         background-image:

@@ -2617,7 +2617,7 @@ async def _user_has_premium(user_id: str) -> bool:
             return True
         pass_doc = await db.clarity_passes.find_one(
             {"user_id": user_id, "source": {"$nin": ["admin-grant", "free_voice_beta"]}},
-            {"_id": 0, "_id": 0},
+            {"_id": 0},
         )
         return bool(pass_doc)
     except Exception:
@@ -2755,6 +2755,13 @@ async def kids_mood_checkin(inp: KidsMoodInput, request: Request):
 
     recommendations = recommend_for_mood(slug, mood)
     premium = await _user_has_premium(user.user_id)
+    # §REFERRAL 2026-02-09 — soft trigger: first ever check-in for
+    # this user fires any pending referral reward.
+    if star_awarded_now:
+        try:
+            await _maybe_reward_referral(user.user_id, trigger="first_daily_checkin")
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("referral reward (mood) failed: %s", exc)
     return {
         "ok": True,
         "mood": mood,
@@ -2814,6 +2821,467 @@ async def kids_mood_parent_portal(request: Request, days: int = 7):
             bucket["recent_notes"].append({"day": r.get("day"), "mood": r.get("mood"), "note": r.get("note")})
 
     return {"days": days, "children": list(by_child.values()), "checkins": rows[:50]}
+
+
+# =============================================================
+# §REFERRAL 2026-02-09 — $5 viral loop, parent-to-parent.
+# Every signed-in user gets a stable code `aurin_<8chars>`. When a
+# new user enters that code at any time during their first 7 days
+# (or it's appended via /refer-claim), both parties earn €5 of
+# voice credit (= 8.33 minutes at our €0.60/min rate) once the
+# referee makes their FIRST paid purchase (or completes their
+# first daily check-in — soft-trigger for non-paying funnel).
+#
+# Schema:
+#   referral_codes      {user_id, code, created_at}
+#   referral_claims     {referrer_id, referee_id, code, status,
+#                        claimed_at, rewarded_at, reward_seconds}
+#
+# Reward rules:
+#   • €5 = 500 seconds (~8 min) credited to BOTH presence_seconds_left
+#   • Soft-trigger: referee's first kids_mood_checkin OR first
+#     clarity_pass purchase fires the reward exactly once.
+#   • Self-referral blocked.
+#   • Idempotent: a referee_id can only ever appear in one claim row.
+# =============================================================
+REFERRAL_REWARD_SECONDS = int(os.environ.get("REFERRAL_REWARD_SECONDS", "500"))
+
+
+def _make_referral_code(user_id: str) -> str:
+    # 6-char base36 hash of user_id+salt → readable & non-guessable.
+    import hashlib
+    h = hashlib.sha256(f"{user_id}|aurin-ref-v1".encode()).hexdigest()
+    return ("AURIN" + h[:6]).upper()
+
+
+async def _get_or_create_referral_code(user_id: str) -> str:
+    doc = await db.referral_codes.find_one({"user_id": user_id}, {"_id": 0, "code": 1})
+    if doc:
+        return doc["code"]
+    code = _make_referral_code(user_id)
+    await db.referral_codes.insert_one({
+        "user_id": user_id,
+        "code": code,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    return code
+
+
+class ReferralClaimInput(BaseModel):
+    code: str
+
+
+@api_router.get("/referral/me")
+async def referral_me(request: Request):
+    user = await _require_user(request)
+    code = await _get_or_create_referral_code(user.user_id)
+    claims = await db.referral_claims.find(
+        {"referrer_id": user.user_id}, {"_id": 0}
+    ).sort("claimed_at", -1).limit(50).to_list(length=50)
+    rewarded = [c for c in claims if c.get("status") == "rewarded"]
+    pending = [c for c in claims if c.get("status") == "pending"]
+    return {
+        "code": code,
+        "share_url": f"https://prulesoul.site/?ref={code}",
+        "total_invited": len(claims),
+        "total_rewarded": len(rewarded),
+        "pending": len(pending),
+        "total_seconds_earned": sum(int(c.get("reward_seconds") or 0) for c in rewarded),
+        "claims": claims[:10],
+    }
+
+
+@api_router.post("/referral/claim")
+async def referral_claim(inp: ReferralClaimInput, request: Request):
+    """Called when a user enters a referral code (typically during
+    onboarding from a ?ref=… URL). Records a pending claim. The
+    reward triggers when the referee's first qualifying action
+    happens (paid pass OR first daily check-in)."""
+    user = await _require_user(request)
+    code = (inp.code or "").strip().upper()
+    if not code or not code.startswith("AURIN"):
+        raise HTTPException(status_code=400, detail="Code doesn't look right.")
+
+    owner = await db.referral_codes.find_one({"code": code}, {"_id": 0, "user_id": 1})
+    if not owner:
+        raise HTTPException(status_code=404, detail="Code not found.")
+    if owner["user_id"] == user.user_id:
+        raise HTTPException(status_code=400, detail="You can't refer yourself, sweet one.")
+
+    # One claim per referee — idempotent.
+    existing = await db.referral_claims.find_one(
+        {"referee_id": user.user_id}, {"_id": 0, "status": 1, "id": 1}
+    )
+    if existing:
+        return {"ok": True, "already": existing.get("status"), "id": existing.get("id")}
+
+    row = {
+        "id": f"refclm_{uuid.uuid4().hex[:12]}",
+        "referrer_id": owner["user_id"],
+        "referee_id": user.user_id,
+        "code": code,
+        "status": "pending",
+        "claimed_at": datetime.now(timezone.utc).isoformat(),
+        "rewarded_at": None,
+        "reward_seconds": REFERRAL_REWARD_SECONDS,
+    }
+    await db.referral_claims.insert_one({**row})
+    return {"ok": True, "id": row["id"], "status": "pending"}
+
+
+async def _maybe_reward_referral(referee_id: str, trigger: str) -> dict:
+    """Fire-and-forget reward fulfilment. Called from:
+       • kids_mood_checkin (first one ever for this user) — soft trigger
+       • LemonSqueezy webhook (first paid pass) — strong trigger
+    Idempotent: a claim only flips to 'rewarded' once."""
+    claim = await db.referral_claims.find_one(
+        {"referee_id": referee_id, "status": "pending"}, {"_id": 0}
+    )
+    if not claim:
+        return {"rewarded": False, "reason": "no_pending_claim"}
+
+    reward = int(claim.get("reward_seconds") or REFERRAL_REWARD_SECONDS)
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    # Credit both sides.
+    for uid in (claim["referrer_id"], claim["referee_id"]):
+        before_doc = await db.users.find_one({"user_id": uid}, {"_id": 0, "presence_seconds_left": 1})
+        before = int((before_doc or {}).get("presence_seconds_left") or 0)
+        await db.users.update_one(
+            {"user_id": uid},
+            {"$inc": {"presence_seconds_left": reward}},
+            upsert=False,
+        )
+        after = before + reward
+        await _append_credit_ledger(
+            user_id=uid,
+            delta=reward,
+            before=before,
+            after=after,
+            reason="referral_reward",
+            external_ref=claim["id"],
+            extra={"role": "referrer" if uid == claim["referrer_id"] else "referee",
+                   "trigger": trigger},
+        )
+
+    await db.referral_claims.update_one(
+        {"id": claim["id"]},
+        {"$set": {"status": "rewarded", "rewarded_at": now_iso, "trigger": trigger}},
+    )
+    return {"rewarded": True, "seconds": reward, "claim_id": claim["id"]}
+
+
+# =============================================================
+# §CUSTOM-TOPUP 2026-02-09 — Flexible voice-minute slider.
+# Founder directive: visitors should be able to top up ANY
+# whole number of minutes between 10 and 300 at €0.60/min. We
+# can't dynamically price LemonSqueezy variants, so we map the
+# slider to the NEAREST existing pre-priced LS variant and
+# surface a "you'll get N minutes" preview.
+#
+# Existing LS variants (env-driven):
+#   TOPUP_30MIN   →   30 min   €18  (€0.60/min · 30 × 0.60)
+#   TOPUP_60MIN   →   60 min   €36
+#   TOPUP_180MIN  →  180 min  €108
+#
+# To unlock fine-grained slider we ALSO accept three additional
+# variants if defined:
+#   TOPUP_10MIN, TOPUP_15MIN, TOPUP_45MIN, TOPUP_90MIN, TOPUP_120MIN,
+#   TOPUP_300MIN — founder configures these in the LS dashboard
+#   and pastes the variant IDs into .env. The endpoint below
+#   returns the full ladder + the nearest match for any requested
+#   minute count.
+# =============================================================
+
+TOPUP_PRICE_PER_MIN_EUR = float(os.environ.get("TOPUP_PRICE_PER_MIN_EUR", "0.60"))
+TOPUP_MIN_MINUTES = int(os.environ.get("TOPUP_MIN_MINUTES", "10"))
+TOPUP_MAX_MINUTES = int(os.environ.get("TOPUP_MAX_MINUTES", "300"))
+
+_TOPUP_LADDER_MINS = [10, 15, 30, 45, 60, 90, 120, 180, 300]
+
+
+def _topup_ladder_with_env() -> list[dict]:
+    """Build the canonical top-up ladder. For each rung we surface
+    the LS variant ID *if* it's configured (so the frontend can
+    show only purchasable rungs)."""
+    rungs = []
+    for mins in _TOPUP_LADDER_MINS:
+        env_key = f"LEMONSQUEEZY_VARIANT_TOPUP_{mins}MIN"
+        variant_id = os.environ.get(env_key, "").strip() or None
+        # LS hosted checkout URL pattern (founder confirmed in iter66+).
+        checkout_url = None
+        if variant_id:
+            store = os.environ.get("LEMONSQUEEZY_STORE_SLUG", "").strip()
+            if store:
+                checkout_url = f"https://{store}.lemonsqueezy.com/buy/{variant_id}"
+        rungs.append({
+            "minutes": mins,
+            "price_eur": round(mins * TOPUP_PRICE_PER_MIN_EUR, 2),
+            "variant_id": variant_id,
+            "checkout_url": checkout_url,
+            "purchasable": bool(variant_id),
+        })
+    return rungs
+
+
+@api_router.get("/topup/ladder")
+async def topup_ladder():
+    """Public. Frontend slider hits this to render the price preview."""
+    return {
+        "price_per_min_eur": TOPUP_PRICE_PER_MIN_EUR,
+        "min_minutes": TOPUP_MIN_MINUTES,
+        "max_minutes": TOPUP_MAX_MINUTES,
+        "ladder": _topup_ladder_with_env(),
+    }
+
+
+@api_router.get("/topup/nearest")
+async def topup_nearest(minutes: int = 30):
+    """Given a slider value, return the nearest purchasable rung."""
+    requested = max(TOPUP_MIN_MINUTES, min(int(minutes or 0), TOPUP_MAX_MINUTES))
+    rungs = [r for r in _topup_ladder_with_env() if r["purchasable"]]
+    if not rungs:
+        # Founder hasn't seeded any LS variant yet — surface the
+        # ladder gracefully so the UI shows "coming soon".
+        return {"requested_minutes": requested, "nearest": None, "purchasable": False}
+    nearest = min(rungs, key=lambda r: abs(r["minutes"] - requested))
+    return {
+        "requested_minutes": requested,
+        "requested_price_eur": round(requested * TOPUP_PRICE_PER_MIN_EUR, 2),
+        "nearest": nearest,
+        "purchasable": True,
+    }
+
+
+# =============================================================
+# §ANNAS-LETTER 2026-02-09 — Weekly Friday digest for parents.
+# Founder directive: every Friday at 18:00 UTC, send each opted-in
+# parent a soft summary of their child's week:
+#   • Mood counts (last 7 days)
+#   • Angel Stars earned (last 7 days)
+#   • One quiet sentence "in Aurin's voice" tied to the dominant mood
+#   • Reflexive close-out from Anna
+#
+# Opt-in defaults to True for any user with at least one
+# kids_mood_checkin (the ritual is the consent signal). Parent
+# can disable from /parent-portal/wellness footer (P2 if needed).
+#
+# Cron: daily check on UTC weekday == 4 (Friday) AND hour == 18.
+# Each user receives at most one send per (year, week).
+# =============================================================
+
+AURIN_WEEKLY_LINES = {
+    "sad":     "If your child carried weight this week, you held some of it without knowing. That counts. — Aurin",
+    "worried": "A worried week is not a failed week. It is a week with feelings doing their work. — Aurin",
+    "okay":    "Okay weeks are the bones of a soft childhood. They matter more than the sparkly ones. — Aurin",
+    "good":    "A good week. Don't analyse it. Just notice it together at dinner one night. — Aurin",
+    "sparkly": "Catch the sparkle in a photo, a hug, a note — sparkle keeps best when shared. — Aurin",
+    "mixed":   "Every kind of feeling visited this week. Your child's heart is honest. That is a gift. — Aurin",
+}
+
+
+async def _build_weekly_letter(user_id: str) -> Optional[dict]:
+    """Compose the digest dict for one parent. Returns None when there's
+    nothing to say (no check-ins, no stars this week)."""
+    now = datetime.now(timezone.utc)
+    week_start = (now - timedelta(days=7)).isoformat()
+
+    moods_cursor = db.kids_mood_checkins.find(
+        {"user_id": user_id, "created_at": {"$gte": week_start}},
+        {"_id": 0},
+    )
+    moods = await moods_cursor.to_list(length=200)
+    stars_cursor = db.angel_stars_actions.find(
+        {"user_id": user_id, "status": "approved", "approved_at": {"$gte": week_start}},
+        {"_id": 0},
+    )
+    stars = await stars_cursor.to_list(length=200)
+    if not moods and not stars:
+        return None
+
+    by_child: dict[str, dict] = {}
+    for m in moods:
+        cs = m.get("child_slug") or "explorers"
+        bucket = by_child.setdefault(cs, {
+            "child_slug": cs,
+            "title": CHILD_TITLES.get(cs, ("?", ""))[0],
+            "moods": {},
+            "stars_earned": 0,
+            "notes": [],
+        })
+        mood = m.get("mood", "okay")
+        bucket["moods"][mood] = bucket["moods"].get(mood, 0) + 1
+        if m.get("note"):
+            bucket["notes"].append(m["note"])
+    for s in stars:
+        cs = s.get("child_slug") or "explorers"
+        bucket = by_child.setdefault(cs, {
+            "child_slug": cs,
+            "title": CHILD_TITLES.get(cs, ("?", ""))[0],
+            "moods": {},
+            "stars_earned": 0,
+            "notes": [],
+        })
+        bucket["stars_earned"] += int(s.get("stars") or 0)
+
+    # Determine dominant mood per child for Aurin's line.
+    for bucket in by_child.values():
+        if bucket["moods"]:
+            dom = max(bucket["moods"].items(), key=lambda kv: kv[1])[0]
+            distinct_moods = len([k for k, v in bucket["moods"].items() if v > 0])
+            bucket["aurin_line"] = AURIN_WEEKLY_LINES["mixed" if distinct_moods >= 4 else dom]
+        else:
+            bucket["aurin_line"] = AURIN_WEEKLY_LINES["good"]
+
+    return {
+        "user_id": user_id,
+        "generated_at": now.isoformat(),
+        "year_week": f"{now.isocalendar()[0]}-W{now.isocalendar()[1]:02d}",
+        "children": list(by_child.values()),
+    }
+
+
+def _render_weekly_letter_html(digest: dict, parent_name: Optional[str]) -> str:
+    name = (parent_name or "").strip().split()[0] if parent_name else ""
+    greeting = f"Hello {name}," if name else "Hello,"
+    children_html = []
+    for c in digest["children"]:
+        moods_html = "".join(
+            f"<li style='margin:4px 0;color:#5a5040;font-size:14px'>"
+            f"<strong style='color:#3d2a1e'>{count}×</strong> {mood}</li>"
+            for mood, count in sorted(c["moods"].items(), key=lambda kv: -kv[1])
+        ) or "<li style='color:#8a7a64;font-size:14px;font-style:italic'>no check-ins this week</li>"
+        notes_html = ""
+        if c["notes"]:
+            quoted = c["notes"][0][:200].replace("<", "&lt;").replace(">", "&gt;")
+            notes_html = (
+                f"<p style='margin:14px 0 0;padding:14px 16px;"
+                f"background:#fff7ee;border-left:3px solid #e8a87c;"
+                f"font-family:Georgia,serif;font-style:italic;color:#3d2a1e;"
+                f"font-size:14.5px;line-height:1.5'>"
+                f"One whisper they wrote: \"{quoted}\""
+                f"</p>"
+            )
+        children_html.append(f"""
+          <div style="margin-top:32px;padding:24px;background:#fbf6ec;border-radius:14px">
+            <p style="margin:0;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#7a5e4a">{c['title']}</p>
+            <div style="display:flex;align-items:baseline;gap:12px;margin-top:6px">
+              <span style="font-size:32px;font-family:Georgia,serif;color:#e8a87c">{c['stars_earned']}</span>
+              <span style="font-size:14px;color:#5a5040">★ Angel Stars this week</span>
+            </div>
+            <p style="margin:18px 0 8px;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#7a5e4a">How the week felt</p>
+            <ul style="list-style:none;padding:0;margin:0">{moods_html}</ul>
+            {notes_html}
+            <p style="margin:18px 0 0;font-family:Georgia,serif;font-style:italic;color:#3d2a1e;font-size:15px;line-height:1.5">
+              {c['aurin_line']}
+            </p>
+          </div>
+        """)
+    return f"""
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;color:#3d2a1e">
+      <p style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:#a65a2f;margin:0 0 8px">A small letter from Anna</p>
+      <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;line-height:1.2;margin:0 0 18px">A quiet week with your child.</h1>
+      <p style="font-size:15px;line-height:1.6;color:#5a5040">{greeting}</p>
+      <p style="font-size:15px;line-height:1.6;color:#5a5040">
+        Here's the rhythm of your child's week inside Aurin's room. Nothing
+        to do with it — just notice. Patterns soften when we look at them
+        gently.
+      </p>
+      {''.join(children_html)}
+      <div style="margin-top:34px;padding-top:18px;border-top:1px solid #e8d8c5">
+        <p style="font-size:14.5px;line-height:1.6;color:#5a5040">
+          If you'd like to see this week up close, open the
+          <a href="https://prulesoul.site/parent-portal/wellness" style="color:#a65a2f;text-decoration:none;border-bottom:1px dotted #a65a2f">Wellness portal</a>
+          — the bars and notes live there.
+        </p>
+        <p style="font-size:14px;line-height:1.6;color:#7a5e4a;margin-top:12px">
+          With warmth,<br>
+          <span style="font-family:'Caveat',cursive,Georgia,serif;font-size:22px;color:#a65a2f">— Anna</span>
+        </p>
+      </div>
+      <p style="margin-top:30px;font-size:11px;color:#a8997f;line-height:1.5">
+        You receive this letter because your child uses Aurin's daily check-in.
+        Reply to this email if you'd like to pause it for a while — I read every note.
+      </p>
+    </div>
+    """
+
+
+async def _send_annas_letter(user_id: str, *, dry_run: bool = False) -> dict:
+    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not user_doc:
+        return {"sent": False, "reason": "user_not_found"}
+    if user_doc.get("annas_letter_opt_out"):
+        return {"sent": False, "reason": "opted_out"}
+    digest = await _build_weekly_letter(user_id)
+    if not digest:
+        return {"sent": False, "reason": "no_activity"}
+
+    year_week = digest["year_week"]
+    sent_already = await db.annas_letter_sends.find_one(
+        {"user_id": user_id, "year_week": year_week}, {"_id": 0, "id": 1}
+    )
+    if sent_already and not dry_run:
+        return {"sent": False, "reason": "already_sent_this_week", "year_week": year_week}
+
+    html = _render_weekly_letter_html(digest, user_doc.get("name"))
+    email = user_doc.get("email")
+    if not email:
+        return {"sent": False, "reason": "no_email"}
+
+    if dry_run:
+        return {"sent": False, "reason": "dry_run", "preview_html": html[:400]}
+
+    try:
+        from email_service import send_email as _send_email, is_configured as _resend_ok
+        if not _resend_ok():
+            return {"sent": False, "reason": "resend_not_configured"}
+        await _send_email(
+            to=email,
+            subject="A quiet week with your child — Aurin's letter",
+            html=html,
+            sender="agent",
+            reply_to="anna@prulesoul.site",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("annas_letter send failed user=%s err=%s", user_id, exc)
+        return {"sent": False, "reason": f"send_error: {exc}"}
+
+    await db.annas_letter_sends.insert_one({
+        "id": f"alsend_{uuid.uuid4().hex[:12]}",
+        "user_id": user_id,
+        "year_week": year_week,
+        "sent_at": digest["generated_at"],
+    })
+    return {"sent": True, "year_week": year_week}
+
+
+@api_router.post("/admin/annas-letter")
+async def admin_annas_letter(request: Request, user_id: str = "", dry_run: bool = False):
+    """Admin-triggered weekly letter. Without `user_id`, dispatches to
+    every user with at least one mood check-in. With `user_id` + `dry_run=true`,
+    returns the HTML preview without sending."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent_hdr = request.headers.get("X-Admin-Token") or request.query_params.get("token")
+    if not admin_token or sent_hdr != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    if user_id:
+        return await _send_annas_letter(user_id, dry_run=dry_run)
+
+    # Dispatch loop: users who have ANY mood check-in.
+    distinct_users = await db.kids_mood_checkins.distinct("user_id")
+    results = {"total": len(distinct_users), "sent": 0, "skipped": 0, "errors": 0}
+    for uid in distinct_users:
+        try:
+            r = await _send_annas_letter(uid)
+            if r.get("sent"):
+                results["sent"] += 1
+            else:
+                results["skipped"] += 1
+        except Exception:
+            results["errors"] += 1
+    return results
 
 
 # =============================================================

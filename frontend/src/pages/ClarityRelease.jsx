@@ -15,6 +15,7 @@ import TypingIndicator from "@/components/TypingIndicator";
 import RoomConvaiChat from "@/components/RoomConvaiChat";
 import VoiceSessionCountdown from "@/components/VoiceSessionCountdown";
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
+import VoiceTopupSlider from "@/components/VoiceTopupSlider";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
@@ -823,6 +824,14 @@ function HubPanel({
             Without a pass, the room offers a few quiet reflections so you can
             feel the space before deciding.
           </p>
+        </div>
+
+        {/* §CUSTOM-TOPUP 2026-02-09 — Flexible voice top-up. Lives
+            beneath the fixed tier ladder so visitors who want a
+            non-standard minute count have a clean path. */}
+        <div className="mt-12 max-w-xl mx-auto" data-testid="clarity-hub-topup-section">
+          <p className="aurin-eyebrow text-center mb-3">Or choose your own minutes</p>
+          <VoiceTopupSlider />
         </div>
       </div>
     </section>

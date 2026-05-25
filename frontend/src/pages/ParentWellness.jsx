@@ -156,6 +156,25 @@ export default function ParentWellness() {
               })}
             </div>
           )}
+
+          {/* §REFERRAL 2026-02-09 — Discreet entry to /portal/referral.
+              Sits at the bottom of the wellness portal because the
+              parent who reads this far already values the platform. */}
+          <div className="mt-12 aurin-card p-6 flex flex-col sm:flex-row sm:items-center gap-4"
+               data-testid="parent-wellness-referral-cta">
+            <div className="flex-1">
+              <p className="aurin-eyebrow mb-1.5">Share Aurin · €5 each</p>
+              <p className="text-[14px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
+                Pass the link to one friend you'd tell anyway. When their first
+                quiet day lands, we drop +8 voice minutes into both of your accounts.
+              </p>
+            </div>
+            <Link to="/portal/referral"
+                  data-testid="parent-wellness-referral-link"
+                  className="aurin-btn aurin-btn-primary inline-flex items-center gap-2">
+              Open the referral page <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </section>
     </div>
