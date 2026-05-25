@@ -76,12 +76,15 @@ export default function ParentStars() {
     if (!photoFor) return;
     setBusy(photoFor);
     try {
-      await api.post("/angel-stars/approve-with-photo", {
+      const r = await api.post("/angel-stars/approve-with-photo", {
         request_id: photoFor,
         photo_base64: photoBase64,
         photo_content_type: "image/jpeg",
         caption: photoCaption,
       });
+      if (r?.data?.photo_warning) {
+        alert("Your approval was saved, but the photo could not be kept. Try a different image.");
+      }
       setPhotoFor(null);
       setPhotoCaption("");
       setPhotoBase64(null);

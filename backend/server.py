@@ -3552,6 +3552,7 @@ async def approve_with_photo(inp: StarApproveWithPhotoInput, request: Request):
         )
 
     # Optional photo upload to album.
+    photo_warning = None
     if inp.photo_base64:
         try:
             import base64 as _b64
@@ -3579,8 +3580,9 @@ async def approve_with_photo(inp: StarApproveWithPhotoInput, request: Request):
             raise
         except Exception as exc:  # noqa: BLE001
             logger.warning("photo upload failed: %s", exc)
+            photo_warning = "photo_not_saved"
 
-    return {"ok": True, "approved": True, "reciprocal": is_reciprocal}
+    return {"ok": True, "approved": True, "reciprocal": is_reciprocal, "photo_warning": photo_warning}
 
 
 @api_router.get("/parent-stamps/me")

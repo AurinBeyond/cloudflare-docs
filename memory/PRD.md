@@ -503,3 +503,49 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 - 🔵 (P2) Aurin chat-driven "today's quest" mood detection in voice rooms
 - 🟢 (P2) Future Agent Multiverse architecture
 - ⚙️ Background — LS escalation letter sent / FastSpring application started (founder's manual task)
+
+## 2026-02-09 (iteration 78) — P2 trio: Universal Bank + Today's Quest + Stars Phase 2
+
+**Anna's directive:** Build all 3 remaining P2 features to completion in one batch, preserve all existing features, no broken pages, deploy-ready by morning.
+
+**Shipped:**
+
+1. **Universal Minute Bank ($12 / 20 min)**
+   - Featured starter pack endpoint `/api/minute-bank/starter`
+   - `<UniversalMinuteBank>` card on Clarity Release Hub (above tier ladder)
+   - Graceful "not yet purchasable" UI until LS variant seeded
+
+2. **Today's Quest** (voice-mood-detection MVP)
+   - `/api/aurin/today-quest` reads latest kids_mood_checkin
+   - Returns 1-3 mood-tuned curriculum activity picks + Aurin's voice line
+   - `<TodaysQuestCard>` placed on Clarity Release Hub
+   - Public preview also works (no signin required for marketing)
+
+3. **Angel Stars Phase 2** — three sub-features
+   - **Reciprocal stars:** 5 curated child→parent actions (`rec_listened`, `rec_apologised`, `rec_patient`, `rec_played`, `rec_read_story`); pending → parent self-approves; awards a parent stamp, not voice credit
+   - **Parent Stamps:** 5 stamp types (Listener / Patient / Playful / Present / Champion), shown as a soft 5-card grid on /parent-portal/stars
+   - **Memory Album:** parent can attach an optional photo (≤2MB) when approving any star. Photos stored in binary_assets + memory_album collection. Owner-only access. Browsable on new `/parent-portal/album` page.
+
+**Bugs found & fixed this iteration:**
+- 🐞 **CRITICAL fixed:** `binary_storage.put_binary` / `get_binary` were called with positional args but they're keyword-only — photo uploads silently failed and parents got success responses. Now uses `kind=`, `slug=`, `data=` kwargs.
+- 🐞 **MINOR fixed:** Even with positional fix, the broad except was swallowing future errors. Added `photo_warning: "photo_not_saved"` in response; frontend now alerts parent: "Your approval was saved, but the photo could not be kept."
+
+**Verified by testing agent (iter 78):**
+- Backend: **18/18 pytest passed** after fixes applied
+- Frontend: **9/10 observable surfaces** (1 unobservable due to test-user state, not code bug — code review confirms UMB+Quest correctly wired in ClarityRelease.jsx)
+- Zero regressions in iter 75/76/77
+
+**State of long-running test session (user_angel_test_c01ba5):**
+- 12 stars on little-dreamers, tier 1 redeemed
+- 500s voice balance (from referral reward)
+- 1 mood check-in (mood=good)
+- 7 parent stamps: listener×2, patient×2, playful×1, present×2
+- 1 memory album photo
+- Referral code: AURIN515556 with 1 rewarded referral
+
+**Backlog (post-deploy, prioritised):**
+- 🟢 (P3) Aurin chat-driven "today's quest" voice TRANSCRIPT mood detection (Phase 2 of current MVP)
+- 🟢 (P3) Future Agent Multiverse architecture
+- 🟢 (P3) Friday cron auto-trigger for Anna's letter (currently manual via /api/admin/annas-letter)
+- 🟢 (P3) Parent opt-out toggle for Anna's letter (currently checked but no UI to flip it)
+- ⚙️ Background — LS escalation / FastSpring application / 9 LS top-up variants (founder's manual tasks)
