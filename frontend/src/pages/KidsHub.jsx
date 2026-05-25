@@ -80,13 +80,13 @@ export default function KidsHub() {
         <header className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="relative inline-flex items-center justify-center mb-5">
             <div
-              className="rounded-full overflow-hidden flex items-center justify-center"
+              className="sanctuary-aura rounded-full overflow-hidden flex items-center justify-center"
               style={{
                 width: 132,
                 height: 132,
                 background: palette.cardBg,
                 border: `2px solid ${palette.cardBorder}`,
-                boxShadow: `0 18px 40px -18px ${palette.accent}66`,
+                boxShadow: `0 18px 40px -18px ${palette.accent}66, inset 0 2px 0 rgba(255,255,255,0.5)`,
               }}
               data-testid="kids-hub-aurin-portrait"
             >
@@ -336,41 +336,69 @@ export default function KidsHub() {
 
 function HubCard({ theme, to, icon: Icon, title, body, testid, primary, badge }) {
   const { palette } = theme;
+  // §KIDS-HUB-VISUAL 2026-02-09 — Founder directive (Anna):
+  // "klar, vöi semi klar, mitte matt" — brighter cards with a
+  // top sheen overlay + golden inner highlight, preserving the
+  // age-group palette (palette.accent/cardBg drive the colour).
   return (
     <Link
       to={to}
       data-testid={testid}
-      className="group relative block rounded-2xl p-6 sm:p-7 transition duration-300 hover:-translate-y-0.5"
+      className="hub-card-shine group relative block rounded-2xl p-6 sm:p-7 transition duration-300 hover:-translate-y-1 overflow-hidden"
       style={{
-        background: primary ? palette.accent : palette.cardBg,
+        background: primary
+          ? `linear-gradient(160deg, ${palette.accent2 || palette.accent} 0%, ${palette.accent} 100%)`
+          : `linear-gradient(180deg, #ffffff 0%, ${palette.cardBg} 100%)`,
         border: `1.5px solid ${primary ? palette.accent : palette.cardBorder}`,
         color: primary ? "#FFFFFF" : palette.text,
         boxShadow: primary
-          ? `0 14px 34px -16px ${palette.accent}`
-          : `0 8px 22px -16px ${palette.accent}55`,
+          ? `0 16px 36px -14px ${palette.accent}cc, 0 0 0 1px ${palette.accent}44, inset 0 1px 0 rgba(255,255,255,0.4)`
+          : `0 10px 24px -14px ${palette.accent}66, 0 0 0 1px ${palette.accent}22, inset 0 1px 0 rgba(255,255,255,0.85)`,
         minHeight: 168,
       }}
     >
-      <div className="flex items-start justify-between">
+      {/* Top sheen — "klar/säravam" effect */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-2xl"
+        style={{
+          height: "42%",
+          background: primary
+            ? "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 100%)"
+            : "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)",
+        }}
+      />
+      {/* Subtle hover-only glow */}
+      <span
+        aria-hidden="true"
+        className="hub-card-glow pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle at 30% 0%, ${palette.accent}33 0%, transparent 60%)`,
+        }}
+      />
+      <div className="relative flex items-start justify-between">
         <span
-          className="inline-flex items-center justify-center rounded-full"
+          className="inline-flex items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
           style={{
-            width: 44,
-            height: 44,
-            background: primary ? "rgba(255,255,255,0.18)" : palette.bg,
-            border: primary ? "1px solid rgba(255,255,255,0.5)" : `1px solid ${palette.cardBorder}`,
+            width: 48,
+            height: 48,
+            background: primary ? "rgba(255,255,255,0.22)" : `linear-gradient(180deg, #ffffff 0%, ${palette.bg} 100%)`,
+            border: primary ? "1px solid rgba(255,255,255,0.55)" : `1px solid ${palette.cardBorder}`,
             color: primary ? "#FFFFFF" : palette.accent,
+            boxShadow: primary
+              ? "0 4px 10px -4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4)"
+              : `0 4px 10px -4px ${palette.accent}55, inset 0 1px 0 rgba(255,255,255,0.7)`,
           }}
         >
-          <Icon size={20} strokeWidth={1.6} />
+          <Icon size={22} strokeWidth={1.6} />
         </span>
         {badge && (
           <span
-            className="text-[12px] font-medium px-2.5 py-1 rounded-full"
+            className="text-[12px] font-medium px-2.5 py-1 rounded-full relative"
             style={{
-              background: primary ? "rgba(255,255,255,0.22)" : palette.bg,
+              background: primary ? "rgba(255,255,255,0.25)" : palette.bg,
               color: primary ? "#FFFFFF" : palette.accent,
-              border: primary ? "1px solid rgba(255,255,255,0.4)" : `1px solid ${palette.cardBorder}`,
+              border: primary ? "1px solid rgba(255,255,255,0.45)" : `1px solid ${palette.cardBorder}`,
             }}
             data-testid={`${testid}-badge`}
           >
@@ -379,21 +407,26 @@ function HubCard({ theme, to, icon: Icon, title, body, testid, primary, badge })
         )}
       </div>
       <h3
-        className="mt-6 text-[20px] sm:text-[22px] font-serif leading-snug"
-        style={{ color: primary ? "#FFFFFF" : palette.text }}
+        className="relative mt-6 text-[22px] sm:text-[24px] leading-snug"
+        style={{
+          color: primary ? "#FFFFFF" : palette.text,
+          fontFamily: "Caveat, Fraunces, serif",
+          fontWeight: 600,
+          letterSpacing: "0.005em",
+        }}
       >
         {title}
       </h3>
       <p
-        className="mt-2.5 text-[14px] leading-relaxed"
+        className="relative mt-2 text-[14px] leading-relaxed"
         style={{
-          color: primary ? "rgba(255,255,255,0.92)" : palette.textMuted,
+          color: primary ? "rgba(255,255,255,0.94)" : palette.textMuted,
         }}
       >
         {body}
       </p>
       <div
-        className="mt-5 inline-flex items-center gap-1 text-[13px]"
+        className="relative mt-5 inline-flex items-center gap-1 text-[13px] font-medium"
         style={{
           color: primary ? "#FFFFFF" : palette.accent,
         }}

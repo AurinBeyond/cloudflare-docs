@@ -21,6 +21,7 @@ import {
     ArrowLeft, ArrowRight, Wind, Hand, Moon, Compass,
     Lock, Check, Sparkles,
 } from "lucide-react";
+import StonePath from "@/components/StonePath";
 
 const WEEK_ICONS = {
     breathing: Wind,
@@ -68,6 +69,20 @@ export default function BodyTemple() {
         () => new Set(overview?.completed_days || []),
         [overview],
     );
+
+    // §BODY-TEMPLE 2026-02-09 — Today's "pulsing stone". First
+    // unlocked day that hasn't been walked yet; falls back to Day 1
+    // for guests / non-premium users so the path always has a
+    // bright anchor.
+    const currentDay = useMemo(() => {
+        if (!overview?.days_preview) return 1;
+        for (const d of overview.days_preview) {
+            if (completedSet.has(d.day)) continue;
+            if (d.is_premium && !overview.unlocked) continue;
+            return d.day;
+        }
+        return 1;
+    }, [overview, completedSet]);
 
     const handleComplete = async () => {
         if (!activeDay || completing) return;
@@ -204,29 +219,17 @@ export default function BodyTemple() {
                                 <p className="text-[13px] leading-relaxed mb-4 relative z-[1]" style={{color: "#5a4a26"}}>
                                     {w.blurb}
                                 </p>
-                                <div className="flex flex-wrap gap-1.5 relative z-[1]">
-                                    {days.map((d) => {
-                                        const done = completedSet.has(d.day);
-                                        const locked = d.is_premium && !overview.unlocked;
-                                        return (
-                                            <button key={d.day}
-                                                    type="button"
-                                                    onClick={() => setActiveDay(d.day)}
-                                                    data-testid={`body-temple-day-${d.day}`}
-                                                    className="px-2.5 py-1.5 text-[12px] rounded-md border transition flex items-center gap-1.5"
-                                                    style={{
-                                                        background: done
-                                                            ? "rgba(123, 168, 136, 0.35)"
-                                                            : "rgba(255, 247, 227, 0.55)",
-                                                        borderColor: "rgba(120, 80, 30, 0.35)",
-                                                        color: "#3d2e15",
-                                                    }}>
-                                                Day {d.day}
-                                                {done && <Check size={11} />}
-                                                {locked && !done && <Lock size={10} />}
-                                            </button>
-                                        );
-                                    })}
+                                <div className="relative z-[1]">
+                                    <StonePath
+                                        days={days.map((d) => ({
+                                            day: d.day,
+                                            locked: d.is_premium && !overview.unlocked,
+                                            completed: completedSet.has(d.day),
+                                        }))}
+                                        currentDay={currentDay}
+                                        onPick={(n) => setActiveDay(n)}
+                                        testIdPrefix="body-temple-day"
+                                    />
                                 </div>
                                 {overview.unlocked && (
                                     <p className="text-[11.5px] mt-3 relative z-[1]" style={{color: "#7a5a26"}}>
