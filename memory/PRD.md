@@ -458,3 +458,48 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 - 🔵 (P2) Angel Stars Phase 2 — reciprocal stars (child awards parent), photo album, parent stamps
 - 🔵 (P2) Aurin chat-driven "today's quest" suggestion (voice room mood detection)
 - 🟢 (P2) Future Agent Multiverse architecture
+
+## 2026-02-09 (iteration 77) — P1 launch trifecta: Referral + Top-up Slider + Anna's Letter
+
+**Anna's directive:** Build all 3 P1 growth features in one batch BEFORE deploy, then do a deep surgical audit.
+
+**Shipped:**
+
+1. **$5 Referral Viral Loop** (parent-to-parent)
+   - Stable `AURINxxxxxx` code per user (hash-based, deterministic)
+   - `POST /referral/claim` accepts code; both parties earn 500s when referee fires first qualifying action (mood checkin OR paid pass)
+   - `?ref=AURIN...` URL capture in AuthProvider → auto-claim after sign-in
+   - `/portal/referral` page with copy-link, email/SMS/Twitter quickshare, stats trio, 3-step "how it works", recent claims list
+   - Discoverable CTA card at bottom of /parent-portal/wellness
+
+2. **Custom Top-up Slider** (€0.60/min, 10-300 min)
+   - 9-rung ladder (10/15/30/45/60/90/120/180/300 min)
+   - Slider + ± nudge buttons + live price preview
+   - Snaps to nearest LemonSqueezy variant on submit
+   - **Graceful degradation** to "coming soon" UI when LS variants not yet seeded
+   - Sits below existing tier ladder on /clarity-release Hub
+
+3. **Anna's Weekly Friday Letter** (admin-triggered Resend cron)
+   - Per (user, year-week) idempotent send tracker
+   - Sanctuary-themed HTML: cream palette, Caveat handwriting in signature, mood bar chart, star totals, dominant-mood Aurin line, 1 quoted child note (escaped)
+   - `POST /admin/annas-letter` with admin token: single-user dry-run OR full dispatch
+   - Auto-skips users with no week activity / no email
+   - Resend graceful degradation when API key missing
+
+**Audit findings (all fixed pre-deploy):**
+- 🐞 **CRITICAL fixed:** `/origin` returned blank page (header nav pointed to `/about` but bare URL had no route). Added `/origin → /about` redirect + soft 404 catch-all (`NotFound.jsx`) with three re-entry doors.
+- 🐞 **MINOR fixed:** Anna's letter `dry_run` returned only 400 chars of HTML preview; now returns full ~3KB markup.
+- ℹ️ **Documented (not a bug):** Top-up slider degrades to "coming soon" until 9 LS variant IDs seeded in env (`LEMONSQUEEZY_VARIANT_TOPUP_10MIN` through `…_300MIN`).
+
+**Verified by testing agent (iteration 77):**
+- Backend: **21/21 pytest passed**. Full referral lifecycle (claim → trigger → both balances +500 → ledger rows → status flip → idempotency). Top-up ladder math + clamps. Anna's letter dry-run + idempotency + admin-gating.
+- Frontend: **100% on observable surfaces** (referral page signin/authed, ?ref capture, parent-wellness CTA card, top-up slider rendered in code).
+- Full system survey: **22/22 routes** render meaningful content (post-fix).
+- Zero critical, zero minor regressions in iter 75/76 features.
+
+**Backlog (P2+ unchanged):**
+- 🔵 (P2) $12 Universal Minute Bank
+- 🔵 (P2) Angel Stars Phase 2 — reciprocal stars, photo album, parent stamps
+- 🔵 (P2) Aurin chat-driven "today's quest" mood detection in voice rooms
+- 🟢 (P2) Future Agent Multiverse architecture
+- ⚙️ Background — LS escalation letter sent / FastSpring application started (founder's manual task)

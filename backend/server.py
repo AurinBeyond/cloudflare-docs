@@ -3230,7 +3230,7 @@ async def _send_annas_letter(user_id: str, *, dry_run: bool = False) -> dict:
         return {"sent": False, "reason": "no_email"}
 
     if dry_run:
-        return {"sent": False, "reason": "dry_run", "preview_html": html[:400]}
+        return {"sent": False, "reason": "dry_run", "preview_html": html}
 
     try:
         from email_service import send_email as _send_email, is_configured as _resend_ok

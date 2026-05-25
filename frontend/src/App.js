@@ -18,6 +18,7 @@ import KidsActivities from "@/pages/KidsActivities";
 import ParentStars from "@/pages/ParentStars";
 import ParentWellness from "@/pages/ParentWellness";
 import Referral from "@/pages/Referral";
+import NotFound from "@/pages/NotFound";
 import MeditationCorner from "@/pages/MeditationCorner";
 import UserPortal from "@/pages/UserPortal";
 import PortalMagicVerify from "@/pages/PortalMagicVerify";
@@ -230,6 +231,11 @@ function AppRouter() {
           the domain. Rollback path: change `<SanctuaryPreview production />`
           to `<Home />` (still imported above) — instant revert.       */}
       <Route path="/" element={<SanctuaryPreview production />} />
+      {/* §AUDIT-77 2026-02-09 — Soft 404 catch-all + /origin redirect
+          (nav label "Origin" historically points to /about; bare URL
+          /origin would silently return blank without this). */}
+      <Route path="/origin" element={<Navigate to="/about" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
