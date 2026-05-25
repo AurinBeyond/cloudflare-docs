@@ -549,3 +549,58 @@ Since Aurin's prompt is fully code-built (not Dashboard-curated), added `BOUNDAR
 - 🟢 (P3) Friday cron auto-trigger for Anna's letter (currently manual via /api/admin/annas-letter)
 - 🟢 (P3) Parent opt-out toggle for Anna's letter (currently checked but no UI to flip it)
 - ⚙️ Background — LS escalation / FastSpring application / 9 LS top-up variants (founder's manual tasks)
+
+
+### 2026-02-09 EVE — Iter 79 FAAS 1 FINAL (Body Temple 28 + Grace Boundaries + Visual unification)
+
+**Founder directive (Anna)**: implement the final scope around the
+"Эти ЗНАНИЯ о теле" video → 28-day adult body-wisdom course + a
+Grace adult-persona MVP, then **freeze new features for 3 weeks**
+and switch to sales-focus mode. The roadmap for deferred work
+lives in `/app/memory/ROADMAP.md` with a 2026-03-02 resume date.
+
+**Shipped (all green via testing_agent_v3_fork iter 79 — 19/19 backend + frontend)**:
+1. **Body Temple 28** — 4-week ($39 one-time unlock) adult course
+   inside the Kaelan/Body Room. Four ancient keys (Breathing →
+   Touch → Rest → Presence), 28 days, each 3–15 min with a single
+   Socratic reflection question. Day 1 is free preview; days 2-28
+   unlock with the same `_user_has_premium` gating used by the
+   Clarity Curriculum.
+   - Backend: `backend/body_temple_curriculum.py` (28 days +
+     weeks dict) + `/api/body-temple/{overview,day/{n},complete}`
+   - Frontend: `pages/BodyTemple.jsx` (new `/body-temple` route)
+   - Body Room: new wooden entry card at top of `/body-room`
+2. **Grace Boundaries Mode** — adult-clarity MVP that runs on top
+   of existing /clarity-release (no new ConvAI agent). Three modes:
+   `boundaries` (saying no without guilt), `energy` (who took / who
+   gave), `grey_rocking` (quiet in loud rooms). Each mode pre-frames
+   the session with a custom first_message preview that the
+   wanderer sees BEFORE entering the voice room.
+   - Backend: `/api/grace/{modes,mode (GET/POST)}` with persistence
+   - Frontend: `components/GraceModeSelector.jsx` rendered inside
+     `PHASES.HUB` block on ClarityRelease.jsx
+3. **Sanctuary visual aesthetic (PoC)** — Caveat handwriting +
+   cream `sanctuary-cream` background + wooden `sanctuary-wood`
+   panels + golden `sanctuary-aura` halo. Applied ONLY to the
+   Body Temple page + Body Room entry card as a proof of concept;
+   full kids-hub rollout is deferred to Faas 5 (2026-03-02+).
+   - `frontend/src/index.css` — new opt-in classes (no existing
+     class changed)
+4. **P0 — Anna's Letter opt-out toggle** — UI + backend re-verified
+   end-to-end after the iter 78 stub.
+
+**Deferred to 2026-03-02 (per Anna's directive)** — see
+`/app/memory/ROADMAP.md`:
+- High-Performers / Burnout persona (Alistair extension)
+- Voice transcript mood detection (Phase 2 — sentiment NLP)
+- Additional Adult Clarity personas (Singles, Seniors, Students,
+  Career switchers)
+- Full visual unification of all Kids Hub modules (Daily Reflection,
+  Kindness Quest, Quiet Corner, Creative Spark, Mindful Eating,
+  Calm Focus) with the same wooden-panel + Caveat aesthetic
+- Anna's Friday cron auto-trigger
+
+**Iter 79 test artifacts**: `/app/backend/tests/test_iteration_79.py`
+(19 pytest cases — re-runnable), `/app/test_reports/iteration_79.json`.
+Test user `test_token_6489e6cf1440` now has `body_temple_progress`
+rows for days 2 + 5; grace_mode cleared.
