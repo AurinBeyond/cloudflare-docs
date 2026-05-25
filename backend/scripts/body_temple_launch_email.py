@@ -36,72 +36,84 @@ from server import db  # noqa: E402
 
 
 PUBLIC_BASE = os.environ.get("PUBLIC_BASE_URL", "https://prulesoul.site")
-SUBJECT = "A small thing I've been carrying for you · Body Temple 28"
+SUBJECT = "Sinu hetk Aurini kõrval · Neli võtit sinu keha jaoks"
 
 
 def render_html(parent_name: str | None) -> str:
-    greeting = f"Dear {parent_name}," if parent_name else "Dear friend,"
+    greeting = f"Kallis {parent_name}," if parent_name else "Kallis lapsevanem,"
     return f"""
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"></head>
+<html lang="et"><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#f8efde;font-family:'Fraunces',Georgia,serif;color:#3d2e15;">
   <div style="max-width:560px;margin:0 auto;padding:36px 28px;background:linear-gradient(180deg,#fbf3df 0%,#f3e6cb 100%);">
     <p style="font-family:'Caveat',cursive;font-size:34px;line-height:1;color:#6a4b1f;margin:0 0 6px 0;">
       Body Temple 28
     </p>
     <p style="font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#7a5a26;margin:0 0 28px 0;">
-      Four ancient keys · Twenty-eight quiet days
+      Neli iidset võtit · Kakskümmend kaheksa vaikset päeva
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 16px 0;">{greeting}</p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      Your child has been walking with Aurin for a while now. I have
-      seen the way you held space for that — gently, without rushing.
+      Olen viimase aasta jooksul jälginud, kuidas Aurin ja Clarity
+      on loonud sinu kodus hetki, kus laps saab olla päriselt tema
+      ise. See turvalisus ja rahu on see, mida ma olen tahtnud hoida.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      For the last year I have been quietly carrying something for
-      <em>you</em>, too. It is finally ready.
+      Aga ma olen mõelnud ka <em>sinule</em>. Lapsevanemaks olemine
+      nõuab palju. Ja vahel on just lapsevanem see, kes vajab kõige
+      turvalisemat ruumi.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      <strong>Body Temple 28</strong> is a four-week journey through four
-      ancient keys — <em>breathing, touch, rest, presence</em>. Twenty-eight
-      quiet days, each between three and fifteen minutes, each closed by
-      a single Socratic question. Never clinical. Never measuring.
+      Olen loonud <strong>Body Temple 28</strong> — neljanädalase
+      teekonna, mis põhineb neljal iidsel võtmel: <em>hingamine,
+      puudutus, puhkus, kohalolu</em>. See on mõeldud sinu kehale,
+      mitte kohustuste nimekirjale.
     </p>
 
     <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
-      Day 1 is free — read it before you decide anything. If it sits
-      well, one unlock ($39, once, yours forever) opens the remaining
-      twenty-seven days at your own pace.
+      See ei ole veel üks "wellness-programm". See on kutse
+      kahekümne kaheksa päeva jooksul märgata, mida sinu keha
+      tegelikult vajab.
+    </p>
+
+    <p style="font-size:16px;line-height:1.65;margin:0 0 14px 0;">
+      <strong>Esimene päev on juba sinu Clarity ruumis ootel.</strong>
     </p>
 
     <div style="margin:32px 0;text-align:center;">
       <a href="{PUBLIC_BASE}/body-temple"
          style="display:inline-block;padding:14px 26px;background:#4a3a1c;color:#f8efde;text-decoration:none;border-radius:999px;font-family:'Fraunces',serif;font-size:15px;letter-spacing:0.04em;box-shadow:0 8px 18px -8px rgba(74,58,28,0.6);">
-        Read Day 1 first ›
+        Alusta esimest päeva tasuta ›
       </a>
     </div>
 
-    <p style="font-size:14.5px;line-height:1.7;color:#5a4a26;margin:0 0 16px 0;font-style:italic;">
-      "The first touch is the one you give yourself — and most adults
-      skip it for years." — Day 8.
+    <p style="font-size:14.5px;line-height:1.7;color:#5a4a26;margin:0 0 14px 0;">
+      Kui leiad, et see 28-päevane teekond kõnetab sind, saad kogu
+      programmi avada <strong>$39 eest, üks kord, igaveseks</strong>.
+      Aga alusta täna täiesti vabalt.
     </p>
 
-    <p style="font-size:15px;line-height:1.65;margin:0 0 6px 0;">
-      Walk gently,
+    <p style="font-size:14.5px;line-height:1.7;color:#5a4a26;margin:0 0 16px 0;font-style:italic;">
+      "Esimene puudutus on see, mille sa annad iseendale — ja
+      enamus täiskasvanuid jätab selle aastateks vahele." — Päev 8
     </p>
-    <p style="font-family:'Caveat',cursive;font-size:30px;line-height:1;color:#6a4b1f;margin:0 0 28px 0;">
-      Anna
+
+    <p style="font-size:15px;line-height:1.65;margin:0 0 4px 0;">
+      Soovides sulle tänaseks natuke rohkem rahu,
+    </p>
+    <p style="font-family:'Caveat',cursive;font-size:32px;line-height:1;color:#6a4b1f;margin:0 0 28px 0;">
+      Anna &amp; Aurin
     </p>
 
     <hr style="border:none;border-top:1px solid rgba(120,80,30,0.18);margin:24px 0;">
     <p style="font-size:11.5px;color:#8a7848;line-height:1.6;margin:0;">
-      You're receiving this because Aurin has been walking with your
-      family. If you'd rather not hear about future quiet things,
-      simply reply with "pause" and I will hold them for you.
+      Saad selle kirja, sest Aurin on käinud käsikäes sinu perega.
+      Kui eelistad mitte kuulda tulevastest vaiksetest asjadest,
+      vasta lihtsalt sõnaga "paus" ja ma hoian neid sinu jaoks.
     </p>
   </div>
 </body></html>
@@ -109,23 +121,29 @@ def render_html(parent_name: str | None) -> str:
 
 
 def render_text(parent_name: str | None) -> str:
-    greeting = f"Dear {parent_name}," if parent_name else "Dear friend,"
+    greeting = f"Kallis {parent_name}," if parent_name else "Kallis lapsevanem,"
     return (
         f"{greeting}\n\n"
-        "Your child has been walking with Aurin for a while now. I have "
-        "seen the way you held space for that — gently, without rushing.\n\n"
-        "For the last year I have been quietly carrying something for you, "
-        "too. It is finally ready.\n\n"
-        "Body Temple 28 is a four-week journey through four ancient keys "
-        "— breathing, touch, rest, presence. Twenty-eight quiet days, each "
-        "between three and fifteen minutes, each closed by a single "
-        "Socratic question. Never clinical. Never measuring.\n\n"
-        "Day 1 is free — read it before you decide anything. If it sits "
-        "well, one unlock ($39, once, yours forever) opens the remaining "
-        "twenty-seven days at your own pace.\n\n"
-        f"Read Day 1 first: {PUBLIC_BASE}/body-temple\n\n"
-        "Walk gently,\n"
-        "Anna\n"
+        "Olen viimase aasta jooksul jälginud, kuidas Aurin ja Clarity "
+        "on loonud sinu kodus hetki, kus laps saab olla päriselt tema "
+        "ise. See turvalisus ja rahu on see, mida ma olen tahtnud hoida.\n\n"
+        "Aga ma olen mõelnud ka sinule. Lapsevanemaks olemine nõuab "
+        "palju. Ja vahel on just lapsevanem see, kes vajab kõige "
+        "turvalisemat ruumi.\n\n"
+        "Olen loonud Body Temple 28 — neljanädalase teekonna, mis "
+        "põhineb neljal iidsel võtmel: hingamine, puudutus, puhkus, "
+        "kohalolu. See on mõeldud sinu kehale, mitte kohustuste "
+        "nimekirjale.\n\n"
+        "See ei ole veel üks 'wellness-programm'. See on kutse "
+        "kahekümne kaheksa päeva jooksul märgata, mida sinu keha "
+        "tegelikult vajab.\n\n"
+        "Esimene päev on juba sinu Clarity ruumis ootel.\n\n"
+        f"Alusta esimest päeva tasuta: {PUBLIC_BASE}/body-temple\n\n"
+        "Kui leiad, et see 28-päevane teekond kõnetab sind, saad "
+        "kogu programmi avada $39 eest, üks kord, igaveseks. "
+        "Aga alusta täna täiesti vabalt.\n\n"
+        "Soovides sulle tänaseks natuke rohkem rahu,\n"
+        "Anna & Aurin\n"
     )
 
 

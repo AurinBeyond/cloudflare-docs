@@ -186,6 +186,34 @@ export default function BodyTemple() {
                 </div>
             </section>
 
+            {/* §FOUNDER-SIGNATURE 2026-02-09 — A short, intimate note
+                from Anna that sits between the hero and the four weeks.
+                Gives the product a human voice no feature can replace.
+                Anna's brand asks for this. */}
+            <section className="px-6 pb-10 max-w-[760px] mx-auto" data-testid="body-temple-anna-note">
+                <div className="sanctuary-wood p-6 md:p-7">
+                    <div className="relative z-[1]">
+                        <p className="text-[11px] uppercase tracking-[0.22em] mb-2"
+                           style={{ color: "#7a5a26" }}>
+                            A note from Anna
+                        </p>
+                        <p className="text-[15.5px] md:text-[16px] leading-relaxed"
+                           style={{ color: "#3d2e15" }}>
+                            I have spent the last year quietly carrying these
+                            twenty-eight days for you. Not as a programme to
+                            finish — but as a small <em>sanctuary</em> to walk
+                            through, one day at a time. There is no rush. No
+                            measurement. Just four old keys, and you,
+                            remembering that your body has been waiting.
+                        </p>
+                        <p className="sanctuary-hand text-[34px] mt-4 leading-none"
+                           style={{ color: "#6a4b1f" }}>
+                            Anna &amp; Aurin
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             {/* Four weeks grid */}
             <section className="px-6 pb-16 max-w-[920px] mx-auto">
                 <p className="sanctuary-hand text-[26px] mb-2" style={{color: "#6a4b1f"}}>
