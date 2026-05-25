@@ -10,7 +10,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
-import { ArrowRight, Sparkles, MessageSquareQuote } from "lucide-react";
+import { ArrowRight, Sparkles, MessageSquareQuote, Mail } from "lucide-react";
 import { api } from "@/lib/api";
 
 const MOOD_COLORS = {
@@ -31,13 +31,28 @@ export default function ParentWellness() {
   const [data, setData] = useState({ children: [], days: 7 });
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
+  const [letterPref, setLetterPref] = useState(null);
 
   useEffect(() => {
     api.get("/kids-mood/parent-portal?days=7")
       .then((r) => setData(r.data))
       .catch((e) => { if (e?.response?.status === 401) setAuthError(true); })
       .finally(() => setLoading(false));
+    api.get("/annas-letter/preferences")
+      .then((r) => setLetterPref(r.data))
+      .catch(() => {});
   }, []);
+
+  const toggleLetter = async () => {
+    if (!letterPref) return;
+    const next = !letterPref.opt_out;
+    setLetterPref({ ...letterPref, opt_out: next });
+    try {
+      await api.post("/annas-letter/preferences", { opt_out: next });
+    } catch {
+      setLetterPref({ ...letterPref, opt_out: !next });
+    }
+  };
 
   if (authError) {
     return (
@@ -175,6 +190,36 @@ export default function ParentWellness() {
               Open the referral page <ArrowRight size={14} />
             </Link>
           </div>
+
+          {/* §ANNAS-LETTER-P3 — Letter opt-out toggle */}
+          {letterPref && (
+            <div className="mt-5 aurin-card p-5 flex items-center gap-4"
+                 data-testid="parent-wellness-letter-pref">
+              <Mail size={18} className="text-[hsl(var(--aurin-amber))] shrink-0" />
+              <div className="flex-1">
+                <p className="text-[13.5px] text-[hsl(var(--aurin-text))]">
+                  Anna's Friday letter
+                </p>
+                <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-0.5">
+                  {letterPref.opt_out
+                    ? "Paused. Flip back on whenever you'd like the weekly digest."
+                    : "Active. Lands on Friday with your child's week."}
+                </p>
+              </div>
+              <button type="button"
+                      onClick={toggleLetter}
+                      data-testid="parent-wellness-letter-toggle"
+                      aria-pressed={!letterPref.opt_out}
+                      className="text-[12.5px] uppercase tracking-[0.16em] px-3.5 py-2 rounded-full border transition"
+                      style={{
+                        background: letterPref.opt_out ? "transparent" : "hsl(var(--aurin-amber) / 0.15)",
+                        borderColor: letterPref.opt_out ? "hsl(var(--aurin-border-soft))" : "hsl(var(--aurin-amber))",
+                        color: letterPref.opt_out ? "hsl(var(--aurin-text-muted))" : "hsl(var(--aurin-amber))",
+                      }}>
+                {letterPref.opt_out ? "Paused · resume" : "Active · pause"}
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </div>

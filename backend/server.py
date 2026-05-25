@@ -3260,6 +3260,10 @@ async def _send_annas_letter(user_id: str, *, dry_run: bool = False) -> dict:
     return {"sent": True, "year_week": year_week}
 
 
+class AnnasLetterOptInput(BaseModel):
+    opt_out: bool
+
+
 @api_router.post("/admin/annas-letter")
 async def admin_annas_letter(request: Request, user_id: str = "", dry_run: bool = False):
     """Admin-triggered weekly letter. Without `user_id`, dispatches to
@@ -3286,6 +3290,32 @@ async def admin_annas_letter(request: Request, user_id: str = "", dry_run: bool 
         except Exception:
             results["errors"] += 1
     return results
+
+
+# §ANNAS-LETTER-P3 2026-02-09 — Parent-facing opt-in / opt-out for
+# the weekly letter. Defaults to opt-in (the daily check-in IS the
+# consent signal), but every parent must be able to step away from
+# the rhythm without hunting through dashboards.
+@api_router.get("/annas-letter/preferences")
+async def annas_letter_preferences(request: Request):
+    user = await _require_user(request)
+    u = await db.users.find_one({"user_id": user.user_id},
+                                {"_id": 0, "annas_letter_opt_out": 1, "email": 1})
+    return {
+        "opt_out": bool((u or {}).get("annas_letter_opt_out")),
+        "email": (u or {}).get("email"),
+    }
+
+
+@api_router.post("/annas-letter/preferences")
+async def annas_letter_preferences_update(inp: AnnasLetterOptInput, request: Request):
+    user = await _require_user(request)
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"annas_letter_opt_out": bool(inp.opt_out),
+                  "annas_letter_pref_updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True, "opt_out": bool(inp.opt_out)}
 
 
 # =============================================================
