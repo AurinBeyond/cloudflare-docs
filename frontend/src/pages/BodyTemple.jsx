@@ -47,6 +47,8 @@ export default function BodyTemple() {
     // §SYNERGY-ANALYTICS 2026-02-10 — Fire one quiet ref-hit so every
     // arrival from /portal (annas_letter, mentor_hook, kids_hub) lands
     // in the marketing analytics table. Fire-and-forget; no UI impact.
+    // §LS-AFFILIATE 2026-02-10 — Also capture ?aff= for the
+    // LemonSqueezy Affiliate Hub (Anna's pro-partner channel).
     useEffect(() => {
         try {
             const params = new URLSearchParams(window.location.search);
@@ -54,7 +56,13 @@ export default function BodyTemple() {
             const utmMedium = (params.get("utm_medium") || "").trim();
             const utmCampaign = (params.get("utm_campaign") || "").trim();
             const refParam = (params.get("ref") || "").trim().toUpperCase();
-            if (refParam || utmSource || utmCampaign) {
+            const affParam = (params.get("aff") || params.get("affiliate_id") || "").trim();
+            // Persist the affiliate id so the checkout button can append it
+            // when LS opens its hosted checkout (last-click attribution).
+            if (affParam) {
+                try { sessionStorage.setItem("ls_aff", affParam); } catch { /* noop */ }
+            }
+            if (refParam || utmSource || utmCampaign || affParam) {
                 api.post("/marketing/ref-hit", {
                     code: refParam,
                     path: window.location.pathname,
@@ -62,6 +70,7 @@ export default function BodyTemple() {
                     utm_source: utmSource || null,
                     utm_medium: utmMedium || null,
                     utm_campaign: utmCampaign || null,
+                    affiliate_id: affParam || null,
                 }).catch(() => {});
             }
         } catch { /* noop */ }

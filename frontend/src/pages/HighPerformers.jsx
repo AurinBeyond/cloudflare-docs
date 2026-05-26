@@ -56,6 +56,8 @@ const FELT_LINES = [
 export default function HighPerformers() {
     // §SYNERGY-ANALYTICS 2026-02-10 — fire-and-forget UTM hit for any
     // LinkedIn/X/email-sourced visitor. Same pattern as BodyTemple.
+    // §LS-AFFILIATE 2026-02-10 — also capture ?aff= and persist it
+    // through the BT checkout link (last-click attribution).
     useEffect(() => {
         try {
             const params = new URLSearchParams(window.location.search);
@@ -63,6 +65,10 @@ export default function HighPerformers() {
             const utmMedium = (params.get("utm_medium") || "").trim();
             const utmCampaign = (params.get("utm_campaign") || "linkedin_b2b").trim();
             const refParam = (params.get("ref") || "").trim().toUpperCase();
+            const affParam = (params.get("aff") || params.get("affiliate_id") || "").trim();
+            if (affParam) {
+                try { sessionStorage.setItem("ls_aff", affParam); } catch { /* noop */ }
+            }
             api.post("/marketing/ref-hit", {
                 code: refParam,
                 path: window.location.pathname,
@@ -70,6 +76,7 @@ export default function HighPerformers() {
                 utm_source: utmSource,
                 utm_medium: utmMedium || null,
                 utm_campaign: utmCampaign,
+                affiliate_id: affParam || null,
             }).catch(() => {});
         } catch { /* noop */ }
     }, []);

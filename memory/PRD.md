@@ -906,3 +906,45 @@ Telegram share (her explicit ask). Approved go-ahead: A1+A2.
   Family Bundle ($59) → drop env IDs in Deploy
 - Marketing Agent: LinkedIn copy + ≥10 business email list
 - Anna: distribute the 5 MUSE keys to chosen influencers
+
+
+### 2026-02-10 LATE — LS Affiliate Hub wiring + Marketing Brief curation
+
+**Founder approved**: A=a1 (LS Affiliate), B=b1 (no Paddle now),
+C=c2 (wait for partner), D=d1 (Marketing Brief).
+
+**Also**: Founder shared raw GPT-generated LinkedIn copy and asked for
+honest, critical curation against Linguistic Guardrails.
+
+**Shipped (no regressions, 9/9 routes 200):**
+
+1. **LemonSqueezy Affiliate Hub — end-to-end tracking wired**
+   - Backend: `RefHitInput` accepts new `affiliate_id` field; analytics
+     now classifies `code_kind == "affiliate"` separately from MUSE / AURIN / UTM.
+   - Frontend `BodyTemple.jsx` + `HighPerformers.jsx`: capture `?aff=`
+     URL param, log it to `/marketing/ref-hit`, persist to `sessionStorage`.
+   - `lemonsqueezy.js` checkout builder: appends `?aff=<id>` to the
+     LS checkout URL so LS Affiliate Hub gets last-click attribution.
+   - Verified: `code=AFF_PARTNER42 kind=affiliate` correctly logged.
+
+2. **Honest critique of GPT-shared marketing copy (delivered to founder)**
+   - Identified brand confusion (GPT used "Clarity" — should be "Aurin"/"Body Temple 28").
+   - Flagged $500/mo fabricated price tier.
+   - Identified ChatGPT recommendation overstated Paddle+Impact integration depth.
+   - Confirmed LS has built-in affiliate (matches what Paddle+Impact would need extra setup for).
+   - Recommended: keep LS, activate LS Affiliate Hub, defer Paddle to >€10k/mo.
+
+3. **Marketing Agent Brief** — `/app/memory/MARKETING_BRIEF_LINKEDIN_2026-02-10.md`
+   - 3 LinkedIn posts curated (Rational / Professional / Human),
+     all brand-corrected and guardrails-compliant.
+   - 3 cold DM templates (executive / somatic practitioner / HR leader).
+   - 1 cold email template with mandatory legal disclaimer footer.
+   - 4-week rollout calendar.
+   - Anti-AI tone enforcement rules.
+   - Full audit trail of what was removed from GPT draft and why.
+
+**Awaiting:**
+- LS Agent: 5 LS variant IDs (Top-Up + Family Bundle) in Deploy env.
+- LS Agent: activate LS Affiliate Hub, generate 1 partner link if Anna chooses someone.
+- Marketing Agent: pick a post from the brief and ship Week-1 schedule.
+- Anna: distribute the 5 MUSE keys + decide if/when to mint a Standard-key.
