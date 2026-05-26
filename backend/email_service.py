@@ -59,6 +59,8 @@ async def send_email(
     reply_to: Optional[str] = None,
     tags: Optional[List[dict]] = None,
     attachments: Optional[List[dict]] = None,
+    db=None,
+    bypass_suppression: bool = False,
 ) -> dict:
     """Send one transactional email. Returns Resend's response dict with
     `id`. If the configured @prulesoul.site sender is rejected because
@@ -67,9 +69,27 @@ async def send_email(
 
     `attachments` (optional, iter 64c) — list of dicts in Resend's shape:
       {"filename": "...", "content": <base64 str>, "content_type": "..."}
+
+    §EMAIL-HEALTH 2026-02-11 — `db` and `bypass_suppression`:
+    If a Motor `db` handle is passed, we check the suppression list
+    before sending. Bounced / complained / unsubscribed addresses are
+    silently skipped to protect domain reputation. Account-critical
+    flows (e.g., password reset) can pass `bypass_suppression=True`
+    to override — but this should be rare.
     """
     if not is_configured():
         raise RuntimeError("Resend is not configured (RESEND_API_KEY missing).")
+
+    # §EMAIL-HEALTH — suppression-list gate.
+    if db is not None and not bypass_suppression:
+        try:
+            from email_suppression import is_suppressed
+            if await is_suppressed(db, to):
+                logger.info("resend.send skipped (suppressed) to=%s", to)
+                return {"skipped": True, "reason": "suppressed", "to": to}
+        except Exception as e:  # noqa: BLE001
+            # Don't let suppression bugs block sends — log and continue.
+            logger.warning("suppression check failed for %s: %s", to, e)
 
     def _build(from_header: str) -> dict:
         p: dict = {

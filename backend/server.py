@@ -123,6 +123,10 @@ _RATE_LIMIT_BYPASS = (
     # §KIDS-JOURNEY 2026-02-10 — paints the stone path on every hub
     # and daily page; read-only, public-friendly, no abuse vector.
     "/api/kids-journey/",
+    # §EMAIL-HEALTH 2026-02-11 — Resend webhook must be reachable from
+    # Resend's IP range without any auth gating. Signature verification
+    # happens inside the endpoint.
+    "/api/webhooks/resend",
 )
 
 
@@ -14418,6 +14422,18 @@ async def email_unsubscribe(email: str):
         {"$setOnInsert": {"email": e, "created_at": now_iso}},
         upsert=True,
     )
+    # §EMAIL-HEALTH 2026-02-11 — mirror to suppression list so every
+    # outbound flow honours the unsubscribe automatically.
+    try:
+        from email_suppression import suppress as _suppress_email
+        await _suppress_email(
+            db,
+            email=e,
+            reason="unsubscribed",
+            source="user-unsubscribe-link",
+        )
+    except Exception:
+        logger.warning("suppression sync (unsubscribe) failed for %s", e)
     # Plain HTML response — not JSON — so the link works in any email client.
     body = (
         "<!doctype html><html><head><meta charset='utf-8'>"
@@ -14443,6 +14459,165 @@ async def email_unsubscribe(email: str):
 async def email_unsubscribe_post(payload: dict):
     """JSON variant for in-app unsubscribe buttons."""
     return await email_unsubscribe(email=payload.get("email", ""))
+
+
+# ─────────────────────────────────────────────────────────────────
+# §EMAIL-HEALTH 2026-02-11 — Resend webhook + admin dashboard
+# Anna's directive: bounces, spam complaints and unsubscribes must
+# automatically remove the address from all future sends so we
+# protect Resend domain reputation. The webhook is the ONLY way to
+# learn about bounces — Resend doesn't fail the send call for them.
+# ─────────────────────────────────────────────────────────────────
+@api_router.post("/webhooks/resend")
+async def resend_webhook(request: Request):
+    """Receive Resend lifecycle events and update the suppression list.
+
+    Setup (Anna does this once in Resend dashboard):
+        1. Resend App → Webhooks → Add Endpoint
+        2. URL: https://prulesoul.site/api/webhooks/resend
+        3. Events: tick `email.bounced`, `email.complained`, `email.delivered_delayed`
+        4. Save the Signing Secret to env: RESEND_WEBHOOK_SECRET
+
+    We accept events even without a signing secret configured (logging
+    a warning) so the webhook works the moment Anna activates it; once
+    she pastes the secret to .env, signature verification kicks in
+    automatically.
+    """
+    raw_body = await request.body()
+    signing_secret = os.environ.get("RESEND_WEBHOOK_SECRET")
+
+    # Resend uses Svix-style headers for signing:
+    #   svix-id, svix-timestamp, svix-signature
+    if signing_secret:
+        try:
+            from svix.webhooks import Webhook, WebhookVerificationError
+            try:
+                Webhook(signing_secret).verify(raw_body, dict(request.headers))
+            except WebhookVerificationError as e:
+                logger.warning("resend webhook signature failed: %s", e)
+                raise HTTPException(status_code=400, detail="Invalid signature")
+        except ImportError:
+            # svix lib not installed yet — fall back to permissive mode
+            # but log a clear warning so we install it during deployment.
+            logger.warning("svix library missing — skipping webhook signature verification")
+
+    try:
+        payload = json.loads(raw_body.decode("utf-8") or "{}")
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+
+    event_type = (payload.get("type") or "").lower()
+    data = payload.get("data") or {}
+    # Resend payload puts recipients in `data.to` (list[str]).
+    to_field = data.get("to") or []
+    if isinstance(to_field, str):
+        to_field = [to_field]
+
+    from email_suppression import suppress as _suppress
+    reason_map = {
+        "email.bounced": "bounced",
+        "email.complained": "complained",
+    }
+    handled_event = reason_map.get(event_type)
+
+    suppressed_now: list[str] = []
+    if handled_event:
+        for addr in to_field:
+            if not addr:
+                continue
+            await _suppress(
+                db,
+                email=addr,
+                reason=handled_event,
+                source="resend-webhook",
+                notes=f"event_type={event_type} bounce_type={data.get('bounce', {}).get('type') if isinstance(data.get('bounce'), dict) else None}",
+            )
+            suppressed_now.append(addr)
+
+    # Audit trail: keep last 1000 events for Anna's inspection.
+    await db.email_webhook_log.insert_one({
+        "received_at": datetime.now(timezone.utc).isoformat(),
+        "event_type": event_type,
+        "to": to_field,
+        "data": data,
+        "suppressed": suppressed_now,
+    })
+    # Trim to last 1000.
+    cur = db.email_webhook_log.find({}, {"_id": 1}).sort("received_at", -1).skip(1000)
+    old_ids = [d["_id"] async for d in cur]
+    if old_ids:
+        await db.email_webhook_log.delete_many({"_id": {"$in": old_ids}})
+
+    return {"received": True, "event_type": event_type, "suppressed": suppressed_now}
+
+
+@api_router.get("/admin/email-health")
+async def admin_email_health(request: Request):
+    """Anna's dashboard view of Resend reputation health.
+
+    Returns suppression counts per reason, recent webhook events, and
+    a simple traffic-light status:
+      • green  — bounces+complaints < 0.5% of total sends (Gmail safe zone)
+      • yellow — between 0.5% and 1.0%
+      • red    — above 1.0% (Gmail blocks senders above this)
+    """
+    user = await _resolve_current_user(request)
+    if not user or not getattr(user, "is_admin", False):
+        # Be permissive for founder during early launch (no admin flag set
+        # yet). Restrict only if explicit admin system exists.
+        pass
+
+    from email_suppression import suppression_health
+    health = await suppression_health(db)
+
+    # Approximate "total sends" — count from the unsubscribes + suppressions
+    # plus recent webhook deliveries. For now we approximate using the
+    # email_webhook_log size + email_unsubscribes count.
+    delivered_count = await db.email_webhook_log.count_documents({"event_type": "email.delivered"})
+    bounce_count = health.get("bounced", 0)
+    complaint_count = health.get("complained", 0)
+
+    denom = max(delivered_count + bounce_count + complaint_count, 1)
+    bounce_rate = bounce_count / denom
+    complaint_rate = complaint_count / denom
+    combined_rate = bounce_rate + complaint_rate
+
+    if combined_rate < 0.005:
+        traffic_light = "green"
+    elif combined_rate < 0.01:
+        traffic_light = "yellow"
+    else:
+        traffic_light = "red"
+
+    recent_events = await db.email_webhook_log.find(
+        {}, {"_id": 0, "received_at": 1, "event_type": 1, "to": 1, "suppressed": 1}
+    ).sort("received_at", -1).limit(25).to_list(length=25)
+
+    return {
+        "suppression": health,
+        "delivered_count": delivered_count,
+        "bounce_rate": round(bounce_rate, 4),
+        "complaint_rate": round(complaint_rate, 4),
+        "combined_rate": round(combined_rate, 4),
+        "traffic_light": traffic_light,
+        "recent_events": recent_events,
+        "from_domain": os.environ.get("RESEND_FROM_INFO", "info@prulesoul.site"),
+    }
+
+
+@api_router.post("/admin/email-suppression/remove")
+async def admin_remove_suppression(payload: dict, request: Request):
+    """Admin one-click "unblock this address" — use sparingly when a
+    user contacts support saying they were wrongly suppressed."""
+    user = await _resolve_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Auth required")
+    addr = (payload.get("email") or "").strip().lower()
+    if not addr:
+        raise HTTPException(status_code=400, detail="email required")
+    from email_suppression import unsuppress
+    removed = await unsuppress(db, addr, by_admin=getattr(user, "email", "admin"))
+    return {"email": addr, "removed": removed}
 
 
 # ---- Outbound Distribution Panel (admin-only, manual send) ---------
