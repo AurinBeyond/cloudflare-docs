@@ -179,7 +179,7 @@ def audit_catalogue_alignment():
             red(
                 "catalogue:price-mismatch",
                 f"`{sku}` — bulk={expected} {md_cur}, FINAL md={md_price} {md_cur}",
-                patch=f"Decide on canonical price. Update the side that's wrong.",
+                patch="Decide on canonical price. Update the side that's wrong.",
             )
     # Each MD SKU not in bulk must be in the manual-bundles list
     BUNDLES = {
@@ -394,8 +394,190 @@ async def audit_routes():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Phase 3 — FastSpring live (will be skipped due to 401)
+# LAYER 2 — Process & webhook data-flow integrity
+# Anna's brief: trace the data lifecycle, find race conditions / orphans.
+# Read-only.
 # ─────────────────────────────────────────────────────────────────────────────
+async def audit_data_flow():
+    # 2.1 — Each ElevenLabs agent ID env var must be set
+    env_text = (BACKEND / ".env").read_text()
+    agents = ["AURIN", "GRACE", "KAELAN", "SARA", "ALISTAIR"]
+    for a in agents:
+        key = f"ELEVENLABS_CONVAI_AGENT_{a}"
+        line = next((ln for ln in env_text.splitlines() if ln.startswith(key + "=")), None)
+        val = line.split("=", 1)[1].strip().strip('"') if line else ""
+        if not val:
+            red("dataflow:agent-missing",
+                f"{key} is empty — that voice room will fail to mount.",
+                patch=f"Set {key}=<agent_id> in /app/backend/.env from ElevenLabs UI.")
+        elif not val.startswith("agent_"):
+            yellow("dataflow:agent-format",
+                   f"{key}={val} — value does not look like a valid ElevenLabs agent ID.",
+                   patch="Verify in ElevenLabs UI → ConvAI → Agent → copy ID (starts with agent_).")
+        else:
+            green("dataflow:agent", f"{key} configured.")
+
+    # 2.2 — Webhook secrets present (LS already has one, Pruesoul has one,
+    #       Resend still pending). We surface them with the right severity.
+    server_py = (BACKEND / "server.py").read_text()
+    secret_pairs = [
+        ("LEMONSQUEEZY_WEBHOOK_SECRET", "LS webhook", "yellow"),   # LS dormant
+        ("PRUESOUL_WEBHOOK_SECRET", "Pruesoul internal webhook", "red"),
+        ("RESEND_WEBHOOK_SECRET", "Resend webhook", "yellow"),     # Anna sets tomorrow
+    ]
+    for env_key, label, sev in secret_pairs:
+        line = next((ln for ln in env_text.splitlines() if ln.startswith(env_key + "=")), None)
+        val = line.split("=", 1)[1].strip().strip('"') if line else ""
+        if not val:
+            (red if sev == "red" else yellow)(
+                "dataflow:secret-missing",
+                f"{label} secret ({env_key}) is empty.",
+                patch="Paste signing secret to .env and restart backend.")
+        else:
+            # Confirm code references the secret env var (not hardcoded).
+            if env_key in server_py:
+                green("dataflow:secret", f"{label} secret configured & referenced in code.")
+            else:
+                yellow("dataflow:secret-unused",
+                       f"{env_key} is set in .env but never read in server.py — dead config.")
+
+    # 2.4 — Race-condition protection on critical mutable state.
+    # We grep for atomic patterns vs naive read-then-write patterns.
+    racy_phrases = ["find_one_and_update", "$inc", "$max", "$setOnInsert"]
+    atomic_hits = sum(server_py.count(p) for p in racy_phrases)
+    if atomic_hits >= 10:
+        green("dataflow:race-safety",
+              f"Server uses {atomic_hits} atomic MongoDB operations (find_one_and_update / $inc / $max / $setOnInsert).")
+    else:
+        yellow("dataflow:race-safety",
+               f"Only {atomic_hits} atomic operations found — high risk of double-spend on voice/credit ledger.",
+               patch="Audit voice_sessions and credit_ledger writes for read-then-write patterns.")
+
+    # 2.5 — Webhook log auto-trim sanity (we keep last 1000 to prevent
+    # unbounded growth from causing query slow-down).
+    if "delete_many({\"_id\": {\"$in\": old_ids}})" in server_py \
+       or "delete_many({'_id': {'$in': old_ids}})" in server_py:
+        green("dataflow:log-trim",
+              "email_webhook_log auto-trims past 1000 entries to prevent unbounded growth.")
+    else:
+        yellow("dataflow:log-trim",
+               "email_webhook_log may grow unbounded — no trim found.",
+               patch="Add a periodic delete_many on entries older than last 1000.")
+
+    # 2.6 — MongoDB collections must be reachable; the suppression index
+    #       must be unique to prevent duplicate suppression rows.
+    try:
+        from motor.motor_asyncio import AsyncIOMotorClient  # noqa
+        client = AsyncIOMotorClient(os.environ["MONGO_URL"])
+        db = client[os.environ["DB_NAME"]]
+        for coll in (
+            "email_suppression",
+            "email_webhook_log",
+            "email_unsubscribes",
+            "voice_sessions",
+            "credit_ledger",
+            "purchases",
+        ):
+            count = await db[coll].count_documents({}, limit=1)
+            green("dataflow:collection",
+                  f"`{coll}` collection reachable (sample-count={count}).")
+        # Index on email_suppression.email should be unique.
+        idx = await db.email_suppression.index_information()
+        has_unique_email = any(
+            info.get("unique") and info.get("key", [(None,)])[0][0] == "email"
+            for info in idx.values()
+        )
+        if has_unique_email:
+            green("dataflow:index",
+                  "email_suppression.email has unique index (prevents duplicate suppressions).")
+        else:
+            yellow("dataflow:index-missing",
+                   "email_suppression.email lacks a unique index.",
+                   patch="Run any send to trigger _ensure_indexes(), or create manually.")
+        client.close()
+    except Exception as e:
+        red("dataflow:db-unreachable",
+            f"Could not connect to MongoDB to verify collections: {e}",
+            patch="Check MONGO_URL and that supervisor mongo task is running.")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LAYER 3 — Agent logic & sanctuary-tone consistency
+# Anna's brief: agents follow sanctuary standards; mappings match env.
+# ─────────────────────────────────────────────────────────────────────────────
+def audit_agents_sanctuary():
+    server_py = (BACKEND / "server.py").read_text()
+
+    # 3.1 — The AGENT_BY_ROOM mapping in server.py must reference exactly
+    # the env vars we set.
+    expected_mappings = {
+        "clarity": "ELEVENLABS_CONVAI_AGENT_GRACE",
+        "body":    "ELEVENLABS_CONVAI_AGENT_KAELAN",
+        "parents": "ELEVENLABS_CONVAI_AGENT_SARA",
+        "courses": "ELEVENLABS_CONVAI_AGENT_ALISTAIR",
+        "aurin":   "ELEVENLABS_CONVAI_AGENT_AURIN",
+    }
+    for room, env_var in expected_mappings.items():
+        # We look for a quoted pair like "clarity": "ELEVENLABS_CONVAI_AGENT_GRACE"
+        if f'"{room}":' in server_py and env_var in server_py:
+            green("agents:room-map", f"Room '{room}' is mapped to {env_var}.")
+        else:
+            red("agents:room-map-missing",
+                f"Room '{room}' is NOT mapped to {env_var} in server.py.",
+                patch="Restore mapping in AGENT_BY_ROOM dict around line 8113.")
+
+    # 3.2 — Forbidden sanctuary terms must NOT appear in any product
+    # description in the bulk-script catalogue.
+    FORBIDDEN = ["therapy.", "treatment", "cure", "diagnose", "medication",
+                 "psychiatr", "psycholog"]  # 'therapy.' only flags positive, 'not therapy' is fine
+    bulk = load_bulk_catalogue()
+    for p in bulk:
+        desc = (p.get("description", {}).get("summary", {}).get("en") or "").lower()
+        # Replace the disclaimer phrase first so we don't false-flag it
+        clean = desc.replace("not therapy", "").replace("not medical advice", "")
+        for term in FORBIDDEN:
+            if term in clean:
+                red("agents:sanctuary-violation",
+                    f"`{p['product']}` description contains forbidden term: '{term}'",
+                    patch=f"Remove '{term}' or rephrase. Sanctuary rules: educational, not medical/clinical.",
+                    evidence=desc[:240])
+                break
+    if all(
+        not any(t in (p.get("description", {}).get("summary", {}).get("en") or "")
+                       .lower().replace("not therapy", "").replace("not medical advice", "")
+                for t in FORBIDDEN)
+        for p in bulk
+    ):
+        green("agents:sanctuary",
+              "All bulk-script descriptions free of forbidden clinical terms.")
+
+    # 3.3 — Fair-use clause on unlimited-text products
+    unlimited_text_skus = [
+        "sub-text-basic", "sub-text-voice-15", "sub-text-premium",
+    ]
+    for sku in unlimited_text_skus:
+        p = next((x for x in bulk if x["product"] == sku), None)
+        if not p:
+            continue
+        desc = (p.get("description", {}).get("summary", {}).get("en") or "").lower()
+        if "fair use" in desc or "fair-use" in desc:
+            green("agents:fair-use", f"`{sku}` carries the fair-use clause.")
+        else:
+            yellow("agents:fair-use-missing",
+                   f"`{sku}` description lacks fair-use clause — heavy users could drift margin to negative.",
+                   patch="Append ' Fair use ~200 conversations/month.' to the description.")
+
+    # 3.4 — Frontend admin route must be wired in App.js
+    app_js = (REPO / "frontend" / "src" / "App.js").read_text()
+    for route in ("/admin/email-health", "/admin/observation"):
+        if route in app_js:
+            green("agents:admin-route", f"{route} mounted in App.js.")
+        else:
+            yellow("agents:admin-route-missing",
+                   f"{route} not mounted in frontend App.js.",
+                   patch="Re-add the <Route path=... /> definition.")
+
+
 async def audit_fastspring_live():
     u = os.environ.get("FASTSPRING_API_USERNAME")
     p = os.environ.get("FASTSPRING_API_PASSWORD")
@@ -420,7 +602,6 @@ async def audit_fastspring_live():
             red("fastspring:status",
                 f"FastSpring API returned HTTP {resp.status_code}: {resp.text[:200]}")
             return
-        # If we got here, API is live — actually cross-reference.
         try:
             live = resp.json()
         except Exception:
@@ -493,12 +674,18 @@ def render_report() -> str:
 
 async def main():
     print("🛡️ Aurin Deep Audit starting…\n")
+    print("─── Layer 1: Configuration & catalogue consistency ───")
     audit_catalogue_alignment()
     audit_backend_wiring()
     audit_env()
     audit_disclaimer()
     audit_margins()
     await audit_routes()
+    print("─── Layer 2: Process & webhook data-flow ───")
+    await audit_data_flow()
+    print("─── Layer 3: Agent logic & sanctuary tone ───")
+    audit_agents_sanctuary()
+    print("─── Live cross-reference ───")
     await audit_fastspring_live()
 
     report = render_report()

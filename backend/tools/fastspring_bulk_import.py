@@ -167,12 +167,12 @@ CATALOGUE: list[dict[str, Any]] = [
     {"product": "clarity-30min",
      "display": {"en": "Clarity Release · 30 minutes"},
      "description": {"summary": {"en": "30-minute voice + text Clarity Release session Not therapy. Not medical advice. Educational sanctuary content."}},
-     "pricing": {"price": {"USD": 15.00, "EUR": 14.00}},
+     "pricing": {"price": {"USD": 22.00, "EUR": 20.50}},
      "format": "digital"},
     {"product": "clarity-60min",
      "display": {"en": "Clarity Release · 60 minutes"},
      "description": {"summary": {"en": "60-minute voice + text Clarity Release session Not therapy. Not medical advice. Educational sanctuary content."}},
-     "pricing": {"price": {"USD": 30.00, "EUR": 28.00}},
+     "pricing": {"price": {"USD": 39.00, "EUR": 36.00}},
      "format": "digital"},
 
     # ── Subscriptions (FastSpring distinguishes recurring at product-type

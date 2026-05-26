@@ -1,23 +1,18 @@
-# 🛡️ Aurin Deep Audit — 2026-05-26T21:24:43.358778+00:00
+# 🛡️ Aurin Deep Audit — 2026-05-26T21:33:37.206689+00:00
 
 Non-destructive integrity check. Read-only. No changes applied.
 
 ## 📊 Summary
 
-- 🔴 **Critical (red): 2**
-- 🟡 **Warning (yellow): 2**
-- 🟢 **Secure (green): 71**
+- 🔴 **Critical (red): 0**
+- 🟡 **Warning (yellow): 3**
+- 🟢 **Secure (green): 100**
 
 ---
 
 ## 🔴 RED — Critical findings (fix before launch)
 
-### [margin:critical] `clarity-30min` — margin 25.8% after FS fees & voice cost is BELOW 30%.
-- **Patch:** Raise price or reduce voice minutes for `clarity-30min`.
-
-### [margin:critical] `clarity-60min` — margin 28.3% after FS fees & voice cost is BELOW 30%.
-- **Patch:** Raise price or reduce voice minutes for `clarity-60min`.
-
+_None._
 
 ---
 
@@ -25,6 +20,9 @@ Non-destructive integrity check. Read-only. No changes applied.
 
 ### [env:empty] `RESEND_WEBHOOK_SECRET` exists but is empty.
 - **Patch:** Fill `RESEND_WEBHOOK_SECRET` with the value from the relevant provider dashboard.
+
+### [dataflow:secret-missing] Resend webhook secret (RESEND_WEBHOOK_SECRET) is empty.
+- **Patch:** Paste signing secret to .env and restart backend.
 
 ### [fastspring:no-creds] FastSpring API credentials not configured — live audit skipped.
 - **Patch:** Once merchant agreement activates, this audit will run automatically.
@@ -86,6 +84,8 @@ Non-destructive integrity check. Read-only. No changes applied.
 - [margin:healthy] `voice-topup-premium-60` — margin 67.0%.
 - [margin:healthy] `voice-topup-premium-180` — margin 67.9%.
 - [margin:healthy] `bundle-family` — margin 64.2%.
+- [margin:healthy] `clarity-30min` — margin 50.5%.
+- [margin:healthy] `clarity-60min` — margin 45.3%.
 - [margin:healthy] `sub-text-basic` — margin 100.0%.
 - [margin:healthy] `sub-text-voice-15` — margin 93.0%.
 - [margin:healthy] `sub-text-premium` — margin 90.3%.
@@ -105,3 +105,30 @@ Non-destructive integrity check. Read-only. No changes applied.
 - [route] /library/kids/read reachable (HTTP 200)
 - [route] /library/kids/draw reachable (HTTP 200)
 - [route] /admin/email-health reachable (HTTP 200)
+- [dataflow:agent] ELEVENLABS_CONVAI_AGENT_AURIN configured.
+- [dataflow:agent] ELEVENLABS_CONVAI_AGENT_GRACE configured.
+- [dataflow:agent] ELEVENLABS_CONVAI_AGENT_KAELAN configured.
+- [dataflow:agent] ELEVENLABS_CONVAI_AGENT_SARA configured.
+- [dataflow:agent] ELEVENLABS_CONVAI_AGENT_ALISTAIR configured.
+- [dataflow:secret] LS webhook secret configured & referenced in code.
+- [dataflow:secret] Pruesoul internal webhook secret configured & referenced in code.
+- [dataflow:race-safety] Server uses 32 atomic MongoDB operations (find_one_and_update / $inc / $max / $setOnInsert).
+- [dataflow:log-trim] email_webhook_log auto-trims past 1000 entries to prevent unbounded growth.
+- [dataflow:collection] `email_suppression` collection reachable (sample-count=0).
+- [dataflow:collection] `email_webhook_log` collection reachable (sample-count=0).
+- [dataflow:collection] `email_unsubscribes` collection reachable (sample-count=1).
+- [dataflow:collection] `voice_sessions` collection reachable (sample-count=1).
+- [dataflow:collection] `credit_ledger` collection reachable (sample-count=1).
+- [dataflow:collection] `purchases` collection reachable (sample-count=1).
+- [dataflow:index] email_suppression.email has unique index (prevents duplicate suppressions).
+- [agents:room-map] Room 'clarity' is mapped to ELEVENLABS_CONVAI_AGENT_GRACE.
+- [agents:room-map] Room 'body' is mapped to ELEVENLABS_CONVAI_AGENT_KAELAN.
+- [agents:room-map] Room 'parents' is mapped to ELEVENLABS_CONVAI_AGENT_SARA.
+- [agents:room-map] Room 'courses' is mapped to ELEVENLABS_CONVAI_AGENT_ALISTAIR.
+- [agents:room-map] Room 'aurin' is mapped to ELEVENLABS_CONVAI_AGENT_AURIN.
+- [agents:sanctuary] All bulk-script descriptions free of forbidden clinical terms.
+- [agents:fair-use] `sub-text-basic` carries the fair-use clause.
+- [agents:fair-use] `sub-text-voice-15` carries the fair-use clause.
+- [agents:fair-use] `sub-text-premium` carries the fair-use clause.
+- [agents:admin-route] /admin/email-health mounted in App.js.
+- [agents:admin-route] /admin/observation mounted in App.js.

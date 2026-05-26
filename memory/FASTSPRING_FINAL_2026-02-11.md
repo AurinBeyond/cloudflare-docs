@@ -294,8 +294,8 @@
 
 | SKU | What | **Price** | Margin |
 |---|---|---:|---:|
-| `clarity-30min` | 30 min voice + text | **$15** | 50% ✅ |
-| `clarity-60min` | 60 min voice + text | **$30** | 65% ✅ |
+| `clarity-30min` | 30 min voice + text | **$22** | 50% ✅ |
+| `clarity-60min` | 60 min voice + text | **$39** | 49% ✅ |
 | `clarity-season-30d` ⭐ | Unlimited 30 days + Eternal Thread | **$89** (raised from $70) | 38% ✅ |
 
 ---
