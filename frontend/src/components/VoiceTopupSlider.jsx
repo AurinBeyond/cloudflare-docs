@@ -126,9 +126,13 @@ export default function VoiceTopupSlider({ className = "" }) {
         <div className="rounded-xl p-4 bg-[hsl(var(--aurin-bg-soft))] border border-dashed border-[hsl(var(--aurin-border-soft))] text-center"
              data-testid="voice-topup-not-ready">
           <p className="text-[13px] text-[hsl(var(--aurin-text-muted))] italic leading-relaxed">
-            Custom top-ups arrive when the founder finishes seeding
-            LemonSqueezy variants. The pre-set 30 / 60 / 180 minute packs
-            on the Clarity Release page still work.
+            Top-ups are being prepared — checkout will open in the next
+            few days. If you'd like first-access notice, write to{" "}
+            <a href="mailto:info@prulesoul.site"
+               className="underline decoration-dotted underline-offset-2 hover:text-[hsl(var(--aurin-sage))]">
+              info@prulesoul.site
+            </a>{" "}
+            and we'll send you the link when the doors open.
           </p>
         </div>
       )}

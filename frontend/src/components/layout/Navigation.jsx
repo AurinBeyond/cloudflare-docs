@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { to: "/body-room", label: "Body Room", testid: "nav-body-room" },
   { to: "/parents-room", label: "Parents' Room", testid: "nav-parents-room" },
   { to: "/kids-universe", label: "Kids Universe", testid: "nav-kids-universe" },
+  { to: "/high-performers", label: "For Leaders", testid: "nav-high-performers" },
   { to: "/course-room", label: "Courses", testid: "nav-course-room" },
   { to: "/aurin-philosophy", label: "Philosophy", testid: "nav-aurin-philosophy" },
   { to: "/library", label: "Library", testid: "nav-library" },
