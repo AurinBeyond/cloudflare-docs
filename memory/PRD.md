@@ -1163,3 +1163,51 @@ LS removal decision, per-room themed backgrounds, activity-type stone
 shapes, Resend fallback cleanup, Kids→Parents cross-sell CTA,
 FastSpring migration trigger, GPT marketing-copy per-line approval.
 
+
+
+### 2026-02-11 — FastSpring bulk import prep + Parents Room launched
+
+**Decisions of the day:**
+
+1. **LemonSqueezy formally abandoned** (no response since 21 Jan, dormant code kept).
+2. **Paddle declined us** (AUP — "not B2B SaaS"). Confirmed dead-end.
+3. **FastSpring is the chosen merchant of record.** Contract signed today by Anna.
+4. **API credentials provided** by Anna: `4TF-HEYFTC2AGHTQOOONXG` / `JXmSTAjORaSJPVffXHgNmg`. Storefront: `prulesoul.test.onfastspring.com`.
+5. **API returns 401 across all endpoints** — diagnosed as merchant agreement
+   pending FastSpring-side activation. Anna sent email to support, will
+   continue tomorrow.
+
+**Shipped today:**
+- `/app/backend/tools/fastspring_bulk_import.py` — production-ready bulk
+  import script for 29 single products (books, courses, voice top-ups,
+  subscriptions, memberships). Uses Basic Auth, DRY_RUN=true by default,
+  audit logs to JSON. Bundle products excluded — must be created in
+  FastSpring dashboard with the copy-paste forms in
+  `FASTSPRING_FINAL_2026-02-11.md`.
+- `/app/memory/FASTSPRING_FINAL_2026-02-11.md` — locked 49-SKU catalogue
+  with margins verified against FastSpring 5.9% + €0.85 transaction fee.
+- `/app/memory/FASTSPRING_COMPLETE_2026-02-11.md` and
+  `/app/memory/FASTSPRING_QUICK_ENTRY_2026-02-11.md` — earlier draft files,
+  superseded by the FINAL file above.
+- Margin audit complete: corrected 2 underpriced premium tiers
+  (Premium 60min €39→€59, Premium 180min €99→€179). Added fair-use
+  clauses to all unlimited-text products to protect against heavy-user
+  drift.
+- Added 2 new mid-tier bundles per Anna's request: Sanctuary Season
+  €890 (3mo) and Couples Sanctuary €1,190 (6mo, 2 accounts).
+- Raised VIP Unlimited €490 → €590 (Anna chose premium positioning).
+- LUX Lifetime priced at €2,990 (Anna chose this over €4,990).
+
+**Backend env:**
+- `/app/backend/.env` now contains FastSpring credentials and storefront.
+  DRY_RUN=true until API activation.
+- ⚠️ Credentials shared in chat — Anna planned to rotate after first
+  successful import. Tracked.
+
+**Tomorrow's plan:**
+1. Wait for FastSpring activation confirmation.
+2. As soon as API returns 200 on any endpoint → run bulk import.
+3. Anna creates the 13 bundles manually in dashboard with provided forms.
+4. Resend webhooks (engagement tracker) — Anna is curious, defer to
+   after FastSpring goes live.
+
