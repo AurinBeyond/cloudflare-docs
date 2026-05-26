@@ -39,6 +39,7 @@ const THEMES = {
     bg: "linear-gradient(160deg, #e8e9d9 0%, #d4d8b8 60%, #b8c8a8 100%)",
     title: "Today's pebble is warm",
     accent: "#8a6a3e",
+    companion: "/assets/aurin/little-dreamers-hero.png",
   },
   "explorers": {
     label: "Crystal explorer path",
@@ -53,6 +54,7 @@ const THEMES = {
     bg: "linear-gradient(160deg, #d8c9e8 0%, #b89cd0 60%, #8a6cb2 100%)",
     title: "A crystal waits to be found",
     accent: "#4a2a6a",
+    companion: "/assets/aurin/explorers-hero.png",
   },
   "dreamweavers": {
     label: "Dreamweaver hex path",
@@ -67,6 +69,7 @@ const THEMES = {
     bg: "linear-gradient(160deg, #c0d8c8 0%, #88b0a0 60%, #5a8878 100%)",
     title: "The path reveals itself",
     accent: "#1f3a2c",
+    companion: "/assets/aurin/dreamweavers-hero.png",
   },
   "body-temple": {
     label: "Body Temple path",
@@ -81,8 +84,29 @@ const THEMES = {
     bg: "linear-gradient(160deg, #f8eecf 0%, #e8d49a 60%, #c9a560 100%)",
     title: "Today's keystone is warm",
     accent: "#4a3a1c",
+    companion: "/assets/illustrations/aurin-sovereign.png",
   },
 };
+
+// Tiny themed glyphs that ride inside the stone — gives each day its own
+// little "content hint" instead of just a bare number. 7 motifs cycled
+// across the 28 days (one per day-of-week). Pure SVG, no external icons.
+const DAY_GLYPHS = [
+  // leaf
+  "M 20 8 C 14 10 11 16 12 22 C 17 21 22 18 23 12 C 21 11 20 10 20 8 Z",
+  // heart
+  "M 20 24 L 12 16 C 10 13 12 9 15 9 C 17 9 19 11 20 12 C 21 11 23 9 25 9 C 28 9 30 13 28 16 Z",
+  // star
+  "M 20 8 L 22 15 L 29 15 L 23.5 19 L 25.5 26 L 20 22 L 14.5 26 L 16.5 19 L 11 15 L 18 15 Z",
+  // droplet
+  "M 20 8 C 16 14 14 18 14 21 C 14 24 17 26 20 26 C 23 26 26 24 26 21 C 26 18 24 14 20 8 Z",
+  // flower (4 petals)
+  "M 20 9 C 22 11 22 14 20 16 C 18 14 18 11 20 9 Z M 27 16 C 25 18 22 18 20 16 C 22 14 25 14 27 16 Z M 20 23 C 18 21 18 18 20 16 C 22 18 22 21 20 23 Z M 13 16 C 15 14 18 14 20 16 C 18 18 15 18 13 16 Z",
+  // moon
+  "M 22 9 C 17 9 13 13 13 18 C 13 23 17 27 22 27 C 19 26 17 22 17 18 C 17 14 19 10 22 9 Z",
+  // spark (4-point)
+  "M 20 8 L 21 17 L 30 18 L 21 19 L 20 28 L 19 19 L 10 18 L 19 17 Z",
+];
 
 function StoneShape({ shape, state, theme }) {
   const isCompleted = state === "completed";
@@ -95,7 +119,6 @@ function StoneShape({ shape, state, theme }) {
              : theme.stoneFill;
   const opacity = state === "locked" ? 0.55 : 1;
   const glow = isToday ? `drop-shadow(0 0 14px ${theme.todayGlow})` : "none";
-
   if (shape === "crystal") {
     return (
       <g opacity={opacity}>
@@ -235,10 +258,11 @@ export default function KidsJourneyPath({
   const rows = Math.ceil(totalDays / ROW_LEN);
   const STONE_W = compact ? 44 : 56;
   const STONE_GAP = compact ? 14 : 18;
-  const ROW_GAP = compact ? 30 : 38;
+  const ROW_GAP = compact ? 30 : 42;
   const PAD = 30;
+  const TOP_PAD = compact ? 60 : 90; // extra headroom so Aurin doesn't clip
   const svgW = PAD * 2 + ROW_LEN * (STONE_W + STONE_GAP) - STONE_GAP;
-  const svgH = PAD * 2 + rows * (STONE_W + ROW_GAP) - ROW_GAP;
+  const svgH = TOP_PAD + PAD + rows * (STONE_W + ROW_GAP) - ROW_GAP;
 
   const stonePositions = useMemo(() => {
     const out = [];
@@ -248,11 +272,11 @@ export default function KidsJourneyPath({
       const isReversed = row % 2 === 1;
       const col = isReversed ? (ROW_LEN - 1 - colInRow) : colInRow;
       const x = PAD + col * (STONE_W + STONE_GAP);
-      const y = PAD + row * (STONE_W + ROW_GAP);
+      const y = TOP_PAD + row * (STONE_W + ROW_GAP);
       out.push({ x, y, day: i + 1 });
     }
     return out;
-  }, [totalDays, STONE_W, STONE_GAP, ROW_GAP]);
+  }, [totalDays, STONE_W, STONE_GAP, ROW_GAP, TOP_PAD]);
 
   const pathD = useMemo(() => {
     return stonePositions.reduce((acc, p, i) => {
@@ -412,15 +436,27 @@ export default function KidsJourneyPath({
                   />
                 </g>
               ) : (
-                <text
-                  x="20" y="23"
-                  textAnchor="middle"
-                  fontWeight="600"
-                  fill={theme.accent}
-                  style={{ fontFamily: "Caveat, cursive", fontSize: 16 }}
-                >
-                  {day}
-                </text>
+                <>
+                  {/* §KIDS-JOURNEY v2 2026-02-10 — small themed glyph on
+                      each open stone (per Anna's directive: "iga kivi
+                      vöib näidata enda sisu"). Day number stays as a
+                      faint subscript so the order is still clear. */}
+                  <path
+                    d={DAY_GLYPHS[(day - 1) % DAY_GLYPHS.length]}
+                    fill={theme.accent}
+                    opacity={state === "today" ? 0.85 : 0.55}
+                    style={{ pointerEvents: "none" }}
+                  />
+                  <text
+                    x="20" y="34"
+                    textAnchor="middle"
+                    fontWeight="600"
+                    fill={theme.accent}
+                    style={{ fontFamily: "Caveat, cursive", fontSize: 11, pointerEvents: "none" }}
+                  >
+                    {day}
+                  </text>
+                </>
               )}
               {state === "today" && (
                 <circle
@@ -436,6 +472,76 @@ export default function KidsJourneyPath({
                 </circle>
               )}
             </g>
+          );
+        })}
+
+        {/* §KIDS-JOURNEY v2 2026-02-10 — Aurin character hovers above
+            today's stone (Anna's directive: "vöib panna meie tegelaste
+            kujud sisse"). Floats with a gentle bobbing animation +
+            casts a soft golden halo so the child's eye is drawn there. */}
+        {(() => {
+          const todayPos = stonePositions.find((p) => p.day === todayIndex);
+          if (!todayPos) return null;
+          const cx = todayPos.x + STONE_W / 2;
+          const ay = todayPos.y - 72;
+          const ASIZE = 78;
+          return (
+            <g aria-hidden="true" style={{ pointerEvents: "none" }}>
+              {/* Soft halo behind the character */}
+              <circle cx={cx} cy={ay + ASIZE / 2} r={ASIZE * 0.65}
+                fill={theme.todayGlow} opacity="0.22">
+                <animate attributeName="r" values={`${ASIZE * 0.55};${ASIZE * 0.75};${ASIZE * 0.55}`} dur="3.6s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.12;0.28;0.12" dur="3.6s" repeatCount="indefinite" />
+              </circle>
+              {/* Subtle string of sparkles trailing down to the stone */}
+              <g opacity="0.85">
+                <circle cx={cx - 4} cy={ay + ASIZE + 4} r="1.6" fill={theme.starColor}>
+                  <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx={cx + 5} cy={ay + ASIZE + 12} r="1.2" fill={theme.starColor}>
+                  <animate attributeName="opacity" values="1;0.2;1" dur="2.4s" repeatCount="indefinite" />
+                </circle>
+                <circle cx={cx - 6} cy={ay + ASIZE + 22} r="2" fill={theme.starColor}>
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
+                </circle>
+              </g>
+              {/* Aurin companion — sits like a guide above today's stone.
+                  The hero illustrations include a UI panel on the right,
+                  so we clip to the left half to show only the character. */}
+              <defs>
+                <clipPath id={`aurin-clip-${themeKey}`}>
+                  <rect x={cx - ASIZE / 2} y={ay} width={ASIZE} height={ASIZE} rx={ASIZE / 2} ry={ASIZE / 2} />
+                </clipPath>
+              </defs>
+              <image
+                href={theme.companion}
+                x={cx - ASIZE / 2}
+                y={ay}
+                width={ASIZE * 2}
+                height={ASIZE}
+                preserveAspectRatio="xMinYMid slice"
+                clipPath={`url(#aurin-clip-${themeKey})`}
+                style={{ filter: `drop-shadow(0 6px 16px ${theme.todayGlow})` }}
+              />
+            </g>
+          );
+        })()}
+
+        {/* Atmospheric particle layer — five tiny sparkles drifting in
+            the path's background, gives the surface a "room with air"
+            feeling rather than a flat rectangle. */}
+        {Array.from({ length: 8 }).map((_, i) => {
+          const px = ((i * 137) % (svgW - 40)) + 20;
+          const py = ((i * 83) % (svgH - 60)) + 30;
+          const dur = 3 + (i % 4);
+          return (
+            <circle key={`sp-${i}`} cx={px} cy={py} r="1.2"
+              fill="white" opacity="0.55"
+              style={{ pointerEvents: "none" }}>
+              <animate attributeName="opacity"
+                values="0.1;0.8;0.1" dur={`${dur}s`} repeatCount="indefinite"
+                begin={`${i * 0.4}s`} />
+            </circle>
           );
         })}
       </svg>
