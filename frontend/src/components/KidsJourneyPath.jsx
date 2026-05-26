@@ -387,8 +387,14 @@ export default function KidsJourneyPath({
             <g
               key={day}
               transform={`translate(${x}, ${y})`}
-              style={{ cursor: state === "locked" ? "not-allowed" : "pointer" }}
-              onClick={() => state !== "locked" && handleStonePick(day)}
+              style={{ cursor: (state === "locked" && !onStoneClick) ? "not-allowed" : "pointer" }}
+              onClick={() => {
+                // If a parent handler is provided (e.g. Body Temple), let it
+                // decide what to do with every state (locked → upsell route).
+                if (onStoneClick) { handleStonePick(day); return; }
+                if (state === "locked") return;
+                handleStonePick(day);
+              }}
               data-testid={`kids-journey-stone-${day}`}
               aria-label={`Day ${day} — ${state}`}
             >

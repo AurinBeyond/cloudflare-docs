@@ -981,3 +981,80 @@ help with Google Workspace domain verification.
      better trust signal than `noreply@resend.dev`)
 
 **No regressions, lint clean, gallery renders cleanly.**.
+
+
+### 2026-02-10 LATE-PM — Iter 82: Kids Universe Stepping-Stone Path (Faas 5 closure)
+
+**Founder directive (Anna, very upset)**: prior "Kids Universe done" claims were
+superficial (only fonts/colors). She demanded a REAL immersive 28-day path —
+stepping stones, themed per age, navigable across hub/daily/activities, with
+clickable popup showing Aurin's tiny day-message + buttons to today's
+check-in or activities. Stein-på-stein language to extend into Body Temple too.
+
+**Shipped (verified end-to-end with real Playwright + testing_agent_v3_fork):**
+
+1. **Backend `/api/kids-journey/*` endpoints + rate-limit bypass**
+   - `GET /api/kids-journey/progress?child_slug=<slug>` — returns
+     `today_index` (days since signup, clamped 1..28), `completed_days`
+     (computed from distinct `kids_mood_checkins` days), `total_days=28`,
+     `messages[]` (28 per age) and `anonymous` flag. Works for anonymous
+     wanderers — public Kids Universe doorway always paints alive.
+   - `GET /api/kids-journey/day/{N}` — returns one day's Aurin message,
+     clamps 1..28.
+   - `/api/kids-journey/` added to rate-limit bypass list.
+   - Backend module: `/app/backend/kids_journey.py` — 28 hand-tuned
+     messages per age band (little-dreamers / explorers / dreamweavers).
+
+2. **Frontend `KidsJourneyPath.jsx` (rebuilt, 4 themes)**
+   - Three age-themed visual languages per Anna's reference images:
+     • little-dreamers → cream PEBBLES + soft clouds on sage-blue meadow
+     • explorers       → purple CRYSTAL stones + leaves on violet path
+     • dreamweavers    → teal HEXAGON stones + leaves on deep emerald
+     • body-temple     → amber WOODEN stones (adult/warm — same visual
+                         family, "Today's keystone is warm" title)
+   - 28 stones laid out in serpentine 7-per-row, smooth dashed connector
+     path under stones, today's stone pulses (animated SVG circle),
+     completed stones show a star, locked show padlock.
+   - Internal popup on stone click (kids hubs): Aurin's day message in
+     Caveat handwriting + two buttons "Open today's check-in" /
+     "See activities". For Body Temple the parent passes `onStoneClick`
+     to route locked days → `/clarity-release` upsell.
+
+3. **Wired into 4 surfaces** (data-testids preserved for regression):
+   - `/kids-universe/:age/hub` — `[data-testid=kids-hub-journey-section]`
+     right under the Today hero
+   - `/kids-universe/:age/daily` — `[data-testid=kids-daily-journey-strip]`
+     above the mood picker (compact variant)
+   - `/kids-universe/:age/activities` — `[data-testid=kids-activities-journey-strip]`
+     above the activity grid (compact variant)
+   - `/body-temple` — `[data-testid=body-temple-journey]` unified 28-stone
+     overview above the existing four-week cards (StonePath chip rows
+     preserved inside each week card)
+
+**Verified by testing_agent_v3_fork iter 82:**
+- Backend: 4/4 pytest pass (anonymous default, legacy slug alias,
+  day-clamping 1..28, distinct day-1 messages per age).
+- Frontend: 10/10 UI assertions PASS (initially 9/10; the failing
+  locked-stone navigation was diagnosed as screenshot-tool async
+  console listener limitation, then verified directly with a fresh
+  Playwright run — body-temple stone-5 → /clarity-release works,
+  console logs `[body-temple] stone click day=5 is_premium=true
+  unlocked=false → navigate /clarity-release`).
+- Zero regressions: 5 KidsHub action cards still render, Daily mood
+  picker still works, Body Temple per-week cards + day modal still open.
+
+**Files added/touched:**
+- `/app/backend/kids_journey.py` (NEW)
+- `/app/backend/server.py` (+1 import, +2 endpoints, rate-limit bypass entry)
+- `/app/backend/tests/test_kids_journey.py` (NEW — 4 passing tests)
+- `/app/frontend/src/components/KidsJourneyPath.jsx` (full rebuild — 4
+  themes, popup, scatter decorations, today-pulse animation)
+- `/app/frontend/src/pages/KidsHub.jsx`, `KidsDaily.jsx`,
+  `KidsActivities.jsx`, `BodyTemple.jsx` (component wiring only —
+  zero existing behaviour removed)
+
+**Future / Anna's open thread**: she floated a Parents Room twin —
+"1 step closer to understanding yourself and your child" — deferred
+until she decides the content shape. Code is now ready to host a
+fourth `parents-room` theme (just add a new entry to `THEMES`).
+
