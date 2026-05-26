@@ -53,14 +53,25 @@ export default function KidsActivities() {
     });
   }, [slug, theme.slug, moduleFilter]);
 
+  const [notFound, setNotFound] = useState(false);
+
   // Load detail when slug present
   useEffect(() => {
     if (!slug) {
       setDetail(null);
       setCompleted(false);
+      setNotFound(false);
       return;
     }
-    api.get(`/kids-curriculum/activities/${slug}`).then((r) => setDetail(r.data));
+    setNotFound(false);
+    api.get(`/kids-curriculum/activities/${slug}`)
+      .then((r) => setDetail(r.data))
+      .catch((err) => {
+        // §KIDS-NAV-AUDIT 2026-02-10 — graceful 404 fallback so a
+        // mistyped/stale slug shows a soft empty state, not the
+        // raw axios error overlay. Anna's redline: no dead pages.
+        if (err?.response?.status === 404) setNotFound(true);
+      });
   }, [slug]);
 
   const completeActivity = async () => {
@@ -82,6 +93,37 @@ export default function KidsActivities() {
 
   // ─── DETAIL VIEW ───
   if (slug) {
+    if (notFound) {
+      return (
+        <div data-testid="kids-activity-notfound"
+             className="min-h-screen flex flex-col items-center justify-center px-6"
+             style={{ background: palette.bgGradient, color: palette.text }}>
+          <p className="text-[12px] uppercase tracking-[0.32em] mb-3"
+             style={{ color: palette.textMuted }}>
+            A quiet detour
+          </p>
+          <h1 className="text-[36px] leading-tight mb-4 text-center"
+              style={{ fontFamily: "Caveat, cursive", color: palette.accent, fontWeight: 600 }}>
+            That doorway hasn't been built yet.
+          </h1>
+          <p className="max-w-[34ch] text-center text-[14px] mb-6"
+             style={{ color: palette.textMuted }}>
+            The page you came from has moved or this activity isn't ready yet.
+            Let's go back to the room.
+          </p>
+          <Link to={`/kids-universe/${theme.slug}/activities`}
+                data-testid="kids-activity-notfound-back"
+                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl text-[13px] font-medium"
+                style={{
+                  background: palette.accent,
+                  color: "#fff",
+                  boxShadow: `0 6px 14px -6px ${palette.accent}`,
+                }}>
+            Back to activities
+          </Link>
+        </div>
+      );
+    }
     if (!detail) {
       return (
         <div className="min-h-screen flex items-center justify-center"

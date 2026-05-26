@@ -266,17 +266,27 @@ export default function KidsJourneyPath({
 
   const stonePositions = useMemo(() => {
     const out = [];
+    // §KIDS-JOURNEY v3 2026-02-10 — Anna's directive: rada peab
+    // **looklema**, mitte olema sirged ruudud. Each stone gets a sine
+    // wave Y offset within its row, and the connectors below use
+    // longer bezier curves so the whole path meanders like a river.
+    const WAVE_AMP = compact ? 9 : 14;
     for (let i = 0; i < totalDays; i++) {
       const row = Math.floor(i / ROW_LEN);
       const colInRow = i % ROW_LEN;
       const isReversed = row % 2 === 1;
       const col = isReversed ? (ROW_LEN - 1 - colInRow) : colInRow;
       const x = PAD + col * (STONE_W + STONE_GAP);
-      const y = TOP_PAD + row * (STONE_W + ROW_GAP);
+      // Wave is mirrored on alternate rows so the meander is
+      // continuous rather than zig-zag.
+      const phase = (colInRow / (ROW_LEN - 1)) * Math.PI;
+      const waveDir = isReversed ? -1 : 1;
+      const yOffset = Math.sin(phase) * WAVE_AMP * waveDir;
+      const y = TOP_PAD + row * (STONE_W + ROW_GAP) + yOffset;
       out.push({ x, y, day: i + 1 });
     }
     return out;
-  }, [totalDays, STONE_W, STONE_GAP, ROW_GAP, TOP_PAD]);
+  }, [totalDays, STONE_W, STONE_GAP, ROW_GAP, TOP_PAD, compact]);
 
   const pathD = useMemo(() => {
     return stonePositions.reduce((acc, p, i) => {
@@ -286,8 +296,22 @@ export default function KidsJourneyPath({
       const prev = stonePositions[i - 1];
       const pcx = prev.x + STONE_W / 2;
       const pcy = prev.y + STONE_W / 2 - 4;
-      const midY = (pcy + cy) / 2;
-      return `${acc} C ${pcx} ${midY}, ${cx} ${midY}, ${cx} ${cy}`;
+      // §KIDS-JOURNEY v3 — longer bezier control points create a
+      // gentle, meandering S-curve instead of straight angled lines.
+      const dx = cx - pcx;
+      const dy = cy - pcy;
+      const isRowJump = Math.abs(dy) > STONE_W;
+      if (isRowJump) {
+        // Sweeping U-curve at row turn-arounds.
+        const midX = pcx + dx * 0.5;
+        return `${acc} C ${pcx + dx * 0.05} ${pcy + dy * 0.65}, ${midX} ${cy - 6}, ${cx} ${cy}`;
+      }
+      // Wavy connector between adjacent stones in a row.
+      const c1x = pcx + dx * 0.35;
+      const c1y = pcy + (cy - pcy) * 0.2;
+      const c2x = pcx + dx * 0.65;
+      const c2y = pcy + (cy - pcy) * 0.8;
+      return `${acc} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${cx} ${cy}`;
     }, "");
   }, [stonePositions, STONE_W]);
 
@@ -483,8 +507,8 @@ export default function KidsJourneyPath({
           const todayPos = stonePositions.find((p) => p.day === todayIndex);
           if (!todayPos) return null;
           const cx = todayPos.x + STONE_W / 2;
-          const ay = todayPos.y - 72;
-          const ASIZE = 78;
+          const ay = todayPos.y - 58;
+          const ASIZE = 62;
           return (
             <g aria-hidden="true" style={{ pointerEvents: "none" }}>
               {/* Soft halo behind the character */}

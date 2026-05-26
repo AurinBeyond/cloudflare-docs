@@ -1055,6 +1055,65 @@ check-in or activities. Stein-på-stein language to extend into Body Temple too.
 
 **Future / Anna's open thread**: she floated a Parents Room twin —
 "1 step closer to understanding yourself and your child" — deferred
+
+
+### 2026-02-10 LATE-PM v2 — Kids Universe Path Refinement + Navigation Audit
+
+**Anna's follow-up** (after seeing v1): keep stones for now, focus on the
+navigation audit — *no dead pages*; make the path **winding**, not straight
+serpentine; shrink Aurin character ~20%; defer per-room themed
+backgrounds for later iteration.
+
+**Shipped:**
+
+1. **Aurin character resized** 78×78 → 62×62 (~20% smaller), positioned
+   tighter above today's stone, halo + sparkle scale matches.
+2. **Winding path** — replaced rigid grid with sine-wave Y-offset per
+   stone (`amplitude * sin(phase) * waveDir`) plus longer bezier control
+   points on connectors. The path now meanders instead of forming
+   straight rows with sharp 90° corners.
+3. **Themed glyphs on stones** — 7 SVG glyph motifs (leaf, heart, star,
+   droplet, flower, moon, spark) cycled across the 28 days. Day numbers
+   shifted to a small subscript below the glyph.
+4. **Atmospheric particles** — 8 drifting white sparkles on the path
+   surface plus a glittering trail from Aurin down to today's stone.
+5. **Kids Universe navigation audit** (`/app/backend/tests/audit_kids_nav.py`,
+   permanent regression artifact):
+   - Harvested **52 unique kid-related routes** by visiting 8 entry
+     points and crawling every `<a href>` link.
+   - Visited each route, checked HTTP status, runtime overlay,
+     page-error events, and body text length.
+   - **Result: 52/52 routes clean.** Zero 404s, zero runtime errors,
+     zero near-empty pages.
+6. **Graceful 404 fallback for invalid activity slugs** — KidsActivities
+   now catches the axios 404 and renders a soft "A quiet detour — that
+   doorway hasn't been built yet" page in the age-band palette with
+   Caveat handwriting and a "Back to activities" CTA. This replaces
+   what used to be a raw Uncaught Runtime Errors overlay if a stale
+   or mistyped slug was visited.
+
+**Files touched:**
+- `/app/frontend/src/components/KidsJourneyPath.jsx` (winding bezier
+  layout, glyph row, Aurin sizing, particle drift)
+- `/app/frontend/src/pages/KidsActivities.jsx` (notFound state +
+  soft 404 page rendering)
+- `/app/backend/tests/audit_kids_nav.py` (NEW — Kids navigation
+  end-to-end audit script, run with `python audit_kids_nav.py`)
+
+**Anna's deferred items (do later):**
+- Per-room themed backgrounds: golden / mossy / mountain-silhouette /
+  cloud-silhouette borders depending on which "room" (story / drawing /
+  activity) the path leads into.
+- Different stone shapes per activity-type (puzzle pieces in puzzle
+  room, leaves in story room, etc.) — current uniform stones stay.
+- "Sparkly path" upgrade in select rooms.
+
+**Anna's NEW idea (still thinking)**:
+- Parents Room twin 28-day path: "1 step closer to understanding
+  yourself and your child" — uses existing reading material / practices
+  per day. Component is ready (just add `THEMES["parents-room"]` and
+  wire one extra Kids-Journey endpoint per parent slug).
+
 until she decides the content shape. Code is now ready to host a
 fourth `parents-room` theme (just add a new entry to `THEMES`).
 
