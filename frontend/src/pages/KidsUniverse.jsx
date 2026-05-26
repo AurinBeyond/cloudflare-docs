@@ -147,6 +147,16 @@ const AGE_GROUPS = [
   },
 ];
 
+// §KIDS-UNIVERSE-V3 2026-02-10 — Artist-made hero images for each age
+// group. Files were created days ago but never wired in. Anna's directive
+// (founder, 2026-02-10): "kogu see ruum muutub lastepäraseks, elavaks
+// huvitavaks disaini osas". These images live in /public/assets/aurin/.
+const AGE_HERO_IMAGE = {
+  "3-5":  "/assets/aurin/little-dreamers-hero.png",
+  "6-8":  "/assets/aurin/explorers-hero.png",
+  "9-12": "/assets/aurin/dreamweavers-hero.png",
+};
+
 export default function KidsUniverse() {
   const freeAccess = useFreeAccess();
   const [kidsBooks, setKidsBooks] = useState([]);
@@ -204,7 +214,18 @@ export default function KidsUniverse() {
   }, []);
 
   return (
-    <div data-testid="page-kids">
+    <div data-testid="page-kids" className="relative">
+      {/* §KIDS-UNIVERSE-V3 2026-02-10 — Floating Aurin companion in
+          the corner, watching from above. Anna's directive: the page
+          must feel inhabited, not a list. */}
+      <img
+        src="/assets/aurin/aurin-companion.png"
+        alt=""
+        aria-hidden="true"
+        data-testid="kids-universe-aurin-companion"
+        className="hidden md:block pointer-events-none absolute top-32 right-6 lg:right-12 w-28 lg:w-36 opacity-90 z-10 animate-pulse"
+        style={{ animationDuration: "5s" }}
+      />
       <PageHeader
         tone="kids"
         eyebrow="Kids Universe"
@@ -253,30 +274,68 @@ export default function KidsUniverse() {
                     type="button"
                     onClick={() => setOpenAge(isOpen ? null : g.slug)}
                     data-testid={`kids-age-${g.slug}-toggle`}
-                    className="relative w-full text-left p-8 cursor-pointer"
+                    className="relative w-full text-left cursor-pointer"
                     aria-expanded={isOpen}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="w-11 h-11 rounded-full border border-[hsl(var(--aurin-border))] flex items-center justify-center text-[hsl(var(--aurin-sage))]">
-                        <Icon size={18} strokeWidth={1.4} />
+                    {/* §KIDS-UNIVERSE-V3 2026-02-10 — Artist-made hero image
+                        anchors the card. Wraps the abstract icon-circle in
+                        actual painted scene so the page IS the room, not
+                        a list of boxes. */}
+                    {AGE_HERO_IMAGE[g.slug] && (
+                      <div
+                        className="relative w-full overflow-hidden"
+                        style={{
+                          height: 220,
+                          background: i % 2 === 0
+                            ? "linear-gradient(180deg, #f3eadd 0%, #e8d8c5 100%)"
+                            : "linear-gradient(180deg, #e8e0d0 0%, #d8c8b0 100%)",
+                        }}
+                      >
+                        <img
+                          src={AGE_HERO_IMAGE[g.slug]}
+                          alt={`${g.title} — ${g.age}`}
+                          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                          data-testid={`kids-age-${g.slug}-hero-image`}
+                        />
+                        {/* Soft top gradient so the eyebrow text inside is readable */}
+                        <div
+                          className="absolute inset-x-0 top-0 h-20 pointer-events-none"
+                          style={{
+                            background: "linear-gradient(180deg, rgba(255,250,240,0.6) 0%, rgba(255,250,240,0) 100%)",
+                          }}
+                        />
+                        <div className="absolute top-4 left-5 right-5 flex items-start justify-between gap-2">
+                          <span className="text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))] bg-white/70 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                            {g.age}
+                          </span>
+                          <ChevronDown
+                            size={18}
+                            className={`text-[hsl(var(--aurin-text-muted))] transition-transform duration-300 bg-white/70 rounded-full p-0.5 ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </div>
                       </div>
-                      <ChevronDown
-                        size={18}
-                        className={`text-[hsl(var(--aurin-text-muted))] transition-transform duration-300 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </div>
-                    <div className="mt-7 text-[11px] uppercase tracking-[0.22em] text-[hsl(var(--aurin-text-muted))]">
-                      {g.age}
-                    </div>
-                    <h3 className="aurin-display text-2xl mt-2">{g.title}</h3>
-                    <p className="mt-4 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
-                      {g.description}
-                    </p>
-                    <div className="mt-5 text-[12px] tracking-[0.16em] uppercase text-[hsl(var(--aurin-sage))] flex items-center gap-1.5">
-                      {isOpen ? "Close" : "See what's free for this age"}
-                      <ArrowRight size={11} />
+                    )}
+                    <div className="p-7">
+                      <h3
+                        className="text-[32px] sm:text-[36px] leading-[1.05]"
+                        style={{
+                          fontFamily: "Caveat, Fraunces, serif",
+                          fontWeight: 600,
+                          color: "hsl(var(--aurin-sage))",
+                        }}
+                      >
+                        {g.title}
+                      </h3>
+                      <p className="mt-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+                        {g.description}
+                      </p>
+                      <div className="mt-5 text-[12px] tracking-[0.16em] uppercase text-[hsl(var(--aurin-sage))] flex items-center gap-1.5">
+                        {isOpen ? "Close" : "See what's free for this age"}
+                        <ArrowRight size={11} />
+                      </div>
                     </div>
                   </button>
 

@@ -137,7 +137,17 @@ export default function ParentsRoom() {
   const activeLensObj = lenses.find((l) => l.id === activeLens) || lenses.find((l) => l.id === DEFAULT_LENS);
 
   return (
-    <div data-testid="page-parents-room" className="sanctuary-room">
+    <div data-testid="page-parents-room" className="sanctuary-room relative">
+      {/* §PARENTS-ROOM-VISUAL 2026-02-10 — Anna's directive (multiple
+          times): the parents' room must FEEL inhabited, not text-on-page.
+          Aurin's companion sits at the top-right, watching softly. */}
+      <img
+        src="/assets/aurin/aurin-companion.png"
+        alt=""
+        aria-hidden="true"
+        data-testid="parents-room-aurin-companion"
+        className="hidden md:block pointer-events-none absolute top-24 right-6 lg:right-10 w-24 lg:w-32 opacity-85 z-10"
+      />
       <PageHeader
         eyebrow="Parents' Room · Wisdom Weaver"
         title="Three wisdom traditions, one calm room for parents."
