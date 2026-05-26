@@ -858,3 +858,51 @@ Telegram share (her explicit ask). Approved go-ahead: A1+A2.
 - Whether to build dedicated `/high-performers` landing page
 - Whether to ship the bulk Body Temple launch email (still GO when
   ≥20 real parents have signed up via Cycle 01 portal)
+
+
+### 2026-02-10 AFTERNOON — Economics + /high-performers + 5 Micro MUSE keys
+
+**Founder approved entire economic plan**. Acted on every item:
+
+1. **5 Micro MUSE Guest Keys minted** (Cycle 01 distribution)
+   - Each: 10 uses × 15 voice-min + Body Temple unlock, 45-day expiry
+   - **Maximum total cost exposure**: €97.50 if every single redemption maxes out
+   - **Realistic expected cost** (40% redemption × 60% minute-use): ~€23
+   - Codes ready for Anna's hand-distribution:
+     - `MUSETLMJND` / `MUSEGV8RFK` / `MUSE3FHB9S` / `MUSE3TVFK7` / `MUSEGBLPQL`
+   - Share URL pattern: `https://prulesoul.site/portal?key=MUSEXXXXXX`
+
+2. **`/high-performers` LinkedIn landing page — LIVE**
+   - File: `frontend/src/pages/HighPerformers.jsx` (~250 lines)
+   - B2B-positioned ("decision-recovery", "professional OS",
+     "the calendar that ate my sleep") — uses Linguistic Guardrails-
+     approved vocabulary only. NO trauma/anxiety/therapy/mental-health.
+   - Hero (Fraunces serif) → felt-lines (Caveat handwriting) →
+     4 pillars (gradient cards with sheen) → founder voice (Anna's
+     03:14 Monday story) → "what it is/isn't" legal-safe disclaimer →
+     final CTA. All paths point to `/body-temple` for checkout.
+   - Auto-fires `?utm_source=high_performers&utm_campaign=linkedin_b2b`
+     to `referral_hits` for LinkedIn conversion tracking.
+
+3. **Economics document** — `/app/memory/ECONOMICS_2026-02-10.md`
+   - Real cost basis: €0.13/voice-min (ElevenLabs $0.10 + Claude $0.04)
+   - Top-up margins 66-73% across all rungs
+   - Family Bundle $59 → 80% margin (cost basis $8.10, LS fee $3.45,
+     perceived value $104 with 43% "value-frame" anchor)
+   - 5 Micro-key strategy validated as max €97.50 worst-case
+   - Break-even: 4 × €36 top-ups OR 2.1 × Family Bundles cover monthly
+     ElevenLabs Pro fixed costs
+
+**Paddle vs FastSpring** — comprehensive answer delivered:
+- Hold LemonSqueezy today (it's working, Paddle owns LS since 2024 anyway)
+- Migrate to Paddle ONLY IF: LS limits AI products / Anna hits €10k/mo /
+  needs subscription pause / discovers FS-tier fee differential
+- Never go FastSpring (0.9% higher fees, 3-7 day approval, AI-conservative)
+
+**Beta audit**: 10/10 routes 200 OK, lint clean
+
+**Awaiting Anna / LS Agent:**
+- LS Agent: create 4 P0 TopUp variants (€9, €18, €36, €108) +
+  Family Bundle ($59) → drop env IDs in Deploy
+- Marketing Agent: LinkedIn copy + ≥10 business email list
+- Anna: distribute the 5 MUSE keys to chosen influencers
