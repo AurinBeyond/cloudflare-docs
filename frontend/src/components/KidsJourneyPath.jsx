@@ -86,6 +86,21 @@ const THEMES = {
     accent: "#4a3a1c",
     companion: "/assets/illustrations/aurin-sovereign.png",
   },
+  "parents-room": {
+    label: "Parents' quiet path",
+    pathColor: "#a6906f",
+    stoneShape: "river",
+    stoneFill: "#f4ecdd",
+    stoneStroke: "#7a6244",
+    unlockedFill: "#e9dcc1",
+    todayGlow: "#caa269",
+    completedFill: "#7c8a62",
+    starColor: "#caa269",
+    bg: "linear-gradient(160deg, #f5ecd9 0%, #d8c4a2 60%, #b89b73 100%)",
+    title: "One step closer to yourself and your child",
+    accent: "#3a2c1c",
+    companion: "/assets/illustrations/aurin-sovereign.png",
+  },
 };
 
 // Tiny themed glyphs that ride inside the stone — gives each day its own
@@ -145,6 +160,24 @@ function StoneShape({ shape, state, theme }) {
           style={{ filter: glow }}
         />
         <polygon points="20,3 33,11 20,18 7,11" fill="white" opacity="0.32" />
+      </g>
+    );
+  }
+  if (shape === "river") {
+    // River-worn stones for parents — soft, oblong, with a quiet
+    // weight to them. Two layered ovals create the "depth" of a
+    // pebble that has been smoothed by years of water.
+    return (
+      <g opacity={opacity}>
+        <ellipse
+          cx="20" cy="19" rx="17" ry="11"
+          fill={fill}
+          stroke={theme.stoneStroke}
+          strokeWidth="1.4"
+          style={{ filter: glow }}
+        />
+        <ellipse cx="17" cy="14" rx="9" ry="3" fill="white" opacity="0.5" />
+        <ellipse cx="22" cy="24" rx="6" ry="1.6" fill="black" opacity="0.1" />
       </g>
     );
   }
@@ -227,6 +260,8 @@ export default function KidsJourneyPath({
   const theme = THEMES[themeKey] || THEMES["explorers"];
   const slug = childSlug || themeKey;
   const isBodyTemple = themeKey === "body-temple";
+  const isParentsRoom = themeKey === "parents-room";
+  const isAdultPath = isBodyTemple || isParentsRoom;
 
   const [todayIndex, setTodayIndex] = useState(todayIndexProp ?? 1);
   const [completedDays, setCompletedDays] = useState(completedDaysProp ?? []);
@@ -234,8 +269,8 @@ export default function KidsJourneyPath({
   const [messages, setMessages] = useState([]);
   const [openDay, setOpenDay] = useState(null);
 
-  // Fetch live progress for Kids age groups (not Body Temple — that
-  // owns its own state via props).
+  // Fetch live progress for Kids age groups + Parents Room (Body
+  // Temple owns its own state via props from /api/body-temple/overview).
   useEffect(() => {
     if (isBodyTemple || todayIndexProp != null) return;
     let alive = true;
@@ -577,7 +612,7 @@ export default function KidsJourneyPath({
             <Star size={11} style={{ color: theme.starColor }} />
             {completedDays.length} of {totalDays} walked
           </span>
-          {!isBodyTemple && (
+          {!isAdultPath && (
             <Link
               to={`/kids-universe/${slug}/daily`}
               data-testid="kids-journey-cta"

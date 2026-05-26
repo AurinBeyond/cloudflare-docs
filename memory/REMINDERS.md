@@ -179,3 +179,55 @@ are never accidentally dropped during agent prompt edits.
 *This file is read by E1 at the start of every fork session. If
 Anna's first message tomorrow contains the two real Sara/Alistair
 agent IDs, jump straight to the steps above.*
+
+
+---
+
+# §REMINDER-2026-06-05 — Anna's deferred Phase-5 items
+
+Anna requested on **2026-02-10 LATE-PM** that the next agent **remind her
+on 5 June 2026** about the items below. She is currently deprioritising
+them to focus on Phase 5 polish and marketing copy.
+
+### 1. LemonSqueezy — abandoned (no response since 21 Jan)
+- **Decision**: moving forward without LS. Keep webhooks dormant.
+- **On 5 June**: ask if to fully remove `/api/lemonsqueezy/*` routes
+  and the affiliate middleware. Don't remove yet.
+
+### 2. Per-room themed backgrounds (Kids Universe)
+- Anna wants different visuals per "room" the path leads into:
+  - **Fairy-tale / story room** → golden / mossy / parchment frame
+  - **Drawing / coloring room** → outline mountain + cloud silhouettes
+  - **Activity / quest room** → sparkling path overlay
+  - **Stars room** → constellation backdrop
+- Code touchpoint: `KidsJourneyPath.jsx` THEMES dict — add a `frame`
+  prop per theme that renders a decorative border overlay inside the SVG.
+
+### 3. Different stone shapes per activity-type
+- Curriculum activity day → leaf stone
+- Story-tegevus day → cloud stone
+- Art-tegevus day → puzzle piece
+- Map slug→shape in StoneShape switch. ~3-4h.
+
+### 4. Resend domain note
+- `prulesoul.site` is verified (per Anna on 2026-02-10). Code already
+  prefers @prulesoul.site senders; sandbox fallback only fires on
+  Resend's "domain not verified" error.
+- On 5 June: spot-check `/admin/audit/email` for any fallback firings
+  in past 30 days. If clean → remove sandbox retry path.
+
+### 5. Kids → Parents Room cross-sell
+- Now that Parents Room has its own 28-day path, consider a soft inline
+  CTA in KidsHub linking parents to their own path.
+
+### 6. FastSpring contract
+- If signed: migrate webhooks from LS to FastSpring code paths. Ref:
+  `/app/memory/FASTSPRING_CATALOGUE_2026-02-10.md`.
+
+### 7. Marketing copy review (Body Room / Grace / single-person)
+- Anna pasted GPT-generated copy on 2026-02-10. Approved-for-page lines
+  are listed in chat thread. Per-line approval still pending before
+  the lines land in production pages.
+
+**Stored by**: main agent, fork iteration 82c (Feb 10 2026 LATE-PM v3).
+

@@ -2852,7 +2852,13 @@ async def kids_mood_parent_portal(request: Request, days: int = 7):
 # =============================================================
 @api_router.get("/kids-journey/progress")
 async def kids_journey_progress(request: Request, child_slug: str = "explorers"):
-    slug = normalise_age_slug(child_slug)
+    # §PARENTS-PATH 2026-02-10 — Parents Room twin 28-day path
+    # bypasses kids slug validation since "parents-room" is its
+    # own bucket, not a kids age band.
+    if child_slug == "parents-room":
+        slug = "parents-room"
+    else:
+        slug = normalise_age_slug(child_slug)
     user = await _resolve_current_user(request)
 
     today_index = 1
@@ -2871,14 +2877,20 @@ async def kids_journey_progress(request: Request, child_slug: str = "explorers")
         days_since = (datetime.now(timezone.utc).date() - anchor.date()).days
         today_index = max(1, min(days_since + 1, JOURNEY_TOTAL_DAYS))
 
-        # Distinct calendar days with a mood check-in for this child.
-        cursor = db.kids_mood_checkins.find(
-            {"user_id": user.user_id, "child_slug": slug},
-            {"_id": 0, "day": 1, "created_at": 1},
-        ).sort("created_at", 1).limit(200)
+        # Parents path counts distinct days they've opened the
+        # parents-room lenses (we reuse parents_room_visits if it
+        # exists; otherwise the count is empty until they engage).
+        if slug == "parents-room":
+            cursor = db.parents_room_visits.find(
+                {"user_id": user.user_id},
+                {"_id": 0, "day": 1, "created_at": 1},
+            ).sort("created_at", 1).limit(200)
+        else:
+            cursor = db.kids_mood_checkins.find(
+                {"user_id": user.user_id, "child_slug": slug},
+                {"_id": 0, "day": 1, "created_at": 1},
+            ).sort("created_at", 1).limit(200)
         rows = await cursor.to_list(length=200)
-        # Map first check-in calendar-day → day index 1, second distinct day → 2, etc.
-        # Capped at JOURNEY_TOTAL_DAYS.
         seen_days: list[str] = []
         for r in rows:
             d = r.get("day")
@@ -2899,7 +2911,7 @@ async def kids_journey_progress(request: Request, child_slug: str = "explorers")
 
 @api_router.get("/kids-journey/day/{day_index}")
 async def kids_journey_day(day_index: int, child_slug: str = "explorers"):
-    slug = normalise_age_slug(child_slug)
+    slug = "parents-room" if child_slug == "parents-room" else normalise_age_slug(child_slug)
     idx = max(1, min(int(day_index or 1), JOURNEY_TOTAL_DAYS))
     return {
         "child_slug": slug,

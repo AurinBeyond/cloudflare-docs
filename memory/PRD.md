@@ -1117,3 +1117,49 @@ backgrounds for later iteration.
 until she decides the content shape. Code is now ready to host a
 fourth `parents-room` theme (just add a new entry to `THEMES`).
 
+
+
+### 2026-02-10 LATE-PM v3 — Parents Room 28-day path + LS deprioritised
+
+**Anna's three decisions this evening:**
+1. **LemonSqueezy abandoned** (no response since 21 Jan). Moving on
+   without LS. Webhooks kept dormant; full removal queued for 5 June check-in.
+2. **Resend confirmed verified** (`prulesoul.site`). Email code already
+   prefers @prulesoul.site senders by default — no env change needed.
+3. **Parents Room 28-day path approved** — her own idea. Built today.
+
+**Shipped:**
+- Backend `/api/kids-journey/progress?child_slug=parents-room` returns
+  28 messages tuned for parents (e.g. *"Day 1 — start where you are."*,
+  *"Day 28 — one step closer to understanding yourself and your child."*).
+  Reads from a separate `parents_room_visits` collection for "walked
+  days" so kids' and parents' progress never mix.
+- Frontend `KidsJourneyPath` adds a `parents-room` theme: warm tan
+  background, river-worn (oblong) pebbles, a new `shape="river"`
+  variant, and the title *"One step closer to yourself and your child"*.
+- `/parents-room` page now hosts the path between the Sara ConvAI tile
+  and the Calm Parent's Code ritual. Stone click smooth-scrolls the
+  wanderer down to the existing ritual section (no separate route,
+  reuses today's content).
+- `aurin-sovereign.png` is the floating companion above today's pebble
+  (clipped to the character half).
+
+**Verified:**
+- Backend pytest: 4/4 (existing tests still pass; parents-room shows up
+  via the existing `progress` endpoint with the new slug).
+- Real-Playwright smoke: 28 stones render, "I enter consciously" gate
+  passes, stone-5 click handler fires and smooth-scrolls correctly.
+- Kids navigation audit re-run: 52/52 routes still clean.
+
+**Files touched:**
+- `/app/backend/kids_journey.py` (+ 28 parents-room messages prepended)
+- `/app/backend/server.py` (parents-room slug bypass + parents_room_visits source)
+- `/app/frontend/src/components/KidsJourneyPath.jsx` (theme + river shape + isAdultPath flag)
+- `/app/frontend/src/pages/ParentsRoom.jsx` (new `parents-room-path` section)
+- `/app/memory/REMINDERS.md` (5 June reminder block appended)
+
+**5 June 2026 reminder set** in `/app/memory/REMINDERS.md` covering:
+LS removal decision, per-room themed backgrounds, activity-type stone
+shapes, Resend fallback cleanup, Kids→Parents cross-sell CTA,
+FastSpring migration trigger, GPT marketing-copy per-line approval.
+

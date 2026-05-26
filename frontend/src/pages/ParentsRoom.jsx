@@ -27,6 +27,7 @@ import {
   PlaneTakeoff, GraduationCap, HandHeart, Check, X, ArrowRight,
 } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import KidsJourneyPath from "@/components/KidsJourneyPath";
 import { api } from "@/lib/api";
 import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
@@ -163,6 +164,33 @@ export default function ParentsRoom() {
           {/* §AUDIT-SCALE 2026-05-20 — Tracker wraps RoomConvaiChat
               internally so we do not double-mount the SDK. */}
           <ConvaiPresenceTracker room="parents" />
+        </div>
+      </section>
+
+      {/* §PARENTS-PATH 2026-02-10 — Anna's own idea: parents need their
+          own 28-day quiet path too. "One step closer to understanding
+          yourself and your child." Same stein-på-stein language as
+          Kids and Body Temple, with river-worn pebbles in a warm tan
+          palette to signal "adult, weighed, gentle". Each stone opens
+          a soft popup with Aurin's tiny invitation; the popup CTA
+          routes to the existing Parents Room ritual area. */}
+      <section className="aurin-section-sm" data-testid="parents-room-path">
+        <div className="aurin-container max-w-[820px]">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-[hsl(var(--aurin-sage))] mb-3 text-center">
+            A 28-day quiet path
+          </p>
+          <KidsJourneyPath
+            ageSlug="parents-room"
+            childSlug="parents-room"
+            onStoneClick={(day) => {
+              // Scroll the wanderer down to the ritual / lens area —
+              // that is the "today's invitation" surface for parents.
+              const target = document.querySelector('[data-testid="parents-calm-code"]')
+                          || document.querySelector('[data-testid="parents-situations"]');
+              if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            showFooter={false}
+          />
         </div>
       </section>
 

@@ -13,6 +13,40 @@ JOURNEY_TOTAL_DAYS = 28
 
 
 JOURNEY_MESSAGES: dict[str, list[str]] = {
+    "parents-room": [
+        # Week 1 — slow open
+        "Day 1 — start where you are.",
+        "Notice one small thing about your child you've never named before.",
+        "What did your own parents teach you about feeling?",
+        "A breath, longer than usual.",
+        "Where in your day is the most rushing?",
+        "Name one quality you keep trying to give your child.",
+        "Rest is not a reward. It is a foundation.",
+        # Week 2 — listening
+        "What does your child do when they feel unsafe?",
+        "What do you do when YOU feel unsafe?",
+        "Ask less today. Listen more.",
+        "Notice the moment before you react.",
+        "What part of your child reminds you of you?",
+        "A small kindness, given without reason.",
+        "Sit beside them in silence today.",
+        # Week 3 — recovery
+        "Forgive yourself for one thing today.",
+        "What's a story you tell yourself about being a parent?",
+        "Is that story still true?",
+        "Where did you learn to be hard on yourself?",
+        "What would softness feel like, today?",
+        "A walk, with no destination.",
+        "Notice what your body has been carrying.",
+        # Week 4 — integration
+        "What's one boundary you keep meaning to set?",
+        "Today, set it gently.",
+        "Tell your child something you love about them — out loud.",
+        "What would you tell your younger self today?",
+        "Your child is watching how you treat yourself.",
+        "Rest before tomorrow asks for you.",
+        "Day 28 — one step closer to understanding yourself and your child.",
+    ],
     "little-dreamers": [
         # Week 1 — gentle hello
         "A soft hello. Today, just be little.",
