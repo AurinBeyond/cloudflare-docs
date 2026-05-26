@@ -206,8 +206,8 @@ export default function KidsStarsView() {
         {/* Actions */}
         <section className="mt-10">
           <h2
-            className="font-serif text-[22px] mb-1.5"
-            style={{ color: palette.text }}
+            className="text-[34px] sm:text-[38px] leading-[1.1] mb-1.5"
+            style={{ color: palette.accent, fontFamily: "Caveat, Fraunces, serif", fontWeight: 600 }}
           >
             Things that earn a star
           </h2>
@@ -225,16 +225,24 @@ export default function KidsStarsView() {
                 disabled={pendingSlug === a.slug}
                 onClick={() => requestStar(a)}
                 data-testid={`kids-stars-action-${a.slug}`}
-                className="group text-left rounded-xl p-5 transition disabled:opacity-60"
+                className="group text-left rounded-xl p-5 transition disabled:opacity-60 relative overflow-hidden hover:-translate-y-0.5"
                 style={{
-                  background: palette.cardBg,
-                  border: `1px solid ${palette.cardBorder}`,
+                  background: `linear-gradient(160deg, #ffffff 0%, ${palette.accent}12 60%, ${palette.accent}22 100%)`,
+                  border: `1.5px solid ${palette.cardBorder}`,
                   color: palette.text,
+                  boxShadow: `0 8px 20px -14px ${palette.accent}88, inset 0 1px 0 rgba(255,255,255,0.85)`,
                 }}
               >
-                <div className="flex items-start justify-between gap-3">
+                <span aria-hidden="true"
+                      className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-xl"
+                      style={{
+                        height: "34%",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%)",
+                      }} />
+                <div className="relative flex items-start justify-between gap-3">
                   <span
-                    className="text-[15px] leading-snug flex-1"
+                    className="text-[18px] leading-snug flex-1"
+                    style={{ fontFamily: "Caveat, Fraunces, serif", fontWeight: 500 }}
                   >
                     {a.label}
                   </span>
@@ -249,7 +257,7 @@ export default function KidsStarsView() {
                   </span>
                 </div>
                 <span
-                  className="mt-3 inline-flex items-center gap-1 text-[12.5px] tracking-wide"
+                  className="relative mt-3 inline-flex items-center gap-1 text-[12.5px] tracking-wide"
                   style={{ color: palette.accent }}
                 >
                   I did this
@@ -312,8 +320,8 @@ export default function KidsStarsView() {
             doesn't compete with the "earn for myself" lane. */}
         {reciprocalCatalog.length > 0 && (
           <section className="mt-14" data-testid="kids-stars-reciprocal-section">
-            <h2 className="font-serif text-[22px] mb-1.5"
-                style={{ color: palette.text }}>
+            <h2 className="text-[32px] sm:text-[36px] leading-[1.1] mb-1.5"
+                style={{ color: palette.accent, fontFamily: "Caveat, Fraunces, serif", fontWeight: 600 }}>
               Give a star to your grown-up
             </h2>
             <p className="text-[14px] mb-6"
@@ -329,18 +337,26 @@ export default function KidsStarsView() {
                   disabled={pendingSlug === a.slug}
                   onClick={() => giveStarToParent(a)}
                   data-testid={`kids-stars-reciprocal-${a.slug}`}
-                  className="group text-left rounded-xl p-5 transition disabled:opacity-60"
+                  className="group text-left rounded-xl p-5 transition disabled:opacity-60 relative overflow-hidden hover:-translate-y-0.5"
                   style={{
-                    background: palette.cardBg,
-                    border: `1px solid ${palette.cardBorder}`,
+                    background: `linear-gradient(160deg, #ffffff 0%, ${palette.accent}12 60%, ${palette.accent}22 100%)`,
+                    border: `1.5px solid ${palette.cardBorder}`,
                     color: palette.text,
+                    boxShadow: `0 8px 20px -14px ${palette.accent}88, inset 0 1px 0 rgba(255,255,255,0.85)`,
                   }}>
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="text-[15px] leading-snug flex-1">{a.label}</span>
+                  <span aria-hidden="true"
+                        className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-xl"
+                        style={{
+                          height: "34%",
+                          background: "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%)",
+                        }} />
+                  <div className="relative flex items-start justify-between gap-3">
+                    <span className="text-[18px] leading-snug flex-1"
+                          style={{ fontFamily: "Caveat, Fraunces, serif", fontWeight: 500 }}>{a.label}</span>
                     <Heart size={14}
                            style={{ color: palette.accent }} className="shrink-0 mt-0.5" />
                   </div>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[12.5px] tracking-wide"
+                  <span className="relative mt-3 inline-flex items-center gap-1 text-[12.5px] tracking-wide"
                         style={{ color: palette.accent }}>
                     Send this <Sparkles size={11} className="transition-transform group-hover:rotate-12" />
                   </span>
@@ -353,8 +369,8 @@ export default function KidsStarsView() {
         {/* Reward tiers */}
         <section className="mt-12">
           <h2
-            className="font-serif text-[22px] mb-1.5"
-            style={{ color: palette.text }}
+            className="text-[32px] sm:text-[36px] leading-[1.1] mb-1.5"
+            style={{ color: palette.accent, fontFamily: "Caveat, Fraunces, serif", fontWeight: 600 }}
           >
             Mystery wishes
           </h2>

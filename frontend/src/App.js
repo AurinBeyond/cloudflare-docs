@@ -12,6 +12,8 @@ import ReachOut from "@/pages/ReachOut";
 import KidsUniverse from "@/pages/KidsUniverse";
 import KidsColoringStudio from "@/pages/KidsColoringStudio";
 import KidsHub from "@/pages/KidsHub";
+import StoryGiftForm from "@/pages/StoryGiftForm";
+import StoryGiftRead from "@/pages/StoryGiftRead";
 import KidsStarsView from "@/pages/KidsStarsView";
 import KidsDaily from "@/pages/KidsDaily";
 import KidsActivities from "@/pages/KidsActivities";
@@ -99,6 +101,9 @@ function AppRouter() {
         <Route path="/learning" element={<Learning />} />
         <Route path="/kids-universe" element={<KidsUniverse />} />
         <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
+        {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
+        <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
+        <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />
         {/* §KIDS-HUBS 2026-02-09 — age-themed Hubs + Angel Stars MVP.
             Slug accepts both modern names (little-dreamers, explorers,
             dreamweavers) and legacy "3-5" / "6-8" / "9-12". */}

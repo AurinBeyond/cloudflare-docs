@@ -3697,6 +3697,95 @@ async def grace_modes():
     return {"modes": list(GRACE_MODES.values())}
 
 
+# =============================================================
+# §SYNERGY-ANNELI 2026-02-10 — Personalised story growth-loop.
+# A parent fills a 3-field form; Claude generates a 200-word
+# bedtime story with the child's name twice, the feeling once.
+# Shareable via WhatsApp / Telegram / Email / Copy.
+# Free for everyone — this is the zero-CAC growth engine.
+# =============================================================
+from aurin_story_gift import generate_story as _gen_story, serialize_gift as _gift_doc  # noqa: E402
+
+
+class StoryGiftInput(BaseModel):
+    child_name: str
+    feeling: Literal["scared","curious","sad","proud","lonely","angry","tired","happy"]
+    age_band: Literal["3-5", "6-8", "9-12"] = "6-8"
+    parent_email: Optional[str] = None
+
+
+@api_router.get("/story-gift/feelings")
+async def story_gift_feelings():
+    """Public — list of accepted feelings + age bands for the UI."""
+    return {
+        "feelings": [
+            {"slug": "scared",   "label": "Scared of something"},
+            {"slug": "curious",  "label": "Curious"},
+            {"slug": "sad",      "label": "A little sad"},
+            {"slug": "proud",    "label": "Proud of themselves"},
+            {"slug": "lonely",   "label": "Lonely"},
+            {"slug": "angry",    "label": "Angry"},
+            {"slug": "tired",    "label": "Very tired"},
+            {"slug": "happy",    "label": "Happy"},
+        ],
+        "age_bands": [
+            {"slug": "3-5",  "label": "3 to 5"},
+            {"slug": "6-8",  "label": "6 to 8"},
+            {"slug": "9-12", "label": "9 to 12"},
+        ],
+    }
+
+
+@api_router.post("/story-gift/create")
+async def story_gift_create(inp: StoryGiftInput):
+    """Public — anyone can generate one story. Rate limit applies."""
+    name = (inp.child_name or "").strip()
+    if not name or len(name) > 32:
+        raise HTTPException(status_code=400, detail="Please use the child's first name (1-32 letters).")
+    if not re.match(r"^[A-Za-zÀ-ÿ' -]+$", name):
+        raise HTTPException(status_code=400, detail="Use letters only for the child's name.")
+
+    result = await _gen_story(
+        child_name=name,
+        feeling=inp.feeling,
+        age_band=inp.age_band,
+    )
+    if not result.get("ok"):
+        if result.get("error") == "llm_not_configured":
+            raise HTTPException(status_code=503, detail="Story engine is resting. Please try again soon.")
+        raise HTTPException(status_code=502, detail="A small gust closed the door. Please try once more.")
+
+    doc = _gift_doc(story_obj=result, parent_email=inp.parent_email)
+    await db.story_gifts.insert_one(doc)
+
+    base = os.environ.get("PUBLIC_BASE_URL", "https://prulesoul.site").rstrip("/")
+    share_url = f"{base}/aurins-room/gift/{doc['slug']}?ref=story_gift&utm_source=anneli"
+    return {
+        "ok": True,
+        "slug": doc["slug"],
+        "title": doc["title"],
+        "story": doc["story"],
+        "word_count": doc["word_count"],
+        "share_url": share_url,
+    }
+
+
+@api_router.get("/story-gift/{slug}")
+async def story_gift_read(slug: str):
+    """Public — render a previously generated gift story."""
+    doc = await db.story_gifts.find_one({"slug": slug}, {"_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="This story has drifted away.")
+    return {
+        "slug": doc["slug"],
+        "title": doc["title"],
+        "story": doc["story"],
+        "name_used": doc.get("name_used"),
+        "word_count": doc.get("word_count"),
+        "created_at": doc.get("created_at"),
+    }
+
+
 class GraceModeSelectInput(BaseModel):
     mode: str
 

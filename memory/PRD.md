@@ -794,3 +794,67 @@ EXECUTION PROTOCOL" requesting: (1) Body Temple Resend cascade,
 - Optional `/admin/dashboard` build-out (~30min, would save daily
   founder DB queries)
 - Family Bundle (Synergy #3) — needs LS variant ID
+
+
+### 2026-02-10 MORNING — Faas 5 (Kids visual unification) + Anneli Story Gift Growth Loop
+
+**Founder context**: Anna pointed out (correctly) that Faas 5 was paused mid-way.
+She also asked to build the Anneli personalised story idea immediately, with
+Telegram share (her explicit ask). Approved go-ahead: A1+A2.
+
+**Shipped (additive, no regressions, beta-audited 14/14 routes 200):**
+
+1. **§FAAS-5 (continuation) — Kids visual unification across 3 missing pages**
+   - `KidsDaily.jsx` — Caveat H1 ("How are you, really?") in palette.accent;
+     mood cards with gradient + top-sheen + per-palette glow shadow.
+   - `KidsStarsView.jsx` — Caveat H2 ("Things that earn a star",
+     "Give a star to your grown-up", "Mystery wishes"); action buttons
+     redesigned with gradient + sheen + Caveat labels at 18px.
+   - `KidsActivities.jsx` (detail view) — Caveat H1 for activity title;
+     instruction step cards re-cased with gradient + sheen.
+   - All three honour the per-age palette (Little Dreamers blush /
+     Explorers sage / Dreamweavers indigo).
+
+2. **§SYNERGY-ANNELI — Personalised Story Gift growth loop**
+   - Backend module `aurin_story_gift.py`: Claude Sonnet 4.5 generates
+     200-word bedtime story in Anna's voice. 8 feelings × 3 age bands
+     × specific mood-anchored opening. Hard tone rules (no "journey/
+     unlock/magical adventure"; one fragment sentence; one sensory
+     detail; ends with a quiet image, not a moral).
+   - Backend endpoints in `server.py`:
+     - `GET  /api/story-gift/feelings` (8 feelings + 3 age bands)
+     - `POST /api/story-gift/create` (validates + generates + stores)
+     - `GET  /api/story-gift/{slug}` (reader view)
+   - DB collection `story_gifts` (slug-indexed, persistent for re-render)
+   - Frontend pages:
+     - `/aurins-room/gift` — 3-field form (name, feeling, age band)
+     - `/aurins-room/gift/:slug` — reader view with **WhatsApp · Telegram
+       · Email · Copy link** share strip + growth-loop CTA "Would you
+       like one for your own child tonight?" + 3 soft doorways (more
+       stories, Body Temple, Kids Universe).
+   - Live LLM test verified: 199-word story, child's name appears,
+     no banned words detected, ends with sensory trailing image.
+   - UTM analytics: every share carries `?ref=story_gift&utm_source=anneli`;
+     every "make own story" click carries `?ref=gift_inception` — these
+     land in `referral_hits` for 5%-hypothesis measurement.
+
+**Anna's strategic Q&A answered:**
+- **Faas 2**: Confirmed already shipped in iter 81 (Alistair persona on
+  Course Room with 3 modes). Anna asked if she wanted a dedicated
+  `/high-performers` landing page — pending her morning decision.
+- **Family Bundle LS Variant ID**: Specified — Anna creates one LS variant
+  "Family Bundle — Body Temple + Kids Universe Premium" at $59 one-time,
+  passes its 12-digit ID via `LEMONSQUEEZY_VARIANT_FAMILY_BUNDLE` env.
+  Code can be wired in ~30min once ID exists.
+- **Paddle vs FastSpring**: Recommended Paddle (owner of LemonSqueezy
+  since 2024; AI-friendly; faster onboarding; cheaper). FastSpring
+  reserved as plan B. No urgency — LS already functional.
+- **LS Top-Up 9-rung variants**: pending — needs 3-way coordination
+  with Anna + Marketing Agent + LS Agent (Anna's call).
+
+**Awaiting Anna's morning approval / data:**
+- LS Top-Up variant IDs (9 of them) for €0.60/min ladder
+- Family Bundle variant ID (when she creates it)
+- Whether to build dedicated `/high-performers` landing page
+- Whether to ship the bulk Body Temple launch email (still GO when
+  ≥20 real parents have signed up via Cycle 01 portal)

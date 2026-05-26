@@ -94,7 +94,8 @@ export default function KidsDaily() {
               <AurinSparkle variant="ambient" size={92} data-testid="kids-daily-sparkle" />
               <p className="text-[11px] uppercase tracking-[0.28em] mt-3 mb-3"
                  style={{ color: palette.textMuted }}>A quiet daily check-in</p>
-              <h1 className="font-serif text-[30px] sm:text-[38px] leading-[1.1] max-w-[20ch]">
+              <h1 className="text-[40px] sm:text-[52px] leading-[1.05] max-w-[20ch]"
+                  style={{ fontFamily: "Caveat, Fraunces, serif", fontWeight: 600, color: palette.accent }}>
                 How are you, really?
               </h1>
               <p className="mt-4 text-[16px] leading-relaxed max-w-[42ch]"
@@ -109,16 +110,28 @@ export default function KidsDaily() {
                 return (
                   <button key={m.slug} type="button" onClick={() => setMood(m.slug)}
                     data-testid={`kids-daily-mood-${m.slug}`}
-                    className="rounded-2xl p-3 sm:p-4 text-center transition"
+                    className="kids-mood-card group relative rounded-2xl p-3 sm:p-4 text-center transition overflow-hidden"
                     style={{
-                      background: selected ? palette.accent : palette.cardBg,
+                      background: selected
+                        ? `linear-gradient(160deg, ${palette.accent} 0%, ${palette.accent}dd 100%)`
+                        : `linear-gradient(160deg, #ffffff 0%, ${palette.accent}12 60%, ${palette.accent}22 100%)`,
                       border: `1.5px solid ${selected ? palette.accent : palette.cardBorder}`,
                       color: selected ? "#fff" : palette.text,
                       transform: selected ? "translateY(-2px)" : "none",
-                      boxShadow: selected ? `0 10px 22px -12px ${palette.accent}` : "none",
+                      boxShadow: selected
+                        ? `0 12px 26px -12px ${palette.accent}, inset 0 1px 0 rgba(255,255,255,0.45)`
+                        : `0 6px 16px -10px ${palette.accent}66, inset 0 1px 0 rgba(255,255,255,0.85)`,
                     }}>
-                    <div className="text-[28px] sm:text-[32px] leading-none mb-1.5">{m.emoji}</div>
-                    <div className="text-[11px] uppercase tracking-[0.18em]">{m.label}</div>
+                    <span aria-hidden="true"
+                          className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-2xl"
+                          style={{
+                            height: "38%",
+                            background: selected
+                              ? "linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%)"
+                              : "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 100%)",
+                          }} />
+                    <div className="relative text-[28px] sm:text-[32px] leading-none mb-1.5">{m.emoji}</div>
+                    <div className="relative text-[11px] uppercase tracking-[0.18em]">{m.label}</div>
                   </button>
                 );
               })}

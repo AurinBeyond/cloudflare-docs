@@ -134,7 +134,8 @@ export default function KidsActivities() {
             </div>
           </div>
 
-          <h1 className="font-serif text-[30px] sm:text-[36px] leading-[1.1] mb-4"
+          <h1 className="text-[40px] sm:text-[48px] leading-[1.05] mb-4"
+              style={{ fontFamily: "Caveat, Fraunces, serif", fontWeight: 600, color: palette.accent }}
               data-testid="kids-activity-title">
             {detail.title}
           </h1>
@@ -173,24 +174,31 @@ export default function KidsActivities() {
             </div>
           ) : (
             <>
-              <h3 className="font-serif text-[19px] mb-3.5"
-                  style={{ color: palette.text }}>How to do it</h3>
+              <h3 className="text-[26px] mb-3.5"
+                  style={{ color: palette.accent, fontFamily: "Caveat, Fraunces, serif", fontWeight: 600 }}>How to do it</h3>
               <ol className="space-y-2.5 mb-9" data-testid="kids-activity-instructions">
                 {(detail.instructions || []).map((step, i) => (
                   <li key={i}
-                      className="rounded-xl px-4 py-3 flex items-start gap-3"
+                      className="rounded-xl px-4 py-3 flex items-start gap-3 relative overflow-hidden"
                       style={{
-                        background: palette.cardBg,
+                        background: `linear-gradient(160deg, #ffffff 0%, ${palette.accent}10 100%)`,
                         border: `1px solid ${palette.cardBorder}`,
+                        boxShadow: `0 4px 14px -10px ${palette.accent}66, inset 0 1px 0 rgba(255,255,255,0.7)`,
                       }}>
-                    <span className="inline-flex items-center justify-center rounded-full shrink-0 mt-0.5"
+                    <span aria-hidden="true"
+                          className="pointer-events-none absolute top-0 left-0 right-0 rounded-t-xl"
+                          style={{
+                            height: "40%",
+                            background: "linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 100%)",
+                          }} />
+                    <span className="relative inline-flex items-center justify-center rounded-full shrink-0 mt-0.5"
                           style={{
                             width: 24, height: 24,
                             background: `${palette.accent}25`,
                             color: palette.accent,
                             fontSize: 12, fontWeight: 600,
                           }}>{i + 1}</span>
-                    <span className="text-[14.5px] leading-relaxed"
+                    <span className="relative text-[14.5px] leading-relaxed"
                           style={{ color: palette.text }}>{step}</span>
                   </li>
                 ))}
