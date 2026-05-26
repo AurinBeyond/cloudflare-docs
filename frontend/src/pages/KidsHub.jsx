@@ -15,6 +15,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { MessageCircleHeart, BookHeart, Palette, Sparkles, ArrowRight, Heart, Sun, Compass } from "lucide-react";
 import AurinSparkle from "@/components/AurinSparkle";
+import KidsJourneyPath from "@/components/KidsJourneyPath";
 import { resolveHubTheme } from "@/lib/kidsHubThemes";
 import { api } from "@/lib/api";
 
@@ -271,6 +272,14 @@ export default function KidsHub() {
                 }}>
             Open daily check-in <ArrowRight size={14} />
           </Link>
+        </section>
+
+        {/* §KIDS-JOURNEY 2026-02-10 — Anna's directive: stein-på-stein,
+            astmekivid läbi kogu lastemaailma. Themed stones per age
+            (pebbles / crystals / hexagons), 28 days, click → popup
+            with Aurin's tiny message + buttons to daily / activities. */}
+        <section className="mb-10" data-testid="kids-hub-journey-section">
+          <KidsJourneyPath ageSlug={theme.slug} childSlug={theme.slug} />
         </section>
 
         {/* ─── Action cards (staggered for spatial feel) ─── */}

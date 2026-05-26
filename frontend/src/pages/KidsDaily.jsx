@@ -13,6 +13,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import AurinSparkle from "@/components/AurinSparkle";
+import KidsJourneyPath from "@/components/KidsJourneyPath";
 import { resolveHubTheme } from "@/lib/kidsHubThemes";
 import { api } from "@/lib/api";
 
@@ -87,6 +88,18 @@ export default function KidsDaily() {
               style={{ color: palette.textMuted }}>
           <ArrowLeft size={13} /> Back to {theme.title}
         </Link>
+
+        {/* §KIDS-JOURNEY 2026-02-10 — Stepping-stone path at top of Daily.
+            Lets the child see where today sits on the 28-day journey
+            before they answer the mood check-in. */}
+        <div className="mb-8" data-testid="kids-daily-journey-strip">
+          <KidsJourneyPath
+            ageSlug={theme.slug}
+            childSlug={theme.slug}
+            compact
+            testIdSuffix="-daily"
+          />
+        </div>
 
         {step !== "done" && (
           <>

@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 82 — 28-day stepping-stone Kids Journey path. Backend: 4/4 pytest cases pass against the public REACT_APP_BACKEND_URL (anonymous progress with today_index=1/completed=[]/total=28/messages.len=28/anonymous=true; legacy slug '3-5' canonicalises to 'little-dreamers'; /day/15 returns day=15 with non-empty message; /day/99 clamps to 28 and /day/0 clamps to 1; day-1 messages distinct across all three age bands — verified literally: little-dreamers='A soft hello. Today, just be little.', explorers='Day 1 — open the door. I'm here.', dreamweavers='Day 1 — slow. There's no rush here.'). Frontend: 9/10 UI assertions PASS. /kids-universe/explorers/hub renders [data-testid=kids-hub-journey-section] containing [data-testid=kids-journey-explorers] + [data-testid=kids-journey-svg] with 28 stones; regression OK — 5 action cards (Talk/Stories/Activities/Color/Stars) still rendered. /kids-universe/little-dreamers/hub renders kids-journey-little-dreamers, /kids-universe/dreamweavers/hub renders kids-journey-dreamweavers. /kids-universe/explorers/daily renders kids-daily-journey-strip above the daily-ritual section. /kids-universe/explorers/activities renders kids-activities-journey-strip. Clicking kids-journey-stone-1 on explorers hub opens kids-journey-popup containing kids-journey-popup-message (Aurin's line 'Day 1 — open the door. I'm here.') + kids-journey-popup-daily + kids-journey-popup-activities buttons; kids-journey-popup-close successfully dismisses the popup. /body-temple renders body-temple-journey wrapping kids-journey-body-temple with 28 amber stones; stone-1 (today, unlocked) opens the existing Body Temple day modal (Week 1/Day 1 'Meeting your own breath'). ONE FAILURE: clicking a locked Body Temple stone (e.g. stone-5 for anonymous user) does NOT navigate to /clarity-release — the URL stays /body-temple.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "KidsJourneyPath.jsx (Body Temple consumer)",
+        "issue": "Locked stones do not navigate to /clarity-release when clicked. Spec: 'Clicking a locked Body Temple stone (e.g. stone-5 for non-premium) navigates to /clarity-release'. Actual: click is swallowed because line 391 reads `onClick={() => state !== 'locked' && handleStonePick(day)}` — when state==='locked' the handler is a no-op, so the parent's onStoneClick prop (which contains the navigate('/clarity-release') logic in BodyTemple.jsx lines 261-268) is never invoked. cursor is correctly 'not-allowed' and aria-label='Day N — locked', so the stones LOOK locked, but they are also UNRESPONSIVE which contradicts the upsell flow. Fix suggestion: allow the click through when an onStoneClick prop is provided by the consumer, e.g. `onClick={() => { if (onStoneClick) { onStoneClick(day); return; } if (state !== 'locked') handleStonePick(day); }}` — kids hubs (which rely on the internal popup) keep the current locked-is-noop behaviour because they do not pass onStoneClick, while Body Temple gets the navigation it needs.",
+        "selector": "[data-testid='body-temple-journey'] [data-testid='kids-journey-stone-5']",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_kids_journey.py",
+    "/app/test_reports/pytest/iter82_kids_journey.xml"
+  ],
+  "action_items": [
+    "Fix KidsJourneyPath.jsx line 391: allow click events to bubble to the parent-provided onStoneClick prop on locked stones (Body Temple needs to navigate locked premium stones to /clarity-release). Keep the existing locked-is-noop behaviour for kids hubs where no onStoneClick prop is passed, so the internal popup still ignores locked days."
+  ],
+  "critical_code_review_comments": [
+    "KidsJourneyPath.jsx:391 — `onClick={() => state !== 'locked' && handleStonePick(day)}` overrides the contract advertised by the onStoneClick prop. The component should either always delegate to onStoneClick (and let the consumer decide what 'locked' means), or expose a `clickLocked` option. Currently the prop is silently dropped for locked stones, which is a leaky abstraction that already produced one shippable-blocker bug.",
+    "KidsJourneyPath.jsx — `cursor: 'not-allowed'` on locked stones is inconsistent with Body Temple's UX intent: in that screen, clicking a locked stone is a PREMIUM upsell trigger (route to /clarity-release), not a hard wall. Recommend cursor:'pointer' with a small lock badge so wanderers know it is a paywall, not a forbidden action.",
+    "KidsJourneyPath.jsx is 545 lines — close to the 700-line soft cap but acceptable. If the popup grows further, consider extracting <KidsJourneyPopup/> into its own file.",
+    "BodyTemple.jsx onStoneClick callback assumes overview.days_preview is fully populated (28 entries with is_premium). Verified in this iteration that the public endpoint returns all 28 with is_premium booleans, so the lookup is safe — but a fallback `if (!d) navigate('/clarity-release');` would protect against future API trimming.",
+    "Kids hubs / Daily / Activities each fetch /api/kids-journey/progress independently on mount — three round-trips per session on a slow network. Caching the response in a lightweight context (or relying on the existing react-query if available) would shave ~600ms off the second-page render."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (4/4 pytest + 5/5 curl probes)", "frontend": "90% (9/10 — Body Temple locked-stone navigation is the only failure)"},
+  "test_credentials": "Anonymous flow only — no auth required. test_token_6489e6cf1440 available but not used; the spec's primary test path is anonymous and that is what was exercised.",
+  "seed_data_creation": "None.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 82 verifies the 28-stone path component. All three kids age-themed paths (pebbles=little-dreamers, crystals=explorers, hexagons=dreamweavers) render correctly with the right testids; their internal popup (kids-journey-popup + -message + -daily + -activities + -close) works on kids hubs because no onStoneClick prop is passed. Body Temple passes onStoneClick, which OVERRIDES the popup and is supposed to (a) open the existing day modal for unlocked days [WORKS] and (b) navigate to /clarity-release for locked premium days [BROKEN — see ui_bugs]. To re-test after the fix: as anonymous user (clear localStorage.aurin_session_token), click `[data-testid='body-temple-journey'] [data-testid='kids-journey-stone-5']` and assert page.url contains '/clarity-release'. Also re-confirm that on kids hubs the locked-stone behaviour is UNCHANGED (clicking a locked stone on /kids-universe/explorers/hub should still open the internal popup — NOT navigate anywhere). The backend pytest file /app/backend/tests/test_kids_journey.py is green and can be run with `KIDS_JOURNEY_TEST_BACKEND=<public-url> pytest backend/tests/test_kids_journey.py -v`.",
+  "rca of the issue": "Root cause: KidsJourneyPath.jsx line 391 hard-codes `state !== 'locked'` as a gate before invoking handleStonePick. handleStonePick is the function that ultimately calls the parent's onStoneClick prop (Body Temple's navigate-to-clarity-release logic). So locked stones in Body Temple never get a chance to redirect users to the premium funnel. Reproduction: open /body-temple as anonymous → click any stone with day>=2 → URL stays on /body-temple (expected: /clarity-release). Mitigation: change line 391 to honour onStoneClick for locked stones when the prop is provided; preserve current behaviour when prop is absent (kids hubs). One-line fix described in action_items."
+}

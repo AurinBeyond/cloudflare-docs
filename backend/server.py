@@ -120,6 +120,9 @@ _RATE_LIMIT_BYPASS = (
     # same bypass rationale as Angel Stars.
     "/api/kids-curriculum/",
     "/api/kids-mood/",
+    # §KIDS-JOURNEY 2026-02-10 — paints the stone path on every hub
+    # and daily page; read-only, public-friendly, no abuse vector.
+    "/api/kids-journey/",
 )
 
 
@@ -2325,6 +2328,11 @@ from angel_stars import (
     get_action,
     normalise_age_slug,
 )
+from kids_journey import (
+    JOURNEY_TOTAL_DAYS,
+    all_messages as kids_journey_all_messages,
+    message_for_day as kids_journey_message_for_day,
+)
 
 
 class AngelStarsRequestInput(BaseModel):
@@ -2830,6 +2838,76 @@ async def kids_mood_parent_portal(request: Request, days: int = 7):
             bucket["recent_notes"].append({"day": r.get("day"), "mood": r.get("mood"), "note": r.get("note")})
 
     return {"days": days, "children": list(by_child.values()), "checkins": rows[:50]}
+
+
+# =============================================================
+# §KIDS-JOURNEY 2026-02-10 — 28-day stepping-stone path endpoint.
+# Anna's directive: the Kids Universe must FEEL like a real
+# journey — three age-themed stone paths (pebbles / crystals /
+# hexagons), one stone per day, click any stone to see Aurin's
+# tiny invitation for that day. Reuses kids_mood_checkins as the
+# source of truth for "walked" days so no new collection is
+# needed. Anonymous wanderers see a pristine path with Day 1
+# pulsing, so the public route still looks alive.
+# =============================================================
+@api_router.get("/kids-journey/progress")
+async def kids_journey_progress(request: Request, child_slug: str = "explorers"):
+    slug = normalise_age_slug(child_slug)
+    user = await _resolve_current_user(request)
+
+    today_index = 1
+    completed_days: list[int] = []
+
+    if user:
+        # Day index since signup. Clamp 1..28 so old accounts still
+        # have a pulsing "today" stone.
+        created_at = getattr(user, "created_at", None)
+        if isinstance(created_at, datetime):
+            anchor = created_at
+        else:
+            anchor = datetime.now(timezone.utc)
+        if anchor.tzinfo is None:
+            anchor = anchor.replace(tzinfo=timezone.utc)
+        days_since = (datetime.now(timezone.utc).date() - anchor.date()).days
+        today_index = max(1, min(days_since + 1, JOURNEY_TOTAL_DAYS))
+
+        # Distinct calendar days with a mood check-in for this child.
+        cursor = db.kids_mood_checkins.find(
+            {"user_id": user.user_id, "child_slug": slug},
+            {"_id": 0, "day": 1, "created_at": 1},
+        ).sort("created_at", 1).limit(200)
+        rows = await cursor.to_list(length=200)
+        # Map first check-in calendar-day → day index 1, second distinct day → 2, etc.
+        # Capped at JOURNEY_TOTAL_DAYS.
+        seen_days: list[str] = []
+        for r in rows:
+            d = r.get("day")
+            if d and d not in seen_days:
+                seen_days.append(d)
+        for i, _ in enumerate(seen_days[:JOURNEY_TOTAL_DAYS]):
+            completed_days.append(i + 1)
+
+    return {
+        "child_slug": slug,
+        "today_index": today_index,
+        "completed_days": completed_days,
+        "total_days": JOURNEY_TOTAL_DAYS,
+        "messages": kids_journey_all_messages(slug),
+        "anonymous": user is None,
+    }
+
+
+@api_router.get("/kids-journey/day/{day_index}")
+async def kids_journey_day(day_index: int, child_slug: str = "explorers"):
+    slug = normalise_age_slug(child_slug)
+    idx = max(1, min(int(day_index or 1), JOURNEY_TOTAL_DAYS))
+    return {
+        "child_slug": slug,
+        "day": idx,
+        "message": kids_journey_message_for_day(slug, idx),
+        "total_days": JOURNEY_TOTAL_DAYS,
+    }
+
 
 
 # =============================================================

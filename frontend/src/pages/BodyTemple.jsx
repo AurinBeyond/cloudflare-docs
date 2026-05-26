@@ -22,6 +22,7 @@ import {
     Lock, Check, Sparkles,
 } from "lucide-react";
 import StonePath from "@/components/StonePath";
+import KidsJourneyPath from "@/components/KidsJourneyPath";
 
 const WEEK_ICONS = {
     breathing: Wind,
@@ -244,6 +245,29 @@ export default function BodyTemple() {
                         </p>
                     </div>
                 </div>
+            </section>
+
+            {/* §KIDS-JOURNEY 2026-02-10 — Anna's directive: laste raja
+                visuaalne keel laienes ka Body Temple peale. One unified
+                28-stone amber path so the wanderer sees the WHOLE
+                arc before drilling into the four weekly keys below. */}
+            <section className="px-6 pb-10 max-w-[920px] mx-auto" data-testid="body-temple-journey">
+                <KidsJourneyPath
+                    ageSlug="body-temple"
+                    childSlug="body-temple"
+                    todayIndex={currentDay}
+                    completedDays={Array.from(completedSet)}
+                    totalDays={overview?.total_days || 28}
+                    onStoneClick={(day) => {
+                        const d = (overview?.days_preview || []).find((x) => x.day === day);
+                        if (d?.is_premium && !overview?.unlocked) {
+                            navigate("/clarity-release");
+                            return;
+                        }
+                        setActiveDay(day);
+                    }}
+                    showFooter={false}
+                />
             </section>
 
             {/* Four weeks grid */}

@@ -17,6 +17,7 @@ import {
   Compass, Utensils, Sprout, Palette, CheckCircle2,
 } from "lucide-react";
 import AurinSparkle from "@/components/AurinSparkle";
+import KidsJourneyPath from "@/components/KidsJourneyPath";
 import { resolveHubTheme } from "@/lib/kidsHubThemes";
 import { api } from "@/lib/api";
 
@@ -251,6 +252,19 @@ export default function KidsActivities() {
             kitchen, kindness, or creative hands.
           </p>
         </header>
+
+        {/* §KIDS-JOURNEY 2026-02-10 — Same stepping-stone path on the
+            activities browser so the child can hop between days (and
+            see their progress at a glance). Compact variant keeps
+            the activities below as the main content. */}
+        <div className="mb-9" data-testid="kids-activities-journey-strip">
+          <KidsJourneyPath
+            ageSlug={theme.slug}
+            childSlug={theme.slug}
+            compact
+            testIdSuffix="-activities"
+          />
+        </div>
 
         {/* Module tabs */}
         <div className="flex flex-wrap gap-2 mb-8" data-testid="kids-activities-tabs">
