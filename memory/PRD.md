@@ -947,4 +947,37 @@ honest, critical curation against Linguistic Guardrails.
 - LS Agent: 5 LS variant IDs (Top-Up + Family Bundle) in Deploy env.
 - LS Agent: activate LS Affiliate Hub, generate 1 partner link if Anna chooses someone.
 - Marketing Agent: pick a post from the brief and ship Week-1 schedule.
-- Anna: distribute the 5 MUSE keys + decide if/when to mint a Standard-key.
+- Anna: distribute the 5 MUSE keys + decide if/when to mint a Standard-key
+
+
+### 2026-02-10 EVENING — Story Gift Gallery + Google Workspace guidance
+
+**Founder asked**: build the "Aurin's first ten stories" gallery to
+reduce blank-page hesitation on `/aurins-room/gift`. Also asked for
+help with Google Workspace domain verification.
+
+**Shipped:**
+
+1. **StoryGiftGallery component** — `/app/frontend/src/components/StoryGiftGallery.jsx`
+   - 10 hand-curated reference stories below the form
+   - Each card: title, feeling/age/archetype tag, opening 30-40 words
+   - Click to expand the next 30 words inline
+   - Covers all 3 archetypes (Night Guardian / Peace Keeper / Protector)
+     and all 8 feelings × 3 age bands matrix
+   - Characters: Luca, Mira, Eero, Noa, Iris, Amos, Stella, Kai, Lina, Tobi
+   - Sage Caveat headers + Fraunces body + gradient sheen cards
+   - data-testids: `story-gift-gallery` + `story-gift-sample-<slug>`
+   - Stories are STATIC reference (no LLM cost) — actual user story
+     generated fresh by Claude when they fill the form
+
+2. **Google Workspace domain verification — instructions delivered**
+   - Anna needs to add ONE TXT record in Cloudflare:
+     - Type: TXT
+     - Name: @
+     - Content: `google-site-verification=hlJwTFZJ67aS8kFNOWX6YCjS7OCzbNkFEGnY4yS_NqE`
+     - TTL: Auto, DNS-only (grey cloud, not orange)
+   - Detailed step-by-step provided in chat (Anna executes in Cloudflare UI)
+   - Once verified: Resend can send from `anna@prulesoul.site` (much
+     better trust signal than `noreply@resend.dev`)
+
+**No regressions, lint clean, gallery renders cleanly.**.

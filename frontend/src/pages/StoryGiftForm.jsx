@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight, Heart } from "lucide-react";
 import { api } from "@/lib/api";
+import StoryGiftGallery from "@/components/StoryGiftGallery";
 
 const FALLBACK_FEELINGS = [
   { slug: "scared",   label: "Scared of something" },
@@ -202,6 +203,10 @@ export default function StoryGiftForm() {
             the link, or close the tab and let it go.
           </p>
         </div>
+
+        {/* §SYNERGY-ANNELI 2026-02-10 — Gallery of 10 example stories
+            shown BELOW the form to reduce blank-page hesitation. */}
+        <StoryGiftGallery />
       </div>
     </div>
   );
