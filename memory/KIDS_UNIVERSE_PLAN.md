@@ -235,14 +235,20 @@ All voice-related endpoints **MUST** go through `runtime_governance.py` checkpoi
 
 ## 9. Open questions (must resolve before Phase 1 starts)
 
-| # | Question | Owner | Default if unanswered |
-|---|---|---|---|
-| Q1 | Aurin storyteller portrait — current file path? | Anna | `/app/frontend/public/avatars/aurin-storyteller.png` |
-| Q2 | Star-commitment activity list — keep these 6 or expand? | Anna | use the 6 listed in §4.3 |
-| Q3 | Album photo retention — keep forever or delete after 2y? | Anna | keep forever, parent can delete |
-| Q4 | Daily cap — how many stones per day a child can unlock? | Anna | 1 stone / 24h (forces real-world memory between digital sessions) |
-| Q5 | Multiple children per parent account? | Anna | NO for v1; ONE child profile per account |
-| Q6 | Age verification — strict birthdate or "I confirm my child is X years" toggle? | Anna | parental affirmation toggle (luxury UX, no friction) |
+✅ ALL RESOLVED 2026-02-27 — see "DECISIONS LOCKED" section below.
+
+| # | Question | Final answer |
+|---|---|---|
+| Q1 | Aurin storyteller portrait source | Use Inner Guide reference image |
+| Q2 | 6 screen-free rewards | Locked as-is |
+| Q3 | Album retention | Forever, parent delete only |
+| Q4 | Daily cap | 1 stone / 24h |
+| Q5 | Multiple children per account | V1: 1 child only |
+| Q6 | Age verification | Parental affirmation toggle |
+| Q7 | Build order | Letter of Admission first → Phase 1 |
+| Extra | Star fulfilled action | Auto-unlock next star |
+| Extra | FAB visibility | Always on premium bottom-right |
+| Extra | UI language | 100% English everywhere |
 
 ---
 
@@ -262,7 +268,36 @@ NOT building this until Anna says GO.
 ## DECISIONS LOCKED ON 2026-02-27
 
 1. ✅ LemonSqueezy: NO price changes ever. Cutover to Polar = clean switch day, both happen simultaneously.
-2. ✅ Aurin avatar strategy: single storyteller now, outfit variants in v1.1.
+2. ✅ Aurin avatar strategy: single Inner Guide storyteller portrait now, outfit variants in v1.1.
 3. ✅ Access model: public map + Day 1 demo / premium for all other stones.
 4. ✅ Build incrementally in 5 phases — test each phase before next.
-5. ✅ Build only after Anna gives "alustame Phase 1" greenlight.
+5. ✅ UI language: **100% English** across the entire kids universe. No Estonian, no mixed strings, no exceptions.
+6. ✅ Aurin portrait source: `Inner Guide & Transformation Catalyst` reference image (provided 2026-02-27).
+7. ✅ 6 screen-free rewards locked: hike, fishing, forest cabin, book aloud, mushroom/berry, paint outdoors.
+8. ✅ Album photos: forever retention, parent-controlled delete only.
+9. ✅ Daily cap: 1 stone / 24h.
+10. ✅ V1: 1 child profile per parent account.
+11. ✅ Age verification: parental affirmation toggle (no friction).
+12. ✅ Star fulfilled: marks complete + auto-unlocks next star reward.
+13. ✅ Family Album FAB: always visible bottom-right on premium pages.
+14. ✅ Build order: **Letter of Admission email FIRST (~1h)** → THEN Phase 1 Static Skeleton (~2h).
+15. ✅ Build only after Anna gives "alustame Phase 1" greenlight per phase.
+
+## FINAL NAVIGATION MAP (100% English UI)
+
+### FREE TIER
+- `/kids-universe` — 3 age tabs (DISCOVERY · EXPLORATION · CREATION), Parent Sign In, "Open the Full Journey ✦" CTA
+- `/kids-universe/{zone}` — 4 stones on curved neon path: `✨ Day 1 · The Beginning` (open demo), `🧩 Day 2 · My Day` 🔒, `⭐ Day 3 · Aurin's Star` 🔒, `📸 Day 4 · Secret Album` 🔒
+- Free demo Storytelling Sanctum: text-only Aurin greeting, "Listen to Today's Tale ✦" → unlock modal
+- Unlock modal: "Discover the Parent Sanctuary →" or "I already have an account — Sign in"
+
+### PREMIUM TIER
+- Map view: all 4 stones unlocked, 1 reveals per 24h, 28-day rotating cycle (Tale → Reflection → Star → Album)
+- Storytelling Sanctum (P2): "Begin Today's Tale" mic, Pause/Resume/Close, optional "Read Along" transcript, "Save as Favorite"
+- Reflection Space (P3): "Share My Day with Aurin", "Hear Aurin's Reflection", optional "Save to Journal"
+- Aurin's Star Chamber (P4): 6 promise cards (hike/fishing/cabin/book/foraging/painting), "Give Aurin My Promise" → 48h Resend reminder
+- Secret Album (P5): "Confirm Parent Password" gate → "Choose Adventure Photo" → caption → "Save to Our Family Vault" (KMS encrypted)
+- Family Album FAB (P6): always bottom-right on premium, opens drawer with Green/Blue/Purple Vaults
+- Parent Sanctuary `/parent-dashboard` (P7): Active Promises, "Mark as Fulfilled", emotion whispers, next stone timer, Account & Billing
+- Topbar (P8): Matrix Aurin logo, parent avatar dropdown (Account · Parent Sanctuary · Sign Out)
+
