@@ -1363,3 +1363,43 @@ P2 (Deferred):
 - Album photos: forever retention, parent delete only.
 - Star fulfilled: marks complete + auto-unlocks next star.
 
+
+
+---
+
+## 2026-02-27 (PM Late) — Kids Universe Phase 2 + 3 + 4 SHIPPED + TESTED ✅
+
+**Done in this iteration (testing_agent_v3_fork: 100% pass, 18/18 backend + 6/6 frontend):**
+
+### Backend
+- New module `/app/backend/kids_universe_endpoints.py` (~489 LOC) with all kids-journey endpoints, mounted at `/api/kids-journey/*`.
+- Collections: `kids_progress`, `star_commitments`, `kids_album_photos`, `emotion_checkins`, `letters_of_admission`.
+- Endpoints:
+  - GET `/progress/{zone}` — anonymous returns demo state; premium returns unlocked_nodes + next_unlock_at
+  - POST `/unlock-stone` — auth + premium, idempotent, 24h cap with HTTP 429
+  - POST `/star/commit` — saves promise + auto-schedules 48h reminder_at
+  - GET `/star/commitments` — list, optionally only_active=true
+  - POST `/star/fulfill` — marks fulfilled, returns next_star_unlocked
+  - POST `/album/upload` — parental_affirmation required, 6 MB max, base64 in Mongo (V1; KMS later)
+  - GET `/album/list` — returns photos with payload (for FAB drawer)
+  - POST `/album/delete` — soft delete owned-only
+  - POST `/emotion-checkin` — anonymous-emotion log (V1 text input)
+  - POST `/cron/star-reminders` — admin-token-gated; processes due 48h Resend emails idempotently
+- Fix applied by testing agent: ObjectId `_id` removed from `/star/commit` response (Mongo insert mutation).
+
+### Frontend
+- New `/app/frontend/src/pages/kids/KidsRooms.jsx` (~600 LOC) — 4 Mode B room components + Family Album FAB
+- `KidsUniverseJourney.jsx` extended with auth-aware progress fetching + Mode B state-swap routing
+- 100% English UI, lint clean.
+
+**Pending P0/P1 (carry forward):**
+- Anna's Polar.sh approval signal (PAUSED — Anna's action)
+- External cron hook for `/api/kids-journey/cron/star-reminders` (UptimeRobot or similar; Anna chooses)
+- Adult v3.0 vision doc — Grace/Kaelan/Sara/Alistair room shells
+
+**P2 (Deferred):**
+- High Luxury v3.0 visual overhaul — wait until Polar approved
+- 49 SKU bulk import to Polar
+- Phase 5 Kids Universe: per-age content tuning + Aurin outfit variants v1.1
+- KMS migration for album photos (currently base64 in Mongo, fine for V1)
+- Multiple children per account (V1 = 1 child only)
