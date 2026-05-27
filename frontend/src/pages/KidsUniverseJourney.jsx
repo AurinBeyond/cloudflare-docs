@@ -45,11 +45,15 @@ const SERIF = '"Cormorant Garamond", "Playfair Display", Georgia, serif';
 const AURIN_PORTRAIT = "/avatars/aurin-inner-guide.png";
 
 // §ZONE-DEFINITIONS — locked palette and copy per age group.
+// Phase 5 (2026-02-27) — per-age content tuning per Anna:
+//   3-6  · Jungle Wonder         (sensory wonder, simplest words)
+//   7-10 · Crystal Exploration   (mid-stage strategic intuition)
+//   11-13 · Canopy Creation      (peak agency, building & creating)
 const ZONES = {
   discovery: {
     slug: "discovery",
-    ageLabel: "4-6 Years",
-    titleLabel: "Discovery",
+    ageLabel: "3-6 Years",
+    titleLabel: "Jungle Wonder",
     subtitle: "The forest of wonder.",
     bgFrom: "#061d15",
     bgTo: "#0b291e",
@@ -58,12 +62,12 @@ const ZONES = {
     accentGlow: "rgba(16,185,129,0.45)",
     pathStroke: "#10b981",
     description:
-      "A gentle green jungle of sound and wonder. Screen-down, ears open.",
+      "A gentle green jungle of sound and warm feeling. Small wonders, soft words, eyes closed if you wish.",
   },
   exploration: {
     slug: "exploration",
     ageLabel: "7-10 Years",
-    titleLabel: "Exploration",
+    titleLabel: "Crystal Exploration",
     subtitle: "The crystal cave of mystery.",
     bgFrom: "#07162c",
     bgTo: "#0d223f",
@@ -72,13 +76,13 @@ const ZONES = {
     accentGlow: "rgba(59,130,246,0.45)",
     pathStroke: "#3b82f6",
     description:
-      "A deep blue crystal cave. Solving challenges through the power of hearing.",
+      "A deep blue crystal cave. Solving quiet riddles, growing strategic intuition through the power of hearing.",
   },
   creation: {
     slug: "creation",
     ageLabel: "11-13 Years",
-    titleLabel: "Creation",
-    subtitle: "The cosmic studio of becoming.",
+    titleLabel: "Canopy Creation",
+    subtitle: "The cosmic canopy of becoming.",
     bgFrom: "#1a0b2e",
     bgTo: "#25123e",
     accent: "#a855f7", // purple
@@ -86,12 +90,14 @@ const ZONES = {
     accentGlow: "rgba(168,85,247,0.45)",
     pathStroke: "#a855f7",
     description:
-      "A cosmic purple studio. Building digital blueprints with Aurin's voice.",
+      "A cosmic violet canopy. Designing inner blueprints, finding your own voice in a noisy world.",
   },
 };
 
 // §STONE-DEFINITIONS — 4 stones per zone (Day 1-4 of the rotating cycle).
 // Day 1 = Storytelling Sanctum (open demo); rest are premium-only.
+// Phase 5: per-zone day labels stay neutral; tonal tuning happens
+// inside the room copy (see KidsRooms.jsx).
 const STONES = [
   {
     id: "node-1",

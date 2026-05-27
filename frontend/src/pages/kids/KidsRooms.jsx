@@ -38,6 +38,109 @@ const SCREEN_FREE_PROMISES = [
   { id: "painting", icon: "🎨", label: "Paint outdoors together" },
 ];
 
+// §PHASE-5 — per-zone tonal copy. Storytelling, Reflection, Star and
+// Album rooms all read these. The three age groups speak with
+// distinctly different vocabularies even though the structure is the
+// same.
+const ZONE_COPY = {
+  discovery: {
+    // 3-6 — sensory wonder, simplest words
+    storytellingEyebrow: "✦ A first whisper from Aurin",
+    storytellingHeadline: "Welcome, little star.\nI am Aurin.",
+    storytellingBody:
+      "I will walk with you through small wonders today. Close your eyes if you like — and listen, when the tale begins.",
+    storytellingPremium:
+      "Today's tale is gentle and short. Tap below to open the voice chamber — Aurin will tell you a small, soft story.",
+    storytellingLocked:
+      "The voice of Aurin sleeps until your grown-up opens the path. Every stone holds its own tale, told slowly, without a screen.",
+    reflectionEyebrow: "✦ A tiny mirror",
+    reflectionHeadline: "How do you feel\nright now?",
+    reflectionBody:
+      "Only one word, said softly. Aurin will hear it and hold it gently.",
+    reflectionPlaceholder: "sleepy · happy · sad · brave…",
+    reflectionConfirm:
+      "Aurin hears you. Take a slow breath. The air outside knows this word too.",
+    starEyebrow: "✦ A small promise",
+    starHeadlinePick: "Choose one little adventure.",
+    starHeadlineConfirmed: "The little star is on its way!",
+    starBody:
+      "Pick something you can do with a grown-up this week. No screens, just real fun.",
+    starConfirmBody:
+      "Your grown-up gets a soft reminder in two days. When you finish the adventure together, return and the new star will shine.",
+    albumEyebrow: "✦ One special picture",
+    albumHeadlinePick: "Save one picture\nfrom the adventure.",
+    albumHeadlineSaved: "The picture is safe now.",
+    albumBody:
+      "Pick just one photo of your trip — by the river, in the woods, anywhere. Only your family will see it.",
+    albumSavedBody:
+      "This picture now glows on your path. Tomorrow another small moment may join it.",
+  },
+  exploration: {
+    // 7-10 — mid-stage strategic intuition, friendly riddle-tone
+    storytellingEyebrow: "✦ A whisper from Aurin",
+    storytellingHeadline: "Hello, explorer.\nI am Aurin.",
+    storytellingBody:
+      "Some stories are riddles, hidden in plain sound. Today's tale carries a small clue — keep your ears open, your eyes closed.",
+    storytellingPremium:
+      "Today's tale waits in the crystal cave. Tap below — Aurin will tell you a story with a small puzzle inside.",
+    storytellingLocked:
+      "The voice of Aurin sleeps until a grown-up opens the Sanctuary. Every stone holds its own riddle-tale, told without a screen.",
+    reflectionEyebrow: "✦ A signal from inside",
+    reflectionHeadline: "What is the\nweather of you today?",
+    reflectionBody:
+      "One word is enough. Bright? Cloudy? Restless? Aurin will reflect it back without judgement.",
+    reflectionPlaceholder: "curious · cloudy · restless · steady…",
+    reflectionConfirm:
+      "Aurin hears you. Naming it is half the work. Step outside for a moment if you can.",
+    starEyebrow: "✦ A real-world quest",
+    starHeadlinePick: "Pick the next outdoor quest.",
+    starHeadlineConfirmed: "The star is set in motion.",
+    starBody:
+      "Each one is a small adventure with someone you trust — screen-free, real-world, and the star unlocks when you return and mark it done.",
+    starConfirmBody:
+      "Your parent receives a gentle reminder in 48 hours. When the quest is done together, come back and mark the moment — a new star will appear.",
+    albumEyebrow: "✦ A field-note memory",
+    albumHeadlinePick: "One picture from\nthe quest.",
+    albumHeadlineSaved: "The memory is filed.",
+    albumBody:
+      "Like an explorer's field-note: choose one photo from the real-world adventure. Caption it if you want. Private to your family.",
+    albumSavedBody:
+      "This memory now glows on the Path. Tomorrow another quiet adventure may join it.",
+  },
+  creation: {
+    // 11-13 — peak agency, designing & building, near-adult tone
+    storytellingEyebrow: "✦ A signal from Aurin",
+    storytellingHeadline: "Welcome.\nI am Aurin.",
+    storytellingBody:
+      "Some tales are not told to you — they are built with you. Today's story is a quiet blueprint. Listen, and notice what part of it is yours.",
+    storytellingPremium:
+      "Today's tale waits in the canopy. Open the voice chamber — Aurin will tell you a story that asks something of you in return.",
+    storytellingLocked:
+      "Aurin's voice stays still until your account opens the Sanctuary. Every stone holds its own architecture — a tale, a reflection, a star, a memory.",
+    reflectionEyebrow: "✦ A quiet calibration",
+    reflectionHeadline: "What is the\nshape of today?",
+    reflectionBody:
+      "One word, honest. Aurin won't judge it — and neither should you. Naming the shape is how it loses its grip.",
+    reflectionPlaceholder: "sharp · quiet · uncertain · clear…",
+    reflectionConfirm:
+      "Aurin hears you. The shape has been named. Step away from any screen for a few minutes if you can — the day will rearrange itself.",
+    starEyebrow: "✦ A real-world build",
+    starHeadlinePick: "Choose your next real build.",
+    starHeadlineConfirmed: "The blueprint is filed.",
+    starBody:
+      "Real things are built with real hours. Pick one screen-free build you can complete with someone who matters — and tell Aurin when it's done.",
+    starConfirmBody:
+      "A gentle reminder will arrive in 48 hours. When the build is complete, return here and mark it done — the next stone reveals itself.",
+    albumEyebrow: "✦ A single, undeniable proof",
+    albumHeadlinePick: "One photograph,\nfor the archive.",
+    albumHeadlineSaved: "Filed in your private archive.",
+    albumBody:
+      "Choose one image. The real one. It belongs to your family alone — never trained into any public model, never resold, never displayed.",
+    albumSavedBody:
+      "Archived. The path now carries a small, private proof that the moment was real.",
+  },
+};
+
 // ──────────────────────────────────────────────────────────────────
 // Shared layout shell for every room
 // ──────────────────────────────────────────────────────────────────
@@ -98,6 +201,7 @@ function RoomShell({ zone, label, onBack, children, testid }) {
 // ──────────────────────────────────────────────────────────────────
 export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlocked }) {
   const ageSlug = ZONE_TO_AGE_SLUG[zone.slug] || "little-dreamers";
+  const copy = ZONE_COPY[zone.slug] || ZONE_COPY.discovery;
 
   // Mark stone unlocked on first open (premium users)
   useEffect(() => {
@@ -121,18 +225,16 @@ export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlock
         className="text-[11px] tracking-[0.42em] uppercase"
         style={{ color: zone.accent }}
       >
-        ✦ A first whisper from Aurin
+        {copy.storytellingEyebrow}
       </p>
       <h2
-        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic"
+        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic whitespace-pre-line"
         style={{ color: "#e8e1d5" }}
       >
-        Welcome, little star.<br />I am Aurin.
+        {copy.storytellingHeadline}
       </h2>
       <p className="text-[17px] leading-[1.85] text-[#bcb4a3] font-light">
-        I am here to walk with you through wonder, courage and real
-        transformation. Close your eyes if you like — and listen, when the
-        tale begins.
+        {copy.storytellingBody}
       </p>
 
       <div
@@ -148,8 +250,7 @@ export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlock
               className="text-[13px] italic text-[#a59f93] leading-[1.85] mb-5"
               style={{ fontFamily: SERIF }}
             >
-              Today's tale waits for you. Tap below to open the voice
-              chamber — Aurin will tell you a small, gentle story.
+              {copy.storytellingPremium}
             </p>
             <Link
               to={`/aurins-room/${ageSlug}`}
@@ -171,9 +272,7 @@ export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlock
               className="text-[13px] italic text-[#a59f93] leading-[1.85] mb-5"
               style={{ fontFamily: SERIF }}
             >
-              The voice of Aurin sleeps until the Parent Sanctuary opens. In
-              the full journey, every stone holds its own tale, told gently
-              and without a screen.
+              {copy.storytellingLocked}
             </p>
             <Link
               to="/pricing"
@@ -199,6 +298,7 @@ export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlock
 // 2. Reflection Space — text-based emotion check-in (V1)
 // ──────────────────────────────────────────────────────────────────
 export function ReflectionSpaceRoom({ zone, onBack, onStoneUnlocked }) {
+  const copy = ZONE_COPY[zone.slug] || ZONE_COPY.discovery;
   const [word, setWord] = useState("");
   const [logged, setLogged] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -245,17 +345,16 @@ export function ReflectionSpaceRoom({ zone, onBack, onStoneUnlocked }) {
         className="text-[11px] tracking-[0.42em] uppercase"
         style={{ color: zone.accent }}
       >
-        ✦ A small mirror
+        {copy.reflectionEyebrow}
       </p>
       <h2
-        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic"
+        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic whitespace-pre-line"
         style={{ color: "#e8e1d5" }}
       >
-        How do you feel<br />today?
+        {copy.reflectionHeadline}
       </h2>
       <p className="text-[17px] leading-[1.85] text-[#bcb4a3] font-light">
-        One quiet word is enough. Aurin will hold it gently — and reflect it
-        back with a small piece of stillness.
+        {copy.reflectionBody}
       </p>
 
       {logged ? (
@@ -280,8 +379,7 @@ export function ReflectionSpaceRoom({ zone, onBack, onStoneUnlocked }) {
             "{logged}"
           </p>
           <p className="text-[13px] italic text-[#a59f93] mt-4 leading-[1.85]">
-            Aurin hears you. Step outside if the day allows. The breath of the
-            air will mirror what you have just shared.
+            {copy.reflectionConfirm}
           </p>
         </div>
       ) : (
@@ -306,7 +404,7 @@ export function ReflectionSpaceRoom({ zone, onBack, onStoneUnlocked }) {
             maxLength={64}
             value={word}
             onChange={(e) => setWord(e.target.value)}
-            placeholder="quiet · curious · sleepy · brave…"
+            placeholder={copy.reflectionPlaceholder}
             className="w-full bg-transparent border-b py-3 text-[20px] italic text-[#e8e1d5] placeholder-[#5a554c] focus:outline-none focus:border-[#c4a46b] transition-colors"
             style={{
               fontFamily: SERIF,
@@ -392,15 +490,15 @@ export function StarChamberRoom({ zone, onBack, onStoneUnlocked }) {
         className="text-[11px] tracking-[0.42em] uppercase"
         style={{ color: zone.accent }}
       >
-        ✦ A real-world promise
+        {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).starEyebrow}
       </p>
       <h2
         className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic"
         style={{ color: "#e8e1d5" }}
       >
         {committed
-          ? "The star is set in motion."
-          : "Choose one quiet promise."}
+          ? (ZONE_COPY[zone.slug] || ZONE_COPY.discovery).starHeadlineConfirmed
+          : (ZONE_COPY[zone.slug] || ZONE_COPY.discovery).starHeadlinePick}
       </h2>
 
       {committed ? (
@@ -428,8 +526,7 @@ export function StarChamberRoom({ zone, onBack, onStoneUnlocked }) {
             </span>
           </div>
           <p className="text-[16px] leading-[1.85] text-[#bcb4a3] font-light mb-4">
-            A reminder will arrive in 48 hours, in case the world gets loud.
-            When the day comes — return together and mark it done.
+            {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).starConfirmBody}
           </p>
           <Link
             to="/parent-portal/stars"
@@ -443,8 +540,7 @@ export function StarChamberRoom({ zone, onBack, onStoneUnlocked }) {
       ) : (
         <>
           <p className="text-[16px] leading-[1.85] text-[#bcb4a3] font-light">
-            Each one is screen-free. Pick whichever fits this week. The star
-            unlocks when you return and mark the moment together.
+            {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).starBody}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
@@ -589,13 +685,15 @@ export function SecretAlbumRoom({ zone, onBack, onStoneUnlocked }) {
         className="text-[11px] tracking-[0.42em] uppercase"
         style={{ color: zone.accent }}
       >
-        ✦ A single memory
+        {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).albumEyebrow}
       </p>
       <h2
-        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic"
+        className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic whitespace-pre-line"
         style={{ color: "#e8e1d5" }}
       >
-        {saved ? "The memory is held." : "One photo. One quiet moment."}
+        {saved
+          ? (ZONE_COPY[zone.slug] || ZONE_COPY.discovery).albumHeadlineSaved
+          : (ZONE_COPY[zone.slug] || ZONE_COPY.discovery).albumHeadlinePick}
       </h2>
 
       {saved ? (
@@ -619,16 +717,13 @@ export function SecretAlbumRoom({ zone, onBack, onStoneUnlocked }) {
             />
           )}
           <p className="text-[15px] leading-[1.85] text-[#bcb4a3] font-light text-center italic">
-            This memory now glows on the Path. Tomorrow, another quiet moment
-            may join it.
+            {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).albumSavedBody}
           </p>
         </div>
       ) : (
         <>
           <p className="text-[16px] leading-[1.85] text-[#bcb4a3] font-light">
-            Choose one photo from your real-world adventure — a fishing
-            evening, a hike, an outdoor afternoon. Just one. The vault is
-            private; only you and Aurin will see it.
+            {(ZONE_COPY[zone.slug] || ZONE_COPY.discovery).albumBody}
           </p>
 
           <div
