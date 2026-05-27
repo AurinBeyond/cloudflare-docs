@@ -1430,3 +1430,27 @@ P2 (Deferred):
 - Tailwind warning for `duration-[2400ms]` exists elsewhere in codebase (not in any Kids Universe file).
 
 **Anna is GO for deploy.**
+
+
+---
+
+## 2026-02-27 (Final) — Adventure Sparks ADDED ✅
+
+**The closing loop is in.** After Anna spotted the missing "Adventure & DIY Ideas" — real-world creative play that the Star Chamber alone did not cover — we added a luxury **Adventure Sparks** panel inside the Storytelling Sanctum room. NOT a new screen-game; an inspirational panel that pushes the child OFFLINE and back into the Secret Album loop.
+
+- Section appears beneath the "Begin Today's Tale" CTA, framed by a thin gold border, with an "✦ Adventure Sparks" eyebrow and the master headline **"When the tale ends, the world begins."**
+- Per-age DIY pools (4 cards each):
+  - **3-6 Discovery (Jungle Wonder):** Leaf Collage · Stone Friends · Finger Painting Sky · Pinecone Family
+  - **7-10 Exploration (Crystal Exploration):** Secret Forest Map · Crystal Hideout · Nature's Five Riddle · Field Notebook
+  - **11-13 Creation (Canopy Creation):** Dream Room Blueprint · Hand-bound Journal · Build Something Real · Photo Essay: One Hour
+- Each card: icon · serif title · italic 1-2 line description
+- For premium parents: "Save your creation to the Secret Album →" button state-swaps directly to Album room
+- Smoke test: all 3 zones × 4 DIY cards × headline confirmed via Playwright assertions
+
+**Final architecture loop (closed):**
+1. Aurin speaks the tale →
+2. Adventure Sparks suggest offline DIY →
+3. Child does it in the real world →
+4. Photo of creation → Secret Album → glows on the Path forever
+
+**Anna is GO for deploy — full Kids Universe Journey is shipped.**

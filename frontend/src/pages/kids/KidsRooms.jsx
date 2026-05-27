@@ -38,6 +38,31 @@ const SCREEN_FREE_PROMISES = [
   { id: "painting", icon: "🎨", label: "Paint outdoors together" },
 ];
 
+// §PHASE-5-ADVENTURE-VAULT — Per-age "Adventure Sparks": real-world,
+// screen-free DIY ideas Aurin whispers AFTER the tale. The child does
+// these OFFLINE; the photo lands in the Secret Album. This closes the
+// loop without adding a digital game.
+const ADVENTURE_SPARKS = {
+  discovery: [
+    { icon: "🍂", title: "Leaf Collage", desc: "Collect five leaves of five colors. Arrange them into a small forest face." },
+    { icon: "🪨", title: "Stone Friends", desc: "Find three river stones. Paint a tiny face on each — they become your quiet companions." },
+    { icon: "🖐️", title: "Finger Painting Sky", desc: "Use only fingers — no brushes. Paint the sky you saw today." },
+    { icon: "🌲", title: "Pinecone Family", desc: "Gather three pinecones. Wrap them in wool or yarn. Give each one a name." },
+  ],
+  exploration: [
+    { icon: "🗺️", title: "Secret Forest Map", desc: "Draw a map of the woods near you — with one hidden treasure marked only you can find." },
+    { icon: "💎", title: "Crystal Hideout", desc: "Build a small hideout under a tree. Hide one 'crystal' (a smooth stone) inside it. Bring a friend." },
+    { icon: "🔍", title: "Nature's Five Riddle", desc: "Find five different leaves, five different stones, five different feathers. Arrange them as a riddle for a sibling." },
+    { icon: "📔", title: "Field Notebook", desc: "Make a tiny notebook from folded paper. Write down three things only YOU noticed today." },
+  ],
+  creation: [
+    { icon: "📐", title: "Dream Room Blueprint", desc: "Draw — by hand, no apps — the room you would build if everything were possible. Label the small details." },
+    { icon: "📓", title: "Hand-bound Journal", desc: "Fold and stitch your own small journal. The first page is the only one that has rules: write what you actually believe." },
+    { icon: "🏛️", title: "Build Something Real", desc: "Wood, cardboard, clay — choose one. Build something with your hands that holds shape and weight." },
+    { icon: "📸", title: "Photo Essay: One Hour", desc: "Take exactly seven photos in one hour outside. No filters, no edits. Tell a quiet story with them." },
+  ],
+};
+
 // §PHASE-5 — per-zone tonal copy. Storytelling, Reflection, Star and
 // Album rooms all read these. The three age groups speak with
 // distinctly different vocabularies even though the structure is the
@@ -199,9 +224,10 @@ function RoomShell({ zone, label, onBack, children, testid }) {
 // ──────────────────────────────────────────────────────────────────
 // 1. Storytelling Sanctum — text demo for free, voice CTA for premium
 // ──────────────────────────────────────────────────────────────────
-export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlocked }) {
+export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlocked, onOpenAlbum }) {
   const ageSlug = ZONE_TO_AGE_SLUG[zone.slug] || "little-dreamers";
   const copy = ZONE_COPY[zone.slug] || ZONE_COPY.discovery;
+  const sparks = ADVENTURE_SPARKS[zone.slug] || ADVENTURE_SPARKS.discovery;
 
   // Mark stone unlocked on first open (premium users)
   useEffect(() => {
@@ -290,6 +316,79 @@ export function StorytellingSanctumRoom({ zone, isPremium, onBack, onStoneUnlock
           </>
         )}
       </div>
+
+      {/* §PHASE-5-ADVENTURE-VAULT — Adventure Sparks panel.
+          Real-world, screen-free DIY ideas Aurin whispers AFTER the tale.
+          The child does these offline; the resulting photo lands in the
+          Secret Album. Always visible — invites everyone to step away
+          from the screen. */}
+      <section
+        className="mt-12 pt-10 border-t"
+        style={{ borderColor: "rgba(196,164,107,0.10)" }}
+        data-testid="kids-room-adventure-sparks"
+      >
+        <p
+          className="text-[11px] tracking-[0.42em] uppercase mb-4"
+          style={{ color: zone.accent, fontFamily: SERIF }}
+        >
+          ✦ Adventure Sparks
+        </p>
+        <h3
+          className="text-[24px] sm:text-[28px] leading-[1.25] font-light italic mb-4"
+          style={{ color: "#e8e1d5", fontFamily: SERIF }}
+        >
+          When the tale ends, the world begins.
+        </h3>
+        <p className="text-[15px] leading-[1.85] text-[#bcb4a3] font-light mb-7 max-w-[52ch]">
+          A few quiet ideas to take with you into the real day. No screens —
+          just hands, paper, leaves, light. Bring back one photo of what you
+          made, and it will join the Secret Album.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {sparks.map((s, i) => (
+            <div
+              key={i}
+              data-testid={`kids-room-spark-${i}`}
+              className="flex items-start gap-3 p-4 rounded-2xl transition-all duration-300"
+              style={{
+                background: "rgba(255,253,249,0.03)",
+                border: "1px solid rgba(196,164,107,0.14)",
+              }}
+            >
+              <span className="text-[22px] leading-none mt-0.5">{s.icon}</span>
+              <div>
+                <p
+                  className="text-[13.5px] tracking-[0.06em] mb-1"
+                  style={{ color: "#e8e1d5", fontFamily: SERIF }}
+                >
+                  {s.title}
+                </p>
+                <p className="text-[12.5px] leading-[1.7] text-[#a59f93] font-light italic">
+                  {s.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {isPremium && onOpenAlbum && (
+          <button
+            type="button"
+            onClick={onOpenAlbum}
+            data-testid="kids-room-sparks-to-album"
+            className="mt-7 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-[11px] tracking-[0.28em] uppercase font-medium transition-all"
+            style={{
+              background: "transparent",
+              color: zone.accent,
+              border: `1px solid ${zone.accentSoft}`,
+              fontFamily: SERIF,
+            }}
+          >
+            Save your creation to the Secret Album →
+          </button>
+        )}
+      </section>
     </RoomShell>
   );
 }

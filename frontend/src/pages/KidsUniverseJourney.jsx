@@ -437,12 +437,17 @@ export default function KidsUniverseJourney() {
   if (activeRoom) {
     const back = () => setActiveRoom(null);
     if (activeRoom.roomType === "fairytale_room") {
+      const goToAlbum = () => {
+        const albumStone = STONES.find((s) => s.roomType === "private_album_room");
+        if (albumStone) setActiveRoom(albumStone);
+      };
       return (
         <StorytellingSanctumRoom
           zone={zone}
           isPremium={isPremium}
           onBack={back}
           onStoneUnlocked={handleStoneUnlocked}
+          onOpenAlbum={goToAlbum}
         />
       );
     }
