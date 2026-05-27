@@ -108,6 +108,43 @@ export default function WhatThisIs() {
         </p>
       </Section>
 
+      <Section
+        eyebrow="✦ Voice-first by design"
+        title="Made to be heard, not watched."
+      >
+        <p>
+          Matrix Aurin is built for the ear, not the eye. The room is
+          voice-first by design — a space where you can close the screen,
+          lower your shoulders, and simply listen. Reading is optional;
+          presence is not.
+        </p>
+        <p>
+          The interface gets out of the way. There are no streaks, no
+          notifications, no infinite feeds. Just a quiet, warm voice that
+          meets you where you are, and steps back when you are ready to
+          return to your day.
+        </p>
+        <p className="pt-4">
+          <span className="text-[#c4a46b] tracking-[0.18em] text-[12px] uppercase block mb-2">
+            ✦ For Individuals
+          </span>
+          A confidential sanctuary to lay down your armor. A space where
+          you do not have to perform, explain, or be anything other than
+          your true self. Your words belong to you; they are protected
+          and never used to train public models.
+        </p>
+        <p className="pt-2">
+          <span className="text-[#c4a46b] tracking-[0.18em] text-[12px] uppercase block mb-2">
+            ✦ For Families &amp; Children
+          </span>
+          Screen-down technology. The kind that allows a parent to place
+          the device upside down on the table, turning a digital moment
+          into a warm, auditory journey. It sparks a child's imagination
+          and calms the nervous system, free from the hypnotic pull of a
+          glowing display.
+        </p>
+      </Section>
+
       <Section eyebrow="Who it's for" title="Three kinds of guests.">
         <p>
           <strong className="text-[#e8e1d5] font-normal">Adults</strong>{" "}

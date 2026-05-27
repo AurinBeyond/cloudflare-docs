@@ -864,7 +864,7 @@ function HubPanel({
             beneath the fixed tier ladder so visitors who want a
             non-standard minute count have a clean path. */}
         <div className="mt-12 max-w-xl mx-auto" data-testid="clarity-hub-topup-section">
-          <p className="aurin-eyebrow text-center mb-3">Or choose your own minutes</p>
+          <p className="aurin-eyebrow text-center mb-3">Or choose your own volume of presence</p>
           <VoiceTopupSlider />
         </div>
       </div>

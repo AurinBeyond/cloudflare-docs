@@ -1280,3 +1280,30 @@ Auto-refresh 60s. Traffic light ≥3x green, 1.5-3.0x yellow, <1.5x red.
 - Enter env vars in Emergent Deploy panel (never paste in chat)
 - Reply "Polar configured, run sandbox tests"
 - I then run live sandbox purchase + refund + duplicate-webhook tests = Faas 1C
+
+
+---
+
+## 2026-02-27 — Luxury copy pass (Variant A — value-driven, no price emphasis)
+
+**Done in this iteration:**
+- Full P&L breakdown of current €0.60/min vs €1.50/min vs €2.00/min — shared with Anna
+- Decision: keep backend price at €0.60/min for now (Polar approval still pending). Move to €1.50/min ONLY when LemonSqueezy variants can be co-updated, ideally after Polar onboarding.
+- Applied 4 copy changes across frontend — no backend, no price math touched:
+  1. `VoiceTopupSlider.jsx` — eyebrow "Voice top-up" → "Minutes of presence"; removed €/min phrase from narrative ("Invite as much time as you need to return…"). Price preview block + CTA button still show €X (legal minimum).
+  2. `ClarityRelease.jsx` — "Or choose your own minutes" → "Or choose your own volume of presence"
+  3. `SanctuaryPreview.jsx` — Voice Meter cards: `30/60/180 minutes` → `30/60/180 minutes of presence`; subtext rewritten to remove "measured by the minute" language; TwoPaths "flexible top-ups" → "flexible additions of presence"
+  4. `WhatThisIs.jsx` — added new "✦ Voice-first by design" section ("Made to be heard, not watched.") between "Why this exists" and "Who it's for", with two sub-callouts:
+     - ✦ For Individuals — confidential sanctuary, never used to train public models
+     - ✦ For Families & Children — screen-down technology, device upside down
+- Lint passed on all modified files. Smoke screenshots of `/what-this-is` and `/` Voice Meter confirm correct rendering.
+
+**Pending P0/P1 (carry forward):**
+- Anna confirms Polar.sh sandbox is ready → run Faas 1C/1D sandbox + refund + duplicate-webhook tests
+- After Polar approved + Anna updates LS variants in dashboard: lift `TOPUP_PRICE_PER_MIN_EUR` from 0.60 → 1.50 in backend `.env` (one-line change). 65% margin target.
+- P1: Letter of Admission email via Resend for Body Temple purchasers (luxury onboarding instead of plain receipt)
+
+**Deferred:**
+- "High Luxury / Sanctuary v3.0" full visual overhaul — Anna confirmed to wait until Polar onboarding is fully cleared.
+- 49 SKU bulk import to Polar after core 3 products are stable.
+

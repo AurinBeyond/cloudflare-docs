@@ -51,9 +51,9 @@ export default function VoiceTopupSlider({ className = "" }) {
     <div className={`aurin-card p-7 ${className}`} data-testid="voice-topup-slider">
       <div className="flex items-baseline justify-between mb-5">
         <div>
-          <p className="aurin-eyebrow mb-1.5">Voice top-up</p>
+          <p className="aurin-eyebrow mb-1.5">Minutes of presence</p>
           <p className="text-[14px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
-            Choose any number of minutes. Pay <strong className="text-[hsl(var(--aurin-text))]">€{ladder.price_per_min_eur.toFixed(2)}</strong> a minute, never more.
+            Invite as much time as you need to return. A quiet space that never auto-renews, never expires, and never runs in the background. Simply a doorway that remains open for as long as you choose to stay.
           </p>
         </div>
       </div>

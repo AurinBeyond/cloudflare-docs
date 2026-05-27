@@ -959,9 +959,9 @@ function WaysToBeHereSection() {
 // without it dominating the page.
 function VoiceMeterSection() {
   const topups = [
-    { mins: "30 minutes", price: "€25", note: "a short return" },
-    { mins: "60 minutes", price: "€39", note: "a full hour, when you need more" },
-    { mins: "180 minutes", price: "€99", note: "a season's worth of presence" },
+    { mins: "30 minutes of presence", price: "€25", note: "a short return" },
+    { mins: "60 minutes of presence", price: "€39", note: "a full hour, when you need more" },
+    { mins: "180 minutes of presence", price: "€99", note: "a season's worth of presence" },
   ];
 
   return (
@@ -984,9 +984,9 @@ function VoiceMeterSection() {
           </h2>
           <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
             Each path above includes a baseline of live voice presence.
-            When you need more, voice is added gently — measured by the
-            minute, never auto-renewed, never running quietly in the
-            background. Premium presence is always governed.
+            When you choose to extend, time is added gently — never
+            auto-renewed, never running quietly in the background.
+            Premium presence is always governed.
           </p>
         </RevealBlock>
 
@@ -1136,7 +1136,7 @@ function TwoPathsSection() {
       kicker: "Path I",
       name: "The Wanderer's Credits",
       tagline: "Pay only for what you use. No subscription.",
-      detail: "A single hour to begin, with flexible top-ups when you wish to return. Credits never expire.",
+      detail: "A single hour to begin, with flexible additions of presence when you wish to return. Credits never expire.",
     },
     {
       key: "subscription",
