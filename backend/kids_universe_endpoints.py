@@ -378,15 +378,29 @@ async def emotion_checkin(inp: EmotionCheckinInput, request: Request):
 # ─── Cron for 48h star reminders ─────────────────────────────────────
 
 @router.post("/cron/star-reminders")
+@router.get("/cron/star-reminders")
 async def cron_star_reminders(request: Request):
-    """Process due 48h reminder emails. Admin-token-gated.
+    """Process due 48h reminder emails. Two auth paths so UptimeRobot
+    free plan (no custom headers) can still trigger this safely:
 
-    Wire this URL to an external uptime monitor (e.g. UptimeRobot)
-    pinging every 10-60 minutes. Idempotent: a commitment's
-    `reminder_sent_at` blocks duplicate sends.
+    1. Header `X-Admin-Token: <ADMIN_TOKEN>` — for internal/admin tools.
+    2. Query param `?secret=<CRON_SECRET>` — for external uptime monitors
+       that cannot send custom headers (UptimeRobot free, etc).
+
+    GET and POST both accepted so UptimeRobot's default monitor type works.
+    Idempotent: a commitment's `reminder_sent_at` blocks duplicate sends.
     """
-    token = request.headers.get("X-Admin-Token") or request.headers.get("x-admin-token")
-    if not token or token != os.environ.get("ADMIN_TOKEN"):
+    token_header = request.headers.get("X-Admin-Token") or request.headers.get("x-admin-token")
+    secret_param = request.query_params.get("secret")
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    cron_secret = os.environ.get("CRON_SECRET")
+
+    authorised = False
+    if token_header and admin_token and token_header == admin_token:
+        authorised = True
+    elif secret_param and cron_secret and secret_param == cron_secret:
+        authorised = True
+    if not authorised:
         raise HTTPException(status_code=403, detail="forbidden")
 
     now_iso = _now_iso()
