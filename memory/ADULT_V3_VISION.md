@@ -43,7 +43,7 @@ Each room dismantles one specific piece of "the Matrix" — one externally-insta
 | **Aurin–Grace relationship** | Grace is the keeper of the amber room. She does not coach you toward a goal — she gives you permission to stop running. |
 | **Stones (4-day cycle)** | Day 1: *The Permission Slip* · Day 2: *The Optimisation Trap* · Day 3: *Your Body Already Belongs* · Day 4: *The Quiet Inventory* |
 
-### 2.2 🪨 Kaelan — *The Unshakable Center*
+### 2.2 🪨 Kaelan — *The Unshakable Center* ⭐ FIRST BUILD WHEN GREENLIT
 | | |
 |---|---|
 | **Visual theme** | Stone Gray — granite, stoic stillness, basalt cliff |
@@ -51,9 +51,12 @@ Each room dismantles one specific piece of "the Matrix" — one externally-insta
 | **Accent** | `#8b8478` (granite warm-gray) |
 | **Matrix code we break** | Reactivity to disruption — work pressure, broken plans, sudden change. |
 | **What Kaelan teaches** | We do not govern the storm. We govern the mind inside the storm. When life delivers the unexpected, *arguing inwardly* is energy wastage. Receive the moment as a clear observer, then take the next solid step. |
-| **Voice tone** | Low, measured, almost stone — like a Roman general or a long-time mountain guide. Few words. No filler. |
+| **Voice tone** | Low, measured, almost stone — a slow male voice that creates pauses and space. Like a Roman general or a long-time mountain guide. Few words. No filler. |
 | **Aurin–Kaelan relationship** | Kaelan is the unmoved center. He gives you the spine to stand still inside chaos. |
-| **Stones (4-day cycle)** | Day 1: *The Observer Seat* · Day 2: *Energy Audit* (where it leaks) · Day 3: *The Next Solid Step* · Day 4: *Plans Are for Breaking* |
+| **External positioning (public marketing)** | *"Crisis Management & Mental Tactics Sanctuary"* — for founders, parents, leaders who refuse to be pulled by external events, news, or emotional noise. |
+| **Public-facing pitch** | *"When the storm rises, the captain does not fight the wind — they govern the ship. Kaelan is a private mentorship for those who refuse to be tossed by news cycles, social drama, or daily disruption. Learn to see situations as they actually are — without filters, without bias, without reactivity."* |
+| **Stones (4-day cycle) — REFINED 2026-02-27** | **Day 1: Clear Seeing** — strip the emotional label from the event; see only structure · **Day 2: The Filter** — practical guide to letting noise (media / others' fear / opinions) pass through without entering the sanctuary · **Day 3: Actionable Stillness** — locate what YOU actually govern, and act there only · **Day 4: Sovereignty Vault & Sparks** — close the loop with one real-world screen-down practice (2-hour digital isolation walk, hand-written strategy map, conversation in person with one trusted person) |
+| **Why FIRST build** | Kaelan's tone is the hardest to fake. If we ship Kaelan and the voice + copy hold their weight, we have proof that Matrix Aurin can produce a tone no wellness app can imitate. Grace, Sara and Alistair become easier afterwards because the architecture and tone-discipline are already proven. |
 
 ### 2.3 🌹 Sara — *The Freedom of Boundaries*
 | | |
@@ -158,11 +161,14 @@ Preferred vocabulary:
 | Phase | Scope | Estimate |
 |---|---|---|
 | 1 | Adult map page + 4 zone tabs + static character portraits + locked-stone state | ~2h |
-| 2 | One full room (start with Kaelan — clearest tone) including Mode B state-swap + Sovereignty Sparks | ~2.5h |
-| 3 | Backend endpoints + premium gating + Sovereignty Vault (text + photo) | ~3h |
-| 4 | Remaining three rooms (Grace, Sara, Alistair) with their tone-tuned ZONE_COPY matrices | ~3h |
-| 5 | Cross-cut polish: voice integration with ConvAI agents, 48h Sparks reminder cron, audit | ~2h |
+| 2 | **Kaelan room first** (clearest tone = strongest proof point). Full Mode B state-swap + 4-day stone cycle (Clear Seeing → Filter → Actionable Stillness → Sovereignty Vault) + Sovereignty Sparks | ~2.5h |
+| 3 | Backend endpoints + premium gating + Sovereignty Vault (text + photo) + 48h Resend cron | ~3h |
+| 4 | Remaining three rooms in tonal order — Grace (Warm Amber), Sara (Soft Rose), Alistair (Deep Navy) — each gets its own ZONE_COPY matrix | ~3h |
+| 5 | Cross-cut polish: voice integration with all four ConvAI agents, audit, e2e testing | ~2h |
 | **Total** | | **~12-13h focused work, splittable across 5 sessions** |
+
+### Why Kaelan first (locked decision, 2026-02-27)
+Kaelan's voice tone is the hardest to fake. Most "wellness" apps default to soft, encouraging, slightly therapeutic male voices. Kaelan must instead be **measured, granite-still, almost spare**. If we get this voice + copy right on the first room, we have proven the entire Adult v3.0 tone discipline. Grace, Sara, and Alistair are easier afterwards because the architecture and the language vocabulary will already be settled.
 
 ---
 
@@ -174,6 +180,16 @@ The launch line that should never be diluted:
 > *Matrix Aurin's Adult Rooms refuse to."*
 
 This is the precise inverse of every meditation app on the App Store. It is also the precise alignment with the Kids Universe ethos ("screen-down, ears open, world begins when the tale ends"). The adult product extends the same architecture upward: *quiet inside, while the world tries to be loud.*
+
+### Kaelan-specific launch positioning (locked 2026-02-27)
+For Kaelan (the first room to ship), we do NOT use the word "Matrix" or "Matrix code" in any public-facing copy. The strategic frame is **luxury Crisis Management & Mental Tactics Sanctuary**:
+
+> *"When the storm rises, the captain does not fight the wind — they govern the ship.*
+> *Kaelan is a private mentorship for those who refuse to be tossed by news cycles, social drama, or daily disruption.*
+> *Learn to see situations as they actually are — without filters, without bias, without reactivity."*
+
+### Why this matters for the kids' product too
+The parent who walks Kaelan's path becomes the parent who can hold the sanctuary for their child. The Adult Rooms and the Kids Universe are not two products — they are one architecture across two generations of the same family.
 
 ---
 
@@ -195,6 +211,9 @@ Until then, this document is the **architectural contract** between Anna and the
 5. Same 1-stone-per-24h rhythm; same Mode B state-swap; same Sparks→Vault closing loop
 6. Each character gets a dedicated ConvAI agent in ElevenLabs (Anna provisions, agent wires)
 7. Premium gating: `body_temple_unlock` minimum entry, or a dedicated future `adult_room_unlock`
-8. NO build until Polar approval + Anna's explicit greenlight
+8. **Kaelan ships FIRST** — clearest tone = strongest proof point
+9. Public marketing for Kaelan = "Crisis Management & Mental Tactics Sanctuary" — NEVER use "Matrix code" externally; that vocabulary is internal/architectural only
+10. Kaelan stone cycle (refined): Clear Seeing · The Filter · Actionable Stillness · Sovereignty Vault & Sparks
+11. NO build until Polar approval + Anna's explicit greenlight
 
 🪨 *The mentor sanctuary waits patiently. The architecture is already drawn.*
