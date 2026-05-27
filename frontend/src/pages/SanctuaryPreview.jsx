@@ -29,6 +29,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 
 const HERO = "/sanctuary/hero-mask.png";
 const ATMOSPHERE = "/sanctuary/atmosphere.png";
@@ -338,6 +339,52 @@ function HeroSection() {
             The doors are open this season.
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// §BRAND-CLARITY 2026-02-11 — A Quiet Note. Sits between the hero
+// and the deeper worlds. Tells a first-time visitor in 8 seconds:
+// what this is, what it is not, and who holds it. Brand voice,
+// no marketing punch, no new visual system.
+function QuietNoteSection() {
+  return (
+    <section
+      data-testid="sanctuary-quiet-note"
+      className="relative w-full bg-[#0b0a08] py-24 sm:py-32"
+    >
+      <div className="max-w-[760px] mx-auto px-6 sm:px-10 text-center">
+        <p
+          className="text-[11px] tracking-[0.42em] uppercase mb-8"
+          style={{ color: BRASS, fontFamily: SERIF }}
+        >
+          ✦ A quiet note
+        </p>
+        <p
+          className="text-[20px] sm:text-[24px] leading-[1.7] font-light italic"
+          style={{ color: "#e8e1d5", fontFamily: SERIF, letterSpacing: "0.005em" }}
+          data-testid="sanctuary-quiet-note-text"
+        >
+          This is not therapy. Not a chatbot. Not another place that
+          wants more of you. It is a room where presence is the product,
+          and you do not have to perform.
+        </p>
+        <p
+          className="mt-10 text-[28px]"
+          style={{ color: "#d9c79b", fontFamily: '"Caveat", cursive' }}
+        >
+          — Anna &amp; Aurin
+        </p>
+        <p className="mt-10 text-[10.5px] tracking-[0.32em] uppercase text-[#7a7468]">
+          <Link
+            to="/what-this-is"
+            className="hover:text-[#bcb4a3] transition-colors duration-500 underline decoration-dotted underline-offset-[6px]"
+            data-testid="sanctuary-quiet-note-link"
+          >
+            What this is, in plain language →
+          </Link>
+        </p>
       </div>
     </section>
   );
@@ -1195,6 +1242,7 @@ function SanctuaryFooter() {
           Pure Soul Life — Matrix Aurin
         </p>
         <div className="flex flex-wrap items-center gap-8 text-[11px] tracking-[0.24em] uppercase text-[#7a7468]">
+          <Link to="/what-this-is" className="hover:text-[#bcb4a3] transition-colors duration-500" data-testid="sanctuary-footer-what-this-is">What this is</Link>
           <Link to="/about" className="hover:text-[#bcb4a3] transition-colors duration-500">About</Link>
           <Link to="/aurin-philosophy" className="hover:text-[#bcb4a3] transition-colors duration-500">Philosophy</Link>
           <Link to="/legal" className="hover:text-[#bcb4a3] transition-colors duration-500">Privacy</Link>
@@ -1227,6 +1275,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
         <SanctuaryNav production={production} />
         <main>
           <HeroSection />
+          <QuietNoteSection />
           <TwoWorldsSection />
           <RoomsSection />
           <TwoPathsSection />
@@ -1235,6 +1284,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <VoiceMeterSection />
           <PhilosophySection />
           <ClosingSection />
+          <AurinsPromise tone="dark" showEarlyAccess={true} />
         </main>
         <SanctuaryFooter />
       </div>

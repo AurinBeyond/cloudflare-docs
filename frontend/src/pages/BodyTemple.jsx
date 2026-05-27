@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import StonePath from "@/components/StonePath";
 import KidsJourneyPath from "@/components/KidsJourneyPath";
+import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 
 const WEEK_ICONS = {
     breathing: Wind,
@@ -172,6 +173,39 @@ export default function BodyTemple() {
                         <p className="text-[15px] leading-relaxed sanctuary-muted max-w-[55ch]">
                             {overview.blurb}
                         </p>
+
+                        {/* §BRAND-CLARITY 2026-02-11 — "What waits for you"
+                            structured promise immediately before the CTA.
+                            Customers ask "what exactly do I get for $39?"
+                            — this answers it without breaking the poetic
+                            tone above. No image, no new colour. */}
+                        {!overview.unlocked && (
+                            <div
+                                className="mt-6 max-w-[55ch] rounded-2xl px-5 py-4"
+                                style={{
+                                    background: "rgba(255, 247, 227, 0.55)",
+                                    border: "1px solid rgba(196, 164, 107, 0.25)",
+                                }}
+                                data-testid="body-temple-what-you-get"
+                            >
+                                <p
+                                    className="text-[10.5px] tracking-[0.32em] uppercase mb-3"
+                                    style={{ color: "#8a6a1a" }}
+                                >
+                                    What waits for you after unlock
+                                </p>
+                                <ul
+                                    className="text-[14px] leading-[1.85] font-light space-y-1.5"
+                                    style={{ color: "#3d2e15" }}
+                                >
+                                    <li>· 28 days · one ancient key per day</li>
+                                    <li>· Breath · Touch · Rest · Presence</li>
+                                    <li>· Text, guided sound, and a small journal</li>
+                                    <li>· Yours forever, with one quiet payment</li>
+                                    <li>· No deadlines, no streaks, no pressure</li>
+                                </ul>
+                            </div>
+                        )}
 
                         <div className="mt-7 flex flex-wrap items-center gap-3">
                             {!overview.unlocked ? (
@@ -433,6 +467,15 @@ export default function BodyTemple() {
                             </>
                         )}
                     </div>
+                </div>
+            )}
+            {/* §BRAND-CLARITY 2026-02-11 — Trust anchor at the close
+                of the page. Cream tone to match the surface. Shown
+                only once overview has loaded so it never flashes
+                during the loading state. */}
+            {overview && (
+                <div className="sanctuary-cream">
+                    <AurinsPromise tone="cream" showEarlyAccess={true} />
                 </div>
             )}
         </div>

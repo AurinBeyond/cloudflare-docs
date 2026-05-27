@@ -36,6 +36,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 // Sara now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
 // The file ParentsRoomChat.jsx is preserved in the repo for rollback.
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
+import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 // §AUDIT-SCALE 2026-05-20 — Parents' Room joins Clarity in tracking
 // presence_seconds so Sara's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
@@ -556,6 +557,8 @@ function SituationModal({ situation, lens, onClose }) {
           )}
         </div>
       </div>
+      {/* §BRAND-CLARITY 2026-02-11 — Trust anchor for parents. */}
+      <AurinsPromise tone="cream" showEarlyAccess={true} />
     </div>
   );
 }

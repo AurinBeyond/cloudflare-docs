@@ -36,6 +36,7 @@ import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
 import LuxurySanctuaryLanding from "@/pages/LuxurySanctuaryLanding";
 import SanctuaryPreview from "@/pages/SanctuaryPreview";
+import WhatThisIs from "@/pages/WhatThisIs";
 import TestMic from "@/pages/TestMic";
 import AurinPhilosophy from "@/pages/AurinPhilosophy";
 import Blog from "@/pages/Blog";
@@ -236,6 +237,7 @@ function AppRouter() {
           locked pricing structure visible as atmospheric "Thresholds".
           Production / Home.jsx remains untouched. */}
       <Route path="/sanctuary-preview" element={<SanctuaryPreview />} />
+      <Route path="/what-this-is" element={<WhatThisIs />} />
       {/* §2026-05-20 — /test-mic is a brutal isolation test page for
           the voice-to-voice deafness bug. No custom CSS, no overlays,
           no focus-stealing elements. If voice works here but fails on
