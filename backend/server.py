@@ -15405,6 +15405,19 @@ app.include_router(api_router)
 from clarity_realtime import router as realtime_router  # noqa: E402
 app.include_router(realtime_router)
 
+# §KIDS-UNIVERSE-PHASE-2-3-4 2026-02-27 — Kids Universe Journey backend.
+# Plan: /app/memory/KIDS_UNIVERSE_PLAN.md
+import kids_universe_endpoints  # noqa: E402
+from email_service import send_email as _send_email_fn  # noqa: E402
+kids_universe_endpoints.init(
+    db=db,
+    user_has_premium_fn=_user_has_premium,
+    resolve_current_user_fn=_resolve_current_user,
+    require_user_fn=_require_user,
+    send_email_fn=_send_email_fn,
+)
+app.include_router(kids_universe_endpoints.router, prefix="/api")
+
 
 @app.on_event("startup")
 async def on_startup():

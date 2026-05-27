@@ -27,9 +27,18 @@
  * 100% English UI per Anna's directive.
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Lock, X, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/contexts/AuthProvider";
+import { api } from "@/lib/api";
+import {
+  StorytellingSanctumRoom,
+  ReflectionSpaceRoom,
+  StarChamberRoom,
+  SecretAlbumRoom,
+  FamilyAlbumFAB,
+} from "@/pages/kids/KidsRooms";
 
 const SERIF = '"Cormorant Garamond", "Playfair Display", Georgia, serif';
 
@@ -347,120 +356,63 @@ function UnlockModal({ open, onClose }) {
   );
 }
 
-function StorytellingDemo({ zone, onBack }) {
-  return (
-    <div
-      data-testid="kids-journey-storytelling-demo"
-      className="min-h-screen w-full"
-      style={{
-        background: `linear-gradient(180deg, ${zone.bgFrom} 0%, ${zone.bgTo} 100%)`,
-        color: "#e8e1d5",
-        fontFamily: SERIF,
-      }}
-    >
-      <header className="max-w-[1100px] mx-auto px-6 sm:px-10 py-6 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={onBack}
-          data-testid="kids-journey-room-back"
-          className="flex items-center gap-2 text-[11px] tracking-[0.32em] uppercase text-[#bcb4a3] hover:text-[#e8e1d5] transition-colors"
-        >
-          <ArrowLeft size={14} /> Back to the Path
-        </button>
-        <span className="text-[10.5px] tracking-[0.28em] uppercase text-[#5a554c] italic">
-          Storytelling Sanctum · Free Preview
-        </span>
-      </header>
-
-      <main className="max-w-[1100px] mx-auto px-6 sm:px-10 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div className="lg:col-span-5 flex justify-center relative">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 rounded-[2rem] blur-3xl opacity-50"
-            style={{ background: zone.accentGlow }}
-          />
-          <img
-            src={AURIN_PORTRAIT}
-            alt="Aurin, your guide"
-            data-testid="kids-journey-aurin-portrait"
-            className="relative z-10 w-full max-w-[360px] aspect-square object-cover rounded-[1.5rem]"
-            style={{
-              border: "1px solid rgba(232,225,213,0.12)",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.55)",
-            }}
-          />
-        </div>
-
-        <div className="lg:col-span-7 space-y-7">
-          <p
-            className="text-[11px] tracking-[0.42em] uppercase"
-            style={{ color: zone.accent }}
-          >
-            ✦ A first whisper from Aurin
-          </p>
-          <h2
-            className="text-[34px] sm:text-[42px] leading-[1.2] font-light italic"
-            style={{ fontFamily: SERIF, color: "#e8e1d5" }}
-          >
-            Welcome, little star.<br />
-            I am Aurin.
-          </h2>
-          <p className="text-[17px] leading-[1.85] text-[#bcb4a3] font-light">
-            I am here to walk with you through wonder, courage and real
-            transformation. Close your eyes if you like — and listen, when the
-            tale begins.
-          </p>
-          <div
-            className="rounded-[1.25rem] p-6 mt-4"
-            style={{
-              background: "rgba(255,253,249,0.04)",
-              border: "1px solid rgba(196,164,107,0.16)",
-            }}
-          >
-            <p
-              className="text-[12.5px] italic text-[#a59f93] leading-[1.85] mb-4"
-              style={{ fontFamily: SERIF }}
-            >
-              The voice of Aurin sleeps until the Parent Sanctuary opens. In the
-              full journey, every stone holds its own tale, told gently and
-              without a screen.
-            </p>
-            <Link
-              to="/pricing"
-              data-testid="kids-journey-demo-cta"
-              className="inline-flex items-center justify-center px-7 py-3 rounded-full text-[12px] tracking-[0.22em] uppercase font-medium transition-all"
-              style={{
-                background: "#c4a46b",
-                color: "#0b0a08",
-                fontFamily: SERIF,
-                boxShadow: "0 0 24px rgba(196,164,107,0.32)",
-              }}
-            >
-              ✦ Open Aurin's Voice
-            </Link>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
-
 export default function KidsUniverseJourney() {
   const { zone: zoneParam } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const currentZoneKey =
     zoneParam && ZONES[zoneParam] ? zoneParam : "discovery";
   const zone = ZONES[currentZoneKey];
 
   const [unlockOpen, setUnlockOpen] = useState(false);
   const [activeRoom, setActiveRoom] = useState(null);
+  const [progress, setProgress] = useState({
+    unlocked_nodes: ["node-1"],
+    premium: false,
+    next_unlock_at: null,
+  });
+
+  const isPremium = !!progress.premium;
+  const isSignedIn = !!user;
+
+  // Load progress whenever zone or auth state changes
+  useEffect(() => {
+    let alive = true;
+    api
+      .get(`/kids-journey/progress/${zone.slug}`)
+      .then((r) => {
+        if (alive) setProgress(r.data || progress);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zone.slug, user?.user_id]);
 
   const onSelectStone = (stone) => {
-    if (stone.freeDemo) {
+    const unlocked = progress.unlocked_nodes || ["node-1"];
+    const stoneUnlocked = unlocked.includes(stone.id);
+    if (stone.id === "node-1" || stoneUnlocked) {
+      setActiveRoom(stone);
+      return;
+    }
+    // Locked stone — if user is premium they CAN unlock the next one
+    // (we still open the room; backend enforces 24h cap). If not premium
+    // or not signed in, show unlock modal.
+    if (isPremium) {
       setActiveRoom(stone);
     } else {
       setUnlockOpen(true);
     }
+  };
+
+  const handleStoneUnlocked = (nodeId) => {
+    setProgress((p) => {
+      const cur = p.unlocked_nodes || [];
+      if (cur.includes(nodeId)) return p;
+      return { ...p, unlocked_nodes: [...cur, nodeId] };
+    });
   };
 
   const changeZone = (slug) => {
@@ -475,12 +427,54 @@ export default function KidsUniverseJourney() {
     [zone]
   );
 
-  // §MODE-B (state-swap, NOT a route change) — only the open demo room is wired in Phase 1.
-  if (activeRoom && activeRoom.freeDemo) {
-    return (
-      <StorytellingDemo zone={zone} onBack={() => setActiveRoom(null)} />
-    );
+  // §MODE-B — render the active room as a state-swap (NOT a route change).
+  if (activeRoom) {
+    const back = () => setActiveRoom(null);
+    if (activeRoom.roomType === "fairytale_room") {
+      return (
+        <StorytellingSanctumRoom
+          zone={zone}
+          isPremium={isPremium}
+          onBack={back}
+          onStoneUnlocked={handleStoneUnlocked}
+        />
+      );
+    }
+    if (activeRoom.roomType === "puzzle_room") {
+      return (
+        <ReflectionSpaceRoom
+          zone={zone}
+          onBack={back}
+          onStoneUnlocked={handleStoneUnlocked}
+        />
+      );
+    }
+    if (activeRoom.roomType === "star_reward_room") {
+      return (
+        <StarChamberRoom
+          zone={zone}
+          onBack={back}
+          onStoneUnlocked={handleStoneUnlocked}
+        />
+      );
+    }
+    if (activeRoom.roomType === "private_album_room") {
+      return (
+        <SecretAlbumRoom
+          zone={zone}
+          onBack={back}
+          onStoneUnlocked={handleStoneUnlocked}
+        />
+      );
+    }
   }
+
+  // Decorate each stone with its current lock state from progress.
+  const unlockedSet = new Set(progress.unlocked_nodes || ["node-1"]);
+  const stonesWithState = STONES.map((s) => ({
+    ...s,
+    freeDemo: s.id === "node-1" || unlockedSet.has(s.id),
+  }));
 
   return (
     <div
@@ -550,7 +544,7 @@ export default function KidsUniverseJourney() {
             style={{ paddingTop: "1rem", paddingBottom: "1rem" }}
             data-testid="kids-journey-stones-list"
           >
-            {STONES.map((s, i) => (
+            {stonesWithState.map((s, i) => (
               <Stone
                 key={s.id}
                 stone={s}
@@ -593,6 +587,7 @@ export default function KidsUniverseJourney() {
       </footer>
 
       <UnlockModal open={unlockOpen} onClose={() => setUnlockOpen(false)} />
+      <FamilyAlbumFAB isPremium={isPremium} />
     </div>
   );
 }
