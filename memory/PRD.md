@@ -1477,3 +1477,55 @@ Voice session → Sovereignty Sparks (real-world screen-down practices) → Sove
 > "Most adult wellness apps want to fix you. Matrix Aurin's Adult Rooms refuse to."
 
 Build estimate when greenlit: ~12-13h across 5 phases. Until then, this is the contract — no drift, no improvisation.
+
+
+---
+
+## 2026-02-27 (Night) — Adult v3.0 Phase 1 + Phase 2 SHIPPED (Kaelan first) ✅
+
+**Backend** (`/app/backend/adult_universe_endpoints.py`):
+- `/api/adult-rooms/progress/{room}` — anonymous OR premium-aware
+- `/api/adult-rooms/unlock-stone` — 24h-gated stone unlock (HTTP 429)
+- `/api/adult-rooms/vault/save-note` — Sovereignty Vault private text
+- `/api/adult-rooms/vault/list` + `/api/adult-rooms/vault/delete`
+- `/api/adult-rooms/sparks/commit` — schedule 48h reminder
+- `/api/adult-rooms/cron/spark-reminders` — dual-auth (X-Admin-Token OR ?secret=)
+- New collections: `adult_room_progress`, `adult_sovereignty_vault`, `adult_sovereignty_sparks`
+
+**Frontend:**
+- `/app/frontend/src/pages/AdultRooms.jsx` — luxury map page with 4 character cards:
+  - 🌟 **Grace** (Warm Amber) — "Opening soon"
+  - 🪨 **Kaelan** (Granite Gray) — ACTIVE
+  - 🌹 **Sara** (Soft Rose) — "Opening soon"
+  - 💙 **Alistair** (Deep Navy) — "Opening soon"
+  - Hero: *"Four quiet rooms. One unshakable center."*
+- `/app/frontend/src/pages/adult/KaelanRoom.jsx` — full Mode B state-swap with:
+  - **Cycle view**: "When the storm rises, you govern the ship." + 4-stone grid
+  - **Stone Detail view**: per-day body + Reflection (Vault) input + Sovereignty Sparks
+  - Granite-themed portrait placeholder (graceful fallback if PNG missing at `/avatars/kaelan.png`)
+  - Free users: see Day 1 body + "Open the Sanctuary" CTA → /pricing
+  - Premium users: write to Vault + commit a Sparks practice → 48h Resend reminder
+
+**Stone cycle copy locked (per ADULT_V3_VISION.md):**
+1. **Clear Seeing** — Strip the label. See the structure.
+2. **The Filter** — Noise passes through. It does not enter.
+3. **Actionable Stillness** — What you govern, and what you do not.
+4. **Sovereignty Vault** — The room remembers, so you do not have to.
+
+**Sparks (real-world screen-down practices) per stone:** walk without phone · write the event twice · mute one source for 7 days · no-news morning · one solid step · handwritten 90-day strategy · one hour alone · one in-person conversation.
+
+**Smoke test: 8/8 PASS** (map loads, all 4 cards render, Kaelan enabled, cycle view opens, all 4 stones, Day 1 detail shows "Strip the label. See the structure.", free user sees pricing CTA, locked Day 3 opens unlock modal).
+
+**Minor bugfix**: duplicate header in cycle view (nested `Shell`) → fixed.
+
+**Build status:**
+- ✅ Phase 1 (Map + zone tabs) — DONE
+- ✅ Phase 2 (Kaelan full room) — DONE
+- 🟡 Phase 3 (Voice integration via new ConvAI agent `ELEVENLABS_CONVAI_AGENT_KAELAN`) — Anna provisions agent
+- 🟡 Phase 4 (Grace, Sara, Alistair rooms with own tonal ZONE_COPY) — when ready
+- 🟡 Phase 5 (Polish, full e2e testing) — final pass
+
+**Carry forward:**
+- Anna to provide curated Kaelan portrait PNG → save to `/app/frontend/public/avatars/kaelan.png`
+- ElevenLabs ConvAI agent for Kaelan (low, measured male voice) — env var `ELEVENLABS_CONVAI_AGENT_KAELAN`
+- UptimeRobot URL for adult reminders: `https://prulesoul.site/api/adult-rooms/cron/spark-reminders?secret=...`
