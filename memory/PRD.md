@@ -1307,3 +1307,59 @@ Auto-refresh 60s. Traffic light ≥3x green, 1.5-3.0x yellow, <1.5x red.
 - "High Luxury / Sanctuary v3.0" full visual overhaul — Anna confirmed to wait until Polar onboarding is fully cleared.
 - 49 SKU bulk import to Polar after core 3 products are stable.
 
+
+---
+
+## 2026-02-27 (PM) — Letter of Admission + Kids Universe Phase 1 SHIPPED
+
+**Done in this session:**
+
+### 1. Letter of Admission email (P1 — DONE) ✅
+- New module `/app/backend/letter_of_admission.py` with luxury HTML+text Resend email
+- Hooked into guest-key redemption flow (server.py): fires once per user when `body_temple_unlock` perk granted
+- Idempotent via `letters_of_admission` collection — never sends twice for same user
+- Admin endpoint `POST /api/admin/letter-of-admission/send` for manual resend (ADMIN_TOKEN-gated)
+- Tone: "A quiet letter of admission · Body Temple 28" — threshold, not receipt. Sanctuary palette, Cormorant Garamond, Honey-Gold CTA "Enter the Temple →"
+- Uses `agent@prulesoul.site` sender (RESEND_FROM_AGENT) with sandbox fallback
+- Backend started clean (verified via `/api/health`)
+
+### 2. Kids Universe Journey — Phase 1 Static Skeleton (DONE) ✅
+- New page `/app/frontend/src/pages/KidsUniverseJourney.jsx`
+- Routes registered: `/kids-universe/journey` (default discovery) and `/kids-universe/journey/:zone`
+- **Existing `/kids-universe` treats page UNTOUCHED** — safe coexistence
+- Aurin Inner Guide portrait saved to `/app/frontend/public/avatars/aurin-inner-guide.png`
+- Three age zones with full color theming:
+  - Discovery (4-6, emerald green) → "The forest of wonder."
+  - Exploration (7-10, crystal blue) → "The crystal cave of mystery."
+  - Creation (11-13, cosmic purple) → "The cosmic studio of becoming."
+- Curved SVG path (gradient + dashed overlay) with 4 stones alternating left/right
+- Day 1 stone = OPEN demo (routes to Storytelling Sanctum demo state-swap)
+- Days 2-4 = LOCKED with soft frosted blur + Lock icon
+- Click locked stone → Unlock Modal: "This stone is held in quiet until the Sanctuary opens." with Honey-Gold "Discover the Parent Sanctuary →" CTA
+- Topbar: "← Back to Matrix Aurin" + "Parent Sign In →"
+- Footer CTA: "Open the Full Journey ✦"
+- **100% English UI** per Anna's directive
+- Lint clean. Smoke test verified all 3 zones + unlock modal flow.
+
+**Carry forward (next session):**
+
+P0/P1:
+- Anna's Polar.sh approval signal (PAUSED — Anna's action)
+- Phase 2 Kids Universe: build Storytelling Sanctum demo state-swap fully (currently routes to demo page; need polished Mode B Room view with text-only Aurin greeting + "Open Aurin's Voice" CTA to /pricing)
+- Phase 3 Kids Universe: Premium gating + Star Chamber with 6 reward cards + Resend reminder (48h)
+- Phase 4 Kids Universe: Album upload with password reconfirm + Reflection voice + Storytelling voice (governance-protected)
+- Phase 5 Kids Universe: per-age content tuning + Anna review
+
+P2 (Deferred):
+- High Luxury v3.0 visual overhaul — wait until Polar approved
+- 49 SKU bulk import to Polar
+- Adult v3.0 vision doc (`/app/memory/ADULT_V3_VISION.md`) — Grace/Kaelan/Sara/Alistair room shells using `SanctuaryChatRoom` model
+
+**Key decisions locked:**
+- LemonSqueezy variants NEVER edited manually. Clean cutover day = LS disable + Polar enable + `TOPUP_PRICE_PER_MIN_EUR=1.50` simultaneously.
+- Aurin avatar strategy v1.0: single Inner Guide portrait for all kids zones. v1.1 will add outfit variants.
+- 1 child / parent account in V1.
+- 1 stone / 24h cap.
+- Album photos: forever retention, parent delete only.
+- Star fulfilled: marks complete + auto-unlocks next star.
+

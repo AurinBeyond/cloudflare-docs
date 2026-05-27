@@ -10,6 +10,7 @@ import Bookstore from "@/pages/Bookstore";
 import BookDetail from "@/pages/BookDetail";
 import ReachOut from "@/pages/ReachOut";
 import KidsUniverse from "@/pages/KidsUniverse";
+import KidsUniverseJourney from "@/pages/KidsUniverseJourney";
 import KidsColoringStudio from "@/pages/KidsColoringStudio";
 import KidsHub from "@/pages/KidsHub";
 import StoryGiftForm from "@/pages/StoryGiftForm";
@@ -105,6 +106,10 @@ function AppRouter() {
         <Route path="/learning" element={<Learning />} />
         <Route path="/kids-universe" element={<KidsUniverse />} />
         <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
+        {/* §KIDS-UNIVERSE-PHASE-1 2026-02-27 — Luxury Adventure Hub.
+            Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}
+        <Route path="/kids-universe/journey" element={<KidsUniverseJourney />} />
+        <Route path="/kids-universe/journey/:zone" element={<KidsUniverseJourney />} />
         {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
         <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
         <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />

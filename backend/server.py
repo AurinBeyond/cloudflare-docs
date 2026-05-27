@@ -4243,6 +4243,26 @@ async def guest_keys_redeem(inp: GuestKeyRedeemInput, request: Request):
                 upsert=True,
             )
             granted.append(p)
+            # §LETTER-OF-ADMISSION 2026-02-27 — Luxurious onboarding
+            # email fires once per user, the moment Body Temple unlocks.
+            # Idempotent: the helper checks `letters_of_admission`
+            # before sending.
+            try:
+                from letter_of_admission import send_letter_of_admission
+                u_doc = await db.users.find_one(
+                    {"user_id": user.user_id},
+                    {"_id": 0, "email": 1, "display_name": 1},
+                )
+                if u_doc and u_doc.get("email"):
+                    await send_letter_of_admission(
+                        db=db,
+                        user_id=user.user_id,
+                        email=u_doc["email"],
+                        recipient_name=u_doc.get("display_name") or None,
+                        source=f"guest_key:{code}",
+                    )
+            except Exception as e:  # noqa: BLE001
+                logger.warning("letter_of_admission dispatch failed: %s", e)
         elif p.startswith("presence_minutes:"):
             try:
                 minutes = int(p.split(":", 1)[1])
@@ -4267,6 +4287,40 @@ async def guest_keys_redeem(inp: GuestKeyRedeemInput, request: Request):
     })
     return {"ok": True, "id": redemption_id, "perks_granted": granted,
             "cycle": doc.get("cycle"), "influencer_name": doc.get("name")}
+
+
+# §LETTER-OF-ADMISSION 2026-02-27 — Admin/test endpoint for manual resend
+@api_router.post("/admin/letter-of-admission/send")
+async def admin_send_letter_of_admission(request: Request):
+    """Manually trigger Letter of Admission for a specific user_id.
+    Protected by ADMIN_TOKEN. Body: { "user_id": "...", "force": false }.
+    `force=true` deletes the prior idempotency row first."""
+    token = request.headers.get("X-Admin-Token") or request.headers.get("x-admin-token")
+    if not token or token != os.environ.get("ADMIN_TOKEN"):
+        raise HTTPException(status_code=403, detail="forbidden")
+    body = await request.json()
+    user_id = (body or {}).get("user_id")
+    force = bool((body or {}).get("force"))
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id required")
+    u_doc = await db.users.find_one(
+        {"user_id": user_id},
+        {"_id": 0, "email": 1, "display_name": 1},
+    )
+    if not u_doc or not u_doc.get("email"):
+        raise HTTPException(status_code=404, detail="user has no email on file")
+    if force:
+        await db.letters_of_admission.delete_one({"user_id": user_id})
+    from letter_of_admission import send_letter_of_admission
+    result = await send_letter_of_admission(
+        db=db,
+        user_id=user_id,
+        email=u_doc["email"],
+        recipient_name=u_doc.get("display_name") or None,
+        source="admin_manual",
+    )
+    return {"ok": True, **result}
+
 
 
 @api_router.get("/marketing/cycle")
