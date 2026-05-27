@@ -11814,6 +11814,147 @@ async def admin_governance_unfreeze(request: Request):
     return {"frozen": is_frozen(), "action": "unfreeze"}
 
 
+# ----------------------------------------------------------------
+# §PAYMENT-ABSTRACTION 2026-02-11 — Polar.sh webhook + admin SKU.
+# Sandbox-only. Returns HTTP 503 until env keys are set.
+# LemonSqueezy webhook untouched.
+# ----------------------------------------------------------------
+
+@api_router.get("/admin/payment/sku-map")
+async def admin_payment_sku_map(request: Request):
+    """Return the 3-SKU mapping + Polar configuration status."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    from payment_providers.sku_mapping import list_skus
+    from payment_providers.polar import PolarProvider, _mode
+    polar = PolarProvider()
+    return {
+        "polar_mode": _mode(),
+        "polar_configured": polar.is_configured(),
+        "skus": list_skus(),
+        "lemonsqueezy_status": "live_untouched",
+    }
+
+
+@api_router.post("/webhooks/polar")
+async def polar_webhook(request: Request):
+    """Polar.sh webhook receiver.
+
+    Verifies Standard Webhooks signature, persists raw event to
+    `polar_webhook_log` for audit, then dispatches to the entitlement
+    engine via the EXISTING grant helpers (no rewrite of grant logic).
+
+    Idempotency: each `webhook-id` is processed at most once. Duplicate
+    deliveries return HTTP 200 with `{duplicate: true}` so Polar
+    stops retrying.
+
+    HTTP semantics:
+      • 200 — accepted (or duplicate)
+      • 400 — bad signature / malformed
+      • 503 — Polar not configured (env keys missing)
+    """
+    from payment_providers.polar import PolarProvider
+    from payment_providers.base import WebhookVerificationError
+
+    polar = PolarProvider()
+    if not polar.is_configured():
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "reason": "polar_not_configured",
+                "message": "POLAR_*_OAT / POLAR_*_WEBHOOK_SECRET / POLAR_ORG_ID not set",
+            },
+        )
+
+    body_bytes = await request.body()
+    headers = {k.lower(): v for k, v in request.headers.items()}
+
+    try:
+        event = polar.verify_webhook(headers, body_bytes)
+    except WebhookVerificationError as exc:
+        logging.warning("[POLAR-WEBHOOK] rejected: %s", exc)
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    # Idempotency check — Polar may retry on transient failure.
+    existing = await db.polar_webhook_log.find_one(
+        {"webhook_id": event.provider_event_id},
+        {"_id": 0, "webhook_id": 1, "processed": 1},
+    )
+    if existing and existing.get("processed"):
+        logging.info(
+            "[POLAR-WEBHOOK] duplicate webhook-id=%s ignored",
+            event.provider_event_id,
+        )
+        return {"duplicate": True, "webhook_id": event.provider_event_id}
+
+    # Persist raw event for audit BEFORE processing — so refund/replay
+    # debugging always has the source.
+    log_doc = {
+        "webhook_id": event.provider_event_id,
+        "event_type": event.event_type,
+        "received_at": event.received_at.isoformat(),
+        "provider": "polar",
+        "mode": os.environ.get("POLAR_MODE", "sandbox"),
+        "customer_email": event.customer_email,
+        "user_id": event.customer_external_id,
+        "sku": event.sku,
+        "amount_cents": event.amount_cents,
+        "currency": event.currency,
+        "raw_product_id": event.raw_product_id,
+        "raw_payload": event.raw_payload,
+        "processed": False,
+    }
+    await db.polar_webhook_log.insert_one(log_doc)
+
+    # Dispatch — Faas 1B sandbox: log only, no presence grants yet.
+    # Production grants will wire up in Faas 1C after Anna verifies
+    # the sandbox flow end-to-end (3 successful test purchases +
+    # refund + duplicate handling).
+    logging.info(
+        "[POLAR-WEBHOOK] sandbox-accepted event=%s sku=%s amount=%s",
+        event.event_type, event.sku, event.amount_cents,
+    )
+
+    await db.polar_webhook_log.update_one(
+        {"webhook_id": event.provider_event_id},
+        {"$set": {"processed": True, "processed_at": datetime.now(timezone.utc).isoformat()}},
+    )
+
+    return {
+        "accepted": True,
+        "webhook_id": event.provider_event_id,
+        "event_type": event.event_type,
+        "sku": event.sku,
+        "phase": "sandbox_log_only",
+    }
+
+
+@api_router.get("/admin/payment/polar-events")
+async def admin_polar_events(request: Request, limit: int = 20):
+    """Recent Polar webhook events for /admin/finance + debug visibility."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    limit = max(1, min(100, limit))
+    rows = []
+    async for row in db.polar_webhook_log.find(
+        {}, {"_id": 0, "raw_payload": 0}
+    ).sort("received_at", -1).limit(limit):
+        rows.append(row)
+    return {"count": len(rows), "events": rows}
+
+
 @api_router.post("/admin/presence/grant")
 async def admin_presence_grant(inp: AdminPresenceGrantInput, request: Request):
     """Founder-only — manual presence-seconds grant or correction.

@@ -1250,3 +1250,33 @@ Auto-refresh 60s. Traffic light ≥3x green, 1.5-3.0x yellow, <1.5x red.
   (LemonSqueezy stays parallel 30d)
 - Polar account creation (Anna: 15-min task, full instructions in
   `/app/memory/GOVERNANCE_FAAS1A_2026-02-11.md`)
+
+
+### 2026-02-11 — §FAAS 1B — Payment Abstraction + Polar Sandbox (DORMANT)
+
+**Quality-lock approach.** All 9 Anna conditions verified with live curl proof.
+
+**Built:**
+- Payment Abstraction Layer (`payment_providers/` — base.py + polar.py + sku_mapping.py + __init__.py)
+- Polar.sh webhook handler `/api/webhooks/polar` (Standard Webhooks HMAC-SHA256 + timestamp tolerance + idempotency)
+- Admin endpoints `/api/admin/payment/sku-map` and `/api/admin/payment/polar-events`
+- 3 SKU registry: body_temple ($39 one_time), topup_60min ($39 one_time), eternal_monthly ($89 recurring)
+- 8 unit tests + 5 live e2e webhook tests — ALL PASS
+
+**Email alert chain verified end-to-end:**
+- Temporary 1.7x threshold triggered → real email sent to info@prulesoul.site
+- Resend ID `88712441-b28d-4129-9e92-f37924bbd193` delivered
+- Idempotency: 2nd call → `within_4h_window_skip`
+- Threshold restored to 1.5x
+
+**Dormant by design:**
+- POLAR_* env not set → all Polar endpoints return 503
+- LemonSqueezy 100% untouched (legacy direct path)
+- No production switchover, no checkout replacement, no 49-SKU import
+- Faas 1B = log-only; presence grants in Faas 1C after Anna verifies sandbox
+
+**Next (PAUSED — Anna's 15-min task):**
+- Anna creates Polar account → 3 sandbox products → 2 OATs → 2 webhook secrets
+- Enter env vars in Emergent Deploy panel (never paste in chat)
+- Reply "Polar configured, run sandbox tests"
+- I then run live sandbox purchase + refund + duplicate-webhook tests = Faas 1C

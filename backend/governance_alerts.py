@@ -48,10 +48,23 @@ def _alert_recipient() -> str:
 
 
 def _level_from_ratio(ratio: float) -> Optional[str]:
-    """Map ratio → alert level. Returns None if all clear."""
-    if ratio < 1.2:
+    """Map ratio → alert level. Returns None if all clear.
+
+    Thresholds are env-configurable for testing:
+      GOVERNANCE_ALERT_WARN_RATIO     (default 1.5)
+      GOVERNANCE_ALERT_CRITICAL_RATIO (default 1.2)
+    """
+    try:
+        crit = float(os.environ.get("GOVERNANCE_ALERT_CRITICAL_RATIO") or 1.2)
+    except (TypeError, ValueError):
+        crit = 1.2
+    try:
+        warn = float(os.environ.get("GOVERNANCE_ALERT_WARN_RATIO") or 1.5)
+    except (TypeError, ValueError):
+        warn = 1.5
+    if ratio < crit:
         return "critical"
-    if ratio < 1.5:
+    if ratio < warn:
         return "warn"
     return None
 
