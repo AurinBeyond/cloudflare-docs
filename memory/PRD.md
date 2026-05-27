@@ -1211,3 +1211,42 @@ FastSpring migration trigger, GPT marketing-copy per-line approval.
 4. Resend webhooks (engagement tracker) — Anna is curious, defer to
    after FastSpring goes live.
 
+
+
+### 2026-02-11 — §GOVERNANCE Faas 1A — Runtime Governance Layer (LIVE)
+
+**Anna's "$0 cash risk" directive — pre-Polar payment work.**
+Three independent vendor-cost guards live in production:
+
+1. **Vendor Balance Guard** — polls ElevenLabs `/v1/user/subscription`
+   every 60s, blocks new sessions at ≥95% character usage.
+2. **Concurrency Guard** — caps open voice_sessions at 50 (env).
+3. **Spend Velocity Breaker** — caps 200 sessions / 15 min, trips
+   5-min cooldown.
+
+All guards bypass `unlimited_voice=true` accounts. Master switch
+`GOVERNANCE_ENABLED`. Failures soft-warn — realtime core never crashes.
+
+**Files added:**
+- `backend/runtime_governance.py` (250 lines, 0 deps beyond httpx)
+- `backend/tests/test_runtime_governance.py` (9 tests, all pass)
+- `frontend/src/pages/AdminFinance.jsx` (real-time dashboard)
+- `/api/admin/governance/status` endpoint (ADMIN_TOKEN required)
+
+**Mount point:** `/api/clarity/convai/signed-url` (server.py ~8253).
+Single try/except after existing session_cap. Returns HTTP 503
++ retry_after=60s on trip.
+
+**Live snapshot (2026-05-27):**
+- ElevenLabs 21.3% used / 124,678 chars left / ~125 voice min
+- 2 users / 76.7 min owed / $10.73 projected
+- Ratio 1.63x → 🟡 YELLOW (watch zone — Anna should monitor)
+
+**Dashboard:** `/admin/finance?token=<ADMIN_TOKEN>`.
+Auto-refresh 60s. Traffic light ≥3x green, 1.5-3.0x yellow, <1.5x red.
+
+**Next (queued, awaiting Anna's GO):**
+- Faas 1B: Payment Abstraction Layer + Polar.sh sandbox integration
+  (LemonSqueezy stays parallel 30d)
+- Polar account creation (Anna: 15-min task, full instructions in
+  `/app/memory/GOVERNANCE_FAAS1A_2026-02-11.md`)

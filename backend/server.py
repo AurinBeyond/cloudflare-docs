@@ -8250,6 +8250,46 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
                 user.user_id, exc,
             )
 
+    # §GOVERNANCE 2026-02-11 — Runtime governance layer (Anna's "$0
+    # cash risk" directive). Three independent guards check vendor
+    # balance, spend velocity, and concurrency. Any failed guard
+    # blocks new voice sessions but does NOT kill running ones.
+    # Admin / unlimited_voice users bypass. Text mode skips entirely.
+    if mode != "text":
+        try:
+            from runtime_governance import evaluate_governance
+            gov_user_doc = await db.users.find_one(
+                {"user_id": user.user_id},
+                {"_id": 0, "unlimited_voice": 1},
+            ) or {}
+            verdict = await evaluate_governance(db, gov_user_doc)
+            if not verdict["allowed"]:
+                logging.warning(
+                    "GOVERNANCE BLOCK user=%s blocked_by=%s details=%s",
+                    user.user_id, verdict["blocked_by"], verdict["details"],
+                )
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "reason": verdict["reason"],
+                        "blocked_by": verdict["blocked_by"],
+                        "soft_close": True,
+                        "retry_after_sec": 60,
+                        "message": (
+                            "The sanctuary is briefly resting. "
+                            "Please try again in a moment."
+                        ),
+                    },
+                )
+        except HTTPException:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            # Governance failures must never break the realtime core.
+            logging.warning(
+                "governance soft-failed for user=%s: %s",
+                user.user_id, exc,
+            )
+
     agent_id = os.getenv(env_name)
     api_key = os.getenv("ELEVENLABS_API_KEY")
     if not agent_id or not api_key:
@@ -11658,6 +11698,120 @@ async def admin_financial_preview(request: Request):
     # and see what they audited mid-session.
     _log_financial_split(split, context="preview")
     return split
+
+
+# ----------------------------------------------------------------
+# §GOVERNANCE 2026-02-11 — Admin Governance Status endpoint.
+# Real-time snapshot of all three runtime guards + customer "debt"
+# (sum of presence_seconds_left) + vendor headroom (ElevenLabs).
+# Powers /admin/finance dashboard. Read-only.
+# ----------------------------------------------------------------
+
+@api_router.get("/admin/governance/status")
+async def admin_governance_status(request: Request):
+    """Snapshot of governance guards + customer debt + vendor headroom.
+
+    Authentication: ADMIN_TOKEN header `X-Admin-Token` or query `token`.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+
+    from runtime_governance import governance_status_snapshot
+    snapshot = await governance_status_snapshot(db)
+
+    # Add recent voice activity: sessions opened in last 24h, 7d.
+    now = datetime.now(timezone.utc)
+    try:
+        cutoff_24h = (now - timedelta(hours=24)).isoformat()
+        cutoff_7d = (now - timedelta(days=7)).isoformat()
+        sessions_24h = await db.voice_sessions.count_documents(
+            {"started_at": {"$gte": cutoff_24h}}
+        )
+        sessions_7d = await db.voice_sessions.count_documents(
+            {"started_at": {"$gte": cutoff_7d}}
+        )
+        # Sum elapsed_seconds over last 7 days for actual vendor burn.
+        burn_pipeline = [
+            {"$match": {"started_at": {"$gte": cutoff_7d}, "closed": True}},
+            {"$group": {"_id": None, "total": {"$sum": "$elapsed_seconds"}}},
+        ]
+        burn_seconds_7d = 0
+        async for row in db.voice_sessions.aggregate(burn_pipeline):
+            burn_seconds_7d = int(row.get("total") or 0)
+    except Exception as exc:  # noqa: BLE001
+        logging.warning("activity snapshot failed: %s", exc)
+        sessions_24h = sessions_7d = burn_seconds_7d = 0
+
+    snapshot["activity"] = {
+        "sessions_last_24h": sessions_24h,
+        "sessions_last_7d": sessions_7d,
+        "actual_burn_seconds_7d": burn_seconds_7d,
+        "actual_burn_minutes_7d": round(burn_seconds_7d / 60.0, 1),
+        "actual_burn_cost_usd_7d": round((burn_seconds_7d / 60.0) * 0.14, 2),
+    }
+
+    # §GOVERNANCE-ALERTS 2026-02-11 — every status poll triggers the
+    # idempotent alert check. Dashboard's 60s auto-refresh is the
+    # heartbeat that fires emails when ratio dips below thresholds.
+    try:
+        from governance_alerts import check_and_send_alerts
+        alert_result = await check_and_send_alerts(db, snapshot)
+        snapshot["alert_status"] = alert_result
+    except Exception as exc:  # noqa: BLE001
+        logging.warning("alert check failed: %s", exc)
+        snapshot["alert_status"] = {"error": str(exc)}
+
+    return snapshot
+
+
+# ----------------------------------------------------------------
+# §GOVERNANCE 2026-02-11 — Emergency Freeze admin endpoints.
+# Toggle in-memory env var. Persists ONLY until backend restart;
+# permanent freeze requires editing /app/backend/.env.
+# ----------------------------------------------------------------
+
+@api_router.post("/admin/governance/freeze")
+async def admin_governance_freeze(request: Request):
+    """Emergency freeze — block ALL new voice sessions (including
+    unlimited_voice users). Returns the new state.
+
+    Authentication: ADMIN_TOKEN header `X-Admin-Token` or query `token`.
+    """
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    from runtime_governance import set_frozen, is_frozen
+    set_frozen(True)
+    logging.warning("[GOVERNANCE] EMERGENCY FREEZE activated by admin")
+    return {"frozen": is_frozen(), "action": "freeze"}
+
+
+@api_router.post("/admin/governance/unfreeze")
+async def admin_governance_unfreeze(request: Request):
+    """Lift emergency freeze. Returns the new state."""
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = (
+        request.headers.get("X-Admin-Token")
+        or request.query_params.get("token")
+        or ""
+    )
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    from runtime_governance import set_frozen, is_frozen
+    set_frozen(False)
+    logging.warning("[GOVERNANCE] freeze lifted by admin")
+    return {"frozen": is_frozen(), "action": "unfreeze"}
 
 
 @api_router.post("/admin/presence/grant")

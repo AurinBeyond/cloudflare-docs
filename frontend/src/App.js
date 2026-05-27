@@ -60,6 +60,7 @@ import Catalogue from "@/pages/Catalogue";
 import Faq from "@/pages/Faq";
 import AdminObservation from "@/pages/AdminObservation";
 import AdminEmailHealth from "@/pages/AdminEmailHealth";
+import AdminFinance from "@/pages/AdminFinance";
 import Start from "@/pages/Start";
 import SixNights from "@/pages/SixNights";
 import Cabinet from "@/pages/Cabinet";
@@ -215,6 +216,7 @@ function AppRouter() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/admin/observation" element={<AdminObservation />} />
         <Route path="/admin/email-health" element={<AdminEmailHealth />} />
+        <Route path="/admin/finance" element={<AdminFinance />} />
         <Route path="/reach-out" element={<ReachOut />} />
         <Route path="/portal" element={<UserPortal />} />
         <Route path="/portal/magic" element={<PortalMagicVerify />} />

@@ -1,0 +1,94 @@
+{
+  "iteration": "governance_faas1a_2026-02-11",
+  "phase": "1A",
+  "title": "Runtime Governance Layer + Emergency Freeze + Email Alerts",
+  "status": "VERIFIED",
+  "completed_at": "2026-02-11T10:00:00Z",
+  "anna_quality_lock_satisfied": true,
+  "tests_run": [
+    {
+      "name": "test_runtime_governance.py",
+      "count": 11,
+      "pass": 11,
+      "fail": 0,
+      "command": "cd /app/backend && python tests/test_runtime_governance.py"
+    },
+    {
+      "name": "live_curl_governance_status",
+      "command": "curl -s $API_URL/api/admin/governance/status?token=$ADMIN_TOKEN",
+      "expected": "200 with frozen,guards,customer_debt,vendor_headroom,activity,alert_status",
+      "actual": "PASS"
+    },
+    {
+      "name": "live_curl_freeze",
+      "command": "POST /api/admin/governance/freeze",
+      "expected": "{frozen:true,action:freeze}",
+      "actual": "PASS"
+    },
+    {
+      "name": "live_curl_unfreeze",
+      "command": "POST /api/admin/governance/unfreeze",
+      "expected": "{frozen:false,action:unfreeze}",
+      "actual": "PASS"
+    },
+    {
+      "name": "auth_gate",
+      "command": "POST /api/admin/governance/freeze (no token)",
+      "expected": "HTTP 401",
+      "actual": "HTTP 401"
+    },
+    {
+      "name": "frontend_dashboard_smoke",
+      "url": "/admin/finance?token=<ADMIN_TOKEN>",
+      "expected": "9 stat boxes, 3 guard cards, freeze button, traffic light card",
+      "actual": "PASS — screenshot /app/admin_finance_step1.png"
+    }
+  ],
+  "files_added": [
+    "/app/backend/runtime_governance.py",
+    "/app/backend/governance_alerts.py",
+    "/app/backend/tests/test_runtime_governance.py",
+    "/app/frontend/src/pages/AdminFinance.jsx",
+    "/app/memory/GOVERNANCE_FAAS1A_2026-02-11.md",
+    "/app/memory/GOVERNANCE_VERIFICATION_2026-02-11.md"
+  ],
+  "files_modified": [
+    "/app/backend/server.py (additive: governance gate in signed-url, 3 new admin endpoints)",
+    "/app/backend/.env (6 new GOVERNANCE_* keys)",
+    "/app/frontend/src/App.js (1 import + 1 route)",
+    "/app/memory/PRD.md (changelog entry)"
+  ],
+  "untouched": [
+    "ConvAI agents (RoomConvaiChat, ConvaiPresenceTracker)",
+    "session_cap.py",
+    "Body Temple curriculum + UI",
+    "Kids Hub + curriculum",
+    "Parents Room",
+    "LemonSqueezy webhooks + entitlement logic",
+    "presence_seconds_left ledger",
+    "All visual surfaces"
+  ],
+  "live_snapshot": {
+    "elevenlabs_used_pct": 21.3,
+    "elevenlabs_remaining_chars": 124678,
+    "active_users_with_balance": 2,
+    "total_owed_minutes": 76.7,
+    "headroom_vs_debt_ratio": 1.63,
+    "ratio_band": "yellow_watch",
+    "concurrency": "1/10",
+    "spend_velocity": "0/40",
+    "frozen": false
+  },
+  "rollback_methods": {
+    "disable_governance": "Set GOVERNANCE_ENABLED=false in /app/backend/.env, restart",
+    "disable_alerts": "Set GOVERNANCE_ALERT_EMAIL='' in env, restart",
+    "lift_freeze": "POST /api/admin/governance/unfreeze",
+    "full_revert": "git revert <commit>"
+  },
+  "next_phase": {
+    "id": "1B",
+    "title": "Payment Abstraction Layer + Polar.sh Sandbox",
+    "status": "PAUSED — awaiting Anna's explicit approval",
+    "scope": "Build (a) PaymentProvider interface, (b) polar_client.py, (c) /api/webhooks/polar, (d) 3 SKU sandbox import. NO production switchover. NO LemonSqueezy removal."
+  }
+}
