@@ -1,0 +1,200 @@
+# Matrix Aurin · Adult v3.0 — The Architecture of Sovereignty
+*Vision locked: 2026-02-27. Build status: 🟡 BLOCKED on Polar.sh approval + Anna's explicit "alustame Adult v3.0" greenlight.*
+
+> **Fookus:** *"Murdub olukord, mitte minu meel."*
+> The adult world is not an escape from reality. It is a return to it.
+
+---
+
+## 0. What this is NOT
+
+To prevent any drift during build:
+
+- ❌ **NOT a meditation app.** No sit-still timers, no breath-counting, no "empty your mind".
+- ❌ **NOT a therapy platform.** No CBT, no trauma vocabulary, no symptoms/treatment/diagnosis language.
+- ❌ **NOT mindfulness theater.** No bell sounds, no "be present right now" copy.
+- ❌ **NOT for casual scrollers.** This is for ambitious, responsible adults who carry weight — founders, parents, builders, leaders.
+
+## 1. What this IS
+
+A private mentor sanctuary for people who refuse to be played by:
+- Reactive emotional weather
+- Performance-fatigue programming ("you must always optimize")
+- Relational drama and social-media manipulation
+- Political theater and news-cycle anxiety
+
+The mentor is **voice-first, screen-down, dignified**. The voice does not whisper you to sleep — it speaks the way a senior advisor speaks across the polished wood of a private club: clear, calm, undeniable.
+
+---
+
+## 2. The Four Rooms · Locked Architecture
+
+Each room dismantles one specific piece of "the Matrix" — one externally-installed program that steals an adult's sovereignty.
+
+### 2.1 🌟 Grace — *The Art of Self-Belonging*
+| | |
+|---|---|
+| **Visual theme** | Warm Amber — golden afternoon light, deep amber gradients |
+| **Background** | `#110e0b` → `#1c1611` |
+| **Accent** | `#d4a85a` (warm amber) |
+| **Matrix code we break** | "You only matter when you are producing, optimizing, hustling." |
+| **What Grace teaches** | Stop treating yourself as a repair project. There is no version of you that needs fixing before you are allowed to belong. True vitality grows from acceptance, not from constant self-improvement. |
+| **Voice tone** | Warm, motherly without softness; like a respected senior woman who has already lived through everything you fear. |
+| **Aurin–Grace relationship** | Grace is the keeper of the amber room. She does not coach you toward a goal — she gives you permission to stop running. |
+| **Stones (4-day cycle)** | Day 1: *The Permission Slip* · Day 2: *The Optimisation Trap* · Day 3: *Your Body Already Belongs* · Day 4: *The Quiet Inventory* |
+
+### 2.2 🪨 Kaelan — *The Unshakable Center*
+| | |
+|---|---|
+| **Visual theme** | Stone Gray — granite, stoic stillness, basalt cliff |
+| **Background** | `#0b0b0a` → `#141412` |
+| **Accent** | `#8b8478` (granite warm-gray) |
+| **Matrix code we break** | Reactivity to disruption — work pressure, broken plans, sudden change. |
+| **What Kaelan teaches** | We do not govern the storm. We govern the mind inside the storm. When life delivers the unexpected, *arguing inwardly* is energy wastage. Receive the moment as a clear observer, then take the next solid step. |
+| **Voice tone** | Low, measured, almost stone — like a Roman general or a long-time mountain guide. Few words. No filler. |
+| **Aurin–Kaelan relationship** | Kaelan is the unmoved center. He gives you the spine to stand still inside chaos. |
+| **Stones (4-day cycle)** | Day 1: *The Observer Seat* · Day 2: *Energy Audit* (where it leaks) · Day 3: *The Next Solid Step* · Day 4: *Plans Are for Breaking* |
+
+### 2.3 🌹 Sara — *The Freedom of Boundaries*
+| | |
+|---|---|
+| **Visual theme** | Soft Rose — dignified, never sentimental |
+| **Background** | `#1c1116` → `#27181f` |
+| **Accent** | `#d68fa3` (muted rose) |
+| **Matrix code we break** | Relational drama, social-media manipulation, carrying other people's fear as if it were your own. |
+| **What Sara teaches** | Most of what people do, they do from their own fear — not against you. When you release others from the duty to be perfect, you release yourself. See others clearly; keep your sanctuary clean. |
+| **Voice tone** | Warm but firm. The voice of a wise older sister or a respected family elder. No sweetness, no people-pleasing. |
+| **Aurin–Sara relationship** | Sara is the keeper of the threshold. She teaches whom to let in, whom to let go of, and how to do both without violence. |
+| **Stones (4-day cycle)** | Day 1: *The Door That Closes Gently* · Day 2: *Carrying What Isn't Yours* · Day 3: *The Boundary as a Gift* · Day 4: *Clean Goodbyes* |
+
+### 2.4 💙 Alistair — *The Grand Architecture*
+| | |
+|---|---|
+| **Visual theme** | Deep Navy — systemic intellect, planetarium calm |
+| **Background** | `#08101f` → `#0d1830` |
+| **Accent** | `#6a8fbe` (deep navy blue, slightly luminous) |
+| **Matrix code we break** | Political theater, news-cycle anxiety, mass psychology trying to lead you by the fear-collar into a chosen box. |
+| **What Alistair teaches** | Strip the emotional labels from events ("this is a catastrophe") and look at the actual structure. You do not give your energy to the outer circus — you direct it to what you actually govern: your life, your work, your family, your craft. |
+| **Voice tone** | Precise, measured, intellectual — like a strategist at a war-room table. No drama, no opinion-spinning. |
+| **Aurin–Alistair relationship** | Alistair is the cartographer. He hands you the map of the larger structure so you stop reacting to weather and start designing terrain. |
+| **Stones (4-day cycle)** | Day 1: *Strip the Label, See the Structure* · Day 2: *What You Govern, What You Do Not* · Day 3: *News as Noise* · Day 4: *Building Inside the Storm* |
+
+---
+
+## 3. Shared "Closing Loop" — Same Pattern as Kids Universe
+
+Every adult room must close the loop the same way Kids Universe does. **Voice tale → Real-world action → Photo/note proof → Private archive.**
+
+For adults this becomes:
+1. **Voice session** with Grace / Kaelan / Sara / Alistair
+2. **Sovereignty Sparks** (the adult equivalent of Adventure Sparks) — 4 tangible, real-world, screen-down practices per room
+   - Examples: *"Write the letter you will never send"* · *"List five things you no longer owe an explanation for"* · *"Take a 45-minute walk without your phone"* · *"Strip one news source for a full week and notice what changes"*
+3. **Sovereignty Vault** — the private archive (text notes, voice notes, optionally one photo per stone). Same KMS-style treatment as Kids' Secret Album.
+
+---
+
+## 4. Access & Premium Gating
+
+- **Public** (no login): each room's landing — title, eyebrow, the character's portrait, the visual theme, and Day 1 in text-only "first whisper" mode (no voice).
+- **Premium-gated**: voice sessions (governance-protected), Sparks "save your reflection" actions, Sovereignty Vault.
+- **Entry tier**: at minimum `body_temple_unlock` OR a dedicated `adult_room_unlock` perk. Decision pending until Polar SKUs are imported.
+- **Daily rhythm**: 1 stone per 24h per room — same governance pattern as kids. No marathon binging.
+
+---
+
+## 5. Technical Architecture (Locked, NOT built yet)
+
+```
+/app/backend/adult_universe_endpoints.py     (new, ~500 LOC)
+  GET   /api/adult-rooms/progress/{room}
+  POST  /api/adult-rooms/unlock-stone
+  POST  /api/adult-rooms/vault/save-note
+  POST  /api/adult-rooms/vault/save-photo
+  GET   /api/adult-rooms/vault/list
+  POST  /api/adult-rooms/sparks/commit
+  POST  /api/adult-rooms/cron/spark-reminders  (admin-token)
+
+/app/frontend/src/pages/AdultRooms.jsx       (new, map view + zone tabs)
+/app/frontend/src/pages/adult/AdultRoomComponents.jsx
+  GraceRoom · KaelanRoom · SaraRoom · AlistairRoom
+  SovereigntySparksPanel  (mirrors AdventureSparks)
+  SovereigntyVaultFAB     (mirrors FamilyAlbumFAB)
+
+Mongo collections:
+  adult_room_progress
+  adult_sovereignty_sparks
+  adult_sovereignty_vault
+  adult_emotion_signals   (optional, parallel to emotion_checkins)
+```
+
+**Reuse from Kids Universe (DRY):**
+- Same RoomShell pattern (left portrait · right content)
+- Same governance layer for voice (existing `/api/clarity/convai/signed-url` with `room=grace|kaelan|sara|alistair`)
+- Same Resend pattern for "Sparks reminders" (48h)
+- Same Mode B state-swap (no URL changes inside a zone)
+
+**New ConvAI agents required (Anna will configure in ElevenLabs):**
+- `ELEVENLABS_CONVAI_AGENT_GRACE`
+- `ELEVENLABS_CONVAI_AGENT_KAELAN`
+- `ELEVENLABS_CONVAI_AGENT_SARA`
+- `ELEVENLABS_CONVAI_AGENT_ALISTAIR`
+
+Each agent gets its own system prompt that enforces the room's *tone discipline* (no therapy language, no meditation tropes, no mass-media doom-loop).
+
+---
+
+## 6. UI Vocabulary Bank (100% English, NO Estonian)
+
+Forbidden words across all adult rooms:
+`trauma · symptom · diagnosis · therapy · healing journey · self-care (alone) · CBT · mindful · meditation · breathwork · zen · vibe · energy (in mystical sense) · manifest · journey (overused)`
+
+Preferred vocabulary:
+`sovereignty · the unshakable center · the threshold · architecture · the long arc · clean step · quiet inventory · stripping the label · the next solid move · clear seeing · returning to your own room · the noise outside, the room inside`
+
+---
+
+## 7. Build Phases (When Anna says GO)
+
+| Phase | Scope | Estimate |
+|---|---|---|
+| 1 | Adult map page + 4 zone tabs + static character portraits + locked-stone state | ~2h |
+| 2 | One full room (start with Kaelan — clearest tone) including Mode B state-swap + Sovereignty Sparks | ~2.5h |
+| 3 | Backend endpoints + premium gating + Sovereignty Vault (text + photo) | ~3h |
+| 4 | Remaining three rooms (Grace, Sara, Alistair) with their tone-tuned ZONE_COPY matrices | ~3h |
+| 5 | Cross-cut polish: voice integration with ConvAI agents, 48h Sparks reminder cron, audit | ~2h |
+| **Total** | | **~12-13h focused work, splittable across 5 sessions** |
+
+---
+
+## 8. Marketing Angle (When ready)
+
+The launch line that should never be diluted:
+
+> *"Most adult wellness apps want to fix you.*
+> *Matrix Aurin's Adult Rooms refuse to."*
+
+This is the precise inverse of every meditation app on the App Store. It is also the precise alignment with the Kids Universe ethos ("screen-down, ears open, world begins when the tale ends"). The adult product extends the same architecture upward: *quiet inside, while the world tries to be loud.*
+
+---
+
+## 9. NOT going to be built until
+
+- ✅ Polar.sh account approved AND
+- ✅ Anna says: **"Alustame Adult v3.0 Faas 1"**
+
+Until then, this document is the **architectural contract** between Anna and the agent. No drift, no improvisation. If anything in the design feels wrong, edit this file FIRST, then build.
+
+---
+
+## 10. Decisions LOCKED on 2026-02-27
+
+1. Four rooms, four distinct visual themes — never merged into one "wellness hub"
+2. 100% English UI everywhere; Estonian only in Anna ↔ agent conversation
+3. No therapy / meditation vocabulary anywhere in the product
+4. Reuse Kids Universe code patterns aggressively (DRY)
+5. Same 1-stone-per-24h rhythm; same Mode B state-swap; same Sparks→Vault closing loop
+6. Each character gets a dedicated ConvAI agent in ElevenLabs (Anna provisions, agent wires)
+7. Premium gating: `body_temple_unlock` minimum entry, or a dedicated future `adult_room_unlock`
+8. NO build until Polar approval + Anna's explicit greenlight
+
+🪨 *The mentor sanctuary waits patiently. The architecture is already drawn.*

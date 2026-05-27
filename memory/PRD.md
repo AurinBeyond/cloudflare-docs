@@ -1454,3 +1454,26 @@ P2 (Deferred):
 4. Photo of creation → Secret Album → glows on the Path forever
 
 **Anna is GO for deploy — full Kids Universe Journey is shipped.**
+
+
+---
+
+## 2026-02-27 (Final Final) — Adult v3.0 Vision LOCKED in document
+
+Created `/app/memory/ADULT_V3_VISION.md` — the full architectural contract for the future adult mentor sanctuary. NO code written. Build status: 🟡 BLOCKED on Polar.sh approval + Anna's explicit "alustame Adult v3.0" greenlight.
+
+**Four rooms locked in vision:**
+- 🌟 **Grace** — *The Art of Self-Belonging* (warm amber) — breaks productivity-as-worth programming
+- 🪨 **Kaelan** — *The Unshakable Center* (granite gray) — breaks reactivity to disruption
+- 🌹 **Sara** — *The Freedom of Boundaries* (soft rose) — breaks relational drama / social-media manipulation
+- 💙 **Alistair** — *The Grand Architecture* (deep navy) — breaks political theater / news anxiety
+
+**Closing loop mirrors Kids Universe:**
+Voice session → Sovereignty Sparks (real-world screen-down practices) → Sovereignty Vault (private text + photo proof) → archive
+
+**Reuse plan:** Same RoomShell, same Mode B state-swap, same governance layer for voice, same 1-stone-per-24h, same 48h Resend reminder cron pattern.
+
+**Marketing line locked:**
+> "Most adult wellness apps want to fix you. Matrix Aurin's Adult Rooms refuse to."
+
+Build estimate when greenlit: ~12-13h across 5 phases. Until then, this is the contract — no drift, no improvisation.
