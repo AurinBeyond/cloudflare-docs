@@ -3,6 +3,35 @@
 ## Original Problem Statement
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
+## 🔒 LOCKED Membership Architecture v2.3.1 (2026-02-12 — supersedes 2026-05-16 model)
+
+**Single source of truth:** `/app/memory/MEMBERSHIP_ARCHITECTURE_v2.3.md` (base) + `/app/memory/MEMBERSHIP_ARCHITECTURE_v2.3.1_PATCH.md` (cohort safeguard + honest archive language).
+
+**Six public surfaces (AI-only · no founder time in any tier):**
+- Kids Day Pass €25 / 24h (sole pre-gate public price)
+- Quiet Entry €89/mo · €239/qtr · €890/yr
+- Aurin Storyteller €79/mo · €209/qtr · €790/yr (standalone children's bundle)
+- Inner Compass ⭐ €229/mo · €619/qtr · €2,290/yr (primary membership)
+- Sanctuary Compass 🏛️ €329/mo · €889/qtr · €3,290/yr (highest LTV / family layer)
+- Sovereign Circle 🔒 Standard €1,890/qtr · Bespoke €3,490/qtr (by application; Founding Cohort: first 10 lock founder rate for life)
+
+**Adult day passes (gate-side only):** €49 / 30 min ConvAI, €89 / 60 min ConvAI.
+**Margins (worst-case full burn):** 71.9% – 86.8% across all surfaces.
+**Polar.sh catalogue:** 24 SKUs (12 bundle + 4 Sovereign + 3 day-pass + 7 top-up).
+
+**Doctrinal constraints (no agent may violate):**
+- No founder time in any tier. No "personal advisor", "interview", "live call", "coaching".
+- No "wellness / therapy / mental-health" classifier (PSP relationship risk).
+- No "credits" as a word. Always "prepaid voice transmission packages".
+- No "unlimited" customer-facing.
+- No fungibility between adult-voice and child-voice wallets.
+- Public surface displays only the Kids Day Pass €25; all other prices behind the gate.
+
+**90-day auto-review trigger:** If neither Sovereign tier converts a member within 90 days of public launch, founder reviews with agent. No price drop without this review. No founder time may be added to compensate for slow Sovereign sales.
+
+---
+
+
 ## MLV Locked Pricing Model (2026-05-16 PM directive)
 - Free Open World — $0, voice OFF
 - 30-min Guided Presence — $39 → 1800 sec
