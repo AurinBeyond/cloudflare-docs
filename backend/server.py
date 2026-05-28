@@ -15840,6 +15840,149 @@ async def clarity_calmer_stats(request: Request):
 
 
 # =============================================================
+# §POLAR-BILLING 2026-02-12 — Sprint B endpoints
+# Webhook + checkout + voice gateway. Loaded as a separate FastAPI
+# router so wiring is uncluttered.
+# =============================================================
+from fastapi import Request as _PolarRequest  # noqa: E402
+from services import billing_webhook as _billing_webhook  # noqa: E402
+from services import credit_ledger as _credit_ledger  # noqa: E402
+from services import checkout as _checkout_svc  # noqa: E402
+
+
+@api_router.post("/billing/polar/webhook")
+async def polar_webhook_v2(request: _PolarRequest):
+    """Polar.sh delivers events here. HMAC-verified via standardwebhooks.
+    Idempotent: every event ID is recorded in `polar_processed_events`.
+    """
+    raw = await request.body()
+    headers = {k.lower(): v for k, v in request.headers.items()}
+    try:
+        event = _billing_webhook.verify_signature(raw, headers)
+    except Exception as exc:
+        logger.warning("Polar webhook signature verification failed: %s", exc)
+        raise HTTPException(status_code=401, detail="invalid_signature")
+
+    try:
+        outcome = await _billing_webhook.handle_event(db, event)
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Polar webhook handler error")
+        raise HTTPException(status_code=500, detail=f"handler_error: {exc}")
+    return outcome
+
+
+@api_router.post("/billing/checkout/session")
+async def billing_create_checkout(request: _PolarRequest, body: Dict[str, Any]):
+    """Frontend calls this to start a Polar hosted-checkout flow.
+    Body: { "sku_code": str, "success_url"?: str }
+    Returns: { "url": str, "id": str }
+    """
+    user = await _require_user(request)
+    sku_code = (body or {}).get("sku_code", "").strip()
+    if not sku_code:
+        raise HTTPException(status_code=400, detail="sku_code required")
+    success_url = (
+        (body or {}).get("success_url")
+        or f"{os.environ.get('PUBLIC_BASE_URL', 'https://prulesoul.site')}/billing/welcome"
+    )
+    try:
+        resp = await asyncio.to_thread(
+            _checkout_svc.create_checkout,
+            sku_code=sku_code,
+            user_id=user.id,
+            customer_email=getattr(user, "email", None),
+            success_url=success_url,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Checkout creation failed")
+        raise HTTPException(status_code=502, detail=f"polar_error: {exc}")
+    return {"url": resp.get("url"), "id": resp.get("id"), "sku_code": sku_code}
+
+
+@api_router.get("/billing/wallets")
+async def billing_wallets(request: _PolarRequest):
+    """Returns the user's adult + kids wallet balances. Frontend uses this
+    to render the minute counters and decide whether to gate voice UI."""
+    user = await _require_user(request)
+    adult = await _credit_ledger.get_wallet_balance(db, user.id, "adult")
+    kids = await _credit_ledger.get_wallet_balance(db, user.id, "kids")
+    return {
+        "adult": {
+            "minutes_remaining": adult["minutes_remaining"],
+            "grants_count": len(adult["grants"]),
+        },
+        "kids": {
+            "minutes_remaining": kids["minutes_remaining"],
+            "grants_count": len(kids["grants"]),
+        },
+    }
+
+
+@api_router.post("/voice/transmit")
+async def voice_transmit(request: _PolarRequest, body: Dict[str, Any]):
+    """Adult-voice atomic spend gateway. Frontend / ConvAI integration
+    calls this BEFORE invoking ElevenLabs to ensure the minute budget
+    exists. Body: { "minutes": int (1-10 per call), "ref"?: str }"""
+    user = await _require_user(request)
+    minutes = int((body or {}).get("minutes", 1))
+    if minutes < 1 or minutes > 10:
+        raise HTTPException(status_code=400, detail="minutes must be 1..10 per call")
+    out = await _credit_ledger.spend(
+        db,
+        user_id=user.id,
+        wallet="adult",
+        minutes=minutes,
+        reason="voice.transmit",
+        ref=(body or {}).get("ref"),
+    )
+    if not out["ok"]:
+        # Telecom-style 402, not a generic 400
+        raise HTTPException(status_code=402, detail=out)
+    return out
+
+
+@api_router.post("/kids/fairytale-session")
+async def kids_fairytale_session(request: _PolarRequest, body: Dict[str, Any]):
+    """Aurin storyteller atomic spend gateway. Body shape identical to
+    /voice/transmit but pulls from the `kids` wallet."""
+    user = await _require_user(request)
+    minutes = int((body or {}).get("minutes", 1))
+    if minutes < 1 or minutes > 15:  # bedtime stories run longer than ConvAI turns
+        raise HTTPException(status_code=400, detail="minutes must be 1..15 per call")
+    out = await _credit_ledger.spend(
+        db,
+        user_id=user.id,
+        wallet="kids",
+        minutes=minutes,
+        reason="kids.fairytale",
+        ref=(body or {}).get("ref"),
+    )
+    if not out["ok"]:
+        raise HTTPException(status_code=402, detail=out)
+    return out
+
+
+@api_router.get("/billing/cohort-seats")
+async def billing_cohort_seats():
+    """Public: returns remaining Sovereign Founding Cohort seats.
+    Frontend may surface this on the Sovereign intro page IF Anna
+    later toggles it on (currently §6 keeps it static)."""
+    rows = await db.polar_cohort_seats.find({}, {"_id": 0}).to_list(length=10)
+    return {"sovereign_cohorts": rows}
+
+
+@app.on_event("startup")
+async def _polar_cohort_seed():
+    """Idempotent: ensures the Sovereign cohort seat counters exist."""
+    try:
+        await _billing_webhook.seed_cohort_seats(db)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Cohort seat seeding skipped: %s", exc)
+
+
+# =============================================================
 # App wiring
 # =============================================================
 app.include_router(api_router)
