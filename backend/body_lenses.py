@@ -485,6 +485,161 @@ LENSES: Dict[str, dict] = {
             },
         },
     },
+
+    # -----------------------------------------------------------------
+    # 4) CHARACTER ARMOR — Wilhelm Reich (muscular armor) + Gabor Maté
+    # (when the body says no). The body's chronic holding patterns as
+    # the architecture of unspoken refusals. No "fix", no "cure" —
+    # only the patient un-locking of structures that have been doing
+    # their job for years.
+    # -----------------------------------------------------------------
+    "character_armor": {
+        "id": "character_armor",
+        "name": "Character Armor",
+        "subtitle": "the body's chronic holding, listened to",
+        "plain": "what the body has been holding so the mind didn't have to",
+        "scope": (
+            "Best when the tension is old, structural, and stubborn — "
+            "the jaw that has been locked for a decade, the lower back "
+            "that flares whenever you cannot say no, the chest that "
+            "tightens before you even know what is wrong."
+        ),
+        "attribution": (
+            "Drawing softly on Wilhelm Reich's character-armor work "
+            "and Gabor Maté's writing on the body's protest — used "
+            "as quiet possibilities, never as verdicts."
+        ),
+        "prompt_anchor": (
+            "Active lens for this reply: CHARACTER ARMOR. Speak in the "
+            "patient register of Wilhelm Reich and Gabor Maté. You MAY, "
+            "at most once, name the idea of a 'character armor ring' "
+            "or 'the body's quiet no' as a possibility, never a "
+            "diagnosis. Reich described seven rings of chronic holding "
+            "(eyes, mouth, neck, chest, diaphragm, abdomen, pelvis); "
+            "you may mention which ring the wanderer's description "
+            "seems closest to. Maté observed that chronic illness "
+            "often appears in those who could not say no — you may "
+            "gently reflect that idea, never as accusation. Offer one "
+            "small, structural release: a longer exhale, an unclenching, "
+            "a small movement that completes a gesture the body began "
+            "long ago. Never use the words 'trauma', 'PTSD', 'cure', "
+            "'heal'."
+        ),
+        "regions": {
+            "crown": {
+                "insight": (
+                    "Reich placed the first armor ring around the eyes "
+                    "and forehead — the place we tighten when we have "
+                    "decided not to see what we are seeing."
+                ),
+                "practice": (
+                    "soften the muscles between the brows; let the "
+                    "eyelids become heavy without closing. Three slow "
+                    "breaths. The forehead does not need to think."
+                ),
+                "permission": "you are allowed to see, and to look away.",
+            },
+            "throat": {
+                "insight": (
+                    "Reich's third ring lives in the jaw and throat — "
+                    "the chronic clamp of words that were rehearsed and "
+                    "swallowed. Gabor Maté noticed that this ring often "
+                    "belongs to those who learned, very young, that "
+                    "no was unsafe."
+                ),
+                "practice": (
+                    "let the jaw fall open by one finger's width. "
+                    "Exhale slowly through the open mouth. Two rounds. "
+                    "Nothing has to be said — only allowed."
+                ),
+                "permission": "your no is allowed to live in the body, even if it does not yet leave it.",
+            },
+            "heart": {
+                "insight": (
+                    "Reich's fourth ring is the chest — the armor we "
+                    "build around the heart so it does not have to ask "
+                    "for what it once asked for and did not receive."
+                ),
+                "practice": (
+                    "place both hands flat on the upper chest. Three "
+                    "long exhales, longer than the inhales. Feel the "
+                    "hands rise and fall without forcing."
+                ),
+                "permission": "the chest is allowed to stay closed today, and to soften tomorrow.",
+            },
+            "solar_plexus": {
+                "insight": (
+                    "Reich's fifth ring crosses the diaphragm. Maté "
+                    "describes this as the body's 'incomplete breath' "
+                    "— the place where chronic vigilance hides as a "
+                    "subtle, unbroken brace."
+                ),
+                "practice": (
+                    "a soft hum on the exhale, low and unhurried, for "
+                    "one long round. The diaphragm releases when it "
+                    "is allowed to make a sound."
+                ),
+                "permission": "the breath is allowed to be a small wave instead of a held wall.",
+            },
+            "belly": {
+                "insight": (
+                    "Reich's sixth ring is the abdominal wall — the "
+                    "armor of the chronically self-reliant, the people "
+                    "who learned to brace because no one came when "
+                    "they were small."
+                ),
+                "practice": (
+                    "lie back if you can; place a warm hand on the "
+                    "belly. Let the belly rise as if asking the hand "
+                    "for permission. Five rounds, no count."
+                ),
+                "permission": "the belly is allowed to be soft, even in a hard world.",
+            },
+            "hips": {
+                "insight": (
+                    "Reich's seventh and deepest ring lives in the "
+                    "pelvis — the structural seat of fight, flight, "
+                    "and the long held 'freeze'. Often the last to "
+                    "speak, and the most honest when it does."
+                ),
+                "practice": (
+                    "a small slow rocking of the pelvis, forward and "
+                    "back, the way a child rocks themselves. Two "
+                    "minutes is plenty. No music, no count."
+                ),
+                "permission": "the pelvis is allowed to remember motion at its own pace.",
+            },
+            "hands": {
+                "insight": (
+                    "Hands that cannot unclench are often holding a "
+                    "gesture Reich would have called 'unfinished' — a "
+                    "reach that was not met, a push that was not "
+                    "allowed, a strike that had nowhere safe to land."
+                ),
+                "practice": (
+                    "slowly open the fingers, one at a time, like "
+                    "unfolding a paper map. When the palms are open, "
+                    "let them rest upward on your thighs. Two breaths."
+                ),
+                "permission": "the hands are allowed to finish, in slow motion, what they could not finish then.",
+            },
+            "feet": {
+                "insight": (
+                    "Gabor Maté observed that those who have spent a "
+                    "lifetime carrying others often forget the simple "
+                    "structural fact that the floor is doing its "
+                    "share. The feet are the body's first contract "
+                    "with the earth."
+                ),
+                "practice": (
+                    "stand, or sit with the feet flat. Press the soles "
+                    "down for one inhale. Release on the exhale. "
+                    "Repeat three times — the floor is the partner."
+                ),
+                "permission": "you are allowed to be held by something that is not made of effort.",
+            },
+        },
+    },
 }
 
 

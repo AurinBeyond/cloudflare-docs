@@ -9745,6 +9745,122 @@ async def parents_room_lenses():
     return {"lenses": parents_list_lenses()}
 
 
+# §SARA-CRISIS-SEARCH 2026-05-28 — Founder directive (Blueprint v3.1):
+# When a parent is in acute crisis they should not need to wait for a
+# live LLM round-trip. This endpoint runs a pure keyword search over
+# the static parents_lenses.py registry (3 active lenses × 8 situations
+# = 24 cards), returning ranked matches with insight + practice +
+# permission for each situation, viewed through every available lens
+# in parallel. Zero LLM cost. Sub-millisecond response.
+@api_router.get("/parents-room/crisis-search")
+async def parents_room_crisis_search(q: str = ""):
+    from parents_lenses import LENSES, SITUATION_IDS
+
+    query = (q or "").strip().lower()
+    if not query or len(query) < 2:
+        return {"query": query, "matches": []}
+
+    # Each situation has natural keyword associations that crisis
+    # searches use — far broader than the situation id alone. We map
+    # them once and intersect the parent's words against the bag.
+    SITUATION_KEYWORDS = {
+        "bedtime": [
+            "bedtime", "sleep", "won't sleep", "wont sleep", "magama", "uni",
+            "night", "evening", "tired", "won't go to bed", "bedtime battle",
+            "wake up", "nightmare", "afraid of the dark", "ärkab",
+        ],
+        "mealtime": [
+            "meal", "eat", "food", "picky", "ei söö", "söömine", "söögi",
+            "won't eat", "wont eat", "refuse food", "vegetables", "dinner",
+            "breakfast", "lunch", "hunger", "snack", "fussy", "feeding",
+        ],
+        "big_emotions": [
+            "tantrum", "meltdown", "screaming", "scream", "crying",
+            "overwhelm", "rage", "anger", "angry", "big feelings",
+            "explosion", "frustrated", "frustration", "raev", "viha",
+            "nutab", "karjub", "hüsteeria", "hysterical",
+        ],
+        "screen_time": [
+            "screen", "phone", "tablet", "ipad", "tv", "youtube",
+            "game", "gaming", "device", "ekraan", "telefon", "video",
+            "too much screen", "addicted", "won't turn off",
+        ],
+        "sibling": [
+            "sibling", "brother", "sister", "fight", "fighting",
+            "sharing", "jealous", "jealousy", "õde", "vend",
+            "kaklus", "rivalry", "argues",
+        ],
+        "separation": [
+            "separation", "daycare", "drop off", "drop-off", "leaving",
+            "clingy", "won't let go", "wont let go", "lasteaed",
+            "school start", "first day", "kindergarten", "missing me",
+            "anxiety when i leave",
+        ],
+        "school_stress": [
+            "homework", "school", "grade", "grades", "exam", "test",
+            "pressure", "perform", "performance", "kool", "õppimine",
+            "kontrolltöö", "hinded", "teacher", "afraid of failure",
+            "anxious about school",
+        ],
+        "connection": [
+            "connection", "closeness", "distant", "ignoring me", "doesn't talk",
+            "won't talk", "quiet", "lonely", "isolated", "drifting",
+            "lähedus", "hingelähedus", "ühendus", "repair",
+            "i don't know how to reach", "feels far away",
+        ],
+    }
+
+    # Compute a simple score per situation: count of keyword tokens
+    # whose text appears in the query string. Then collect all lenses'
+    # cards for each match so the parent sees the situation through
+    # every cultural register in one page.
+    results = []
+    for sit_id in SITUATION_IDS:
+        kws = SITUATION_KEYWORDS.get(sit_id, [])
+        # Score = highest-precision match wins (longer phrase > word)
+        score = 0
+        matched_terms = []
+        for kw in kws:
+            if kw in query:
+                score += max(2, len(kw.split()))
+                matched_terms.append(kw)
+        # Single-word fallback: token-level intersection
+        if score == 0:
+            q_tokens = set(query.split())
+            for kw in kws:
+                if any(tok in q_tokens for tok in kw.split() if len(tok) >= 4):
+                    score += 1
+                    matched_terms.append(kw)
+                    break
+        if score == 0:
+            continue
+
+        lens_views = []
+        for lens_id, lens in LENSES.items():
+            sit = (lens.get("situations") or {}).get(sit_id)
+            if not sit:
+                continue
+            lens_views.append({
+                "lens_id": lens_id,
+                "lens_name": lens["name"],
+                "lens_subtitle": lens.get("subtitle", ""),
+                "insight": sit.get("insight", ""),
+                "practice": sit.get("practice", ""),
+                "permission": sit.get("permission", ""),
+            })
+
+        results.append({
+            "situation_id": sit_id,
+            "score": score,
+            "matched_terms": matched_terms[:3],
+            "lens_views": lens_views,
+        })
+
+    # Highest score first; tie-break by situation order
+    results.sort(key=lambda r: (-r["score"], SITUATION_IDS.index(r["situation_id"])))
+    return {"query": query, "matches": results[:4]}
+
+
 @api_router.post("/body-room/chat")
 async def body_room_chat(inp: BodyRoomChatIn, request: Request):
     """One-shot Body Room mentor reply. Stateless on the server: the

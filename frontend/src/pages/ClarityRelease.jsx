@@ -426,7 +426,7 @@ export default function ClarityRelease() {
         eyebrow="Clarity Release"
         title="Welcome to"
         italicWord="Clarity Release."
-        description="Your private sanctuary for the soul — a bridge between current burdens and inner peace. You are met with absolute confidentiality and a non-judgemental Light-side guide."
+        description="Your private sanctuary for the soul — a bridge between current burdens and inner peace. You are met with absolute confidentiality and a non-judgemental Light-side guide. For heavy loads, for the quiet fog of loneliness, and for the days you no longer recognise yourself."
       />
 
       {/* Inner Mirror — founder-supplied illustration of the doorway */}

@@ -137,7 +137,7 @@ export const CURATOR_PALETTES = {
     accentGlow: "rgba(212,168,90,0.32)",
     background: "linear-gradient(160deg, #14110d 0%, #1d1812 100%)",
     border: "1px solid rgba(212,168,90,0.22)",
-    blurb: "An empathic mirror, never a judge. Press play for a short hello — about fifteen seconds.",
+    blurb: "An empathic mirror for the burdens you carry — and for the quiet fog of loneliness and not-knowing-yourself. Press play for a short hello — about fifteen seconds.",
   },
   sara: {
     name: "Sara",

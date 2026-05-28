@@ -41,6 +41,7 @@ import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 // presence_seconds so Sara's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
+import SaraCrisisSearch from "@/components/SaraCrisisSearch";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -151,6 +152,17 @@ export default function ParentsRoom() {
       <section className="aurin-section-sm" data-testid="parents-room-sara-intro">
         <div className="aurin-container max-w-[760px]">
           <CuratorIntroCard slug="sara" eyebrow="✦ Meet your curator" {...CURATOR_PALETTES.sara} />
+        </div>
+      </section>
+
+      {/* §SARA-CRISIS-SEARCH 2026-05-28 — Static (LLM-free) keyword
+          search across the 3 lenses × 8 situations registry. Founder
+          directive: when a parent is in acute crisis they should not
+          need a voice call. They type two words; Sara surfaces the
+          situation viewed through every wisdom lens in parallel. */}
+      <section className="aurin-section-sm" data-testid="parents-room-crisis-search">
+        <div className="aurin-container max-w-[820px]">
+          <SaraCrisisSearch />
         </div>
       </section>
 
