@@ -1,0 +1,299 @@
+import "@/App.css";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthProvider";
+import Layout from "@/components/layout/Layout";
+import Home from "@/pages/Home";
+import Library from "@/pages/Library";
+import LibraryEntry from "@/pages/LibraryEntry";
+import Learning from "@/pages/Learning";
+import Bookstore from "@/pages/Bookstore";
+import BookDetail from "@/pages/BookDetail";
+import ReachOut from "@/pages/ReachOut";
+import KidsUniverse from "@/pages/KidsUniverse";
+import KidsUniverseJourney from "@/pages/KidsUniverseJourney";
+import KidsColoringStudio from "@/pages/KidsColoringStudio";
+import KidsHub from "@/pages/KidsHub";
+import StoryGiftForm from "@/pages/StoryGiftForm";
+import StoryGiftRead from "@/pages/StoryGiftRead";
+import HighPerformers from "@/pages/HighPerformers";
+import KidsStarsView from "@/pages/KidsStarsView";
+import KidsDaily from "@/pages/KidsDaily";
+import KidsActivities from "@/pages/KidsActivities";
+import ParentStars from "@/pages/ParentStars";
+import ParentWellness from "@/pages/ParentWellness";
+import ParentAlbum from "@/pages/ParentAlbum";
+import Referral from "@/pages/Referral";
+import NotFound from "@/pages/NotFound";
+import MeditationCorner from "@/pages/MeditationCorner";
+import UserPortal from "@/pages/UserPortal";
+import PortalMagicVerify from "@/pages/PortalMagicVerify";
+import Guest from "@/pages/Guest";
+import AdminContent from "@/pages/AdminContent";
+import AdminParentsCompass from "@/pages/AdminParentsCompass";
+import About from "@/pages/About";
+import Legal from "@/pages/Legal";
+import WanderersAgreement from "@/pages/WanderersAgreement";
+import AuthCallback from "@/pages/AuthCallback";
+import TheBeginning from "@/pages/TheBeginning";
+import TheBeginningStep from "@/pages/TheBeginningStep";
+import LuxurySanctuaryLanding from "@/pages/LuxurySanctuaryLanding";
+import SanctuaryPreview from "@/pages/SanctuaryPreview";
+import WhatThisIs from "@/pages/WhatThisIs";
+import TestMic from "@/pages/TestMic";
+import AurinPhilosophy from "@/pages/AurinPhilosophy";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
+import LibraryHub from "@/pages/LibraryHub";
+import LibraryKids from "@/pages/LibraryKids";
+import LibraryKidsRead from "@/pages/LibraryKidsRead";
+import ClarityRelease from "@/pages/ClarityRelease";
+import ClarityThreshold from "@/pages/ClarityThreshold";
+import Presence from "@/pages/Presence";
+import BodyRoom from "@/pages/BodyRoom";
+import BodyTemple from "@/pages/BodyTemple";
+import ParentsRoom from "@/pages/ParentsRoom";
+import SubsystemWing from "@/pages/SubsystemWing";
+import AurinsRoom from "@/pages/AurinsRoom";
+import AurinsRoomChat from "@/pages/AurinsRoomChat";
+import AurinStoryWorld from "@/pages/AurinStoryWorld";
+import AurinStoryRead from "@/pages/AurinStoryRead";
+import BetaTestGroup from "@/pages/BetaTestGroup";
+import CourseRoom from "@/pages/CourseRoom";
+import CourseDetail from "@/pages/CourseDetail";
+import Catalogue from "@/pages/Catalogue";
+import Faq from "@/pages/Faq";
+import AdminObservation from "@/pages/AdminObservation";
+import AdminEmailHealth from "@/pages/AdminEmailHealth";
+import AdminFinance from "@/pages/AdminFinance";
+import Start from "@/pages/Start";
+import SixNights from "@/pages/SixNights";
+import Cabinet from "@/pages/Cabinet";
+import WhispersPortal from "@/pages/WhispersPortal";
+import WhispersTracker from "@/components/WhispersTracker";
+import AdminPreviewAssets from "@/pages/AdminPreviewAssets";
+import AdminScheduler from "@/pages/AdminScheduler";
+import AdminOutbound from "@/pages/AdminOutbound";
+import AdminBadge from "@/components/AdminBadge";
+import WandererGate from "@/components/WandererGate";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { Navigate } from "react-router-dom";
+
+function AppRouter() {
+  const location = useLocation();
+  // CRITICAL: Detect Emergent Auth callback BEFORE any other routing.
+  // useEffect would run too late.
+  if (location.hash?.includes("session_id=")) {
+    return <AuthCallback />;
+  }
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        {/* §2026-05-19 — Home was moved OUT of Layout (below) so the
+            new Sanctuary landing can own its full-bleed nav + footer
+            without doubling. The previous classic Home now lives at
+            /home-legacy for instant rollback safety. */}
+        <Route path="/home-legacy" element={<Home />} />
+        <Route path="/start" element={<Start />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/wanderers-agreement" element={<WanderersAgreement />} />
+        <Route path="/legal" element={<Legal />} />
+        <Route path="/bookstore" element={<Bookstore />} />
+        <Route path="/bookstore/:slug" element={<BookDetail />} />
+        <Route path="/library" element={<LibraryHub />} />
+        <Route path="/library/adults" element={<Library />} />
+        <Route path="/library/kids" element={<LibraryKids />} />
+        <Route path="/library/kids/read" element={<LibraryKidsRead />} />
+        <Route path="/library/kids/draw" element={<KidsColoringStudio />} />
+        <Route path="/library/:slug" element={<LibraryEntry />} />
+        <Route path="/learning" element={<Learning />} />
+        <Route path="/kids-universe" element={<KidsUniverse />} />
+        <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
+        {/* §KIDS-UNIVERSE-PHASE-1 2026-02-27 — Luxury Adventure Hub.
+            Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}
+        <Route path="/kids-universe/journey" element={<KidsUniverseJourney />} />
+        <Route path="/kids-universe/journey/:zone" element={<KidsUniverseJourney />} />
+        {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
+        <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
+        <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />
+        {/* §HIGH-PERFORMERS 2026-02-10 — LinkedIn-targeted B2B landing */}
+        <Route path="/high-performers" element={<HighPerformers />} />
+        {/* §KIDS-HUBS 2026-02-09 — age-themed Hubs + Angel Stars MVP.
+            Slug accepts both modern names (little-dreamers, explorers,
+            dreamweavers) and legacy "3-5" / "6-8" / "9-12". */}
+        <Route path="/kids-universe/:ageGroup/hub" element={<KidsHub />} />
+        <Route path="/kids-universe/:ageGroup/stars" element={<KidsStarsView />} />
+        <Route path="/kids-universe/:ageGroup/daily" element={<KidsDaily />} />
+        <Route path="/kids-universe/:ageGroup/activities" element={<KidsActivities />} />
+        <Route path="/kids-universe/:ageGroup/activities/:slug" element={<KidsActivities />} />
+        <Route path="/parent-portal/stars" element={<ParentStars />} />
+        <Route path="/parent-portal/wellness" element={<ParentWellness />} />
+        <Route path="/parent-portal/album" element={<ParentAlbum />} />
+        <Route path="/meditation-corner" element={<MeditationCorner />} />
+        <Route path="/the-beginning" element={<TheBeginning />} />
+        <Route path="/the-beginning/step" element={<TheBeginningStep />} />
+        <Route path="/six-nights" element={<SixNights />} />
+        <Route path="/six-nights/:nightId" element={<SixNights />} />
+        <Route path="/aurin-philosophy" element={<AurinPhilosophy />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/private-room" element={<Navigate to="/clarity-release" replace />} />
+        {/* §AUDIT 2026-05-21 — `/pricing` was referenced from 3 places
+            (RoomConvaiChat blocked-card, ConvaiPresenceTracker, AurinsRoomChat)
+            but the route was NEVER registered → users hit a blank black
+            page when topping up credits. Redirect to /clarity-release
+            where the real Wanderer Passes + LemonSqueezy checkout live. */}
+        <Route path="/pricing" element={<Navigate to="/clarity-release" replace />} />
+        <Route path="/guest" element={<Guest />} />
+        <Route path="/portal/guest" element={<Guest />} />
+        <Route path="/portal/referral" element={<Referral />} />
+        <Route path="/refer-a-friend" element={<Navigate to="/portal/referral" replace />} />
+        <Route
+          path="/clarity-release"
+          element={
+            <WandererGate scope="private">
+              <ClarityRelease />
+            </WandererGate>
+          }
+        />
+        <Route path="/clarity-release/threshold" element={<ClarityThreshold />} />
+        {/* §Phase 1 — public Grace-only demo route (no auth, no
+            consent gate). Founder-shareable link for bank / demo. */}
+        <Route path="/presence" element={<Presence />} />
+        <Route
+          path="/body-room"
+          element={
+            <WandererGate scope="private">
+              <BodyRoom />
+            </WandererGate>
+          }
+        />
+        {/* §BODY-TEMPLE 2026-02-09 — Public route so the course page
+            is visible to non-signed-in visitors as a marketing surface;
+            Day 1 is free preview, days 2-28 gate via the existing
+            premium logic (clarity_passes + presence_seconds_left). */}
+        <Route path="/body-temple" element={<BodyTemple />} />
+        <Route
+          path="/parents-room"
+          element={
+            <WandererGate scope="private">
+              <ParentsRoom />
+            </WandererGate>
+          }
+        />
+        {/* §SUBSYSTEM 2026-02-11 — adult-only interior wing of
+            Parents' Room. Same WandererGate. No minor data. */}
+        <Route
+          path="/parents-room/subsystem"
+          element={
+            <WandererGate scope="private">
+              <SubsystemWing />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/aurins-room"
+          element={
+            <WandererGate scope="private">
+              <AurinsRoom />
+            </WandererGate>
+          }
+        />
+        {/* §AURIN STORY WORLD 2026-05-22 — Founder directive: a
+            lightweight, low-cost subpage for static bedtime stories.
+            Public (no WandererGate) so parents can browse before
+            committing. Individual story pages are also public. */}
+        <Route path="/aurins-room/stories" element={<AurinStoryWorld />} />
+        <Route path="/aurins-room/stories/:storySlug" element={<AurinStoryRead />} />
+        <Route
+          path="/aurins-room/:ageGroup"
+          element={
+            <WandererGate scope="private">
+              <AurinsRoomChat />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/cabinet/booking"
+          element={
+            <WandererGate scope="private">
+              <Cabinet />
+            </WandererGate>
+          }
+        />
+        <Route path="/test-group" element={<BetaTestGroup />} />
+        <Route
+          path="/course-room"
+          element={
+            <WandererGate scope="private">
+              <CourseRoom />
+            </WandererGate>
+          }
+        />
+        <Route path="/course-room/:slug" element={<CourseDetail />} />
+        <Route path="/catalogue" element={<Catalogue />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/admin/observation" element={<AdminObservation />} />
+        <Route path="/admin/email-health" element={<AdminEmailHealth />} />
+        <Route path="/admin/finance" element={<AdminFinance />} />
+        <Route path="/reach-out" element={<ReachOut />} />
+        <Route path="/portal" element={<UserPortal />} />
+        <Route path="/portal/magic" element={<PortalMagicVerify />} />
+        <Route path="/whispers-portal" element={<WhispersPortal />} />
+        <Route path="/admin/preview-assets" element={<AdminPreviewAssets />} />
+        <Route path="/admin/scheduler" element={<AdminScheduler />} />
+        <Route path="/admin/outbound" element={<AdminOutbound />} />
+        <Route path="/admin/content" element={<AdminContent />} />
+        <Route path="/admin/parents-compass" element={<AdminParentsCompass />} />
+      </Route>
+      {/* §2026-05-17 — /luxury preview route lives OUTSIDE the
+          standard Layout wrapper. It is a full-bleed sanctuary
+          landing experience with its own navigation and footer.
+          Founder Q1=b: do NOT replace the current `/` route. */}
+      <Route path="/luxury" element={<LuxurySanctuaryLanding />} />
+      {/* §2026-05-18 — /sanctuary-preview is a founder-review-only
+          route. Full-bleed polished landing, Atoms audit applied,
+          locked pricing structure visible as atmospheric "Thresholds".
+          Production / Home.jsx remains untouched. */}
+      <Route path="/sanctuary-preview" element={<SanctuaryPreview />} />
+      <Route path="/what-this-is" element={<WhatThisIs />} />
+      {/* §2026-05-20 — /test-mic is a brutal isolation test page for
+          the voice-to-voice deafness bug. No custom CSS, no overlays,
+          no focus-stealing elements. If voice works here but fails on
+          /clarity-release, the bug lives in our overlay stack. If it
+          fails here too, the bug is in the browser profile or
+          upstream WebSocket. Login required (uses signed-url like
+          the production rooms). */}
+      <Route path="/test-mic" element={<TestMic />} />
+      {/* §2026-05-19 — Production Sanctuary landing. The /sanctuary-preview
+          component is mounted with `production` so the preview ribbon
+          is hidden, the nav docks to the very top, and visitors arrive
+          on the polished V6 / Mike experience the moment they land on
+          the domain. Rollback path: change `<SanctuaryPreview production />`
+          to `<Home />` (still imported above) — instant revert.       */}
+      <Route path="/" element={<SanctuaryPreview production />} />
+      {/* §AUDIT-77 2026-02-09 — Soft 404 catch-all + /origin redirect
+          (nav label "Origin" historically points to /about; bare URL
+          /origin would silently return blank without this). */}
+      <Route path="/origin" element={<Navigate to="/about" replace />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <div className="App" data-testid="app-root">
+      <ErrorBoundary>
+        <BrowserRouter>
+          <AuthProvider>
+            <WhispersTracker />
+            <AdminBadge />
+            <AppRouter />
+          </AuthProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+export default App;
