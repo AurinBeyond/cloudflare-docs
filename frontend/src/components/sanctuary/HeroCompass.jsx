@@ -26,7 +26,6 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { WaitlistInline } from "@/components/MembershipTiers";
-
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
 const BRASS_BRIGHT = "#d4b67d";
@@ -119,8 +118,130 @@ const TICKS = Array.from({ length: 24 }, (_, i) => i * 15);
 export default function HeroCompass() {
   const [active, setActive] = useState(null); // hovered cardinal key
   const [openSlug, setOpenSlug] = useState(null); // which waitlist is open
+  const [audioOn, setAudioOn] = useState(false); // user-toggled audio ambient
   const containerRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
+
+  // §AMBIENT 2026-02-11 — Founder directive: a subtle "Screen-Down,
+  // Ears-Open" sonic layer on the Compass. Synth-driven (Web Audio
+  // API), no asset file. Two-layer drone: a low cosmic-wind pad
+  // (oscillator pair detuned with lowpass) and a faint mechanical
+  // tick at the dial cadence. Master gain is very low; intensifies
+  // ~3× when a cardinal is hovered.
+  const audioCtxRef = useRef(null);
+  const audioNodesRef = useRef(null);
+  const startAmbient = () => {
+    if (audioCtxRef.current) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const master = ctx.createGain();
+      master.gain.value = 0.0;
+      master.connect(ctx.destination);
+
+      // Low cosmic wind — two detuned sine oscillators through a lowpass
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      osc1.type = "sine";
+      osc2.type = "sine";
+      osc1.frequency.value = 82.4; // E2
+      osc2.frequency.value = 110;  // A2 — open fifth feel
+      const lp = ctx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.value = 420;
+      lp.Q.value = 0.6;
+      const droneGain = ctx.createGain();
+      droneGain.gain.value = 0.18;
+      osc1.connect(lp);
+      osc2.connect(lp);
+      lp.connect(droneGain);
+      droneGain.connect(master);
+      osc1.start();
+      osc2.start();
+
+      // Slow LFO on the lowpass — gives a breathing quality
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      lfo.frequency.value = 0.07; // ~14s cycle
+      lfoGain.gain.value = 160;
+      lfo.connect(lfoGain);
+      lfoGain.connect(lp.frequency);
+      lfo.start();
+
+      // Mechanical tick — short pulse every ~3.5s
+      let tickTimer = null;
+      const tick = () => {
+        const now = ctx.currentTime;
+        const tickOsc = ctx.createOscillator();
+        const tickGain = ctx.createGain();
+        tickOsc.type = "triangle";
+        tickOsc.frequency.value = 1800;
+        tickGain.gain.setValueAtTime(0.0, now);
+        tickGain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+        tickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        tickOsc.connect(tickGain);
+        tickGain.connect(master);
+        tickOsc.start(now);
+        tickOsc.stop(now + 0.14);
+      };
+      tickTimer = setInterval(tick, 3400);
+
+      audioCtxRef.current = ctx;
+      audioNodesRef.current = { master, tickTimer, osc1, osc2, lfo };
+      // Soft fade-in to 0.18 master
+      const t0 = ctx.currentTime;
+      master.gain.setValueAtTime(0, t0);
+      master.gain.linearRampToValueAtTime(0.18, t0 + 1.4);
+    } catch (e) {
+      // Silently fail — ambient is a nice-to-have, never blocks UX
+    }
+  };
+  const stopAmbient = () => {
+    const ctx = audioCtxRef.current;
+    const nodes = audioNodesRef.current;
+    if (!ctx || !nodes) return;
+    try {
+      const t = ctx.currentTime;
+      nodes.master.gain.cancelScheduledValues(t);
+      nodes.master.gain.setValueAtTime(nodes.master.gain.value, t);
+      nodes.master.gain.linearRampToValueAtTime(0.0, t + 0.6);
+      clearInterval(nodes.tickTimer);
+      setTimeout(() => {
+        try {
+          nodes.osc1.stop();
+          nodes.osc2.stop();
+          nodes.lfo.stop();
+          ctx.close();
+        } catch (e) {
+          /* ignore */
+        }
+        audioCtxRef.current = null;
+        audioNodesRef.current = null;
+      }, 700);
+    } catch (e) {
+      /* ignore */
+    }
+  };
+  useEffect(() => {
+    return () => stopAmbient();
+  }, []);
+  useEffect(() => {
+    if (audioOn) startAmbient();
+    else stopAmbient();
+  }, [audioOn]);
+
+  // Intensify master gain when a cardinal is hovered.
+  useEffect(() => {
+    const ctx = audioCtxRef.current;
+    const nodes = audioNodesRef.current;
+    if (!ctx || !nodes) return;
+    const t = ctx.currentTime;
+    const target = active ? 0.34 : 0.18;
+    nodes.master.gain.cancelScheduledValues(t);
+    nodes.master.gain.setValueAtTime(nodes.master.gain.value, t);
+    nodes.master.gain.linearRampToValueAtTime(target, t + 0.8);
+  }, [active, audioOn]);
 
   // Soft reveal on first viewport entry.
   useEffect(() => {
@@ -500,6 +621,27 @@ export default function HeroCompass() {
           >
             Click a heading to reserve your place
           </p>
+
+          {/* §AMBIENT 2026-02-11 — Sovereign audio toggle. Off by
+              default; one calm tap activates the "Screen-Down,
+              Ears-Open" sonic layer. */}
+          <div className="mt-8 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setAudioOn((v) => !v)}
+              data-testid="compass-audio-toggle"
+              aria-pressed={audioOn}
+              className="inline-flex items-center gap-3 px-5 py-2.5 border border-[rgba(196,164,107,0.4)] text-[10.5px] tracking-[0.36em] uppercase text-[#c4a46b] hover:bg-[rgba(196,164,107,0.08)] hover:border-[rgba(196,164,107,0.7)] transition-colors duration-500"
+            >
+              <span
+                aria-hidden="true"
+                className={`inline-block w-1.5 h-1.5 rounded-full transition-colors duration-500 ${
+                  audioOn ? "bg-[#d4b67d]" : "bg-[#7a7468]"
+                }`}
+              />
+              {audioOn ? "Sonic layer · on" : "Sonic layer · off"}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -46,3 +46,64 @@ source of truth for problem statement and architecture.
 - CREATE: `frontend/src/components/sanctuary/HeroCompass.jsx`
 - EDIT:   `frontend/src/pages/SanctuaryPreview.jsx` (import + mount + nav anchor)
 - EDIT:   `frontend/src/components/BodyRoomChat.jsx` (4 string cleanups)
+
+## 2026-02-11 (PM) — Course Room Audit + Sonic Layer + Sara Memory
+
+### P0 · Course Room (Alistair) Strategic Architecture rebuild
+File: `frontend/src/pages/CourseRoom.jsx` — copy/structure rewrite ONLY
+(no backend changes, no new components). Anti-wellness language sweep:
+
+- Header eyebrow `"Course Room"` → `"W · 270° · Alistair"`
+  (links visually back to the new Hero-Compass)
+- Title `"Quiet Letters"` → `"Strategic Architecture"`
+- Description rewritten: "Not a course shelf. A protocol library.
+  …24-hour cadence-lock — no binge, no dopamine loop."
+- Intro card: added "PROTOCOL STRUCTURE" eyebrow, rewrote both paragraphs
+  with biomechanical / sovereign register, italicised
+  "Anti-dopamine by design."
+- NEW chrono-strip visible on the room itself (`data-testid="course-room-chrono-strip"`)
+  showing: T-0 Read · +24H Integrate · +48H Next gate opens.
+  Maps the cadence-lock visually so HNW visitors see the constraint
+  as the feature (not a limitation)
+- Course card format line: `"7 letters · 7 quiet evenings of inward listening · A solo walk, with audio whispers as company"` → `"7 transmissions · 24-hour cadence-lock between each · Audio sub-channel runs in parallel"`
+- Course CTA `"Begin gently"` → `"Activate sequence"`
+- Price hint `"letter 1 free"` → `"transmission 1 open"`
+- Bridge card rewritten: routes to "N · Body Architecture" and
+  "S · Clarity Release" using compass headings instead of soft prose
+
+### P1 · Compass sonic layer (Founder approved enhancement)
+File: `frontend/src/components/sanctuary/HeroCompass.jsx`
+- Web Audio API engine — zero asset weight, no external files
+- Two-layer ambient: detuned sine drone (E2 + A2) through lowpass +
+  slow LFO breathing modulation, plus a triangle-wave mechanical tick
+  every ~3.4s at 1800Hz
+- Master gain 0.18 idle, ramps to 0.34 when any cardinal is hovered
+- User-controlled toggle (`data-testid="compass-audio-toggle"`):
+  "Sonic layer · off" by default — one calm tap activates it
+- Browser autoplay policy respected (no audio until user interaction)
+- Cleanup on unmount stops all oscillators and closes AudioContext
+
+### P1 · Sara persona memory expansion
+File: `memory/CURATORS_GRACE_SARA_ALISTAIR.md` (founder-locked)
+Two new sections appended under Sara:
+1. **Architectural expertise** — Special education / neurodivergent
+   dynamics translated through biomechanical framing. Clinical →
+   Sara's register translation table (sensory overload, meltdown,
+   ADHD, autism, transition anxiety)
+2. **High-Net-Worth teen dynamics** — three named patterns:
+   The "Project Child" Syndrome · Privilege Isolation · Parent as
+   Anchor OS not Friend
+
+### Verifications
+- Lint: ✓ both files clean
+- Backend `POST /api/waitlist/join` → 200 OK, saves to
+  `waitlist_entries` AND mirrors to `newsletter_subscribers` ✓
+- Course Room renders correctly after WandererGate consent ✓
+- Compass audio toggle button visible in DOM ✓
+- Mobile viewport: SVG uses `w-full h-full max-w-[640px] aspect-square`
+  → scales down responsively
+
+### Still on hold (founder waiting)
+- Grace + Sara new MP3 generation — paused until founder confirms
+  voices added to ElevenLabs Library
+- Polar.sh full switch — awaiting account approval

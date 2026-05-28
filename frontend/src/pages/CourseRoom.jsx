@@ -72,10 +72,10 @@ export default function CourseRoom() {
   return (
     <div data-testid="course-room-page" className="sanctuary-room relative">
       <PageHeader
-        eyebrow="Course Room"
-        title="Quiet"
-        italicWord="Letters"
-        description="A small shelf of letter-courses. Seven slow letters per series, one per day, with a single audio companion you can play on quiet repeat. No videos. No webinars. No urgency. Just a reading practice that returns each evening."
+        eyebrow="W · 270° · Alistair"
+        title="Strategic"
+        italicWord="Architecture"
+        description="Not a course shelf. A protocol library. Each transmission is a single short letter, released on a 24-hour cadence-lock — no binge, no dopamine loop. You read one. You sit with it. The next will not arrive before its hour. This is how high-bandwidth operators retrain their own operating system."
         testid="course-room-header"
       />
 
@@ -119,19 +119,51 @@ export default function CourseRoom() {
       <section className="aurin-section-sm" data-testid="course-room-intro">
         <div className="aurin-container max-w-[760px]">
           <div className="aurin-card p-6 md:p-8">
+            <p className="aurin-eyebrow text-[10.5px] tracking-[0.36em] uppercase text-[hsl(var(--aurin-sage))] mb-3">
+              Protocol structure
+            </p>
             <p className="text-[14.5px] leading-[1.85] text-[hsl(var(--aurin-text-muted))]">
-              A letter-course is not a webinar. It is a slower form. Each
-              evening a new letter arrives quietly in this room — one short
-              page, one honest question. You read it. You write a little, or
-              you don't. You play the audio companion on a soft loop while
-              you sit. The first letter is always open, freely.
+              This is not a course. It is a quiet command sequence. Each
+              transmission is a single short letter — one page, one precise
+              question, one structural lever. Read once. Sit. Execute one
+              line if the body permits. The next letter is locked behind a
+              <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]"> 24-hour cadence-gate</span> —
+              not because the system is slow, but because cognitive
+              integration is.
             </p>
             <p className="mt-4 text-[14.5px] leading-[1.85] text-[hsl(var(--aurin-text-muted))]">
               <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
-                You don't have to take my word for it.
+                Anti-dopamine by design.
               </span>{" "}
-              Begin with one letter. See if anything moves.
+              You cannot binge a re-architecture. The first transmission is
+              always open — read it before deciding anything.
             </p>
+            {/* §CHRONO-LOCK 2026-02-11 — Visualise the 24-hour cadence
+                gate so high-net-worth users understand the constraint
+                is the feature, not a limitation. */}
+            <div
+              className="mt-6 grid grid-cols-3 gap-2 text-center"
+              data-testid="course-room-chrono-strip"
+            >
+              {[
+                { code: "T-0", label: "Read" },
+                { code: "+24h", label: "Integrate" },
+                { code: "+48h", label: "Next gate opens" },
+              ].map((s) => (
+                <div
+                  key={s.code}
+                  className="border border-[hsl(var(--aurin-sage))]/30 py-2 px-3"
+                  data-testid={`chrono-step-${s.code.toLowerCase()}`}
+                >
+                  <p className="text-[10px] tracking-[0.22em] uppercase text-[hsl(var(--aurin-sage))]">
+                    {s.code}
+                  </p>
+                  <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">
+                    {s.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -190,7 +222,7 @@ export default function CourseRoom() {
                     className="mt-3 text-[12.5px] leading-[1.7] text-[hsl(var(--aurin-text-muted))/0.75] aurin-serif-italic"
                     data-testid={`course-format-${c.slug}`}
                   >
-                    {`${c.duration_days} letters · ${c.duration_days} quiet evenings of inward listening · A solo walk, with audio whispers as company.`}
+                    {`${c.duration_days} transmissions · 24-hour cadence-lock between each · Audio sub-channel runs in parallel.`}
                   </p>
                   {c.audio_title && (
                     <div
@@ -211,14 +243,14 @@ export default function CourseRoom() {
                       data-testid={`course-price-${c.slug}`}
                     >
                       {c.price ? `$${c.price.toFixed(0)}` : "Free"}
-                      <span className="opacity-70"> · letter 1 free</span>
+                      <span className="opacity-70"> · transmission 1 open</span>
                     </span>
                     <Link
                       to={`/course-room/${c.slug}`}
                       data-testid={`course-open-${c.slug}`}
                       className="aurin-link inline-flex items-center gap-1 text-[13px]"
                     >
-                      Begin gently
+                      Activate sequence
                       <ArrowRight size={14} strokeWidth={1.4} />
                     </Link>
                   </div>
@@ -236,14 +268,15 @@ export default function CourseRoom() {
         <div className="aurin-container max-w-[680px]">
           <div className="aurin-card p-6 md:p-8 text-center">
             <p className="aurin-serif-italic text-[15px] text-[hsl(var(--aurin-text))]">
-              The body sometimes asks before the mind has words.
+              Architecture is not always cognitive.
             </p>
             <p className="mt-3 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
-              If a letter touches a place that wants more attention, you can
-              step into <Link className="aurin-link" to="/body-room">The Body Room</Link>{" "}
-              or sit for a quiet moment in{" "}
-              <Link className="aurin-link" to="/clarity-release">Clarity Release</Link>.
-              Both rooms are nearby.
+              When a transmission triggers something structural in the
+              hardware, the adjacent compass headings handle it directly:
+              {" "}<Link className="aurin-link" to="/body-room">N · Body Architecture</Link>{" "}
+              for somatic-load discharge, or{" "}
+              <Link className="aurin-link" to="/clarity-release">S · Clarity Release</Link>{" "}
+              for cognitive-load extraction. Same compass. Different vector.
             </p>
           </div>
         </div>
