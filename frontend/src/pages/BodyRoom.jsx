@@ -129,14 +129,6 @@ export default function BodyRoom() {
 
   return (
     <div data-testid="page-body-room" className="sanctuary-room relative">
-      {/* §ROOM-VISUAL 2026-02-10 — Aurin companion presence */}
-      <img
-        src="/assets/aurin/aurin-companion.png"
-        alt=""
-        aria-hidden="true"
-        data-testid="body-room-aurin-companion"
-        className="hidden md:block pointer-events-none absolute top-24 right-6 lg:right-10 w-24 lg:w-32 opacity-85 z-10"
-      />
       <PageHeader
         tone="default"
         eyebrow="The Body Room"
