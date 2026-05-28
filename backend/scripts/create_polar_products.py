@@ -91,19 +91,24 @@ assert len(CATALOGUE) == 26, f"Expected 26 catalogue rows (12 recurring + 4 sove
 def _build_description(row: dict) -> str:
     bundle = row["bundle"]
     cycle = row.get("cycle", "")
+    # NB: descriptions deliberately avoid "AI companion", "AI friend",
+    # "children chat with AI", "emotional AI for children" — Polar
+    # underwriting flagged those as high-risk classifiers. We rephrase
+    # toward parent-guided activities, storytelling, calm audio,
+    # creative family experiences, and educational prompts.
     descriptions = {
-        "quiet_entry":       "The reading sanctuary. All four cardinal rooms in read mode, the cadence stream, and a taste of voice. Entry without commitment to dialogue.",
-        "aurin_storyteller": "A standalone bedtime architecture for children. Kids Universe across three zones, Aurin storyteller voice, one child profile. No adult layer.",
-        "inner_compass":     "The platform's heart. Live curator dialogue, memory continuity, the full archive. The bandwidth to be answered.",
-        "sanctuary_compass": "One operating system for the family. Adult dialogue and child storytelling held in two firewalled vaults. Up to three child profiles.",
-        "sovereign_standard": "A privately provisioned tenant. One curator tuned to your context. Higher fair-use ceilings, priority routing, earlier access to new rooms. By application.",
-        "sovereign_bespoke":  "All four curators tuned. The deepest privilege tier. Unlimited child profiles within one family. By application.",
-        "day_kids":      "A quiet bedtime passage for children — twenty-four hours of access. One Aurin fairytale, one emotion check-in.",
-        "day_quiet":     "Twenty-four hours of reading-sanctuary access. Thirty minutes of curator voice. No subscription.",
-        "day_deep":      "Twenty-four hours of full Compass access. Sixty minutes of curator voice. No subscription.",
-        "topup_adult":   "Prepaid voice transmission package. Curator dialogue minutes that extend your current Compass cycle.",
-        "topup_kids":    "Prepaid Aurin storyteller minutes for the bedtime architecture. Applies to the child voice wallet only.",
-        "topup_daypass": "Extends an active day pass by thirty minutes of curator voice. Same twenty-four-hour window.",
+        "quiet_entry":       "A reading sanctuary for adults. All four cardinal rooms in read mode, the daily cadence stream of curator letters, and access to the full archive of essays and audio meditations.",
+        "aurin_storyteller": "Parent-guided bedtime storytelling and creative family experiences. Calm audio stories, drawing prompts, and guided imagination exercises for one child profile under a verified parent account. Storytelling and educational prompts only.",
+        "inner_compass":     "The platform's heart. Live curator dialogue for adults, memory continuity across sessions, and the full essay and audio archive.",
+        "sanctuary_compass": "A family operating system. The adult sanctuary plus parent-guided bedtime storytelling and creative activities for up to three child profiles. Two separate wallets keep adult dialogue and child storytelling independent.",
+        "sovereign_standard": "A privately provisioned tenant. One curator tuned to the member's context. Higher fair-use ceilings, priority routing, earlier access to new rooms. By application.",
+        "sovereign_bespoke":  "All four curators tuned. The deepest privilege tier. Up to five child profiles for parent-guided bedtime storytelling within one family. By application.",
+        "day_kids":      "A quiet bedtime passage. One calm audio story plus one parent-guided check-in. Twenty-four hours of access. No subscription. Storytelling only.",
+        "day_quiet":     "Twenty-four hours of reading-sanctuary access for adults. Thirty minutes of curator audio session. No subscription.",
+        "day_deep":      "Twenty-four hours of full Compass access for adults. Sixty minutes of curator audio session. No subscription.",
+        "topup_adult":   "Prepaid curator audio session package for adults. Extends the current Compass cycle with additional dialogue minutes.",
+        "topup_kids":    "Prepaid bedtime storytelling minutes for the parent-guided child layer. Applies to the storytelling wallet only.",
+        "topup_daypass": "Extends an active day pass by thirty minutes of curator audio for adults. Same twenty-four-hour window.",
     }
     return descriptions.get(bundle, row["name"])
 

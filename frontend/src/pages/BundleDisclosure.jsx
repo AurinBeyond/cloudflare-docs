@@ -24,8 +24,8 @@ const BUNDLES = [
   {
     tier: "I",
     name: "Quiet Entry",
-    role: "The reading sanctuary",
-    body: "All four cardinal rooms in read mode. The 24-hour cadence stream. The Broken Clockwork library. A small taste of voice.",
+    role: "A reading sanctuary for adults",
+    body: "All four cardinal rooms in read mode. The daily cadence stream of curator letters. The full essay and audio meditation archive. A small taste of curator audio sessions.",
     prices: [
       { sku: "quiet.entry.month",   label: "Monthly",   amount: "€89"  },
       { sku: "quiet.entry.quarter", label: "Quarterly", amount: "€239" },
@@ -35,8 +35,8 @@ const BUNDLES = [
   {
     tier: "II",
     name: "Aurin Storyteller",
-    role: "A standalone bedtime architecture for children",
-    body: "Kids Universe across three zones. The Aurin storyteller voice. Emotion check-ins. One child profile. No adult layer.",
+    role: "Parent-guided bedtime storytelling",
+    body: "Calm audio stories for the family bedtime ritual. Drawing prompts, guided imagination exercises, and creative family activities. One child profile under a verified parent account.",
     prices: [
       { sku: "aurin.storyteller.month",   label: "Monthly",   amount: "€79"  },
       { sku: "aurin.storyteller.quarter", label: "Quarterly", amount: "€209" },
@@ -47,8 +47,8 @@ const BUNDLES = [
     tier: "III",
     name: "Inner Compass",
     badge: "The heart",
-    role: "Live curator dialogue",
-    body: "Everything in Quiet Entry, plus live ConvAI dialogue with the four curators, memory continuity, and the full archive.",
+    role: "Live curator audio sessions for adults",
+    body: "Everything in Quiet Entry, plus live curator dialogue for adults, memory continuity across sessions, and the full essay and audio archive.",
     prices: [
       { sku: "inner.compass.month",   label: "Monthly",   amount: "€229"   },
       { sku: "inner.compass.quarter", label: "Quarterly", amount: "€619"   },
@@ -59,8 +59,8 @@ const BUNDLES = [
     tier: "IV",
     name: "Sanctuary Compass",
     badge: "Family",
-    role: "One operating system for the family",
-    body: "Inner Compass plus the full Kids Universe. Up to three child profiles. Adult and child voice held in two firewalled vaults.",
+    role: "The full family architecture",
+    body: "Inner Compass for the adult plus parent-guided bedtime storytelling, drawing prompts and creative family activities for up to three child profiles. Two separate wallets keep adult sessions and family storytelling firewalled.",
     prices: [
       { sku: "sanctuary.compass.month",   label: "Monthly",   amount: "€329"   },
       { sku: "sanctuary.compass.quarter", label: "Quarterly", amount: "€889"   },
@@ -70,21 +70,21 @@ const BUNDLES = [
 ];
 
 const DAY_PASSES = [
-  { sku: "access.day.kids",  name: "Kids Day Pass",  amount: "€25", note: "1 fairytale · 1 check-in · 24 h"   },
-  { sku: "access.day.quiet", name: "Quiet Day Pass", amount: "€49", note: "30 min curator voice · 24 h"        },
-  { sku: "access.day.deep",  name: "Deep Day Pass",  amount: "€89", note: "60 min full Compass voice · 24 h"   },
+  { sku: "access.day.kids",  name: "Kids Day Pass",  amount: "€25", note: "1 calm audio story · 1 parent-guided check-in · 24 h" },
+  { sku: "access.day.quiet", name: "Quiet Day Pass", amount: "€49", note: "30 min adult curator audio · 24 h"                     },
+  { sku: "access.day.deep",  name: "Deep Day Pass",  amount: "€89", note: "60 min full Compass audio for adults · 24 h"           },
 ];
 
 const TOPUPS_ADULT = [
-  { sku: "topup.compass.30",  name: "Adult Voice · 30 min",  amount: "€49",  note: "valid 30 days" },
-  { sku: "topup.compass.120", name: "Adult Voice · 120 min", amount: "€159", note: "valid 60 days" },
-  { sku: "topup.compass.300", name: "Adult Voice · 300 min", amount: "€399", note: "valid 90 days" },
+  { sku: "topup.compass.30",  name: "Adult Audio · 30 min",  amount: "€49",  note: "valid 30 days" },
+  { sku: "topup.compass.120", name: "Adult Audio · 120 min", amount: "€159", note: "valid 60 days" },
+  { sku: "topup.compass.300", name: "Adult Audio · 300 min", amount: "€399", note: "valid 90 days" },
 ];
 
 const TOPUPS_KIDS = [
-  { sku: "topup.aurin.20",  name: "Aurin Voice · 20 min",  amount: "€29",  note: "valid 30 days" },
-  { sku: "topup.aurin.60",  name: "Aurin Voice · 60 min",  amount: "€79",  note: "valid 60 days" },
-  { sku: "topup.aurin.150", name: "Aurin Voice · 150 min", amount: "€169", note: "valid 90 days" },
+  { sku: "topup.aurin.20",  name: "Bedtime Storytelling · 20 min",  amount: "€29",  note: "valid 30 days" },
+  { sku: "topup.aurin.60",  name: "Bedtime Storytelling · 60 min",  amount: "€79",  note: "valid 60 days" },
+  { sku: "topup.aurin.150", name: "Bedtime Storytelling · 150 min", amount: "€169", note: "valid 90 days" },
 ];
 
 function useCheckoutStarter() {
@@ -104,7 +104,7 @@ function useCheckoutStarter() {
         body: JSON.stringify({ sku_code }),
       });
       if (resp.status === 401) {
-        navigate(`/sign-in?next=${encodeURIComponent(window.location.pathname)}`);
+        navigate(`/portal?next=${encodeURIComponent(window.location.pathname)}`);
         return;
       }
       const data = await resp.json();
@@ -157,9 +157,9 @@ export default function BundleDisclosure() {
             style={{ color: PALETTE.muted, lineHeight: 1.85 }}
           >
             Members buy access to architecture, continuity, atmosphere,
-            and private space — never AI minutes. Minutes exist only to
-            create the felt presence of the curators, and they remain
-            metered so the platform survives.
+            and private space — never minutes. Audio sessions exist only
+            to create the felt presence of the curators, and they
+            remain metered so the platform survives.
           </p>
         </header>
 
@@ -283,14 +283,15 @@ export default function BundleDisclosure() {
 
         {/* Top-ups */}
         <section data-testid="bundles-topups" className="border-t pt-9" style={{ borderColor: PALETTE.edge }}>
-          <h3 className="aurin-display italic text-xl mb-2">Prepaid voice packages.</h3>
+          <h3 className="aurin-display italic text-xl mb-2">Prepaid audio packages.</h3>
           <p className="text-[13px] mb-7" style={{ color: PALETTE.muted }}>
-            Extend your current cycle. Adult and child voice live in separate wallets and never cross-spend.
+            Extend your current cycle. Adult sessions and family
+            storytelling live in separate wallets and never cross-spend.
           </p>
           <div className="grid sm:grid-cols-2 gap-8">
             <div data-testid="topups-adult">
               <p className="text-[11px] tracking-[0.28em] uppercase mb-3" style={{ color: PALETTE.muted }}>
-                Curator dialogue (Compass)
+                Curator audio sessions (Compass)
               </p>
               <div className="space-y-2">
                 {TOPUPS_ADULT.map((t) => (

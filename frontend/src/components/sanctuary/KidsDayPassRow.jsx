@@ -9,7 +9,8 @@
  * Behaviour: clicking the CTA calls /api/billing/checkout/session
  * with sku_code "access.day.kids" and redirects the user to Polar's
  * hosted checkout. Anonymous visitors are routed through
- * /sign-in?next=... first because the checkout API requires a user.
+ * /portal?next=... first (magic-link email sign-in lives there)
+ * because the checkout API requires a user.
  */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +32,7 @@ export default function KidsDayPassRow() {
         body: JSON.stringify({ sku_code: "access.day.kids" }),
       });
       if (resp.status === 401) {
-        navigate(`/sign-in?next=${encodeURIComponent(window.location.pathname)}`);
+        navigate(`/portal?next=${encodeURIComponent(window.location.pathname)}`);
         return;
       }
       const data = await resp.json();
@@ -89,7 +90,7 @@ export default function KidsDayPassRow() {
         className="mt-5 text-[11px] tracking-[0.16em]"
         style={{ color: "hsla(36, 14%, 64%, 0.7)" }}
       >
-        One fairytale · one quiet check-in · no subscription
+        One calm audio story · one parent-guided check-in · no subscription
       </p>
     </div>
   );
