@@ -27,6 +27,7 @@
 import { useEffect, useRef, useState } from "react";
 import { WaitlistInline } from "@/components/MembershipTiers";
 import SovereignCounter from "@/components/sanctuary/SovereignCounter";
+import { trackEvent } from "@/lib/analytics";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
 const BRASS_BRIGHT = "#d4b67d";
@@ -566,12 +567,29 @@ export default function HeroCompass() {
                   onMouseLeave={() => setActive(null)}
                   onFocus={() => setActive(c.key)}
                   onBlur={() => setActive(null)}
-                  onClick={() => setOpenSlug(c.slug)}
+                  onClick={() => {
+                    // §GA4 — emit a named event so the founder can see
+                    // which heading cold visitors actually click.
+                    trackEvent("compass_arm_click", {
+                      cardinal: c.key,
+                      degrees: c.degrees,
+                      curator: c.curator,
+                      slug: c.slug,
+                    });
+                    setOpenSlug(c.slug);
+                  }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
+                      trackEvent("compass_arm_click", {
+                        cardinal: c.key,
+                        degrees: c.degrees,
+                        curator: c.curator,
+                        slug: c.slug,
+                        via: "keyboard",
+                      });
                       setOpenSlug(c.slug);
                     }
                   }}

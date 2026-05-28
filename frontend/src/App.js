@@ -77,6 +77,8 @@ import AdminBadge from "@/components/AdminBadge";
 import WandererGate from "@/components/WandererGate";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { initAnalytics } from "@/lib/analytics";
 
 function AppRouter() {
   const location = useLocation();
@@ -281,6 +283,11 @@ function AppRouter() {
 }
 
 function App() {
+  // §GA4 2026-02-11 — initialise GA4 once on app mount. Idempotent;
+  // safe to re-mount under React StrictMode.
+  useEffect(() => {
+    initAnalytics();
+  }, []);
   return (
     <div className="App" data-testid="app-root">
       <ErrorBoundary>

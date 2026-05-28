@@ -517,3 +517,32 @@ including all 100 memory artefacts, source files, Charlotte+Lily MP3s,
 and a MANIFEST.md describing how to restore individual files if needed.
 
 Backup tarball: 1.2 MB · expanded folder: 2.8 MB.
+
+## 2026-02-11 (GA4 WIRED) — Phase 1 Telemetry Live
+
+### What landed
+- `frontend/.env` → `REACT_APP_GA4_ID=G-7E9R7QLP0C`
+- `frontend/src/lib/analytics.js` (NEW) — env-var-driven GA4 initialiser
+  with `initAnalytics()` + `trackEvent(name, params)` API. Silently
+  no-ops if env var absent.
+- `frontend/src/App.js` — `useEffect(() => initAnalytics(), [])` on
+  mount. One-time, idempotent under React StrictMode.
+- `frontend/src/components/sanctuary/HeroCompass.jsx` — emits
+  `compass_arm_click` event with `{cardinal, degrees, curator, slug}`
+  payload on every cardinal click (including keyboard activation).
+
+### Verified live
+- `bundle.js` contains `G-7E9R7QLP0C` (build-time injection ✓)
+- `window.gtag === 'function'` ✓
+- `<script src=googletagmanager.com/gtag/js?id=G-7E9R7QLP0C>` in DOM ✓
+- 4 GA4 network requests on first load (config + page_view + ID sync) ✓
+- `initAnalytics()` runs without errors ✓
+- Lint: clean
+
+### What this gives the founder
+- Real-time data in https://analytics.google.com Realtime tab from
+  the moment the next visitor lands
+- Geographic breakdown (Phase 1 plan calls for UK/EU first market test)
+- Cardinal-arm click distribution (which heading draws the most
+  organic curiosity)
+- $0 Google Cloud credit consumed — GA4 is free outside Cloud billing
