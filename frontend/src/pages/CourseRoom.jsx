@@ -7,6 +7,7 @@ import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line
 // presence_seconds so Alistair's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import AlistairModeSelector from "@/components/AlistairModeSelector";
+import CadenceEngine from "@/components/CadenceEngine";
 import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 import SpatialCompass from "@/components/SpatialCompass";
 import { fetchCourses } from "@/lib/api";
@@ -138,32 +139,12 @@ export default function CourseRoom() {
               You cannot binge a re-architecture. The first transmission is
               always open — read it before deciding anything.
             </p>
-            {/* §CHRONO-LOCK 2026-02-11 — Visualise the 24-hour cadence
-                gate so high-net-worth users understand the constraint
-                is the feature, not a limitation. */}
-            <div
-              className="mt-6 grid grid-cols-3 gap-2 text-center"
-              data-testid="course-room-chrono-strip"
-            >
-              {[
-                { code: "T-0", label: "Read" },
-                { code: "+24h", label: "Integrate" },
-                { code: "+48h", label: "Next gate opens" },
-              ].map((s) => (
-                <div
-                  key={s.code}
-                  className="border border-[hsl(var(--aurin-sage))]/30 py-2 px-3"
-                  data-testid={`chrono-step-${s.code.toLowerCase()}`}
-                >
-                  <p className="text-[10px] tracking-[0.22em] uppercase text-[hsl(var(--aurin-sage))]">
-                    {s.code}
-                  </p>
-                  <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {/* §CHRONO-LOCK 2026-02-11 — Live Cadence Engine. For
+                authenticated users with active enrollments it shows
+                a ticking countdown to their next letter unlock; for
+                everyone else it falls back to the original static
+                T-0 / +24H / +48H reference strip. */}
+            <CadenceEngine />
           </div>
         </div>
       </section>

@@ -107,3 +107,66 @@ Two new sections appended under Sara:
 - Grace + Sara new MP3 generation — paused until founder confirms
   voices added to ElevenLabs Library
 - Polar.sh full switch — awaiting account approval
+
+## 2026-02-11 (LATE) — Voice IDs Auto-Wired + Live Cadence Engine
+
+### P0 · ElevenLabs voice generation — Grace & Sara
+- ElevenLabs API tested with Charlotte (`XB0fDUnXU5powFXDhCwa`) and
+  Lily (`pFZP5JQG7iQjIQuC4Bku`): **both return HTTP 200** — founder has
+  successfully added them to her ElevenLabs Library
+- Rachel (`21m00Tcm4Tlvkq7QITTI`) returns 404 — that backup voice was
+  not added (Charlotte serves as Grace's voice → no rerun needed)
+- Generated NEW distinct 15-second intro MP3s:
+    - `frontend/public/audio/grace-intro.mp3` — Charlotte voice (238 KB)
+    - `frontend/public/audio/sara-intro.mp3`  — Lily voice (262 KB)
+- Brand-aligned scripts ("South — one-eighty degrees. I curate Clarity
+  Release…" and "East — ninety degrees. I curate the Parents' Room…")
+  linking each curator to her Compass heading
+- Updated `backend/.env`:
+    - `ELEVENLABS_VOICE_GRACE` → Charlotte
+    - `ELEVENLABS_VOICE_SARA`  → Lily
+  (previously both pointed at the same fallback ID — that is now fixed)
+- Backend restarted; new voices live for any TTS fallback paths
+
+### P0 · Live Cadence Engine (Founder enhancement)
+**Backend** — `server.py` new endpoint `GET /api/courses/me/next-unlock`
+- Iterates the authenticated user's `course_enrollments`, computes
+  every letter's `unlock_at = started_at + (day - 1) days`, returns
+  the soonest upcoming unlock (with course_slug, course_title,
+  letter_day, letter_title, seconds_remaining)
+- Returns `unlocked_at: null` gracefully when there are no
+  enrollments / no upcoming locks
+
+**Frontend** — `frontend/src/components/CadenceEngine.jsx` (NEW)
+- Mounted in `CourseRoom.jsx` in place of the static T-0/+24H/+48H strip
+- Personalised live countdown for authenticated users with active
+  enrollments: "Your next transmission — `<letter title>` of
+  `<course title>` — unlocks in 14h 23m 11s"
+- 1Hz visual tick, server re-sync every 30s to prevent drift across
+  long-open tabs
+- Auto-refetches when remaining reaches zero
+- Falls back to the original static reference strip for signed-out
+  visitors and users with no upcoming locks → testid stable
+- Anti-dopamine note rendered beneath the clock
+
+### Verifications
+- ElevenLabs Charlotte + Lily: 200 OK · file sizes 238/262 KB ✓
+- `/api/courses/me/next-unlock` unauth → 401 ✓
+- `/api/courses/me/next-unlock` auth, no enrolments → `unlocked_at: null` ✓
+- After injected enrollment 12h ago → `seconds_remaining: 43199`,
+  letter_day: 2, course_title: "The language you forgot" ✓
+- Lint: ✓ both files clean
+- Static strip fallback verified via screenshot
+
+### Parents' Room (Sara) terminology audit
+- Grep across `/app/frontend/src/pages/ParentsRoom.jsx` for
+  `therapy|therapeutic|heal|healing|wellness|cure|treatment|patient|trauma `
+  → **zero matches**. Page already speaks the architectural register.
+- No code change required.
+
+### Still on hold
+- Polar.sh full switch — awaiting account approval
+- Body Room 7-day chrono-lock + Clarity 48h chrono-lock — Course Room
+  per-letter daily cadence is the only one currently enforced
+  server-side; Body / Clarity locks remain front-end soft gates for
+  the next sprint

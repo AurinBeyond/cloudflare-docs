@@ -10885,6 +10885,71 @@ async def course_enroll(slug: str, request: Request):
     return {"status": "enrolled", "started_at": doc["started_at"]}
 
 
+@api_router.get("/courses/me/next-unlock")
+async def courses_next_unlock(request: Request):
+    """Authenticated — return the soonest upcoming chrono-lock unlock
+    across all of this user's course enrollments. Powers the live
+    Cadence Engine countdown in CourseRoom.jsx.
+
+    Response shape:
+      { unlocked_at: ISO | None,
+        course_slug: str | None,
+        course_title: str | None,
+        letter_day: int | None,
+        seconds_remaining: int,
+        enrollments: int }
+
+    If user has no enrollments or every letter is already unlocked,
+    returns `unlocked_at: None` so the UI can fall back to the
+    static T-0 / +24H / +48H reference strip.
+    """
+    user = await _require_user(request)
+    cursor = db.course_enrollments.find(
+        {"user_id": user.user_id}, {"_id": 0}
+    )
+    enrollments = [e async for e in cursor]
+    now = datetime.now(timezone.utc)
+    soonest = None
+    soonest_meta = None
+    for e in enrollments:
+        try:
+            started_at = datetime.fromisoformat(e["started_at"])
+        except Exception:
+            continue
+        course = _course_by_slug(e.get("course_slug", ""))
+        if not course:
+            continue
+        for letter in course.get("letters", []):
+            if letter["day"] == 1:
+                continue  # always preview-open
+            unlock_at = started_at + timedelta(days=letter["day"] - 1)
+            if unlock_at <= now:
+                continue  # already unlocked
+            if soonest is None or unlock_at < soonest:
+                soonest = unlock_at
+                soonest_meta = {
+                    "course_slug": course["slug"],
+                    "course_title": course["title"],
+                    "letter_day": letter["day"],
+                    "letter_title": letter.get("title"),
+                }
+    if soonest is None:
+        return {
+            "unlocked_at": None,
+            "course_slug": None,
+            "course_title": None,
+            "letter_day": None,
+            "seconds_remaining": 0,
+            "enrollments": len(enrollments),
+        }
+    return {
+        "unlocked_at": soonest.isoformat(),
+        "seconds_remaining": int((soonest - now).total_seconds()),
+        "enrollments": len(enrollments),
+        **soonest_meta,
+    }
+
+
 # =============================================================
 # FIRST LETTER FUNNEL — send letter 1 of any course to a cold email.
 # This is the lead magnet: no sign-in, no password, just a free
