@@ -9858,7 +9858,67 @@ async def parents_room_crisis_search(q: str = ""):
 
     # Highest score first; tie-break by situation order
     results.sort(key=lambda r: (-r["score"], SITUATION_IDS.index(r["situation_id"])))
+
+    # §SARA-COMPASS-V2 2026-05-28 — Anonymous query logging.
+    # Zero PII: only the query text, day bucket (YYYY-MM-DD), top-matched
+    # situations, and a count. Used solely to surface "Top 10 worries
+    # parents actually type" for the founder's marketing reports.
+    try:
+        if query and len(query) >= 2:
+            today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            top_sits = [r["situation_id"] for r in results[:3]]
+            now_utc = datetime.now(timezone.utc)
+            await db.sara_search_queries.update_one(
+                {"day": today_str, "query": query[:120]},
+                {
+                    "$inc": {"count": 1},
+                    "$setOnInsert": {
+                        "first_seen": now_utc,
+                        "top_situations": top_sits,
+                    },
+                    "$set": {"last_seen": now_utc},
+                },
+                upsert=True,
+            )
+    except Exception:
+        # Logging must never break the search.
+        pass
+
     return {"query": query, "matches": results[:4]}
+
+
+# §SARA-COMPASS-V2 2026-05-28 — Founder-only report endpoint. Returns
+# top crisis queries parents have actually typed over the last N days,
+# with their top-matched situations. Zero PII.
+@api_router.get("/parents-room/compass/top-queries")
+async def parents_room_top_queries(request: Request, days: int = 30):
+    user = await _require_user(request)
+    if not (user.get("is_admin") or user.get("email") == os.environ.get("ADMIN_EMAIL")):
+        raise HTTPException(status_code=403, detail="Founder only.")
+    cutoff = (
+        datetime.now(timezone.utc) - timedelta(days=max(1, min(days, 365)))
+    ).strftime("%Y-%m-%d")
+    pipeline = [
+        {"$match": {"day": {"$gte": cutoff}}},
+        {"$group": {
+            "_id": "$query",
+            "total": {"$sum": "$count"},
+            "days_seen": {"$addToSet": "$day"},
+            "top_situations": {"$first": "$top_situations"},
+        }},
+        {"$project": {
+            "_id": 0,
+            "query": "$_id",
+            "total": 1,
+            "days_seen_count": {"$size": "$days_seen"},
+            "top_situations": 1,
+        }},
+        {"$sort": {"total": -1}},
+        {"$limit": 25},
+    ]
+    cursor = db.sara_search_queries.aggregate(pipeline)
+    rows = [doc async for doc in cursor]
+    return {"window_days": days, "rows": rows}
 
 
 @api_router.post("/body-room/chat")

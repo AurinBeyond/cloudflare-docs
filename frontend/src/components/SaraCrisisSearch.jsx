@@ -123,7 +123,7 @@ export default function SaraCrisisSearch() {
         >
           {searching ? (
             <span className="inline-flex items-center gap-2"><Loader2 size={13} className="animate-spin" /> Searching</span>
-          ) : "Find the lenses"}
+          ) : "Find your heading"}
         </button>
       </form>
 
@@ -206,6 +206,13 @@ export default function SaraCrisisSearch() {
                 ))}
               </div>
             </article>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+e>
           ))}
         </div>
       )}
