@@ -240,3 +240,59 @@ agent) knows the rule.
 - Body Room 7-day chrono-lock + Clarity 48h chrono-lock — next sprint
 - "Broken Clockwork" full course (28-day Sara protocol) — next sprint
 - Polar.sh full switch — awaiting account approval
+
+## 2026-02-11 (NIGHT) — Polar.sh Prep + Broken Clockwork Scaffold
+
+### P0 · Polar.sh switchover preparation (no live changes)
+**Status:** Scaffolding complete · awaiting founder's Polar account approval
+
+What was already wired in the codebase (verified, untouched):
+- `/api/webhooks/polar` endpoint (HTTP 503 until env keys set) ✓
+- `payment_providers/polar.py` — Standard Webhooks signature verification ✓
+- `payment_providers/sku_mapping.py` — 3 SKUs (body_temple, topup_60min, eternal_monthly) ✓
+- `polar_webhook_log` MongoDB idempotency layer ✓
+- `/api/admin/payment/sku-map` admin visibility endpoint ✓
+- LemonSqueezy stays the LIVE provider — Polar in 503 standby
+
+What was added in this sprint:
+- `backend/.env` — `§POLAR-PREP` block with all required env-key
+  placeholders (`POLAR_MODE`, `POLAR_ORG_ID`, sandbox + production
+  OAT + webhook secret, `POLAR_SKU_MAP_JSON`). Each documented inline.
+- `backend/.env` — `TOPUP_PRICE_PER_MIN_EUR=0.60` now explicitly
+  declared (was implicit fallback). Founder flips to `1.50` on
+  Polar production cutover.
+- `memory/POLAR_SWITCHOVER_GUIDE.md` — six-step founder runbook with
+  rollback procedure, verification commands, and a clean cutover
+  ordering rule (never flip price before sandbox verification).
+
+Verifications after backend restart:
+- `POST /api/webhooks/polar` → HTTP 503 (clean signal, not crash) ✓
+- Backend supervisor RUNNING ✓
+- No regression on existing routes ✓
+
+### P1 · "The Broken Clockwork" 28-day Sara protocol — DRAFT BLUEPRINT
+**Status:** Memory artifact only · NOT in `SEED_COURSES`
+
+`memory/BROKEN_CLOCKWORK_COURSE_DRAFT.md` — full course blueprint:
+- Slug, audience, blurb, audio companion, language="draft" target shape
+- 4-act × 7-day arc structure:
+    - Act I (1–7): Read the System (Value Flip diagnosis)
+    - Act II (8–14): Find the Anchor (parent's own clock audit)
+    - Act III (15–21): Install the OS (Anchor OS protocols α–δ)
+    - Act IV (22–28): Hold the Clock (load-test the new cadence)
+- All 28 letter titles authored (ready for founder to write the bodies)
+- Authorial register lock documented (no t.A.T.u. citations in prose;
+  blueprints referenced by mechanism only; ~400–550 words/letter)
+- Promotion contract: when founder says "Promote The Broken Clockwork
+  to SEED_COURSES", agent inserts the dict, lints, ships
+
+This keeps the public catalog clean while the content is being authored.
+
+### What was deliberately NOT done this sprint
+- Body Room 7-day chrono-lock backend enforcement — waiting for
+  founder's audit feedback
+- Clarity Release 48h chrono-lock — same
+- Wanderer Sovereign Counter ("127 sovereigns under cadence-lock") —
+  GPT idea acknowledged; deferred until founder audit complete
+- Parents' Room live in-room ticker — same
+- Live Charlotte/Lily voice listen-test — founder doing this manually
