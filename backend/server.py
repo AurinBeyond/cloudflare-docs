@@ -15332,6 +15332,60 @@ async def waitlist_health():
     return {"total": total, "by_slug": by_slug}
 
 
+# ---- Polarstar Explorer List (PSP-safe waitlist, MongoDB-only) ------
+# §POLARSTAR 2026-02-13 — Kids surface is preview-only while Polar.sh
+# underwriter review is pending. We only collect interest; we DO NOT
+# send any confirmation email (Resend stays untouched), we DO NOT bind
+# a purchase, we DO NOT mention "AI". Stored quietly in MongoDB for
+# the founder to review manually.
+
+class PolarstarWaitlistRequest(BaseModel):
+    email: str
+    name: Optional[str] = None
+    age_group: Optional[str] = None  # 'discovery' | 'exploration' | 'creation'
+    note: Optional[str] = None
+    consent: bool = True
+
+
+@api_router.post("/waitlist/polarstar")
+async def polarstar_waitlist_join(inp: PolarstarWaitlistRequest):
+    """Join the Polarstar Explorer List. No email sent — quiet record."""
+    if not inp.consent:
+        raise HTTPException(status_code=400, detail="Consent is required.")
+    email = (inp.email or "").strip().lower()
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Please share a valid email.")
+    age_group = (inp.age_group or "").strip().lower() or None
+    if age_group and age_group not in {"discovery", "exploration", "creation"}:
+        age_group = None
+    now_iso = datetime.now(timezone.utc).isoformat()
+    res = await db.polarstar_waitlist.update_one(
+        {"email": email},
+        {
+            "$setOnInsert": {
+                "id": str(uuid.uuid4()),
+                "email": email,
+                "name": (inp.name or "").strip() or None,
+                "age_group": age_group,
+                "note": (inp.note or "").strip() or None,
+                "source": "polarstar_preview",
+                "created_at": now_iso,
+            },
+            "$set": {"last_seen_at": now_iso},
+        },
+        upsert=True,
+    )
+    status = "joined" if res.upserted_id is not None else "already_on_list"
+    return {"status": status, "email_recorded": True}
+
+
+@api_router.get("/waitlist/polarstar/health")
+async def polarstar_waitlist_health():
+    """Public count (no PII) so the founder can verify growth."""
+    total = await db.polarstar_waitlist.count_documents({})
+    return {"total": total, "source": "polarstar_preview"}
+
+
 # ---- Unsubscribe (deliverability protection) ------------------------
 
 @api_router.get("/email/unsubscribe")

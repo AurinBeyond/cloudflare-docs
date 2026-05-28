@@ -3,6 +3,99 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02-13 — Polarstar v9 PSP-safe Preview Polish (iter 85)
+
+Final pre-PSP-review polish for the Kids surface. Polar.sh underwriter
+is currently reviewing the production account, so the Kids layer must
+visibly stay "preview only" — no purchase CTAs, no AI badges, only an
+interest list.
+
+### New day painting + mode-aware click zones
+- Replaced `/app/frontend/public/polarstar/day-world-v2.png` with the
+  founder's new daytime composition (3 age paths + central
+  exploration path + side panels, matching the night painting's
+  structure).
+- `Polarstar.jsx` now switches between `ZONES_DAY` and `ZONES_NIGHT`
+  coordinate arrays based on `getTimeMode()`. Each set is tuned for
+  its painting (day panels sit higher; night has an extra
+  "Adventure Hub" zone).
+- Exploration day-tile chips also use mode-specific coordinates.
+
+### Header overlay (was missing in v8)
+- Compact top banner: pulsing "PREVIEW WORLD · The First Lanterns
+  Are Lit" badge + serif "POLARSTAR KIDS" + "One World · Three
+  Paths · One Family." subtitle.
+- Tone-aware (`ps9-header--dark` on night/evening, `--light` on
+  day/morning) so cream painting and indigo painting both keep
+  legible contrast.
+- Sized to *not* compete with the painted "Kids Universe Journey"
+  title baked into the background art.
+
+### Coming Soon markers + zone variants
+- New zone variants: `primary` (active age path), `library` (preview
+  panel, no badge), `soon` (preview + Coming Soon pill).
+- Tomorrow's Adventure / Discovery Stars / Memory Trail (and their
+  day equivalents Morning Boost / Discovery Stars / Today I Feel)
+  carry a "COMING SOON" pill that fades in on hover so the painting
+  is never visually crowded.
+
+### Join the Explorer List (waitlist, NOT a checkout)
+- Floating "✦ Join the Explorer List" CTA at fixed bottom-right
+  (intentionally below the site nav so the nav's "Enter Portal"
+  cannot intercept clicks).
+- Footer ribbon "A quiet preview of Polarstar Kids · Be told when
+  it opens." — opens the same modal.
+- Clicking ANY Coming-Soon zone also opens the modal pre-filled with
+  "Interested in: <zone label>".
+- `PolarstarWaitlistModal.jsx` (new): cream-paper modal with email +
+  optional name + age-path picker + optional note + consent
+  checkbox + done-state. Escape closes. Backdrop-click closes.
+
+### Backend — quiet MongoDB-only waitlist endpoint
+- New `POST /api/waitlist/polarstar` and `GET /api/waitlist/polarstar/health`.
+- Stores into `db.polarstar_waitlist` (`email`, `name`, `age_group`,
+  `note`, `source="polarstar_preview"`, timestamps). Idempotent on
+  email (re-submission returns `already_on_list`).
+- **Deliberately does NOT call Resend.** Founder explicitly asked to
+  keep the email pipeline silent for now (no automated confirmation),
+  so the underwriter cannot see automated mail traffic tied to the
+  Kids brand during review. Resend wiring is a later P2 task.
+- Rejects invalid email (400) and missing consent (400).
+
+### Click-zone audit (12 nighttime / 11 daytime)
+- **ACTIVE (3):** Discovery / Exploration / Creation → routes to
+  `/kids-universe/polarstar/{discovery|exploration|creation}` which
+  renders the existing `PolarstarRoom.jsx`.
+- **PREVIEW (8–9):** Library, Adventure Hub (night only), Tomorrow,
+  Stars, My Story Space, Family, Evening Room, You-are-never-alone,
+  Keepsakes — all open the waitlist modal (no broken navigation,
+  no checkout, no AI mention).
+- Bottom rail buttons removed (the old `pw8-rail-btn` invisible
+  pills) so they don't trigger silent no-ops; the painted rail
+  remains decorative only.
+
+### Files touched
+- New: `frontend/src/components/PolarstarWaitlistModal.jsx`
+- Updated: `frontend/src/pages/Polarstar.jsx`,
+  `frontend/src/styles/polarstar.css`, `backend/server.py`
+- Replaced asset: `frontend/public/polarstar/day-world-v2.png`
+
+### Verified
+- Backend curl: 4/4 cases pass (400 invalid email, 400 no consent,
+  joined/already_on_list idempotency, /health returns count).
+- Playwright: header + badge + title render, Discovery zone
+  navigates correctly, Tomorrow zone opens the waitlist modal with
+  the right pre-filled context, full submission shows the "done"
+  state.
+
+### What is still NOT done (per founder's instruction)
+- No Resend confirmation email yet (intentional).
+- No billing / checkout wiring (Polar.sh review still pending).
+- `kids_polarstar_progress` collection + 7-day chrono-lock countdown
+  (Phase 2 — paused until preview launch is approved by founder).
+
+
+
 ## 2026-02-13 — Truth Sequence Modal + Chrono-Lock Enforcement (P1 sprint while Polar PSP review pending 24h)
 
 ### Frontend · "Walk truth first" interactive modal
