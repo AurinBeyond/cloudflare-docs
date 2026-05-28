@@ -467,3 +467,53 @@ When founder approves, the channel will be implemented with:
 - Sovereign Counter strip live on landing showing `0 · 0 · 2` ✓
 - Compass cardinal geometry untouched (4-cardinal N/E/S/W) ✓
 - No new dependencies added ✓
+
+## 2026-02-11 (PRE-DEPLOY AUDIT) — Free Visitkaart Refresh
+
+### Audit finding
+The "tasuta visitkaardid" (free room intro cards) DID exist in
+`SanctuaryPreview.jsx → RoomsSection` (live on `/`), but the copy
+was written in the pre-v3.0 wellness register — "Your place for
+clarity and quiet. Grace is here to listen" — which violates the
+freshly-locked BRAND_VOICE_LOCK.md.
+
+GPT proposed building new public intro routes per room, but that
+would have introduced new components, new routes, and deploy-risk
+on the eve of the GitHub push. Surgical move taken instead.
+
+### What was changed (copy-edit only, no new routes)
+File: `frontend/src/pages/SanctuaryPreview.jsx → RoomsSection`
+
+All four cardinal room cards now carry:
+- **Cardinal-coded sub-heading**: `S · 180° · Grace · The Private Room`
+  (was just "The Private Room") — visually wires each card directly to
+  the new Hero-Compass cardinal mapping
+- **Architectural body line**: e.g. Parents' Room body is now
+  "For the ones holding the operating system of a home. Architectural
+  read, never pedagogical advice." (was "For the ones holding others.
+  A quiet hour for the part of you that rarely rests.")
+- **Refreshed intro paragraph** in the Matrix Aurin register, retaining
+  the three-channel practical info and the "if line breaks, write" promise
+- Course Room card now references "The Broken Clockwork (28-day Sara protocol)"
+  directly — visitor now sees on the landing that this signature
+  course exists
+- Parents' Room card now references "The Subsystem" sub-cluster
+- Aurin's Room (5th card · children) deliberately UNTOUCHED — that
+  audience requires the soft register; the BRAND_VOICE_LOCK applies
+  to the adult cardinals only
+
+### Verifications
+- Lint: ✓ clean
+- Screenshot triple-check: all 4 cards render with new cardinal
+  eyebrows, new body lines, new intros, "Enter →" CTAs intact ✓
+- No routing changes ✓
+- No gate changes ✓
+- No backend changes ✓
+- DOM testid attributes preserved ✓
+
+### Snapshot taken pre-push
+`/app/snapshots/2026-02-11_matrix_aurin_pre_github_push/` — 132 files
+including all 100 memory artefacts, source files, Charlotte+Lily MP3s,
+and a MANIFEST.md describing how to restore individual files if needed.
+
+Backup tarball: 1.2 MB · expanded folder: 2.8 MB.
