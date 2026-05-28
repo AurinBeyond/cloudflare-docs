@@ -30,12 +30,16 @@ export default function PolarstarAtmosphere({ children, testid = "polarstar-root
   // Pre-load painted background so we crossfade in rather than flash.
   useEffect(() => {
     setImgReady(false);
-    const url = `${process.env.PUBLIC_URL || ""}/polarstar/${mode}-world.png`;
+    // §POLARSTAR — night uses the richer v2 (no buildings, asymmetric path)
+    const file = mode === "night" ? "night-world-v2.png" : `${mode}-world.png`;
+    const url = `${process.env.PUBLIC_URL || ""}/polarstar/${file}`;
     const img = new Image();
     img.onload = () => setImgReady(true);
     img.onerror = () => setImgReady(false);
     img.src = url;
   }, [mode]);
+
+  const bgFile = mode === "night" ? "night-world-v2.png" : `${mode}-world.png`;
 
   return (
     <main
@@ -45,7 +49,7 @@ export default function PolarstarAtmosphere({ children, testid = "polarstar-root
     >
       <div
         className={`ps-atmosphere ${imgReady ? "ps-atmosphere--ready" : ""}`}
-        style={{ backgroundImage: `url(${process.env.PUBLIC_URL || ""}/polarstar/${mode}-world.png)` }}
+        style={{ backgroundImage: `url(${process.env.PUBLIC_URL || ""}/polarstar/${bgFile})` }}
         aria-hidden="true"
         data-testid="polarstar-atmosphere"
       />

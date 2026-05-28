@@ -77,39 +77,60 @@ function GatewayHeading() {
 
 function AgeGatewayCard({ group, hovered, onHover }) {
   const navigate = useNavigate();
-  const { id, age, title, subtitle, description, route, Icon, activities } = group;
+  const { id, age, title, subtitle, description, route, Icon, activities,
+          guideImage, guideSpeech } = group;
   const enterLabel = title.replace(" Path", "");
   return (
-    <button
-      type="button"
-      onClick={() => navigate(route)}
-      onMouseEnter={() => onHover(id)}
-      onMouseLeave={() => onHover(null)}
-      className={`ps-gateway-card ${hovered === id ? "ps-gateway-card--hover" : ""}`}
-      data-testid={`polarstar-gateway-${id}`}
-      style={{ fontFamily: SERIF }}
+    <div
+      className={`ps-gateway-slot ${hovered === id ? "ps-gateway-slot--hover" : ""}`}
+      data-testid={`polarstar-gateway-slot-${id}`}
     >
-      <div className="ps-gateway-icon" aria-hidden="true">
-        <Icon size={28} />
+      {/* Fairy guide + comic-style speech bubble above the card */}
+      <div className="ps-guide" aria-hidden="true" data-testid={`polarstar-guide-${id}`}>
+        <img
+          src={`${process.env.PUBLIC_URL || ""}${guideImage}`}
+          alt=""
+          className="ps-guide-img"
+          loading="lazy"
+        />
+        <div className="ps-speech" data-testid={`polarstar-speech-${id}`}>
+          <p style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}>
+            {guideSpeech}
+          </p>
+        </div>
       </div>
-      <p className="ps-eyebrow ps-gateway-age">{age}</p>
-      <h3 className="ps-gateway-cardtitle">
-        {title.replace(" Path", " ")}<span className="ps-italic">Path</span>
-      </h3>
-      <p className="ps-gateway-subtitle">{subtitle}</p>
-      <p className="ps-gateway-desc">{description}</p>
 
-      <div className="ps-gateway-tags" aria-hidden="true">
-        {activities.slice(0, 4).map((a) => (
-          <span key={a.id} className="ps-gateway-tag">{a.label}</span>
-        ))}
-      </div>
+      <button
+        type="button"
+        onClick={() => navigate(route)}
+        onMouseEnter={() => onHover(id)}
+        onMouseLeave={() => onHover(null)}
+        className={`ps-gateway-card ${hovered === id ? "ps-gateway-card--hover" : ""}`}
+        data-testid={`polarstar-gateway-${id}`}
+        style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}
+      >
+        <div className="ps-gateway-icon" aria-hidden="true">
+          <Icon size={24} />
+        </div>
+        <p className="ps-eyebrow ps-gateway-age">{age}</p>
+        <h3 className="ps-gateway-cardtitle">
+          {title.replace(" Path", " ")}<span className="ps-italic">Path</span>
+        </h3>
+        <p className="ps-gateway-subtitle">{subtitle}</p>
+        <p className="ps-gateway-desc">{description}</p>
 
-      <div className="ps-gateway-cta">
-        <span>Enter {enterLabel}</span>
-        <ArrowRight size={16} aria-hidden="true" />
-      </div>
-    </button>
+        <div className="ps-gateway-tags" aria-hidden="true">
+          {activities.slice(0, 3).map((a) => (
+            <span key={a.id} className="ps-gateway-tag">{a.label}</span>
+          ))}
+        </div>
+
+        <div className="ps-gateway-cta">
+          <span>Enter {enterLabel}</span>
+          <ArrowRight size={14} aria-hidden="true" />
+        </div>
+      </button>
+    </div>
   );
 }
 

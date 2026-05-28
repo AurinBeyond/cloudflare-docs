@@ -18,6 +18,8 @@ export const POLARSTAR_AGE_GROUPS = [
       "Simple stories, gentle play, drawing, calm moments and parent-child rituals.",
     route: "/kids-universe/polarstar/discovery",
     Icon: BookOpen,
+    guideImage: "/polarstar/guide-discovery.png",
+    guideSpeech: "Is it time for a bedtime story?",
     activities: [
       { id: "bedtime",  label: "Bedtime Stories",  Icon: Moon,    blurb: "A quiet tale before sleep." },
       { id: "calm",     label: "Calm Moments",     Icon: Wind,    blurb: "One slow breath together." },
@@ -36,6 +38,8 @@ export const POLARSTAR_AGE_GROUPS = [
       "Stories, nature quests, kindness missions, drawing, imagination and family adventures.",
     route: "/kids-universe/polarstar/exploration",
     Icon: Leaf,
+    guideImage: "/polarstar/guide-exploration.png",
+    guideSpeech: "Shall we go on an adventure?",
     activities: [
       { id: "story",      label: "Story Journey",   Icon: BookOpen, blurb: "Begin a new chapter." },
       { id: "imagine",    label: "Imagine Together",Icon: Sparkles, blurb: "Build a world in your mind." },
@@ -55,6 +59,8 @@ export const POLARSTAR_AGE_GROUPS = [
       "Story studio, art studio, voice creation, dream projects and reflective family memories.",
     route: "/kids-universe/polarstar/creation",
     Icon: Palette,
+    guideImage: "/polarstar/guide-creation.png",
+    guideSpeech: "What will you create tonight?",
     activities: [
       { id: "story-studio", label: "Story Studio",   Icon: BookOpen, blurb: "Write your own short tale." },
       { id: "art-studio",   label: "Art Studio",     Icon: Palette,  blurb: "Paint what cannot be said." },
