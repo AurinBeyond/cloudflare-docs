@@ -29,6 +29,7 @@ import UserPortal from "@/pages/UserPortal";
 import PortalMagicVerify from "@/pages/PortalMagicVerify";
 import Guest from "@/pages/Guest";
 import AdminContent from "@/pages/AdminContent";
+import AdminParentsCompass from "@/pages/AdminParentsCompass";
 import About from "@/pages/About";
 import Legal from "@/pages/Legal";
 import WanderersAgreement from "@/pages/WanderersAgreement";
@@ -231,6 +232,7 @@ function AppRouter() {
         <Route path="/admin/scheduler" element={<AdminScheduler />} />
         <Route path="/admin/outbound" element={<AdminOutbound />} />
         <Route path="/admin/content" element={<AdminContent />} />
+        <Route path="/admin/parents-compass" element={<AdminParentsCompass />} />
       </Route>
       {/* §2026-05-17 — /luxury preview route lives OUTSIDE the
           standard Layout wrapper. It is a full-bleed sanctuary

@@ -212,10 +212,3 @@ export default function SaraCrisisSearch() {
     </div>
   );
 }
-e>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}

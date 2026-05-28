@@ -54,40 +54,32 @@ export default function WandererGate({ scope = "private", children }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const visitorId = useMemo(getOrCreateVisitorId, []);
-  const localKey = `wanderer_accepted_${AGREEMENT_VERSION}_${scope}`;
+  // §SOVEREIGN-AGREEMENT-VARIANT-D 2026-05-28 — Founder directive: the
+  // five-checkbox responsibility ritual should re-appear once per day
+  // per room (not on every visit, not just once forever). Encoding the
+  // current YYYY-MM-DD (UTC) into the cache key makes each new day a
+  // fresh sovereign agreement, without any background timers or extra
+  // network calls.
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  const localKey = `wanderer_accepted_${AGREEMENT_VERSION}_${scope}_${todayUtc}`;
 
   useEffect(() => {
     let alive = true;
-    // Fast path: localStorage.
+    // §SOVEREIGN-AGREEMENT-VARIANT-D — Today's localStorage key is the
+    // single source of truth for the UI gate. The server still keeps a
+    // permanent legal record of every acceptance (see /agreement/accept
+    // below), but we do NOT fetch it back — that would defeat the
+    // daily ritual the founder requested.
     try {
       const cached = localStorage.getItem(localKey);
       if (cached === "1") {
         setAccepted(true);
-        return () => {};
+      } else {
+        setAccepted(false);
       }
-    } catch {}
-    // Slow path: server.
-    (async () => {
-      try {
-        const r = await fetch(
-          `${API}/api/agreement/status?visitor_id=${encodeURIComponent(
-            visitorId,
-          )}&scope=${scope}`,
-        );
-        const d = await r.json();
-        if (!alive) return;
-        if (d?.accepted) {
-          try {
-            localStorage.setItem(localKey, "1");
-          } catch {}
-          setAccepted(true);
-        } else {
-          setAccepted(false);
-        }
-      } catch {
-        if (alive) setAccepted(false);
-      }
-    })();
+    } catch {
+      setAccepted(false);
+    }
     return () => {
       alive = false;
     };

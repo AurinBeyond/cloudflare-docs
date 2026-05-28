@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
-import Week1PreviewPlayer from "@/components/Week1PreviewPlayer";
+import BodyArchitectureAudioShelf from "@/components/BodyArchitectureAudioShelf";
 // §GHOST-FIX 2026-05-23 — Old <BodyRoomChat> import removed.
 // Kaelan now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
 // The file BodyRoomChat.jsx is preserved in the repo for rollback.
@@ -247,11 +247,10 @@ export default function BodyRoom() {
             </div>
           </Link>
 
-          {/* §BODY-ARCH-WEEK1 2026-05-28 — PoC master-class preview.
-              Founder must audition before the other three weeks are
-              generated in batch. */}
+          {/* §BODY-ARCH-AUDIO-SHELF 2026-05-28 — All four weekly
+              master-classes, founder-approved after Week 1 PoC. */}
           <div className="mt-6">
-            <Week1PreviewPlayer />
+            <BodyArchitectureAudioShelf />
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import AlistairModeSelector from "@/components/AlistairModeSelector";
 import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
+import SpatialCompass from "@/components/SpatialCompass";
 import { fetchCourses } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
@@ -103,6 +104,15 @@ export default function CourseRoom() {
       <section className="aurin-section-sm" data-testid="course-room-mode-section">
         <div className="aurin-container max-w-[760px]">
           <AlistairModeSelector />
+        </div>
+      </section>
+
+      {/* §SPATIAL-COMPASS 2026-05-28 — Three ancient principles of
+          spatial biomechanics, on Alistair's shelf. Anti-wellness:
+          structural nervous-system hygiene for high-performers. */}
+      <section className="aurin-section-sm" data-testid="course-room-spatial-compass">
+        <div className="aurin-container max-w-[1080px]">
+          <SpatialCompass />
         </div>
       </section>
 

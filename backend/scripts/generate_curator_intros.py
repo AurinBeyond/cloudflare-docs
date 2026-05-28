@@ -31,7 +31,7 @@ OUTPUT_DIR = Path("/app/frontend/public/audio")
 # 2) one sentence describing the room's soul, 3) one soft invitation.
 INTROS = {
     "grace": {
-        "voice_id": os.environ.get("ELEVENLABS_VOICE_FEMALE", "2cmw3pVpSgQyjo7Vu8fX"),
+        "voice_id": os.environ["ELEVENLABS_VOICE_GRACE"],  # Rachel — warm narration
         "text": (
             "You found the Confession Room. I'm Grace. "
             "Some sentences live in the body for years, "
