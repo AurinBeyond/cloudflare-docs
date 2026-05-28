@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
@@ -22,7 +22,7 @@ import {
   fetchBodyPatterns,
   fetchBodyQuestionnaire,
 } from "@/lib/api";
-import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass } from "lucide-react";
+import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass, Play, Pause } from "lucide-react";
 import { track } from "@/lib/telemetry";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
@@ -189,6 +189,19 @@ export default function BodyRoom() {
               feet. Walk to the one that speaks loudest tonight.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* §KAELAN-VOICE-POC 2026-05-28 — Pre-recorded Daniel-voice
+          introduction. Plays a single 15s MP3 served as a static
+          asset for zero-latency luxury playback. This is a PoC step
+          before any realtime ConvAI voice integration; the founder
+          must approve the audio quality first. The actual live
+          conversation still happens below via <ConvaiPresenceTracker
+          room="body" /> which mints a signed ElevenLabs URL. */}
+      <section className="aurin-section-sm" data-testid="body-room-kaelan-intro">
+        <div className="aurin-container max-w-[760px]">
+          <KaelanIntroCard />
         </div>
       </section>
 
@@ -1079,4 +1092,103 @@ function computeQuizResult(quiz, answers, patternsPayload, hotspots) {
       : "The willingness itself is already the work. Start with the place that feels loudest, in the smallest way you can tonight. The rest unfolds.";
 
   return { intro, regionCards: topRegions, patternCards, closing };
+}
+
+// =============================================================
+// §KAELAN-VOICE-POC 2026-05-28 — Kaelan introduction card.
+// Plays a pre-recorded 15s Daniel-voice MP3 from /public/audio.
+// Zero backend round-trip, zero credit cost, founder-audited
+// before any realtime ConvAI voice work is greenlit.
+// =============================================================
+function KaelanIntroCard() {
+  const audioRef = useRef(null);
+  const [state, setState] = useState("idle"); // idle | playing | ended
+
+  const onToggle = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (state === "playing") {
+      audio.pause();
+      audio.currentTime = 0;
+      setState("idle");
+      return;
+    }
+    audio.currentTime = 0;
+    audio.play().then(() => setState("playing")).catch(() => setState("idle"));
+  };
+
+  return (
+    <div
+      data-testid="kaelan-intro-card"
+      className="rounded-[1.5rem] p-7 md:p-8 flex items-center gap-5 md:gap-7"
+      style={{
+        background: "linear-gradient(160deg, #131210 0%, #1c1a16 100%)",
+        border: "1px solid rgba(139,132,120,0.22)",
+        boxShadow: "0 12px 40px rgba(0,0,0,0.45), 0 0 28px rgba(139,132,120,0.18)",
+      }}
+    >
+      <div
+        className="shrink-0 rounded-full overflow-hidden"
+        style={{
+          width: 84,
+          height: 84,
+          border: "1px solid #8b8478",
+          boxShadow: "0 0 26px rgba(139,132,120,0.32)",
+        }}
+      >
+        <img
+          src="/avatars/kaelan.png"
+          alt="Kaelan, curator of the Body Room"
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p
+          className="text-[10.5px] tracking-[0.36em] uppercase mb-1.5"
+          style={{ color: "#a59f93", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+          data-testid="kaelan-intro-eyebrow"
+        >
+          ✦ Meet your curator
+        </p>
+        <p
+          className="text-[24px] md:text-[28px] leading-[1.15] font-light italic mb-1.5"
+          style={{ color: "#e8e1d5", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+          data-testid="kaelan-intro-name"
+        >
+          Kaelan
+        </p>
+        <p
+          className="text-[13px] md:text-[13.5px] leading-[1.7] italic"
+          style={{ color: "#bcb4a3", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+        >
+          A quiet listener of the body. Press play for a short hello — about fifteen seconds.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={onToggle}
+        data-testid="kaelan-intro-play"
+        aria-label={state === "playing" ? "Stop introduction" : "Play Kaelan introduction"}
+        className="shrink-0 inline-flex items-center justify-center rounded-full transition-all"
+        style={{
+          width: 56,
+          height: 56,
+          background: "#8b8478",
+          color: "#0b0a08",
+          boxShadow: "0 0 22px rgba(139,132,120,0.36)",
+        }}
+      >
+        {state === "playing" ? <Pause size={22} /> : <Play size={22} className="ml-0.5" />}
+      </button>
+      <audio
+        ref={audioRef}
+        src="/audio/kaelan-intro.mp3"
+        preload="auto"
+        onEnded={() => setState("ended")}
+        onError={() => setState("idle")}
+        data-testid="kaelan-intro-audio"
+      />
+    </div>
+  );
 }

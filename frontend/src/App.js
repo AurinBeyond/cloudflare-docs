@@ -11,7 +11,6 @@ import BookDetail from "@/pages/BookDetail";
 import ReachOut from "@/pages/ReachOut";
 import KidsUniverse from "@/pages/KidsUniverse";
 import KidsUniverseJourney from "@/pages/KidsUniverseJourney";
-import AdultRooms from "@/pages/AdultRooms";
 import KidsColoringStudio from "@/pages/KidsColoringStudio";
 import KidsHub from "@/pages/KidsHub";
 import StoryGiftForm from "@/pages/StoryGiftForm";
@@ -111,10 +110,6 @@ function AppRouter() {
             Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}
         <Route path="/kids-universe/journey" element={<KidsUniverseJourney />} />
         <Route path="/kids-universe/journey/:zone" element={<KidsUniverseJourney />} />
-        {/* §ADULT-V3-PHASE-1-2 2026-02-27 — Adult Mentor Rooms.
-            Plan: /app/memory/ADULT_V3_VISION.md. Kaelan ships first. */}
-        <Route path="/adult-rooms" element={<AdultRooms />} />
-        <Route path="/adult-rooms/:room" element={<AdultRooms />} />
         {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
         <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
         <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />

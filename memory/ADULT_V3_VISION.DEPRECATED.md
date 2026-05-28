@@ -1,3 +1,28 @@
+# ⛔ DEPRECATED — Replaced by curator-in-room model (2026-05-28)
+**This document was AI fabrication that ran parallel to the real Matrix Aurin architecture.**
+The "Architecture of Sovereignty" / 4-day stone cycle / `/adult-rooms` route described
+below was **never the real plan**. The four characters (Grace, Kaelan, Sara, Alistair)
+are NOT mentors in separate "stone sanctuary" rooms — they are **curators inside the
+four real, already-existing rooms**:
+
+| Character | Real room (live in production) | Route |
+|---|---|---|
+| **Grace**    | Pihituba / Confession Room | `/clarity-release` |
+| **Kaelan**   | Keha tuba / Body Room      | `/body-room` |
+| **Sara**     | Lastevanemate tuba         | `/parents-room` |
+| **Alistair** | Kursused / Course Room     | `/course-room` |
+
+Each character is wired as an ElevenLabs ConvAI agent (see
+`server.py:_ROOM_TO_CONVAI_AGENT_ENV`). Their full personalities live in the
+**ElevenLabs Dashboard**, NOT in this document. Zero-Override Policy applies.
+
+**Do not use any content below this banner.** Kept for forensic reference only.
+The cleanup commit removed `/adult-rooms` route, `AdultRooms.jsx`, `adult/KaelanRoom.jsx`
+and `adult_universe_endpoints.py`. Source-of-truth is now `/app/memory/KAELAN_PERSONA.md`
+plus the live ConvAI agents in ElevenLabs.
+
+---
+
 # Matrix Aurin · Adult v3.0 — The Architecture of Sovereignty
 *Vision locked: 2026-02-27. Build status: 🟡 BLOCKED on Polar.sh approval + Anna's explicit "alustame Adult v3.0" greenlight.*
 

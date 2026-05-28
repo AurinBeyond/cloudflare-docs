@@ -15418,18 +15418,6 @@ kids_universe_endpoints.init(
 )
 app.include_router(kids_universe_endpoints.router, prefix="/api")
 
-# §ADULT-V3-PHASE-1-2 2026-02-27 — Adult Rooms backend (Kaelan first).
-# Plan: /app/memory/ADULT_V3_VISION.md
-import adult_universe_endpoints  # noqa: E402
-adult_universe_endpoints.init(
-    db=db,
-    user_has_premium_fn=_user_has_premium,
-    resolve_current_user_fn=_resolve_current_user,
-    require_user_fn=_require_user,
-    send_email_fn=_send_email_fn,
-)
-app.include_router(adult_universe_endpoints.router, prefix="/api")
-
 
 @app.on_event("startup")
 async def on_startup():
