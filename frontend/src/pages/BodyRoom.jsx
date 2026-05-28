@@ -231,12 +231,12 @@ export default function BodyRoom() {
                   Premium · 4 weeks
                 </p>
                 <p className="sanctuary-wood-title text-[30px] md:text-[34px] mt-0.5">
-                  Body Temple 28
+                  The Body Architecture
                 </p>
                 <p className="text-[13.5px] mt-2 leading-relaxed max-w-[52ch]" style={{color: "#5a4a26"}}>
-                  Four ancient keys — breathing, touch, rest, presence —
-                  walked across twenty-eight quiet days. Yours forever
-                  after one $39 unlock.
+                  A 28-day walk through the four ancient keys —
+                  the breath, the armor, the radical pause, and
+                  coming home. Yours forever after one $39 unlock.
                 </p>
                 <p className="text-[13px] mt-3 inline-flex items-center gap-1.5" style={{color: "#3d2e15"}}>
                   Walk the temple <ArrowRight size={13} />

@@ -252,7 +252,7 @@ BODY_TEMPLE_DAYS: List[Dict[str, Any]] = (
 BODY_TEMPLE_WEEKS = {
     "breathing": {
         "key": "breathing", "number": 1,
-        "title": "Breathing",
+        "title": "The First Key — The Breath",
         "subtitle": "The body's oldest prayer.",
         "blurb": "Seven days of listening to the one companion you've had since birth. The long exhale teaches the body it is safe.",
         "icon": "Wind",
@@ -260,7 +260,7 @@ BODY_TEMPLE_WEEKS = {
     },
     "touch": {
         "key": "touch", "number": 2,
-        "title": "Touch",
+        "title": "The Second Key — Listening to the Armor",
         "subtitle": "Coming home to your own skin.",
         "blurb": "The first touch is the one you give yourself. Seven days of gentle, deliberate contact with the body that carries you.",
         "icon": "Hand",
@@ -268,7 +268,7 @@ BODY_TEMPLE_WEEKS = {
     },
     "rest": {
         "key": "rest", "number": 3,
-        "title": "Rest",
+        "title": "The Third Key — The Radical Pause",
         "subtitle": "The fast from noise.",
         "blurb": "Not sleep — chosen rest. Seven days of skipping one small thing each day, so the body can hear itself again.",
         "icon": "Moon",
@@ -276,7 +276,7 @@ BODY_TEMPLE_WEEKS = {
     },
     "presence": {
         "key": "presence", "number": 4,
-        "title": "Presence",
+        "title": "The Fourth Key — Coming Home to the Body",
         "subtitle": "Being here, now, in this body.",
         "blurb": "Seven days of returning home. The temple was always yours — these are the final keys.",
         "icon": "Compass",
@@ -301,9 +301,9 @@ def get_week_days(week_key: str) -> List[Dict[str, Any]]:
 
 def course_overview() -> Dict[str, Any]:
     return {
-        "title": "Body Temple 28",
-        "subtitle": "Four ancient keys. Twenty-eight quiet days.",
-        "blurb": "A four-week journey through the body's oldest wisdom — breathing, touch, rest, presence. Soft, never clinical. Yours forever, after one unlock.",
+        "title": "The Body Architecture",
+        "subtitle": "A 28-day walk through the four ancient keys.",
+        "blurb": "Four weeks. The breath, the armor, the radical pause, and coming home. Soft, never clinical. Yours forever, after one unlock.",
         "price_usd": BODY_TEMPLE_PRICE_USD,
         "total_days": BODY_TEMPLE_TOTAL_DAYS,
         "weeks": list(BODY_TEMPLE_WEEKS.values()),

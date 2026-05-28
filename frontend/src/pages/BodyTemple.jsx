@@ -165,7 +165,7 @@ export default function BodyTemple() {
                     <div>
                         <p className="sanctuary-hand text-[34px] md:text-[42px] leading-[0.95] mb-1"
                            style={{color: "#6a4b1f"}}>
-                            Body Temple 28
+                            The Body Architecture
                         </p>
                         <h1 className="text-2xl md:text-3xl font-light mb-4" style={{fontFamily: "Fraunces, serif"}}>
                             {overview.subtitle}
