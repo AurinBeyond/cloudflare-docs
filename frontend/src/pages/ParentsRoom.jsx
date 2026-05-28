@@ -143,8 +143,8 @@ export default function ParentsRoom() {
   return (
     <div data-testid="page-parents-room" className="sanctuary-room relative">
       <PageHeader
-        eyebrow="Parents' Room · Wisdom Weaver"
-        title="Three wisdom traditions, one calm room for parents."
+        eyebrow="Parents' Room · The Quiet Weaver"
+        title="Three lenses, one calm room for parents."
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
 

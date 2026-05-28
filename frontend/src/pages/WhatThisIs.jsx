@@ -109,12 +109,12 @@ export default function WhatThisIs() {
       </Section>
 
       <Section
-        eyebrow="✦ Voice-first by design"
+        eyebrow="✦ Made for the ear"
         title="Made to be heard, not watched."
       >
         <p>
           Matrix Aurin is built for the ear, not the eye. The room is
-          voice-first by design — a space where you can close the screen,
+          made for the ear — a space where you can close the screen,
           lower your shoulders, and simply listen. Reading is optional;
           presence is not.
         </p>
@@ -139,7 +139,7 @@ export default function WhatThisIs() {
           </span>
           Screen-down technology. The kind that allows a parent to place
           the device upside down on the table, turning a digital moment
-          into a warm, auditory journey. It sparks a child's imagination
+          into a warm, auditory presence. It sparks a child's imagination
           and calms the nervous system, free from the hypnotic pull of a
           glowing display.
         </p>

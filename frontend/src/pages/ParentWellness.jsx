@@ -60,7 +60,7 @@ export default function ParentWellness() {
         <div className="text-center max-w-md">
           <h2 className="aurin-display text-2xl mb-3">Sign in to see the week.</h2>
           <p className="text-[14.5px] text-[hsl(var(--aurin-text-muted))] mb-6">
-            The Wellness portal is reserved for parents who have signed in.
+            The Weekly Digest is reserved for parents who have signed in.
           </p>
           <Link to="/portal" data-testid="parent-wellness-signin"
                 className="aurin-btn aurin-btn-primary inline-flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function ParentWellness() {
   return (
     <div data-testid="parent-portal-wellness">
       <PageHeader tone="kids"
-        eyebrow="Wellness · Parent Portal"
+        eyebrow="Weekly Digest · Parent Portal"
         title="A quiet week with"
         italicWord="your child."
         description="Seven days of small daily check-ins. Aurin asks one question, your child picks how today felt. Here's the pattern — without intrusion."

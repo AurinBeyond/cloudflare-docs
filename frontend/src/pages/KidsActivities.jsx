@@ -203,7 +203,7 @@ export default function KidsActivities() {
                   <p className="text-[14px] leading-relaxed mb-4"
                      style={{ color: palette.textMuted }}>
                     Quiet workbooks, full recipe collections, and premium craft
-                    bundles live inside the package — alongside unlimited
+                    bundles live inside the package — alongside extended
                     voice time with Aurin.
                   </p>
                   <Link to="/clarity-release"

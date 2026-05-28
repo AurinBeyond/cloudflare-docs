@@ -198,7 +198,7 @@ export default function LuxurySanctuaryLanding() {
             <div className="principle">
               <span className="principle-number">I</span>
               <h3 className="principle-title">Privacy</h3>
-              <p className="principle-text">No pixels watch you here. No data leaves this room. Your journey stays yours — that is part of the design.</p>
+              <p className="principle-text">No pixels watch you here. No data leaves this room. What unfolds here stays yours — that is part of the design.</p>
             </div>
             <div className="principle">
               <span className="principle-number">II</span>
@@ -270,9 +270,9 @@ export default function LuxurySanctuaryLanding() {
                 <h3 className="offering-title">All rooms.<br />Monthly companionship.</h3>
               </div>
               <div className="offering-body">
-                <p className="offering-description">Return as often as you need. Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always.</p>
+                <p className="offering-description">Return as often as you need. Move freely between all rooms, with a monthly voice session included. You are welcome here, always.</p>
                 <ul className="offering-includes">
-                  <li>Unlimited access to all four rooms</li>
+                  <li>Access to all four rooms</li>
                   <li>One private voice session per month</li>
                   <li>Priority access to new spaces</li>
                   <li>The quiet community thread</li>
@@ -291,9 +291,9 @@ export default function LuxurySanctuaryLanding() {
                 <h3 className="offering-title">A space held<br />only for you.</h3>
               </div>
               <div className="offering-body">
-                <p className="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary.</p>
+                <p className="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, full room access, and a private channel — your own corner of this sanctuary.</p>
                 <ul className="offering-includes">
-                  <li>Unlimited access to all rooms</li>
+                  <li>Full access to all rooms</li>
                   <li>Weekly private AI voice sessions</li>
                   <li>Priority presence and response</li>
                   <li>Early access to future sanctuaries</li>
@@ -351,7 +351,7 @@ export default function LuxurySanctuaryLanding() {
           <div className="footer-brand">Matrix Aurin</div>
           <p className="footer-trust">
             No social-media pixels. No tracking cookies. No public feed.<br />
-            Your journey through this work stays yours — that is part of the design.
+            What unfolds here stays yours — that is part of the design.
           </p>
           <p className="footer-warmth">Built with care. Held with silence.</p>
           <div className="footer-meta">

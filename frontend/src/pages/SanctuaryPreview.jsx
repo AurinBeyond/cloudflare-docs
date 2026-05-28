@@ -819,9 +819,9 @@ function WaysToBeHereSection() {
       key: "steady-presence",
       name: "A Steady Presence",
       tagline: "All rooms. Monthly companionship. Return as often as you need.",
-      lede: "Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always.",
+      lede: "Move freely between all rooms, with a monthly voice session included. You are welcome here, always.",
       includes: [
-        "Unlimited access to all four rooms — reading, reflection, text-to-text chat",
+        "Access to all four rooms — reading, reflection, text-to-text chat",
         "One private live AI voice session per month",
         "Priority access to new spaces",
         "The quiet community thread",
