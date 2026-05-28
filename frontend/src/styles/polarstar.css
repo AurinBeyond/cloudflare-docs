@@ -25,7 +25,7 @@
 .ps-mode-morning  { background: linear-gradient(155deg, #f3e7d4 0%, #dee9f0 40%, #c8d9c4 100%); --ps-text:#15213c; --ps-text-muted:rgba(21,33,60,0.72); }
 .ps-mode-day      { background: linear-gradient(150deg, #e6e0cf 0%, #d8dfd0 45%, #c9d4dc 100%); --ps-text:#15213c; --ps-text-muted:rgba(21,33,60,0.72); }
 .ps-mode-evening  { background: linear-gradient(150deg, #7e6354 0%, #c98e57 42%, #3a4a64 100%); --ps-text:#2a1d12; --ps-text-muted:rgba(42,29,18,0.72); }
-.ps-mode-night    { background: linear-gradient(155deg, #0e1730 0%, #172b55 48%, #1f3540 100%); }
+.ps-mode-night    { background: #0e1730; }
 
 /* ── painted atmosphere layer (Nano Banana world-map) ──────── */
 .ps-atmosphere {
@@ -49,7 +49,13 @@
 .ps-mode-morning .ps-atmosphere::after { background: linear-gradient(180deg, rgba(243,231,212,0.10) 0%, rgba(243,231,212,0.35) 70%, rgba(243,231,212,0.55) 100%); }
 .ps-mode-day .ps-atmosphere::after     { background: linear-gradient(180deg, rgba(230,224,207,0.08) 0%, rgba(230,224,207,0.30) 70%, rgba(230,224,207,0.50) 100%); }
 .ps-mode-evening .ps-atmosphere::after { background: linear-gradient(180deg, rgba(58,74,100,0.10) 0%, rgba(58,74,100,0.25) 60%, rgba(58,74,100,0.42) 100%); }
-.ps-mode-night .ps-atmosphere::after   { background: linear-gradient(180deg, rgba(14,23,48,0.10) 0%, rgba(14,23,48,0.35) 55%, rgba(14,23,48,0.55) 100%); }
+.ps-mode-night .ps-atmosphere::after   { background: none; }
+/* §POLARSTAR v8 — paint the reference 100% width edge-to-edge */
+.ps-mode-night .ps-atmosphere {
+  background-size: 100% auto;
+  background-position: top center;
+  background-color: #0e1730;
+}
 
 /* very subtle noise on top for film-grain feel */
 .ps-glow, .ps-noise { display: none; }
@@ -1061,5 +1067,147 @@
   .pw-path--center .pw-path-tiles { grid-template-columns: repeat(4, 1fr); }
   .pw-rail { flex-wrap: wrap; height: auto; }
   .pw-top-right { position: static; justify-content: center; margin: 8px auto 12px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+ * §POLARSTAR v8 — REFERENCE CLICK-MAP
+ * The painted background IS the interface. We overlay invisible
+ * click targets exactly where the artwork has its buttons.
+ * Hover reveals a subtle brass outline so users know the world
+ * is interactive without spoiling the painting.
+ * ════════════════════════════════════════════════════════════ */
+
+/* The world container fills the painted aspect ratio so percentage
+   positions stay aligned regardless of viewport width. The painted
+   reference is 3:2 (1536x1024). */
+.pw8-stage {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+/* When night mode is active the page is the painted world — clip
+   the viewport to its aspect so percentage coordinates align. */
+.ps-mode-night .ps-world-root {
+  padding: 0;
+  min-height: 0;
+  height: calc(100vw * 2 / 3);
+  max-height: 100vh;
+  overflow: hidden;
+}
+.ps-mode-night .ps-world-root .ps-atmosphere {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pw8-zone {
+  position: absolute;
+  border: 1px solid transparent;
+  background: transparent;
+  color: transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 240ms ease, background 240ms ease,
+              box-shadow 240ms ease;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0;
+}
+.pw8-zone:hover,
+.pw8-zone:focus-visible {
+  border-color: rgba(212, 182, 125, 0.85);
+  background: rgba(196, 164, 107, 0.12);
+  box-shadow:
+    inset 0 0 24px rgba(212, 182, 125, 0.18),
+    0 0 28px rgba(212, 182, 125, 0.45);
+  outline: none;
+}
+.pw8-zone-label {
+  position: absolute;
+  bottom: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f6edda;
+  background: rgba(14, 23, 48, 0.92);
+  border: 1px solid rgba(212, 182, 125, 0.55);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+.pw8-zone:hover .pw8-zone-label,
+.pw8-zone:focus-visible .pw8-zone-label {
+  opacity: 1;
+}
+
+/* Exploration day chips — small circular invisible hot-spots. */
+.pw8-day {
+  position: absolute;
+  width: 3%;
+  height: 4.4%;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 220ms ease, background 220ms ease,
+              box-shadow 220ms ease;
+}
+.pw8-day:hover,
+.pw8-day:focus-visible {
+  border-color: rgba(212, 182, 125, 0.9);
+  background: rgba(212, 182, 125, 0.18);
+  box-shadow: 0 0 18px rgba(212, 182, 125, 0.55);
+  outline: none;
+}
+
+/* Bottom rail — invisible pills aligned with painted footer text */
+.pw8-rail-btn {
+  position: absolute;
+  bottom: 1.8%;
+  width: 7.5%;
+  height: 4.5%;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: background 220ms ease, border-color 220ms ease;
+}
+.pw8-rail-btn:hover,
+.pw8-rail-btn:focus-visible {
+  border-color: rgba(212, 182, 125, 0.8);
+  background: rgba(196, 164, 107, 0.12);
+  outline: none;
+}
+
+/* On smaller screens, the painted layout breaks anyway. Offer a
+   fallback message so we don't pretend interactivity works. */
+@media (max-width: 980px) {
+  .pw8-stage::before {
+    content: "Polarstar is currently optimised for desktop screens.";
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: rgba(14, 23, 48, 0.92);
+    color: #f6edda;
+    padding: 14px 22px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 182, 125, 0.55);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 14px;
+    text-align: center;
+    z-index: 10;
+  }
 }
 
