@@ -1,218 +1,248 @@
 /**
- * Polarstar — /kids-universe/polarstar (preview-only)
+ * Polarstar — world-map layout (NOT a dashboard).
  *
- * §POLARSTAR 2026-02-13 — Founder directive: one living world.
- * Three age paths (Discovery 4–6, Exploration 7–10, Creation 11–13)
- * each lead into their own room, but every room shares the same
- * atmosphere, typography and visual hush.
+ * §POLARSTAR v5 2026-02-13 — Founder corrective: stop placing
+ * dashboard cards on a pretty background. The landscape IS the
+ * interface. Three compact age signposts at the top. Fairies live
+ * inside the world, not above cards. Activity stones float along
+ * the visible path.
  *
  * Preview sandbox only. Do NOT deploy. Do NOT touch billing.
  */
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Star, ArrowRight, Sunrise } from "lucide-react";
+import {
+  BookOpen, Palette, Leaf, Heart, Moon, Mail,
+  Star, Library, Sparkles, Music, Compass,
+} from "lucide-react";
 import PolarstarAtmosphere from "@/components/PolarstarAtmosphere";
-import PolarstarCornerGuides from "@/components/PolarstarCornerGuides";
 import { POLARSTAR_AGE_GROUPS } from "@/data/polarstarAgeGroups";
 import "@/styles/polarstar.css";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
-const TIME_LABELS = {
-  morning: "The world wakes gently",
-  day:     "The path is open",
-  evening: "Lanterns are lighting",
-  night:   "Even the night carries light",
+const FAIRY_SPEECH = {
+  night: {
+    discovery:   "Is it time for a bedtime story?",
+    exploration: "Shall we look at the stars?",
+    creation:    "What will you create tonight?",
+    leftCorner:  "The lanterns are warming up.",
+    rightCorner: "One more wonder before rest.",
+  },
+  evening: {
+    discovery:   "Almost time for stories.",
+    exploration: "One more adventure first?",
+    creation:    "What did today make you imagine?",
+    leftCorner:  "Lanterns are lighting.",
+    rightCorner: "The river is quiet now.",
+  },
+  day: {
+    discovery:   "Shall we draw the sun?",
+    exploration: "I found a secret path.",
+    creation:    "Let's make something beautiful.",
+    leftCorner:  "Did the sun wake you too?",
+    rightCorner: "There are flowers everywhere.",
+  },
+  morning: {
+    discovery:   "Good morning, little one.",
+    exploration: "The path is open today.",
+    creation:    "Today is a fresh page.",
+    leftCorner:  "The mist is lifting.",
+    rightCorner: "A new day, a new story.",
+  },
 };
 
-function HeroBlock({ mode }) {
+/* ── Activity nodes scattered along the path ───────────────── */
+const PATH_NODES = [
+  { id: "story",    Icon: BookOpen, label: "Story Time",     pos: { top: "33%", left: "20%" } },
+  { id: "draw",     Icon: Palette,  label: "Draw Together",  pos: { top: "46%", left: "12%" } },
+  { id: "nature",   Icon: Leaf,     label: "Nature Quest",   pos: { top: "39%", left: "78%" } },
+  { id: "kindness", Icon: Heart,    label: "Kindness Star",  pos: { top: "54%", left: "84%" } },
+  { id: "evening",  Icon: Moon,     label: "Evening Room",   pos: { top: "62%", left: "32%" } },
+  { id: "memory",   Icon: Mail,     label: "Memory Box",     pos: { top: "70%", left: "68%" } },
+  { id: "library",  Icon: Library,  label: "Family Library", pos: { top: "78%", left: "20%" } },
+  { id: "music",    Icon: Music,    label: "Calm Music",     pos: { top: "82%", left: "82%" } },
+];
+
+
+function Header({ mode }) {
+  const titleByMode = {
+    morning: "The world wakes gently",
+    day:     "The path is open",
+    evening: "Lanterns are lighting",
+    night:   "Even the night carries light",
+  };
   return (
-    <section className="ps-hero" data-testid="polarstar-hero">
-      <p
-        className="ps-time-badge"
-        data-testid="polarstar-time-badge"
-        style={{ fontFamily: SERIF }}
-      >
-        {TIME_LABELS[mode]}
+    <header className="ps5-header" data-testid="polarstar-header">
+      <p className="ps5-kicker" style={{ fontFamily: SERIF }}>
+        Kids Universe Journey
       </p>
-      <h1
-        className="ps-hero-title"
-        style={{ fontFamily: SERIF }}
-        data-testid="polarstar-headline"
-      >
-        Welcome to <span className="ps-italic">Polarstar.</span>
+      <h1 className="ps5-title" style={{ fontFamily: SERIF }} data-testid="polarstar-headline">
+        Polarstar
       </h1>
-      <p
-        className="ps-hero-line"
-        style={{ fontFamily: SERIF }}
-        data-testid="polarstar-tagline"
-      >
-        Here, even the night carries light.
+      <p className="ps5-sub" style={{ fontFamily: SERIF }}>
+        {titleByMode[mode]} · <span className="ps5-italic">
+          A calm world of stories, creativity and connection for the whole family.
+        </span>
       </p>
-      <p
-        className="ps-hero-sub"
-        style={{ fontFamily: SERIF }}
-        data-testid="polarstar-subcopy"
-      >
-        A calm family world for stories, creativity, memories
-        and small daily adventures.
-      </p>
+    </header>
+  );
+}
+
+/* ── Age regions sit as compact signposts under the header ─── */
+function AgeSignposts({ mode }) {
+  const navigate = useNavigate();
+  const speech = FAIRY_SPEECH[mode] || FAIRY_SPEECH.night;
+  return (
+    <section className="ps5-ages" data-testid="polarstar-ages">
+      {POLARSTAR_AGE_GROUPS.map((g, idx) => {
+        const Icon = g.Icon;
+        const positionClass = ["ps5-age--left", "ps5-age--center", "ps5-age--right"][idx];
+        return (
+          <div
+            key={g.id}
+            className={`ps5-age ${positionClass}`}
+            data-testid={`polarstar-age-region-${g.id}`}
+          >
+            {/* Fairy lives in the landscape, not above a card */}
+            <div className="ps5-fairy" data-testid={`polarstar-fairy-${g.id}`}>
+              <img
+                src={`${process.env.PUBLIC_URL || ""}${g.guideImage}`}
+                alt=""
+                className="ps5-fairy-img"
+                loading="lazy"
+              />
+              <div className="ps5-speech ps5-speech--fairy">
+                <p style={{ fontFamily: SERIF }}>{speech[g.id]}</p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="ps5-signpost"
+              data-testid={`polarstar-signpost-${g.id}`}
+              onClick={() => navigate(g.route)}
+              style={{ fontFamily: SERIF }}
+            >
+              <span className="ps5-sign-icon" aria-hidden="true">
+                <Icon size={18} />
+              </span>
+              <span className="ps5-sign-age">{g.age}</span>
+              <span className="ps5-sign-title">
+                {g.title.replace(" Path", " ")}<em>Path</em>
+              </span>
+            </button>
+          </div>
+        );
+      })}
     </section>
   );
 }
 
-function GatewayHeading() {
+/* ── Clickable stones / leaves on the path ─────────────────── */
+function PathNodes() {
   return (
-    <div className="ps-gateway-heading" data-testid="polarstar-gateway-heading">
-      <p className="ps-eyebrow">Choose a path</p>
-      <h2 className="ps-gateway-title" style={{ fontFamily: SERIF }}>
-        One world. <span className="ps-italic">Three paths.</span> One family.
-      </h2>
-      <p className="ps-gateway-sub" style={{ fontFamily: SERIF }}>
-        Each age group enters the same calm Polarstar world, with activities
-        shaped for their season of growth.
-      </p>
+    <div className="ps5-path-layer" aria-label="Polarstar path locations">
+      {PATH_NODES.map(({ id, Icon, label, pos }) => (
+        <button
+          key={id}
+          type="button"
+          className={`ps5-stone ps5-stone--${id}`}
+          style={{ ...pos, fontFamily: SERIF }}
+          data-testid={`polarstar-stone-${id}`}
+        >
+          <span className="ps5-stone-icon" aria-hidden="true">
+            <Icon size={18} />
+          </span>
+          <span className="ps5-stone-label">{label}</span>
+        </button>
+      ))}
     </div>
   );
 }
 
-function AgeGatewayCard({ group, hovered, onHover }) {
-  const navigate = useNavigate();
-  const { id, age, title, subtitle, description, route, Icon, activities,
-          guideImage, guideSpeech } = group;
-  const enterLabel = title.replace(" Path", "");
+/* ── Tomorrow's Adventure box pinned to bottom-left ─────────── */
+function TomorrowBox() {
+  return (
+    <aside className="ps5-tomorrow" data-testid="polarstar-tomorrow">
+      <span className="ps5-tomorrow-icon" aria-hidden="true">
+        <Compass size={20} />
+      </span>
+      <div>
+        <p className="ps5-eyebrow">Tomorrow&apos;s Adventure</p>
+        <h3 className="ps5-tomorrow-title" style={{ fontFamily: SERIF }}>
+          A new story <em>awakens softly.</em>
+        </h3>
+      </div>
+    </aside>
+  );
+}
+
+/* ── Aurin guide pinned to bottom-right ─────────────────────── */
+function AurinGuide() {
+  return (
+    <aside className="ps5-aurin" data-testid="polarstar-aurin">
+      <div className="ps5-aurin-icon" aria-hidden="true">
+        <Sparkles size={20} />
+      </div>
+      <div>
+        <p className="ps5-eyebrow">Aurin</p>
+        <h3 className="ps5-aurin-title" style={{ fontFamily: SERIF }}>
+          Your gentle <em>story guide.</em>
+        </h3>
+        <div className="ps5-stars">
+          <Star size={11} aria-hidden="true" />
+          <span>24 / 50 stars</span>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ── Decorative corner fairies (live IN the world) ──────────── */
+function CornerFairy({ corner, speech, name }) {
   return (
     <div
-      className={`ps-gateway-slot ${hovered === id ? "ps-gateway-slot--hover" : ""}`}
-      data-testid={`polarstar-gateway-slot-${id}`}
+      className={`ps5-corner ps5-corner--${corner}`}
+      data-testid={`polarstar-corner-${corner}`}
+      aria-hidden="true"
     >
-      {/* Fairy guide + comic-style speech bubble above the card */}
-      <div className="ps-guide" aria-hidden="true" data-testid={`polarstar-guide-${id}`}>
-        <img
-          src={`${process.env.PUBLIC_URL || ""}${guideImage}`}
-          alt=""
-          className="ps-guide-img"
-          loading="lazy"
-        />
-        <div className="ps-speech" data-testid={`polarstar-speech-${id}`}>
-          <p style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}>
-            {guideSpeech}
-          </p>
-        </div>
+      <img
+        src={`${process.env.PUBLIC_URL || ""}/polarstar/guide-${name}.png`}
+        alt=""
+        className="ps5-corner-img"
+        loading="lazy"
+      />
+      <div className="ps5-speech ps5-speech--corner">
+        <p style={{ fontFamily: SERIF }}>{speech}</p>
       </div>
-
-      <button
-        type="button"
-        onClick={() => navigate(route)}
-        onMouseEnter={() => onHover(id)}
-        onMouseLeave={() => onHover(null)}
-        className={`ps-gateway-card ${hovered === id ? "ps-gateway-card--hover" : ""}`}
-        data-testid={`polarstar-gateway-${id}`}
-        style={{ fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif' }}
-      >
-        <div className="ps-gateway-icon" aria-hidden="true">
-          <Icon size={24} />
-        </div>
-        <p className="ps-eyebrow ps-gateway-age">{age}</p>
-        <h3 className="ps-gateway-cardtitle">
-          {title.replace(" Path", " ")}<span className="ps-italic">Path</span>
-        </h3>
-        <p className="ps-gateway-subtitle">{subtitle}</p>
-        <p className="ps-gateway-desc">{description}</p>
-
-        <div className="ps-gateway-tags" aria-hidden="true">
-          {activities.slice(0, 3).map((a) => (
-            <span key={a.id} className="ps-gateway-tag">{a.label}</span>
-          ))}
-        </div>
-
-        <div className="ps-gateway-cta">
-          <span>Enter {enterLabel}</span>
-          <ArrowRight size={14} aria-hidden="true" />
-        </div>
-      </button>
     </div>
-  );
-}
-
-function AgeGateway() {
-  const [hovered, setHovered] = useState(null);
-  return (
-    <section className="ps-gateway" data-testid="polarstar-gateway">
-      <GatewayHeading />
-      <div className="ps-gateway-grid">
-        {POLARSTAR_AGE_GROUPS.map((g) => (
-          <AgeGatewayCard
-            key={g.id}
-            group={g}
-            hovered={hovered}
-            onHover={setHovered}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function SideStack() {
-  return (
-    <section className="ps-rail" data-testid="polarstar-rail">
-      <div className="ps-card ps-card--aurin">
-        <div className="ps-avatar ps-avatar--aurin" aria-hidden="true">
-          <Sparkles size={26} />
-        </div>
-        <h3 className="ps-card-title" style={{ fontFamily: SERIF }}>Aurin</h3>
-        <p className="ps-card-blurb">Your gentle story guide.</p>
-      </div>
-      <div className="ps-card ps-card--stars">
-        <p className="ps-eyebrow">Story Stars</p>
-        <h3 className="ps-card-title" style={{ fontFamily: SERIF }}>
-          24 <span className="ps-of">/ 50</span>
-        </h3>
-        <div className="ps-progress" aria-hidden="true">
-          <span style={{ width: "48%" }} />
-        </div>
-      </div>
-      <div className="ps-card ps-card--family">
-        <p className="ps-eyebrow">Family Moment</p>
-        <h3 className="ps-card-title" style={{ fontFamily: SERIF }}>
-          Share one small <span className="ps-italic">memory</span> today.
-        </h3>
-      </div>
-      <div className="ps-card ps-card--sunrise">
-        <span className="ps-sunrise-icon" aria-hidden="true">
-          <Sunrise size={22} />
-        </span>
-        <p className="ps-card-blurb">
-          The atmosphere shifts with the hour of your day.
-        </p>
-      </div>
-    </section>
   );
 }
 
 export default function Polarstar() {
   return (
     <PolarstarAtmosphere testid="polarstar-root">
-      {(mode) => (
-        <>
-          <HeroBlock mode={mode} />
+      {(mode) => {
+        const speech = FAIRY_SPEECH[mode] || FAIRY_SPEECH.night;
+        return (
+          <>
+            <Header mode={mode} />
+            <AgeSignposts mode={mode} />
+            <PathNodes />
+            <TomorrowBox />
+            <AurinGuide />
 
-          <div className="ps-home-shell" data-testid="polarstar-shell">
-            <AgeGateway />
-            <SideStack />
-          </div>
+            <CornerFairy corner="left"  name="discovery" speech={speech.leftCorner}  />
+            <CornerFairy corner="right" name="exploration" speech={speech.rightCorner} />
 
-          <footer className="ps-footer" data-testid="polarstar-footer">
-            <p style={{ fontFamily: SERIF }}>
-              <Star size={14} className="ps-footer-icon" aria-hidden="true" />
-              Small moments. <span className="ps-italic">Big memories.</span> Forever.
-            </p>
-          </footer>
-
-          <PolarstarCornerGuides mode={mode} />
-        </>
-      )}
+            <footer className="ps5-footer" data-testid="polarstar-footer">
+              <p style={{ fontFamily: SERIF }}>
+                Small moments. <span className="ps5-italic">Big memories.</span> Forever.
+              </p>
+            </footer>
+          </>
+        );
+      }}
     </PolarstarAtmosphere>
   );
 }

@@ -10,7 +10,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, Compass, Star, Moon, Mail, Sparkles } from "lucide-react";
 import PolarstarAtmosphere from "@/components/PolarstarAtmosphere";
-import PolarstarCornerGuides from "@/components/PolarstarCornerGuides";
 import { findAgeGroup } from "@/data/polarstarAgeGroups";
 import "@/styles/polarstar.css";
 
@@ -169,7 +168,7 @@ export default function PolarstarRoom() {
   }
   return (
     <PolarstarAtmosphere testid={`polarstar-room-${group.id}`}>
-      {(mode) => (
+      {() => (
         <>
           <RoomHero group={group} />
           <div className="ps-room-shell" data-testid={`polarstar-room-shell-${group.id}`}>
@@ -181,7 +180,6 @@ export default function PolarstarRoom() {
               Small moments. <span className="ps-italic">Big memories.</span> Forever.
             </p>
           </footer>
-          <PolarstarCornerGuides mode={mode} />
         </>
       )}
     </PolarstarAtmosphere>
