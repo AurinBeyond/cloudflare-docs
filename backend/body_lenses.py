@@ -9,6 +9,29 @@ Three wisdom lenses the wanderer can opt into. Each lens carries:
   - `regions`: a dict mapping the 8 Body Room hotspot ids to one calm
     insight + one breath/practice + one permission line.
 
+§MATRIX-AURIN AUTHORIAL OVERLAY (founder-locked 2026-02-11)
+-------------------------------------------------------------------
+The named sources (Luule Viilma, Louise Hay, Stephen Porges, Peter
+Levine; the Sanskrit / Chinese energetic frameworks) are public
+intellectual lineages. This file does NOT reproduce or paraphrase
+any one author's text. Every region insight, practice, and
+permission line in this registry is an *original Matrix Aurin
+synthesis* — translated into Kaelan's biomechanical / architectural
+register before it was placed here.
+
+The Matrix Aurin authorial transformation:
+  • Source intent kept (e.g. Porges' polyvagal pacing).
+  • Source vocabulary replaced with ours (we say "the body's
+    architecture", never "polyvagal theory"; "the structural pause"
+    instead of "freeze response").
+  • Sanskrit / Chinese terms appear only paired with a plain-meaning
+    fragment authored by us, not borrowed from any single school.
+  • All wellness verbs ("heal", "cure", "restore") are stripped.
+    The room offers possibility, not promise.
+
+This overlay is the legal AND the brand shield: the wisdom lineage
+is real, the wording is ours. No copying. No paraphrasing.
+
 Wellness-language lock (enforced here AND audited by `clarity_safety`):
   - No "diagnose", "cure", "heal", "treat", "therapy", "disorder",
     "patient", "psychiatric" claims.

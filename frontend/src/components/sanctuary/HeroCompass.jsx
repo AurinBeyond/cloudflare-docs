@@ -54,6 +54,19 @@ const CARDINALS = [
     whisper: "What was inherited. What is now yours.",
     slug: "compass-parents-room",
     testid: "compass-arm-east",
+    // §BROKEN-CLOCKWORK 2026-02-11 — East carries a custom UX signal:
+    // when hovered, the dial accelerates and the sonic layer morphs
+    // into a 1-second mechanical metronome. The waitlist modal swaps
+    // to the "Broken Clockwork" frame.
+    modalHeadline: "[ TRANSMISSION GATE: PARENTS' ROOM ]",
+    modalBody: (
+      "You promised them time. The business demanded otherwise. " +
+      "The countdown hit zero, and the trust short-circuited. " +
+      "Parents' Room is not another counselling layer. " +
+      "It is the Anchor OS your home was never given. " +
+      "Leave your access key below and step out of the transactional " +
+      "loop — the clock is ticking."
+    ),
   },
   {
     key: "south",
@@ -169,26 +182,32 @@ export default function HeroCompass() {
       lfoGain.connect(lp.frequency);
       lfo.start();
 
-      // Mechanical tick — short pulse every ~3.5s
+      // Mechanical tick — short pulse every ~3.5s. When the user
+      // hovers over Sara's wedge (East / Parents' Room), the
+      // metronome morphs into a sharp 1-second clockwork tick at a
+      // higher pitch — the t.A.T.u. "30 minut" Broken Clockwork
+      // signature. See active-cardinal effect below.
       let tickTimer = null;
-      const tick = () => {
+      const tick = (sharp = false) => {
         const now = ctx.currentTime;
         const tickOsc = ctx.createOscillator();
         const tickGain = ctx.createGain();
         tickOsc.type = "triangle";
-        tickOsc.frequency.value = 1800;
+        tickOsc.frequency.value = sharp ? 2400 : 1800;
+        const peak = sharp ? 0.085 : 0.05;
+        const tail = sharp ? 0.07 : 0.12;
         tickGain.gain.setValueAtTime(0.0, now);
-        tickGain.gain.linearRampToValueAtTime(0.05, now + 0.005);
-        tickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        tickGain.gain.linearRampToValueAtTime(peak, now + 0.005);
+        tickGain.gain.exponentialRampToValueAtTime(0.0001, now + tail);
         tickOsc.connect(tickGain);
         tickGain.connect(master);
         tickOsc.start(now);
-        tickOsc.stop(now + 0.14);
+        tickOsc.stop(now + tail + 0.02);
       };
       tickTimer = setInterval(tick, 3400);
 
       audioCtxRef.current = ctx;
-      audioNodesRef.current = { master, tickTimer, osc1, osc2, lfo };
+      audioNodesRef.current = { master, tickTimer, tick, osc1, osc2, lfo };
       // Soft fade-in to 0.18 master
       const t0 = ctx.currentTime;
       master.gain.setValueAtTime(0, t0);
@@ -232,6 +251,10 @@ export default function HeroCompass() {
   }, [audioOn]);
 
   // Intensify master gain when a cardinal is hovered.
+  // §BROKEN-CLOCKWORK 2026-02-11 — when hovering East (Sara), morph
+  // the mechanical tick from ~3.4s breath to a 1-second clockwork
+  // metronome. This is the audible counterpart to the accelerated
+  // tick-ring rotation below.
   useEffect(() => {
     const ctx = audioCtxRef.current;
     const nodes = audioNodesRef.current;
@@ -241,6 +264,14 @@ export default function HeroCompass() {
     nodes.master.gain.cancelScheduledValues(t);
     nodes.master.gain.setValueAtTime(nodes.master.gain.value, t);
     nodes.master.gain.linearRampToValueAtTime(target, t + 0.8);
+
+    // Re-wire the metronome cadence for East
+    clearInterval(nodes.tickTimer);
+    if (active === "east") {
+      nodes.tickTimer = setInterval(() => nodes.tick(true), 1000);
+    } else {
+      nodes.tickTimer = setInterval(() => nodes.tick(false), 3400);
+    }
   }, [active, audioOn]);
 
   // Soft reveal on first viewport entry.
@@ -261,7 +292,10 @@ export default function HeroCompass() {
   }, []);
 
   // Slow continuous rotation of the outer tick ring — a subtle
-  // "the compass is alive" signal. Pauses while hovered.
+  // "the compass is alive" signal. Pauses while hovered, EXCEPT
+  // when East (Sara's wedge) is hovered — then it accelerates ~10×
+  // and reverses direction, simulating the t.A.T.u. "30 minut"
+  // Broken Clockwork countdown.
   const tickRingRef = useRef(null);
   useEffect(() => {
     const el = tickRingRef.current;
@@ -272,7 +306,12 @@ export default function HeroCompass() {
     const tick = (now) => {
       const dt = now - last;
       last = now;
-      if (!active) deg = (deg + dt * 0.003) % 360; // ~3°/s
+      if (active === "east") {
+        // accelerated reverse — clockwork countdown feel
+        deg = (deg - dt * 0.036) % 360; // ~36°/s, anti-clockwise
+      } else if (!active) {
+        deg = (deg + dt * 0.003) % 360; // ~3°/s breathing rotation
+      }
       el.setAttribute("transform", `rotate(${deg} ${CX} ${CY})`);
       raf = requestAnimationFrame(tick);
     };
@@ -704,6 +743,19 @@ function CompassWaitlistDialog({ openSlug, onClose }) {
         >
           {cardinal.degrees}° · {cardinal.label} · {cardinal.curator}
         </p>
+        {/* §BROKEN-CLOCKWORK 2026-02-11 — East/Sara carries a custom
+            high-status headline that frames the transactional-promise
+            trauma directly. Other cardinals show the standard room
+            name as the headline. */}
+        {cardinal.modalHeadline ? (
+          <p
+            className="text-[12px] tracking-[0.28em] uppercase text-[#d4b67d] mb-3"
+            style={{ fontFamily: SERIF }}
+            data-testid={`compass-modal-headline-${cardinal.key}`}
+          >
+            {cardinal.modalHeadline}
+          </p>
+        ) : null}
         <h3
           className="text-[26px] sm:text-[30px] leading-[1.16] text-[#f0eadd] font-light mb-4"
           style={{ fontFamily: SERIF }}
@@ -716,9 +768,15 @@ function CompassWaitlistDialog({ openSlug, onClose }) {
         >
           {cardinal.whisper}
         </p>
-        <p className="text-[13px] leading-[1.85] text-[#a59f93] font-light mb-2">
-          The doors of this heading open this season. Leave your address
-          and we will send a single quiet note when it is your time.
+        <p
+          className="text-[13px] leading-[1.85] text-[#a59f93] font-light mb-2"
+          data-testid={`compass-modal-body-${cardinal.key}`}
+        >
+          {cardinal.modalBody || (
+            "The doors of this heading open this season. Leave your " +
+            "address and we will send a single quiet note when it is " +
+            "your time."
+          )}
         </p>
         <WaitlistInline slug={cardinal.slug} tierLabel={cardinal.room} />
         <p

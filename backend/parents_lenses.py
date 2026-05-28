@@ -9,6 +9,29 @@ architecture so the same Multi-Lens UX scales beyond the body:
   - positive_coding  · Positive psychology + affirmation language
   - intuitive        · the default · the room reads + chooses silently
 
+§MATRIX-AURIN AUTHORIAL OVERLAY (founder-locked 2026-02-11)
+-------------------------------------------------------------------
+The named sources (Shitsuke, Montessori, Waldorf, Steiner, positive
+psychology) are public-domain pedagogical traditions. This file does
+NOT reproduce or paraphrase any one author's text. Every insight,
+practice, and permission line in this registry is an *original
+Matrix Aurin synthesis* — written in our biomechanical / architectural
+register and run through Sara's "Anchor OS" lens before being placed
+here.
+
+The Matrix Aurin authorial transformation:
+  • Source intent kept (e.g. Montessori's "prepared environment").
+  • Source language replaced with our register (we say "small
+    architectural shift", never "Montessori method").
+  • Where a Japanese / Italian term remains, it is followed by a
+    plain-meaning fragment authored by us, not by the source.
+  • All judgement / moralising / parent-shaming verbs are stripped
+    and replaced with possibility-verbs ("you may notice…",
+    "one option is…").
+
+This overlay is the legal AND the brand shield: the wisdom is
+real, the words are ours. Do not copy in third-party copy.
+
 Each lens carries:
   - id, name, subtitle, plain, scope, attribution
   - `prompt_anchor` — fragment injected into the parents-room system

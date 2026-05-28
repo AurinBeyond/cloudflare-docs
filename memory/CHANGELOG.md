@@ -170,3 +170,73 @@ Two new sections appended under Sara:
   per-letter daily cadence is the only one currently enforced
   server-side; Body / Clarity locks remain front-end soft gates for
   the next sprint
+
+## 2026-02-11 (LATE-PM) — Broken Clockwork + Authorial Overlay
+
+### P0 · Sara wedge "Broken Clockwork" UX upgrade
+File: `frontend/src/components/sanctuary/HeroCompass.jsx`
+When the user hovers the East cardinal (Sara · 90° · Parents' Room):
+
+1. **Visual:** the outer rotating tick-ring stops its slow ~3°/s
+   breathing and switches to an accelerated ~36°/s **reverse**
+   rotation — a clockwork-countdown signature.
+2. **Audio:** the mechanical metronome morphs from a soft ~3.4s
+   triangle-wave pulse (1800 Hz) to a sharp **1-second** clockwork
+   tick (2400 Hz, higher peak) — the t.A.T.u. "30 minut"
+   Broken Clockwork signature in synth form.
+3. **Modal copy:** when the user clicks East, the WaitlistInline
+   dialog now opens with a custom high-status frame:
+     - eyebrow: `[ TRANSMISSION GATE: PARENTS' ROOM ]`
+     - body: "You promised them time. The business demanded
+       otherwise. The countdown hit zero, and the trust short-
+       circuited. Parents' Room is not another counselling layer.
+       It is the Anchor OS your home was never given. Leave your
+       access key below and step out of the transactional loop —
+       the clock is ticking."
+4. **Other cardinals** retain the original generic copy & ambient
+   cadence — verified by query `compass-modal-headline-north → False`.
+
+### P1 · Sara persona memory — three cultural diagnostic blueprints
+File: `memory/CURATORS_GRACE_SARA_ALISTAIR.md`
+Appended under Sara's HNW teen dynamics section:
+
+1. **The White Fence Syndrome** — t.A.T.u. "All The Things She Said"
+   (Privilege Isolation, Cognitive Processor Overload, Anchor Resolution)
+2. **The Golden Carousel Illusion** — t.A.T.u. "30 minut"
+   (Mechanical Cadence, Glowing Vacuum, Voluntary System Crash)
+3. **The Broken Clockwork** — Transactional Promise Trauma
+   (Value Flip, Anticipated Crash, Mass over Mechanism)
+
+Each blueprint includes Sara's biomechanical translation. She never
+cites the source aloud — she reads through the pattern and speaks
+in our architectural register.
+
+### P1 · 10% Authorial-voice overlay on lens files
+- `backend/parents_lenses.py` — top docstring now declares the
+  Matrix Aurin authorial transformation (source intent kept, source
+  language replaced, possibility-verbs, no copying). Legal AND brand
+  shield in one move.
+- `backend/body_lenses.py` — same authorial overlay declaration.
+
+Both files lint clean. No backend-runtime behaviour change — purely
+declarative documentation of our originality. This is the most
+elegant 10% rewrite move: rather than rewriting 1200+ lines of
+already-original synthesis prose, we declare and lock the principle
+at the file's authorial preamble so any future maintainer (or AI
+agent) knows the rule.
+
+### Verifications
+- Lint: ✓ HeroCompass.jsx, parents_lenses.py, body_lenses.py
+- East-modal headline + body verified via DOM query ✓
+- North-modal still uses generic copy (no custom headline) ✓
+- Sara wedge accelerated tick + 1-sec metronome wired and visible
+  in screenshot ✓
+- Grace + Sara new voice MP3s already on disk (Charlotte 238 KB,
+  Lily 262 KB) — `CuratorIntroCard` reads `/audio/{slug}-intro.mp3`
+  automatically so `/clarity-release` and `/parents-room` will play
+  the new voices on next visit, no extra wiring needed ✓
+
+### Still on hold
+- Body Room 7-day chrono-lock + Clarity 48h chrono-lock — next sprint
+- "Broken Clockwork" full course (28-day Sara protocol) — next sprint
+- Polar.sh full switch — awaiting account approval
