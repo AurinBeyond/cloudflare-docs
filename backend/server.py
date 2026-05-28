@@ -10759,6 +10759,154 @@ SEED_COURSES: List[dict] = [
             },
         ],
     },
+    # =================================================================
+    # §BROKEN-CLOCKWORK 2026-02-11 — The 28-Day Sara Protocol.
+    # Founder-authored Act I (letters 1–7). Acts II–IV land as the
+    # founder writes the bodies; their day numbers and titles are
+    # placeholders in `language: "draft"` so they do NOT surface on
+    # the public `/api/courses` index, while Act I (days 1–7) is
+    # live `language: "en"`.
+    # The course title intentionally avoids the t.A.T.u. reference
+    # in the public-facing string per founder directive.
+    # =================================================================
+    {
+        "slug": "the-broken-clockwork",
+        "title": "The Broken Clockwork",
+        "audience": "adult",
+        "duration_days": 7,  # Act I only — Acts II–IV land as authored.
+        "blurb": (
+            "A seven-day Sara protocol for the parent whose business-clock "
+            "and home-clock have stopped agreeing. One transmission per "
+            "24 hours. No binge. No catch-up. The cadence is the lesson."
+        ),
+        "price": 39.0,
+        "lemonsqueezy_variant_id": None,
+        "audio_companion": None,
+        "audio_title": "The clock you cannot bend",
+        "language": "en",
+        "letters": [
+            {
+                "day": 1,
+                "title": "The currency of attention",
+                "body": (
+                    "Read once. Sit. Do not act before the next gate opens.\n\n"
+                    "Everything you have built — the company, the schedule, the staff, the protected silence around your work — has trained one specific muscle: the muscle that decides where attention goes. "
+                    "Attention is the only resource you actually allocate. Money is just attention that has already been spent.\n\n"
+                    "In your home, that same muscle is at work, whether you have named it or not. "
+                    "Every minute you give your teenager — and every minute you redirect away from them — is a transaction in the only currency they have ever known you to handle precisely. "
+                    "They do not need more of you. They need accurate signal about how you spend you.\n\n"
+                    "The system inside a young nervous system is not interested in your love speech. It is interested in *bandwidth received this week*. "
+                    "It runs the same audit every founder runs on their own calendar: where did the hours actually go, and what does that pattern say about what mattered.\n\n"
+                    "Tonight's transmission is not asking you to feel guilty. Guilt is a low-resolution emotion and it does not move the system. "
+                    "Tonight's transmission is asking you to do one accurate thing: name the currency.\n\n"
+                    "**Evening protocol — one line, no list.** Take your calendar from this week. Look at the hours that went to your most important deal. Now look at the hours that went to your teenager. "
+                    "Do not adjust the numbers. Do not promise to fix them. Simply hold them next to each other on the page for sixty seconds. "
+                    "This is the audit. The audit is the work for today.\n\n"
+                    "**Quiet sentence to carry until tomorrow:** *Attention is the currency. The pattern is the contract. I have already signed something I never read.*"
+                ),
+                "prompt": "What did this week's calendar actually pay for?",
+            },
+            {
+                "day": 2,
+                "title": "The promise that died on a Tuesday",
+                "body": (
+                    "Somewhere in the last six months, you gave your teenager a small, ordinary promise. *Friday. I'll be home by six.* *Saturday morning, just us.* *I'll come to the game.*\n\n"
+                    "And then the call came in. A board crisis. An investor on a different timezone. A deal that could not be moved. You did the rational thing — you renegotiated the home-side of the contract. You sent a message, perhaps an apology, perhaps a compensation: a delivery, a credit card, a weekend trip later.\n\n"
+                    "That moment is what we are going to look at now. Not the moment the call came. The moment your teenager received the cancellation.\n\n"
+                    "Inside their nervous system, a very specific subroutine ran. It is the same subroutine that runs in any operator who has been promised a delivery date by a counterparty. It logs: *expectation declared, expectation undelivered, compensation issued, value-flip filed.* "
+                    "The system makes no moral judgment. It simply updates the trust ledger. From that day forward, the next promise from you carries a discount factor. They do not consciously do this. The system does it for them.\n\n"
+                    "After three to five of these cycles, the discount factor stabilises near zero. Your promises stop being processed as future commitments and are instead filed as *parental signal noise*. This is the moment most parents misread as 'teenage attitude'. It is not attitude. It is firmware.\n\n"
+                    "There is one architectural correction available, and it is the opposite of what most parents try. You do not fix the ledger by making bigger promises. You fix it by making smaller, calibrated, completable promises — and completing them with the same precision you complete a board commitment.\n\n"
+                    "**Evening protocol — one promise, smaller than you think.** Make exactly one promise to your teenager today that you are 100% certain you can keep within the next 48 hours. Not 'this weekend'. Not 'soon'. A specific window, a specific commitment, something so small it is almost embarrassing. "
+                    "Then deliver it on time. That is the entire transmission for today.\n\n"
+                    "**Quiet sentence:** *The size of the promise does not rebuild trust. The precision of the delivery does.*"
+                ),
+                "prompt": "What is one small, certain promise I can land in the next forty-eight hours?",
+            },
+            {
+                "day": 3,
+                "title": "The carousel that spins for no one",
+                "body": (
+                    "Look at the room your teenager lives in. The square footage. The technology. The wardrobe. The proximity to the best teachers their generation has ever had access to.\n\n"
+                    "On paper, the hardware is excellent. The infrastructure is the kind of infrastructure their grandparents would have called impossible. By every external metric you have ever been trained to read, you have provided exceptionally.\n\n"
+                    "Now look at the room as a system. The hardware is glowing. But the bus that connects it to the only motherboard that matters — direct, undivided, non-transactional parental presence — has been thinned by a thousand small reroutes. The nanny gave a hug. The tutor explained the concept. The personal trainer cheered the personal best. The driver listened to the rant.\n\n"
+                    "None of those reroutes were wrong. Most were necessary. You were building a company. But cumulatively, you have constructed a beautiful, expensive carousel that spins in a darkened room, and somewhere on that carousel sits a young person whose neurological development was supposed to be calibrated against the gravitational pull of the founder of the home.\n\n"
+                    "This is not a moral failure. It is an architectural one. And architectural failures have architectural solutions.\n\n"
+                    "Do not flood them with attention tonight. Do not over-correct. Over-correction reads to their nervous system as panic, and panic confirms their underlying hypothesis that something is structurally wrong. "
+                    "Instead, do one quiet thing: be in the same room as them, with no objective, for fifteen minutes. No device in your hand. No question to ask. No subject to introduce. Just shared physical space and the soft signal that you are available without an agenda.\n\n"
+                    "That signal, repeated quietly across many evenings, is what the carousel has been waiting for. It is the gravitational re-anchor. It does not announce itself. It works underneath everything.\n\n"
+                    "**Evening protocol — fifteen unweighted minutes.** Find a way to be in the same room as your teenager for fifteen minutes today, with no instruction, no question, no improvement attempt, and no device. If they leave the room, do not follow. If they ignore you, do not interpret. Simply be available.\n\n"
+                    "**Quiet sentence:** *Presence without an agenda is the rarest infrastructure I can build for them.*"
+                ),
+                "prompt": "Where in my home is the carousel currently spinning without me?",
+            },
+            {
+                "day": 4,
+                "title": "What the teen heard when the call came",
+                "body": (
+                    "Yesterday you sat in the same room. Today we are going to sit with something less comfortable.\n\n"
+                    "When the call came in last Tuesday and you stepped out — when the meeting overran by ninety minutes and you missed dinner — your teenager was not measuring whether the meeting was important. They were measuring something simpler and far more precise: *what did the parent's voice sound like when the call ended.*\n\n"
+                    "Children, including teenage children, do not process language the way adults do. They process tone, micro-shifts in shoulder tension, the speed at which their parent returns to baseline, the millisecond delay between the call ending and the parent's eyes refocusing on them. Their nervous system is a full-spectrum analyzer for these micro-signals. It has been since they were three.\n\n"
+                    "So when you stepped back into the room with that residual business-tension still riding through your body, your teenager received the entire transmission. Not the words. The frequency. And the frequency said: *the call still matters more than this room*.\n\n"
+                    "That is the exact signal that, repeated across months, instructs their developing identity to file your home under the same category your subordinates file you in: a high-status environment requiring performance.\n\n"
+                    "There is a correction available and it is almost rude in its simplicity. When you return from the call, you do not arrive in the room with words. You arrive in the room with your nervous system. You exhale. You sit. You bring your breathing back to baseline *before* you speak. You make the doorway between the business and the home a real doorway and not a porous wall.\n\n"
+                    "Your teenager will not consciously notice this on the first evening. Their system will notice it within three.\n\n"
+                    "**Evening protocol — the doorway breath.** The next time you finish a high-stakes call and walk into a room your teenager is in, do not greet them with your mouth. Stand at the threshold for one full exhale before you cross it. Let the room be reset by your nervous system, not by your speech. Then enter, quietly.\n\n"
+                    "**Quiet sentence:** *The frequency arrives before the words. I am the frequency.*"
+                ),
+                "prompt": "What frequency did I bring into the room last time I returned from work?",
+            },
+            {
+                "day": 5,
+                "title": "Three broken cycles equals firmware",
+                "body": (
+                    "There is a number we should put on the table tonight. It is not a soft number.\n\n"
+                    "A developing nervous system tolerates one broken promise from a primary parent as a glitch. Two broken promises as a pattern that needs investigation. Three broken promises as firmware. After three, the system stops investigating and simply installs the new default: *parental signal is unreliable; build other infrastructure*.\n\n"
+                    "What looks, externally, like a teenager who has become hard, or evasive, or sophisticated, or quietly contemptuous, is usually a teenager whose nervous system installed that firmware update somewhere between ages nine and thirteen, and is now running on it. Their coldness is not cruelty. It is a survival operating system, and it has been carefully optimised.\n\n"
+                    "This is the hardest letter in this first week, because the correction does not feel proportional to the damage. It feels too small. Founders, especially founders, want to throw resources at architectural problems. The instinct is to launch a campaign — a vacation, a renewed routine, a heart-to-heart, an apology speech, a therapist.\n\n"
+                    "None of that will overwrite firmware. Firmware is not overwritten by intensity. It is overwritten by a long, low, uninterrupted signal that quietly contradicts the previous frequency. Months of *small, calibrated, completed* contact. Not weeks. Not even one impressive month. Months. The exact opposite of how you have learned to win in business.\n\n"
+                    "What we are training in this protocol is patience in a domain where you have never had to be patient, because the market has always rewarded the opposite. Your teenager is not a market. They are a slow biological instrument that requires a different metabolism of attention.\n\n"
+                    "**Evening protocol — the three-month frame.** Take one piece of paper. At the top, write the date three months from today. Then write one sentence: *By this date, the small contacts I make with my teenager will have begun to overwrite the old firmware.* "
+                    "Fold it. Put it somewhere only you will see it. This is the frame for everything that follows.\n\n"
+                    "**Quiet sentence:** *Firmware is not overwritten by intensity. It is overwritten by the patience my industry never taught me.*"
+                ),
+                "prompt": "Where in my life have I confused intensity with patience?",
+            },
+            {
+                "day": 6,
+                "title": "You did not raise a stranger. You raised a survivor.",
+                "body": (
+                    "Of all the descriptions you have privately used for your teenager over the last year — distant, ungrateful, secretive, hostile, cold, unreachable — there is one description we have not yet considered. They are competent.\n\n"
+                    "Whatever they have become, they became in response to an environment they did not choose, with resources that were the wrong shape for the developmental need, while simultaneously navigating one of the most aggressive neurological renovation projects a human ever undertakes. And they are still functional. Still eating. Still showing up to school, or pretending to. Still alive. Still occasionally beautiful when they think no one is watching.\n\n"
+                    "That is not a stranger you live with. That is a survivor. They survived a domestic architecture that gave them more material wealth than 99% of human beings have ever had access to, and almost zero of the slow, unweighted, founder-grade parental presence that their evolutionary design assumed would be available. They built workarounds. The workarounds look ugly from the outside — substances, screens, defiance, withdrawal, performance — but every workaround was, at the time of its installation, a rational engineering decision by a young system trying to stay online.\n\n"
+                    "If you can hold this frame for ten seconds — they are a competent survivor of a setup they did not choose — something quietly changes in your nervous system. The reactivity drops. The disappointment drops. What replaces them is something closer to professional respect.\n\n"
+                    "That respect is something they have never had from you. Not because you do not love them. You love them violently. But love and respect operate on different bandwidths in the teenage nervous system, and respect is the one they have been starving for.\n\n"
+                    "**Evening protocol — one sentence of respect, unspoken.** Write down, only for yourself, one specific way your teenager has demonstrated competence or survival skill in the last six months. Do not show them. Do not announce it. Simply let yourself hold the sentence privately, and let your face soften by the smallest amount the next time they walk into the room.\n\n"
+                    "**Quiet sentence:** *They are not a stranger. They are a survivor of a system I built without yet understanding the cost.*"
+                ),
+                "prompt": "Which specific competence of theirs have I refused to see?",
+            },
+            {
+                "day": 7,
+                "title": "The cost of compensating with objects",
+                "body": (
+                    "We close Act I tonight with the most embarrassing audit in this entire seven-day sequence.\n\n"
+                    "Over the last twelve months, calculate, very approximately, how much money you have spent compensating for time you could not give. The expensive trip after the missed birthday. The console after the missed game. The wardrobe after the missed parents' evening. The car after the year of overscheduled silence.\n\n"
+                    "Do not feel bad about the number. The number is just data. The number is the cost of a specific architectural decision: *when bandwidth was not available, capital was deployed in its place.* It is the most rational substitution your operating mind could find under load.\n\n"
+                    "But there is a second cost that does not appear on any of your statements. Each substitution taught your teenager's nervous system a single sentence, repeated under different conditions until it became firmware: *when my parent cannot give me presence, my parent will give me an object, and the object means I should now stop expecting presence.* "
+                    "The capital does not buy forgiveness. It buys closure of the request. It teaches the young system to stop requesting.\n\n"
+                    "And once the requesting stops, the bandwidth pipe between you and them quietly closes. Not in anger. In efficiency. They have learned that the asking is not worth the cost of being deflected with material.\n\n"
+                    "This is the moment most high-net-worth parents discover that their teenager has stopped asking for anything personal — and they misinterpret the silence as maturity. It is not maturity. It is firmware. It is the silent acceptance that the channel is closed.\n\n"
+                    "The architectural correction does not require you to stop being generous. It requires you to decouple capital from presence in their nervous system. The next time you would normally compensate with an object, give the same time slot you would have spent shopping, and give it as undivided, agenda-less presence instead. Spend the money some other day, in some other context, untied to compensation. Let presence and capital live in two completely separate ledgers.\n\n"
+                    "**Evening protocol — the empty-handed visit.** This week, identify one moment when you would normally have compensated with an object or an experience. Skip the compensation. Replace it with twenty minutes of empty-handed time in the same room as your teenager. Bring nothing. Buy nothing. Carry nothing. That is the entire transmission.\n\n"
+                    "**Quiet sentence:** *Capital and presence belong in different ledgers. I am closing the cross-account leak tonight.*\n\n"
+                    "---\n\n"
+                    "*Act I — Read the System — closes here. Act II opens when authored. Hold the cadence.*"
+                ),
+                "prompt": "Where in my home have I been paying for presence I could have simply given?",
+            },
+        ],
+    },
 ]
 
 

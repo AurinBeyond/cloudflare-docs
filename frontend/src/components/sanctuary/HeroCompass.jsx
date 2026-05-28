@@ -368,6 +368,15 @@ export default function HeroCompass() {
             Each heading is a curator. Each curator holds a room.
             Choose the direction the moment is asking of you.
           </p>
+
+          {/* §SOVEREIGN-CODE 2026-02-11 — The three-law manifest, sourced
+              from the Russian carceral survival mantra and rebuilt for
+              Matrix Aurin's architectural register. Each line ties to
+              one cardinal direction and intensifies when the matching
+              wedge is hovered. This is the ideological spine of the
+              platform — placed before the Compass so the visitor
+              passes through the laws before reaching the doors. */}
+          <SovereignCode active={active} />
         </div>
 
         <div
@@ -785,6 +794,154 @@ function CompassWaitlistDialog({ openSlug, onClose }) {
           No tracking. No follow-ups. One note, when the door opens.
         </p>
       </div>
+    </div>
+  );
+}
+
+
+/**
+ * SovereignCode — the three-law manifest displayed above the Compass.
+ *
+ * §SOVEREIGN-CODE 2026-02-11 — Founder directive.
+ *   The mantra "Не верь. Не бойся. Не проси." is a public-domain
+ *   survival koan from Russian carceral culture, used by writers
+ *   from Shalamov to Solzhenitsyn. Matrix Aurin re-grounds it for
+ *   high-net-worth founder-parents as the three architectural laws
+ *   of sovereign presence at home.
+ *
+ *   Visual contract:
+ *     - Three short laws in our biomechanical register.
+ *     - Each line maps to one cardinal direction:
+ *         · "Do not trust empty words"     ↔  W · Alistair · Course
+ *         · "Do not fear emotional chaos"  ↔  N · Kaelan   · Body
+ *         · "Do not force them to beg"     ↔  E · Sara     · Parents
+ *     - When the user hovers the matching wedge on the SVG dial,
+ *       the corresponding line lifts: brass underline appears, the
+ *       text colour shifts from cream-dim to bright brass, and a
+ *       faint glitch shimmer plays for ~600ms. Other lines dim
+ *       slightly so the eye lands on the active law.
+ *     - Hover on South (Grace / Clarity) does NOT highlight a law;
+ *       it dims all three equally — Grace is the room where the
+ *       laws no longer apply, the room where the mask drops.
+ */
+function SovereignCode({ active }) {
+  const laws = [
+    {
+      key: "west",
+      en: "Do not trust empty words.",
+      sub: "The system updates on delivered signal, not declared intent.",
+      ru: "Не верь",
+      cardinal: "W · 270°",
+    },
+    {
+      key: "north",
+      en: "Do not fear the chaos.",
+      sub: "Your nervous system is the firewall the room is waiting for.",
+      ru: "Не бойся",
+      cardinal: "N · 360°",
+    },
+    {
+      key: "east",
+      en: "Do not force them to beg.",
+      sub: "Bandwidth and attention are infrastructure, never currency.",
+      ru: "Не проси",
+      cardinal: "E · 90°",
+    },
+  ];
+
+  const isSouth = active === "south";
+  return (
+    <div
+      data-testid="sovereign-code-manifest"
+      className="mt-12 sm:mt-14 mx-auto max-w-[760px] border border-[rgba(196,164,107,0.22)] bg-[rgba(15,12,10,0.6)] backdrop-blur-[2px] px-6 sm:px-10 py-8"
+    >
+      <p
+        className="text-[10px] tracking-[0.42em] uppercase text-[#c4a46b] mb-5"
+        style={{ fontFamily: SERIF }}
+        data-testid="sovereign-code-eyebrow"
+      >
+        [ Protocol · The Sovereign Code ]
+      </p>
+      <ul className="space-y-4">
+        {laws.map((law) => {
+          const isActive = active === law.key;
+          const dimmed = !!active && !isActive;
+          return (
+            <li
+              key={law.key}
+              data-testid={`sovereign-law-${law.key}`}
+              className="grid grid-cols-[auto_1fr] gap-x-5 sm:gap-x-7 items-baseline"
+              style={{
+                transition: "opacity 600ms ease, transform 600ms ease",
+                opacity: dimmed && !isSouth ? 0.32 : isSouth ? 0.55 : 1,
+                transform: isActive ? "translateX(4px)" : "none",
+              }}
+            >
+              <span
+                className="text-[10px] tracking-[0.32em] uppercase whitespace-nowrap"
+                style={{
+                  color: isActive ? "#d4b67d" : "#7a7468",
+                  fontFamily: SERIF,
+                  transition: "color 500ms ease",
+                }}
+              >
+                {law.cardinal}
+              </span>
+              <div>
+                <p
+                  className="text-[19px] sm:text-[22px] leading-[1.32] font-light"
+                  style={{
+                    color: isActive ? "#f0eadd" : "#bcb4a3",
+                    fontFamily: SERIF,
+                    transition: "color 500ms ease",
+                    textShadow: isActive
+                      ? "0 0 18px rgba(196,164,107,0.25)"
+                      : "none",
+                  }}
+                >
+                  {law.en}
+                  <span
+                    className="ml-3 text-[12px] tracking-[0.22em] uppercase"
+                    style={{
+                      color: isActive ? "#d4b67d" : "#7a7468",
+                      transition: "color 500ms ease",
+                    }}
+                  >
+                    · {law.ru}
+                  </span>
+                </p>
+                <p
+                  className="mt-1.5 text-[13px] sm:text-[13.5px] italic font-light leading-[1.7]"
+                  style={{
+                    color: isActive ? "#a59f93" : "#7a7468",
+                    fontFamily: SERIF,
+                    transition: "color 500ms ease",
+                  }}
+                >
+                  {law.sub}
+                </p>
+                {/* Brass underline that appears only on the active law. */}
+                <div
+                  aria-hidden="true"
+                  className="mt-3 h-[1px] bg-[#c4a46b]"
+                  style={{
+                    transformOrigin: "left",
+                    transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                    transition: "transform 700ms cubic-bezier(0.4,0,0.2,1)",
+                    opacity: isActive ? 0.8 : 0,
+                  }}
+                />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      <p
+        className="mt-6 pt-5 border-t border-[rgba(196,164,107,0.12)] text-[11px] tracking-[0.28em] uppercase text-[#7a7468]"
+        data-testid="sovereign-code-coda"
+      >
+        — Three laws. Four headings. One way home.
+      </p>
     </div>
   );
 }

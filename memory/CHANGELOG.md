@@ -296,3 +296,85 @@ This keeps the public catalog clean while the content is being authored.
   GPT idea acknowledged; deferred until founder audit complete
 - Parents' Room live in-room ticker — same
 - Live Charlotte/Lily voice listen-test — founder doing this manually
+
+## 2026-02-11 (FINAL SPRINT) — Act I + Sovereign Code
+
+### P0 · "The Broken Clockwork" — Act I shipped to SEED_COURSES
+**Status:** LIVE on `/api/courses` index
+File: `backend/server.py` SEED_COURSES list (28th course entry)
+
+Authored 7 full letter bodies (~1500–1850 chars each, ~350–450 words):
+1. **The currency of attention** — calendar-audit framing
+2. **The promise that died on a Tuesday** — Value Flip diagnosis
+3. **The carousel that spins for no one** — Privilege Isolation
+4. **What the teen heard when the call came** — frequency carries
+5. **Three broken cycles equals firmware** — patience > intensity
+6. **You did not raise a stranger. You raised a survivor.** — reframe
+7. **The cost of compensating with objects** — capital ≠ presence
+
+Each letter:
+- Opens with one sharp diagnostic frame (no "Hello, parents")
+- Holds biomechanical register throughout (Anchor OS, firmware,
+  Value Flip, bandwidth, ledger, frequency)
+- Closes with ONE small evening protocol (single action)
+- Carries a Quiet sentence for the parent to hold across the 24-hour
+  cadence-lock
+- Day 7 explicitly closes Act I and signals Acts II–IV to come
+
+Backend verified:
+- `/api/courses` index → Broken Clockwork visible, letter_count: 7 ✓
+- `/api/courses/the-broken-clockwork` → day 1 body 1674 chars
+  (preview-open), days 2–7 locked (body=null until enroll +
+  cadence-gate elapses) ✓
+- `language: "en"` → publicly listed ✓
+- `price: 39.0` · `lemonsqueezy_variant_id: None` → will receive
+  Polar SKU on cutover ✓
+- Lint: clean ✓
+
+### P0 · The Sovereign Code manifest on landing page
+File: `frontend/src/components/sanctuary/HeroCompass.jsx` — new
+internal `SovereignCode` component rendered between the Compass
+headline/subhead and the SVG dial.
+
+Three-law manifesto (Russian carceral survival mantra translated into
+Matrix Aurin's architectural register):
+
+| Cardinal | English law | Russian source | Subtext |
+|---|---|---|---|
+| W · 270° | Do not trust empty words. | Не верь | The system updates on delivered signal, not declared intent. |
+| N · 360° | Do not fear the chaos. | Не бойся | Your nervous system is the firewall the room is waiting for. |
+| E · 90° | Do not force them to beg. | Не проси | Bandwidth and attention are infrastructure, never currency. |
+
+Interactive sync:
+- When the user hovers the matching wedge on the SVG dial, the
+  corresponding law lifts (cream → bright, brass underline draws
+  in 700ms, subtle translateX) while the other two laws dim to 32%.
+- Hovering South (Grace · Clarity) dims all three equally — Grace
+  is the room where the laws no longer apply (the mask drops here).
+- No new DOM listeners; reuses the existing `active` state on the
+  Compass via simple prop.
+
+Visual lineage: brass on graniidist canvas, serif italic, 760px
+max-width centered card with hairline brass border + backdrop blur,
+coda line "— Three laws. Four headings. One way home."
+
+Verifications:
+- Lint: ✓
+- Idle state screenshot: all 3 laws visible, cardinal coordinates
+  rendered, Russian source displayed ✓
+- Hover-East screenshot: "Do not force them to beg · Не проси"
+  lifts, brass underline appears ✓
+- Hover-West screenshot: "Do not trust empty words" lifts, others
+  dim ✓
+- NAV anchor unchanged; the manifest is part of the Compass section
+
+### Files touched
+- EDIT: `backend/server.py` SEED_COURSES (one new dict, 7 letters)
+- EDIT: `frontend/src/components/sanctuary/HeroCompass.jsx`
+  (one new internal `SovereignCode` component + render hook)
+
+### Still on hold (next sprint, awaiting founder direction)
+- Acts II, III, IV of Broken Clockwork (21 more letters to author)
+- Puberty Room — architectural decision pending (see ask_human next)
+- Wanderer Sovereign Counter
+- Parents' Room live in-room "Broken Clockwork" ticker
