@@ -60,13 +60,48 @@
 .ps-mode-night {
   --ps-text: #f6edda;
   --ps-text-muted: rgba(246, 237, 218, 0.66);
-  --ps-card-bg: rgba(20, 25, 50, 0.45);
-  --ps-card-border: rgba(196, 164, 107, 0.22);
-  --ps-card-bg-strong: rgba(28, 35, 62, 0.62);
+  --ps-card-bg: rgba(14, 23, 48, 0.55);
+  --ps-card-border: rgba(196, 164, 107, 0.28);
+  --ps-card-bg-strong: rgba(20, 30, 60, 0.72);
   background:
     radial-gradient(circle at 78% 14%, rgba(255, 244, 190, 0.30), transparent 18%),
     radial-gradient(circle at 22% 82%, rgba(196, 164, 107, 0.20), transparent 32%),
     linear-gradient(155deg, #0e1730 0%, #172b55 48%, #1f3540 100%);
+}
+
+/* ── Painted atmosphere layer (Nano Banana art) ───────────── */
+.ps-atmosphere {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1800ms ease-out;
+}
+.ps-atmosphere.ps-atmosphere--ready {
+  opacity: 1;
+}
+.ps-atmosphere::after {
+  /* Veil that keeps cards legible over the painting */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ps-mode-morning .ps-atmosphere::after {
+  background: linear-gradient(180deg, rgba(243,231,212,0.15) 0%, rgba(243,231,212,0.45) 70%, rgba(243,231,212,0.72) 100%);
+}
+.ps-mode-day .ps-atmosphere::after {
+  background: linear-gradient(180deg, rgba(230,224,207,0.14) 0%, rgba(230,224,207,0.42) 70%, rgba(230,224,207,0.68) 100%);
+}
+.ps-mode-evening .ps-atmosphere::after {
+  background: linear-gradient(180deg, rgba(58,74,100,0.10) 0%, rgba(58,74,100,0.30) 60%, rgba(58,74,100,0.50) 100%);
+}
+.ps-mode-night .ps-atmosphere::after {
+  background: linear-gradient(180deg, rgba(14,23,48,0.18) 0%, rgba(14,23,48,0.50) 55%, rgba(14,23,48,0.70) 100%);
 }
 
 /* ── atmosphere overlays ───────────────────────────────────── */
@@ -74,15 +109,17 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
   background:
-    radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.18), transparent 32%),
-    radial-gradient(circle at 38% 72%, rgba(196, 164, 107, 0.18), transparent 30%);
+    radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.10), transparent 32%),
+    radial-gradient(circle at 38% 72%, rgba(196, 164, 107, 0.12), transparent 30%);
 }
 .ps-noise {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.08;
+  z-index: 1;
+  opacity: 0.06;
   background-image:
     repeating-radial-gradient(circle at 15% 25%, rgba(255,255,255,0.4) 0, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100px),
     repeating-radial-gradient(circle at 70% 65%, rgba(255,255,255,0.3) 0, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 90px);

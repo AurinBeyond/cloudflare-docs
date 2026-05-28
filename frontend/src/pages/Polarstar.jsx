@@ -265,6 +265,7 @@ export default function Polarstar() {
   const [selectedId, setSelectedId] = useState("exploration");
   const initialMode = useMemo(() => getTimeMode(), []);
   const [mode, setMode] = useState(initialMode);
+  const [imgReady, setImgReady] = useState(false);
 
   // Refresh every 15 minutes so a long-open tab transitions gracefully
   // from evening → night without forcing a reload.
@@ -273,12 +274,33 @@ export default function Polarstar() {
     return () => clearInterval(id);
   }, []);
 
+  // Pre-load the painted atmosphere image for the active mode so we
+  // can crossfade it in once decoded — no jarring flash.
+  useEffect(() => {
+    setImgReady(false);
+    const url = `${process.env.PUBLIC_URL || ""}/polarstar/${mode}-world.png`;
+    const img = new Image();
+    img.onload = () => setImgReady(true);
+    img.onerror = () => setImgReady(false);
+    img.src = url;
+  }, [mode]);
+
+  const atmosphereStyle = {
+    backgroundImage: `url(${process.env.PUBLIC_URL || ""}/polarstar/${mode}-world.png)`,
+  };
+
   return (
     <main
       className={`ps-world-root ps-mode-${mode}`}
       data-testid="polarstar-root"
       data-time-mode={mode}
     >
+      <div
+        className={`ps-atmosphere ${imgReady ? "ps-atmosphere--ready" : ""}`}
+        style={atmosphereStyle}
+        aria-hidden="true"
+        data-testid="polarstar-atmosphere"
+      />
       <div className="ps-glow" aria-hidden="true" />
       <div className="ps-noise" aria-hidden="true" />
 
