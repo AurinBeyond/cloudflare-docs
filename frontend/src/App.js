@@ -77,6 +77,11 @@ import AdminOutbound from "@/pages/AdminOutbound";
 import AdminBadge from "@/components/AdminBadge";
 import WandererGate from "@/components/WandererGate";
 import ErrorBoundary from "@/components/ErrorBoundary";
+// §POLARSTAR 2026-02-13 — preview-only Kids north-star route.
+// Lives parallel to /kids-universe and /kids-universe/journey; does
+// NOT touch billing, Polar SKUs, or production. See
+// /app/memory/POLARSTAR_NORTHSTAR.md for the locked design law.
+import Polarstar from "@/pages/Polarstar";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -114,6 +119,8 @@ function AppRouter() {
             Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}
         <Route path="/kids-universe/journey" element={<KidsUniverseJourney />} />
         <Route path="/kids-universe/journey/:zone" element={<KidsUniverseJourney />} />
+        {/* §POLARSTAR — preview-only sandbox route */}
+        <Route path="/kids-universe/polarstar" element={<Polarstar />} />
         {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
         <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
         <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />

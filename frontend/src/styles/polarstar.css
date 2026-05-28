@@ -1,0 +1,448 @@
+/* ============================================================
+ * polarstar.css — atmospheric backgrounds + UI for /kids-universe/polarstar
+ *
+ * §POLARSTAR 2026-02-13 — One world, four atmospheres.
+ * Brand palette: brass (#c4a46b), cream (#f0eadd), indigo deep (#0e1730).
+ * Atmosphere changes via .ps-mode-{morning|day|evening|night} class on root.
+ * ============================================================ */
+
+.ps-world-root {
+  --ps-brass: #c4a46b;
+  --ps-brass-bright: #d4b67d;
+  --ps-cream: #f0eadd;
+  --ps-cream-soft: #e8e1d5;
+  --ps-text: #15213c;
+  --ps-text-muted: rgba(21, 33, 60, 0.66);
+  --ps-card-bg: rgba(255, 255, 255, 0.42);
+  --ps-card-border: rgba(255, 255, 255, 0.55);
+  --ps-card-bg-strong: rgba(255, 255, 255, 0.62);
+
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 48px 32px 80px;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background 1800ms ease-out;
+}
+
+/* ── MORNING — pale dawn, peach + cream ─────────────────────── */
+.ps-mode-morning {
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.85), transparent 28%),
+    radial-gradient(circle at 78% 18%, rgba(255, 214, 170, 0.55), transparent 32%),
+    linear-gradient(155deg, #f3e7d4 0%, #dee9f0 38%, #c8d9c4 100%);
+}
+
+/* ── DAY — bright cream + sky ──────────────────────────────── */
+.ps-mode-day {
+  background:
+    radial-gradient(circle at 60% 8%, rgba(255, 255, 255, 0.78), transparent 24%),
+    radial-gradient(circle at 12% 70%, rgba(202, 184, 140, 0.35), transparent 32%),
+    linear-gradient(150deg, #e6e0cf 0%, #d8dfd0 45%, #c9d4dc 100%);
+}
+
+/* ── EVENING — golden hour, warm amber + deep blue ──────────── */
+.ps-mode-evening {
+  --ps-text: #2a1d12;
+  --ps-text-muted: rgba(42, 29, 18, 0.68);
+  --ps-card-bg: rgba(255, 244, 220, 0.30);
+  --ps-card-border: rgba(255, 224, 175, 0.45);
+  background:
+    radial-gradient(circle at 75% 14%, rgba(255, 206, 130, 0.65), transparent 32%),
+    radial-gradient(circle at 18% 78%, rgba(116, 76, 64, 0.45), transparent 38%),
+    linear-gradient(150deg, #7e6354 0%, #c98e57 42%, #3a4a64 100%);
+}
+
+/* ── NIGHT — deep indigo + brass starlight (signature) ──────── */
+.ps-mode-night {
+  --ps-text: #f6edda;
+  --ps-text-muted: rgba(246, 237, 218, 0.66);
+  --ps-card-bg: rgba(20, 25, 50, 0.45);
+  --ps-card-border: rgba(196, 164, 107, 0.22);
+  --ps-card-bg-strong: rgba(28, 35, 62, 0.62);
+  background:
+    radial-gradient(circle at 78% 14%, rgba(255, 244, 190, 0.30), transparent 18%),
+    radial-gradient(circle at 22% 82%, rgba(196, 164, 107, 0.20), transparent 32%),
+    linear-gradient(155deg, #0e1730 0%, #172b55 48%, #1f3540 100%);
+}
+
+/* ── atmosphere overlays ───────────────────────────────────── */
+.ps-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.18), transparent 32%),
+    radial-gradient(circle at 38% 72%, rgba(196, 164, 107, 0.18), transparent 30%);
+}
+.ps-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image:
+    repeating-radial-gradient(circle at 15% 25%, rgba(255,255,255,0.4) 0, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100px),
+    repeating-radial-gradient(circle at 70% 65%, rgba(255,255,255,0.3) 0, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 90px);
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.ps-hero {
+  position: relative;
+  z-index: 2;
+  max-width: 920px;
+  margin: 0 auto 56px;
+  text-align: center;
+  padding-top: 24px;
+}
+.ps-time-badge {
+  margin: 0 0 18px;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ps-text-muted);
+}
+.ps-hero-title {
+  margin: 0;
+  font-weight: 300;
+  font-size: clamp(46px, 7vw, 84px);
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+  color: var(--ps-text);
+}
+.ps-italic {
+  font-style: italic;
+  color: var(--ps-brass-bright);
+}
+.ps-hero-line {
+  margin: 24px 0 0;
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-style: italic;
+  color: var(--ps-text-muted);
+}
+.ps-hero-sub {
+  margin: 22px auto 0;
+  max-width: 600px;
+  font-size: 15px;
+  line-height: 1.7;
+  font-style: italic;
+  color: var(--ps-text-muted);
+}
+
+/* ── SHELL (3-column grid) ────────────────────────────────── */
+.ps-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  gap: 28px;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+/* ── shared card surfaces ─────────────────────────────────── */
+.ps-side, .ps-right {
+  padding: 26px 22px;
+  border-radius: 28px;
+  background: var(--ps-card-bg);
+  border: 1px solid var(--ps-card-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.ps-world {
+  padding: 32px 28px;
+  border-radius: 32px;
+  background: var(--ps-card-bg);
+  border: 1px solid var(--ps-card-border);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  min-height: 700px;
+  position: relative;
+}
+
+.ps-eyebrow {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ps-text-muted);
+}
+
+.ps-card {
+  background: var(--ps-card-bg-strong, rgba(255,255,255,0.55));
+  border: 1px solid var(--ps-card-border);
+  border-radius: 22px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.ps-card-title {
+  margin: 8px 0 6px;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.18;
+  color: var(--ps-text);
+}
+.ps-card-blurb {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ps-text-muted);
+}
+.ps-of {
+  font-size: 14px;
+  color: var(--ps-text-muted);
+  font-style: italic;
+}
+
+/* ── child + Aurin avatars ────────────────────────────────── */
+.ps-avatar {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  margin-bottom: 14px;
+  color: var(--ps-brass);
+  border: 1px solid var(--ps-card-border);
+}
+.ps-mode-night .ps-avatar {
+  background: rgba(196,164,107,0.18);
+  color: var(--ps-brass-bright);
+}
+.ps-avatar--aurin {
+  width: 72px;
+  height: 72px;
+}
+
+/* ── side panel buttons ───────────────────────────────────── */
+.ps-soft-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border-radius: 16px;
+  border: 1px solid var(--ps-card-border);
+  background: var(--ps-card-bg);
+  color: var(--ps-text);
+  text-align: left;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 220ms ease, transform 220ms ease;
+}
+.ps-soft-button:hover {
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateX(2px);
+}
+.ps-mode-night .ps-soft-button:hover {
+  background: rgba(196, 164, 107, 0.22);
+}
+
+/* ── age selector ─────────────────────────────────────────── */
+.ps-age-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.ps-age-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px 18px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--ps-card-border);
+  background: var(--ps-card-bg);
+  color: var(--ps-text);
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  transition: all 360ms ease;
+}
+.ps-age-card strong {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  font-style: italic;
+  color: var(--ps-text);
+}
+.ps-age-card--active {
+  background: rgba(255, 255, 255, 0.70);
+  border-color: var(--ps-brass);
+  box-shadow: 0 0 0 2px rgba(196, 164, 107, 0.35),
+              0 18px 40px rgba(196, 164, 107, 0.18);
+}
+.ps-mode-night .ps-age-card--active {
+  background: rgba(196, 164, 107, 0.18);
+  box-shadow: 0 0 0 2px rgba(212, 182, 125, 0.55),
+              0 18px 40px rgba(0, 0, 0, 0.42);
+}
+
+/* ── current path block ───────────────────────────────────── */
+.ps-selected {
+  padding: 22px 22px 24px;
+  border-radius: 22px;
+  background: var(--ps-card-bg);
+  border: 1px solid var(--ps-card-border);
+  margin-bottom: 28px;
+}
+.ps-selected-title {
+  margin: 6px 0 12px;
+  font-weight: 300;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  color: var(--ps-text);
+}
+.ps-selected-blurb {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ps-text-muted);
+  font-style: italic;
+}
+
+/* ── activity grid ────────────────────────────────────────── */
+.ps-activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.ps-activity-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 158px;
+  padding: 20px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--ps-card-border);
+  background: var(--ps-card-bg);
+  color: var(--ps-text);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 280ms ease, background 280ms ease;
+}
+.ps-activity-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.62);
+}
+.ps-mode-night .ps-activity-card:hover {
+  background: rgba(196, 164, 107, 0.18);
+}
+.ps-activity-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ps-brass);
+  margin-bottom: 6px;
+}
+.ps-mode-night .ps-activity-icon {
+  background: rgba(196, 164, 107, 0.18);
+  color: var(--ps-brass-bright);
+}
+.ps-activity-card strong {
+  font-size: 17px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ps-text);
+}
+.ps-activity-card small {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ps-text-muted);
+}
+
+/* ── Tomorrow's Adventure ─────────────────────────────────── */
+.ps-tomorrow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  padding: 22px 24px;
+  border-radius: 22px;
+  border: 1px solid var(--ps-brass);
+  background: rgba(196, 164, 107, 0.10);
+}
+.ps-mode-night .ps-tomorrow {
+  background: rgba(196, 164, 107, 0.16);
+}
+.ps-tomorrow-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ps-brass);
+  flex-shrink: 0;
+}
+.ps-mode-night .ps-tomorrow-icon {
+  background: rgba(196, 164, 107, 0.22);
+  color: var(--ps-brass-bright);
+}
+.ps-tomorrow-title {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ps-text);
+}
+
+/* ── right panel cards ────────────────────────────────────── */
+.ps-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+  margin-top: 10px;
+}
+.ps-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--ps-brass) 0%, var(--ps-brass-bright) 100%);
+  border-radius: inherit;
+  transition: width 600ms ease;
+}
+.ps-card--sunrise {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ps-sunrise-icon {
+  display: grid;
+  place-items: center;
+  color: var(--ps-brass);
+  flex-shrink: 0;
+}
+
+/* ── footer ───────────────────────────────────────────────── */
+.ps-footer {
+  position: relative;
+  z-index: 2;
+  margin: 64px auto 0;
+  max-width: 900px;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--ps-text-muted);
+}
+
+/* ── responsive ───────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .ps-world-root { padding: 28px 18px 64px; }
+  .ps-shell { grid-template-columns: 1fr; gap: 18px; }
+  .ps-activity-grid { grid-template-columns: repeat(2, 1fr); }
+  .ps-age-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .ps-activity-grid { grid-template-columns: 1fr; }
+  .ps-hero-title { font-size: 42px; }
+}
