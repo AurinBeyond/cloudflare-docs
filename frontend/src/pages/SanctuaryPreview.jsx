@@ -30,6 +30,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AurinsPromise from "@/components/sanctuary/AurinsPromise";
+import HeroCompass from "@/components/sanctuary/HeroCompass";
 
 const HERO = "/sanctuary/hero-mask.png";
 const ATMOSPHERE = "/sanctuary/atmosphere.png";
@@ -167,6 +168,7 @@ function SanctuaryNav({ production = false }) {
         </Link>
         <div className="hidden md:flex items-center gap-9 text-[11.5px] tracking-[0.24em] uppercase text-[#a59f93]">
           <a href="#worlds" className="hover:text-[#e8e1d5] transition-colors duration-500">Worlds</a>
+          <a href="#hero-compass" className="hover:text-[#e8e1d5] transition-colors duration-500">Compass</a>
           <a href="#rooms" className="hover:text-[#e8e1d5] transition-colors duration-500">Rooms</a>
           <a href="#open-world" className="hover:text-[#e8e1d5] transition-colors duration-500">Open World</a>
           <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways to be here</a>
@@ -1275,6 +1277,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
         <SanctuaryNav production={production} />
         <main>
           <HeroSection />
+          <HeroCompass />
           <QuietNoteSection />
           <TwoWorldsSection />
           <RoomsSection />

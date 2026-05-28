@@ -1,0 +1,590 @@
+/**
+ * HeroCompass — The interactive SVG navigation Compass on the
+ * Sanctuary homepage (production `/`).
+ *
+ * §COMPASS 2026-02-11 — Founder directive (Variant A):
+ *   Replace the traditional "four cards in a row" room menu with a
+ *   single, cohesive SVG compass that maps the four Adult-side
+ *   rooms to cardinal headings. Each cardinal arm is a clickable
+ *   navigation target that, while the platform is in "Pre-heat /
+ *   Coming Soon" mode, opens the existing `WaitlistInline` form
+ *   (POST /waitlist/join) instead of routing into the live room.
+ *
+ *   Cardinal mapping (founder lock):
+ *     N (360°) — Kaelan      — Body Architecture
+ *     E ( 90°) — Sara        — Parents' Room
+ *     S (180°) — Grace       — Clarity Release
+ *     W (270°) — Alistair    — Course Room
+ *
+ *   Visual lineage:
+ *     - Brass / bronze line work on the existing graniidist
+ *       (#0b0a08) sanctuary canvas.
+ *     - Cardinal degree numbers (360, 90, 180, 270) preserved as
+ *       navigational "codes" per founder directive.
+ *     - No therapy / wellness language. Strictly Body Architecture
+ *       / Curator terminology.
+ */
+import { useEffect, useRef, useState } from "react";
+import { WaitlistInline } from "@/components/MembershipTiers";
+
+const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
+const BRASS = "#c4a46b";
+const BRASS_BRIGHT = "#d4b67d";
+const CREAM = "#f0eadd";
+const MUTED = "#7a7468";
+
+const CARDINALS = [
+  {
+    key: "north",
+    degrees: 360,
+    label: "N",
+    angle: 270, // SVG: 0° points right, so North = 270°
+    curator: "Kaelan",
+    room: "Body Architecture",
+    whisper: "The architecture remembers what the mind forgets.",
+    slug: "compass-body-architecture",
+    testid: "compass-arm-north",
+  },
+  {
+    key: "east",
+    degrees: 90,
+    label: "E",
+    angle: 0,
+    curator: "Sara",
+    room: "Parents' Room",
+    whisper: "What was inherited. What is now yours.",
+    slug: "compass-parents-room",
+    testid: "compass-arm-east",
+  },
+  {
+    key: "south",
+    degrees: 180,
+    label: "S",
+    angle: 90,
+    curator: "Grace",
+    room: "Clarity Release",
+    whisper: "Release the structure that no longer holds.",
+    slug: "compass-clarity-release",
+    testid: "compass-arm-south",
+  },
+  {
+    key: "west",
+    degrees: 270,
+    label: "W",
+    angle: 180,
+    curator: "Alistair",
+    room: "Course Room",
+    whisper: "Sovereign study. Unhurried mastery.",
+    slug: "compass-course-room",
+    testid: "compass-arm-west",
+  },
+];
+
+const CX = 300;
+const CY = 300;
+const R_OUTER = 270;
+const R_INNER = 200;
+const R_TICK_OUTER = 268;
+const R_TICK_INNER = 256;
+const R_LABEL = 170;
+const R_DEGREE = 230;
+
+function polar(r, angleDeg) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+}
+
+// Per-cardinal text placement. For N/S the curator + room stack
+// vertically on the axis. For E/W the labels sit inside the inner
+// disc on the horizontal arm but are nudged vertically so they do
+// not collide with the arm line itself.
+function textBlockFor(key) {
+  switch (key) {
+    case "north":
+      return { curator: { x: CX, y: CY - 118 }, room: { x: CX, y: CY - 100 } };
+    case "south":
+      return { curator: { x: CX, y: CY + 112 }, room: { x: CX, y: CY + 130 } };
+    case "east":
+      return { curator: { x: CX + 122, y: CY - 12 }, room: { x: CX + 122, y: CY + 8 } };
+    case "west":
+      return { curator: { x: CX - 122, y: CY - 12 }, room: { x: CX - 122, y: CY + 8 } };
+    default:
+      return { curator: { x: CX, y: CY }, room: { x: CX, y: CY } };
+  }
+}
+
+// 24 minor ticks around the dial (every 15°), brass thin lines.
+const TICKS = Array.from({ length: 24 }, (_, i) => i * 15);
+
+export default function HeroCompass() {
+  const [active, setActive] = useState(null); // hovered cardinal key
+  const [openSlug, setOpenSlug] = useState(null); // which waitlist is open
+  const containerRef = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  // Soft reveal on first viewport entry.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.18 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Slow continuous rotation of the outer tick ring — a subtle
+  // "the compass is alive" signal. Pauses while hovered.
+  const tickRingRef = useRef(null);
+  useEffect(() => {
+    const el = tickRingRef.current;
+    if (!el) return undefined;
+    let raf = 0;
+    let last = performance.now();
+    let deg = 0;
+    const tick = (now) => {
+      const dt = now - last;
+      last = now;
+      if (!active) deg = (deg + dt * 0.003) % 360; // ~3°/s
+      el.setAttribute("transform", `rotate(${deg} ${CX} ${CY})`);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active]);
+
+  const activeCardinal = CARDINALS.find((c) => c.key === active) || null;
+
+  return (
+    <section
+      id="hero-compass"
+      data-testid="sanctuary-hero-compass"
+      ref={containerRef}
+      className="relative w-full bg-[#0b0a08] py-28 sm:py-36 overflow-hidden"
+    >
+      {/* Warm low-opacity glow behind the compass to anchor it on
+          the graniit canvas without competing with the dial. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-[18%] h-[520px] opacity-[0.22]"
+        style={{
+          background:
+            "radial-gradient(ellipse 48% 60% at 50% 50%, rgba(196,164,107,0.32) 0%, rgba(196,164,107,0.08) 45%, transparent 75%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-[1120px] mx-auto px-6 sm:px-10">
+        <div
+          className={`text-center mb-14 sm:mb-20 transition-all duration-[1400ms] ease-out ${
+            revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
+          <p
+            data-testid="compass-eyebrow"
+            className="text-[11px] tracking-[0.42em] uppercase mb-6"
+            style={{ color: BRASS, fontFamily: SERIF }}
+          >
+            — The Compass
+          </p>
+          <h2
+            data-testid="compass-headline"
+            className="text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] font-light max-w-[820px] mx-auto tracking-[-0.012em]"
+            style={{ fontFamily: SERIF }}
+          >
+            Four cardinal points.<br />
+            <span className="italic text-[#d4b67d]">One way out.</span>
+          </h2>
+          <p
+            data-testid="compass-subhead"
+            className="mt-7 text-[14.5px] sm:text-[15.5px] italic text-[#a59f93] max-w-[560px] mx-auto leading-[1.85] font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            Each heading is a curator. Each curator holds a room.
+            Choose the direction the moment is asking of you.
+          </p>
+        </div>
+
+        <div
+          className={`relative mx-auto max-w-[640px] aspect-square transition-all duration-[2200ms] ease-out ${
+            revealed ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]"
+          }`}
+          data-testid="compass-dial-wrap"
+        >
+          <svg
+            viewBox="0 0 600 600"
+            className="w-full h-full"
+            role="img"
+            aria-label="Sanctuary navigation compass"
+            data-testid="compass-svg"
+          >
+            <defs>
+              <radialGradient id="compass-disc" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#1a1612" stopOpacity="0.92" />
+                <stop offset="65%" stopColor="#0e0c0a" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#0b0a08" stopOpacity="0.95" />
+              </radialGradient>
+              <linearGradient id="brass-line" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#8a6f3a" />
+                <stop offset="50%" stopColor="#d4b67d" />
+                <stop offset="100%" stopColor="#8a6f3a" />
+              </linearGradient>
+              <filter id="brass-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Inner disc */}
+            <circle cx={CX} cy={CY} r={R_OUTER} fill="url(#compass-disc)" />
+            {/* Outer ring */}
+            <circle
+              cx={CX}
+              cy={CY}
+              r={R_OUTER}
+              fill="none"
+              stroke="url(#brass-line)"
+              strokeWidth="1.2"
+              opacity="0.9"
+            />
+            {/* Inner ring */}
+            <circle
+              cx={CX}
+              cy={CY}
+              r={R_INNER}
+              fill="none"
+              stroke={BRASS}
+              strokeOpacity="0.35"
+              strokeWidth="0.6"
+            />
+            {/* Hairline middle ring (subtle navigation guide) */}
+            <circle
+              cx={CX}
+              cy={CY}
+              r={140}
+              fill="none"
+              stroke={BRASS}
+              strokeOpacity="0.18"
+              strokeWidth="0.5"
+              strokeDasharray="2 4"
+            />
+
+            {/* Rotating tick ring — animated subtly */}
+            <g ref={tickRingRef}>
+              {TICKS.map((deg) => {
+                const isMajor = deg % 90 === 0;
+                const inner = polar(isMajor ? R_TICK_INNER - 8 : R_TICK_INNER, deg);
+                const outer = polar(R_TICK_OUTER, deg);
+                return (
+                  <line
+                    key={deg}
+                    x1={inner.x}
+                    y1={inner.y}
+                    x2={outer.x}
+                    y2={outer.y}
+                    stroke={BRASS}
+                    strokeOpacity={isMajor ? 0.9 : 0.45}
+                    strokeWidth={isMajor ? 1.4 : 0.6}
+                  />
+                );
+              })}
+            </g>
+
+            {/* Cross arms (the four cardinal lines) */}
+            {CARDINALS.map((c) => {
+              const isActive = active === c.key;
+              const outer = polar(R_OUTER - 6, c.angle);
+              const inner = polar(60, c.angle);
+              return (
+                <line
+                  key={`arm-${c.key}`}
+                  x1={inner.x}
+                  y1={inner.y}
+                  x2={outer.x}
+                  y2={outer.y}
+                  stroke={isActive ? BRASS_BRIGHT : BRASS}
+                  strokeOpacity={isActive ? 1 : 0.55}
+                  strokeWidth={isActive ? 1.6 : 1}
+                  filter={isActive ? "url(#brass-glow)" : undefined}
+                  style={{ transition: "all 600ms ease" }}
+                />
+              );
+            })}
+
+            {/* Central emblem */}
+            <g data-testid="compass-emblem">
+              <circle cx={CX} cy={CY} r={42} fill="#0b0a08" stroke={BRASS} strokeOpacity="0.7" strokeWidth="1" />
+              <circle cx={CX} cy={CY} r={36} fill="none" stroke={BRASS} strokeOpacity="0.35" strokeWidth="0.5" />
+              <text
+                x={CX}
+                y={CY - 2}
+                textAnchor="middle"
+                fill={CREAM}
+                fontFamily={SERIF}
+                fontSize="11"
+                letterSpacing="3"
+                fontStyle="italic"
+              >
+                MATRIX
+              </text>
+              <text
+                x={CX}
+                y={CY + 12}
+                textAnchor="middle"
+                fill={BRASS_BRIGHT}
+                fontFamily={SERIF}
+                fontSize="9"
+                letterSpacing="2.5"
+              >
+                AURIN
+              </text>
+            </g>
+
+            {/* Compass needle pointer (decorative, fixed at North) */}
+            <g opacity="0.85">
+              <polygon
+                points={`${CX},${CY - 72} ${CX - 6},${CY} ${CX + 6},${CY}`}
+                fill={BRASS_BRIGHT}
+                opacity="0.85"
+              />
+              <polygon
+                points={`${CX},${CY + 72} ${CX - 4},${CY} ${CX + 4},${CY}`}
+                fill={BRASS}
+                opacity="0.45"
+              />
+            </g>
+
+            {/* Cardinal labels + curator + room + degree codes */}
+            {CARDINALS.map((c) => {
+              const labelPt = polar(R_LABEL, c.angle);
+              const degreePt = polar(R_DEGREE, c.angle);
+              const block = textBlockFor(c.key);
+              const curatorPt = block.curator;
+              const roomPt = block.room;
+              const isActive = active === c.key;
+
+              // Hit zone — a generous wedge so the arm + labels are clickable
+              const wedgeOuter = R_OUTER - 4;
+              const wedgeInner = 56;
+              const halfAngle = 22; // ±22° hit zone per cardinal
+              const a1 = (c.angle - halfAngle) * (Math.PI / 180);
+              const a2 = (c.angle + halfAngle) * (Math.PI / 180);
+              const p1 = { x: CX + wedgeInner * Math.cos(a1), y: CY + wedgeInner * Math.sin(a1) };
+              const p2 = { x: CX + wedgeOuter * Math.cos(a1), y: CY + wedgeOuter * Math.sin(a1) };
+              const p3 = { x: CX + wedgeOuter * Math.cos(a2), y: CY + wedgeOuter * Math.sin(a2) };
+              const p4 = { x: CX + wedgeInner * Math.cos(a2), y: CY + wedgeInner * Math.sin(a2) };
+              const hitPath = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${wedgeOuter} ${wedgeOuter} 0 0 1 ${p3.x} ${p3.y} L ${p4.x} ${p4.y} A ${wedgeInner} ${wedgeInner} 0 0 0 ${p1.x} ${p1.y} Z`;
+
+              return (
+                <g
+                  key={c.key}
+                  data-testid={c.testid}
+                  onMouseEnter={() => setActive(c.key)}
+                  onMouseLeave={() => setActive(null)}
+                  onFocus={() => setActive(c.key)}
+                  onBlur={() => setActive(null)}
+                  onClick={() => setOpenSlug(c.slug)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setOpenSlug(c.slug);
+                    }
+                  }}
+                  style={{ cursor: "pointer", outline: "none" }}
+                >
+                  {/* Hit wedge (invisible but generous) */}
+                  <path
+                    d={hitPath}
+                    fill="rgba(0,0,0,0.001)"
+                    style={{ pointerEvents: "all" }}
+                  />
+
+                  {/* Cardinal letter — large */}
+                  <text
+                    x={labelPt.x}
+                    y={labelPt.y + 6}
+                    textAnchor="middle"
+                    fill={isActive ? CREAM : BRASS}
+                    fontFamily={SERIF}
+                    fontSize={isActive ? 28 : 26}
+                    fontStyle="italic"
+                    style={{ transition: "all 500ms ease" }}
+                  >
+                    {c.label}
+                  </text>
+
+                  {/* Curator name — italic, just above center */}
+                  <text
+                    x={curatorPt.x}
+                    y={curatorPt.y + 4}
+                    textAnchor="middle"
+                    fill={isActive ? BRASS_BRIGHT : "#a59f93"}
+                    fontFamily={SERIF}
+                    fontSize="13"
+                    fontStyle="italic"
+                    style={{ transition: "all 500ms ease" }}
+                  >
+                    {c.curator}
+                  </text>
+
+                  {/* Room name — small caps, beneath curator */}
+                  <text
+                    x={roomPt.x}
+                    y={roomPt.y + 4}
+                    textAnchor="middle"
+                    fill={isActive ? CREAM : "#7a7468"}
+                    fontFamily={SERIF}
+                    fontSize="8.5"
+                    letterSpacing="2.4"
+                    style={{ transition: "all 500ms ease" }}
+                  >
+                    {c.room.toUpperCase()}
+                  </text>
+
+                  {/* Degree code on the outer rim — a small filled
+                      plate so the number sits cleanly on the dial
+                      regardless of the rotating tick ring beneath. */}
+                  <rect
+                    x={degreePt.x - 28}
+                    y={degreePt.y - 12}
+                    width="56"
+                    height="24"
+                    fill="#0b0a08"
+                    stroke={BRASS}
+                    strokeOpacity={isActive ? 0.85 : 0.5}
+                    strokeWidth="0.7"
+                    style={{ transition: "all 500ms ease" }}
+                  />
+                  <text
+                    x={degreePt.x}
+                    y={degreePt.y + 5}
+                    textAnchor="middle"
+                    fill={isActive ? BRASS_BRIGHT : CREAM}
+                    fontFamily={SERIF}
+                    fontSize="15"
+                    fontWeight="500"
+                    fontStyle="italic"
+                    style={{ transition: "all 500ms ease", opacity: isActive ? 1 : 0.95 }}
+                  >
+                    {c.degrees}°
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+
+          {/* Whisper line — changes with hover */}
+          <p
+            data-testid="compass-whisper"
+            className="mt-10 sm:mt-12 text-center italic text-[#bcb4a3] font-light text-[15px] sm:text-[16px] min-h-[1.8em] transition-opacity duration-500"
+            style={{ fontFamily: SERIF }}
+          >
+            {activeCardinal
+              ? activeCardinal.whisper
+              : "Hover a heading. The Compass listens."}
+          </p>
+
+          <p
+            className="mt-3 text-center text-[10.5px] tracking-[0.36em] uppercase text-[#7a7468]"
+            data-testid="compass-instructions"
+          >
+            Click a heading to reserve your place
+          </p>
+        </div>
+      </div>
+
+      {/* Waitlist dialog — opens when a cardinal is clicked.
+          Reuses the existing `WaitlistInline` (POST /waitlist/join). */}
+      {openSlug ? (
+        <CompassWaitlistDialog
+          openSlug={openSlug}
+          onClose={() => setOpenSlug(null)}
+        />
+      ) : null}
+    </section>
+  );
+}
+
+function CompassWaitlistDialog({ openSlug, onClose }) {
+  const cardinal = CARDINALS.find((c) => c.slug === openSlug) || null;
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    // Lock body scroll while open
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  if (!cardinal) return null;
+
+  return (
+    <div
+      data-testid="compass-waitlist-dialog"
+      className="fixed inset-0 z-[70] flex items-center justify-center px-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-[rgba(8,7,6,0.82)] backdrop-blur-sm" />
+      <div
+        ref={dialogRef}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[520px] bg-[#0e0c0a] border border-[rgba(196,164,107,0.4)] p-10 sm:p-12"
+        data-testid={`compass-waitlist-${cardinal.key}`}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          data-testid="compass-waitlist-close"
+          className="absolute top-4 right-4 text-[#7a7468] hover:text-[#e8e1d5] text-[11px] tracking-[0.32em] uppercase transition-colors"
+        >
+          Close
+        </button>
+        <p
+          className="text-[10.5px] tracking-[0.42em] uppercase mb-5"
+          style={{ color: BRASS, fontFamily: SERIF }}
+        >
+          {cardinal.degrees}° · {cardinal.label} · {cardinal.curator}
+        </p>
+        <h3
+          className="text-[26px] sm:text-[30px] leading-[1.16] text-[#f0eadd] font-light mb-4"
+          style={{ fontFamily: SERIF }}
+        >
+          {cardinal.room}
+        </h3>
+        <p
+          className="text-[14px] sm:text-[15px] italic text-[#bcb4a3] leading-[1.8] font-light mb-7"
+          style={{ fontFamily: SERIF }}
+        >
+          {cardinal.whisper}
+        </p>
+        <p className="text-[13px] leading-[1.85] text-[#a59f93] font-light mb-2">
+          The doors of this heading open this season. Leave your address
+          and we will send a single quiet note when it is your time.
+        </p>
+        <WaitlistInline slug={cardinal.slug} tierLabel={cardinal.room} />
+        <p
+          className="mt-7 text-[10.5px] tracking-[0.28em] uppercase text-[#7a7468]"
+        >
+          No tracking. No follow-ups. One note, when the door opens.
+        </p>
+      </div>
+    </div>
+  );
+}

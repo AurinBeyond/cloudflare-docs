@@ -1,5 +1,5 @@
 /**
- * BodyRoomChat.jsx — §G3 Somatic Mentor surface (iter 60).
+ * BodyRoomChat.jsx — §G3 Body Architecture surface (iter 60).
  *
  * A small, calm chat panel inside the Body Room. Stateless on the
  * server — every turn carries its own short transcript + optional
@@ -192,7 +192,7 @@ export default function BodyRoomChat({
     const text = input.trim();
     if (!text || sending) return;
     if (!user) {
-      setError("Sign in to talk with the somatic companion.");
+      setError("Sign in to enter the Body Architecture room.");
       return;
     }
     setError(null);
@@ -257,7 +257,7 @@ export default function BodyRoomChat({
           <div className="aurin-card p-6 text-center space-y-3">
             <div className="aurin-eyebrow !mb-1">A second hand at the edge</div>
             <p className="text-[14px] opacity-80">
-              Sign in to sit with a brief somatic companion. The Body Room
+              Sign in to enter the Body Architecture room. The Body Room
               stays open without it; this is just a small voice that says
               one quiet thing back.
             </p>
@@ -303,7 +303,7 @@ export default function BodyRoomChat({
             }
             variant="compact"
             mouthOpenRef={voice.mouthOpenRef}
-            labelOverride="A quiet hand · somatic companion"
+            labelOverride="A quiet hand · Body Architecture"
             testidPrefix="body-room-guide"
           />
 
