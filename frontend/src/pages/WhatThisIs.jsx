@@ -16,6 +16,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import AurinsPromise from "@/components/sanctuary/AurinsPromise";
+import KidsDayPassRow from "@/components/sanctuary/KidsDayPassRow";
 
 const SERIF = '"Cormorant Garamond", "Playfair Display", Georgia, serif';
 const SCRIPT = '"Caveat", "Caveat Brush", cursive';
@@ -210,6 +211,11 @@ export default function WhatThisIs() {
       </Section>
 
       <AurinsPromise tone="dark" showEarlyAccess={true} />
+
+      {/* §SPRINT-C 2026-02-12 — Sole pre-gate public price disclosure
+          per Strategy v2.3.1 §6. The €25 Kids Day Pass is the only
+          numeric anchor visitors see before the qualification gate. */}
+      <KidsDayPassRow />
 
       <footer className="w-full border-t border-[rgba(196,164,107,0.08)] py-12">
         <div className="max-w-[820px] mx-auto px-6 sm:px-10 text-center">

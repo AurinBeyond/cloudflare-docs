@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import { Sprout, BookHeart, Stars, ArrowRight, BookOpen } from "lucide-react";
 import { AURIN_AGE_GROUPS } from "@/lib/aurinPrompts";
+import KidsDayPassRow from "@/components/sanctuary/KidsDayPassRow";
 
 const GROUP_ICON = {
   "little-dreamers": Sprout,
@@ -113,6 +114,9 @@ export default function AurinsRoom() {
           </div>
         </Link>
       </section>
+
+      {/* §SPRINT-C 2026-02-12 — Kids Day Pass €25 row (single public price). */}
+      <KidsDayPassRow />
     </div>
   );
 }

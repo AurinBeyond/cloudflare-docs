@@ -15848,6 +15848,7 @@ from fastapi import Request as _PolarRequest  # noqa: E402
 from services import billing_webhook as _billing_webhook  # noqa: E402
 from services import credit_ledger as _credit_ledger  # noqa: E402
 from services import checkout as _checkout_svc  # noqa: E402
+from services import day_pass_nudge as _day_pass_nudge  # noqa: E402
 
 
 @api_router.post("/billing/polar/webhook")
@@ -15971,6 +15972,30 @@ async def billing_cohort_seats():
     later toggles it on (currently §6 keeps it static)."""
     rows = await db.polar_cohort_seats.find({}, {"_id": 0}).to_list(length=10)
     return {"sovereign_cohorts": rows}
+
+
+@api_router.post("/billing/daypass/run-nudges")
+async def billing_run_daypass_nudges(request: _PolarRequest):
+    """Admin-triggered scan that finds day-pass holders at hour-22 of
+    their 24-h pass and sends a single Resend upgrade-conversion email.
+    Idempotent: each grant nudged exactly once via `nudge_sent_at`.
+
+    Intended to be called by a cron / APScheduler every ~10 min. The
+    endpoint guards on requester being an authenticated admin so that
+    the public cannot DoS Resend through us.
+    """
+    user = await _require_user(request)
+    if not getattr(user, "is_admin", False):
+        raise HTTPException(status_code=403, detail="admin_only")
+    # Inject the existing Resend helper if available; otherwise dry-run.
+    resend_fn = None
+    try:
+        from services.email_resend import send_plain_email as _resend_send  # type: ignore
+        resend_fn = _resend_send  # async (to, subj, body) → None
+    except Exception:  # noqa: BLE001
+        resend_fn = None
+    out = await _day_pass_nudge.run_once(db, resend_send_fn=resend_fn)
+    return out
 
 
 @app.on_event("startup")
