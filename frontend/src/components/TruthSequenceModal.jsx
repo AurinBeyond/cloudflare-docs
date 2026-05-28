@@ -251,9 +251,11 @@ export default function TruthSequenceModal({ open, onClose, onComplete }) {
           {/* Actions — fade in only after the minimum hold so the
               wanderer cannot tap-spam through the sequence. */}
           <div
-            className={`mt-12 flex flex-col sm:flex-row gap-5 sm:gap-7 sm:items-center transition-opacity duration-[1400ms] ease-out ${
-              revealCta ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
+            className="mt-12 flex flex-col sm:flex-row gap-5 sm:gap-7 sm:items-center transition-opacity duration-[1400ms] ease-out"
+            style={{
+              opacity: revealCta ? 1 : 0,
+              pointerEvents: revealCta ? "auto" : "none",
+            }}
             aria-hidden={!revealCta}
           >
             {isFinal ? (

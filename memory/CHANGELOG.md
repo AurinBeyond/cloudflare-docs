@@ -3,6 +3,69 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02-13 — Truth Sequence Modal + Chrono-Lock Enforcement (P1 sprint while Polar PSP review pending 24h)
+
+### Frontend · "Walk truth first" interactive modal
+- New component: `frontend/src/components/TruthSequenceModal.jsx`
+- Mounted into `SanctuaryPreview.jsx` (production `/` and preview routes)
+- Both hero CTAs (`hero-cta-step-inside` + `hero-cta-walk`) now open the
+  modal instead of routing directly to `/portal` or scrolling to `#worlds`
+- 5-step anti-dopamine sequence:
+    I.  "Can you sit for a moment?"
+    II. "What is loudest in you right now?"
+    III. "Are you here to perform, or to be?"
+    IV. "Slow is not weakness."
+    V.  "You may walk through." → /portal
+- Each step holds for 4.2s before the primary CTA fades in (no skip)
+- `localStorage` flag `matrix_aurin.truth_sequence.walked_at` lets us
+  recognise returning founders for 30 days (re-prompt thereafter)
+- Brass-keyed progress vein at the top edge advances per step
+
+### Backend · Body Architecture 7-day weekly chrono-lock
+- New service: `backend/services/chrono_lock.py` (pure helpers + Mongo)
+- New collection: `db.body_temple_enrollments` (idempotent upsert)
+- `GET /api/body-temple/overview` now returns `chrono_lock_days`,
+  `week_unlocks` (per-week unlock status for the user), and
+  `enrollment_started_at`
+- `GET /api/body-temple/day/{day}` now returns `chrono_locked`,
+  `chrono_unlocks_at`, `chrono_seconds_remaining`. When locked, the
+  `body`, `practice` and `reflection` fields are scrubbed so the
+  wanderer cannot bypass via the API.
+- `POST /api/body-temple/complete` lazy-enrols on the first successful
+  call, then returns HTTP 423 with `detail.code = "chrono_locked"`
+  for any day in weeks 2–4 attempted before the 7-day window opens
+
+### Backend · Clarity Release 48-hour Integration Lock
+- New collection: `db.clarity_integration_locks` (one row per user)
+- `GET /api/clarity/integration-lock` — current lock state (guest-safe)
+- `POST /api/clarity/integration-lock/consume` — auth-required, records
+  the moment a foundational module was finished
+- `POST /api/grace/mode` — switching to a *different* mode during the
+  48h window returns HTTP 423 with the unlock_at; re-selecting the
+  same mode is permitted (integration continues)
+
+### Tests
+- New: `backend/tests/test_chrono_lock.py` — 13 unit + Mongo tests
+- New: `backend/tests/test_iter84_live_chrono.py` (added by testing
+  agent) — 7 live HTTP regression tests against
+  `REACT_APP_BACKEND_URL`
+- Run all green: `pytest tests/test_chrono_lock.py tests/test_stage3_4_sprint_b.py -v`
+  → 24/24 passing
+- Iteration report: `/app/test_reports/iteration_84.json` — backend
+  100% (31/31), frontend 100% (full Playwright E2E walk)
+
+### Files touched
+- `frontend/src/components/TruthSequenceModal.jsx` (created)
+- `frontend/src/pages/SanctuaryPreview.jsx` (hero CTAs + modal mount)
+- `backend/services/chrono_lock.py` (created)
+- `backend/server.py` (body-temple endpoints + grace/mode + clarity
+  integration-lock endpoints + Mongo indexes)
+- `backend/tests/test_chrono_lock.py` (created)
+- `backend/tests/test_iter84_live_chrono.py` (created by tester)
+
+---
+
+
 ## 2026-02-11 — Hero-Compass + "Somatic" Sweep
 
 ### P0 · Hero-Compass SVG (Variant A) on Sanctuary homepage
