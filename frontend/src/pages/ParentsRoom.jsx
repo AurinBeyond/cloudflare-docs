@@ -205,6 +205,39 @@ export default function ParentsRoom() {
         </div>
       </section>
 
+      {/* §SUBSYSTEM 2026-02-11 — Inline link to the Subsystem wing
+          (adolescent neuro-architecture). Visible only as a small
+          high-status sub-entry; the compass remains 4-cardinal. */}
+      <section className="aurin-section-sm" data-testid="parents-room-subsystem-link">
+        <div className="aurin-container max-w-[760px]">
+          <Link
+            to="/parents-room/subsystem"
+            data-testid="parents-room-subsystem-cta"
+            className="block aurin-card p-6 md:p-7 hover:border-[hsl(var(--aurin-sage))/0.55] transition-colors"
+          >
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-[10.5px] tracking-[0.36em] uppercase text-[hsl(var(--aurin-sage))] mb-2">
+                  [ Sub-cluster ]
+                </p>
+                <h3 className="aurin-serif text-[22px] sm:text-[24px] font-light text-[hsl(var(--aurin-text))]">
+                  The Subsystem
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[1.8] text-[hsl(var(--aurin-text-muted))] max-w-[520px]">
+                  For the parent of an adolescent between roughly age eleven
+                  and seventeen — the most aggressive neurological renovation
+                  a human ever undertakes. Seven diagnostics in our register.
+                  No therapy. No pedagogy. Adult-only.
+                </p>
+              </div>
+              <span className="text-[12px] tracking-[0.32em] uppercase text-[hsl(var(--aurin-sage))] whitespace-nowrap">
+                Enter →
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* §Stage 3.2 — Featured ritual: The Calm Parent's Code.
           A seven-day soft anchor that introduces the room without
           asking for anything. No CTA pressure, no signup gate. */}

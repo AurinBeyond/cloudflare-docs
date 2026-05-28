@@ -378,3 +378,92 @@ Verifications:
 - Puberty Room — architectural decision pending (see ask_human next)
 - Wanderer Sovereign Counter
 - Parents' Room live in-room "Broken Clockwork" ticker
+
+## 2026-02-11 (CLOSING SPRINT) — Subsystem Wing + Sovereign Counter + Smoke Test
+
+### P0 · The Subsystem Wing (Variant A · adult-only)
+**Route:** `/parents-room/subsystem`
+**File:** `frontend/src/pages/SubsystemWing.jsx` (NEW)
+**Wired:** `App.js` route + `WandererGate scope="private"` (same gate
+as Parents' Room — no separate auth surface for minors)
+
+The word **"puberty"** is now permanently retired from the codebase.
+Founder-locked nomenclature: **The Subsystem**. The new wing carries:
+
+- Header: "E · 90° · Sara · Sub-cluster" → "The Subsystem"
+- Founder note explaining the term retirement (with literal
+  strikethrough on the word "puberty" in the UI)
+- 7 architectural diagnostics in our register:
+    01. The Subsystem (the renovation itself)
+    02. Privilege Isolation pattern
+    03. The White Fence Syndrome
+    04. Cognitive Processor Overload
+    05. The Voluntary System Crash
+    06. The Anchor OS — what the Subsystem actually needs
+    07. The Sovereign Code applied to the Subsystem
+- "Teen Frequency · Season 2 · forthcoming" footer card
+  (deliberate hold per founder directive — no minor data collection
+  in this deployment cycle)
+- Return link to `/parents-room`
+
+Cross-link injected into Parents' Room (`ParentsRoom.jsx`) below the
+28-day quiet path: a high-status sub-cluster card →
+`/parents-room/subsystem`. Compass geometry unchanged (4-cardinal
+intact).
+
+### P0 · The Wanderer Sovereign Counter
+**Backend:** `server.py` new endpoint `GET /api/sanctuary/sovereign-counter`
+- Anonymous live telemetry, no individual data
+- Returns `sovereigns_under_cadence_lock`, `transmissions_this_hour`,
+  `waitlist_total`, `rooms_under_load`
+- Computes transmissions by scanning enrollments × letter days
+  whose unlock_at falls inside the last hour
+
+**Frontend:** `frontend/src/components/sanctuary/SovereignCounter.jsx` (NEW)
+- Three-cell strip beneath the Sovereign Code manifest on `/`
+- Quietly refreshes every 60 seconds, silently disappears if the
+  endpoint errors (manifest above carries the philosophical weight)
+- Verified live: `0 · 0 · 2` (clean account state)
+
+### P0 · polar_smoke_test.sh (Founder runbook companion)
+**File:** `/app/scripts/polar_smoke_test.sh` (NEW, chmod +x)
+
+Three-check verification script:
+1. `/api/admin/payment/sku-map` reports `polar_configured: true`
+2. `/api/webhooks/polar` rejects invalid signature with HTTP 400
+   (or HTTP 503 if Polar env keys are still empty — script flags
+   this state correctly)
+3. `polar_webhook_log` MongoDB collection is queryable
+
+Usage:
+```
+bash /app/scripts/polar_smoke_test.sh        # human-readable
+bash /app/scripts/polar_smoke_test.sh --json # machine-readable
+```
+Exit codes: 0 = all passed, 1 = at least one failed, 2 = env problem.
+
+Verified in current state: 1/3 pass (collection queryable), 2/3 fail
+because Polar env keys still empty. This is the **expected** state
+before the founder fills in keys per
+`memory/POLAR_SWITCHOVER_GUIDE.md`. The script will report 3/3 green
+once she completes Step 2 of the runbook.
+
+### P1 · Teen Frequency · Season 2 backlog (NO BUILD)
+Documented in:
+- `SubsystemWing.jsx` (Season 2 card visible on the page)
+- This CHANGELOG
+
+When founder approves, the channel will be implemented with:
+- Parental consent flow + age-gating
+- Aurin as adolescent-facing curator (mascot returns *only* in
+  teen context, never in adult rooms)
+- Separate route `/parents-room/subsystem/teen-frequency`
+- 5–7 short "system-call" transmissions
+
+### Verifications
+- Lint: ✓ SubsystemWing.jsx, SovereignCounter.jsx, server.py
+- `/api/sanctuary/sovereign-counter` → 200 OK, returns valid JSON ✓
+- `/parents-room/subsystem` renders 7 diagnostics + header ✓
+- Sovereign Counter strip live on landing showing `0 · 0 · 2` ✓
+- Compass cardinal geometry untouched (4-cardinal N/E/S/W) ✓
+- No new dependencies added ✓

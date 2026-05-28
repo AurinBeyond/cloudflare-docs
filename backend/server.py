@@ -11033,6 +11033,61 @@ async def course_enroll(slug: str, request: Request):
     return {"status": "enrolled", "started_at": doc["started_at"]}
 
 
+@api_router.get("/sanctuary/sovereign-counter")
+async def sanctuary_sovereign_counter():
+    """Anonymous, low-cost live metric strip for the landing page.
+
+    §SOVEREIGN-COUNTER 2026-02-11 — Founder directive. Eliminates the
+    isolation of the waitlist by showing wanderers a live, anonymous
+    count of fellow operators currently engaged with the platform.
+    No emails. No names. No individual data. Pure architectural
+    telemetry.
+
+    Response:
+      {
+        sovereigns_under_cadence_lock: int,
+        transmissions_this_hour: int,
+        waitlist_total: int,
+        rooms_under_load: int
+      }
+    """
+    now = datetime.now(timezone.utc)
+    one_hour_ago = now - timedelta(hours=1)
+    sovereigns = await db.course_enrollments.count_documents({})
+    waitlist_total = await db.waitlist_entries.count_documents({})
+    # Transmissions in the last hour = enrollments where any letter
+    # day's unlock_at falls inside [one_hour_ago, now].
+    transmissions = 0
+    slugs_in_use = set()
+    cursor = db.course_enrollments.find(
+        {}, {"_id": 0, "started_at": 1, "course_slug": 1}
+    )
+    async for e in cursor:
+        slug = e.get("course_slug")
+        if slug:
+            slugs_in_use.add(slug)
+        try:
+            started = datetime.fromisoformat(e["started_at"])
+        except Exception:
+            continue
+        course = _course_by_slug(slug or "")
+        if not course:
+            continue
+        for letter in course.get("letters", []):
+            if letter["day"] == 1:
+                continue
+            unlock_at = started + timedelta(days=letter["day"] - 1)
+            if one_hour_ago <= unlock_at <= now:
+                transmissions += 1
+    return {
+        "sovereigns_under_cadence_lock": sovereigns,
+        "transmissions_this_hour": transmissions,
+        "waitlist_total": waitlist_total,
+        "rooms_under_load": len(slugs_in_use),
+    }
+
+
+
 @api_router.get("/courses/me/next-unlock")
 async def courses_next_unlock(request: Request):
     """Authenticated — return the soonest upcoming chrono-lock unlock

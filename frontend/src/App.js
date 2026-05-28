@@ -52,6 +52,7 @@ import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
 import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
+import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
 import AurinStoryWorld from "@/pages/AurinStoryWorld";
@@ -176,6 +177,16 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <ParentsRoom />
+            </WandererGate>
+          }
+        />
+        {/* §SUBSYSTEM 2026-02-11 — adult-only interior wing of
+            Parents' Room. Same WandererGate. No minor data. */}
+        <Route
+          path="/parents-room/subsystem"
+          element={
+            <WandererGate scope="private">
+              <SubsystemWing />
             </WandererGate>
           }
         />

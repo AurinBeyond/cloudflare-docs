@@ -26,6 +26,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { WaitlistInline } from "@/components/MembershipTiers";
+import SovereignCounter from "@/components/sanctuary/SovereignCounter";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
 const BRASS_BRIGHT = "#d4b67d";
@@ -377,6 +378,11 @@ export default function HeroCompass() {
               platform — placed before the Compass so the visitor
               passes through the laws before reaching the doors. */}
           <SovereignCode active={active} />
+
+          {/* §SOVEREIGN-COUNTER 2026-02-11 — Anonymous live telemetry
+              strip beneath the manifest. Removes the isolation of the
+              waitlist without exposing any individual identity. */}
+          <SovereignCounter />
         </div>
 
         <div
