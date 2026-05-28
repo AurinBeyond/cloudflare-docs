@@ -15,6 +15,7 @@ import TypingIndicator from "@/components/TypingIndicator";
 import RoomConvaiChat from "@/components/RoomConvaiChat";
 import VoiceSessionCountdown from "@/components/VoiceSessionCountdown";
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
+import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 import VoiceTopupSlider from "@/components/VoiceTopupSlider";
 import UniversalMinuteBank from "@/components/UniversalMinuteBank";
 import TodaysQuestCard from "@/components/TodaysQuestCard";
@@ -442,6 +443,13 @@ export default function ClarityRelease() {
               loading="eager"
             />
           </figure>
+        </div>
+      </section>
+
+      {/* §CURATOR-INTRO 2026-05-28 — Grace's pre-recorded 15s hello. */}
+      <section className="aurin-section-sm" data-testid="clarity-grace-intro">
+        <div className="aurin-container max-w-[760px]">
+          <CuratorIntroCard slug="grace" eyebrow="✦ Meet your curator" {...CURATOR_PALETTES.grace} />
         </div>
       </section>
 

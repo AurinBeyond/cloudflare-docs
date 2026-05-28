@@ -7,6 +7,7 @@ import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line
 // presence_seconds so Alistair's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import AlistairModeSelector from "@/components/AlistairModeSelector";
+import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 import { fetchCourses } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthProvider";
 import {
@@ -76,6 +77,13 @@ export default function CourseRoom() {
         description="A small shelf of letter-courses. Seven slow letters per series, one per day, with a single audio companion you can play on quiet repeat. No videos. No webinars. No urgency. Just a reading practice that returns each evening."
         testid="course-room-header"
       />
+
+      {/* §CURATOR-INTRO 2026-05-28 — Alistair's pre-recorded 15s hello. */}
+      <section className="aurin-section-sm" data-testid="course-room-alistair-intro">
+        <div className="aurin-container max-w-[760px]">
+          <CuratorIntroCard slug="alistair" eyebrow="✦ Meet your curator" {...CURATOR_PALETTES.alistair} />
+        </div>
+      </section>
 
       {/* §Phase B (2026-02-15) — Alistair ConvAI is mounted at the
           top of Course Room. Alistair is the dedicated learning-

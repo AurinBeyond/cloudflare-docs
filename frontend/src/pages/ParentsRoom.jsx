@@ -40,6 +40,7 @@ import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 // §AUDIT-SCALE 2026-05-20 — Parents' Room joins Clarity in tracking
 // presence_seconds so Sara's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
+import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -145,6 +146,13 @@ export default function ParentsRoom() {
         title="Three wisdom traditions, one calm room for parents."
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
+
+      {/* §CURATOR-INTRO 2026-05-28 — Sara's pre-recorded 15s hello. */}
+      <section className="aurin-section-sm" data-testid="parents-room-sara-intro">
+        <div className="aurin-container max-w-[760px]">
+          <CuratorIntroCard slug="sara" eyebrow="✦ Meet your curator" {...CURATOR_PALETTES.sara} />
+        </div>
+      </section>
 
       {/* §Phase B (2026-02-15) — Sara ConvAI is mounted at the top of
           Parents' Room. Sara is the dedicated parental-support voice

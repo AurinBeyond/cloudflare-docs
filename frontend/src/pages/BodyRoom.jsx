@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 // §GHOST-FIX 2026-05-23 — Old <BodyRoomChat> import removed.
 // Kaelan now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
 // The file BodyRoomChat.jsx is preserved in the repo for rollback.
@@ -22,7 +23,7 @@ import {
   fetchBodyPatterns,
   fetchBodyQuestionnaire,
 } from "@/lib/api";
-import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass, Play, Pause } from "lucide-react";
+import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass } from "lucide-react";
 import { track } from "@/lib/telemetry";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 
@@ -193,7 +194,7 @@ export default function BodyRoom() {
           room="body" /> which mints a signed ElevenLabs URL. */}
       <section className="aurin-section-sm" data-testid="body-room-kaelan-intro">
         <div className="aurin-container max-w-[760px]">
-          <KaelanIntroCard />
+          <CuratorIntroCard slug="kaelan" eyebrow="✦ Meet your curator" {...CURATOR_PALETTES.kaelan} />
         </div>
       </section>
 
