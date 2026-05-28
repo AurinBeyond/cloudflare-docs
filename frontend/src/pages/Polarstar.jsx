@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, Star, ArrowRight, Sunrise } from "lucide-react";
 import PolarstarAtmosphere from "@/components/PolarstarAtmosphere";
+import PolarstarCornerGuides from "@/components/PolarstarCornerGuides";
 import { POLARSTAR_AGE_GROUPS } from "@/data/polarstarAgeGroups";
 import "@/styles/polarstar.css";
 
@@ -208,6 +209,8 @@ export default function Polarstar() {
               Small moments. <span className="ps-italic">Big memories.</span> Forever.
             </p>
           </footer>
+
+          <PolarstarCornerGuides mode={mode} />
         </>
       )}
     </PolarstarAtmosphere>
