@@ -17,16 +17,18 @@
 | **`/sanctuary-preview`** | 200 OK | curl |
 | **`/parent-portal/digest`** (new) | 200 OK · renders Weekly Digest header | curl + grep |
 | **`/parent-portal/wellness`** (legacy) | 200 OK · client-side `Navigate replace` redirects to `/digest` | curl + App.js verified |
+| **`/luxury`** (legacy v1 pricing) | 200 OK · client-side `Navigate replace` redirects to `/` (v1 prices retired) | App.js |
 | **`/kids-universe`** | 200 OK | curl |
 | **Backend `/api/`** | `{"service":"matrix-aurin","version":"0.2.0","status":"ok"}` | curl |
 | **`/api/sanctuary/sovereign-counter`** | 200 OK | curl |
 | **`/api/courses/me/next-unlock`** | 401 (expected — auth-required) | curl |
-| **Supervisor processes** | backend / frontend / mongodb all RUNNING (≥2h uptime) | `supervisorctl` |
+| **Supervisor processes** | backend / frontend / mongodb all RUNNING | `supervisorctl` |
 | **GA4 telemetry** | `G-7E9R7QLP0C` integrated in `analytics.js` | `.env` + smoke |
 | **Snapshot backup** | `/app/snapshots/2026-02-11_matrix_aurin_pre_github_push.tar.gz` (1.2 MB) | filesystem |
-| **Environment files** | `REACT_APP_BACKEND_URL` + `MONGO_URL` + `DB_NAME` populated; no test placeholders | redacted check |
+| **Environment files** | `REACT_APP_BACKEND_URL` + `MONGO_URL` + `DB_NAME` populated | redacted check |
 | **URL rename SEO fix** | `/parent-portal/wellness` → `/parent-portal/digest` redirect live; backend email templates + marketing_engine.py updated | code audit |
 | **PSP positioning protection** | No "wellness / therapy / mental-health" classifier in any user-facing URL, copy, or page metadata | grep audit |
+| **🆕 Hero image performance** | PNG 2.3 MB → WebP 184 KB (12.5× faster). `<picture>` element with JPEG 284 KB fallback. `<link rel="preload" fetchpriority="high">` in `<head>`. `fetchpriority="high" loading="eager" decoding="async"` on `<img>` | filesystem + smoke screenshot confirms mask renders crisply |
 
 ---
 
@@ -52,22 +54,13 @@ sprint. **None block today's deploy.**
 
 ## ⚠️ ADVISORY NOTES (not blocking, but worth knowing)
 
-### A. Legacy `/luxury` page (`LuxurySanctuaryLanding.jsx`)
+### A. Legacy `/luxury` page — RESOLVED 2026-02-12
 
-This route is still live and displays the v1 pricing table (€45 /
-€120 / €380). The v1 table is **structurally inconsistent** with the
-v2.3.1 architecture (which has Quiet Entry €89 / Inner Compass €229 /
-Sanctuary Compass €329 instead). Today's audit kept the page online
-because:
-- It is not linked from the main navigation.
-- Its surface "unlimited / journey" language was already neutralised
-  in this session.
-- Removing it now risks breaking inbound links during deploy.
-
-**Recommendation post-deploy:** in the next sprint, replace the v1
-pricing block with a single-line "By application — pricing disclosed
-at the gate" or redirect the entire route to `/` once v2.3.1 SKUs
-are live in Polar.
+The `/luxury` route now redirects to `/` via client-side `Navigate
+replace`. The `LuxurySanctuaryLanding.jsx` component remains in the
+codebase (not imported by any active route except a soft historical
+reference) and can be removed in a future cleanup sprint. No v1
+prices are visible anywhere on the live site.
 
 ### B. Supervisor warnings (cosmetic only)
 

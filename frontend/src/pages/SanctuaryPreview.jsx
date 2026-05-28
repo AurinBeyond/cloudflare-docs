@@ -32,7 +32,8 @@ import { Link } from "react-router-dom";
 import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 import HeroCompass from "@/components/sanctuary/HeroCompass";
 
-const HERO = "/sanctuary/hero-mask.png";
+const HERO = "/sanctuary/hero-mask.webp";
+const HERO_FALLBACK = "/sanctuary/hero-mask.jpg";
 const ATMOSPHERE = "/sanctuary/atmosphere.png";
 const GROUNDED = "/sanctuary/grounded-presence.png";
 const WINGS = "/sanctuary/sanctuary-wings.png";
@@ -236,18 +237,24 @@ function HeroSection() {
               filter: "blur(3px)",
             }}
           />
-          <img
-            src={HERO}
-            alt=""
-            aria-hidden="true"
-            data-testid="hero-mask-image"
-            className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-              visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
-            }`}
-            style={{
-              filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
-            }}
-          />
+          <picture className="block absolute inset-0 w-full h-full">
+            <source srcSet={HERO} type="image/webp" />
+            <img
+              src={HERO_FALLBACK}
+              alt=""
+              aria-hidden="true"
+              fetchpriority="high"
+              loading="eager"
+              decoding="async"
+              data-testid="hero-mask-image"
+              className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
+                visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
+              }`}
+              style={{
+                filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
+              }}
+            />
+          </picture>
           {/* Face contour spotlight — anchored on the RIGHT-CENTER of
               the figure (the unmasked face: eye + cheek + smile).
               Founder cue 2026-05-19 late: "ava see näo osa mis on

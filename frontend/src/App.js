@@ -257,7 +257,13 @@ function AppRouter() {
           standard Layout wrapper. It is a full-bleed sanctuary
           landing experience with its own navigation and footer.
           Founder Q1=b: do NOT replace the current `/` route. */}
-      <Route path="/luxury" element={<LuxurySanctuaryLanding />} />
+      {/* §2026-02-12 — /luxury legacy route retired. The v1 pricing
+          table (€45 / €120 / €380) is inconsistent with the locked
+          MEMBERSHIP_ARCHITECTURE_v2.3.1 hierarchy. Redirect preserves
+          any inbound links during deploy; the LuxurySanctuaryLanding
+          component is kept in the codebase for reference and may be
+          archived in a future cleanup sprint. */}
+      <Route path="/luxury" element={<Navigate to="/" replace />} />
       {/* §2026-05-18 — /sanctuary-preview is a founder-review-only
           route. Full-bleed polished landing, Atoms audit applied,
           locked pricing structure visible as atmospheric "Thresholds".
