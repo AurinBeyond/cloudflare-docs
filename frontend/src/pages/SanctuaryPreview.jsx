@@ -31,6 +31,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 import HeroCompass from "@/components/sanctuary/HeroCompass";
+import TruthSequenceModal from "@/components/TruthSequenceModal";
 
 const HERO = "/sanctuary/hero-mask.webp";
 const HERO_FALLBACK = "/sanctuary/hero-mask.jpg";
@@ -193,7 +194,7 @@ function SanctuaryNav({ production = false }) {
 // the mask now lives as a calm 1/3 atmospheric accent on the right
 // while the wordmark + opening line breathe on the left. Elegance
 // through restraint, not visual force.
-function HeroSection() {
+function HeroSection({ onWalkTruthFirst }) {
   const { ref, visible } = useReveal();
   const imgRef = useRef(null);
   useHeroParallax(imgRef);
@@ -325,20 +326,22 @@ function HeroSection() {
             You do not have to perform here.
           </p>
           <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
-            <Link
-              to="/portal"
+            <button
+              type="button"
+              onClick={onWalkTruthFirst}
               data-testid="hero-cta-step-inside"
               className="inline-flex items-center justify-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
               Step Inside
-            </Link>
-            <a
-              href="#worlds"
+            </button>
+            <button
+              type="button"
+              onClick={onWalkTruthFirst}
               data-testid="hero-cta-walk"
               className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline self-start sm:self-auto"
             >
-              Walk through first
-            </a>
+              Walk through truth first
+            </button>
           </div>
           <p
             data-testid="hero-season"
@@ -1266,6 +1269,11 @@ function SanctuaryFooter() {
 
 export default function SanctuaryPreview({ production = false } = {}) {
   useHidePlatformBadge();
+  const [truthOpen, setTruthOpen] = useState(false);
+  const openTruth = () => setTruthOpen(true);
+  const closeTruth = () => setTruthOpen(false);
+  // After completing the sequence, the modal CTA itself routes to /portal.
+  const completeTruth = () => setTruthOpen(false);
   return (
     <div
       data-testid={production ? "sanctuary-home-root" : "sanctuary-preview-root"}
@@ -1283,7 +1291,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
       <div className={production ? "" : "pt-[28px]"}>
         <SanctuaryNav production={production} />
         <main>
-          <HeroSection />
+          <HeroSection onWalkTruthFirst={openTruth} />
           <HeroCompass />
           <QuietNoteSection />
           <TwoWorldsSection />
@@ -1298,6 +1306,11 @@ export default function SanctuaryPreview({ production = false } = {}) {
         </main>
         <SanctuaryFooter />
       </div>
+      <TruthSequenceModal
+        open={truthOpen}
+        onClose={closeTruth}
+        onComplete={completeTruth}
+      />
     </div>
   );
 }

@@ -3564,6 +3564,10 @@ from body_temple_curriculum import (  # noqa: E402
     get_week_days as _bt_get_week_days,
     course_overview as _bt_overview,
 )
+# §CHRONO-LOCK 2026-02-13 — Body Architecture 7-day weekly unlocks
+# and Clarity Release 48-hour Integration Lock are enforced from
+# this dedicated service so the math is unit-testable.
+from services import chrono_lock as _chrono_lock  # noqa: E402
 
 
 def _bt_public_day(d: Dict[str, Any], unlocked: bool) -> Dict[str, Any]:
@@ -3591,12 +3595,23 @@ async def body_temple_overview(request: Request):
     user = await _resolve_current_user(request)
     unlocked = False
     completed_days: list[int] = []
+    enrollment_started_at = None
+    week_unlocks: Dict[str, Any] = {}
     if user:
         unlocked = await _user_has_premium(user.user_id)
         cursor = db.body_temple_progress.find(
             {"user_id": user.user_id}, {"_id": 0, "day": 1},
         )
         completed_days = [doc["day"] async for doc in cursor]
+        # §CHRONO-LOCK — surface unlock_at per week for signed-in users.
+        enr = await _chrono_lock.get_body_enrollment(db, user.user_id)
+        if enr:
+            enrollment_started_at = enr.get("started_at")
+            started_dt = enr["started_at_dt"]
+            for w in BODY_TEMPLE_WEEKS.values():
+                week_unlocks[w["key"]] = _chrono_lock.body_week_status(
+                    started_dt, w["number"]
+                )
 
     overview = _bt_overview()
     return {
@@ -3604,6 +3619,9 @@ async def body_temple_overview(request: Request):
         "unlocked": unlocked,
         "completed_days": sorted(completed_days),
         "completed_count": len(completed_days),
+        "enrollment_started_at": enrollment_started_at,
+        "week_unlocks": week_unlocks,
+        "chrono_lock_days": _chrono_lock.BODY_WEEK_LOCK_DAYS,
         "days_preview": [
             {
                 "day": d["day"],
@@ -3625,16 +3643,40 @@ async def body_temple_day(day: int, request: Request):
     user = await _resolve_current_user(request)
     unlocked = False
     completed = False
+    chrono_status = _chrono_lock.body_week_status(
+        _chrono_lock._now(), d["week_number"]
+    )
     if user:
         unlocked = await _user_has_premium(user.user_id)
         completed = bool(await db.body_temple_progress.find_one(
             {"user_id": user.user_id, "day": day}, {"_id": 1},
         ))
+        # Compute against the user's enrollment if any. Week 1 days are
+        # always open as a tone-preview — only week >= 2 needs the lock.
+        if unlocked:
+            chrono_status = await _chrono_lock.body_week_status_for_user(
+                db, user.user_id, d["week_number"]
+            )
+    chrono_locked = bool(chrono_status.get("chrono_locked") and d["week_number"] > 1)
+    public = _bt_public_day(d, unlocked)
+    # Strip body/practice/reflection when chrono-locked, regardless of
+    # premium state — the wanderer must walk the previous week first.
+    if chrono_locked:
+        public["body"] = (
+            "The next key opens on its own time. Walk this week's "
+            "rhythm first; the gate cannot be hurried."
+        )
+        public["practice"] = []
+        public["reflection"] = None
+        public["locked"] = True
     return {
-        "day": _bt_public_day(d, unlocked),
+        "day": public,
         "unlocked": unlocked,
         "completed": completed,
         "week": BODY_TEMPLE_WEEKS.get(d["week_key"]),
+        "chrono_locked": chrono_locked,
+        "chrono_unlocks_at": chrono_status.get("unlock_at"),
+        "chrono_seconds_remaining": chrono_status.get("seconds_remaining", 0),
     }
 
 
@@ -3651,6 +3693,28 @@ async def body_temple_complete(inp: BodyTempleCompleteInput, request: Request):
     # Locked days cannot be completed; require unlock.
     if d.get("is_premium") and not await _user_has_premium(user.user_id):
         raise HTTPException(status_code=403, detail="Day is part of the premium Body Temple 28 unlock.")
+    # §CHRONO-LOCK — lazy-enrol the user on their first completion
+    # (so week 2/3/4 unlocks measure from this moment, not the day
+    # they first opened the room).
+    enr = await _chrono_lock.ensure_body_enrollment(db, user.user_id)
+    status = _chrono_lock.body_week_status(
+        enr["started_at_dt"], d["week_number"]
+    )
+    if status["chrono_locked"] and d["week_number"] > 1:
+        raise HTTPException(
+            status_code=423,
+            detail={
+                "code": "chrono_locked",
+                "message": (
+                    "This key opens on its own time. The previous week's "
+                    "rhythm is still settling. Please return after the "
+                    "integration window."
+                ),
+                "unlock_at": status["unlock_at"],
+                "seconds_remaining": status["seconds_remaining"],
+                "week_number": d["week_number"],
+            },
+        )
     now = datetime.now(timezone.utc).isoformat()
     await db.body_temple_progress.update_one(
         {"user_id": user.user_id, "day": inp.day},
@@ -3887,10 +3951,34 @@ class GraceModeSelectInput(BaseModel):
 @api_router.post("/grace/mode")
 async def grace_mode_set(inp: GraceModeSelectInput, request: Request):
     """Stores the selected mode in the user's profile so the next
-    Grace session opens with the mode's framing. Idempotent."""
+    Grace session opens with the mode's framing. Idempotent.
+
+    §CHRONO-LOCK — switching to a *different* mode within the 48-hour
+    Integration Lock window is blocked with HTTP 423. Re-selecting the
+    same mode the user just consumed is always permitted."""
     if inp.mode not in GRACE_MODES and inp.mode != "":
         raise HTTPException(status_code=400, detail="Unknown Grace mode.")
     user = await _require_user(request)
+    # Guard the *switch* — empty clears do not trip the lock.
+    if inp.mode:
+        try:
+            await _chrono_lock.assert_clarity_mode_switch_allowed(
+                db, user.user_id, inp.mode
+            )
+        except _chrono_lock.ChronoLocked as locked:
+            raise HTTPException(
+                status_code=423,
+                detail={
+                    "code": "chrono_locked",
+                    "message": (
+                        "A 48-hour Integration Lock is open from your "
+                        "previous session. The next gate becomes "
+                        "accessible only after the nervous system has "
+                        "had its integration window."
+                    ),
+                    **locked.status,
+                },
+            )
     await db.users.update_one(
         {"user_id": user.user_id},
         {"$set": {"grace_mode": inp.mode,
@@ -3908,6 +3996,59 @@ async def grace_mode_get(request: Request):
     u = await db.users.find_one({"user_id": user.user_id}, {"_id": 0, "grace_mode": 1})
     mode = (u or {}).get("grace_mode") or ""
     return {"mode": mode, "frame": GRACE_MODES.get(mode) if mode else None}
+
+
+# §CHRONO-LOCK 2026-02-13 — Clarity Release 48-hour Integration Lock.
+# Surfaces the current lock state and lets the frontend record when a
+# module has been consumed so the next gate opens on its own time.
+
+
+class ClarityModuleConsumeInput(BaseModel):
+    mode: str
+
+
+@api_router.get("/clarity/integration-lock")
+async def clarity_integration_lock_get(request: Request):
+    """Returns the user's current 48h Integration Lock state. When the
+    user is signed-out we always return the unlocked shape so the UI
+    can render the path without authentication."""
+    user = await _resolve_current_user(request)
+    if not user:
+        return {
+            "last_mode": None,
+            "last_consumed_at": None,
+            "chrono_locked": False,
+            "unlock_at": None,
+            "seconds_remaining": 0,
+            "lock_hours": _chrono_lock.CLARITY_INTEGRATION_LOCK_HOURS,
+        }
+    state = await _chrono_lock.get_clarity_integration_state(db, user.user_id)
+    return {
+        **state,
+        "lock_hours": _chrono_lock.CLARITY_INTEGRATION_LOCK_HOURS,
+    }
+
+
+@api_router.post("/clarity/integration-lock/consume")
+async def clarity_integration_lock_consume(
+    inp: ClarityModuleConsumeInput, request: Request
+):
+    """Record the moment the user finished a foundational module (a
+    Grace mode session). Subsequent attempts to switch to a different
+    mode within the next 48 hours will return HTTP 423 — the same
+    mode can be re-entered freely so integration continues."""
+    if inp.mode not in GRACE_MODES:
+        raise HTTPException(status_code=400, detail="Unknown Grace mode.")
+    user = await _require_user(request)
+    state = await _chrono_lock.record_clarity_module_consumption(
+        db, user.user_id, inp.mode
+    )
+    return {
+        "ok": True,
+        "mode": inp.mode,
+        **state,
+        "lock_hours": _chrono_lock.CLARITY_INTEGRATION_LOCK_HOURS,
+    }
 
 
 
@@ -16159,6 +16300,17 @@ async def on_startup():
     # Body Room: insights per user, newest first.
     await db.body_insights.create_index([("user_id", 1), ("created_at", -1)])
     await db.body_insights.create_index([("user_id", 1), ("acknowledged_at", 1)])
+    # §CHRONO-LOCK 2026-02-13 — Body Architecture enrollment + Clarity
+    # 48h Integration Lock collections. Both keyed by user_id.
+    try:
+        await db.body_temple_enrollments.create_index(
+            [("user_id", 1)], unique=True, name="uniq_body_enrollment"
+        )
+        await db.clarity_integration_locks.create_index(
+            [("user_id", 1)], unique=True, name="uniq_clarity_integration"
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("chrono_lock indexes skipped: %s", exc)
     # Clarity Release user prefs — one row per user.
     await db.clarity_user_prefs.create_index(
         [("user_id", 1)], unique=True, name="uniq_clarity_prefs"
