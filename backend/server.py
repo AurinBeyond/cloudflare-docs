@@ -3171,7 +3171,7 @@ async def topup_nearest(minutes: int = 30):
 #
 # Opt-in defaults to True for any user with at least one
 # kids_mood_checkin (the ritual is the consent signal). Parent
-# can disable from /parent-portal/wellness footer (P2 if needed).
+# can disable from /parent-portal/digest footer (P2 if needed).
 #
 # Cron: daily check on UTC weekday == 4 (Friday) AND hour == 18.
 # Each user receives at most one send per (year, week).
@@ -3299,7 +3299,7 @@ def _render_weekly_letter_html(digest: dict, parent_name: Optional[str],
       <div style="margin-top:34px;padding-top:18px;border-top:1px solid #e8d8c5">
         <p style="font-size:14.5px;line-height:1.6;color:#5a5040">
           If you'd like to see this week up close, open the
-          <a href="https://prulesoul.site/parent-portal/wellness" style="color:#a65a2f;text-decoration:none;border-bottom:1px dotted #a65a2f">Wellness portal</a>
+          <a href="https://prulesoul.site/parent-portal/digest" style="color:#a65a2f;text-decoration:none;border-bottom:1px dotted #a65a2f">Weekly Digest</a>
           — the bars and notes live there.
         </p>
         {('<div style="margin-top:22px;padding:18px 20px;background:#fbf2e0;border:1px solid #e8d2a8;border-radius:12px">'

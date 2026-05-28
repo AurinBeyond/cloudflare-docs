@@ -1,10 +1,14 @@
 /**
- * ParentWellness.jsx — /parent-portal/wellness
+ * ParentDigest.jsx — /parent-portal/digest
  *
- * §KIDS-CURRICULUM 2026-02-09 — Parent-facing 7-day mood
- * dashboard. Per-child summary, simple bar chart of mood counts,
- * and the last 3 notes (with redaction respected — only if the
- * child chose to write one).
+ * §KIDS-CURRICULUM 2026-02-09 · renamed 2026-02-12 (was ParentWellness)
+ * Parent-facing 7-day mood dashboard. Per-child summary, simple bar
+ * chart of mood counts, and the last 3 notes (with redaction respected
+ * — only if the child chose to write one).
+ *
+ * URL was previously /parent-portal/wellness; renamed to remove the
+ * "wellness" classifier from Google's index. App.js retains a
+ * client-side Navigate redirect from the old path.
  */
 
 import { useEffect, useState } from "react";
@@ -27,7 +31,7 @@ const MOOD_EMOJI = {
   sad: "😔", worried: "😟", okay: "🙂", good: "😊", sparkly: "✨",
 };
 
-export default function ParentWellness() {
+export default function ParentDigest() {
   const [data, setData] = useState({ children: [], days: 7 });
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
@@ -62,7 +66,7 @@ export default function ParentWellness() {
           <p className="text-[14.5px] text-[hsl(var(--aurin-text-muted))] mb-6">
             The Weekly Digest is reserved for parents who have signed in.
           </p>
-          <Link to="/portal" data-testid="parent-wellness-signin"
+          <Link to="/portal" data-testid="parent-digest-signin"
                 className="aurin-btn aurin-btn-primary inline-flex items-center gap-2">
             Sign in <ArrowRight size={14} />
           </Link>
@@ -72,7 +76,7 @@ export default function ParentWellness() {
   }
 
   return (
-    <div data-testid="parent-portal-wellness">
+    <div data-testid="parent-portal-digest">
       <PageHeader tone="kids"
         eyebrow="Weekly Digest · Parent Portal"
         title="A quiet week with"
@@ -87,7 +91,7 @@ export default function ParentWellness() {
               One quiet breath…
             </p>
           ) : data.children.length === 0 ? (
-            <div className="aurin-card p-8" data-testid="parent-wellness-empty">
+            <div className="aurin-card p-8" data-testid="parent-digest-empty">
               <p className="text-[15px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
                 No daily check-ins yet. When your child opens
                 <Link to="/kids-universe" className="aurin-link mx-1.5">the Kids Universe</Link>
@@ -95,12 +99,12 @@ export default function ParentWellness() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" data-testid="parent-wellness-children">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" data-testid="parent-digest-children">
               {data.children.map((c) => {
                 const total = c.total || 1;
                 return (
                   <div key={c.child_slug}
-                       data-testid={`parent-wellness-child-${c.child_slug}`}
+                       data-testid={`parent-digest-child-${c.child_slug}`}
                        className="aurin-card p-7">
                     <div className="flex items-start justify-between mb-5">
                       <div>
@@ -113,7 +117,7 @@ export default function ParentWellness() {
                     </div>
 
                     {/* Bar chart */}
-                    <div className="space-y-2.5 mb-6" data-testid={`parent-wellness-${c.child_slug}-bars`}>
+                    <div className="space-y-2.5 mb-6" data-testid={`parent-digest-${c.child_slug}-bars`}>
                       {Object.entries(c.counts).map(([mood, count]) => {
                         const pct = Math.round((count / total) * 100);
                         return (
@@ -137,7 +141,7 @@ export default function ParentWellness() {
                     {/* Recent notes */}
                     {c.recent_notes && c.recent_notes.length > 0 && (
                       <div className="border-t border-[hsl(var(--aurin-border-soft))] pt-5"
-                           data-testid={`parent-wellness-${c.child_slug}-notes`}>
+                           data-testid={`parent-digest-${c.child_slug}-notes`}>
                         <div className="aurin-eyebrow mb-3 flex items-center gap-1.5">
                           <MessageSquareQuote size={11} /> What your child whispered
                         </div>
@@ -173,10 +177,10 @@ export default function ParentWellness() {
           )}
 
           {/* §REFERRAL 2026-02-09 — Discreet entry to /portal/referral.
-              Sits at the bottom of the wellness portal because the
+              Sits at the bottom of the digest portal because the
               parent who reads this far already values the platform. */}
           <div className="mt-12 aurin-card p-6 flex flex-col sm:flex-row sm:items-center gap-4"
-               data-testid="parent-wellness-referral-cta">
+               data-testid="parent-digest-referral-cta">
             <div className="flex-1">
               <p className="aurin-eyebrow mb-1.5">Share Aurin · €5 each</p>
               <p className="text-[14px] text-[hsl(var(--aurin-text-muted))] leading-relaxed">
@@ -185,7 +189,7 @@ export default function ParentWellness() {
               </p>
             </div>
             <Link to="/portal/referral"
-                  data-testid="parent-wellness-referral-link"
+                  data-testid="parent-digest-referral-link"
                   className="aurin-btn aurin-btn-primary inline-flex items-center gap-2">
               Open the referral page <ArrowRight size={14} />
             </Link>
@@ -194,7 +198,7 @@ export default function ParentWellness() {
           {/* §ANNAS-LETTER-P3 — Letter opt-out toggle */}
           {letterPref && (
             <div className="mt-5 aurin-card p-5 flex items-center gap-4"
-                 data-testid="parent-wellness-letter-pref">
+                 data-testid="parent-digest-letter-pref">
               <Mail size={18} className="text-[hsl(var(--aurin-amber))] shrink-0" />
               <div className="flex-1">
                 <p className="text-[13.5px] text-[hsl(var(--aurin-text))]">
@@ -208,7 +212,7 @@ export default function ParentWellness() {
               </div>
               <button type="button"
                       onClick={toggleLetter}
-                      data-testid="parent-wellness-letter-toggle"
+                      data-testid="parent-digest-letter-toggle"
                       aria-pressed={!letterPref.opt_out}
                       className="text-[12.5px] uppercase tracking-[0.16em] px-3.5 py-2 rounded-full border transition"
                       style={{

@@ -91,7 +91,7 @@ CONTENT_CALENDAR: List[Dict[str, Any]] = [
             linkedin="I send one letter every Friday. No frameworks. No 'three things to optimise this weekend.' Just one quiet observation for parents who are already doing more than enough.",
             instagram="One letter on Fridays.\n\nFor the parents who don't need another tip — just a place where someone has already understood.",
             product="annas-letter",
-            link_path="/parent-portal/wellness",
+            link_path="/parent-portal/digest",
         ),
     },
     {
@@ -255,7 +255,7 @@ CONTENT_CALENDAR: List[Dict[str, Any]] = [
             linkedin="Tomorrow's letter is about the small permissions parents forget to give themselves. Optional in. Optional out. No tracker, no nudge.",
             instagram="Anna's letter is tomorrow.\n\nFor the parents who don't need another tip — just a place where someone has already understood.",
             product="annas-letter",
-            link_path="/parent-portal/wellness",
+            link_path="/parent-portal/digest",
         ),
     },
     {

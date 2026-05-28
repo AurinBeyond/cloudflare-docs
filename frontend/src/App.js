@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthProvider";
 import Layout from "@/components/layout/Layout";
 import Home from "@/pages/Home";
@@ -20,7 +20,7 @@ import KidsStarsView from "@/pages/KidsStarsView";
 import KidsDaily from "@/pages/KidsDaily";
 import KidsActivities from "@/pages/KidsActivities";
 import ParentStars from "@/pages/ParentStars";
-import ParentWellness from "@/pages/ParentWellness";
+import ParentDigest from "@/pages/ParentDigest";
 import ParentAlbum from "@/pages/ParentAlbum";
 import Referral from "@/pages/Referral";
 import NotFound from "@/pages/NotFound";
@@ -76,7 +76,6 @@ import AdminOutbound from "@/pages/AdminOutbound";
 import AdminBadge from "@/components/AdminBadge";
 import WandererGate from "@/components/WandererGate";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -128,7 +127,14 @@ function AppRouter() {
         <Route path="/kids-universe/:ageGroup/activities" element={<KidsActivities />} />
         <Route path="/kids-universe/:ageGroup/activities/:slug" element={<KidsActivities />} />
         <Route path="/parent-portal/stars" element={<ParentStars />} />
-        <Route path="/parent-portal/wellness" element={<ParentWellness />} />
+        <Route path="/parent-portal/digest" element={<ParentDigest />} />
+        {/* §URL-RENAME 2026-02-12 — legacy /parent-portal/wellness
+            redirected client-side. Drop the "wellness" classifier from
+            Google's index without losing inbound links. */}
+        <Route
+          path="/parent-portal/wellness"
+          element={<Navigate to="/parent-portal/digest" replace />}
+        />
         <Route path="/parent-portal/album" element={<ParentAlbum />} />
         <Route path="/meditation-corner" element={<MeditationCorner />} />
         <Route path="/the-beginning" element={<TheBeginning />} />
