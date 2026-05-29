@@ -106,11 +106,18 @@ function setMode(mode) {
 export default function PolarstarDayWorld({ navigate }) {
   return (
     <div className="ps-day-world" data-testid="polarstar-day-world">
-      {/* §POLARSTAR v10 iter 85f — bg painting is provided by
-       * `PolarstarAtmosphere` (one source of truth, mode-aware).
-       * The local `.ps-day-bg` layer stays as a transparent spacer
-       * so the panel coordinates below still resolve correctly. */}
-      <div className="ps-day-bg" aria-hidden="true" />
+      {/* §POLARSTAR v10 iter 85h — DayWorld supplies its own painted
+       * background so the % hitbox coordinates below map exactly to
+       * the painted pixels. PolarstarAtmosphere intentionally
+       * skips rendering its painting layer for day/morning modes. */}
+      <div
+        className="ps-day-bg"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.06), rgba(255,255,255,0.04)), url("/polarstar/day-world-v2.png")',
+        }}
+      />
 
       <header className="ps-day-title" data-testid="polarstar-day-title">
         <div className="ps-preview-badge" data-testid="polarstar-day-badge">
@@ -265,10 +272,13 @@ export default function PolarstarDayWorld({ navigate }) {
         </button>
       </nav>
 
-      {/* §POLARSTAR v10 — Always-visible Explorer-List CTA. The
-       * painted bottom-nav is invisible (it lives in the painting);
-       * this pill is the only visible interactive surface the parent
-       * sees, so they can leave their name without hunting. */}
+      {/* §POLARSTAR v10 iter 85h — Always-visible Explorer-List CTA.
+       * Founder live-test feedback: users could not tell the painted
+       * world was interactive. We keep the CTA bottom-right (only
+       * visible affordance) and now add a small "Explore the world"
+       * hint pill bottom-left so the first-time visitor knows the
+       * painting is clickable. The hint auto-fades after 8s so it
+       * doesn't crowd the painting forever. */}
       <button
         type="button"
         className="ps-day-explorer-cta"
@@ -278,6 +288,11 @@ export default function PolarstarDayWorld({ navigate }) {
         <Star size={15} aria-hidden="true" />
         <span>Join the Explorer List</span>
       </button>
+
+      <div className="ps-day-explore-hint" data-testid="polarstar-day-explore-hint" aria-hidden="true">
+        <span className="ps-day-explore-hint-dot" />
+        <span>Hover any painted area · everything is alive</span>
+      </div>
     </div>
   );
 }

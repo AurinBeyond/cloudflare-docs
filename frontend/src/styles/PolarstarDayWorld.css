@@ -14,15 +14,18 @@
  */
 
 .ps-day-world {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  /* §POLARSTAR v10 iter 85h — DayWorld fills the parent atmosphere
+   * container exactly. The painted background is provided BY us
+   * (not by PolarstarAtmosphere) so hitbox coordinates and painted
+   * pixels share one coordinate space. */
   width: 100%;
-  min-height: 980px;
+  height: 100%;
   overflow: hidden;
   color: #10233a;
   font-family: Inter, system-ui, sans-serif;
   background: #dcedd0;
-  /* When the bg painting is a clean illustration (no baked UI),
-   * flip this to 1 to reveal all overlay panels. */
   --ps-day-overlay-alpha: 0;
   --ps-day-overlay-text: 0;
 }
@@ -30,7 +33,7 @@
 .ps-day-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   pointer-events: none;
@@ -90,26 +93,25 @@
 }
 
 /* CHILD CARD / TOP ICONS / WORLD MAP SHORTCUT — invisible click-
- * zones over the painted UI (the painting already shows them). */
+ * zones over the painted UI (the painting already shows them).
+ * §POLARSTAR v10 iter 85h — coordinates derived from the native
+ * 1536×1024 day-world-v2.png. Every value is a percentage of the
+ * container (.ps-day-world has aspect-ratio 3:2 lock). */
 .ps-child-card {
   position: absolute;
-  left: 28px;
-  top: 28px;
-  width: 290px;
-  height: 94px;
+  left: 3.97%;
+  top: 4.30%;
+  width: 15.69%;
+  height: 6.64%;
   z-index: 6;
   cursor: pointer;
-  background: rgba(255,255,255, calc(0.62 * var(--ps-day-overlay-alpha)));
-  border: 1px solid rgba(255,255,255, calc(0.7 * var(--ps-day-overlay-alpha)));
+  background: transparent;
+  border: 0;
   border-radius: 24px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px;
-  backdrop-filter: blur(calc(10px * var(--ps-day-overlay-alpha)));
-  -webkit-backdrop-filter: blur(calc(10px * var(--ps-day-overlay-alpha)));
+  padding: 0;
+  display: block;
 }
-.ps-child-card * { opacity: var(--ps-day-overlay-text); }
+.ps-child-card * { opacity: 0; }
 
 .ps-avatar,
 .ps-guide-face,
@@ -146,13 +148,34 @@
 
 .ps-top-icons {
   position: absolute;
-  right: 38px;
-  top: 30px;
-  display: flex;
-  gap: 18px;
+  right: 2%;
+  top: 9.5%;
+  width: 35%;
+  height: 6%;
   z-index: 6;
-  opacity: var(--ps-day-overlay-text);
+  display: flex;
+  gap: 1.5%;
+  justify-content: flex-end;
+  opacity: 0;
+  pointer-events: none;
 }
+
+/* The three painted icons in the top-right (Sun/Bell/Avatar) have
+ * SEPARATE hitboxes so each goes to its own action. We re-enable
+ * pointer-events on the buttons themselves. */
+.ps-top-icons button {
+  position: absolute;
+  pointer-events: auto;
+  opacity: 1;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.ps-top-icons button > * { opacity: 0; }
+.ps-top-icons [data-testid="polarstar-day-mode-night"]  { left: 51.69%; top: 10.74%; width: 2.73%; height: 4.30%; right: auto; top: 0.5%; }
+.ps-top-icons [data-testid="polarstar-day-messages"]    { left: 55.47%; top: 10.74%; width: 2.67%; height: 4.10%; right: auto; top: 0.5%; }
+.ps-top-icons [data-testid="polarstar-day-parents"]     { left: 59.31%; top: 10.84%; width: 2.73%; height: 4.00%; right: auto; top: 0.5%; }
 
 .ps-top-icons button {
   position: relative;
@@ -197,29 +220,23 @@
 
 .ps-world-map-shortcut {
   position: absolute;
-  left: 6px;
-  top: 350px;
-  width: 76px;
-  height: 122px;
+  left: 2.54%;
+  top: 40.82%;
+  width: 5.40%;
+  height: 10.84%;
   z-index: 5;
   cursor: pointer;
-  border: 1px solid rgba(255,255,255, calc(0.7 * var(--ps-day-overlay-alpha)));
+  border: 0;
   border-radius: 20px;
-  background: rgba(64, 116, 130, calc(0.62 * var(--ps-day-overlay-alpha)));
-  color: white;
-  display: grid;
-  place-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: center;
-  opacity: 1;
+  background: transparent;
+  color: transparent;
+  padding: 0;
 }
-.ps-world-map-shortcut > * { opacity: var(--ps-day-overlay-text); }
+.ps-world-map-shortcut > * { opacity: 0; }
 
 .ps-world-map-shortcut svg { width: 38px; height: 38px; }
 
-/* AGE ZONES ----------------------------------------------------- */
+/* AGE ZONES — %-positions from native 1536×1024 painting -------- */
 .ps-age-zone {
   position: absolute;
   z-index: 4;
@@ -227,47 +244,42 @@
 
 .ps-age-tab {
   position: absolute;
-  top: -68px;
-  left: 0;
-  width: 150px;
-  height: 78px;
-  text-align: left;
-  padding: 12px 18px;
+  background: transparent;
   border: 0;
-  border-radius: 14px 14px 0 0;
-  background: rgba(246, 247, 218, 0.72);
-  color: #17334a;
   cursor: pointer;
-  font: inherit;
+  padding: 0;
 }
-
-.ps-age-tab span,
-.ps-age-tab strong { display: block; }
-.ps-age-tab span { font-weight: 800; font-size: 14px; color: #1b8290; letter-spacing: 0.08em; }
-.ps-age-tab strong { font-size: 20px; text-transform: uppercase; margin-top: 4px; font-family: Georgia, serif; font-weight: 500; }
+.ps-age-tab > * { opacity: 0; }
 
 .ps-zone-panel,
 .ps-panel,
 .ps-family-zone,
 .ps-guide-bubble,
 .ps-bottom-question {
-  background: rgba(246, 247, 218, 0.68);
-  border: 1px solid rgba(255,255,255,0.78);
+  background: transparent;
+  border: 0;
   border-radius: 24px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 18px 45px rgba(60, 78, 54, 0.18);
 }
+.ps-zone-panel { padding: 0; cursor: pointer; position: absolute; }
+.ps-zone-panel > * { opacity: 0; }
 
-.ps-zone-panel { border: 0; padding: 0; cursor: pointer; }
+/* Each .ps-age-zone is itself a positioning context that wraps both
+ * the small year-tab and the wider age panel beneath it. */
+/* Discovery (4-6 YEARS) — TAB above panel + PANEL below */
+.ps-day-age-discovery   { left: 2.99%;  top: 18.16%; width: 30.66%; height: 14.65%; }
+.ps-day-age-discovery .ps-age-tab    { left: 0;     top: 0;     width: 100%; height: 20%; }
+.ps-day-age-discovery .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
 
-.ps-day-age-discovery   { left: 104px; top: 248px; }
-.ps-day-age-exploration { left: 515px; top: 248px; }
-.ps-day-age-creation    { right: 38px; top: 248px; }
+/* Exploration (7-10 YEARS) — keep boundaries snug so they don't
+ * overlap the Creation panel on the right. */
+.ps-day-age-exploration { left: 32.50%; top: 18.16%; width: 35.50%; height: 14.65%; }
+.ps-day-age-exploration .ps-age-tab    { left: 12%; top: 0; width: 32%; height: 20%; }
+.ps-day-age-exploration .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
 
-.ps-day-age-discovery .ps-zone-panel   { width: 370px; height: 172px; }
-.ps-day-age-exploration .ps-zone-panel { width: 546px; height: 172px; }
-.ps-day-age-creation .ps-zone-panel    { width: 430px; height: 172px; }
+/* Creation (11-13 YEARS) — starts after Exploration ends. */
+.ps-day-age-creation    { left: 69%;    top: 18.07%; width: 28.50%; height: 14.74%; }
+.ps-day-age-creation .ps-age-tab    { left: 20%; top: 0; width: 32%; height: 20%; }
+.ps-day-age-creation .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
 
 .ps-icon-row {
   height: 100%;
@@ -313,249 +325,178 @@
   letter-spacing: 0.02em;
 }
 
+/* §POLARSTAR v10 iter 85h — Secondary panels, %-positions from
+ * native 1536×1024 painting. */
 .ps-explorer-hub {
   position: absolute;
-  left: 74px;
-  top: 486px;
-  width: 374px;
-  height: 158px;
+  left: 3.78%;
+  top: 51.56%;
+  width: 30.08%;
+  height: 10.94%;
   z-index: 4;
 }
-
-.ps-explorer-hub .ps-icon-row { height: 112px; padding: 8px 16px 16px; }
-.ps-explorer-hub .ps-icon-row button { height: 92px; }
+.ps-explorer-hub .ps-icon-row { height: 100%; padding: 0; }
+.ps-explorer-hub .ps-icon-row button { flex: 1; height: 100%; }
+.ps-explorer-hub .ps-icon-row button > * { opacity: 0; }
 
 .ps-morning-boost {
   position: absolute;
-  left: 170px;
-  top: 740px;
-  width: 150px;
-  height: 166px;
+  left: 4.04%;
+  top: 72.07%;
+  width: 12.24%;
+  height: 11.62%;
   z-index: 5;
-  padding: 12px;
+  cursor: pointer;
+  padding: 0;
 }
-
-.ps-morning-boost h2 { margin: 0 0 10px; font-size: 14px; }
-.ps-morning-boost p { font-size: 12px; line-height: 1.45; margin: 0; }
-.ps-big-sun { width: 54px; height: 54px; color: #f7c84e; margin: 6px 0 0 60px; display: block; }
+.ps-morning-boost > * { opacity: 0; }
 
 .ps-my-space {
   position: absolute;
-  left: 384px;
-  top: 735px;
-  width: 282px;
-  height: 148px;
+  left: 25%;
+  top: 76%;
+  width: 19%;
+  height: 17%;
   z-index: 4;
 }
-
-.ps-my-space .ps-icon-row { padding: 8px 14px 14px; height: 104px; }
-.ps-my-space .ps-icon-row button { height: 88px; }
+.ps-my-space .ps-icon-row { height: 100%; padding: 0; }
+.ps-my-space .ps-icon-row button { flex: 1; height: 100%; }
+.ps-my-space .ps-icon-row button > * { opacity: 0; }
 
 .ps-daily-challenges {
   position: absolute;
-  right: 274px;
-  top: 488px;
-  width: 310px;
-  height: 216px;
+  left: 63%;
+  top: 53%;
+  width: 19%;
+  height: 18%;
   z-index: 4;
-  padding: 12px 18px;
+  padding: 0;
 }
-
-.ps-daily-challenges h2 { margin: 4px 0 8px; font-size: 16px; }
+.ps-daily-challenges > h2 { opacity: 0; }
 
 .ps-challenge-list {
+  position: absolute;
+  inset: 18% 0 0 0;
   display: grid;
-  gap: 8px;
+  gap: 1%;
 }
-
 .ps-challenge-list button {
-  height: 36px;
-  border: 1px solid rgba(126, 143, 120, 0.25);
-  border-radius: 10px;
-  background: rgba(255,255,255,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  font: inherit;
-  font-size: 12px;
+  height: 100%;
+  border: 0;
+  background: transparent;
   cursor: pointer;
+  padding: 0;
 }
-
-.ps-challenge-list svg { width: 18px; height: 18px; color: #5baa65; }
-
-.ps-challenge-list i {
-  width: 18px;
-  height: 18px;
-  border: 1px solid rgba(85, 100, 90, 0.38);
-  border-radius: 50%;
-  display: inline-block;
-}
+.ps-challenge-list button > * { opacity: 0; }
 
 .ps-today-feel {
   position: absolute;
-  right: 260px;
-  top: 760px;
-  width: 314px;
-  height: 138px;
+  left: 64%;
+  top: 80%;
+  width: 22%;
+  height: 11%;
   z-index: 4;
+  padding: 0;
 }
-
-.ps-today-feel h2 { margin: 4px 0 8px; font-size: 16px; }
+.ps-today-feel > h2 { opacity: 0; }
 
 .ps-moods {
+  position: absolute;
+  inset: 0;
   display: flex;
-  gap: 8px;
-  padding: 0 16px 16px;
+  gap: 0;
+  padding: 0;
 }
-
 .ps-moods button {
   flex: 1;
-  height: 70px;
-  border: 1px solid rgba(126, 143, 120, 0.25);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.45);
-  display: grid;
-  place-items: center;
-  font: inherit;
-  font-size: 11px;
+  height: 100%;
+  border: 0;
+  background: transparent;
   cursor: pointer;
-  gap: 2px;
+  padding: 0;
 }
-
-.ps-moods svg { width: 22px; height: 22px; color: #d9a14e; }
+.ps-moods button > * { opacity: 0; }
 
 .ps-discovery-stars {
   position: absolute;
-  left: 645px;
-  top: 482px;
-  width: 160px;
-  height: 118px;
-  z-index: 4;
-  border-radius: 28px;
-  background: rgba(246, 247, 218, 0.62);
-  border: 1px solid rgba(255,255,255,0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: grid;
-  place-items: center;
-  text-align: center;
+  left: 44%;
+  top: 53%;
+  width: 8%;
+  height: 14%;
+  z-index: 5;
+  border: 0;
+  background: transparent;
   cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  color: #10233a;
+  padding: 0;
 }
-
-.ps-discovery-stars svg { width: 52px; height: 52px; color: #5ba6d8; }
-.ps-discovery-stars strong { font-family: Georgia, serif; font-size: 16px; font-weight: 500; }
+.ps-discovery-stars > * { opacity: 0; }
 
 .ps-family-zone {
   position: absolute;
-  left: 720px;
-  top: 812px;
-  width: 190px;
-  height: 118px;
+  left: 49%;
+  top: 75%;
+  width: 10%;
+  height: 17%;
   z-index: 5;
-  text-align: center;
-  padding: 14px;
+  padding: 0;
   cursor: pointer;
-  font: inherit;
-  color: #10233a;
+  background: transparent;
+  border: 0;
 }
-
-.ps-family-photo {
-  width: 54px;
-  height: 54px;
-  margin: -46px auto 8px;
-  background:
-    radial-gradient(circle at 38% 40%, #d6a884 0 17%, transparent 18%),
-    radial-gradient(circle at 62% 40%, #f0c5a2 0 17%, transparent 18%),
-    linear-gradient(#4b3b35, #e7d3b1);
-}
-
-.ps-family-zone strong { display: block; font-size: 13px; font-family: Georgia, serif; font-weight: 500; }
-.ps-family-zone p { margin: 4px 0 0; font-size: 11px; line-height: 1.35; }
+.ps-family-zone > * { opacity: 0; }
 
 .ps-guide-bubble {
   position: absolute;
-  right: 66px;
-  top: 575px;
-  width: 142px;
-  height: 128px;
+  left: 59.18%;
+  top: 69.43%;
+  width: 8.72%;
+  height: 6.05%;
   z-index: 5;
-  text-align: center;
-  padding: 14px 12px;
-  border-radius: 30px;
-  background: rgba(247, 232, 171, 0.75);
+  background: transparent;
+  pointer-events: none;
 }
-
-.ps-guide-face {
-  position: absolute;
-  width: 86px;
-  height: 86px;
-  top: -96px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ps-guide-bubble p { margin: 0; font-weight: 700; font-size: 14px; }
+.ps-guide-bubble > * { opacity: 0; }
+.ps-guide-face { display: none; }
 
 .ps-bottom-question {
   position: absolute;
-  right: 60px;
-  bottom: 42px;
-  width: 275px;
-  height: 70px;
+  left: 88%;
+  bottom: 3%;
+  width: 11%;
+  height: 6%;
   z-index: 6;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 18px;
-  background: rgba(54, 89, 88, 0.68);
-  color: white;
+  background: transparent;
+  border: 0;
+  padding: 0;
   cursor: pointer;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.78);
 }
+.ps-bottom-question > * { opacity: 0; }
 
-.ps-bottom-question svg { width: 42px; height: 42px; }
-
-/* BOTTOM NAV --------------------------------------------------- */
+/* BOTTOM NAV — 7 buttons in the painted pill bar -------------- */
 .ps-bottom-nav {
   position: absolute;
-  left: 50%;
-  bottom: 20px;
-  transform: translateX(-50%);
-  width: 860px;
-  height: 84px;
+  left: 20%;
+  bottom: 0.5%;
+  width: 60%;
+  height: 7%;
   z-index: 6;
-  border-radius: 999px;
-  background: rgba(248, 248, 240, 0.78);
-  border: 1px solid rgba(255,255,255,0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-around;
+  background: transparent;
+  padding: 0;
 }
 
 .ps-bottom-nav button {
+  flex: 1;
   border: 0;
   background: transparent;
-  color: #20344a;
-  display: grid;
-  place-items: center;
-  gap: 4px;
-  font: inherit;
-  font-weight: 700;
-  font-size: 12px;
   cursor: pointer;
+  padding: 0;
+  height: 100%;
 }
-
-.ps-bottom-nav button.active { color: #2c8fd3; }
-.ps-bottom-nav svg { width: 26px; height: 26px; }
+.ps-bottom-nav button > * { opacity: 0; }
+.ps-bottom-nav button.active { color: transparent; }
 
 /* RESPONSIVE FALLBACK ------------------------------------------ */
 @media (max-width: 1100px) {
@@ -654,6 +595,95 @@
   opacity: 0 !important;
 }
 
+/* ════════════════════════════════════════════════════════════
+ * §POLARSTAR v10 iter 85h — VISIBLE HOVER FEEDBACK
+ *
+ * Founder live-tested and reported "navigation buttons not active"
+ * even though clicks fire correctly. The root cause was zero visual
+ * feedback over the invisible hitboxes — users hover, see nothing
+ * happen, assume the painting is decorative. The fixes below add:
+ *   1. `cursor: pointer` explicitly on every clickable surface
+ *   2. A soft golden glow ring on hover so users SEE the hit zone
+ *   3. A "press" depression on :active so the click is felt
+ *   4. A focus ring for keyboard / screen-reader users
+ *
+ * The hover/press states are deliberately subtle so they do not
+ * compete with the painting itself.
+ * ════════════════════════════════════════════════════════════ */
+.ps-day-world .ps-child-card,
+.ps-day-world .ps-top-icons button,
+.ps-day-world .ps-world-map-shortcut,
+.ps-day-world .ps-age-tab,
+.ps-day-world .ps-zone-panel,
+.ps-day-world .ps-discovery-stars,
+.ps-day-world .ps-family-zone,
+.ps-day-world .ps-bottom-question,
+.ps-day-world .ps-bottom-nav button,
+.ps-day-world .ps-icon-row button,
+.ps-day-world .ps-challenge-list button,
+.ps-day-world .ps-moods button {
+  cursor: pointer !important;
+  position: relative;
+  transition: box-shadow 220ms ease, transform 160ms ease;
+  outline: none !important;
+  border-radius: 16px !important;
+}
+
+.ps-day-world .ps-child-card:hover,
+.ps-day-world .ps-top-icons button:hover,
+.ps-day-world .ps-world-map-shortcut:hover,
+.ps-day-world .ps-age-tab:hover,
+.ps-day-world .ps-zone-panel:hover,
+.ps-day-world .ps-discovery-stars:hover,
+.ps-day-world .ps-family-zone:hover,
+.ps-day-world .ps-bottom-question:hover,
+.ps-day-world .ps-bottom-nav button:hover,
+.ps-day-world .ps-icon-row button:hover,
+.ps-day-world .ps-challenge-list button:hover,
+.ps-day-world .ps-moods button:hover {
+  box-shadow:
+    0 0 0 2px rgba(212, 182, 125, 0.55),
+    0 0 22px rgba(212, 182, 125, 0.35),
+    0 0 38px rgba(212, 182, 125, 0.18) !important;
+}
+
+.ps-day-world .ps-child-card:active,
+.ps-day-world .ps-top-icons button:active,
+.ps-day-world .ps-world-map-shortcut:active,
+.ps-day-world .ps-age-tab:active,
+.ps-day-world .ps-zone-panel:active,
+.ps-day-world .ps-discovery-stars:active,
+.ps-day-world .ps-family-zone:active,
+.ps-day-world .ps-bottom-question:active,
+.ps-day-world .ps-bottom-nav button:active,
+.ps-day-world .ps-icon-row button:active,
+.ps-day-world .ps-challenge-list button:active,
+.ps-day-world .ps-moods button:active {
+  transform: scale(0.985);
+  box-shadow:
+    0 0 0 2px rgba(212, 182, 125, 0.8),
+    0 0 18px rgba(212, 182, 125, 0.55) !important;
+}
+
+.ps-day-world button:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(212, 182, 125, 0.75),
+    0 0 24px rgba(212, 182, 125, 0.45) !important;
+}
+
+/* Mobile: replace hover with a permanent faint ring on the three
+ * primary age tabs/panels so touch users see they are clickable.
+ * (Hover is unreliable on touch devices.) */
+@media (hover: none) {
+  .ps-day-world .ps-day-age-discovery .ps-zone-panel,
+  .ps-day-world .ps-day-age-exploration .ps-zone-panel,
+  .ps-day-world .ps-day-age-creation .ps-zone-panel {
+    box-shadow:
+      inset 0 0 0 2px rgba(212, 182, 125, 0.35),
+      0 0 14px rgba(212, 182, 125, 0.16) !important;
+  }
+}
+
 /* Re-show only the page-identity strip (NOT in the painting). */
 .ps-day-world .ps-day-title { z-index: 8; }
 
@@ -691,3 +721,46 @@
     0 0 32px rgba(212, 182, 125, 0.65);
 }
 .ps-day-explorer-cta svg { color: #d4b67d; }
+
+/* §POLARSTAR v10 iter 85h — "Hover any painted area" hint pill.
+ * Visible bottom-left for the first 8 seconds, then auto-fades so
+ * it doesn't crowd the painting. Tells first-time visitors that the
+ * world is interactive (the live audit found users assumed it was
+ * static). */
+.ps-day-explore-hint {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 182, 125, 0.55);
+  background: rgba(14, 23, 48, 0.78);
+  color: #f6edda;
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  font-style: italic;
+  pointer-events: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.38),
+              0 0 18px rgba(212, 182, 125, 0.22);
+  animation: ps-hint-fade 11s ease-out forwards;
+}
+.ps-day-explore-hint-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d4b67d;
+  box-shadow: 0 0 0 2px rgba(212, 182, 125, 0.28),
+              0 0 12px rgba(212, 182, 125, 0.85);
+  animation: ps9-pulse 2.4s ease-in-out infinite;
+}
+@keyframes ps-hint-fade {
+  0%, 70%   { opacity: 1; transform: translateY(0); }
+  100%      { opacity: 0; transform: translateY(8px); pointer-events: none; }
+}

@@ -71,12 +71,18 @@ export default function PolarstarAtmosphere({ children, testid = "polarstar-root
       data-testid={testid}
       data-time-mode={mode}
     >
-      <div
-        className={`ps-atmosphere ${imgReady ? "ps-atmosphere--ready" : ""}`}
-        style={{ backgroundImage: `url(${process.env.PUBLIC_URL || ""}/polarstar/${bgFile})` }}
-        aria-hidden="true"
-        data-testid="polarstar-atmosphere"
-      />
+      {/* §POLARSTAR v10 iter 85h — On day/morning, PolarstarDayWorld
+       * provides its OWN painted background to keep the hitbox % map
+       * aligned with the painted pixels. We render the atmosphere bg
+       * only for night/evening (NightClickMap layout). */}
+      {!isLight && (
+        <div
+          className={`ps-atmosphere ${imgReady ? "ps-atmosphere--ready" : ""}`}
+          style={{ backgroundImage: `url(${process.env.PUBLIC_URL || ""}/polarstar/${bgFile})` }}
+          aria-hidden="true"
+          data-testid="polarstar-atmosphere"
+        />
+      )}
       <div className="ps-glow"  aria-hidden="true" />
       <div className="ps-noise" aria-hidden="true" />
       {typeof children === "function" ? children(mode) : children}
