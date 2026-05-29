@@ -114,7 +114,17 @@ function AppRouter() {
         <Route path="/library/kids/draw" element={<KidsColoringStudio />} />
         <Route path="/library/:slug" element={<LibraryEntry />} />
         <Route path="/learning" element={<Learning />} />
-        <Route path="/kids-universe" element={<KidsUniverse />} />
+        {/* §POLARSTAR HIERARCHY LOCK 2026-02-13 (iter 85e) —
+           Founder decision: POLARSTAR KIDS is now the primary brand
+           for the kids surface. The legacy /kids-universe landing
+           page contains Aurin-AI-for-kids language and priced
+           bookstore cards that trigger PSP underwriter rejections,
+           so we redirect every visit to the PSP-safe Polarstar
+           world. The legacy KidsUniverse component is preserved on
+           a sibling route (/kids-universe/legacy) for internal
+           reference until the Polar.sh review concludes. */}
+        <Route path="/kids-universe" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/legacy" element={<KidsUniverse />} />
         <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
         {/* §KIDS-UNIVERSE-PHASE-1 2026-02-27 — Luxury Adventure Hub.
             Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}

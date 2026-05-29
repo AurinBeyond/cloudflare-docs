@@ -3,6 +3,65 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02-13 — Title hierarchy lock + PSP-safe redirect (iter 85e)
+
+Founder locked the title hierarchy and asked us to neutralise the
+last PSP-risky surface.
+
+### Hierarchy lock
+- **POLARSTAR KIDS** is now the primary brand for the kids surface.
+- Tagline: *One World. Three Paths. One Family.*
+- "Kids Universe Journey" demoted from brand to world description
+  (it lives only as painted typography inside the day-mode painting).
+
+Rule (recorded for future iterations): "Kids Universe Journey" is
+the journey. "POLARSTAR KIDS" is the world. Do not use the former
+as a primary title anywhere.
+
+### Day-mode brand band (`Polarstar.jsx` + `PolarstarDayWorld.css`)
+The compact title that floated above the painting was replaced with
+a dark cream-on-indigo brand capsule:
+- `PREVIEW WORLD · The First Lanterns Are Lit` (eyebrow)
+- `POLARSTAR KIDS` (serif, 36px, gold-on-indigo, 0.22em tracking)
+- `One World. Three Paths. One Family.` (italic gold tagline)
+
+The capsule sits at the very top centre, dominates the painted
+"Kids Universe Journey" without erasing it, and matches the night-
+mode header tone so the brand reads identically across moods.
+
+### Legacy `/kids-universe` redirect (`App.js`)
+The old `/kids-universe` landing page is the surface that triggered
+the Polar.sh suspension — it contained:
+- "Talk with Aurin" + "Open Aurin's Room" CTA (AI-for-kids language)
+- Three age cards with baked-in "Aurin's Room — Bringing Calm to
+  Little Minds" chat mockups
+- A live featured-books carousel with $5 priced items
+
+It is now a one-line redirect to `/kids-universe/polarstar`. The
+original component is preserved on `/kids-universe/legacy` for
+internal reference until the Polar.sh review concludes; the top-nav
+"Kids Universe" link silently lands on the PSP-safe Polarstar
+world.
+
+### Files touched
+- Updated: `frontend/src/App.js`
+- Updated: `frontend/src/styles/PolarstarDayWorld.css`
+
+### Verified
+- `/kids-universe` → 302-style client redirect to
+  `/kids-universe/polarstar` (Playwright confirmed final URL)
+- `/kids-universe/legacy` still serves the old component (escape
+  hatch for the founder)
+- Brand capsule visible on day mode without obscuring the painted
+  world identity
+- Night mode (existing `ps9-header`) already honoured the hierarchy
+  so was left untouched
+- Per-age rooms (`/discovery`, `/exploration`, `/creation`) already
+  show `← POLARSTAR · {AGE} · {RANGE}` breadcrumb so the hierarchy
+  is consistent across all four routes
+
+
+
 ## 2026-02-13 — Polarstar v10 STOP-the-dashboard correction (iter 85d)
 
 Founder pushed back, hard and rightly: previous iterations were
