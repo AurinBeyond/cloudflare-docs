@@ -99,6 +99,10 @@ function openWaitlist(interest) {
   );
 }
 
+function setMode(mode) {
+  window.dispatchEvent(new CustomEvent("polarstar:setMode", { detail: { mode } }));
+}
+
 export default function PolarstarDayWorld({ navigate }) {
   return (
     <div className="ps-day-world" data-testid="polarstar-day-world">
@@ -126,9 +130,9 @@ export default function PolarstarDayWorld({ navigate }) {
       </section>
 
       <section className="ps-top-icons" data-testid="polarstar-day-top-icons">
-        <button type="button" onClick={() => openWaitlist("Calendar")} data-testid="polarstar-day-calendar">
+        <button type="button" onClick={() => setMode("night")} data-testid="polarstar-day-mode-night" aria-label="Switch to night mode">
           <CalendarDays />
-          <span>Calendar</span>
+          <span>Night</span>
         </button>
         <button type="button" onClick={() => openWaitlist("Messages")} data-testid="polarstar-day-messages">
           <MessageCircle />

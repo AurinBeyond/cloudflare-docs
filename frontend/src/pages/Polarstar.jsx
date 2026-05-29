@@ -159,6 +159,40 @@ function NightClickMap({ navigate, openWaitlist, mode }) {
         <Sparkles size={16} aria-hidden="true" />
         <span>Join the Explorer List</span>
       </button>
+
+      {/* §POLARSTAR v10 iter 85g — Day-mode toggle from inside night
+       * surface. Sits top-right so it never competes with the
+       * Explorer List CTA at bottom-right. */}
+      <button
+        type="button"
+        data-testid="polarstar-night-mode-day"
+        onClick={() => window.dispatchEvent(new CustomEvent("polarstar:setMode", { detail: { mode: "day" } }))}
+        aria-label="Switch to day mode"
+        style={{
+          position: "fixed",
+          top: 28,
+          right: 28,
+          zIndex: 9,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 7,
+          padding: "8px 16px 8px 12px",
+          borderRadius: 999,
+          border: "1px solid rgba(212, 182, 125, 0.55)",
+          background: "rgba(14, 23, 48, 0.72)",
+          color: "#f6edda",
+          fontFamily: SERIF,
+          fontSize: 12,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+        }}
+      >
+        <span aria-hidden="true" style={{ color: "#d4b67d" }}>☀</span>
+        <span>Day</span>
+      </button>
     </>
   );
 }

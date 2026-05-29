@@ -16,15 +16,32 @@ export function getTimeMode() {
   return "night";
 }
 
+/* §POLARSTAR v10 iter 85g — Founder decision: the PUBLIC Polarstar
+ * world opens in DAY MODE by default. Auto-detected time mood is too
+ * subtle a hook for a preview-only product, and the founder's first
+ * reference image is the day painting. A subtle mode toggle (sun /
+ * moon) lets visitors flip to night if they wish; we do NOT auto-
+ * shift the surface based on the visitor's local clock anymore.
+ */
+export function getDefaultMode() {
+  return "day";
+}
+
 export default function PolarstarAtmosphere({ children, testid = "polarstar-root" }) {
-  const initial = useMemo(() => getTimeMode(), []);
+  const initial = useMemo(() => getDefaultMode(), []);
   const [mode, setMode] = useState(initial);
   const [imgReady, setImgReady] = useState(false);
 
-  // Refresh every 15 min so a long-open tab transitions naturally.
+  /* §POLARSTAR v10 iter 85g — Allow any descendant to flip the mode
+   * via `polarstar:setMode` events. Used by the painted sun / moon
+   * toggle in the top-right of the world. */
   useEffect(() => {
-    const id = setInterval(() => setMode(getTimeMode()), 15 * 60 * 1000);
-    return () => clearInterval(id);
+    const handler = (e) => {
+      const next = (e.detail && e.detail.mode) || null;
+      if (next === "day" || next === "night") setMode(next);
+    };
+    window.addEventListener("polarstar:setMode", handler);
+    return () => window.removeEventListener("polarstar:setMode", handler);
   }, []);
 
   // Pre-load painted background so we crossfade in rather than flash.
