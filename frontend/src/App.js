@@ -83,6 +83,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 // /app/memory/POLARSTAR_NORTHSTAR.md for the locked design law.
 import Polarstar from "@/pages/Polarstar";
 import PolarstarRoom from "@/pages/PolarstarRoom";
+import PolarstarActivity from "@/pages/PolarstarActivity";
+import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -125,6 +127,9 @@ function AppRouter() {
         <Route path="/kids-universe" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/kids-universe/polarstar" element={<Polarstar />} />
         <Route path="/kids-universe/polarstar/:ageGroup" element={<PolarstarRoom />} />
+        {/* §POLARSTAR-CONTENT iter 86 — themed content layer */}
+        <Route path="/kids-universe/polarstar/:roomId/story-time/:storySlug" element={<PolarstarStoryRead />} />
+        <Route path="/kids-universe/polarstar/:roomId/:activitySlug" element={<PolarstarActivity />} />
         {/* Legacy kids-universe surface — all redirect to Polarstar */}
         <Route path="/kids-universe/legacy" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/kids-universe/coloring" element={<Navigate to="/kids-universe/polarstar" replace />} />

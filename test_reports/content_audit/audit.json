@@ -1,0 +1,159 @@
+{
+  "results": [
+    {
+      "step": "A01 Discovery World hub renders",
+      "pass": true,
+      "detail": "polarstar-room-discovery count=1"
+    },
+    {
+      "step": "A01b Discovery has 5 activity cards",
+      "pass": true,
+      "detail": "polarstar-activity-discovery-story-time count=1"
+    },
+    {
+      "step": "A01c Drawing Palette shows Coming Soon badge",
+      "pass": true,
+      "detail": "polarstar-activity-discovery-drawing-palette count=1"
+    },
+    {
+      "step": "A02 Story Time (4-6) renders story deck",
+      "pass": true,
+      "detail": "polarstar-story-deck count=1"
+    },
+    {
+      "step": "A02b Story cards count (expect \u22652 for little-dreamers)",
+      "pass": true,
+      "detail": "polarstar-story-card-little-star count=1"
+    },
+    {
+      "step": "A02c Moon Boat card present",
+      "pass": true,
+      "detail": "polarstar-story-card-moon-boat count=1"
+    },
+    {
+      "step": "A03 Story 'Little Star' renders body paragraphs",
+      "pass": true,
+      "detail": "polarstar-story-para-0 count=1"
+    },
+    {
+      "step": "A03b Next story link present",
+      "pass": true,
+      "detail": "polarstar-story-next count=1"
+    },
+    {
+      "step": "A04 Kindness Mission renders challenge card",
+      "pass": true,
+      "detail": "polarstar-challenge-card count=1"
+    },
+    {
+      "step": "A04b 4 kind actions listed",
+      "pass": true,
+      "detail": "polarstar-challenge-action-3 count=1"
+    },
+    {
+      "step": "A04c 'I did it' button confirms",
+      "pass": true,
+      "detail": "after-click text='Lovely. Well done.'"
+    },
+    {
+      "step": "A05 Morning Mindful Start renders breath steps",
+      "pass": true,
+      "detail": "polarstar-steps-card count=1"
+    },
+    {
+      "step": "A05b 4 breath steps listed",
+      "pass": true,
+      "detail": "polarstar-step-3 count=1"
+    },
+    {
+      "step": "A06 Play & Move renders moves grid",
+      "pass": true,
+      "detail": "polarstar-moves-grid count=1"
+    },
+    {
+      "step": "A06b 4 move cards present",
+      "pass": true,
+      "detail": "polarstar-move-3 count=1"
+    },
+    {
+      "step": "A07 Drawing Palette renders prompts",
+      "pass": true,
+      "detail": "polarstar-drawing-placeholder count=1"
+    },
+    {
+      "step": "A07b 4 drawing prompts",
+      "pass": true,
+      "detail": "polarstar-draw-prompt-3 count=1"
+    },
+    {
+      "step": "B01 Exploration World hub renders",
+      "pass": true,
+      "detail": "polarstar-room-exploration count=1"
+    },
+    {
+      "step": "B02 Story Time (7-10) renders deck",
+      "pass": true,
+      "detail": "polarstar-story-deck count=1"
+    },
+    {
+      "step": "B02b Night Forest story card",
+      "pass": true,
+      "detail": "polarstar-story-card-night-forest count=1"
+    },
+    {
+      "step": "B02c Quiet Dragon story card",
+      "pass": true,
+      "detail": "polarstar-story-card-quiet-dragon count=1"
+    },
+    {
+      "step": "B03 Nature Quest renders challenge",
+      "pass": true,
+      "detail": "polarstar-challenge-card count=1"
+    },
+    {
+      "step": "B04 Reflection Time renders prompts",
+      "pass": true,
+      "detail": "polarstar-reflection count=1"
+    },
+    {
+      "step": "B05 World Cultures shows themed Coming Soon",
+      "pass": true,
+      "detail": "polarstar-coming-soon count=1"
+    },
+    {
+      "step": "C01 Creation World hub renders",
+      "pass": true,
+      "detail": "polarstar-room-creation count=1"
+    },
+    {
+      "step": "C02 Design Lab renders project steps",
+      "pass": true,
+      "detail": "polarstar-steps-card count=1"
+    },
+    {
+      "step": "C03 Build Something renders project steps",
+      "pass": true,
+      "detail": "polarstar-steps-card count=1"
+    },
+    {
+      "step": "C04 Share Project renders challenge",
+      "pass": true,
+      "detail": "polarstar-challenge-card count=1"
+    },
+    {
+      "step": "D01 Back from leaf returns to room hub",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "D02 Back from hub returns to Main World",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "D03 Main \u2192 Discovery tab still navigates",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar/discovery"
+    }
+  ]
+}
