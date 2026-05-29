@@ -3,6 +3,119 @@
 ## Original Problem Statement
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
+
+## 2026-02-29 — Iter 85j: Polarstar Navigation Contract 100% (full user-journey audit)
+
+**Founder directive**: Stop proving DOM elements exist; prove that a child and
+parent can walk through the painted world from beginning to end. Don't start
+Phase 2 backend, bundle cleanup, billing, or deploy. Focus solely on the
+Polarstar User Journey audit. Provide PASS/FAIL screenshots for each step.
+
+**Shipped (additive, /app/frontend/src/styles/PolarstarDayWorld.css +
+PolarstarDayWorld.jsx; no backend changes):**
+
+The previous "31/31 clickable" report was misleading — element-from-point
+audits proved 7+ hitboxes were laterally drifting and 2 (Compass + Bottom Nav)
+rendered entirely **below the visible viewport** because the parent container
+was anchored to `100vh` while sitting 72 px below the Layout nav. Four
+foundational CSS bugs were silently masking each other:
+
+1. A late hover-feedback rule (line 663–678) was forcing `position: relative !important`
+   on every clickable zone, overriding every `position: absolute` declaration above
+   it. Removed.
+2. Legacy `.ps-top-icons button { position: relative; width: 78px; height: 80px }`
+   was clamping the three top-right icons to fixed pixel boxes and stacking them
+   inline. Replaced with the new %-percentage hitbox model.
+3. `.ps-top-icons` was a `width: 35%` flex container at `right: 2%`, so child
+   `left: 78.5%` was resolving to `78.5% × 35% = 27.5%` of the world — i.e.
+   the hitboxes were 200 px right of the painted icons. Container converted
+   to a full-world overlay (`inset: 0`).
+4. `Morning Boost` was rendered via the generic `<Panel>` helper as a
+   `<section>` with no `onClick`. The CSS pretended it was clickable
+   (`cursor: pointer`). Converted to a proper `<button>` with the waitlist
+   handler.
+
+**Plus 5 alignment fixes against direct screenshot remeasurement:**
+
+- Top icons now occupy `left: 78% / 87% / 93.5%` with width 8% / 6% / 6%
+  (Calendar narrows so its hitbox doesn't bleed into Messages).
+- Three age zones repositioned to `top: 19%`, with Discovery 24% wide,
+  Exploration 37% wide, Creation 30% wide — and each panel's inner tab/panel
+  band realigned to the painted label + activity-row split.
+- Explorer's Hub and Daily Challenges raised to `top: 49%`; My Space, Family
+  Connection, Today I Feel, Morning Boost all re-anchored against the live
+  painting.
+- Family Connection clipped (`overflow: hidden` + `pointer-events: none` on
+  children) and height tightened from 18% → 15% so the long "Share moments…"
+  paragraph no longer covers the bottom-nav Music/Videos hitboxes.
+- Compass and Bottom Nav moved up from `top: 96%` to `top: 90%/91%` so they
+  render inside the visible viewport (the `100vh + 72px` parent was pushing
+  them off-screen).
+- My Space and Explorer's Hub icon-rows switched to `position: absolute; inset: 0`
+  so the invisible `<h2>` header no longer pushes the button row 50 px below the
+  panel, overlapping the bottom-nav strip.
+
+**Full user-journey audit (Playwright async, headless 1920×1280)**:
+
+```
+70 / 70 PASS  (100%)
+
+Polarstar Main World loads                                 PASS
+→ Discovery TAB        -> /discovery                       PASS
+  identity strip + back link + room CTA                    PASS
+  Discovery activity (CTA) -> waitlist modal               PASS
+  Back -> main world                                       PASS
+→ Exploration TAB      -> /exploration                     PASS
+  Exploration activity (CTA) -> waitlist modal             PASS
+  Back -> main world                                       PASS
+→ Creation TAB         -> /creation                        PASS
+  Creation activity (CTA) -> waitlist modal                PASS
+  Back -> main world                                       PASS
+→ Join the Explorer List CTA -> waitlist                   PASS
+
+Calendar -> Night mode mounted (pw8-stage)                 PASS
+Messages -> waitlist                                       PASS
+Parents  -> waitlist                                       PASS
+Compass "What will we discover today?" -> waitlist         PASS
+Family Connection Zone -> waitlist                         PASS
+Morning Boost (now <button>) -> waitlist                   PASS
+Our World Map shortcut (stays on /polarstar)               PASS
+
+4 × Daily Challenge rows -> waitlist                       4/4 PASS
+5 × Today I Feel moods   -> waitlist                       5/5 PASS
+4 × My Space cells       -> waitlist                       4/4 PASS
+5 × Explorer's Hub cells -> waitlist                       5/5 PASS
+
+Bottom-nav HOME (stays)                                    PASS
+6 × bottom-nav (Stories/Activities/Games/Music/Videos/
+   Resources) -> waitlist                                  6/6 PASS
+
+3 × age PANEL (the wide painted icon row) -> /discovery|
+   /exploration|/creation                                  3/3 PASS
+
+Element-at-painted-coords probes (21 points)             21/21 PASS
+   incl. Calendar, Messages, Parents, all 3 age labels,
+   Explorer's Hub, Daily Challenges, Morning Boost,
+   Family Connection, Happy mood, My Space, World Map,
+   all 7 bottom-nav icons, Compass.
+```
+
+Decorative zones (correctly non-clickable, painted-only):
+Welcome avatar card, both fairy guides + their speech bubbles, the
+"Collect Discovery Stars" treasure chest, the "You can do great
+things!" fairy, the treehouse and tent decorations.
+
+**Test artifacts** kept in `/app/test_reports/journey_audit/` (v6_FINAL.json
++ 11 PASS/FAIL screenshots covering the J01→V13 journey).
+
+**Awaiting founder approval** (per the strict instruction):
+- Polar.sh PSP review (still BLOCKED — no billing code touched)
+- Bundle cleanup (KidsUniverse/KidsHub/aurinPrompts.js still in /app
+  filesystem; route-redirected only)
+- Polarstar Phase 2 Backend Wiring (Story Stars / Tomorrow's Adventure /
+  kids_polarstar_progress)
+
+
 ## 🔒 LOCKED Membership Architecture v2.3.1 (2026-02-12 — supersedes 2026-05-16 model)
 
 **Single source of truth:** `/app/memory/MEMBERSHIP_ARCHITECTURE_v2.3.md` (base) + `/app/memory/MEMBERSHIP_ARCHITECTURE_v2.3.1_PATCH.md` (cohort safeguard + honest archive language).

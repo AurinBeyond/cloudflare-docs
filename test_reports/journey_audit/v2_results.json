@@ -1,0 +1,357 @@
+{
+  "results": [
+    {
+      "step": "01 Main World loads",
+      "pass": true,
+      "detail": "main world rendered, title visible=True"
+    },
+    {
+      "step": "02 Click Discovery tab -> /discovery",
+      "pass": true,
+      "detail": "clicked polarstar-day-age-tab-discovery -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "03 Discovery room identity strip + back",
+      "pass": true,
+      "detail": "name_visible=True back_present=True"
+    },
+    {
+      "step": "04 Discovery room CTA -> waitlist",
+      "pass": true,
+      "detail": "discovery-cta -> modal_visible=True"
+    },
+    {
+      "step": "05 Back from Discovery -> main world",
+      "pass": true,
+      "detail": "back_url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "06 Click Discovery PANEL -> /discovery",
+      "pass": true,
+      "detail": "clicked polarstar-day-age-panel-discovery -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "07 Click Exploration tab -> /exploration",
+      "pass": true,
+      "detail": "clicked polarstar-day-age-tab-exploration -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/exploration"
+    },
+    {
+      "step": "08 Exploration room identity",
+      "pass": true,
+      "detail": "exploration room name_visible=True"
+    },
+    {
+      "step": "09 Back from Exploration -> main world",
+      "pass": true,
+      "detail": "back_url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "10 Click Creation tab -> /creation",
+      "pass": true,
+      "detail": "clicked polarstar-day-age-tab-creation -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/creation"
+    },
+    {
+      "step": "11 Creation room identity",
+      "pass": true,
+      "detail": "creation room name_visible=True"
+    },
+    {
+      "step": "12 Back from Creation -> main world",
+      "pass": true,
+      "detail": "back_url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "13 Night toggle works",
+      "pass": true,
+      "detail": "night world mounted=True"
+    },
+    {
+      "step": "14 Messages icon -> waitlist",
+      "pass": true,
+      "detail": "messages -> modal_visible=True"
+    },
+    {
+      "step": "15 Parents icon -> waitlist",
+      "pass": true,
+      "detail": "parents -> modal_visible=True"
+    },
+    {
+      "step": "16 Family Connection -> waitlist",
+      "pass": true,
+      "detail": "family -> modal_visible=True"
+    },
+    {
+      "step": "17 Join Explorer List CTA -> waitlist",
+      "pass": true,
+      "detail": "explorer-list-cta -> modal_visible=True"
+    },
+    {
+      "step": "18 Compass 'What will we discover today?' -> waitlist",
+      "pass": true,
+      "detail": "compass -> modal_visible=True"
+    },
+    {
+      "step": "19 Our World Map shortcut",
+      "pass": true,
+      "detail": "world-map shortcut -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "20 Bottom-nav Home (active, stays on main)",
+      "pass": true,
+      "detail": "home-click url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "21 Bottom-nav Stories -> waitlist",
+      "pass": true,
+      "detail": "nav-stories -> modal_visible=True"
+    },
+    {
+      "step": "22 Bottom-nav Activities -> waitlist",
+      "pass": true,
+      "detail": "nav-activities -> modal_visible=True"
+    },
+    {
+      "step": "23 Bottom-nav Games -> waitlist",
+      "pass": true,
+      "detail": "nav-games -> modal_visible=True"
+    },
+    {
+      "step": "24 Bottom-nav Music -> waitlist",
+      "pass": true,
+      "detail": "nav-music -> modal_visible=True"
+    },
+    {
+      "step": "25 Bottom-nav Videos -> waitlist",
+      "pass": true,
+      "detail": "nav-videos -> modal_visible=True"
+    },
+    {
+      "step": "26 Bottom-nav Resources -> waitlist",
+      "pass": true,
+      "detail": "nav-resources -> modal_visible=True"
+    },
+    {
+      "step": "27.0 Daily Challenge #0 -> waitlist",
+      "pass": true,
+      "detail": "challenge-0 -> modal_visible=True"
+    },
+    {
+      "step": "27.1 Daily Challenge #1 -> waitlist",
+      "pass": true,
+      "detail": "challenge-1 -> modal_visible=True"
+    },
+    {
+      "step": "27.2 Daily Challenge #2 -> waitlist",
+      "pass": true,
+      "detail": "challenge-2 -> modal_visible=True"
+    },
+    {
+      "step": "27.3 Daily Challenge #3 -> waitlist",
+      "pass": true,
+      "detail": "challenge-3 -> modal_visible=True"
+    },
+    {
+      "step": "28 Mood 'happy' -> waitlist",
+      "pass": false,
+      "detail": "EXC Locator.click: Timeout 4000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"polarstar-day-mood-happy\\\"]\").first\n    - locator resolved to <button type=\"button\" x-column=\"12\" x-dynamic=\"false\" x-line-number=\"218\" x-component=\"button\" x-file-name=\"PolarstarDayWorld\" x-id=\"PolarstarDayWorld_218_12\" data-testid=\"polarstar-day-mood-happy\">\u2026</button>\n  - attempting click action\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <p x-column=\"8\" x-component=\"p\" x-dynamic=\"false\" x-line-number=\"239\" x-id=\"PolarstarDayWorld_239_8\" x-file-name=\"PolarstarDayWorld\">Share moments, celebrate wins and create memories\u2026</p> from <button x-column=\"6\" type=\"button\" x-dynamic=\"false\" x-line-number=\"231\" x-component=\"button\" class=\"ps-family-zone\" x-id=\"PolarstarDayWorld_231_6\" x-file-name=\"PolarstarDayWorld\" data-testid=\"polarstar-day-family\">\u2026</button> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <p x-column=\"8\" x-component=\"p\" x-dynamic=\"false\" x-line-number=\"239\" x-id=\"PolarstarDayWorld_239_8\" x-file-name=\"PolarstarDayWorld\">Share moments, celebrate wins and create memories\u2026</p> from <button x-column=\"6\" type=\"button\" x-dynamic=\"false\" x-line-number=\"231\" x-component=\"button\" class=\"ps-family-zone\" x-id=\"PolarstarDayWorld_231_6\" x-file-name=\"PolarstarDayWorld\" data-testid=\"polarstar-day-family\">\u2026</button> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    7 \u00d7 waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <p x-column=\"8\" x-component=\"p\" x-dynamic=\"false\" x-line-number=\"239\" x-id=\"PolarstarDayWorld_239_8\" x-file-name=\"PolarstarDayWorld\">Share moments, celebrate wins and create memories\u2026</p> from <button x-column=\"6\" type=\"button\" x-dynamic=\"false\" x-line-number=\"231\" x-component=\"button\" class=\"ps-family-zone\" x-id=\"PolarstarDayWorld_231_6\" x-file-name=\"PolarstarDayWorld\" data-testid=\"polarstar-day-family\">\u2026</button> subtree intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n"
+    },
+    {
+      "step": "28 Mood 'calm' -> waitlist",
+      "pass": true,
+      "detail": "mood-calm -> modal_visible=True"
+    },
+    {
+      "step": "28 Mood 'excited' -> waitlist",
+      "pass": true,
+      "detail": "mood-excited -> modal_visible=True"
+    },
+    {
+      "step": "28 Mood 'tired' -> waitlist",
+      "pass": true,
+      "detail": "mood-tired -> modal_visible=True"
+    },
+    {
+      "step": "28 Mood 'other' -> waitlist",
+      "pass": true,
+      "detail": "mood-other -> modal_visible=True"
+    },
+    {
+      "step": "29 My Space 'my-journal' -> waitlist",
+      "pass": true,
+      "detail": "myspace-my-journal -> modal_visible=True"
+    },
+    {
+      "step": "29 My Space 'my-drawings' -> waitlist",
+      "pass": true,
+      "detail": "myspace-my-drawings -> modal_visible=True"
+    },
+    {
+      "step": "29 My Space 'my-voice' -> waitlist",
+      "pass": true,
+      "detail": "myspace-my-voice -> modal_visible=True"
+    },
+    {
+      "step": "29 My Space 'my-treasures' -> waitlist",
+      "pass": true,
+      "detail": "myspace-my-treasures -> modal_visible=True"
+    },
+    {
+      "step": "30 Explorer's Hub 'science-lab' -> waitlist",
+      "pass": true,
+      "detail": "explorer-science-lab -> modal_visible=True"
+    },
+    {
+      "step": "30 Explorer's Hub 'nature-explorers' -> waitlist",
+      "pass": true,
+      "detail": "explorer-nature-explorers -> modal_visible=True"
+    },
+    {
+      "step": "30 Explorer's Hub 'world-cultures' -> waitlist",
+      "pass": true,
+      "detail": "explorer-world-cultures -> modal_visible=True"
+    },
+    {
+      "step": "30 Explorer's Hub 'space-adventures' -> waitlist",
+      "pass": true,
+      "detail": "explorer-space-adventures -> modal_visible=True"
+    },
+    {
+      "step": "30 Explorer's Hub 'amazing-animals' -> waitlist",
+      "pass": true,
+      "detail": "explorer-amazing-animals -> modal_visible=True"
+    },
+    {
+      "step": "31 Morning Boost panel -> waitlist",
+      "pass": false,
+      "detail": "morning-boost -> modal_visible=False"
+    }
+  ],
+  "hits": {
+    "calendar (1530,170)": {
+      "want": "polarstar-day-mode-night",
+      "got": {
+        "tag": "svg",
+        "tid": "polarstar-day-mode-night",
+        "cls": "[object SVGAnimatedString]"
+      },
+      "ok": true
+    },
+    "messages (1660,170)": {
+      "want": "polarstar-day-messages",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-mode-night",
+        "cls": ""
+      },
+      "ok": false
+    },
+    "parents (1810,170)": {
+      "want": "polarstar-day-parents",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-messages",
+        "cls": ""
+      },
+      "ok": false
+    },
+    "discovery_label (220,340)": {
+      "want": "polarstar-day-age-tab-discovery",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-age-tab-discovery",
+        "cls": "ps-age-tab"
+      },
+      "ok": true
+    },
+    "exploration_label (870,340)": {
+      "want": "polarstar-day-age-tab-exploration",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-age-tab-exploration",
+        "cls": "ps-age-tab"
+      },
+      "ok": true
+    },
+    "creation_label (1560,340)": {
+      "want": "polarstar-day-age-tab-creation",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-age-tab-creation",
+        "cls": "ps-age-tab"
+      },
+      "ok": true
+    },
+    "world_map (60,510)": {
+      "want": "polarstar-day-world-shortcut",
+      "got": {
+        "tag": "DIV",
+        "tid": "polarstar-day-world",
+        "cls": "ps-day-world"
+      },
+      "ok": false
+    },
+    "discovery_panel (350,500)": {
+      "want": "polarstar-day-age-panel-discovery",
+      "got": {
+        "tag": "SECTION",
+        "tid": "polarstar-day-age-discovery",
+        "cls": "ps-age-zone ps-day-age-discovery"
+      },
+      "ok": false
+    },
+    "explorers_hub (320,780)": {
+      "want": null,
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-explorer-world-cultures",
+        "cls": ""
+      },
+      "ok": true
+    },
+    "daily_challenges (1400,800)": {
+      "want": null,
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-challenge-1",
+        "cls": ""
+      },
+      "ok": true
+    },
+    "morning_boost (300,1080)": {
+      "want": "polarstar-day-morning-boost",
+      "got": {
+        "tag": "H2",
+        "tid": "polarstar-day-morning-boost",
+        "cls": ""
+      },
+      "ok": true
+    },
+    "my_space (680,1060)": {
+      "want": null,
+      "got": {
+        "tag": "SECTION",
+        "tid": "polarstar-day-my-space",
+        "cls": "ps-panel ps-my-space"
+      },
+      "ok": true
+    },
+    "family_connection (1020,1100)": {
+      "want": "polarstar-day-family",
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-family",
+        "cls": "ps-family-zone"
+      },
+      "ok": true
+    },
+    "today_feel (1430,1100)": {
+      "want": null,
+      "got": {
+        "tag": "BUTTON",
+        "tid": "polarstar-day-mood-excited",
+        "cls": ""
+      },
+      "ok": true
+    }
+  }
+}

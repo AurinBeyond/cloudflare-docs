@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "step": "NAV discovery",
+      "pass": true,
+      "detail": "tab_box={'x': 57.40625, 'y': 304.4375, 'width': 588.671875, 'height': 37.5} el@tab=SPAN.#[data-testid=] url_after_tab=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "NAV exploration",
+      "pass": true,
+      "detail": "tab_box={'x': 705.78125, 'y': 304.4375, 'width': 218.109375, 'height': 37.5} el@tab=SPAN.#[data-testid=] url_after_tab=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/exploration"
+    },
+    {
+      "step": "NAV creation",
+      "pass": true,
+      "detail": "tab_box={'x': 1434.234375, 'y': 303.28125, 'width': 175.09375, 'height': 37.734375} el@tab=SPAN.#[data-testid=] url_after_tab=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/creation"
+    }
+  ],
+  "nav": {
+    "tag": "HEADER",
+    "classes": "sticky top-0 z-50 transition-colors duration-500 bg-transparent",
+    "top": 0,
+    "bottom": 72,
+    "height": 72,
+    "zIndex": "50",
+    "position": "sticky",
+    "pointerEvents": "auto"
+  },
+  "hits": {
+    "painted_discovery_label": "BUTTON.ps-age-tab[polarstar-day-age-tab-discovery]",
+    "painted_exploration_label": "BUTTON.ps-age-tab[polarstar-day-age-tab-exploration]",
+    "painted_creation_label": "BUTTON.ps-age-tab[polarstar-day-age-tab-creation]",
+    "painted_fairy_left": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_fairy_speech": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_world_map_icon": "BUTTON.[polarstar-day-discovery-morning-mindful-start]",
+    "painted_explorers_hub": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_chest": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_daily_challenges": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_fairy_right": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_morning_boost": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_my_space": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_family_connection": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_today_feel": "BUTTON.[polarstar-day-challenge-3]",
+    "painted_compass_question": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_bottom_nav_home": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_bottom_nav_stories": "BUTTON.[polarstar-day-myspace-my-journal]",
+    "painted_bottom_nav_resources": "BUTTON.[polarstar-day-mood-other]",
+    "painted_top_calendar": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_top_messages": "DIV.ps-day-world[polarstar-day-world]",
+    "painted_top_parents": "DIV.ps-day-world[polarstar-day-world]"
+  }
+}

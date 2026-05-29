@@ -162,23 +162,26 @@
   background: linear-gradient(90deg, #ffd15a, #58a8d8);
 }
 
+/* §POLARSTAR NAV-CONTRACT iter 85j 2026-02-29 — CRITICAL FIX:
+ * Previously, .ps-top-icons was a flex container at right:2% top:9.5%
+ * width:35% height:6%. Its children used left/top % which resolved
+ * against the *parent* (35%×6%), not the world — so left:78.5%
+ * actually became 27.5% of the world. Hitboxes were 200px right of
+ * the painted icons (over empty sky). Now: .ps-top-icons is a full-
+ * world overlay (inset:0) so the child %-coords are world-relative. */
 .ps-top-icons {
   position: absolute;
-  right: 2%;
-  top: 9.5%;
-  width: 35%;
-  height: 6%;
+  inset: 0;
   z-index: 6;
-  display: flex;
-  gap: 1.5%;
-  justify-content: flex-end;
   opacity: 0;
   pointer-events: none;
 }
 
-/* The three painted icons in the top-right (Sun/Bell/Avatar) have
- * SEPARATE hitboxes so each goes to its own action. We re-enable
- * pointer-events on the buttons themselves. */
+/* The three painted icons in the top-right (Calendar/Messages/Parents)
+ * have SEPARATE hitboxes so each goes to its own action. We re-enable
+ * pointer-events on the buttons themselves. Percentages are now of the
+ * world container (Layout nav offset already accounted for by parent
+ * inset:0). */
 .ps-top-icons button {
   position: absolute;
   pointer-events: auto;
@@ -189,17 +192,19 @@
   padding: 0;
 }
 .ps-top-icons button > * { opacity: 0; }
-/* §POLARSTAR NAV-CONTRACT iter 85i — Top-right painted icons are
- * Calendar/Messages/Parents at ~78-92% horiz, ~9-17% vert in the
- * painting (Gemini's earlier 51-62% estimate was wrong). */
-.ps-top-icons [data-testid="polarstar-day-mode-night"]  { left: 78.5%; top: 7%;  width: 4.5%; height: 11%; right: auto; }
-.ps-top-icons [data-testid="polarstar-day-messages"]    { left: 84%;   top: 7%;  width: 4.5%; height: 11%; right: auto; }
-.ps-top-icons [data-testid="polarstar-day-parents"]     { left: 90%;   top: 7%;  width: 5.0%; height: 11%; right: auto; }
+/* §POLARSTAR NAV-CONTRACT iter 85j — Coordinates measured directly
+ * from the live screenshot (day-world-v2.png stretched to the 16:10
+ * preview viewport, Layout nav 72px offset). Hitboxes are narrowed
+ * so each painted icon has its OWN zone with a 1% buffer between. */
+.ps-top-icons [data-testid="polarstar-day-mode-night"]  { left: 78%;   top: 4%; width: 8%; height: 13%; right: auto; }
+.ps-top-icons [data-testid="polarstar-day-messages"]    { left: 87%;   top: 4%; width: 6%; height: 13%; right: auto; }
+.ps-top-icons [data-testid="polarstar-day-parents"]     { left: 93.5%; top: 4%; width: 6%; height: 13%; right: auto; }
 
+/* §POLARSTAR NAV-CONTRACT iter 85j — Top-icon size/visuals now flow
+ * through the painted background. The legacy 78×80px override has
+ * been removed; size + position are 100% from the percentage
+ * hitbox declarations above. Keep only the colour fallback. */
 .ps-top-icons button {
-  position: relative;
-  width: 78px;
-  height: 80px;
   border: 0;
   background: transparent;
   color: #10233a;
@@ -239,10 +244,10 @@
 
 .ps-world-map-shortcut {
   position: absolute;
-  left: 2.54%;
-  top: 40.82%;
-  width: 5.40%;
-  height: 10.84%;
+  left: 0.3%;
+  top: 36%;
+  width: 6%;
+  height: 12%;
   z-index: 5;
   cursor: pointer;
   border: 0;
@@ -284,21 +289,26 @@
 
 /* Each .ps-age-zone is itself a positioning context that wraps both
  * the small year-tab and the wider age panel beneath it. */
+/* §POLARSTAR NAV-CONTRACT iter 85j 2026-02-29 — Coordinates remeasured
+ * from the live screenshot. The painted "4-6 YEARS DISCOVERY" label,
+ * "Daily Path" sub-header, and the 5 activity icons together occupy
+ * ~7-31% horiz and ~19-45% vert. Tab inner = label band only,
+ * Panel inner = the wide icon row below. */
+
 /* Discovery (4-6 YEARS) — TAB above panel + PANEL below */
-.ps-day-age-discovery   { left: 2.99%;  top: 18.16%; width: 30.66%; height: 14.65%; }
-.ps-day-age-discovery .ps-age-tab    { left: 0;     top: 0;     width: 100%; height: 20%; }
-.ps-day-age-discovery .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
+.ps-day-age-discovery   { left: 7%;  top: 19%; width: 24%; height: 26%; }
+.ps-day-age-discovery .ps-age-tab    { left: 0;     top: 0;     width: 70%; height: 28%; }
+.ps-day-age-discovery .ps-zone-panel { left: 0; top: 30%; width: 100%; height: 70%; }
 
-/* Exploration (7-10 YEARS) — keep boundaries snug so they don't
- * overlap the Creation panel on the right. */
-.ps-day-age-exploration { left: 32.50%; top: 18.16%; width: 35.50%; height: 14.65%; }
-.ps-day-age-exploration .ps-age-tab    { left: 12%; top: 0; width: 32%; height: 20%; }
-.ps-day-age-exploration .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
+/* Exploration (7-10 YEARS) — wide panel with 7 daily icons */
+.ps-day-age-exploration { left: 32%; top: 19%; width: 37%; height: 26%; }
+.ps-day-age-exploration .ps-age-tab    { left: 21%; top: 0; width: 30%; height: 28%; }
+.ps-day-age-exploration .ps-zone-panel { left: 0; top: 30%; width: 100%; height: 70%; }
 
-/* Creation (11-13 YEARS) — starts after Exploration ends. */
-.ps-day-age-creation    { left: 69%;    top: 18.07%; width: 28.50%; height: 14.74%; }
-.ps-day-age-creation .ps-age-tab    { left: 20%; top: 0; width: 32%; height: 20%; }
-.ps-day-age-creation .ps-zone-panel { left: 0; top: 24%; width: 100%; height: 76%; }
+/* Creation (11-13 YEARS) — 5 icon Creation Studio */
+.ps-day-age-creation    { left: 69%; top: 19%; width: 30%; height: 26%; }
+.ps-day-age-creation .ps-age-tab    { left: 18%; top: 0; width: 46%; height: 28%; }
+.ps-day-age-creation .ps-zone-panel { left: 0; top: 30%; width: 100%; height: 70%; }
 
 .ps-icon-row {
   height: 100%;
@@ -330,26 +340,31 @@
   letter-spacing: 0.02em;
 }
 
-/* §POLARSTAR v10 iter 85h — Secondary panels, %-positions from
- * native 1536×1024 painting. */
+/* §POLARSTAR NAV-CONTRACT iter 85j 2026-02-29 — Secondary panels
+ * remeasured directly from the live preview screenshot. */
 .ps-explorer-hub {
   position: absolute;
-  left: 3.78%;
-  top: 51.56%;
-  width: 30.08%;
-  height: 10.94%;
+  left: 4%;
+  top: 49%;
+  width: 27%;
+  height: 18%;
   z-index: 4;
+  overflow: hidden;
 }
-.ps-explorer-hub .ps-icon-row { height: 100%; padding: 0; }
+/* §POLARSTAR NAV-CONTRACT iter 85j — clip the icon row to the panel
+ * bounds. The invisible <h2> header still occupies vertical space at
+ * the top of the section, so a plain `height: 100%` on .ps-icon-row
+ * pushed its buttons below the panel and into the bottom-nav row. */
+.ps-explorer-hub .ps-icon-row { position: absolute; inset: 0; padding: 0; display: flex; }
 .ps-explorer-hub .ps-icon-row button { flex: 1; height: 100%; }
 .ps-explorer-hub .ps-icon-row button > * { opacity: 0; }
 
 .ps-morning-boost {
   position: absolute;
-  left: 4.04%;
-  top: 72.07%;
-  width: 12.24%;
-  height: 11.62%;
+  left: 10%;
+  top: 76%;
+  width: 13%;
+  height: 16%;
   z-index: 5;
   cursor: pointer;
   padding: 0;
@@ -359,21 +374,22 @@
 .ps-my-space {
   position: absolute;
   left: 25%;
-  top: 76%;
-  width: 19%;
+  top: 74%;
+  width: 20%;
   height: 17%;
   z-index: 4;
+  overflow: hidden;
 }
-.ps-my-space .ps-icon-row { height: 100%; padding: 0; }
+.ps-my-space .ps-icon-row { position: absolute; inset: 0; padding: 0; display: flex; }
 .ps-my-space .ps-icon-row button { flex: 1; height: 100%; }
 .ps-my-space .ps-icon-row button > * { opacity: 0; }
 
 .ps-daily-challenges {
   position: absolute;
-  left: 63%;
-  top: 53%;
-  width: 19%;
-  height: 18%;
+  left: 64%;
+  top: 49%;
+  width: 18%;
+  height: 23%;
   z-index: 4;
   padding: 0;
 }
@@ -398,10 +414,10 @@
 
 .ps-today-feel {
   position: absolute;
-  left: 64%;
-  top: 80%;
-  width: 22%;
-  height: 11%;
+  left: 63%;
+  top: 78%;
+  width: 21%;
+  height: 14%;
   z-index: 4;
   padding: 0;
 }
@@ -426,9 +442,9 @@
 
 .ps-discovery-stars {
   position: absolute;
-  left: 44%;
-  top: 53%;
-  width: 8%;
+  left: 42%;
+  top: 50%;
+  width: 9%;
   height: 14%;
   z-index: 5;
   border: 0;
@@ -438,28 +454,31 @@
 }
 .ps-discovery-stars > * { opacity: 0; }
 
-/* Family Connection painted circle is at ~50-58% horiz, ~76-90%
- * vert in the painting. Position the click-zone over its core. */
+/* Family Connection painted circle is at ~47-59% horiz, ~72-87%
+ * vert in the painting. §POLARSTAR NAV-CONTRACT iter 85j — height
+ * tightened from 18% → 15% so the box no longer extends down into
+ * the bottom-nav Music/Videos hitboxes. */
 .ps-family-zone {
   position: absolute;
-  left: 50%;
-  top: 76%;
-  width: 9%;
-  height: 17%;
+  left: 47%;
+  top: 72%;
+  width: 13%;
+  height: 15%;
   z-index: 7;
   padding: 0;
   cursor: pointer;
   background: transparent;
   border: 0;
+  overflow: hidden;
 }
-.ps-family-zone > * { opacity: 0; }
+.ps-family-zone > * { opacity: 0; pointer-events: none; }
 
 .ps-guide-bubble {
   position: absolute;
-  left: 59.18%;
-  top: 69.43%;
-  width: 8.72%;
-  height: 6.05%;
+  left: 88%;
+  top: 53%;
+  width: 11%;
+  height: 20%;
   z-index: 5;
   background: transparent;
   pointer-events: none;
@@ -470,7 +489,7 @@
 .ps-bottom-question {
   position: absolute;
   left: 88%;
-  bottom: 3%;
+  top: 90%;
   width: 11%;
   height: 6%;
   z-index: 6;
@@ -482,12 +501,17 @@
 .ps-bottom-question > * { opacity: 0; }
 
 /* BOTTOM NAV — 7 buttons in the painted pill bar -------------- */
+/* §POLARSTAR NAV-CONTRACT iter 85j — y position moved up from
+ * top:96% because the parent atmosphere container is 100vh anchored
+ * 72px below the layout nav. That pushed everything below 94% off
+ * the visible viewport. The painted nav-bar pill itself appears at
+ * world-y ≈ 91-95%. */
 .ps-bottom-nav {
   position: absolute;
-  left: 20%;
-  bottom: 0.5%;
-  width: 60%;
-  height: 7%;
+  left: 15%;
+  top: 91%;
+  width: 54%;
+  height: 5%;
   z-index: 6;
   display: flex;
   align-items: stretch;
@@ -507,7 +531,34 @@
 .ps-bottom-nav button > * { opacity: 0; }
 .ps-bottom-nav button.active { color: transparent; }
 
-/* RESPONSIVE FALLBACK ------------------------------------------ */
+/* §POLARSTAR DEBUG iter 85j — Temporary calibration overlay. Add the
+ * `data-ps-debug="1"` attribute on the .ps-day-world root to outline
+ * every active click-zone with a transparent magenta tint + dashed
+ * border. Decorative zones get a green tint so misclassifications
+ * jump out instantly. Remove once the founder approves alignment. */
+.ps-day-world[data-ps-debug="1"] .ps-top-icons button,
+.ps-day-world[data-ps-debug="1"] .ps-world-map-shortcut,
+.ps-day-world[data-ps-debug="1"] .ps-age-tab,
+.ps-day-world[data-ps-debug="1"] .ps-zone-panel,
+.ps-day-world[data-ps-debug="1"] .ps-explorer-hub,
+.ps-day-world[data-ps-debug="1"] .ps-morning-boost,
+.ps-day-world[data-ps-debug="1"] .ps-my-space,
+.ps-day-world[data-ps-debug="1"] .ps-daily-challenges,
+.ps-day-world[data-ps-debug="1"] .ps-today-feel,
+.ps-day-world[data-ps-debug="1"] .ps-family-zone,
+.ps-day-world[data-ps-debug="1"] .ps-bottom-question,
+.ps-day-world[data-ps-debug="1"] .ps-bottom-nav button {
+  background: rgba(231, 91, 91, 0.22) !important;
+  outline: 2px dashed rgba(231, 91, 91, 0.95) !important;
+  outline-offset: -2px !important;
+}
+.ps-day-world[data-ps-debug="1"] .ps-decorative,
+.ps-day-world[data-ps-debug="1"] .ps-discovery-stars,
+.ps-day-world[data-ps-debug="1"] .ps-guide-bubble {
+  background: rgba(91, 173, 91, 0.18) !important;
+  outline: 2px dashed rgba(91, 173, 91, 0.85) !important;
+  outline-offset: -2px !important;
+}
 @media (max-width: 1100px) {
   .ps-day-world {
     min-height: auto;
@@ -630,7 +681,13 @@
 .ps-day-world .ps-challenge-list button,
 .ps-day-world .ps-moods button {
   cursor: pointer !important;
-  position: relative;
+  /* §POLARSTAR NAV-CONTRACT iter 85j 2026-02-29 — DO NOT add
+   * `position: relative` here. The hitbox layer already declares
+   * `position: absolute` on each click-zone, and overriding it
+   * to relative makes the buttons flow in-document instead of
+   * sitting precisely over the painting. Hover/active feedback
+   * is purely visual (box-shadow + transform) and works regardless
+   * of positioning scheme. */
   transition: box-shadow 220ms ease, transform 160ms ease;
   outline: none !important;
   border-radius: 16px !important;

@@ -174,10 +174,16 @@ export default function PolarstarDayWorld({ navigate }) {
         <IconRow items={EXPLORER_HUB} onClick={(label) => openWaitlist(label)} ariaPrefix="explorer" />
       </Panel>
 
-      <Panel className="ps-morning-boost" title="Morning Boost" testid="polarstar-day-morning-boost">
+      <button
+        type="button"
+        className="ps-panel ps-morning-boost"
+        onClick={() => openWaitlist("Morning Boost")}
+        data-testid="polarstar-day-morning-boost"
+      >
+        <h2>Morning Boost</h2>
         <p>Start your day with calm and focus.</p>
         <Sun className="ps-big-sun" />
-      </Panel>
+      </button>
 
       <Panel className="ps-my-space" title="My Space" testid="polarstar-day-my-space">
         <IconRow items={MY_SPACE} onClick={(label) => openWaitlist(label)} ariaPrefix="myspace" />

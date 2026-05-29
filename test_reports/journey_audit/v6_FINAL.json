@@ -1,0 +1,354 @@
+{
+  "results": [
+    {
+      "step": "J01 MAIN WORLD loads",
+      "pass": true,
+      "detail": "title visible=True"
+    },
+    {
+      "step": "J02 Discovery tab -> /discovery",
+      "pass": true,
+      "detail": "url=nt.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "J03 Discovery room: identity+back+CTA",
+      "pass": true,
+      "detail": "name=True back=True cta=True"
+    },
+    {
+      "step": "J04 Discovery activity (CTA) -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "J05 Back -> main world",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "J06 Exploration tab -> /exploration",
+      "pass": true,
+      "detail": "url=.com/kids-universe/polarstar/exploration"
+    },
+    {
+      "step": "J07 Exploration room identity",
+      "pass": true,
+      "detail": "exploration name visible=True"
+    },
+    {
+      "step": "J08 Exploration activity (CTA) -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "J09 Back -> main world",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "J10 Creation tab -> /creation",
+      "pass": true,
+      "detail": "url=ent.com/kids-universe/polarstar/creation"
+    },
+    {
+      "step": "J11 Creation room identity",
+      "pass": true,
+      "detail": "creation name visible=True"
+    },
+    {
+      "step": "J12 Creation activity (CTA) -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "J13 Back -> main world",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "J14 Join the Explorer List CTA -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V01 Calendar -> Night mode",
+      "pass": true,
+      "detail": "night mounted"
+    },
+    {
+      "step": "V02 Messages -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V03 Parents -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V04 Compass 'What will we discover today?' -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V05 Family Connection Zone -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V06 Morning Boost -> waitlist",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V07 Our World Map (stays on /polarstar)",
+      "pass": true,
+      "detail": "url=mergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "V08.0 Daily Challenge #0",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V08.1 Daily Challenge #1",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V08.2 Daily Challenge #2",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V08.3 Daily Challenge #3",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V09 Mood 'happy'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V09 Mood 'calm'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V09 Mood 'excited'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V09 Mood 'tired'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V09 Mood 'other'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V10 MySpace 'my-journal'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V10 MySpace 'my-drawings'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V10 MySpace 'my-voice'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V10 MySpace 'my-treasures'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V11 Hub 'science-lab'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V11 Hub 'nature-explorers'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V11 Hub 'world-cultures'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V11 Hub 'space-adventures'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V11 Hub 'amazing-animals'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav HOME (active)",
+      "pass": true,
+      "detail": "url=s-universe/polarstar"
+    },
+    {
+      "step": "V12 Bottom-nav 'stories'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav 'activities'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav 'games'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav 'music'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav 'videos'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V12 Bottom-nav 'resources'",
+      "pass": true,
+      "detail": "modal=True"
+    },
+    {
+      "step": "V13 Discovery PANEL -> /discovery",
+      "pass": true,
+      "detail": "url=nt.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "V13 Exploration PANEL -> /exploration",
+      "pass": true,
+      "detail": "url=.com/kids-universe/polarstar/exploration"
+    },
+    {
+      "step": "V13 Creation PANEL -> /creation",
+      "pass": true,
+      "detail": "url=ent.com/kids-universe/polarstar/creation"
+    },
+    {
+      "step": "HB Calendar paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-mode-night'}"
+    },
+    {
+      "step": "HB Messages paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-messages'}"
+    },
+    {
+      "step": "HB Parents paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-parents'}"
+    },
+    {
+      "step": "HB Discovery label",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-discovery'}"
+    },
+    {
+      "step": "HB Exploration label",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-exploration'}"
+    },
+    {
+      "step": "HB Creation label",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-creation'}"
+    },
+    {
+      "step": "HB Explorer's Hub paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-explorer-world-cultures'}"
+    },
+    {
+      "step": "HB Daily Challenges",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-challenge-1'}"
+    },
+    {
+      "step": "HB Morning Boost paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-morning-boost'}"
+    },
+    {
+      "step": "HB Family paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-family'}"
+    },
+    {
+      "step": "HB Mood Happy paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-mood-happy'}"
+    },
+    {
+      "step": "HB MySpace paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-myspace-my-journal'}"
+    },
+    {
+      "step": "HB World Map paint",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-world-shortcut'}"
+    },
+    {
+      "step": "HB Bottom-nav HOME",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-home'}"
+    },
+    {
+      "step": "HB Bottom-nav Stories",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-stories'}"
+    },
+    {
+      "step": "HB Bottom-nav Activities",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-activities'}"
+    },
+    {
+      "step": "HB Bottom-nav Games",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-games'}"
+    },
+    {
+      "step": "HB Bottom-nav Music",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-music'}"
+    },
+    {
+      "step": "HB Bottom-nav Videos",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-videos'}"
+    },
+    {
+      "step": "HB Bottom-nav Resources",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-nav-resources'}"
+    },
+    {
+      "step": "HB Compass paint",
+      "pass": true,
+      "detail": "{'tag': 'SPAN', 'tid': 'polarstar-day-compass'}"
+    }
+  ]
+}

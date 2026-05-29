@@ -1,0 +1,274 @@
+{
+  "results": [
+    {
+      "step": "01 Discovery tab -> /discovery",
+      "pass": true,
+      "detail": "polarstar-day-age-tab-discovery -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/discovery"
+    },
+    {
+      "step": "02 Discovery CTA -> waitlist",
+      "pass": true,
+      "detail": "polarstar-room-cta-discovery -> modal=True"
+    },
+    {
+      "step": "03 Back -> main world",
+      "pass": true,
+      "detail": "url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "04 Exploration tab -> /exploration",
+      "pass": true,
+      "detail": "polarstar-day-age-tab-exploration -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/exploration"
+    },
+    {
+      "step": "05 Back -> main world",
+      "pass": true,
+      "detail": "url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "06 Creation tab -> /creation",
+      "pass": true,
+      "detail": "polarstar-day-age-tab-creation -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar/creation"
+    },
+    {
+      "step": "07 Back -> main world",
+      "pass": true,
+      "detail": "url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "08 Join Explorer List CTA -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-explorer-cta -> modal=True"
+    },
+    {
+      "step": "09 Calendar -> Night mode",
+      "pass": true,
+      "detail": "night=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "10 Messages -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-messages -> modal=True"
+    },
+    {
+      "step": "11 Parents -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-parents -> modal=True"
+    },
+    {
+      "step": "12 World Map shortcut",
+      "pass": true,
+      "detail": "polarstar-day-world-shortcut -> url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "13 Compass question -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-compass -> modal=True"
+    },
+    {
+      "step": "14 Family Connection -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-family -> modal=True"
+    },
+    {
+      "step": "15 Morning Boost -> waitlist",
+      "pass": true,
+      "detail": "polarstar-day-morning-boost -> modal=True"
+    },
+    {
+      "step": "16.0 Daily Challenge #0",
+      "pass": true,
+      "detail": "polarstar-day-challenge-0 -> modal=True"
+    },
+    {
+      "step": "16.1 Daily Challenge #1",
+      "pass": true,
+      "detail": "polarstar-day-challenge-1 -> modal=True"
+    },
+    {
+      "step": "16.2 Daily Challenge #2",
+      "pass": true,
+      "detail": "polarstar-day-challenge-2 -> modal=True"
+    },
+    {
+      "step": "16.3 Daily Challenge #3",
+      "pass": true,
+      "detail": "polarstar-day-challenge-3 -> modal=True"
+    },
+    {
+      "step": "17 Mood 'happy'",
+      "pass": true,
+      "detail": "polarstar-day-mood-happy -> modal=True"
+    },
+    {
+      "step": "17 Mood 'calm'",
+      "pass": true,
+      "detail": "polarstar-day-mood-calm -> modal=True"
+    },
+    {
+      "step": "17 Mood 'excited'",
+      "pass": true,
+      "detail": "polarstar-day-mood-excited -> modal=True"
+    },
+    {
+      "step": "17 Mood 'tired'",
+      "pass": true,
+      "detail": "polarstar-day-mood-tired -> modal=True"
+    },
+    {
+      "step": "17 Mood 'other'",
+      "pass": true,
+      "detail": "polarstar-day-mood-other -> modal=True"
+    },
+    {
+      "step": "18 MySpace 'my-journal'",
+      "pass": true,
+      "detail": "polarstar-day-myspace-my-journal -> modal=True"
+    },
+    {
+      "step": "18 MySpace 'my-drawings'",
+      "pass": true,
+      "detail": "polarstar-day-myspace-my-drawings -> modal=True"
+    },
+    {
+      "step": "18 MySpace 'my-voice'",
+      "pass": true,
+      "detail": "polarstar-day-myspace-my-voice -> modal=True"
+    },
+    {
+      "step": "18 MySpace 'my-treasures'",
+      "pass": true,
+      "detail": "polarstar-day-myspace-my-treasures -> modal=True"
+    },
+    {
+      "step": "19 Hub 'science-lab'",
+      "pass": true,
+      "detail": "polarstar-day-explorer-science-lab -> modal=True"
+    },
+    {
+      "step": "19 Hub 'nature-explorers'",
+      "pass": true,
+      "detail": "polarstar-day-explorer-nature-explorers -> modal=True"
+    },
+    {
+      "step": "19 Hub 'world-cultures'",
+      "pass": true,
+      "detail": "polarstar-day-explorer-world-cultures -> modal=True"
+    },
+    {
+      "step": "19 Hub 'space-adventures'",
+      "pass": true,
+      "detail": "polarstar-day-explorer-space-adventures -> modal=True"
+    },
+    {
+      "step": "19 Hub 'amazing-animals'",
+      "pass": true,
+      "detail": "polarstar-day-explorer-amazing-animals -> modal=True"
+    },
+    {
+      "step": "20 Nav HOME",
+      "pass": true,
+      "detail": "url=https://aurin-hub.preview.emergentagent.com/kids-universe/polarstar"
+    },
+    {
+      "step": "21 Nav 'stories'",
+      "pass": true,
+      "detail": "polarstar-day-nav-stories -> modal=True"
+    },
+    {
+      "step": "21 Nav 'activities'",
+      "pass": true,
+      "detail": "polarstar-day-nav-activities -> modal=True"
+    },
+    {
+      "step": "21 Nav 'games'",
+      "pass": true,
+      "detail": "polarstar-day-nav-games -> modal=True"
+    },
+    {
+      "step": "21 Nav 'music'",
+      "pass": true,
+      "detail": "polarstar-day-nav-music -> modal=True"
+    },
+    {
+      "step": "21 Nav 'videos'",
+      "pass": true,
+      "detail": "polarstar-day-nav-videos -> modal=True"
+    },
+    {
+      "step": "21 Nav 'resources'",
+      "pass": true,
+      "detail": "polarstar-day-nav-resources -> modal=True"
+    },
+    {
+      "step": "HB Calendar paint (1530,170)",
+      "pass": true,
+      "detail": "{'tag': 'svg', 'tid': 'polarstar-day-mode-night'}"
+    },
+    {
+      "step": "HB Messages paint (1660,170)",
+      "pass": false,
+      "detail": "{'tag': 'DIV', 'tid': 'polarstar-day-world'}"
+    },
+    {
+      "step": "HB Parents paint (1820,170)",
+      "pass": true,
+      "detail": "{'tag': 'svg', 'tid': 'polarstar-day-parents'}"
+    },
+    {
+      "step": "HB Discovery label (220,340)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-discovery'}"
+    },
+    {
+      "step": "HB Exploration label (870,340)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-exploration'}"
+    },
+    {
+      "step": "HB Creation label (1560,340)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-age-tab-creation'}"
+    },
+    {
+      "step": "HB Explorer's Hub (320,780)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-explorer-world-cultures'}"
+    },
+    {
+      "step": "HB Daily Challenges (1400,800)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-challenge-1'}"
+    },
+    {
+      "step": "HB Morning Boost (300,1080)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-morning-boost'}"
+    },
+    {
+      "step": "HB Family (1020,1100)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-family'}"
+    },
+    {
+      "step": "HB Today I Feel happy (1252,1098)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-mood-happy'}"
+    },
+    {
+      "step": "HB World Map (60,560)",
+      "pass": true,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-world-shortcut'}"
+    },
+    {
+      "step": "HB Compass (1820,1240)",
+      "pass": false,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-explorer-cta'}"
+    },
+    {
+      "step": "HB Bottom-nav Stories paint (500,1240)",
+      "pass": false,
+      "detail": "{'tag': 'BUTTON', 'tid': 'polarstar-day-myspace-my-journal'}"
+    }
+  ]
+}
