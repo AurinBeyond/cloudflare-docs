@@ -1,0 +1,685 @@
+/* §POLARSTAR v10 — Day Mode world stylesheet.
+ *
+ * Built from the founder's exact spec, but tuned for the *current*
+ * day-world-v2.png — which is a fully-painted UI mockup (panels,
+ * icons, labels are all baked into the image). To avoid a doubled-
+ * up surface, the React panels below are rendered as INVISIBLE
+ * click-zones positioned over the painted elements (same approach
+ * as the v8 night click-map).
+ *
+ * When the founder swaps in a clean background painting (the
+ * Nano-Banana prompt result, no baked UI), simply set
+ * `--ps-day-overlay-alpha: 1;` on `.ps-day-world` and the panels
+ * become opaque again. Spec parity preserved.
+ */
+
+.ps-day-world {
+  position: relative;
+  width: 100%;
+  min-height: 980px;
+  overflow: hidden;
+  color: #10233a;
+  font-family: Inter, system-ui, sans-serif;
+  background: #dcedd0;
+  /* When the bg painting is a clean illustration (no baked UI),
+   * flip this to 1 to reveal all overlay panels. */
+  --ps-day-overlay-alpha: 0;
+  --ps-day-overlay-text: 0;
+}
+
+.ps-day-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.ps-day-title {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 720px;
+  text-align: center;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.ps-day-title h1 {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  line-height: 1;
+  margin: 8px 0 4px;
+  color: #15233a;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  text-shadow: 0 2px 14px rgba(255,255,255,0.7);
+}
+
+.ps-day-title p {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  font-style: italic;
+  color: rgba(31,42,68,0.78);
+}
+
+.ps-preview-badge {
+  display: inline-flex;
+  pointer-events: auto;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 248, 221, 0.88);
+  border: 1px solid rgba(161, 129, 59, 0.45);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #8a6a37;
+  box-shadow: 0 6px 14px rgba(31,42,68,0.10);
+}
+
+/* CHILD CARD / TOP ICONS / WORLD MAP SHORTCUT — invisible click-
+ * zones over the painted UI (the painting already shows them). */
+.ps-child-card {
+  position: absolute;
+  left: 28px;
+  top: 28px;
+  width: 290px;
+  height: 94px;
+  z-index: 6;
+  cursor: pointer;
+  background: rgba(255,255,255, calc(0.62 * var(--ps-day-overlay-alpha)));
+  border: 1px solid rgba(255,255,255, calc(0.7 * var(--ps-day-overlay-alpha)));
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  backdrop-filter: blur(calc(10px * var(--ps-day-overlay-alpha)));
+  -webkit-backdrop-filter: blur(calc(10px * var(--ps-day-overlay-alpha)));
+}
+.ps-child-card * { opacity: var(--ps-day-overlay-text); }
+
+.ps-avatar,
+.ps-guide-face,
+.ps-family-photo {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 38%, #f5c99d 0 23%, transparent 24%),
+    radial-gradient(circle at 45% 35%, #3a2018 0 3%, transparent 4%),
+    radial-gradient(circle at 56% 35%, #3a2018 0 3%, transparent 4%),
+    radial-gradient(circle at 50% 82%, #73a5d8 0 42%, transparent 43%);
+  border: 3px solid rgba(255,255,255,0.9);
+}
+
+.ps-avatar { width: 68px; height: 68px; }
+
+.ps-child-card-text { display: flex; flex-direction: column; }
+.ps-child-card-text strong { display: block; font-size: 16px; }
+.ps-child-card-text span { display: block; font-size: 12px; }
+
+.ps-progress {
+  width: 150px;
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: rgba(70, 98, 96, 0.25);
+  overflow: hidden;
+}
+
+.ps-progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ffd15a, #58a8d8);
+}
+
+.ps-top-icons {
+  position: absolute;
+  right: 38px;
+  top: 30px;
+  display: flex;
+  gap: 18px;
+  z-index: 6;
+  opacity: var(--ps-day-overlay-text);
+}
+
+.ps-top-icons button {
+  position: relative;
+  width: 78px;
+  height: 80px;
+  border: 0;
+  background: transparent;
+  color: #10233a;
+  cursor: pointer;
+}
+
+.ps-top-icons svg {
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+.ps-top-icons span {
+  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.ps-top-icons b {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  background: #e75b5b;
+  color: white;
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.ps-world-map-shortcut {
+  position: absolute;
+  left: 6px;
+  top: 350px;
+  width: 76px;
+  height: 122px;
+  z-index: 5;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255, calc(0.7 * var(--ps-day-overlay-alpha)));
+  border-radius: 20px;
+  background: rgba(64, 116, 130, calc(0.62 * var(--ps-day-overlay-alpha)));
+  color: white;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 1;
+}
+.ps-world-map-shortcut > * { opacity: var(--ps-day-overlay-text); }
+
+.ps-world-map-shortcut svg { width: 38px; height: 38px; }
+
+/* AGE ZONES ----------------------------------------------------- */
+.ps-age-zone {
+  position: absolute;
+  z-index: 4;
+}
+
+.ps-age-tab {
+  position: absolute;
+  top: -68px;
+  left: 0;
+  width: 150px;
+  height: 78px;
+  text-align: left;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 14px 14px 0 0;
+  background: rgba(246, 247, 218, 0.72);
+  color: #17334a;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ps-age-tab span,
+.ps-age-tab strong { display: block; }
+.ps-age-tab span { font-weight: 800; font-size: 14px; color: #1b8290; letter-spacing: 0.08em; }
+.ps-age-tab strong { font-size: 20px; text-transform: uppercase; margin-top: 4px; font-family: Georgia, serif; font-weight: 500; }
+
+.ps-zone-panel,
+.ps-panel,
+.ps-family-zone,
+.ps-guide-bubble,
+.ps-bottom-question {
+  background: rgba(246, 247, 218, 0.68);
+  border: 1px solid rgba(255,255,255,0.78);
+  border-radius: 24px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(60, 78, 54, 0.18);
+}
+
+.ps-zone-panel { border: 0; padding: 0; cursor: pointer; }
+
+.ps-day-age-discovery   { left: 104px; top: 248px; }
+.ps-day-age-exploration { left: 515px; top: 248px; }
+.ps-day-age-creation    { right: 38px; top: 248px; }
+
+.ps-day-age-discovery .ps-zone-panel   { width: 370px; height: 172px; }
+.ps-day-age-exploration .ps-zone-panel { width: 546px; height: 172px; }
+.ps-day-age-creation .ps-zone-panel    { width: 430px; height: 172px; }
+
+.ps-icon-row {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px;
+}
+
+.ps-icon-row button {
+  flex: 1;
+  height: 124px;
+  min-width: 0;
+  border: 1px solid rgba(126, 143, 120, 0.28);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.42);
+  cursor: pointer;
+  color: #10233a;
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  font: inherit;
+}
+
+.ps-icon-row svg { width: 34px; height: 34px; color: #1b8290; }
+
+.ps-icon-row span {
+  white-space: pre-line;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* FLOATING PANELS ---------------------------------------------- */
+.ps-panel h2 {
+  margin: 14px 0 8px;
+  text-align: center;
+  font-size: 17px;
+  font-family: Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.ps-explorer-hub {
+  position: absolute;
+  left: 74px;
+  top: 486px;
+  width: 374px;
+  height: 158px;
+  z-index: 4;
+}
+
+.ps-explorer-hub .ps-icon-row { height: 112px; padding: 8px 16px 16px; }
+.ps-explorer-hub .ps-icon-row button { height: 92px; }
+
+.ps-morning-boost {
+  position: absolute;
+  left: 170px;
+  top: 740px;
+  width: 150px;
+  height: 166px;
+  z-index: 5;
+  padding: 12px;
+}
+
+.ps-morning-boost h2 { margin: 0 0 10px; font-size: 14px; }
+.ps-morning-boost p { font-size: 12px; line-height: 1.45; margin: 0; }
+.ps-big-sun { width: 54px; height: 54px; color: #f7c84e; margin: 6px 0 0 60px; display: block; }
+
+.ps-my-space {
+  position: absolute;
+  left: 384px;
+  top: 735px;
+  width: 282px;
+  height: 148px;
+  z-index: 4;
+}
+
+.ps-my-space .ps-icon-row { padding: 8px 14px 14px; height: 104px; }
+.ps-my-space .ps-icon-row button { height: 88px; }
+
+.ps-daily-challenges {
+  position: absolute;
+  right: 274px;
+  top: 488px;
+  width: 310px;
+  height: 216px;
+  z-index: 4;
+  padding: 12px 18px;
+}
+
+.ps-daily-challenges h2 { margin: 4px 0 8px; font-size: 16px; }
+
+.ps-challenge-list {
+  display: grid;
+  gap: 8px;
+}
+
+.ps-challenge-list button {
+  height: 36px;
+  border: 1px solid rgba(126, 143, 120, 0.25);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ps-challenge-list svg { width: 18px; height: 18px; color: #5baa65; }
+
+.ps-challenge-list i {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(85, 100, 90, 0.38);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ps-today-feel {
+  position: absolute;
+  right: 260px;
+  top: 760px;
+  width: 314px;
+  height: 138px;
+  z-index: 4;
+}
+
+.ps-today-feel h2 { margin: 4px 0 8px; font-size: 16px; }
+
+.ps-moods {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.ps-moods button {
+  flex: 1;
+  height: 70px;
+  border: 1px solid rgba(126, 143, 120, 0.25);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.45);
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  gap: 2px;
+}
+
+.ps-moods svg { width: 22px; height: 22px; color: #d9a14e; }
+
+.ps-discovery-stars {
+  position: absolute;
+  left: 645px;
+  top: 482px;
+  width: 160px;
+  height: 118px;
+  z-index: 4;
+  border-radius: 28px;
+  background: rgba(246, 247, 218, 0.62);
+  border: 1px solid rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  color: #10233a;
+}
+
+.ps-discovery-stars svg { width: 52px; height: 52px; color: #5ba6d8; }
+.ps-discovery-stars strong { font-family: Georgia, serif; font-size: 16px; font-weight: 500; }
+
+.ps-family-zone {
+  position: absolute;
+  left: 720px;
+  top: 812px;
+  width: 190px;
+  height: 118px;
+  z-index: 5;
+  text-align: center;
+  padding: 14px;
+  cursor: pointer;
+  font: inherit;
+  color: #10233a;
+}
+
+.ps-family-photo {
+  width: 54px;
+  height: 54px;
+  margin: -46px auto 8px;
+  background:
+    radial-gradient(circle at 38% 40%, #d6a884 0 17%, transparent 18%),
+    radial-gradient(circle at 62% 40%, #f0c5a2 0 17%, transparent 18%),
+    linear-gradient(#4b3b35, #e7d3b1);
+}
+
+.ps-family-zone strong { display: block; font-size: 13px; font-family: Georgia, serif; font-weight: 500; }
+.ps-family-zone p { margin: 4px 0 0; font-size: 11px; line-height: 1.35; }
+
+.ps-guide-bubble {
+  position: absolute;
+  right: 66px;
+  top: 575px;
+  width: 142px;
+  height: 128px;
+  z-index: 5;
+  text-align: center;
+  padding: 14px 12px;
+  border-radius: 30px;
+  background: rgba(247, 232, 171, 0.75);
+}
+
+.ps-guide-face {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  top: -96px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ps-guide-bubble p { margin: 0; font-weight: 700; font-size: 14px; }
+
+.ps-bottom-question {
+  position: absolute;
+  right: 60px;
+  bottom: 42px;
+  width: 275px;
+  height: 70px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  background: rgba(54, 89, 88, 0.68);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.78);
+}
+
+.ps-bottom-question svg { width: 42px; height: 42px; }
+
+/* BOTTOM NAV --------------------------------------------------- */
+.ps-bottom-nav {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: 860px;
+  height: 84px;
+  z-index: 6;
+  border-radius: 999px;
+  background: rgba(248, 248, 240, 0.78);
+  border: 1px solid rgba(255,255,255,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ps-bottom-nav button {
+  border: 0;
+  background: transparent;
+  color: #20344a;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ps-bottom-nav button.active { color: #2c8fd3; }
+.ps-bottom-nav svg { width: 26px; height: 26px; }
+
+/* RESPONSIVE FALLBACK ------------------------------------------ */
+@media (max-width: 1100px) {
+  .ps-day-world {
+    min-height: auto;
+    overflow: auto;
+    padding: 24px 18px 60px;
+  }
+
+  .ps-day-bg { position: fixed; }
+
+  .ps-day-title,
+  .ps-child-card,
+  .ps-top-icons,
+  .ps-world-map-shortcut,
+  .ps-age-zone,
+  .ps-explorer-hub,
+  .ps-morning-boost,
+  .ps-my-space,
+  .ps-discovery-stars,
+  .ps-daily-challenges,
+  .ps-today-feel,
+  .ps-family-zone,
+  .ps-guide-bubble,
+  .ps-bottom-question,
+  .ps-bottom-nav {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    margin: 16px auto;
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+  }
+
+  .ps-day-title { width: calc(100% - 32px); }
+
+  .ps-age-tab { position: relative; top: auto; width: 100%; }
+
+  .ps-zone-panel { width: calc(100vw - 32px) !important; height: auto !important; }
+
+  .ps-icon-row { flex-wrap: wrap; height: auto; padding: 14px; }
+  .ps-icon-row button { flex: 1 1 120px; height: 92px; }
+
+  .ps-bottom-nav { height: auto; border-radius: 30px; padding: 16px; flex-wrap: wrap; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+ * §POLARSTAR v10 — INVISIBLE-MODE OVERRIDE
+ *
+ * The current day-world-v2.png is a fully-painted UI mockup. Every
+ * panel below is the painting itself. To avoid a doubled surface,
+ * we strip the React overlays of all visual chrome and keep only
+ * their hitboxes. Title bar + Preview badge + waitlist CTA remain
+ * visible — they are NOT in the painting and identify what kind of
+ * page this is.
+ *
+ * When a clean Nano-Banana background is uploaded later (per the
+ * founder's prompt), DELETE this block and the spec re-emerges.
+ * ════════════════════════════════════════════════════════════ */
+.ps-day-world .ps-child-card,
+.ps-day-world .ps-top-icons,
+.ps-day-world .ps-world-map-shortcut,
+.ps-day-world .ps-age-tab,
+.ps-day-world .ps-zone-panel,
+.ps-day-world .ps-panel,
+.ps-day-world .ps-discovery-stars,
+.ps-day-world .ps-family-zone,
+.ps-day-world .ps-guide-bubble,
+.ps-day-world .ps-bottom-question,
+.ps-day-world .ps-bottom-nav {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Hide every child element of these click-zones (text, svg icons,
+ * pseudo-content). Click hitbox stays. */
+.ps-day-world .ps-child-card > *,
+.ps-day-world .ps-top-icons button > *,
+.ps-day-world .ps-world-map-shortcut > *,
+.ps-day-world .ps-age-tab > *,
+.ps-day-world .ps-zone-panel > *,
+.ps-day-world .ps-panel > *,
+.ps-day-world .ps-discovery-stars > *,
+.ps-day-world .ps-family-zone > *,
+.ps-day-world .ps-guide-bubble > *,
+.ps-day-world .ps-bottom-question > *,
+.ps-day-world .ps-bottom-nav > * {
+  opacity: 0 !important;
+}
+
+/* Re-show only the page-identity strip (NOT in the painting). */
+.ps-day-world .ps-day-title { z-index: 8; }
+
+/* Floating "Join the Explorer List" CTA — re-mount as a fixed pill
+ * so the parent can still leave their name. Hooks into the same
+ * waitlist event the bottom-nav buttons used. */
+.ps-day-explorer-cta {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(196,164,107,0.7);
+  background: rgba(14,23,48,0.78);
+  color: #f6edda;
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 13.5px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.42),
+    0 0 22px rgba(212, 182, 125, 0.30);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.ps-day-explorer-cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba(212, 182, 125, 0.65);
+}
+.ps-day-explorer-cta svg { color: #d4b67d; }

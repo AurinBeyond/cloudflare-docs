@@ -3,6 +3,92 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02-13 — Polarstar v10 STOP-the-dashboard correction (iter 85d)
+
+Founder pushed back, hard and rightly: previous iterations were
+turning the per-age rooms into Body-Temple-style course modules and
+my screenshot runner was still passing `PLACEHOLDER` as the URL.
+Both issues now fixed in one pass.
+
+### Per-age rooms — STRIPPED of dashboard layout
+`PolarstarRoom.jsx` was completely rewritten. The cream-paper hero,
+the seven-day grid, the four-card rail, the bottom CTA panel — all
+deleted. The room now renders ONLY:
+- The same painted Polarstar atmosphere (unchanged)
+- A compact breadcrumb pill at top-center:
+  `← POLARSTAR · EXPLORATION · 7–10 YEARS`
+- A subtle "lantern" at bottom-center:
+  `THE LANTERN IS BEING LIT · {age subtitle} · Join the Explorer List`
+- The Explorer-List modal mounts on demand
+
+Same painted world. No dashboard surface. No course-style cards.
+Same visual language as the main map.
+
+### Main world — Day mode now matches founder's spec (invisible
+### click-zones over the painted UI)
+`Polarstar.jsx` became a mode-aware container:
+- `day` / `morning` → renders new `PolarstarDayWorld`
+- `night` / `evening` → renders the existing v8 click-zone map
+
+`PolarstarDayWorld` implements the founder's exact JSX/CSS spec
+(age tabs, Explorer's Hub, Daily Challenges, Today I Feel, Family
+Connection Zone, Discovery Stars, Daily Compass, bottom navigation,
+Avatar/Calendar/Messages/Parents shortcuts). The current
+`day-world-v2.png` is a fully-painted UI mockup, so the React panels
+are rendered as INVISIBLE click-zones (transparent backgrounds, zero
+opacity contents) layered over the painted elements. The painting
+remains the visible surface; React provides the interactivity. When
+the founder later swaps in a clean Nano-Banana background, simply
+delete the `INVISIBLE-MODE OVERRIDE` block in `PolarstarDayWorld.css`
+and the spec re-emerges opaque.
+
+Visible chrome on the main world is intentionally minimal:
+- Compact `POLARSTAR KIDS` + `One World. Three Paths. One Family.`
+- `PREVIEW WORLD · The First Lanterns Are Lit` badge
+- Fixed `Join the Explorer List` pill bottom-right
+
+### Global waitlist event bridge
+Both the main world and the rooms listen for
+`polarstar:openWaitlist` window events. Any descendant (painted age
+tab, bottom-nav button, Daily Challenge row, mood emoji, footer link,
+etc.) can dispatch the event and the modal opens with the right
+pre-filled interest. One modal, one source of truth.
+
+### Screenshot runner — PLACEHOLDER bug fixed
+Earlier screenshot calls were passing `page_url="PLACEHOLDER"` and
+relying on the script to navigate. The screenshot harness pre-loads
+the `page_url` BEFORE running the script, so PLACEHOLDER failed
+three navigation attempts every time. All screenshots now pass the
+real preview URL (`https://aurin-hub.preview.emergentagent.com/...`)
+directly to `page_url`. Verified across all four routes:
+- `/kids-universe/polarstar` ✓
+- `/kids-universe/polarstar/discovery` ✓
+- `/kids-universe/polarstar/exploration` ✓
+- `/kids-universe/polarstar/creation` ✓
+
+### Files touched
+- New: `frontend/src/components/PolarstarDayWorld.jsx`
+- New: `frontend/src/styles/PolarstarDayWorld.css`
+- Updated: `frontend/src/pages/Polarstar.jsx`,
+  `frontend/src/pages/PolarstarRoom.jsx`
+
+### Verified
+- All 4 routes load cleanly, no compile errors
+- Age tab click on main map navigates to the correct age room
+- Coming-Soon click zones (Calendar / Messages / Daily Challenges /
+  moods / bottom-nav / etc.) all open the Explorer-List modal
+- Modal pre-fills the right interest
+- Per-age rooms show the same painted world + minimal in-world UI
+
+### What is still NOT done (by design)
+- Resend confirmation emails remain disabled
+- No new functionality, no billing, no Polar.sh touched
+- Clean Nano-Banana background not yet generated (founder's prompt
+  exists; flipping the invisible-mode override is a 1-line change
+  once the new image lands)
+
+
+
 ## 2026-02-13 — Polarstar v9 PSP-safe Preview Polish (iter 85)
 
 Final pre-PSP-review polish for the Kids surface. Polar.sh underwriter
