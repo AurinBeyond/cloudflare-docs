@@ -28,11 +28,16 @@ export default function PolarstarAtmosphere({ children, testid = "polarstar-root
   }, []);
 
   // Pre-load painted background so we crossfade in rather than flash.
+  // §POLARSTAR v10 iter 85f — only TWO paintings carry the UI map:
+  //   day-world-v2.png  → used for morning + day  (light mood)
+  //   night-world-v2.png → used for evening + night (dark mood)
+  // The older single-scene paintings (morning-world.png / evening-world.png)
+  // are decorative-only and DO NOT contain the click-zone targets, so
+  // we never serve them as the world background.
   useEffect(() => {
     setImgReady(false);
-    // §POLARSTAR — night + day use richer v2 paintings
-    const v2 = mode === "night" || mode === "day";
-    const file = v2 ? `${mode}-world-v2.png` : `${mode}-world.png`;
+    const isLight = mode === "morning" || mode === "day";
+    const file = isLight ? "day-world-v2.png" : "night-world-v2.png";
     const url = `${process.env.PUBLIC_URL || ""}/polarstar/${file}`;
     const img = new Image();
     img.onload = () => setImgReady(true);
@@ -40,8 +45,8 @@ export default function PolarstarAtmosphere({ children, testid = "polarstar-root
     img.src = url;
   }, [mode]);
 
-  const v2 = mode === "night" || mode === "day";
-  const bgFile = v2 ? `${mode}-world-v2.png` : `${mode}-world.png`;
+  const isLight = mode === "morning" || mode === "day";
+  const bgFile = isLight ? "day-world-v2.png" : "night-world-v2.png";
 
   return (
     <main

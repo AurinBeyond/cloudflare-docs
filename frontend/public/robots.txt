@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# §POLARSTAR HIERARCHY LOCK 2026-02-13 — Block any cached crawler
+# memory of the legacy Aurin-AI-for-kids surfaces. Every public URL
+# below now 302-redirects to /kids-universe/polarstar inside the SPA,
+# but listing them here gives Googlebot and PSP underwriter scrapers
+# a clean, machine-readable signal that we no longer market AI to
+# children on those routes.
+Disallow: /kids-universe/legacy
+Disallow: /kids-universe/coloring
+Disallow: /kids-universe/journey
+Disallow: /kids-universe/discovery/
+Disallow: /kids-universe/explorers/
+Disallow: /kids-universe/dreamweavers/
+Disallow: /kids-universe/little-dreamers/
+Disallow: /kids-universe/3-5/
+Disallow: /kids-universe/6-8/
+Disallow: /kids-universe/9-12/
+Disallow: /aurins-room/stories
+Disallow: /aurins-room/gift
+
+Sitemap: https://prulesoul.site/sitemap.xml

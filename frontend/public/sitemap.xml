@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  §POLARSTAR HIERARCHY LOCK 2026-02-13 (iter 85f) — Clean sitemap for
+  the Matrix Aurin / Polarstar Kids surface. The legacy kids-universe
+  subroutes are intentionally omitted: every one of them now
+  redirects to /kids-universe/polarstar, so listing them here would
+  only re-introduce stale AI-for-kids language into search indexes.
+
+  When the Polar.sh review concludes, additional Polarstar age-room
+  routes (/discovery, /exploration, /creation) may be promoted to
+  this sitemap. Until then, only the main world is advertised.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://prulesoul.site/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/aurin-philosophy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/parents-room</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/bookstore</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/library</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/kids-universe/polarstar</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/kids-universe/polarstar/discovery</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/kids-universe/polarstar/exploration</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/kids-universe/polarstar/creation</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/high-performers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/learning</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/reach-out</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/legal</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://prulesoul.site/wanderers-agreement</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

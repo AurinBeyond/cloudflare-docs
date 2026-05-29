@@ -102,14 +102,11 @@ function openWaitlist(interest) {
 export default function PolarstarDayWorld({ navigate }) {
   return (
     <div className="ps-day-world" data-testid="polarstar-day-world">
-      <div
-        className="ps-day-bg"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.12), rgba(255,255,255,0.10)), url("/polarstar/day-world-v2.png")',
-        }}
-      />
+      {/* §POLARSTAR v10 iter 85f — bg painting is provided by
+       * `PolarstarAtmosphere` (one source of truth, mode-aware).
+       * The local `.ps-day-bg` layer stays as a transparent spacer
+       * so the panel coordinates below still resolve correctly. */}
+      <div className="ps-day-bg" aria-hidden="true" />
 
       <header className="ps-day-title" data-testid="polarstar-day-title">
         <div className="ps-preview-badge" data-testid="polarstar-day-badge">

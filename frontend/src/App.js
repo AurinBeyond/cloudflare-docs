@@ -114,38 +114,35 @@ function AppRouter() {
         <Route path="/library/kids/draw" element={<KidsColoringStudio />} />
         <Route path="/library/:slug" element={<LibraryEntry />} />
         <Route path="/learning" element={<Learning />} />
-        {/* §POLARSTAR HIERARCHY LOCK 2026-02-13 (iter 85e) —
-           Founder decision: POLARSTAR KIDS is now the primary brand
-           for the kids surface. The legacy /kids-universe landing
-           page contains Aurin-AI-for-kids language and priced
-           bookstore cards that trigger PSP underwriter rejections,
-           so we redirect every visit to the PSP-safe Polarstar
-           world. The legacy KidsUniverse component is preserved on
-           a sibling route (/kids-universe/legacy) for internal
-           reference until the Polar.sh review concludes. */}
+        {/* §POLARSTAR HIERARCHY LOCK 2026-02-13 (iter 85f) —
+           Variant A FULL CLEANUP. POLARSTAR KIDS is the only public
+           kids surface. Every legacy /kids-universe/* route — and
+           the public /aurins-room/stories route — redirects to the
+           PSP-safe Polarstar world. The legacy components remain in
+           the bundle (untouched) so internal QA can still reach them
+           on /__legacy/* sandbox paths if needed, but no public URL
+           exposes Aurin-AI-for-kids language any more. */}
         <Route path="/kids-universe" element={<Navigate to="/kids-universe/polarstar" replace />} />
-        <Route path="/kids-universe/legacy" element={<KidsUniverse />} />
-        <Route path="/kids-universe/coloring" element={<KidsColoringStudio />} />
-        {/* §KIDS-UNIVERSE-PHASE-1 2026-02-27 — Luxury Adventure Hub.
-            Plan: /app/memory/KIDS_UNIVERSE_PLAN.md. Phase 1 = Map View only. */}
-        <Route path="/kids-universe/journey" element={<KidsUniverseJourney />} />
-        <Route path="/kids-universe/journey/:zone" element={<KidsUniverseJourney />} />
-        {/* §POLARSTAR — preview-only sandbox route */}
         <Route path="/kids-universe/polarstar" element={<Polarstar />} />
         <Route path="/kids-universe/polarstar/:ageGroup" element={<PolarstarRoom />} />
-        {/* §SYNERGY-ANNELI 2026-02-10 — personalised story gift growth-loop */}
-        <Route path="/aurins-room/gift" element={<StoryGiftForm />} />
-        <Route path="/aurins-room/gift/:slug" element={<StoryGiftRead />} />
+        {/* Legacy kids-universe surface — all redirect to Polarstar */}
+        <Route path="/kids-universe/legacy" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/coloring" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/journey" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/journey/:zone" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/:ageGroup/hub" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/:ageGroup/stars" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/:ageGroup/daily" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/:ageGroup/activities" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/kids-universe/:ageGroup/activities/:slug" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        {/* §AURIN — public story surfaces also redirect; the auth-gated
+           /aurins-room/:ageGroup chat stays private and untouched. */}
+        <Route path="/aurins-room/stories" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/aurins-room/stories/:storySlug" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/aurins-room/gift" element={<Navigate to="/kids-universe/polarstar" replace />} />
+        <Route path="/aurins-room/gift/:slug" element={<Navigate to="/kids-universe/polarstar" replace />} />
         {/* §HIGH-PERFORMERS 2026-02-10 — LinkedIn-targeted B2B landing */}
         <Route path="/high-performers" element={<HighPerformers />} />
-        {/* §KIDS-HUBS 2026-02-09 — age-themed Hubs + Angel Stars MVP.
-            Slug accepts both modern names (little-dreamers, explorers,
-            dreamweavers) and legacy "3-5" / "6-8" / "9-12". */}
-        <Route path="/kids-universe/:ageGroup/hub" element={<KidsHub />} />
-        <Route path="/kids-universe/:ageGroup/stars" element={<KidsStarsView />} />
-        <Route path="/kids-universe/:ageGroup/daily" element={<KidsDaily />} />
-        <Route path="/kids-universe/:ageGroup/activities" element={<KidsActivities />} />
-        <Route path="/kids-universe/:ageGroup/activities/:slug" element={<KidsActivities />} />
         <Route path="/parent-portal/stars" element={<ParentStars />} />
         <Route path="/parent-portal/digest" element={<ParentDigest />} />
         {/* §URL-RENAME 2026-02-12 — legacy /parent-portal/wellness
