@@ -124,11 +124,12 @@ export default function PolarstarWaitlistModal({ isOpen, onClose, context, mode 
               <Check size={22} />
             </span>
             <h2 id="polarstar-waitlist-title" className="ps9-modal-title" style={{ fontFamily: SERIF }}>
-              Your name is <span className="ps9-italic">in the world</span>.
+              Your name is <span className="ps9-italic">on the Explorer List</span>.
             </h2>
             <p className="ps9-modal-body" style={{ fontFamily: SERIF }}>
-              When the first lantern is fully lit, we&apos;ll send you a quiet note.
-              No urgency. No ladder. Just one calm letter.
+              Your place in Polarstar has been saved. When the first lantern
+              opens, we&apos;ll quietly add you to the world — no urgency, no
+              ladder, no inbox traffic in between.
             </p>
             <button
               type="button"
@@ -233,7 +234,7 @@ export default function PolarstarWaitlistModal({ isOpen, onClose, context, mode 
             </button>
 
             <p className="ps9-modal-fine" data-testid="polarstar-waitlist-fine">
-              No payment. No subscription. We will not share your email.
+              We save your name in Polarstar only. No emails will be sent at this time.
             </p>
           </form>
         )}

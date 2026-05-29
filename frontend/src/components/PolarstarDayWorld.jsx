@@ -127,7 +127,11 @@ export default function PolarstarDayWorld({ navigate }) {
         <p>One World. Three Paths. One Family.</p>
       </header>
 
-      <section className="ps-child-card" data-testid="polarstar-day-child-card">
+      {/* §POLARSTAR NAV-CONTRACT v1 2026-02-13 (iter 85i) — Per the
+       * founder's reference image: the avatar / Welcome / level card
+       * is DECORATIVE INFO. Not a button. No cursor:pointer, no
+       * hover, no click handler. */}
+      <section className="ps-child-card ps-decorative" data-testid="polarstar-day-child-card" aria-hidden="true">
         <div className="ps-avatar" aria-hidden="true" />
         <div className="ps-child-card-text">
           <strong>Welcome, Explorer!</strong>
@@ -179,16 +183,18 @@ export default function PolarstarDayWorld({ navigate }) {
         <IconRow items={MY_SPACE} onClick={(label) => openWaitlist(label)} ariaPrefix="myspace" />
       </Panel>
 
-      <button
-        type="button"
-        className="ps-discovery-stars"
-        onClick={() => openWaitlist("Discovery Stars")}
+      {/* §POLARSTAR NAV-CONTRACT — Discovery Stars chest is the
+       * "Visual focus point. Not a button." per the founder's spec.
+       * Decorative only: no click handler, no cursor:pointer. */}
+      <div
+        className="ps-discovery-stars ps-decorative"
         data-testid="polarstar-day-discovery-stars"
+        aria-hidden="true"
       >
         <span>Collect</span>
         <strong>Discovery Stars</strong>
         <Star />
-      </button>
+      </div>
 
       <Panel className="ps-daily-challenges" title="Daily Challenges" testid="polarstar-day-challenges">
         <div className="ps-challenge-list">
@@ -233,7 +239,14 @@ export default function PolarstarDayWorld({ navigate }) {
         <p>Share moments, celebrate wins and create memories. ♥</p>
       </button>
 
-      <section className="ps-guide-bubble" data-testid="polarstar-day-guide">
+      {/* §POLARSTAR NAV-CONTRACT — Guide bubble ("You can do great
+       * things!") is a decorative speech bubble from the fairy.
+       * Not a button. */}
+      <section
+        className="ps-guide-bubble ps-decorative"
+        data-testid="polarstar-day-guide"
+        aria-hidden="true"
+      >
         <div className="ps-guide-face" aria-hidden="true" />
         <p>You can do great things!</p>
       </section>

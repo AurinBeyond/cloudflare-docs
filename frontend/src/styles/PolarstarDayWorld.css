@@ -104,7 +104,6 @@
   width: 15.69%;
   height: 6.64%;
   z-index: 6;
-  cursor: pointer;
   background: transparent;
   border: 0;
   border-radius: 24px;
@@ -112,6 +111,23 @@
   display: block;
 }
 .ps-child-card * { opacity: 0; }
+
+/* §POLARSTAR NAV-CONTRACT v1 — .ps-decorative neutralises any
+ * accidental button-like styling so spec-decorative zones (avatar
+ * card, Discovery Stars chest, fairy speech bubble) read as part of
+ * the painting and never lead a visitor to try clicking them. */
+.ps-day-world .ps-decorative {
+  pointer-events: none !important;
+  cursor: default !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.ps-day-world .ps-decorative * {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+.ps-day-world .ps-decorative:hover { box-shadow: none !important; }
 
 .ps-avatar,
 .ps-guide-face,
@@ -173,9 +189,12 @@
   padding: 0;
 }
 .ps-top-icons button > * { opacity: 0; }
-.ps-top-icons [data-testid="polarstar-day-mode-night"]  { left: 51.69%; top: 10.74%; width: 2.73%; height: 4.30%; right: auto; top: 0.5%; }
-.ps-top-icons [data-testid="polarstar-day-messages"]    { left: 55.47%; top: 10.74%; width: 2.67%; height: 4.10%; right: auto; top: 0.5%; }
-.ps-top-icons [data-testid="polarstar-day-parents"]     { left: 59.31%; top: 10.84%; width: 2.73%; height: 4.00%; right: auto; top: 0.5%; }
+/* §POLARSTAR NAV-CONTRACT iter 85i — Top-right painted icons are
+ * Calendar/Messages/Parents at ~78-92% horiz, ~9-17% vert in the
+ * painting (Gemini's earlier 51-62% estimate was wrong). */
+.ps-top-icons [data-testid="polarstar-day-mode-night"]  { left: 78.5%; top: 7%;  width: 4.5%; height: 11%; right: auto; }
+.ps-top-icons [data-testid="polarstar-day-messages"]    { left: 84%;   top: 7%;  width: 4.5%; height: 11%; right: auto; }
+.ps-top-icons [data-testid="polarstar-day-parents"]     { left: 90%;   top: 7%;  width: 5.0%; height: 11%; right: auto; }
 
 .ps-top-icons button {
   position: relative;
@@ -284,36 +303,22 @@
 .ps-icon-row {
   height: 100%;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 18px;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
 }
 
 .ps-icon-row button {
   flex: 1;
-  height: 124px;
+  height: 100%;
   min-width: 0;
-  border: 1px solid rgba(126, 143, 120, 0.28);
-  border-radius: 13px;
-  background: rgba(255,255,255,0.42);
+  border: 0;
+  background: transparent;
   cursor: pointer;
-  color: #10233a;
-  display: grid;
-  place-items: center;
-  gap: 6px;
-  padding: 10px 6px;
+  padding: 0;
   font: inherit;
 }
-
-.ps-icon-row svg { width: 34px; height: 34px; color: #1b8290; }
-
-.ps-icon-row span {
-  white-space: pre-line;
-  font-size: 12px;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.2;
-}
+.ps-icon-row button > * { opacity: 0; }
 
 /* FLOATING PANELS ---------------------------------------------- */
 .ps-panel h2 {
@@ -374,11 +379,13 @@
 }
 .ps-daily-challenges > h2 { opacity: 0; }
 
+/* Daily Challenges — 4 rows stacked vertically inside panel */
 .ps-challenge-list {
   position: absolute;
-  inset: 18% 0 0 0;
+  inset: 8% 0 0 0;
   display: grid;
-  gap: 1%;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0;
 }
 .ps-challenge-list button {
   height: 100%;
@@ -431,13 +438,15 @@
 }
 .ps-discovery-stars > * { opacity: 0; }
 
+/* Family Connection painted circle is at ~50-58% horiz, ~76-90%
+ * vert in the painting. Position the click-zone over its core. */
 .ps-family-zone {
   position: absolute;
-  left: 49%;
-  top: 75%;
-  width: 10%;
+  left: 50%;
+  top: 76%;
+  width: 9%;
   height: 17%;
-  z-index: 5;
+  z-index: 7;
   padding: 0;
   cursor: pointer;
   background: transparent;
@@ -610,12 +619,10 @@
  * The hover/press states are deliberately subtle so they do not
  * compete with the painting itself.
  * ════════════════════════════════════════════════════════════ */
-.ps-day-world .ps-child-card,
 .ps-day-world .ps-top-icons button,
 .ps-day-world .ps-world-map-shortcut,
 .ps-day-world .ps-age-tab,
 .ps-day-world .ps-zone-panel,
-.ps-day-world .ps-discovery-stars,
 .ps-day-world .ps-family-zone,
 .ps-day-world .ps-bottom-question,
 .ps-day-world .ps-bottom-nav button,
@@ -629,12 +636,10 @@
   border-radius: 16px !important;
 }
 
-.ps-day-world .ps-child-card:hover,
 .ps-day-world .ps-top-icons button:hover,
 .ps-day-world .ps-world-map-shortcut:hover,
 .ps-day-world .ps-age-tab:hover,
 .ps-day-world .ps-zone-panel:hover,
-.ps-day-world .ps-discovery-stars:hover,
 .ps-day-world .ps-family-zone:hover,
 .ps-day-world .ps-bottom-question:hover,
 .ps-day-world .ps-bottom-nav button:hover,
@@ -647,12 +652,10 @@
     0 0 38px rgba(212, 182, 125, 0.18) !important;
 }
 
-.ps-day-world .ps-child-card:active,
 .ps-day-world .ps-top-icons button:active,
 .ps-day-world .ps-world-map-shortcut:active,
 .ps-day-world .ps-age-tab:active,
 .ps-day-world .ps-zone-panel:active,
-.ps-day-world .ps-discovery-stars:active,
 .ps-day-world .ps-family-zone:active,
 .ps-day-world .ps-bottom-question:active,
 .ps-day-world .ps-bottom-nav button:active,
