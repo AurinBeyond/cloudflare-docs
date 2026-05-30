@@ -4,6 +4,73 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (LATE-NIGHT) — Iter 86g: 🎉 LIVE (production deploy + first sale + full security)
+
+**Day-ending state:** Polarstar Kids is live and selling.
+
+### What shipped to production
+- All iter 86b → 86f code (compliance, brand-translation, coming-soon
+  sweep, FAQ anchor block, Gumroad webhook + reconciliation).
+- PDF bundle deployed: `https://prulesoul.site/assets/pdfs/polarstar-bedtime-stories.pdf`
+- Production .env updated with three new vars (founder did this via
+  Emergent UI): `GUMROAD_SELLER_ID`, `GUMROAD_PRODUCT_PERMALINKS`,
+  `GUMROAD_ACCESS_TOKEN`.
+
+### Verified live
+- `GET https://prulesoul.site/api/webhooks/gumroad/health` →
+  all 5 `configured.*` flags `true`.
+- Anti-spoof: bogus `seller_id` → **HTTP 403** ✅
+- Whitelist: wrong `permalink` → `"ignored"` ✅
+- First real sale: `vNV3ALiQ1KXbNDrU-3wlJg==` —
+  Polarstar Bedtime Stories, €9 (€10.50 paid incl. fees),
+  customer `mesterskredder.info@gmail.com`,
+  2026-05-30 19:19:57 UTC.
+- Email pipeline confirmed end-to-end: Gumroad receipt + Resend
+  branded email both delivered. Founder additionally enriched the
+  Gumroad-side receipt with a "Tonight's Ritual" Night Angel + Worry
+  Jar paragraph — extra brand polish.
+
+### Gumroad product state
+- Single live product: `fwqmha` (slug)
+- Duplicate hidden product deleted via API earlier today
+- Price: €9 EUR
+- File: 24-page A5 PDF, 85 KB
+- Custom thank-you receipt with Night Angel ritual text
+
+### Cumulative project state (after iter 86g)
+- 1 real customer
+- 10 waitlist entries
+- 4 test purchases (preview DB)
+- 5 Polarstar stories live in product
+- 20 Polarstar activities in content map (10 live + 7 brand-voiced "soon")
+- 3 hero pages carrying compass-refrain
+- 1 FAQ anchor block with PSP-pitch language
+- PSP red-flag grep: 0 positive claims, all 24 hits are defensive
+- Brand Translation Sheet, PSP Pitch, Play & Move mockup, Post-launch
+  backlog — all locked in `/app/memory/`
+
+### Next focus — Voice Phase 1 (founder decision pending)
+
+Founder paid €22/mo for ElevenLabs Creator tier. Recommended path:
+
+1. **Telefon-recording of "Little Star"** (Anna's own voice, ~20 min)
+   → minor cleanup → embed in updated PDF as a bonus link.
+2. Wait 7 days, watch whether buyers listen.
+3. If positive signal: record remaining 4 stories + create Gumroad
+   bundle (PDF + 5 audio = €19).
+4. ElevenLabs Voice Clone for downstream non-story content (newsletter
+   audio, ankrute UI hovers, future stories drafted in Anna's voice).
+
+This is captured in `/app/memory/post_launch_backlog.md` (P1).
+
+### Locked / untouched
+- Polarstar Kids data, painted worlds, navigation
+- Backend except for Gumroad-related additions
+- Hero compass-refrain (iter 86e)
+- Defensive disclaimers across the site
+- Matrix Aurin brand vocabulary on adult rooms
+
+
 ## 2026-02-29 (NIGHT-2) — Iter 86f: Coming Soon Sweep + Play & Move Mockup + CORE 5 Audit
 
 **Founder directive (iter 86f):** Three surgical tasks in one session:
