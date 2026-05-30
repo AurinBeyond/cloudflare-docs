@@ -2342,3 +2342,38 @@ Build estimate when greenlit: ~12-13h across 5 phases. Until then, this is the c
 - Anna to provide curated Kaelan portrait PNG → save to `/app/frontend/public/avatars/kaelan.png`
 - ElevenLabs ConvAI agent for Kaelan (low, measured male voice) — env var `ELEVENLABS_CONVAI_AGENT_KAELAN`
 - UptimeRobot URL for adult reminders: `https://prulesoul.site/api/adult-rooms/cron/spark-reminders?secret=...`
+
+---
+
+## Iter 86h — 2026-02-29 — Show HN draft + essay angles + audio Phase 1 prep
+
+**Trigger:** Founder agreed to record "Little Star" tomorrow morning.
+Agent prepares non-code marketing assets in the meantime so that no
+context is lost while we wait for the audio file.
+
+**Created:**
+- `/app/memory/show_hn_draft.md` — 3 Show HN variants (Founder
+  confession / Product reveal / Anti-AI manifesto), timing window
+  (Wed 14:00 EET), first-hour ritual, 6 pre-written replies for the
+  most likely top comments, post-mortem checklist. Recommended
+  primary: Variant A (Founder confession). Save Variant C for Essay #1.
+- `/app/memory/essay_angles.md` — 3 Substack/Medium essay drafts
+  (titles + opening paragraphs + structural sketches): "The bedtime
+  story problem nobody is writing about", "What I removed from the
+  children's book I almost wrote", "On the friend who notices first".
+  Compass register tagged on each. Publishing cadence: one essay per
+  2–3 weeks, starting ~week 4 after audio release.
+
+**Confirmed (no code change):**
+- `product_portfolio_plan.md` already covers €19 audio bundle,
+  €29 Family Kit, €39 Compass Starter, €9/mo Membership — no further
+  pricing-tier work needed before audio data lands.
+
+**Blocked / waiting:**
+- ⏸️ "Little Star" `.mp3` from founder (tomorrow morning). On arrival:
+  build `/listen/little-star` page + update PDF page 2 with audio link.
+- ⏸️ `PolarstarActivity.jsx` "Play & Move" code rewrite, awaiting
+  founder green-light on `play_move_mockup.md`.
+
+**No production change.** Gumroad webhook + Resend delivery untouched.
+
