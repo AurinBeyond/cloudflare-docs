@@ -22,6 +22,22 @@ import "@/styles/PolarstarDayWorld.css";
  * line breaks; we keep them as separate strings so the CSS can break
  * the words naturally without depending on \n parsing. */
 
+/* §POLARSTAR NAV-REPAIR iter 86k 2026-02-29 — A1+A2+A3 fix.
+ *
+ * Per /app/memory/POLARSTAR_CONTENT_COVERAGE_MATRIX_2026-02-29.md the
+ * three structural defects were:
+ *   A1 — Inner age-panel icons were dead (nested button-in-button).
+ *   A2 — Explorer's Hub + Morning Boost opened a waitlist despite
+ *        live content existing for 5 of those 6 surfaces.
+ *   A3 — Night-world "Day 1-7" pillars all dumped to /exploration.
+ *
+ * This file fixes A1 + A2 here. A3 is fixed in Polarstar.jsx (the
+ * pw8-day pillars are removed; the night Exploration zone alone
+ * carries the navigation).
+ *
+ * NO new content is created. Every `route` below points to an
+ * activity that already exists in polarstarContentMap.js.
+ */
 const AGE_ZONES = [
   {
     id: "discovery",
@@ -30,27 +46,31 @@ const AGE_ZONES = [
     route: "/kids-universe/polarstar/discovery",
     className: "ps-day-age-discovery",
     items: [
-      { icon: Sun,      label: "Morning\nMindful\nStart" },
-      { icon: BookOpen, label: "Story\nTime" },
-      { icon: Leaf,     label: "Play &\nMove" },
-      { icon: Palette,  label: "Create" },
-      { icon: Heart,    label: "Kindness\nMission" },
+      { icon: Sun,      label: "Morning\nMindful\nStart", route: "/kids-universe/polarstar/discovery/morning-mindful-start" },
+      { icon: BookOpen, label: "Story\nTime",             route: "/kids-universe/polarstar/discovery/story-time" },
+      { icon: Leaf,     label: "Play &\nMove",            route: "/kids-universe/polarstar/discovery/play-move" },
+      { icon: Palette,  label: "Create",                  route: "/kids-universe/polarstar/discovery/drawing-palette" },
+      { icon: Heart,    label: "Kindness\nMission",       route: "/kids-universe/polarstar/discovery/kindness-mission" },
     ],
   },
   {
+    /* A3 — Exploration items WERE labelled "Day 1 … Day 7" and all
+       navigated to the same Exploration overview. Replaced with the
+       7 actual LIVE activities authored in polarstarContentMap.js.
+       The number "7" preserved (matches the painted 7 lanterns). */
     id: "exploration",
     label: "7–10 YEARS",
     title: "Exploration",
     route: "/kids-universe/polarstar/exploration",
     className: "ps-day-age-exploration",
     items: [
-      { icon: Compass,  label: "Day 1\nDiscover\n& Wonder" },
-      { icon: Puzzle,   label: "Day 2\nBuild &\nCreate" },
-      { icon: BookOpen, label: "Day 3\nCode &\nSolve" },
-      { icon: Leaf,     label: "Day 4\nExplore\nNature" },
-      { icon: Heart,    label: "Day 5\nHelp &\nCare" },
-      { icon: Music,    label: "Day 6\nMusic &\nMove" },
-      { icon: Star,     label: "Day 7\nShare &\nReflect" },
+      { icon: BookOpen,     label: "Story\nTime",        route: "/kids-universe/polarstar/exploration/story-time" },
+      { icon: Leaf,         label: "Nature\nQuest",      route: "/kids-universe/polarstar/exploration/nature-quest" },
+      { icon: Globe2,       label: "World\nCultures",    route: "/kids-universe/polarstar/exploration/world-cultures" },
+      { icon: Rocket,       label: "Space\nAdventures",  route: "/kids-universe/polarstar/exploration/space-adventures" },
+      { icon: PawPrint,     label: "Amazing\nAnimals",   route: "/kids-universe/polarstar/exploration/amazing-animals" },
+      { icon: FlaskConical, label: "Science\nLab",       route: "/kids-universe/polarstar/exploration/science-lab" },
+      { icon: Star,         label: "Reflection\nTime",   route: "/kids-universe/polarstar/exploration/reflection-time" },
     ],
   },
   {
@@ -60,21 +80,25 @@ const AGE_ZONES = [
     route: "/kids-universe/polarstar/creation",
     className: "ps-day-age-creation",
     items: [
-      { icon: Palette,  label: "Design\nLab" },
-      { icon: Home,     label: "Build\nSomething" },
-      { icon: BookOpen, label: "Code\nStudio" },
-      { icon: Video,    label: "Media\nStudio" },
-      { icon: Star,     label: "Share\nProject" },
+      { icon: Palette,  label: "Design\nLab",        route: "/kids-universe/polarstar/creation/design-lab" },
+      { icon: Home,     label: "Build\nSomething",   route: "/kids-universe/polarstar/creation/build-something" },
+      { icon: BookOpen, label: "Code\nStudio",       route: "/kids-universe/polarstar/creation/code-studio" },
+      { icon: Video,    label: "Media\nStudio",      route: "/kids-universe/polarstar/creation/media-studio" },
+      { icon: Star,     label: "Share\nProject",     route: "/kids-universe/polarstar/creation/share-project" },
     ],
   },
 ];
 
+/* §POLARSTAR NAV-REPAIR iter 86k — Explorer's Hub now points at the
+ * LIVE Exploration activities (matches the 4-7 actions already shipped
+ * in iter 86i). Nature Explorers maps to the closest live route,
+ * `nature-quest`. */
 const EXPLORER_HUB = [
-  { icon: FlaskConical, label: "Science\nLab" },
-  { icon: Leaf,         label: "Nature\nExplorers" },
-  { icon: Globe2,       label: "World\nCultures" },
-  { icon: Rocket,       label: "Space\nAdventures" },
-  { icon: PawPrint,     label: "Amazing\nAnimals" },
+  { icon: FlaskConical, label: "Science\nLab",       route: "/kids-universe/polarstar/exploration/science-lab" },
+  { icon: Leaf,         label: "Nature\nExplorers",  route: "/kids-universe/polarstar/exploration/nature-quest" },
+  { icon: Globe2,       label: "World\nCultures",    route: "/kids-universe/polarstar/exploration/world-cultures" },
+  { icon: Rocket,       label: "Space\nAdventures",  route: "/kids-universe/polarstar/exploration/space-adventures" },
+  { icon: PawPrint,     label: "Amazing\nAnimals",   route: "/kids-universe/polarstar/exploration/amazing-animals" },
 ];
 
 const MY_SPACE = [
@@ -171,13 +195,13 @@ export default function PolarstarDayWorld({ navigate }) {
       ))}
 
       <Panel className="ps-explorer-hub" title="Explorer's Hub" testid="polarstar-day-explorer-hub">
-        <IconRow items={EXPLORER_HUB} onClick={(label) => openWaitlist(label)} ariaPrefix="explorer" />
+        <IconRow items={EXPLORER_HUB} navigate={navigate} ariaPrefix="explorer" />
       </Panel>
 
       <button
         type="button"
         className="ps-panel ps-morning-boost"
-        onClick={() => openWaitlist("Morning Boost")}
+        onClick={() => navigate("/kids-universe/polarstar/discovery/morning-mindful-start")}
         data-testid="polarstar-day-morning-boost"
       >
         <h2>Morning Boost</h2>
@@ -317,6 +341,12 @@ export default function PolarstarDayWorld({ navigate }) {
 }
 
 function AgeZone({ zone, navigate }) {
+  /* §POLARSTAR NAV-REPAIR iter 86k — A1 fix.
+   * Previously the ps-zone-panel was a `<button>` wrapping inner
+   * `<button>` icons (HTML-invalid nested buttons; inner clicks
+   * were swallowed). Now the panel is a plain `<div>` and each inner
+   * icon is its own real button that navigates to a per-activity
+   * route. The ps-age-tab above stays a button → room overview. */
   return (
     <section
       className={`ps-age-zone ${zone.className}`}
@@ -332,14 +362,17 @@ function AgeZone({ zone, navigate }) {
         <strong>{zone.title}</strong>
       </button>
 
-      <button
-        type="button"
+      <div
         className="ps-zone-panel"
-        onClick={() => navigate(zone.route)}
         data-testid={`polarstar-day-age-panel-${zone.id}`}
       >
-        <IconRow items={zone.items} ariaPrefix={zone.id} />
-      </button>
+        <IconRow
+          items={zone.items}
+          navigate={navigate}
+          fallbackRoute={zone.route}
+          ariaPrefix={zone.id}
+        />
+      </div>
     </section>
   );
 }
@@ -353,21 +386,39 @@ function Panel({ className, title, children, testid }) {
   );
 }
 
-function IconRow({ items, onClick, ariaPrefix }) {
+function IconRow({ items, navigate, fallbackRoute, onClick, ariaPrefix }) {
+  /* §POLARSTAR NAV-REPAIR iter 86k —
+   * Priority:  item.route → onClick(label) → fallbackRoute.
+   * No more silent no-ops. If an item has neither route nor onClick
+   * nor a fallback, the button is rendered disabled so it can't
+   * pretend to be interactive. */
   return (
     <div className="ps-icon-row">
       {items.map((item) => {
         const Icon = item.icon;
         const safe = item.label.replace(/\n/g, " ").trim();
+        const itemRoute = item.route || null;
+        const hasAction = Boolean(itemRoute || onClick || fallbackRoute);
+        const handler = (e) => {
+          e.stopPropagation();
+          if (itemRoute && navigate) {
+            navigate(itemRoute);
+            return;
+          }
+          if (onClick) {
+            onClick(safe);
+            return;
+          }
+          if (fallbackRoute && navigate) {
+            navigate(fallbackRoute);
+          }
+        };
         return (
           <button
             type="button"
             key={item.label}
-            onClick={(e) => {
-              if (!onClick) return;
-              e.stopPropagation();
-              onClick(safe);
-            }}
+            onClick={handler}
+            disabled={!hasAction}
             data-testid={`polarstar-day-${ariaPrefix}-${safe.toLowerCase().replace(/\s+/g, "-")}`}
           >
             <Icon />

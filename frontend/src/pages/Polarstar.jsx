@@ -36,15 +36,17 @@ const NIGHT_ZONES = [
   { id: "never-alone", label: "You are never alone",       route: null, top: 54, left: 89, w: 9,  h: 8,  active: false, variant: "library" },
   { id: "keepsakes",   label: "Memory Trail",              route: null, top: 70, left: 76, w: 17, h: 10, active: false, variant: "soon", soonLabel: "Coming Soon" },
 ];
-const NIGHT_DAYS = [
-  { id: "d1", left: 38.5 },
-  { id: "d2", left: 42.5 },
-  { id: "d3", left: 46.5 },
-  { id: "d4", left: 50.5 },
-  { id: "d5", left: 54.5 },
-  { id: "d6", left: 58.5 },
-  { id: "d7", left: 62.5 },
-];
+/* §POLARSTAR NAV-REPAIR iter 86k 2026-02-29 — A3 fix.
+ *
+ * NIGHT_DAYS removed entirely: previously 7 invisible buttons over
+ * the painted "Day 1 … Day 7" lanterns ALL navigated to the same
+ * /exploration overview, creating the false promise of 7 distinct
+ * daily journeys. The painted lanterns remain in the image as
+ * decoration only; the single Exploration zone (#27 in NIGHT_ZONES)
+ * carries the actual navigation.
+ * If/when 7 distinct day-content pages are authored, restore the
+ * NIGHT_DAYS array with per-day routes (not 7 dumps to the same
+ * overview). */
 
 export default function Polarstar() {
   const navigate = useNavigate();
@@ -135,18 +137,8 @@ function NightClickMap({ navigate, openWaitlist, mode }) {
             {soonLabel && <span className="pw8-soon-tag">{soonLabel}</span>}
           </button>
         ))}
-
-        {NIGHT_DAYS.map(({ id, left }) => (
-          <button
-            key={id}
-            type="button"
-            className="pw8-day"
-            data-testid={`pw8-day-${id}`}
-            aria-label={`Exploration ${id}`}
-            onClick={() => navigate("/kids-universe/polarstar/exploration")}
-            style={{ top: "28%", left: `${left}%`, height: "5%" }}
-          />
-        ))}
+        {/* §POLARSTAR NAV-REPAIR iter 86k — 7 night day-pillars removed.
+         * Painted lanterns in the night image now decorative-only. */}
       </div>
 
       <button

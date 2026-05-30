@@ -2635,6 +2635,103 @@ work yet).
 - 🟡 Per-story illustrations + per-story PDFs
 - 🟡 Show HN variant final pick (A recommended)
 
+---
+
+## Iter 86k — 2026-02-29 (evening) — Navigation parandussprint (A1 + A2 + A3)
+
+**Trigger:** `POLARSTAR_CONTENT_COVERAGE_MATRIX_2026-02-29.md` paljastas
+30 surface'i peamaailmas, mis paistsid klikitavad aga olid kas dead
+nested buttons (A1, 17 tk), waitlist'i avavad LIVE-sisuga marsruudid
+(A2, 6 tk) või eksitavad Day-1-7 pillarid (A3, 7 tk). Founder + GPT
+konsulteerisid ja andsid green light parandussprindile.
+
+**Discipline:** Mitte ühtegi uut sisu rida. Ainult olemasoleva
+ühendamine.
+
+### A1 — Dead nested buttons fixed (`PolarstarDayWorld.jsx`)
+
+- `AgeZone` ümberkirjutatud: ps-zone-panel oli vana `<button>` mis
+  haaras inner `<button>` ikoone (HTML-invalidne button-in-button
+  nesting). Nüüd on välimine paneel plain `<div>`, kõik 17 sisemist
+  ikooni on ehtsad nuppud millel oma route.
+- `IconRow` ümberkirjutatud: priority `item.route → onClick(label) →
+  fallbackRoute`. Kui ükski neist puudub, button renderdab
+  `disabled` — ei saa enam silently no-op'iks olla.
+- Kõik 17 dead-buttonit (5 Discovery + 7 Exploration + 5 Creation)
+  saavad nüüd otse-marsruudi vastavale LIVE aktiivsusele.
+- `data-testid`-d säilitatud (`polarstar-day-{zone}-{slug}`) — ei
+  riku ühtegi olemasolevat Playwright testi.
+
+### A2 — Explorer's Hub + Morning Boost reconnect (`PolarstarDayWorld.jsx`)
+
+- `EXPLORER_HUB` (5 ikooni): Science Lab / Nature Explorers / World
+  Cultures / Space Adventures / Amazing Animals nüüd kõik kannavad
+  `route`-välja LIVE marsruutidele. `<IconRow>` käivitab `navigate()`,
+  mitte `openWaitlist()`.
+- Nature Explorers → `/exploration/nature-quest` (lähim live route).
+- Morning Boost panel: vana `onClick={() => openWaitlist("Morning
+  Boost")}` → uus `navigate("/kids-universe/polarstar/discovery/
+  morning-mindful-start")`.
+
+### A3 — Night-world Day 1-7 pillars removed (`Polarstar.jsx`)
+
+- `NIGHT_DAYS` array (7 element) ja vastav `.map()` rendering osa
+  täielikult eemaldatud. 7 nähtamatut nuppu mis kõik saatsid samale
+  `/exploration` lehele nüüd kustutatud.
+- Painted lanterns night-world-v2.png pildil säilivad — nad on art,
+  mitte UI. Visitor kes klikib lanterni peale ei saa enam vale-
+  promise'i 7 erinevat päeva.
+- Kui hiljem autoreeritakse 7 päeva-spetsiifilist sisu, taastame
+  `NIGHT_DAYS` per-day route'idega (mitte 7 dump'i ühele lehele).
+
+### Live verification (1 paralleel-screenshot test, 9 assertion)
+
+| Check | Result |
+|---|---|
+| A3 vana "Day 1" label puudub DayWorld'ist | ✓ 0 |
+| A3 uus `nature-quest` testid olemas | ✓ 1 |
+| A1 Discovery Story Time inner btn count | ✓ 1 |
+| A1 Story Time btn enabled | ✓ True |
+| A1 click → `/discovery/story-time` | ✓ navigated |
+| A2 Hub World Cultures btn count | ✓ 1 |
+| A2 click → `/exploration/world-cultures` | ✓ navigated |
+| A2b Morning Boost click → `/discovery/morning-mindful-start` | ✓ navigated |
+| A3 night day-pillars count | ✓ 0 |
+
+**Tegelik tööaeg:** ~30 min, mitte audit'i hinnatud 2-3h. Põhjus:
+kõik LIVE marsruudid olid juba olemas iter 86i järelt; vajalik oli
+ainult ühendamine, mitte uue sisu autoreerimine.
+
+### Coverage matrix — AFTER iter 86k
+
+| Defect kategooria | Enne | Pärast |
+|---|---|---|
+| Dead nested buttons | 17 | **0** |
+| Waitlist despite LIVE content | 6 | **0** |
+| Misleading Day 1-7 pillars | 7 | **0** |
+| **Total P0/A defects** | **30** | **0** |
+
+### Files touched
+
+- Updated: `frontend/src/components/PolarstarDayWorld.jsx`
+  (AGE_ZONES items get routes, EXPLORER_HUB navigate'ib, Morning
+  Boost navigate'ib, AgeZone div'iks, IconRow priority-handler)
+- Updated: `frontend/src/pages/Polarstar.jsx` (NIGHT_DAYS array
+  + .map render bloc eemaldatud)
+- Lint clean (× 2)
+
+### What is **STILL** not done (carry forward, unchanged)
+
+- ⏸️ Little Star `.mp3` from founder (PDF 6-lõiguline versioon)
+- 🟡 Drawing Palette canvas (Discovery's last Soon)
+- 🟡 Code Studio + Media Studio content (Creation's last Soons)
+- 🟡 Dreamweavers needs 1-2 more stories
+- 🟡 Per-story illustrations + per-story PDFs
+- 🟡 Show HN variant final pick (A recommended)
+- 🟡 Bundle proposal decision (first 1 SKU to build)
+- 🟡 Audio anywhere (0/96 still — no kids audio exists)
+
+
 
 
 
