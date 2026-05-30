@@ -4,6 +4,151 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (LATE) — Iter 86d: Compass Framework + Voice & Tone (internal model only)
+
+**Founder directive**: Capture the most valuable insight from today's
+strategy review — the Compass Framework — as an **internal navigation
+model** in PRD. **NO code changes. NO public copy changes. NO new site
+sections.** This is a thinking tool for future decisions, not a product
+feature. Also lock in a Voice & Tone style guide for the day we do a
+coordinated public copy refresh (after deploy readiness + FastSpring
+outcome).
+
+### The Compass Framework (internal architecture model)
+
+Matrix Aurin and Polarstar Kids both operate on the same four-direction
+compass. This is **a mental model for the founder + future agents**,
+not a UI element to ship. Use it when asking *"where does this new
+feature belong?"*
+
+```
+                     NORTH
+                    Clarity
+              "What is true?"
+                      |
+WEST          Connection · Centre · Possibility           EAST
+"Who am I        "Welcome back            "What can
+becoming with     to yourself."           become
+others?"                                  possible?"
+                      |
+                   Foundation
+                "What supports me?"
+                     SOUTH
+```
+
+### Direction-to-room mapping
+
+| Compass | Adult (Matrix Aurin) | Kids (Polarstar Kids) | Human need |
+|---------|---------------------|----------------------|-----------|
+| **North · Clarity** | Clarity Release · Clarity Threshold · FAQ · reflective letters | Discovery World (story-time, reflect, kindness) | "I want to see where I am." |
+| **East · Possibility** | Cabinet courses · Course Room | Exploration World (world cultures, nature, science) | "I want to see where I could go." |
+| **South · Foundation** | Body Room · Body Temple · daily rituals · Parents Room | Creation World (design lab, build, drawing) — grounded in making | "I want to feel safe and create." |
+| **West · Connection** | Aurin's Room · Wanderer's Agreement · community letters | Family Connection (rituals, bedtime, conversation) | "I do not want to be in this alone." |
+| **Centre** | "Welcome back to yourself." | (same — implied, never said to children) | The person, not the platform. |
+
+### How the Compass helps
+
+1. **Feature routing.** New idea? Find its compass direction first.
+   If it does not fit any direction cleanly, it is probably not for
+   this platform.
+2. **PSP clarity.** When asked "what do you sell?", the answer
+   compresses to four directions, not eleven feature names. (The PSP
+   Pitch at `/app/memory/psp_pitch.md` does this in product language.)
+3. **Cross-pollination.** Adult and kids content share architecture
+   without sharing copy. A child's "Discovery World" mirrors an
+   adult's "Clarity" — same compass direction, different vocabulary.
+4. **Anti-scope-creep.** Anything that does not have a compass home
+   is a candidate for cutting.
+
+### What this does NOT do
+
+- ❌ Does **not** appear on the public site.
+- ❌ Does **not** rename any existing room, world, or page.
+- ❌ Does **not** require backend changes.
+- ❌ Does **not** restructure navigation.
+- ✅ Lives only here in PRD + in the founder's thinking.
+
+---
+
+## Voice & Tone style guide (for FUTURE coordinated copy pass)
+
+**Apply when:** After deploy readiness checklist + Coming Soon sweep
++ FastSpring outcome. Not before.
+
+**Discipline (inspired by Tony-Robbins-style translation of complex
+ideas into one accessible line, without using his name or vocabulary
+on our pages):**
+
+### Three rules
+
+1. **Translate concept → felt human need.** Never sell the abstraction;
+   sell the relief.
+   - ✗ "Escape the Matrix" → ✓ "Find your direction."
+   - ✗ "Pattern interruption" → ✓ "Notice what you keep doing."
+   - ✗ "Cognitive load extraction" → ✓ "Empty what you're carrying."
+
+2. **One sentence anyone gets in 10 seconds.** If a parent reading on
+   a phone at 11pm cannot parse the line in one breath, it is too long.
+   - ✓ "Welcome back to yourself."
+   - ✓ "A compass for what is already shaping your life."
+   - ✓ "Stories for the slow part of the evening."
+
+3. **Universal over esoteric.** The Matrix concept is real, but its
+   public framing must speak to a non-spiritual audience too.
+   - Matrix = "the habits, stories and assumptions that quietly shape
+     our lives." NOT "the system you must escape."
+   - Aurin = "a quiet voice for reflective questions." NOT "an
+     awakened companion."
+
+### Vocabulary registers (when the time comes)
+
+| Avoid on public surfaces | Prefer |
+|-------------------------|--------|
+| awakening, escape, matrix (as noun) | notice, direction, return |
+| healing, therapy, wellbeing | calmer daily life, clarity, ground |
+| program, system, control | habit, story, pattern |
+| AI companion, AI guide | storytelling companion, voice room |
+| credits, tokens, currency | session, month, bundle |
+
+### Keep (these are brand)
+
+- "Matrix Aurin" (brand name — used in name only, not as a noun in copy)
+- "Polarstar Kids" (brand name)
+- "The Guardian" (character)
+- "Welcome back to yourself." (signature line)
+- "Aurin" (character name)
+- "Sanctuary" (used in context — "a quiet sanctuary for stories", not "mental health sanctuary")
+
+### Future homepage candidate (NOT applied — for future reference only)
+
+When the coordinated copy pass happens, the homepage hero candidate is:
+
+```
+The world offers endless advice.
+A compass offers direction.
+Welcome back to yourself.
+```
+
+This is **archived as a candidate**, not approved for implementation.
+Founder review required before any live edit.
+
+---
+
+### Files created/updated in iter 86d
+
+- ✅ `/app/memory/psp_pitch.md` — created (PSP/underwriter response sheet)
+- ✅ `/app/memory/PRD.md` — this section added (Compass + Voice & Tone)
+
+### Files explicitly NOT touched
+
+- ❌ Any `.jsx`, `.js`, `.css` in `/app/frontend/src/`
+- ❌ Any `.py` in `/app/backend/`
+- ❌ Any route, endpoint, or DB collection
+- ❌ Polarstar terminology (still untouched since iter 85j)
+- ❌ Compliance fixes from iter 86b (intact)
+- ❌ Gumroad webhook from iter 86d-morning (intact)
+
+
 ## 2026-02-29 (NIGHT) — Iter 86c: Reality Audit + Deploy Decision (founder)
 
 **Founder directive**: Run an objective audit on actual files/routes/DB/
