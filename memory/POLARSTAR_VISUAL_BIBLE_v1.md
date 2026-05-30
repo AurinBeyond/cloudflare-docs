@@ -84,30 +84,70 @@ own.
 
 ---
 
-## Color Palette
+## Color Palette — Two Worlds, Two Energies
 
-**Primary:**
+**Locked 2026-02-29 by founder.**
 
-- warm gold
-- moonlight silver
-- soft blue
-- forest green
-- warm cream
-- gentle lavender
+Polarstar is two worlds, not one. The colour system must support both
+without bleeding into each other.
 
-**Accent:**
+### ☀️ Day Palette — Discovery / Exploration / Creation
+Used wherever a child is **exploring, building, asking, moving, doing**.
 
-- lantern amber
-- sunrise peach
-- meadow yellow
+- **Warm Gold** — sunlight, lanterns lit in daytime
+- **Sky Blue** — open horizon, morning light
+- **Meadow Green** — forests, leaves, growing things
+- **Soft White** — clouds, open page, fresh paper
 
-**Avoid:**
+**Feeling target:** *"Let's explore."*
+**Where it lives:** Day-world hero, three age rooms, all activity
+cards, Drawing Palette future canvas, Science Lab visuals.
 
-- saturated red
-- toxic green
-- electric blue
-- neon pink
-- fluorescent colors
+### 🌙 Night Palette — Story Time / Bedtime
+Used wherever a child is **listening, resting, settling**.
+
+- **Warm Cream** — old paper, soft pillow
+- **Lantern Amber** — bedside lamp, evening fire
+- **Moonlight Silver** — pale glow on cloth, stars on water
+- **Deep Blue** — quiet midnight sky
+
+**Feeling target:** *"Let's rest."*
+**Where it lives:** Story reader (`PolarstarStoryRead.jsx`), all 5
+hero illustrations for story covers, `/listen/little-star` page,
+Gumroad PDF, audio companion banner.
+
+### Shared accents (cross both palettes)
+- **Lantern amber** — bridges day and night; sparingly
+- **Sunrise peach** — only at transitions (page footer, "next" hints)
+- **Meadow yellow** — only inside Day surfaces
+
+### Avoid (everywhere)
+- Saturated red
+- Toxic green
+- Electric blue
+- Neon pink
+- Fluorescent colours
+
+### Discipline rule
+A single Polarstar surface uses one palette, not both. If a hover or
+transition needs a bridge tone, use Lantern Amber only.
+
+---
+
+### Story-by-story palette assignment (locked)
+
+| Story | Surface palette | Hero illustration palette |
+|-------|----------------|---------------------------|
+| Little Star | 🌙 Night | 🌙 Night (sleeping village under stars) |
+| The Moon Boat | 🌙 Night | 🌙 Night (silver moonlit clouds) |
+| The Night Forest | 🌙 Night | 🌙 Night with warm amber lantern accent |
+| The Quiet Dragon | 🌙 Night | 🌙 Night at golden-hour sunset boundary (slight day-bridge) |
+| Aurin and the Lantern | 🌙 Night | 🌙 Night with golden lantern (twilight) |
+
+**Note:** All 5 hero illustrations sit in the Night Palette because
+they are *story scenes*, not Day-world activity scenes. When the Day
+side gets its first hero illustration (Discovery activity art,
+future), it follows Day Palette discipline.
 
 ---
 
@@ -231,6 +271,10 @@ top of this foundation, not in place of it.
 ## Versioning
 
 - **v1.0** · 2026-02-29 · initial lock, 5 story visuals defined.
+- **v1.1** · 2026-02-29 evening · Founder Day/Night Palette split
+  added (GPT correction accepted). Replaces flat single palette.
+  All 5 hero illustrations confirmed Night Palette; Day Palette
+  reserved for Discovery/Exploration/Creation Day-world activities.
 - Future bumps documented in CHANGELOG with reason + approved by founder.
 
 ---
