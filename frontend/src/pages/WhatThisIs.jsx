@@ -82,7 +82,7 @@ export default function WhatThisIs() {
           style={{ fontFamily: SERIF }}
           data-testid="what-this-is-title"
         >
-          The AI is the engine.
+          The room is the vessel.
           <br />
           Presence is the product.
         </h1>
@@ -174,7 +174,7 @@ export default function WhatThisIs() {
           or relationships.
         </p>
         <p>
-          It is not a 24/7 AI friend, not a replacement for human
+          It is not a 24/7 companion, not a replacement for human
           connection, and not a spiritual teaching. The angels and
           light-bearing characters in our stories are{" "}
           <em>imaginative symbols</em> — language for kindness, courage and
@@ -205,7 +205,7 @@ export default function WhatThisIs() {
           do not let costs run away into the night.
         </p>
         <p>
-          In plain language: this is wellbeing technology built with the
+          In plain language: this is quiet-room technology built with the
           same seriousness we ask of our guests.
         </p>
       </Section>

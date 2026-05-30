@@ -474,11 +474,11 @@ function AurinsRoomChatInner() {
               For the grown-up
             </span>
             <br />
-            Aurin is an AI companion — not a teacher, doctor, or
-            therapist. Replies are AI-generated and may be imprecise;
-            please supervise younger children and contact a qualified
-            human professional for clinical, safety, or developmental
-            questions.
+            Aurin is a storytelling companion — not a teacher, doctor,
+            or therapist. Replies are machine-generated and may be
+            imprecise; please supervise younger children and contact a
+            qualified human professional for clinical, safety, or
+            developmental questions.
           </p>
           <p>
             By continuing, you acknowledge the{" "}

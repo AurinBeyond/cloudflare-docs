@@ -54,7 +54,7 @@ export default function About() {
               data-testid="about-headline"
               className="aurin-display text-4xl md:text-5xl lg:text-6xl leading-[1.05]"
             >
-              I did not want to build another AI platform.{" "}
+              I did not want to build another platform competing for attention.{" "}
               <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
                 I wanted to build a calmer place.
               </span>
@@ -65,7 +65,7 @@ export default function About() {
             >
               My name is Anna. This project was born from something deeply
               personal — and from one quiet belief: that technology should
-              support human wellbeing, not consume it.
+              support a calmer daily life, not consume it.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -133,7 +133,7 @@ export default function About() {
               many still feel unseen and alone.
             </p>
             <p>
-              I did not want to create another <em>"AI platform,"</em> another
+              I did not want to create another <em>"platform competing for attention,"</em> another
               cold technology product, or another place that treats human
               emotions like data.
             </p>
@@ -294,7 +294,7 @@ export default function About() {
             <div className="relative">
               <div className="aurin-eyebrow !mb-3">The core idea</div>
               <p className="aurin-serif-italic text-xl md:text-2xl leading-snug text-[hsl(var(--aurin-text))/0.96]">
-                "Technology should support human wellbeing — not consume it."
+                "Technology should support a calmer daily life — not consume it."
               </p>
               <p className="mt-6 text-[15.5px] leading-[1.85] text-[hsl(var(--aurin-text))/0.94]">
                 I believe people do not only search for answers. They search

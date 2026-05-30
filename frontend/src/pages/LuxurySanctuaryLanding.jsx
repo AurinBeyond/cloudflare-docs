@@ -294,7 +294,7 @@ export default function LuxurySanctuaryLanding() {
                 <p className="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, full room access, and a private channel — your own corner of this sanctuary.</p>
                 <ul className="offering-includes">
                   <li>Full access to all rooms</li>
-                  <li>Weekly private AI voice sessions</li>
+                  <li>Weekly private live voice sessions</li>
                   <li>Priority presence and response</li>
                   <li>Early access to future sanctuaries</li>
                   <li>Direct channel for quiet requests</li>

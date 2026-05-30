@@ -35,7 +35,7 @@ export default function Referral() {
 
   const shareSubject = encodeURIComponent("A quiet corner of the internet for you");
   const shareBody = (url) => encodeURIComponent(
-    `I've been using a small AI sanctuary called Aurin — calm voice rooms, ` +
+    `I've been using a quiet online space called Aurin — calm voice rooms, ` +
     `a kids universe, no ads. Open with my link and we both get a few extra ` +
     `voice minutes when you start: ${url}`
   );

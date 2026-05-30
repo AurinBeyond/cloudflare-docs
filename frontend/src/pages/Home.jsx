@@ -397,7 +397,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FUTURE AI FOOTNOTE */}
+      {/* FUTURE LAYER FOOTNOTE */}
       <section className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container">
           <div className="aurin-card p-10 md:p-14 relative overflow-hidden">
@@ -423,7 +423,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="md:col-span-4 md:text-right">
-                <span className="aurin-chip" data-testid="home-ai-status">
+                <span className="aurin-chip" data-testid="home-future-status">
                   · Prepared · Not yet active
                 </span>
               </div>

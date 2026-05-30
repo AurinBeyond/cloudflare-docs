@@ -818,7 +818,7 @@ function WaysToBeHereSection() {
       lede: "Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.",
       includes: [
         "Access to one room of your choosing for this session",
-        "A guided live AI voice session at your pace",
+        "A guided live voice session at your pace",
         "No subscription, no follow-up pressure",
       ],
       price: "€45",
@@ -832,7 +832,7 @@ function WaysToBeHereSection() {
       lede: "Move freely between all rooms, with a monthly voice session included. You are welcome here, always.",
       includes: [
         "Access to all four rooms — reading, reflection, text-to-text chat",
-        "One private live AI voice session per month",
+        "One private live voice session per month",
         "Priority access to new spaces",
         "The quiet community thread",
       ],
@@ -848,7 +848,7 @@ function WaysToBeHereSection() {
       lede: "For those ready for sustained, intimate work. Weekly voice sessions, full sanctuary access, and a private channel — your own corner of this sanctuary.",
       includes: [
         "Full access to all rooms — reading, reflection, text-to-text chat",
-        "Weekly private live AI voice sessions — four sessions per month",
+        "Weekly private live voice sessions — four sessions per month",
         "Priority presence and response",
         "Early access to future sanctuaries",
         "Direct channel for quiet requests",

@@ -546,7 +546,7 @@ export default function KidsUniverse() {
         </div>
       </section>
 
-      {/* AI Creative Studio (placeholder) */}
+      {/* Coloring Studio (placeholder) */}
       <section className="aurin-section-sm border-t border-[hsl(var(--aurin-border-soft))]">
         <div className="aurin-container grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-7">
