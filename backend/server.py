@@ -15386,6 +15386,256 @@ async def polarstar_waitlist_health():
     return {"total": total, "source": "polarstar_preview"}
 
 
+# =====================================================================
+# GUMROAD WEBHOOK — "Polarstar Kids · Bedtime Stories" automated delivery
+#
+# Gumroad sends a Ping (POST form-encoded) on every sale. We:
+#   1. Verify the `seller_id` matches GUMROAD_SELLER_ID (anti-spoof).
+#   2. Verify the `product_permalink` (or `short_product_id`) is in the
+#      configured whitelist (anti-cross-product noise).
+#   3. Upsert the sale into `polarstar_purchases` (idempotent by sale_id).
+#   4. Also upsert the buyer into `polarstar_waitlist` with
+#      `customer: true` (so future PSP reviews see paying customers).
+#   5. Send a quiet thank-you email via Resend with the PDF link.
+#
+# Configure in backend/.env:
+#   GUMROAD_SELLER_ID=...                       (from gumroad.com/settings)
+#   GUMROAD_PRODUCT_PERMALINKS=slug1,slug2      (comma-separated)
+#   GUMROAD_PDF_URL=https://prulesoul.site/assets/pdfs/polarstar-bedtime-stories.pdf
+#
+# Gumroad webhook URL to paste:
+#   https://prulesoul.site/api/webhooks/gumroad
+#
+# (Gumroad's standard Ping has no HMAC. Seller-ID match + permalink
+# whitelist is the documented best practice.)
+# =====================================================================
+
+
+async def _send_polarstar_bedtime_pdf_email(
+    *, email: str, full_name: Optional[str], pdf_url: str, order_number: Optional[str]
+) -> dict:
+    """Quiet thank-you with the PDF link. Returns the email_service result
+    (or a graceful skip if Resend is not configured)."""
+    try:
+        from email_service import send_email as _send, is_configured as _ok
+    except Exception as e:  # noqa: BLE001
+        logger.warning("polarstar.bedtime email import failed: %s", e)
+        return {"status": "skipped_import_error"}
+
+    if not _ok():
+        logger.info("polarstar.bedtime email skipped — Resend not configured")
+        return {"status": "skipped_resend_not_configured"}
+
+    first_name = (full_name or "").strip().split(" ")[0] if full_name else ""
+    salutation = f"Dear {first_name}," if first_name else "Hello,"
+
+    subject = "Your Polarstar Bedtime Stories are here"
+    text_body = (
+        f"{salutation}\n\n"
+        "Thank you for your order. Your collection of five calm bedtime "
+        "stories is ready below.\n\n"
+        f"Download (PDF): {pdf_url}\n\n"
+        "How to use the book:\n"
+        "  • Read one story aloud, slowly. Most take 3–5 minutes.\n"
+        "  • After the story, glance at the 'Together' page. One question is enough.\n"
+        "  • The 'Quiet Activity' is optional. Skip it if the child is already drifting.\n\n"
+        "There is no order. Read whichever story matches the mood tonight.\n\n"
+        "We are also adding you to the Explorer List — so when Polarstar "
+        "opens the rest of the world (drawing, music, family rituals), you "
+        "will be among the first to know.\n\n"
+        "With warmth,\n"
+        "— Polarstar Kids\n\n"
+        + (f"Order: {order_number}\n" if order_number else "")
+        + "Reply directly to this email if anything is missing."
+    )
+    html_body = f"""\
+<!doctype html><html><body style="font-family: Georgia, 'Times New Roman', serif; color:#3a2a18; background:#fffbf1; padding:24px;">
+<div style="max-width: 560px; margin: 0 auto; background:#fff; padding:36px 32px; border:1px solid #d4b67d33; border-radius:8px;">
+  <div style="text-align:center; letter-spacing:.18em; font-size:11px; color:#b97a3a; text-transform:uppercase;">Polarstar Kids</div>
+  <hr style="border:none; border-top:1px solid #d4b67d; margin:14px 60px 22px;"/>
+  <h1 style="font-size:24px; font-weight:600; margin:0 0 14px; text-align:center; color:#3a2a18;">Your Bedtime Stories are here</h1>
+  <p style="margin:0 0 20px;">{salutation}</p>
+  <p style="margin:0 0 16px;">Thank you for your order. Your collection of five calm bedtime stories is ready.</p>
+  <p style="margin:24px 0; text-align:center;">
+    <a href="{pdf_url}" style="display:inline-block; padding:14px 28px; background:#b97a3a; color:#fffbf1; text-decoration:none; font-weight:600; letter-spacing:.04em; border-radius:4px;">Download the PDF</a>
+  </p>
+  <h3 style="font-size:14px; font-weight:600; margin:28px 0 8px; color:#5b4a32;">How to use the book</h3>
+  <ul style="margin:0 0 18px; padding-left:20px; color:#5b4a32; line-height:1.7;">
+    <li>Read one story aloud, slowly. Most take 3–5 minutes.</li>
+    <li>After the story, glance at the &ldquo;Together&rdquo; page. One question is enough.</li>
+    <li>The &ldquo;Quiet Activity&rdquo; is optional &mdash; skip if the child is already drifting.</li>
+  </ul>
+  <p style="margin:18px 0 0; font-style:italic; color:#5b4a32; font-size:14px;">There is no order. Read whichever story matches the mood tonight.</p>
+  <hr style="border:none; border-top:1px solid #d4b67d33; margin:28px 0;"/>
+  <p style="font-size:13px; color:#5b4a32; margin:0;">We are also adding you to the Explorer List &mdash; so when Polarstar opens the rest of the world (drawing, music, family rituals), you will be among the first to know.</p>
+  <p style="margin:24px 0 0;">With warmth,<br/><em>&mdash; Polarstar Kids</em></p>
+  {f'<p style="font-size:11px; color:#9b8a6a; margin:24px 0 0;">Order: {order_number}</p>' if order_number else ''}
+</div>
+</body></html>"""
+
+    try:
+        return await _send(
+            to=email,
+            subject=subject,
+            html=html_body,
+            text=text_body,
+            sender="info",
+            tags=[
+                {"name": "kind", "value": "polarstar_bedtime_delivery"},
+                {"name": "source", "value": "gumroad"},
+            ],
+            db=db,
+        )
+    except Exception as e:  # noqa: BLE001
+        logger.warning("polarstar.bedtime resend.send failed: %s", e)
+        return {"status": "send_failed", "error": type(e).__name__}
+
+
+@api_router.post("/webhooks/gumroad")
+async def gumroad_webhook(request: Request):
+    """Gumroad Ping receiver. Idempotent. Triggers PDF delivery email.
+
+    Gumroad sends `application/x-www-form-urlencoded`. We support both
+    that and `application/json` for flexibility.
+    """
+    expected_seller = os.environ.get("GUMROAD_SELLER_ID", "").strip()
+    permalink_whitelist = {
+        s.strip().lower()
+        for s in os.environ.get("GUMROAD_PRODUCT_PERMALINKS", "").split(",")
+        if s.strip()
+    }
+    pdf_url = os.environ.get(
+        "GUMROAD_PDF_URL",
+        "https://prulesoul.site/assets/pdfs/polarstar-bedtime-stories.pdf",
+    ).strip()
+
+    # Parse body (form or json)
+    ctype = (request.headers.get("content-type") or "").lower()
+    if "application/json" in ctype:
+        data = await request.json()
+    else:
+        form = await request.form()
+        data = {k: v for k, v in form.items()}
+
+    seller_id = (data.get("seller_id") or "").strip()
+    permalink = (data.get("product_permalink") or data.get("short_product_id") or "").strip().lower()
+    email = (data.get("email") or "").strip().lower()
+    full_name = (data.get("full_name") or "").strip() or None
+    sale_id = (data.get("sale_id") or "").strip()
+    order_number = (data.get("order_number") or "").strip() or None
+    test_flag = str(data.get("test", "")).lower() in {"true", "1", "yes"}
+
+    # 1. Anti-spoof: seller_id must match (when configured)
+    if expected_seller and seller_id != expected_seller:
+        logger.warning("gumroad.webhook seller_id mismatch: got=%r expected=%r", seller_id, expected_seller)
+        raise HTTPException(status_code=403, detail="seller_id mismatch")
+
+    # 2. Anti-noise: permalink whitelist (when configured)
+    if permalink_whitelist and permalink not in permalink_whitelist:
+        logger.info("gumroad.webhook permalink %r not in whitelist — ignoring", permalink)
+        return {"status": "ignored", "reason": "permalink_not_whitelisted"}
+
+    # 3. Basic sanity
+    if "@" not in email or not sale_id:
+        logger.warning("gumroad.webhook missing email or sale_id — payload keys=%s", list(data.keys()))
+        raise HTTPException(status_code=400, detail="email and sale_id required")
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    # 4. Idempotent insert by sale_id
+    purchase_doc = {
+        "sale_id": sale_id,
+        "order_number": order_number,
+        "email": email,
+        "full_name": full_name,
+        "product_permalink": permalink,
+        "price": data.get("price"),
+        "currency": data.get("currency"),
+        "quantity": data.get("quantity"),
+        "test": test_flag,
+        "raw_keys": sorted(list(data.keys())),
+        "received_at": now_iso,
+    }
+    res = await db.polarstar_purchases.update_one(
+        {"sale_id": sale_id},
+        {"$setOnInsert": purchase_doc, "$set": {"last_ping_at": now_iso}},
+        upsert=True,
+    )
+    is_new = res.upserted_id is not None
+
+    # 5. Also add to waitlist as customer (idempotent upsert)
+    await db.polarstar_waitlist.update_one(
+        {"email": email},
+        {
+            "$setOnInsert": {
+                "id": str(uuid.uuid4()),
+                "email": email,
+                "name": full_name,
+                "source": "gumroad_purchase",
+                "created_at": now_iso,
+            },
+            "$set": {
+                "customer": True,
+                "last_purchase_at": now_iso,
+                "last_seen_at": now_iso,
+            },
+        },
+        upsert=True,
+    )
+
+    # 6. Send PDF email only on first ping for this sale_id
+    email_result: dict = {"status": "skipped_duplicate"}
+    if is_new:
+        raw = await _send_polarstar_bedtime_pdf_email(
+            email=email,
+            full_name=full_name,
+            pdf_url=pdf_url,
+            order_number=order_number,
+        )
+        # Resend success returns {"id": "..."} (no "status" key). Normalise:
+        if isinstance(raw, dict):
+            if "status" in raw:
+                email_result = raw
+            elif raw.get("id"):
+                email_result = {"status": "sent", "resend_id": raw["id"]}
+            else:
+                email_result = {"status": "sent_unknown"}
+        else:
+            email_result = {"status": "sent"}
+
+    return {
+        "status": "ok",
+        "new_sale": is_new,
+        "test": test_flag,
+        "email_dispatch": email_result.get("status", "sent"),
+    }
+
+
+@api_router.get("/webhooks/gumroad/health")
+async def gumroad_webhook_health():
+    """Quick diagnostic — never exposes seller_id or secrets."""
+    total = await db.polarstar_purchases.count_documents({})
+    test_count = await db.polarstar_purchases.count_documents({"test": True})
+    last_doc = await db.polarstar_purchases.find_one(
+        {}, sort=[("received_at", -1)], projection={"_id": 0, "received_at": 1, "test": 1}
+    )
+    return {
+        "configured": {
+            "seller_id_set": bool(os.environ.get("GUMROAD_SELLER_ID")),
+            "permalinks_set": bool(os.environ.get("GUMROAD_PRODUCT_PERMALINKS")),
+            "pdf_url_set": bool(os.environ.get("GUMROAD_PDF_URL")),
+            "resend_ready": bool(os.environ.get("RESEND_API_KEY")),
+        },
+        "purchases_total": total,
+        "test_purchases": test_count,
+        "live_purchases": total - test_count,
+        "last_ping_at": last_doc.get("received_at") if last_doc else None,
+    }
+
+
+
+
+
 # ---- Unsubscribe (deliverability protection) ------------------------
 
 @api_router.get("/email/unsubscribe")
