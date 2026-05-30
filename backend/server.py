@@ -15625,6 +15625,7 @@ async def gumroad_webhook_health():
             "permalinks_set": bool(os.environ.get("GUMROAD_PRODUCT_PERMALINKS")),
             "pdf_url_set": bool(os.environ.get("GUMROAD_PDF_URL")),
             "resend_ready": bool(os.environ.get("RESEND_API_KEY")),
+            "api_token_set": bool(os.environ.get("GUMROAD_ACCESS_TOKEN")),
         },
         "purchases_total": total,
         "test_purchases": test_count,
@@ -15633,6 +15634,171 @@ async def gumroad_webhook_health():
     }
 
 
+# ---- Admin: Gumroad API integration (reconciliation + view) --------
+#
+# These endpoints require ADMIN_TOKEN in the Authorization header:
+#   Authorization: Bearer <ADMIN_TOKEN>
+#
+# The Gumroad API is called only when these endpoints are hit — so a
+# missing GUMROAD_ACCESS_TOKEN is not a crash, just a 503.
+
+
+def _require_admin(request: Request):
+    """Reject unless `Authorization: Bearer <ADMIN_TOKEN>` matches."""
+    expected = (os.environ.get("ADMIN_TOKEN") or "").strip()
+    if not expected:
+        raise HTTPException(status_code=503, detail="ADMIN_TOKEN not configured")
+    raw = request.headers.get("authorization", "")
+    token = raw.removeprefix("Bearer ").strip() if raw.lower().startswith("bearer ") else ""
+    if token != expected:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+@api_router.get("/admin/gumroad/sales")
+async def admin_gumroad_sales(request: Request, limit: int = 50):
+    """Recent purchases as stored locally. No Gumroad API call needed."""
+    _require_admin(request)
+    limit = max(1, min(limit, 200))
+    cursor = db.polarstar_purchases.find(
+        {}, projection={"_id": 0}
+    ).sort("received_at", -1).limit(limit)
+    rows = await cursor.to_list(length=limit)
+    return {"count": len(rows), "rows": rows}
+
+
+@api_router.post("/admin/gumroad/reconcile")
+async def admin_gumroad_reconcile(request: Request, since: Optional[str] = None):
+    """Fetch sales from Gumroad API and insert any that our webhook
+    missed. Idempotent — sales we already have are left alone.
+
+    `since` is YYYY-MM-DD. Defaults to 30 days ago.
+    """
+    _require_admin(request)
+    try:
+        import gumroad_service as gs
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"gumroad_service import failed: {e}")
+    if not gs.is_configured():
+        raise HTTPException(status_code=503, detail="GUMROAD_ACCESS_TOKEN not configured")
+
+    if not since:
+        since = (datetime.now(timezone.utc) - timedelta(days=30)).date().isoformat()
+
+    try:
+        api_sales = await gs.fetch_all_sales_since(since)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("gumroad reconcile fetch failed: %s", e)
+        raise HTTPException(status_code=502, detail=f"Gumroad API call failed: {type(e).__name__}")
+
+    permalink_whitelist = {
+        s.strip().lower()
+        for s in (os.environ.get("GUMROAD_PRODUCT_PERMALINKS") or "").split(",")
+        if s.strip()
+    }
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    inserted = 0
+    skipped_existing = 0
+    skipped_filtered = 0
+    for sale in api_sales:
+        sale_id = (sale.get("id") or "").strip()
+        if not sale_id:
+            continue
+        permalink = (sale.get("product_permalink") or sale.get("short_product_id") or "").strip().lower()
+        if permalink_whitelist and permalink and permalink not in permalink_whitelist:
+            skipped_filtered += 1
+            continue
+        existing = await db.polarstar_purchases.find_one({"sale_id": sale_id}, projection={"_id": 1})
+        if existing:
+            skipped_existing += 1
+            continue
+        email = (sale.get("email") or "").strip().lower()
+        full_name = (sale.get("full_name") or "").strip() or None
+        doc = {
+            "sale_id": sale_id,
+            "order_number": sale.get("order_number"),
+            "email": email,
+            "full_name": full_name,
+            "product_permalink": permalink,
+            "price": sale.get("price"),
+            "currency": sale.get("currency"),
+            "quantity": sale.get("quantity"),
+            "test": bool(sale.get("test")),
+            "source": "reconcile_api",
+            "received_at": sale.get("created_at") or now_iso,
+            "last_ping_at": now_iso,
+        }
+        await db.polarstar_purchases.insert_one(doc)
+        inserted += 1
+        # Also add to waitlist as a customer
+        if email and "@" in email:
+            await db.polarstar_waitlist.update_one(
+                {"email": email},
+                {
+                    "$setOnInsert": {
+                        "id": str(uuid.uuid4()),
+                        "email": email,
+                        "name": full_name,
+                        "source": "gumroad_reconcile",
+                        "created_at": now_iso,
+                    },
+                    "$set": {
+                        "customer": True,
+                        "last_purchase_at": doc["received_at"],
+                        "last_seen_at": now_iso,
+                    },
+                },
+                upsert=True,
+            )
+
+    return {
+        "status": "ok",
+        "since": since,
+        "api_sales_returned": len(api_sales),
+        "inserted_new": inserted,
+        "skipped_already_in_db": skipped_existing,
+        "skipped_outside_whitelist": skipped_filtered,
+    }
+
+
+@api_router.get("/admin/gumroad/summary")
+async def admin_gumroad_summary(request: Request):
+    """Lightweight revenue summary for the PSP-evidence story.
+    Counts live (non-test) purchases only."""
+    _require_admin(request)
+    pipeline = [
+        {"$match": {"test": {"$ne": True}}},
+        {
+            "$group": {
+                "_id": "$currency",
+                "count": {"$sum": 1},
+                "revenue_minor": {
+                    "$sum": {
+                        "$toDouble": {"$ifNull": ["$price", 0]},
+                    }
+                },
+            }
+        },
+    ]
+    by_currency = []
+    async for row in db.polarstar_purchases.aggregate(pipeline):
+        by_currency.append(
+            {
+                "currency": row.get("_id") or "unknown",
+                "count": int(row.get("count") or 0),
+                "revenue_minor": float(row.get("revenue_minor") or 0),
+            }
+        )
+    total_live = sum(r["count"] for r in by_currency)
+    first_doc = await db.polarstar_purchases.find_one(
+        {"test": {"$ne": True}}, sort=[("received_at", 1)],
+        projection={"_id": 0, "received_at": 1},
+    )
+    return {
+        "live_purchases_total": total_live,
+        "first_live_purchase_at": first_doc.get("received_at") if first_doc else None,
+        "by_currency": by_currency,
+    }
 
 
 
