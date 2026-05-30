@@ -4,6 +4,93 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (LATE-LATE) — Iter 86e: Brand Translation Foundation (LOCKED)
+
+**Status:** **LOCKED.** Not "final Brand Clarity end-state" — only the
+foundation. Both candidates #2 and #3 remain active in
+`/app/memory/brand_translation.md`.
+
+### What shipped (3 surgical edits)
+
+1 line added (no removals, no CTA changes, no navigation changes) on
+three pages, in the brass register (`#d4b67d` / `hsl(var(--aurin-brass))`):
+
+```
+A quiet room for noticing
+what is already shaping your life.
+```
+
+| File | Placement | data-testid |
+|------|-----------|-------------|
+| `pages/SanctuaryPreview.jsx` | Between H1 and "You do not have to perform here." | `hero-compass-line` (new) |
+| `pages/WhatThisIs.jsx` | Between H1 ("The room is the vessel…") and existing subhead | `what-this-is-compass-line` (new) |
+| `pages/About.jsx` | Between H1 ("I wanted to build a calmer place.") and subheadline | `about-compass-line` (new) |
+
+### What was created (1 strategic doc)
+
+- `/app/memory/brand_translation.md` — Brand Translation Sheet:
+  three Tony-rules, translation dictionary, Compass voice (one line per
+  direction), 3-layer messaging model, style checklist, **Brand Core
+  Statement — 10 candidates** with founder selection criteria.
+
+### Active Brand Core Statement candidates (both kept)
+
+- **#2 (hero refrain, currently live in preview)** — *"A quiet room for
+  noticing what is already shaping your life."* — North/Centre register.
+  Best for hero / Welcome-back rhythm.
+- **#3 (strategic kept for future)** — *"The world offers endless advice.
+  A compass offers direction."* — North contrast. Reserved for
+  PSP-pitch sections, About long-form, partner/investor framing.
+
+No statement is enshrined. The hero-refrain is **a working draft**, not
+The Brand Core Statement. One week of preview observation will tell us
+whether #2 is the final pick or whether the next copy-pass uses #3.
+
+### Verifications (preview only — NO deploy)
+
+```
+✅ /             compass_count=1  has_welcome_back=true  zero regressions
+✅ /what-this-is compass_count=1  room_vessel=true       zero "AI is the engine"
+✅ /about        compass_count=1  attention_h1=true      zero "AI platform"
+```
+
+Plus 3 visual screenshots taken (hero / WTI / about) — all show the
+brass line landing in the intended rhythm without breaking the existing
+layout, font sizes, or test IDs.
+
+### Code freeze remains in effect
+
+- ❌ NO deploy.
+- ❌ NO Polarstar Kids changes (iter 85j navigation + iter 86b/86c content untouched).
+- ❌ NO backend changes (Gumroad webhook from iter 86d-morning intact).
+- ❌ NO Compliance regression (iter 86b sweep intact — re-verified by greps in iter 86c).
+- ❌ NO new strategic exercises queued.
+
+### Next-session priority order (founder-locked, in this exact sequence)
+
+```
+1. 🟡 Coming Soon sweep
+   → every `status: "soon"` activity in polarstarContentMap.js must
+     visually communicate "Coming Soon" without feeling broken
+   → coverage: world-cultures, space-adventures, amazing-animals,
+     science-lab, code-studio, media-studio, drawing-palette
+
+2. 🟡 Play & Move UX mockup (NO CODE — wireframe + flow + CTA logic)
+   → narrative wrapper, stepping-stone progress, one-move-at-a-time
+   → mockup approval before any implementation
+
+3. 🔵 Next coordinated copy harmonisation pass
+   → only after the above two land cleanly
+   → may activate Brand Core Statement #3 if #2 plateaus
+```
+
+### Founder note
+
+Reframed: project has moved from "fix everything at once" mode into
+"build one layer at a time" mode. This is the healthiest phase the
+project has been in. Iter 86e is the seal on that transition.
+
+
 ## 2026-02-29 (LATE) — Iter 86d: Compass Framework + Voice & Tone (internal model only)
 
 **Founder directive**: Capture the most valuable insight from today's
