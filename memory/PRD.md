@@ -2509,5 +2509,132 @@ Live Gumroad webhook + Resend delivery untouched. Backend restarted
 cleanly. All endpoints return the expected status codes. No frontend
 changes. No PDF re-generation. No mail sent.
 
+---
+
+## Iter 86i — 2026-02-29 (PM late) — Sprint A executed + Play & Move journey shipped
+
+**Trigger:** Founder green-lit Sprint A and the Play & Move rewrite at
+the same time. Founder also asked for bundle proposals (no Gumroad
+work yet).
+
+### Frontend — 3 content changes, 1 component rewrite
+
+**1. Creation Studio · Story Time slot added** (`polarstarContentMap.js`)
+- New first entry in `CREATION_ACTIVITIES`: `story-time` of type
+  `story` with `storyAgeBucket: "dreamweavers"`.
+- Result: "Aurin and the Lantern" is now discoverable inside Creation
+  Studio (was previously orphaned in the catalogue).
+- Screenshot verified live: `/kids-universe/polarstar/creation/story-time`
+  renders Story Time card with the lantern story.
+
+**2. Exploration · 4 empty "Coming Soon" cards filled**
+(`polarstarContentMap.js`)
+- `world-cultures`, `space-adventures`, `amazing-animals`,
+  `science-lab` — type changed from `"soon"` to `"challenge"`,
+  each gets a 1-sentence challenge headline + 4 action prompts.
+- All copy is parent-child paper-activity ("find a country on a map",
+  "step outside after dark", "drop two objects from same height").
+- Zero PSP-flag words (verified by grep).
+- Result: Exploration room goes from 3 LIVE / 7 total → 7 LIVE / 7
+  total.
+- Screenshot verified live: `/exploration/world-cultures` renders
+  full challenge card with "Today's Cultures Quest" + 4 numbered
+  actions + "I did it!" button + parent tip.
+
+**3. Discovery · Play & Move rewrite to narrative journey**
+(`polarstarContentMap.js` + `PolarstarActivity.jsx`)
+- `play-move` activity now has a `journey` block alongside the
+  existing `moves` array (additive, backward-compatible).
+- `PolarstarActivity.jsx` branches: if `act.type === "moves" &&
+  act.journey` → render new `MovesJourney` component; else keep
+  rendering `MovesGrid`.
+- `MovesJourney` (~190 lines) implements `play_move_mockup.md`
+  verbatim:
+  - 4 phases: `intro` / `step` / `outro` / `resting`
+  - Narrative copy: *"The Little Star feels heavy tonight. Help it
+    reach the moon."*
+  - Progress dots reflect step completion
+  - "I did it — next move" + "Skip this one" per step
+  - **Absolute time cap of 10 minutes** — at 9 min a soft line
+    appears ("Two minutes left. We will close together."), at 10 min
+    the session forces the Outro screen
+  - **18-hour cool-down** via `localStorage["polarstar-play-move-finished-at"]`
+    — re-entering the URL shows *"The Star is resting. See you
+    tomorrow."*
+  - Outro offers exactly two exits: Back to Discovery / One quiet
+    story before bed
+  - No "Play again" button
+- 10 new `data-testid`s added (none renamed). Lint clean.
+- Screenshot verified live: `/discovery/play-move` shows the
+  narrative intro ("Help the Little Star reach the moon" in
+  Caveat font, 4 progress dots, "Let's begin →" button) instead of
+  the old 4-card grid.
+
+### Documentation — bundle proposals (NO Gumroad work)
+
+- `memory/BUNDLES_PROPOSAL_2026-02-29.md` — 11 bundle proposals:
+  6 family-side (€0 → €49) + 5 adult-side (€9 → €39 + €9/mo) + 1
+  cross-brand "House Compass" €49. Each carries anti-wellness
+  positioning. Pricing strategy table. Release sequencing rule
+  (one launch per 3-week cycle, ≥5 sales before next).
+- The **agent-stronger alternative** to GPT's "Sovereign Mind Bundle":
+  reframed as `A3 — The Sovereign Operating Manual` (€29) — an
+  **8-day practice** with structured day-ordered audio + a Cognitive
+  Debt Audit PDF + a bonus Day 8 audio sold nowhere else.
+- Document explicitly omits: €99+ ultimate bundles, gamification,
+  course framing, live coaching, lifetime memberships, personalised
+  audio. Each omission has a reasoned justification.
+- **Founder reviews this document before any bundle becomes a Gumroad
+  SKU.** Nothing has been wired.
+
+### Documentation — bonus Little Star
+
+- `memory/polarstar_bonus_story_little_star_moon.md` — founder's
+  330-word "Moon Version" of Little Star reserved for either bonus
+  story #6 alongside Vol I OR opening story of Vol II. Verbatim
+  text + implementation notes for both paths. Not in the customer-
+  facing catalogue.
+
+### Live status verification (post-changes)
+
+| Path | Status |
+|------|--------|
+| `/kids-universe/polarstar/discovery/play-move` (Intro) | ✅ narrative wrapper renders |
+| `/kids-universe/polarstar/exploration/world-cultures` | ✅ challenge card + 4 actions |
+| `/kids-universe/polarstar/creation/story-time` | ✅ Aurin lantern story discoverable |
+| Lint JS (PolarstarActivity + polarstarContentMap) | ✅ no issues |
+| Existing endpoints (Gumroad/Polar v2/LemonSqueezy inert) | ✅ unchanged |
+
+### Files touched (iter 86i)
+
+- Updated: `frontend/src/data/polarstarContentMap.js` (3 surgical
+  edits — Discovery Play & Move journey block, Exploration 4 cards,
+  Creation Story Time slot)
+- Updated: `frontend/src/pages/PolarstarActivity.jsx` (import line
+  + render branch + new MovesJourney component + 2 button-style
+  helpers)
+- Created: `memory/POLARSTAR_KIDS_AUDIT_2026-02-29.md`
+- Created: `memory/polarstar_bonus_story_little_star_moon.md`
+- Created: `memory/BUNDLES_PROPOSAL_2026-02-29.md`
+
+### Polarstar Kids coverage matrix — AFTER iter 86i
+
+| Room | LIVE / total | Δ from audit |
+|------|--------------|--------------|
+| Discovery (4–6) | 4 / 5 (Drawing Palette still Soon) | unchanged |
+| Exploration (7–10) | **7 / 7** 🟢 | +4 |
+| Creation (11–13) | **4 / 5** (Story Time added; Code+Media Studio still Soon) | +1 |
+| **TOTAL** | **15 / 17 LIVE (88%)** | **+5 from 10/17** |
+
+### What is still NOT done (carry forward)
+
+- ⏸️ Little Star `.mp3` from founder
+- 🟡 Drawing Palette canvas (Discovery's last Soon)
+- 🟡 Code Studio + Media Studio (Creation's last two Soons)
+- 🟡 Dreamweavers needs 1-2 more stories (currently only 1)
+- 🟡 Per-story illustrations + per-story PDFs
+- 🟡 Show HN variant final pick (A recommended)
+
+
 
 

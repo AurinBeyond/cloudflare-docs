@@ -20,9 +20,9 @@
  * world feel is preserved across every leaf.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { BookOpen, Headphones, Check, Sparkles, ChevronRight } from "lucide-react";
+import { BookOpen, Headphones, Check, Sparkles, ChevronRight, ArrowRight } from "lucide-react";
 import PolarstarThemePage from "@/components/PolarstarThemePage";
 import PolarstarWaitlistModal from "@/components/PolarstarWaitlistModal";
 import { getRoom, getActivity } from "@/data/polarstarContentMap";
@@ -74,7 +74,11 @@ export default function PolarstarActivity() {
           <StepsCard act={act} palette={palette} stepLabel="Breath" />
         )}
 
-        {act.type === "moves" && (
+        {act.type === "moves" && act.journey && (
+          <MovesJourney act={act} palette={palette} room={room} />
+        )}
+
+        {act.type === "moves" && !act.journey && (
           <MovesGrid act={act} palette={palette} />
         )}
 
@@ -444,6 +448,313 @@ function MovesGrid({ act, palette }) {
       ))}
     </div>
   );
+}
+
+/* ──────────────────────────── MovesJourney ──────────────────────────── *
+ * §POLARSTAR-PLAY-MOVE iter 86h+++ 2026-02-29
+ * Narrative four-step movement journey with absolute session-end and
+ * 18-hour cool-down. Implements play_move_mockup.md verbatim.
+ * Pure client-side state; localStorage for cool-down; no backend.
+ */
+const COOLDOWN_KEY = "polarstar-play-move-finished-at";
+
+function MovesJourney({ act, palette, room }) {
+  const journey = act.journey || {};
+  const moves = act.moves || [];
+  const capMin = journey.sessionCapMinutes ?? 10;
+  const softMin = journey.softWarningAtMinutes ?? 9;
+  const coolHours = journey.coolDownHours ?? 18;
+
+  // Initial phase = "resting" if last finish is within cool-down window
+  const initialPhase = (() => {
+    try {
+      const last = localStorage.getItem(COOLDOWN_KEY);
+      if (!last) return "intro";
+      const finishedAt = new Date(last).getTime();
+      if (Number.isNaN(finishedAt)) return "intro";
+      const elapsedH = (Date.now() - finishedAt) / 3_600_000;
+      return elapsedH < coolHours ? "resting" : "intro";
+    } catch {
+      return "intro";
+    }
+  })();
+
+  const [phase, setPhase] = useState(initialPhase);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [completed, setCompleted] = useState(() => moves.map(() => false));
+  const [sessionStartedAt, setSessionStartedAt] = useState(null);
+  const [softWarning, setSoftWarning] = useState(false);
+  const [now, setNow] = useState(Date.now());
+
+  // Absolute time guard: tick every 30s during "step" phase.
+  useEffect(() => {
+    if (phase !== "step" || !sessionStartedAt) return undefined;
+    const tick = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(tick);
+  }, [phase, sessionStartedAt]);
+
+  useEffect(() => {
+    if (phase !== "step" || !sessionStartedAt) return;
+    const elapsedMin = (now - sessionStartedAt) / 60_000;
+    if (elapsedMin >= capMin) {
+      finishToOutro();
+    } else if (elapsedMin >= softMin && !softWarning) {
+      setSoftWarning(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [now, sessionStartedAt, phase]);
+
+  function beginJourney() {
+    setPhase("step");
+    setStepIndex(0);
+    setSessionStartedAt(Date.now());
+  }
+
+  function markCurrent(done) {
+    setCompleted((prev) => {
+      const next = prev.slice();
+      next[stepIndex] = done;
+      return next;
+    });
+    if (stepIndex + 1 < moves.length) {
+      setStepIndex(stepIndex + 1);
+    } else {
+      finishToOutro();
+    }
+  }
+
+  function finishToOutro() {
+    setPhase("outro");
+    try {
+      localStorage.setItem(COOLDOWN_KEY, new Date().toISOString());
+    } catch {
+      /* localStorage unavailable — gracefully skip cool-down persistence */
+    }
+  }
+
+  const progressDots = (n, completedCount) => {
+    const out = [];
+    for (let i = 0; i < n; i += 1) {
+      out.push(
+        <span
+          key={i}
+          aria-hidden="true"
+          style={{
+            display: "inline-block",
+            width: 14,
+            height: 14,
+            borderRadius: "50%",
+            margin: "0 6px",
+            background: i < completedCount ? palette.accent : "transparent",
+            border: `2px solid ${palette.accent}`,
+            transition: "background 250ms ease",
+          }}
+        />,
+      );
+    }
+    return out;
+  };
+
+  const containerStyle = {
+    maxWidth: 760,
+    margin: "0 auto",
+    padding: "28px 30px 30px",
+    borderRadius: 24,
+    background: "rgba(255,252,244,0.96)",
+    border: `1.5px solid ${palette.accent}55`,
+    boxShadow: "0 14px 28px rgba(58,42,24,0.18)",
+    textAlign: "center",
+  };
+
+  const eyebrowStyle = {
+    fontSize: 11,
+    letterSpacing: "0.28em",
+    textTransform: "uppercase",
+    color: palette.accent,
+    fontWeight: 600,
+    marginBottom: 14,
+  };
+
+  // ── RESTING (cool-down) ───────────────────────────────────
+  if (phase === "resting") {
+    return (
+      <div data-testid="polarstar-move-journey-resting" style={containerStyle}>
+        <div style={eyebrowStyle}>Tomorrow's Adventure</div>
+        <div style={{ fontFamily: CAVEAT, fontSize: 38, lineHeight: 1.1, color: "#3a2a18", marginBottom: 12 }}>
+          {journey.restingMessage || "The Star is resting. See you tomorrow."}
+        </div>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5b4a32", maxWidth: 480, margin: "0 auto 22px" }}>
+          You moved your body today. The Little Star kept what you sent it.
+          Come back tomorrow and there will be another adventure.
+        </p>
+        <Link
+          to={`/kids-universe/polarstar/${room.id}`}
+          data-testid="polarstar-move-journey-back"
+          style={primaryBtnStyle(palette)}
+        >
+          Back to {room.title}
+        </Link>
+      </div>
+    );
+  }
+
+  // ── INTRO ─────────────────────────────────────────────────
+  if (phase === "intro") {
+    return (
+      <div data-testid="polarstar-move-journey-intro" style={containerStyle}>
+        <div style={eyebrowStyle}>
+          Play &amp; Move · {room.ageLabel}
+        </div>
+        <div style={{ fontFamily: CAVEAT, fontSize: 38, lineHeight: 1.1, color: "#3a2a18", marginBottom: 18 }}>
+          Help the Little Star reach the moon.
+        </div>
+        <p style={{ fontSize: 16, lineHeight: 1.65, color: "#3a2a18", maxWidth: 520, margin: "0 auto 22px" }}>
+          {journey.intro}
+        </p>
+        <div style={{ margin: "10px 0 18px" }} aria-hidden="true">
+          {progressDots(moves.length, 0)}
+        </div>
+        <div style={{ fontSize: 13, color: "#8a7a5a", marginBottom: 22 }}>
+          {moves.length} moves · about 5 minutes
+        </div>
+        <button
+          type="button"
+          onClick={beginJourney}
+          data-testid="polarstar-move-journey-begin"
+          style={primaryBtnStyle(palette)}
+        >
+          Let's begin <ArrowRight size={16} style={{ marginLeft: 6 }} />
+        </button>
+      </div>
+    );
+  }
+
+  // ── STEP ──────────────────────────────────────────────────
+  if (phase === "step") {
+    const m = moves[stepIndex];
+    const completedCount = completed.filter(Boolean).length;
+    return (
+      <div data-testid="polarstar-move-journey-stepcard" style={containerStyle}>
+        <div style={{ marginBottom: 16 }} aria-hidden="true">
+          {progressDots(moves.length, completedCount)}
+        </div>
+        <div style={{ fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: palette.accent, fontWeight: 600, marginBottom: 6 }}>
+          Step {stepIndex + 1} of {moves.length}
+        </div>
+        <div
+          data-testid={`polarstar-move-journey-step-${stepIndex}`}
+          style={{ fontFamily: CAVEAT, fontSize: 34, lineHeight: 1.1, color: "#3a2a18", marginBottom: 14 }}
+        >
+          {m.title}
+        </div>
+        <p style={{ fontSize: 16.5, lineHeight: 1.6, color: "#3a2a18", maxWidth: 480, margin: "0 auto 24px" }}>
+          {m.body}
+        </p>
+        <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => markCurrent(true)}
+            data-testid="polarstar-move-journey-done"
+            style={primaryBtnStyle(palette)}
+          >
+            <Check size={16} style={{ marginRight: 6 }} /> I did it — next move
+          </button>
+          <button
+            type="button"
+            onClick={() => markCurrent(false)}
+            data-testid="polarstar-move-journey-skip"
+            style={secondaryBtnStyle(palette)}
+          >
+            Skip this one
+          </button>
+        </div>
+        {softWarning && (
+          <div
+            data-testid="polarstar-move-journey-soft-warning"
+            style={{ marginTop: 22, fontSize: 13, color: "#8a7a5a", fontStyle: "italic" }}
+          >
+            Two minutes left. We will close together.
+          </div>
+        )}
+        <div style={{ marginTop: 22, fontSize: 11.5, letterSpacing: "0.18em", textTransform: "uppercase", color: "#8a7a5a" }}>
+          The page closes itself when the moves are done.
+        </div>
+      </div>
+    );
+  }
+
+  // ── OUTRO ─────────────────────────────────────────────────
+  return (
+    <div data-testid="polarstar-move-journey-outro" style={containerStyle}>
+      <div style={{ marginBottom: 18 }} aria-hidden="true">
+        {progressDots(moves.length, moves.length)}
+      </div>
+      <div style={eyebrowStyle}>
+        {(journey.outroEyebrow || "the star is glowing").toUpperCase()}
+      </div>
+      <div style={{ fontFamily: CAVEAT, fontSize: 42, lineHeight: 1.1, color: "#3a2a18", marginBottom: 18 }}>
+        <Sparkles size={20} style={{ display: "inline", marginRight: 8, color: palette.accent }} />
+        All four moves done.
+      </div>
+      <p style={{ fontSize: 16, lineHeight: 1.65, color: "#3a2a18", maxWidth: 480, margin: "0 auto 26px" }}>
+        {journey.outro}
+      </p>
+      <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+        <Link
+          to={`/kids-universe/polarstar/${room.id}`}
+          data-testid="polarstar-move-journey-back"
+          style={primaryBtnStyle(palette)}
+        >
+          Back to {room.title}
+        </Link>
+        <Link
+          to={`/kids-universe/polarstar/${room.id}/story-time`}
+          data-testid="polarstar-move-journey-story"
+          style={secondaryBtnStyle(palette)}
+        >
+          One quiet story before bed <ArrowRight size={14} style={{ marginLeft: 4 }} />
+        </Link>
+      </div>
+      <p style={{ marginTop: 28, fontSize: 12.5, color: "#8a7a5a", fontStyle: "italic" }}>
+        Don't restart. The Star has done its work for tonight. Tomorrow there will be another adventure.
+      </p>
+    </div>
+  );
+}
+
+function primaryBtnStyle(palette) {
+  return {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "12px 22px",
+    borderRadius: 999,
+    background: palette.accent,
+    color: "#fffbf1",
+    fontWeight: 600,
+    fontSize: 15,
+    letterSpacing: "0.02em",
+    textDecoration: "none",
+    border: "none",
+    cursor: "pointer",
+    boxShadow: `0 6px 18px ${palette.accent}40`,
+  };
+}
+
+function secondaryBtnStyle(palette) {
+  return {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "11px 20px",
+    borderRadius: 999,
+    background: "transparent",
+    color: palette.accent,
+    fontWeight: 600,
+    fontSize: 14.5,
+    letterSpacing: "0.02em",
+    textDecoration: "none",
+    border: `1.5px solid ${palette.accent}`,
+    cursor: "pointer",
+  };
 }
 
 /* ──────────────────────────── DrawingPlaceholder ──────────────────────────── */
