@@ -4,6 +4,100 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (NIGHT) — Iter 86c: Reality Audit + Deploy Decision (founder)
+
+**Founder directive**: Run an objective audit on actual files/routes/DB/
+environment (not PRD assumptions), then lock the deploy posture and the
+next-priority order. NO code changes this entry.
+
+### Reality audit findings (verified live)
+
+| Surface | Reality |
+|---------|---------|
+| Polarstar frontend files | 11 files present (last touched 2026-05-29) |
+| Polarstar routes in App.js | 5 active + 8 legacy redirects, all 200 |
+| Painted-world backgrounds | 9 PNGs present (`day-world-v2.png` 2.5MB etc.) |
+| data-testid coverage | 83 across Polarstar files (testable) |
+| Polarstar content map | **20 activities** (10 live + 7 soon + 3 other). PRD said "31" — the 31 number was zone/button-hitbox count from iter 85j Navigation Contract, not activity-content count. Re-classified. |
+| Stories (`aurinStories.js`) | **5 stories**: little-dreamers ×2, explorers ×2, dreamweavers ×1. All `audio: null`, all `pdf: null`. |
+| Audio files | 19 MP3 total in `/public/assets/audio/` — **0 for kids stories**. All MP3s belong to adult courses (Body Temple etc.). |
+| Polarstar backend | **2 endpoints only**: `POST /api/waitlist/polarstar`, `GET /api/waitlist/polarstar/health`. Phase 2 wiring genuinely not started ✅ |
+| Waitlist DB | 5 entries already saved in MongoDB |
+| Backend total endpoints | 231 |
+| RESEND_API_KEY | Present and active (`re_kUEsX1...`); disabled for Polarstar waitlist by design, used for adult magic-link + Anna's Letter |
+| ELEVENLABS_API_KEY | Present, 5 adult ConvAI agents wired |
+| Billing in `.env` | **LemonSqueezy** keys + store_id + webhook_secret. All 9 LEMONSQUEEZY_VARIANT_* IDs are empty strings → graceful degradation to "coming soon" |
+
+### Documentation vs reality mismatch (1 finding)
+
+🟡 **PRD/handoff narrative references "Polar.sh PSP suspension". Backend
+`.env` has LemonSqueezy configuration, not Polar.sh.** One of three:
+(a) Polar.sh integration was planned but never coded; (b) Polar.sh was
+removed and replaced by LemonSqueezy; (c) PRD narrative is partially
+stale. Resolution deferred to dedicated **Billing Source-of-Truth
+Report** session before any future billing work.
+
+### Founder deploy decision (locked)
+
+**Deploy readiness: 85–90%. Sales readiness (waitlist-first): 90%.
+Full product readiness: 60–70%.**
+
+✅ **Deploy is permitted** when ALL of the following hold:
+1. Every unfinished activity is **explicitly marked "Coming Soon"** —
+   no page may appear broken or empty.
+2. No broken links, no white-screen routes.
+3. Waitlist confirmed working (already verified: 5 entries in DB).
+4. Compliance fixes from iter 86b remain intact.
+5. Polarstar terminology remains untouched (Discovery World / Story
+   Time / Kindness Mission / etc.).
+6. **No backend Phase 2 work started.**
+
+❌ **NOT permitted before deploy:**
+- Story Stars / Tomorrow's Adventure / progress tracking
+- Audio system for kids stories (all 5 stay `audio: null` with "Soon" badge)
+- Resend activation for Polarstar waitlist
+- Any LemonSqueezy variant activation
+- Any new feature beyond what already exists
+
+### Sales posture for deploy
+Marketing copy MUST be **waitlist-first**:
+- `Polarstar Kids · Early Access`
+- `Join the Explorer List`
+- `Be among the first families entering the world.`
+
+NOT: "100% complete platform", "launch", "release".
+
+### Next-session priority order (founder-locked)
+
+```
+P1 — Play & Move UX mockup    (wireframe + flow + CTA logic — NO CODE)
+P2 — Story Time UX mockup     (after P1 approval)
+P3 — Kindness Mission UX      (after P2 approval)
+P4 — Discovery World redesign
+P5 — Exploration redesign
+P6 — Creation redesign
+P7 — Backend Phase 2          (Story Stars / progress / chrono-lock)
+```
+
+Audit-driven follow-ups (parallel, separate sessions):
+- 📋 **Billing Source-of-Truth Report** — A) active source, B) legacy
+  remnants, C) actual code paths, D) deployment reality. Read-only;
+  no implementation.
+- 🎯 **Coming-Soon coverage sweep** before deploy — every `status: "soon"`
+  activity must visually communicate "Coming Soon" without feeling
+  broken. Audit covers `world-cultures`, `space-adventures`, `amazing-animals`,
+  `science-lab`, `code-studio`, `media-studio`, `drawing-palette`.
+- 🛡️ Pre-deploy compliance self-check script (grep AI/wellbeing in
+  renderable strings → fail build if non-zero). Optional but recommended.
+
+### NO CODE CHANGES THIS ENTRY
+- ❌ No file modified.
+- ❌ No deploy executed.
+- ❌ No backend work.
+- ❌ No UX implementation.
+- ✅ PRD updated with audit + deploy decision only.
+
+
 ## 2026-02-29 (EVE) — Iter 86b: PSP Compliance Surface Sweep (public marketing pages)
 
 **Founder directive**: Audit the public-facing surfaces for AI / health /
