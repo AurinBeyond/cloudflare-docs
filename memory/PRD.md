@@ -2377,3 +2377,53 @@ context is lost while we wait for the audio file.
 
 **No production change.** Gumroad webhook + Resend delivery untouched.
 
+---
+
+## Iter 86h+ — 2026-02-29 — Independent work while audio is recorded
+
+**Trigger:** Founder went to record Little Star. Agent picked 3 fully
+independent tasks that save P0 sprint time and have ZERO production
+risk.
+
+**Created:**
+- `/app/memory/BILLING_SOURCE_OF_TRUTH_2026-02-29.md` — honest audit
+  of 4 webhook endpoints + 4 PSP env blocks. Findings: only Gumroad
+  is live (4 purchases confirmed). LemonSqueezy code path active but
+  no traffic. Polar v1 + v2 endpoints are duplicates (recommend
+  keeping v2). FastSpring has env keys but **no wiring exists** —
+  "review on June 9" gives a dashboard, not a working PSP. Three
+  cleanup paths suggested (A: Gumroad-only / B: Gumroad + Polar
+  fallback / C: Gumroad + FastSpring wiring +3h).
+- `frontend/src/pages/ListenLittleStar.jsx` — full `/listen/little-star`
+  page component, Polarstar palette, no email gate, no autoplay,
+  back-link to Gumroad PDF, Play/Pause + progress + duration. Route
+  NOT yet wired in App.js — file ready to import the moment the .mp3
+  lands at `/assets/audio/polarstar/little-star.mp3`. Lint clean.
+
+**Modified (production-safe):**
+- `scripts/generate_polarstar_pdf.py` — added
+  `POLARSTAR_AUDIO_LINK_LIVE` env flag (default `false`). When `true`,
+  injects a quiet single-line audio banner on the intro letter (page 2)
+  pointing to `prulesoul.site/listen/little-star`. Verified: with
+  flag OFF, PDF size is identical to live (84.9 KB). With flag ON,
+  size grows to 85.7 KB (banner present). Three regenerations
+  confirm zero-regression of the unfagged path.
+
+**Sprint time saved when audio arrives:** ~30 min (component already
+written, PDF flag already wired). Remaining P0 work shrinks to:
+1. Drop `.mp3` into `/app/frontend/public/assets/audio/polarstar/`
+2. Add one route line in `App.js`
+3. `POLARSTAR_AUDIO_LINK_LIVE=true python3 scripts/generate_polarstar_pdf.py`
+4. Manually upload regenerated PDF to Gumroad
+5. Update Resend email template with `/listen/little-star` link
+6. Self-test
+
+**Production impact today:** zero. No new routes mounted, no env
+flags flipped, no PDF re-uploaded.
+
+**Decisions waiting for founder:**
+- Which billing cleanup path (A / B / C) from the audit
+- Whether to flip the PDF audio flag the moment .mp3 lands, or hold
+  for a "release day" announcement
+
+

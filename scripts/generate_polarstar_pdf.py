@@ -12,8 +12,21 @@ Re-run anytime to regenerate. Story content is the source of truth
 since this is a one-off generator, not a build-pipeline tool).
 """
 
+import os
 from fpdf import FPDF
 from pathlib import Path
+
+# ── Audio companion flag (iter 86h) ──────────────────────────
+# When the Little Star audio recording lands and is uploaded to
+# /assets/audio/polarstar/little-star.mp3, flip this flag to "true"
+# (env var POLARSTAR_AUDIO_LINK_LIVE) and re-run this script. A small
+# banner will appear on the intro letter page (page 2) inviting the
+# reader to a free audio companion. Default = false (zero change to
+# current live PDF).
+AUDIO_LINK_LIVE = os.environ.get("POLARSTAR_AUDIO_LINK_LIVE", "false").lower() in {
+    "true", "1", "yes", "on",
+}
+AUDIO_LINK_URL = "prulesoul.site/listen/little-star"
 
 # ── Brand palette ────────────────────────────────────────────
 CREAM = (255, 251, 241)
@@ -296,6 +309,31 @@ class PolarstarPDF(FPDF):
         self.set_font("Serif", "BI", 13)
         self.set_text_color(*ACCENT_AMBER)
         self.cell(0, 6, "\u2014 Polarstar Kids", align="L")
+
+        # ── Audio companion banner (gated by POLARSTAR_AUDIO_LINK_LIVE) ──
+        # Quiet single-line invitation. No autoplay. No tracking pixel.
+        # The full audio version lives at /listen/little-star (no email gate).
+        if AUDIO_LINK_LIVE:
+            self.ln(18)
+            self.brand_line(color=ACCENT_AMBER)
+            self.ln(6)
+            self.set_font("Serif", "I", 10.5)
+            self.set_text_color(*BROWN_SOFT)
+            self.multi_cell(
+                0, 6,
+                "If you would like to hear the first story read aloud, "
+                "Little Star has a free audio companion at:",
+                align="C",
+            )
+            self.ln(2)
+            self.set_font("Serif", "B", 11)
+            self.set_text_color(*ACCENT_AMBER)
+            self.cell(0, 6, AUDIO_LINK_URL, align="C")
+            self.ln(6)
+            self.set_font("Serif", "I", 8.5)
+            self.set_text_color(*BROWN_SOFT)
+            self.cell(0, 5, "No account. No email. One quiet story.", align="C")
+
 
     def page_story_cover(self, story):
         self.add_page()
