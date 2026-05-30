@@ -113,19 +113,108 @@ content Anna will ever record.** Origin story = trust foundation.
 
 ---
 
+## Month 4 (or earlier, if buyer demand signals) — The paper SKU
+
+### NEW SKU #5 — WEST + SOUTH (physical product)
+**"Polarstar Journal"** · €15 · physical paper · Gumroad ships from
+print-on-demand partner (Lulu or Blurb)
+
+A short paper journal designed for the child, not the parent. ~48
+pages, A6 size (small enough to live next to the pillow), heavy
+cream paper, one prompt per spread:
+
+- *"One thing the day gave me that I did not ask for"*
+- *"The smallest sound I heard today"*
+- *"A person I was glad to see"*
+- *"Something I noticed but did not say out loud"*
+- *"A worry I am going to leave outside the door tonight"*
+
+48 pages = ~24 prompts, each repeated once. The repetition is
+deliberate. The same prompt on a different day produces a different
+answer, and the child sees the change in their own handwriting
+without being told it is meaningful.
+
+No app companion. No QR codes. No "scan to unlock". The journal is
+intentionally the **only** product in the portfolio that has no
+digital surface whatsoever.
+
+**Anti-wellness positioning:**
+*"This is not a gratitude journal. There is no streak. There are no
+stars. If you forget about it for two weeks and find it again, it
+works the same. The point is the paper, not the practice."*
+
+**Why this slot matters:**
+Digital-age parents will pay a *premium* for objects that quietly
+remove their child from screens for ten minutes a day. A €15 physical
+journal that ships in a discreet brown envelope is the strongest
+brand signal we can send. It is also the only SKU that buyers can
+hold, photograph, and gift — which makes it the natural seed for
+word-of-mouth growth.
+
+**Constraint:** Print-on-demand quality varies. Founder must
+order a single proof copy before listing, and reject anything that
+looks like an Amazon KDP paperback. The journal must feel like a
+small hardcover sketchbook, not a notebook.
+
+**Production time:** ~6 hours of layout work (founder + agent),
+~2 weeks of print-test cycle, then live.
+
+**Anti-wellness positioning across all SKUs:**
+
+| SKU | One-line anti-wellness positioning |
+|-----|-----------------------------------|
+| 5-story PDF (LIVE) | *"Five quiet stories. Not fifty. Not a series."* |
+| Little Star audio (free preview) | *"A 5-minute story, read once, by the person who wrote it."* |
+| Family Bundle €19 | *"What you read. What you hear. One paper thing to do at the end."* |
+| Letters to a Woman €19 | *"Not therapy. Not advice. The friend who noticed first, lent to you by audio."* |
+| 17:00 Decompression €9 | *"Five minutes when you close the laptop. No breath instructions. No music."* |
+| Polarstar Journal €15 (paper) | *"This is not a gratitude journal. There is no streak."* |
+| Family Compass Kit €49 | *"This is not a self-care kit. It assumes you are tired."* |
+| Compass Starter €39 | *"Four short things. None of them are routines."* |
+| Monthly Membership €9/mo | *"One small thing each month. You can stop whenever."* |
+
+---
+
 ## Gumroad Bundle & Membership
 
 Gumroad lets us combine SKUs. Two bundles + one membership when all
 four directions exist:
 
-### Bundle A — "The Polarstar Family Kit" · €29
-- Family Bundle (PDF + audio) + Worry Jar printable
-- Discount vs buying separately
+### Bundle A — "The Polarstar Family Compass Kit" · €49
+- Family Bundle (PDF + 5 audio files of Anna reading the stories)
+- Worry Jar printable (A4 PDF)
+- **NEW:** *Tonight's Ritual* card deck — 10 printable A6 cards, one
+  per quiet evening practice (no screens, no devices, no scheduled time).
+  Examples: *"Sit with your child while they choose one object from
+  today to place by their pillow"* · *"Walk three minutes outside
+  together without speaking"* · *"Light one candle. Read one story.
+  Blow it out together."*
+- Three short "letters to the parent" — Anna writes one short text
+  to the parent (not the child) for each of three felt moments:
+  the bedtime fight night, the morning the child wakes too early,
+  the day the parent has nothing left to give. ~400 words each.
+
+**Anti-wellness positioning:**
+*"This is not a self-care kit. It is a set of small things to do
+with your child at the end of a day that did not go the way you
+wanted. The kit assumes you are tired. It does not ask you to
+breathe deeply."*
+
+**Founder note:** €49 is the high-margin anchor of the whole portfolio.
+It must feel like a *book one buys and keeps*, not a bundle of files
+one downloads and forgets. Visual design discipline applies — minimal,
+hardback-publishing aesthetic on the Gumroad cover image, not stock
+illustration.
 
 ### Bundle B — "The Compass Starter" · €39
 - Family Bundle + "Letters to a Woman" + 17:00 Decompression
 - One product per direction (NW S E) + free Origin
 - Saves €18 vs buying separately
+
+**Anti-wellness positioning:**
+*"Four short things from four different directions. None of them
+are routines. None of them are exercises. You use one when you need
+it, and the next one waits."*
 
 ### Membership — "Polarstar Monthly" · €9 / month
 - One new audio piece each month — alternates kids / adult
@@ -179,6 +268,7 @@ Week 5 → 6 (M2b):    Letters to a Woman recording + launch        (4h founder)
 Week 7:              Origin story recording + site /origin page   (1h founder, 2h agent)
 Week 8 → 10 (M3):    17:00 Decompression + Bundles + Membership   (founder pace)
 Week 11+:            Show HN post + Substack essay 1              (founder + agent jointly)
+Week 12 → 14 (M4):   Polarstar Journal paper SKU                  (6h layout + 2w print proof)
 ```
 
 Founder pace is the real constraint. Agent work is asynchronous and

@@ -54,20 +54,21 @@ illustrations harvested from Canva templates. Live on Gumroad.
 
 ---
 
-### Variant B — Product reveal (minimalism angle)
+### Variant B — Product reveal (minimalism angle, parent-personal)
 
 > **Title:** Show HN: Five bedtime stories, not fifty. A 24-page PDF for €9
 
 > **Body:**
 >
-> I made a small thing. Five bedtime stories in a single PDF. No app, no
-> subscription, no AI in the writing.
+> I am a parent. I wrote a small thing. Five bedtime stories in a
+> single PDF. No app, no subscription, no AI in the writing.
 >
 > The decision I keep getting asked about is why only five. The honest
 > answer is that I wrote eleven and threw out six. A children's book
 > that contains a story you do not like is a children's book your kid
 > asks for at the exact moment you are too tired to argue. Better to
-> ship five you can read aloud at midnight without flinching.
+> ship five I can read aloud at midnight without flinching, than
+> eleven where I am quietly skipping the ones I dislike.
 >
 > €9. https://prulesoul.site/polarstar
 >
