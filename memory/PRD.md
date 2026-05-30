@@ -2426,4 +2426,88 @@ flags flipped, no PDF re-uploaded.
 - Whether to flip the PDF audio flag the moment .mp3 lands, or hold
   for a "release day" announcement
 
+---
+
+## Iter 86h++ — 2026-02-29 (PM) — Path A executed + retention email scaffold
+
+**Trigger:** Founder picked Path A (Gumroad-only) from the billing audit
+AND green-lit a retention email to existing purchasers when audio goes
+live. Both executed in the same session, end-to-end verified.
+
+### `.env` cleanup (Path A executed)
+
+- **LemonSqueezy section** — `API_KEY`, `STORE_ID`, `WEBHOOK_SECRET`
+  emptied (kept as `""` so reads succeed). All 7 `VARIANT_*` keys
+  fully removed. Endpoint at `/api/lemonsqueezy/webhook` still
+  mounted but now returns 401 on any inbound request (signature
+  cannot verify against empty secret). Marker comment block added:
+  `§LEMONSQUEEZY-DECOMMISSIONED 2026-02-29`.
+- **FastSpring section** — entire 4-key block removed
+  (`API_USERNAME`, `API_PASSWORD`, `STOREFRONT`, `DRY_RUN`). Marker
+  comment block left explaining that re-wiring would require ~3h
+  per Path C in the billing audit.
+- **Gumroad section** — untouched. Marker comment added:
+  `§GUMROAD-LIVE 2026-02-29 — Do not touch without explicit founder
+  confirmation.`
+- **Polar section** — untouched (Path A keeps standby). Marker
+  comment updated to `§POLAR-STANDBY 2026-02-29` and references the
+  new audit document.
+
+### `server.py` cleanup
+
+- **`/api/webhooks/polar` (v1)** at line ~12484 replaced with a
+  permanent HTTP 410 Gone responder. The 90-line implementation
+  removed; replaced with a short docstring + `raise HTTPException(410)`.
+  Any future Polar webhook configured to v1 fails loudly instead
+  of silently double-processing.
+- **Historical `polar_webhook_log` collection** is now frozen but
+  still queryable via the existing `/api/admin/payment/polar-events`
+  admin endpoint — preserving audit trail.
+- **`/api/billing/polar/webhook` (v2)** untouched.
+
+### Live endpoint state (verified post-restart)
+
+| Endpoint | HTTP | Meaning |
+|----------|------|---------|
+| `GET /api/webhooks/gumroad/health` | 200 | 4 test purchases, configured ✓ |
+| `POST /api/webhooks/polar` (v1) | **410** | Decommissioned ✓ |
+| `POST /api/billing/polar/webhook` (v2) | 401 | Alive, rejects invalid sig ✓ |
+| `POST /api/lemonsqueezy/webhook` | 401 | Inert (empty secret) ✓ |
+
+### New: `scripts/send_audio_announcement.py`
+
+One-off Resend mailing tool for sending the "free audio companion"
+announcement to existing PDF buyers.
+
+- **Default mode:** DRY-RUN. Live send requires explicit `--live` flag
+  + typed `send` confirmation at the prompt.
+- **Idempotent:** logs every successful send to
+  `polarstar_audio_announcement_sent` collection. Re-runs skip
+  already-sent emails — safe to interrupt and resume.
+- **Filters:** by default skips `test=True` rows in
+  `polarstar_purchases` (use `--include-test` to include them);
+  supports `--filter you@example.com` for single-email tests.
+- **Rate-limited** to 1 send / 1.2s (Resend free tier safe).
+- **Email content:** "I read Little Star aloud in my own voice. It is
+  yours to listen to whenever." — no upsell, no email-list trap,
+  closes with explicit *"no further mailings unless you write back"*.
+- **Dry-run verified:** 0 recipients pending today because all 4
+  existing purchases are `test=True` (Gumroad dashboard pings).
+  When the first real `test=False` Gumroad sale lands, that buyer
+  becomes the first recipient.
+
+### Files touched
+
+- Updated: `backend/.env` (LemonSqueezy + FastSpring decommissioned,
+  Gumroad + Polar marker comments added)
+- Updated: `backend/server.py` (Polar v1 endpoint → 410 stub)
+- Created: `scripts/send_audio_announcement.py` (252 lines, lint clean)
+
+### Production impact
+
+Live Gumroad webhook + Resend delivery untouched. Backend restarted
+cleanly. All endpoints return the expected status codes. No frontend
+changes. No PDF re-generation. No mail sent.
+
+
 

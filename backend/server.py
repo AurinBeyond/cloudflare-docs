@@ -12483,95 +12483,31 @@ async def admin_payment_sku_map(request: Request):
 
 @api_router.post("/webhooks/polar")
 async def polar_webhook(request: Request):
-    """Polar.sh webhook receiver.
+    """Polar v1 webhook — DECOMMISSIONED 2026-02-29 (iter 86h+).
 
-    Verifies Standard Webhooks signature, persists raw event to
-    `polar_webhook_log` for audit, then dispatches to the entitlement
-    engine via the EXISTING grant helpers (no rewrite of grant logic).
+    Founder picked Path A (Gumroad-only) from
+    /app/memory/BILLING_SOURCE_OF_TRUTH_2026-02-29.md.
 
-    Idempotency: each `webhook-id` is processed at most once. Duplicate
-    deliveries return HTTP 200 with `{duplicate: true}` so Polar
-    stops retrying.
+    This endpoint was a duplicate of `/api/billing/polar/webhook`
+    (line ~16465). The newer v2 endpoint uses the
+    `polar_processed_events` collection and the `_billing_webhook`
+    service. It stays live but returns 503 until POLAR_SKU_MAP_JSON
+    is filled.
 
-    HTTP semantics:
-      • 200 — accepted (or duplicate)
-      • 400 — bad signature / malformed
-      • 503 — Polar not configured (env keys missing)
+    This v1 path is permanently retired: it always returns 410 Gone
+    so any Polar dashboard pointing at the old URL fails loudly
+    rather than silently double-processing events.
+
+    Historical webhook log: `polar_webhook_log` collection is frozen
+    but still queryable via `/api/admin/payment/polar-events`.
     """
-    from payment_providers.polar import PolarProvider
-    from payment_providers.base import WebhookVerificationError
-
-    polar = PolarProvider()
-    if not polar.is_configured():
-        raise HTTPException(
-            status_code=503,
-            detail={
-                "reason": "polar_not_configured",
-                "message": "POLAR_*_OAT / POLAR_*_WEBHOOK_SECRET / POLAR_ORG_ID not set",
-            },
-        )
-
-    body_bytes = await request.body()
-    headers = {k.lower(): v for k, v in request.headers.items()}
-
-    try:
-        event = polar.verify_webhook(headers, body_bytes)
-    except WebhookVerificationError as exc:
-        logging.warning("[POLAR-WEBHOOK] rejected: %s", exc)
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
-
-    # Idempotency check — Polar may retry on transient failure.
-    existing = await db.polar_webhook_log.find_one(
-        {"webhook_id": event.provider_event_id},
-        {"_id": 0, "webhook_id": 1, "processed": 1},
+    raise HTTPException(
+        status_code=410,
+        detail={
+            "reason": "endpoint_decommissioned",
+            "message": "Use /api/billing/polar/webhook instead. See BILLING_SOURCE_OF_TRUTH_2026-02-29.md.",
+        },
     )
-    if existing and existing.get("processed"):
-        logging.info(
-            "[POLAR-WEBHOOK] duplicate webhook-id=%s ignored",
-            event.provider_event_id,
-        )
-        return {"duplicate": True, "webhook_id": event.provider_event_id}
-
-    # Persist raw event for audit BEFORE processing — so refund/replay
-    # debugging always has the source.
-    log_doc = {
-        "webhook_id": event.provider_event_id,
-        "event_type": event.event_type,
-        "received_at": event.received_at.isoformat(),
-        "provider": "polar",
-        "mode": os.environ.get("POLAR_MODE", "sandbox"),
-        "customer_email": event.customer_email,
-        "user_id": event.customer_external_id,
-        "sku": event.sku,
-        "amount_cents": event.amount_cents,
-        "currency": event.currency,
-        "raw_product_id": event.raw_product_id,
-        "raw_payload": event.raw_payload,
-        "processed": False,
-    }
-    await db.polar_webhook_log.insert_one(log_doc)
-
-    # Dispatch — Faas 1B sandbox: log only, no presence grants yet.
-    # Production grants will wire up in Faas 1C after Anna verifies
-    # the sandbox flow end-to-end (3 successful test purchases +
-    # refund + duplicate handling).
-    logging.info(
-        "[POLAR-WEBHOOK] sandbox-accepted event=%s sku=%s amount=%s",
-        event.event_type, event.sku, event.amount_cents,
-    )
-
-    await db.polar_webhook_log.update_one(
-        {"webhook_id": event.provider_event_id},
-        {"$set": {"processed": True, "processed_at": datetime.now(timezone.utc).isoformat()}},
-    )
-
-    return {
-        "accepted": True,
-        "webhook_id": event.provider_event_id,
-        "event_type": event.event_type,
-        "sku": event.sku,
-        "phase": "sandbox_log_only",
-    }
 
 
 @api_router.get("/admin/payment/polar-events")
