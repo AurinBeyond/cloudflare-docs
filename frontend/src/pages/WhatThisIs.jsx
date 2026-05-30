@@ -78,7 +78,7 @@ export default function WhatThisIs() {
           ✦ A quiet introduction
         </p>
         <h1
-          className="text-[36px] sm:text-[52px] font-light italic text-[#e8e1d5] leading-[1.15] mb-10"
+          className="text-[36px] sm:text-[52px] font-light italic text-[#e8e1d5] leading-[1.15] mb-6"
           style={{ fontFamily: SERIF }}
           data-testid="what-this-is-title"
         >
@@ -86,6 +86,13 @@ export default function WhatThisIs() {
           <br />
           Presence is the product.
         </h1>
+        <p
+          className="text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#d4b67d] font-light leading-[1.7] mb-10 max-w-[58ch] mx-auto"
+          style={{ fontFamily: SERIF }}
+          data-testid="what-this-is-compass-line"
+        >
+          A quiet room for noticing what is already shaping your life.
+        </p>
         <p
           className="text-[17px] sm:text-[19px] leading-[1.8] text-[#bcb4a3] font-light italic max-w-[58ch] mx-auto"
           style={{ fontFamily: SERIF }}

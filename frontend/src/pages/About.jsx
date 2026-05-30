@@ -60,8 +60,14 @@ export default function About() {
               </span>
             </h1>
             <p
+              data-testid="about-compass-line"
+              className="mt-5 text-[15px] md:text-[16.5px] leading-[1.65] text-[hsl(var(--aurin-brass))] italic max-w-[52ch]"
+            >
+              A quiet room for noticing what is already shaping your life.
+            </p>
+            <p
               data-testid="about-subheadline"
-              className="mt-6 text-[16.5px] leading-[1.85] text-[hsl(var(--aurin-text-muted))] max-w-[55ch]"
+              className="mt-5 text-[16.5px] leading-[1.85] text-[hsl(var(--aurin-text-muted))] max-w-[55ch]"
             >
               My name is Anna. This project was born from something deeply
               personal — and from one quiet belief: that technology should

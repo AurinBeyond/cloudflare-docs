@@ -112,3 +112,59 @@ If any box fails → not ready for live.
 
 It is the **working dictionary** for the next single coordinated copy
 pass when the founder gives the green light.
+
+---
+
+## Brand Core Statement — 10 candidates
+
+**Purpose:** Find the *one sentence* a stranger gets in 10 seconds.
+This is the line behind every other line. Everything else (headlines,
+sub-copy, CTAs) leans on this sentence. Until one is chosen and locked,
+the copy will drift.
+
+**Rules for candidates** (from founder, iter 86e):
+- Do not start with "Matrix"
+- Do not start with "AI"
+- Do not start with "spirituality"
+- Do not start with "therapy"
+- Do not start with "technology"
+- Start with the human problem, the human need, or the human action
+
+### The 10 candidates
+
+| # | Candidate | Compass register | Strength |
+|--:|-----------|------------------|----------|
+| 1 | **Welcome back to yourself.** | Centre | Already brand-locked. Emotional. Implies a return. *Weakness: does not say what we do.* |
+| 2 | A quiet room for noticing what is already shaping your life. | Centre + North | What is happening in their head, not our system. Action verb. *Weakness: 11 words — borderline long.* |
+| 3 | The world offers endless advice. A compass offers direction. | North + Centre | Strong contrast. Universal. Tony-discipline. *Weakness: two sentences, not one.* |
+| 4 | Less noise. More direction. | North | 4 words. Cannot be misread. *Weakness: too thin for the depth of the brand.* |
+| 5 | Notice what shapes your days. Choose the next step. | North + East | Pure verbs. Pure action. *Weakness: feels like a productivity app.* |
+| 6 | When the world keeps pulling at you, choose your own direction. | Centre + East | Recognises the felt problem first. *Weakness: 12 words, slightly long.* |
+| 7 | A compass for a noisy world. | North | Six words. Memorable. *Weakness: vague — what does the compass point at?* |
+| 8 | See more clearly. Choose more freely. | North + East | Symmetric rhythm. Action verbs. *Weakness: very abstract.* |
+| 9 | A quieter way to live with your own attention. | Centre + South | Speaks to the actual scarcity (attention). *Weakness: introspective.* |
+| 10 | The world offers endless advice. We offer a quieter way to find your own direction. | North + Centre | Combines #3 and #6 — felt problem + offered relief. *Weakness: longest.* |
+
+### Selection criteria
+
+A chosen Brand Core Statement should:
+
+1. Pass the 10-second test (stranger lands → understands).
+2. Use at least one motion verb.
+3. Imply a contrast (vana → uus).
+4. Survive being read aloud at 11pm on a phone.
+5. Sit comfortably above *"Welcome back to yourself."* without
+   competing with it. (BCS = what you do. WBTY = how it feels.)
+
+### Suggested decision rule (founder)
+
+Choose two finalists. Live-test by writing the homepage hero in both
+versions. The one that survives a second reading without feeling
+clumsy wins.
+
+Top-2 working recommendation (from this agent — not approval, just an
+opinion to react against):
+- **Primary finalist:** #2 (*A quiet room for noticing what is already shaping your life.*) — already used as compass-line subhead in iter 86e. Repetition across hero + /what-this-is + /about will tell us within a week whether it reads naturally.
+- **Secondary finalist:** #3 (*The world offers endless advice. A compass offers direction.*) — stronger contrast structure, but requires two sentences and a different placement (not directly under H1).
+
+**Status:** No statement locked. The current hero-line + /what-this-is + /about already carry #2 as a working draft, but it is not enshrined as *the* Brand Core Statement until a founder review marks it so.

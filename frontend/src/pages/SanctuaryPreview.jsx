@@ -319,8 +319,16 @@ function HeroSection({ onWalkTruthFirst }) {
             <span className="italic text-[#d4b67d]">to yourself.</span>
           </h1>
           <p
+            data-testid="hero-compass-line"
+            className="mt-7 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#d4b67d] font-light max-w-[520px] leading-[1.6]"
+            style={{ fontFamily: SERIF }}
+          >
+            A quiet room for noticing<br />
+            what is already shaping your life.
+          </p>
+          <p
             data-testid="hero-subtitle"
-            className="mt-10 text-[15px] sm:text-[17px] tracking-[0.04em] text-[#bcb4a3] italic font-light max-w-[520px]"
+            className="mt-8 text-[15px] sm:text-[17px] tracking-[0.04em] text-[#bcb4a3] italic font-light max-w-[520px]"
             style={{ fontFamily: SERIF }}
           >
             You do not have to perform here.
