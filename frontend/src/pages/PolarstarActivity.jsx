@@ -91,7 +91,7 @@ export default function PolarstarActivity() {
         )}
 
         {act.type === "soon" && (
-          <ComingSoonCard act={act} palette={palette} onAlert={() => setWaitlistOpen(true)} />
+          <ComingSoonCard act={{ ...act, _roomId: room.id }} palette={palette} onAlert={() => setWaitlistOpen(true)} />
         )}
       </PolarstarThemePage>
 
@@ -111,7 +111,7 @@ export default function PolarstarActivity() {
 function StoryDeck({ act, palette, room }) {
   const stories = act._stories || [];
   if (stories.length === 0) {
-    return <ComingSoonCard act={act} palette={palette} />;
+    return <ComingSoonCard act={{ ...act, _roomId: room.id }} palette={palette} />;
   }
   return (
     <div
@@ -581,7 +581,26 @@ function ReflectionPrompts({ act, palette }) {
 }
 
 /* ──────────────────────────── ComingSoonCard ──────────────────────────── */
+/* Coming-Soon copy is brand-voice (no "Coming Soon" string anywhere).
+ * Each direction in the world borrows a different metaphor so the
+ * waitlist does not feel like the same wall five times. */
+const SOON_VOICE = {
+  exploration: {
+    eyebrow: "The star is warming up",
+    intro: "This corner of the world is still drawing its first breath.",
+  },
+  creation: {
+    eyebrow: "A workshop in slow making",
+    intro: "Tools are being laid out on the table. Not yet, but soon.",
+  },
+  discovery: {
+    eyebrow: "Next discovery",
+    intro: "A small new room is being prepared inside this world.",
+  },
+};
+
 function ComingSoonCard({ act, palette, onAlert }) {
+  const tone = SOON_VOICE[act._roomId] || SOON_VOICE.discovery;
   return (
     <div
       data-testid="polarstar-coming-soon"
@@ -605,14 +624,15 @@ function ComingSoonCard({ act, palette, onAlert }) {
           fontWeight: 600,
           marginBottom: 8,
         }}
+        data-testid="polarstar-coming-soon-eyebrow"
       >
-        The lantern is being lit
+        {tone.eyebrow}
       </div>
       <div style={{ fontFamily: CAVEAT, fontSize: 32, lineHeight: 1.1, color: "#3a2a18", marginBottom: 12 }}>
         {act.title}
       </div>
       <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.6, color: "#5b4a32", fontStyle: "italic" }}>
-        {act.blurb} We are preparing this corner of the world with quiet hands. Drop your name on the Explorer List and you will be the first to know when it opens.
+        {act.blurb} {tone.intro} Leave your name on the Explorer List and you will be the first to know when it opens.
       </p>
       {onAlert && (
         <button
@@ -637,7 +657,7 @@ function ComingSoonCard({ act, palette, onAlert }) {
           }}
         >
           <Sparkles size={14} />
-          <span>Join the Explorer List</span>
+          <span>Save my spot on the Explorer List</span>
         </button>
       )}
     </div>

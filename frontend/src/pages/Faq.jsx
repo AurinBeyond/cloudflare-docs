@@ -148,6 +148,26 @@ export default function Faq() {
 
       <section className="aurin-section">
         <div className="aurin-container max-w-[820px] space-y-10">
+          {/* §BRAND-CLARITY iter 86f — short anchor for PSP underwriters
+              and first-time visitors. Mirrors the compass-line refrain
+              that runs across /, /what-this-is, /about. */}
+          <div
+            className="aurin-card p-6 md:p-7 border-l-2"
+            data-testid="faq-what-this-is"
+            style={{ borderLeftColor: "hsl(var(--aurin-brass))" }}
+          >
+            <div className="aurin-eyebrow !mb-2">What this site is, in one line</div>
+            <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text))]">
+              A quiet room for noticing what is already shaping your life —
+              built as structured reading, audio rooms and bedtime stories
+              for families. Not a chatbot. Not therapy. Not medical care.
+            </p>
+            <p className="mt-3 text-[13px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
+              You pay only for what you use. No stored credits. Refund
+              policy on the Legal · Responsibility page.
+            </p>
+          </div>
+
           {SECTIONS.map((s) => (
             <FaqSection key={s.id} section={s} />
           ))}

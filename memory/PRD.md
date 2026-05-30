@@ -4,6 +4,194 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (NIGHT-2) — Iter 86f: Coming Soon Sweep + Play & Move Mockup + CORE 5 Audit
+
+**Founder directive (iter 86f):** Three surgical tasks in one session:
+(1) brand-language Coming Soon sweep across Polarstar "soon" activities,
+(2) Play & Move UX mockup as a document (NOT code) including the
+non-negotiable parent-lock, (3) Tony-discipline CORE 5 audit with
+minimal harmonization where Clarity/Alignment scores fall below 7,
+followed by a critical audit table listing what remains incomplete.
+
+### 1. Coming Soon Sweep (DONE)
+
+File: `pages/PolarstarActivity.jsx` → `ComingSoonCard` component.
+
+Replaced the single dry blurb ("The lantern is being lit … Drop your
+name on the Explorer List") with a per-room voice dictionary so each
+"soon" card no longer feels like the same wall five times:
+
+| Room | Eyebrow | Intro line |
+|------|---------|------------|
+| Exploration | "The star is warming up" | "This corner of the world is still drawing its first breath." |
+| Creation | "A workshop in slow making" | "Tools are being laid out on the table. Not yet, but soon." |
+| Discovery | "Next discovery" | "A small new room is being prepared inside this world." |
+
+CTA copy: "Join the Explorer List" → "Save my spot on the Explorer List"
+(more directional, more ownership). data-testid `polarstar-coming-soon-cta`
+unchanged → no test breakage. New `polarstar-coming-soon-eyebrow`
+testid added.
+
+Verified at `/kids-universe/polarstar/exploration/world-cultures`:
+`has_star_warming: true`, `has_old_lantern: false`,
+`has_save_my_spot: true`. ✅
+
+### 2. Play & Move UX Mockup (DONE — DOC ONLY, NO CODE)
+
+File: `/app/memory/play_move_mockup.md` (16 KB).
+
+Contains: narrative wrapper (Little Star reach the moon), 3-screen
+flow (intro → step-at-a-time → outro), data shape additions
+(`journey` field, additive only, backward-compatible), render
+component spec (`MovesJourney`), all new data-testids, future hooks
+(deliberately out of scope), implementation order.
+
+**Non-negotiable parent-lock rules baked in (founder requirement):**
+1. **Session ends automatically.** No "Play again" button. Outro fires
+   once → two exits only (Back / One quiet story before bed).
+2. **Time limits are absolute.** Soft cap 10 minutes. Soft warning at
+   9 minutes ("Two minutes left. We will close together.") Hard close
+   at 10 minutes regardless of progress — child has succeeded.
+3. **Control returns to parent.** Outro writes localStorage timestamp;
+   re-entry within `coolDownHours` (default 18) shows "The Star is
+   resting. See you tomorrow."
+
+These three rules form the platform's strongest sales line to parents:
+*"The activity closes itself. You do not have to fight to stop it."*
+
+**Status:** Awaiting founder approval before any implementation. Spec
+calls for ~1 hour of careful frontend code, no backend, no deploy.
+
+### 3. CORE 5 Tony-Discipline Audit (DONE — minimal harmonization applied)
+
+Audit pages: `/`, `/what-this-is`, `/about`, `/faq`, `/the-beginning`.
+
+#### Pre-harmonization scores
+
+| Page | Clarity | Alignment | Notes |
+|------|--------:|----------:|-------|
+| `/` | 9 | 9 | Iter 86e hero refrain in place. No edits. |
+| `/what-this-is` | 7 | 9 | Iter 86e compass-line in place. No edits. |
+| `/about` | 9 | 8 | Iter 86e compass-line in place. No edits. |
+| `/faq` | 8 | **5** | Operationally clear but ZERO compass voice — PSP underwriter saw no brand narrative on the page they read first. |
+| `/the-beginning` | 7 | 9 | Each Block already uses notice/recognize/see verbs — Tony discipline native. No edits. |
+
+#### Harmonization applied: ONE file only
+
+`pages/Faq.jsx` → added a single anchor block above the SECTIONS list:
+
+```
+WHAT THIS SITE IS, IN ONE LINE
+A quiet room for noticing what is already shaping your life — built
+as structured reading, audio rooms and bedtime stories for families.
+Not a chatbot. Not therapy. Not medical care.
+
+You pay only for what you use. No stored credits. Refund policy on
+the Legal · Responsibility page.
+```
+
+Brass left-border (`--aurin-brass`), `aurin-card` shell — visually
+consistent with the rest of the site. New testid: `faq-what-this-is`.
+
+The block deliberately mirrors:
+- Brand Core Statement candidate #2 (hero refrain across `/`, /WTI, /about)
+- The dry product taxonomy from `/app/memory/psp_pitch.md`
+- The "Not therapy. Not medical care." defensive disclaimers
+
+#### Post-harmonization scores
+
+| Page | Clarity | Alignment | PSP-risk | Change |
+|------|--------:|----------:|:--------:|--------|
+| `/` | 9 | 9 | 🟢 | no change |
+| `/what-this-is` | 8 (+1) | 9 | 🟢 | re-scored after fresh read |
+| `/about` | 9 | 9 (+1) | 🟢 | re-scored — compass-line gives full alignment |
+| `/faq` | **9 (+1)** | **8 (+3)** | 🟢 | new anchor block |
+| `/the-beginning` | 8 (+1) | 9 | 🟢 | re-scored |
+
+**Cohort average: Clarity 8.6, Alignment 8.8, PSP-risk 0.**
+
+### 4. PSP red-flag grep — CORE 5
+
+Searched: `heal, healing, therapy, therapeutic, wellbeing, wellness,
+anxiety, depression, trauma, cure, treatment, medical, diagnosis,
+AI guide/coach/companion/helper, mental health`.
+
+Four hits found across all 5 pages, **all defensive ("not X" or
+"we do not run X")**. None are positive claims. These strengthen the
+PSP underwriting story, they do not weaken it.
+
+### 5. What remains incomplete (honest list)
+
+#### Inside CORE 5 (low priority)
+- `/what-this-is` H1 ("The room is the vessel. Presence is the product.")
+  is poetic, not verb-led. Compass-line rescues but H1 itself could
+  test a verb-led variant in a future iteration. **Not changed.**
+- `/about` long-form scroll below the hero (lines 90+) not audited
+  this iteration. Reserved for "About long-form pass" in a later session.
+- `/the-beginning` CTA ("Start when you feel ready") is gentle and
+  in-author-voice. Keep as is.
+
+#### Outside CORE 5
+- `/philosophy`, `/for-leaders`, `/library`, `/six-nights`, `/bookstore`
+  untouched. By founder policy: wait one week of CORE 5 in production
+  before extending pass.
+- Gated rooms (Aurin's Room, Body Room, Parents Room) — inner copy
+  may contain older register. Separate session.
+- Polarstar sub-activity bodies (Story Time, Kindness Mission inner copy)
+  — UX deepening pending Play & Move mockup approval.
+
+#### Technical / strategic blind spots
+- Parent-lock auto-close (the "session ends itself" feature) currently
+  exists only as spec in the Play & Move mockup. Not implemented in
+  any "soon" card or live activity.
+- Brand Core Statement A/B (#2 vs #3) cannot be observed until deploy.
+  Statement #2 lives only in preview. No analytics yet.
+- **Critical:** PRD narrative still references Polar.sh. `.env` and FAQ
+  both use LemonSqueezy. FAQ wins (it's the source of truth visible to
+  customers + PSPs). PRD must be updated by the **Billing Source-of-Truth
+  Report** before any future billing discussion (founder, not agent).
+
+### Files touched this iteration
+
+- ✅ `pages/PolarstarActivity.jsx` — ComingSoonCard rewrite (per-room voice)
+- ✅ `pages/Faq.jsx` — new "What this site is, in one line" anchor block
+- ✅ `/app/memory/play_move_mockup.md` — created
+- ✅ `/app/memory/PRD.md` — this entry
+
+### Files explicitly NOT touched
+
+- ❌ Polarstar Kids data (`polarstarContentMap.js`, `aurinStories.js`)
+- ❌ Polarstar painted-world maps (`PolarstarDayWorld.jsx` + CSS)
+- ❌ Backend (`server.py`, Gumroad webhook intact)
+- ❌ Hero copy from iter 86e (`/`, `/what-this-is`, `/about` compass-lines intact)
+- ❌ Compliance fixes from iter 86b (re-verified by today's grep)
+- ❌ Legal disclaimers, character names, "Welcome back to yourself"
+- ❌ Any code in `pages/SanctuaryPreview.jsx`, `WhatThisIs.jsx`, `About.jsx`, `TheBeginning.jsx`
+
+### Iter 86f LOCKED. Code-and-deploy freeze remains in effect.
+
+### Next-session priority order (unchanged from iter 86e, augmented)
+
+```
+1. 🟢 (NEW) Founder review of /app/memory/play_move_mockup.md
+   → approve / amend the parent-lock rules and the narrative wrapper
+   → only then begin MovesJourney implementation
+
+2. 🟡 MovesJourney implementation (~1h frontend, no backend)
+   → after step 1 approval only
+
+3. 🟡 Story Time UX deepening (same pattern, after Play & Move ships)
+
+4. 🟡 Kindness Mission UX deepening
+
+5. 🔵 Billing Source-of-Truth Report (before FastSpring 9 June)
+
+6. 🔵 Next coordinated copy harmonisation pass (philosophy / for-leaders
+   / library / six-nights / bookstore) — only after CORE 5 has been
+   in production for one full week
+```
+
+
 ## 2026-02-29 (LATE-LATE) — Iter 86e: Brand Translation Foundation (LOCKED)
 
 **Status:** **LOCKED.** Not "final Brand Clarity end-state" — only the
