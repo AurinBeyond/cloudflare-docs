@@ -4,6 +4,96 @@
 "STABILIZATION + REAL PRODUCT EXECUTION MODE" — Matrix Aurin, calm voice-first mentor ecosystem with 4 psychologically isolated rooms (Grace/Private, Kaelan/Body, Sara/Parents, Alistair/Course), powered by ElevenLabs Conversational AI (`@elevenlabs/react`). Zero-Override policy: Dashboard is single source of truth for personas/voices/prompts; code only opens WebSocket + pipes audio.
 
 
+## 2026-02-29 (EVE) — Iter 86b: PSP Compliance Surface Sweep (public marketing pages)
+
+**Founder directive**: Audit the public-facing surfaces for AI / health /
+medical / wellness risk language ahead of Polar.sh re-review. DO NOT
+touch Polarstar Kids terminology (already PSP-clean per audit). DO NOT
+modify legal disclaimers. DO NOT deploy.
+
+### Audit findings (8 files, 90+ scanned)
+- 🟢 **Polarstar Kids itself: 0 renderable AI/health/medical strings.**
+  All Polarstar hits were JSX comments (not rendered). Polarstar
+  terminology (Discovery World / Exploration World / Creation World /
+  Story Time / Kindness Mission / Morning Mindful Start / Family
+  Connection / Design Lab / Build Something / Drawing Palette / Nature
+  Quest / Reflection Time / World Cultures / Explorer Hub) was left
+  100% untouched.
+- 🔴 **Adult marketing pages carried 14 RED rendered hits.** That is
+  where Polar.sh risk engine actually saw "AI platform / wellbeing /
+  AI voice session" — not on the kids' world.
+
+### Replacements applied (13 surgical edits, 1 deliberately skipped)
+
+| File | OLD → NEW |
+|------|-----------|
+| `pages/LuxurySanctuaryLanding.jsx:297` | `Weekly private AI voice sessions` → `Weekly private live voice sessions` (route is `/luxury`, redirects to `/`; dead-route patched for safety) |
+| `pages/SanctuaryPreview.jsx:821` | `A guided live AI voice session at your pace` → `A guided live voice session at your pace` |
+| `pages/SanctuaryPreview.jsx:835` | `One private live AI voice session per month` → `One private live voice session per month` |
+| `pages/SanctuaryPreview.jsx:851` | `Weekly private live AI voice sessions — four sessions per month` → `Weekly private live voice sessions — four sessions per month` |
+| `pages/WhatThisIs.jsx:85` (H1) | `The AI is the engine. / Presence is the product.` → `The room is the vessel. / Presence is the product.` |
+| `pages/WhatThisIs.jsx:177` | `It is not a 24/7 AI friend` → `It is not a 24/7 companion` (kept the "not a replacement" defensive clause) |
+| `pages/WhatThisIs.jsx:208` | `wellbeing technology built with the` → `quiet-room technology built with the` |
+| `pages/About.jsx:57` (H1) | `I did not want to build another AI platform.` → `I did not want to build another platform competing for attention.` |
+| `pages/About.jsx:68` | `support human wellbeing, not consume it.` → `support a calmer daily life, not consume it.` |
+| `pages/About.jsx:136` | `I did not want to create another "AI platform,"` → `I did not want to create another "platform competing for attention,"` |
+| `pages/About.jsx:297` (core-idea quote) | `Technology should support human wellbeing — not consume it.` → `Technology should support a calmer daily life — not consume it.` |
+| `pages/Referral.jsx:38` (share template — most viral leak) | `I've been using a small AI sanctuary called Aurin` → `I've been using a quiet online space called Aurin` |
+| `pages/Home.jsx:400,426` | HTML comment `FUTURE AI FOOTNOTE` → `FUTURE LAYER FOOTNOTE`; `data-testid="home-ai-status"` → `data-testid="home-future-status"` (testid only referenced inside Home.jsx — safe rename) |
+| `pages/KidsUniverse.jsx:549` | HTML comment `AI Creative Studio (placeholder)` → `Coloring Studio (placeholder)` (rendered text already said "Coloring Studio") |
+| `pages/AurinsRoomChat.jsx:477–480` | `Aurin is an AI companion ... Replies are AI-generated` → `Aurin is a storytelling companion ... Replies are machine-generated` (machine-generated keeps PSP honesty without buzzword) |
+
+### Deliberately skipped (founder explicit instruction)
+
+- ❌ `pages/WanderersAgreement.jsx:103` — `built on advanced AI` left
+  UNCHANGED. Founder rationale: this is a legal honesty clause; PSPs
+  prefer honest AI disclosure in a Wanderer's Agreement / ToS surface
+  over softened language. Defensive disclaimers ("not medical care",
+  "not therapy") elsewhere stay intact too — they are PSP-protective.
+
+### Confirmations
+- ✅ Polarstar Kids untouched (data files, components, routes, tests).
+- ✅ Navigation Contract (70/70 PASS from iter 85j) untouched.
+- ✅ Defensive legal disclaimers preserved (WandererGate, ClarityRelease,
+  WanderersAgreement disclaimers, Faq "no 24/7 AI helper" denial, all
+  "not clinical / not medical" clauses across BodyRoom / Cabinet /
+  KidsColoringStudio / ClarityThreshold).
+- ✅ WanderersAgreement "advanced AI" preserved for legal honesty.
+- ✅ Visible AI-voice and wellbeing risk language removed from all
+  public marketing surfaces (/, /luxury, /what-this-is, /about,
+  /portal/referral, /home, /kids-universe, /aurins-room/:slug).
+- ✅ NO DEPLOY. NO production push.
+
+### Verification
+- Source-side grep: 0 renderable `AI` or `wellbeing` matches across
+  the 8 fixed pages (SanctuaryPreview.jsx:619 is a JSX comment).
+- DOM audit at `/`: `AI voice session` count = 0; `live voice session`
+  count = 3 ✅
+- Screenshots taken at `/what-this-is` (new H1 visible),
+  `/about` (new H1 + new sub-headline visible),
+  `/` Ways-To-Be-Here section (all three pricing cards updated).
+- ESLint clean, no console errors.
+
+### Locked next step (deferred to next session)
+- 🎨 P1 — Play & Move UX deepening — narrative wrapper, stepping-stone
+  progress, one-move-at-a-time, intro + outro. Mockup approval required
+  BEFORE implementation per founder directive. Do NOT begin without
+  fresh founder go-ahead in the next session.
+
+### Backlog (unchanged from iter 85j)
+- 🟡 (P1) Story Time UX deepening (after Play & Move pattern lands).
+- 🟡 (P1) Kindness Mission UX deepening.
+- 🟡 (P1) Real audio integration for the 5 existing stories.
+- 🟡 (P1) Dreamweavers story library expansion (currently 1).
+- 🔵 (P2) Real Drawing Palette HTML5 canvas.
+- 🔵 (P2) Polarstar Phase 2 Backend Wiring (Story Stars / Tomorrow's
+  Adventure / kids_polarstar_progress) — BLOCKED on founder approval
+  that Content Layer UX is "good enough".
+- 🔵 (P2) Broken Clockwork Course (Acts II–IV).
+- 🟢 (P3) Nano Banana day-world background regeneration.
+- 🟢 (P3) Resend Email pipeline activation for Polarstar waitlist.
+
+
 ## 2026-02-29 — Iter 85j: Polarstar Navigation Contract 100% (full user-journey audit)
 
 **Founder directive**: Stop proving DOM elements exist; prove that a child and
