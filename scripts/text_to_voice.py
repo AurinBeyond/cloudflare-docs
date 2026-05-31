@@ -47,7 +47,10 @@ Notes:
 import argparse
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import httpx
@@ -67,12 +70,14 @@ WORLD_DIRS = {
 }
 
 # World → ElevenLabs voice settings
+# §DIRECTIVE 2026-05-31 — style locked to 0.00 for adult/sanctuary worlds
+# to enforce a completely flat, non-theatrical, grounding cadence.
 WORLD_SETTINGS = {
-    "hearth":    {"stability": 0.65, "similarity_boost": 0.80, "style": 0.05, "use_speaker_boost": True},
+    "hearth":    {"stability": 0.65, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
     "polarstar": {"stability": 0.55, "similarity_boost": 0.80, "style": 0.15, "use_speaker_boost": True},
-    "clarity":   {"stability": 0.60, "similarity_boost": 0.80, "style": 0.05, "use_speaker_boost": True},
-    "course":    {"stability": 0.60, "similarity_boost": 0.80, "style": 0.05, "use_speaker_boost": True},
-    "body":      {"stability": 0.60, "similarity_boost": 0.80, "style": 0.05, "use_speaker_boost": True},
+    "clarity":   {"stability": 0.60, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
+    "course":    {"stability": 0.60, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
+    "body":      {"stability": 0.60, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
 }
 
 # Voice alias → env variable name
@@ -143,19 +148,44 @@ def synthesize(text: str, voice_id: str, settings: dict, out_path: Path) -> None
     print(f"    chars={len(text)}  model={MODEL_DEFAULT}  settings={settings}")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    # First, write raw narration to a temp file
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+        tmp_path = Path(tmp.name)
+
     with httpx.Client(timeout=180) as c:
         with c.stream("POST", url, headers=headers, json=payload) as r:
             if r.status_code != 200:
-                # consume body for error message
                 body = r.read()
                 print(f"[X] HTTP {r.status_code}")
                 print(body.decode("utf-8", errors="replace")[:1000])
+                tmp_path.unlink(missing_ok=True)
                 sys.exit(3)
-            with out_path.open("wb") as f:
+            with tmp_path.open("wb") as f:
                 for chunk in r.iter_bytes(chunk_size=8192):
                     f.write(chunk)
+
+    # §DIRECTIVE — pad 1.0s of pure digital silence at both ends
+    # for sensory buffer. ffmpeg is required (already installed for Polarstar).
+    if shutil.which("ffmpeg") is None:
+        print("[!] ffmpeg not found — saving without silence padding.")
+        shutil.move(str(tmp_path), str(out_path))
+        padded = False
+    else:
+        cmd = [
+            "ffmpeg", "-y", "-loglevel", "error",
+            "-i", str(tmp_path),
+            "-af", "adelay=1000|1000,apad=pad_dur=1.0",
+            "-c:a", "libmp3lame", "-b:a", "192k",
+            str(out_path),
+        ]
+        try:
+            subprocess.run(cmd, check=True)
+            padded = True
+        finally:
+            tmp_path.unlink(missing_ok=True)
     size_kb = out_path.stat().st_size // 1024
-    print(f"[+] OK  saved → {out_path}  ({size_kb} KB)")
+    pad_note = "  [1.0s silence padded both ends]" if padded else "  [raw, no padding]"
+    print(f"[+] OK  saved → {out_path}  ({size_kb} KB){pad_note}")
 
 
 def find_manuscript(slug: str, world: str) -> Path:
