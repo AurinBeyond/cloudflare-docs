@@ -51,7 +51,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 logger = logging.getLogger(__name__)
 
-BUFFER_API = "https://api.bufferapp.com/1"
+BUFFER_API = "https://api.buffer.com/graphql"
 
 Channel = Literal[
     "linkedin", "twitter", "instagram", "pinterest", "reddit", "substack"
@@ -115,35 +115,72 @@ class BufferClient:
         scheduled_at: datetime,
         media_url: Optional[str] = None,
     ) -> dict:
+        """Create a scheduled post via Buffer GraphQL v2 API.
+        See https://developers.buffer.com for full schema.
+        Returns {buffer_id, raw}. Raises RuntimeError on any failure."""
         if not self.configured:
             raise RuntimeError("BUFFER_ACCESS_TOKEN not set")
-        profile_id = self.profiles.get(channel)
-        if not profile_id:
-            raise RuntimeError(f"No Buffer profile id for channel {channel}")
-        scheduled_unix = int(scheduled_at.timestamp())
-        payload = {
-            "profile_ids[]": profile_id,
-            "text": text,
-            "scheduled_at": scheduled_unix,
-            "shorten": "false",
-            "access_token": self.token,
+        channel_id = self.profiles.get(channel)
+        if not channel_id:
+            raise RuntimeError(f"No Buffer channel id for {channel}")
+        # Buffer dueAt must be in the FUTURE. If our queue's scheduled_at
+        # is in the past (we dispatched late), bump dueAt to +2 minutes
+        # so Buffer accepts it and posts almost immediately.
+        from datetime import timedelta
+        sched = scheduled_at
+        if sched.tzinfo is None:
+            sched = sched.replace(tzinfo=timezone.utc)
+        now_utc = datetime.now(timezone.utc)
+        target = sched if sched > now_utc else now_utc + timedelta(minutes=2)
+        dueAt = target.astimezone(timezone.utc).isoformat()
+        mutation = """
+        mutation CreatePost($input: CreatePostInput!) {
+          createPost(input: $input) {
+            __typename
+            ... on PostActionSuccess { post { id } }
+            ... on NotFoundError      { message }
+            ... on UnauthorizedError  { message }
+            ... on UnexpectedError    { message }
+            ... on RestProxyError     { message code }
+            ... on LimitReachedError  { message }
+            ... on InvalidInputError  { message }
+          }
         }
-        if media_url:
-            payload["media[link]"] = media_url
-            payload["media[photo]"] = media_url
+        """
+        variables = {
+            "input": {
+                "channelId": channel_id,
+                "schedulingType": "automatic",
+                "mode": "customScheduled",
+                "dueAt": dueAt,
+                "text": text,
+                "assets": [],
+                "source": "aurin-hub",
+            }
+        }
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+            "Content-Type": "application/json",
+        }
         async with httpx.AsyncClient(timeout=30) as c:
-            r = await c.post(f"{BUFFER_API}/updates/create.json", data=payload)
-        if r.status_code >= 300:
+            r = await c.post(
+                BUFFER_API,
+                json={"query": mutation, "variables": variables},
+                headers=headers,
+            )
+        try:
+            data = r.json()
+        except Exception:
             raise RuntimeError(f"Buffer HTTP {r.status_code}: {r.text[:300]}")
-        data = r.json()
-        if not data.get("success", True):
-            raise RuntimeError(f"Buffer error: {data}")
-        # Buffer returns "updates" list with each update id
-        updates = data.get("updates") or []
-        return {
-            "buffer_id": updates[0].get("id") if updates else None,
-            "raw": data,
-        }
+        if data.get("errors"):
+            raise RuntimeError(f"Buffer GraphQL errors: {data['errors']}")
+        payload = (data.get("data", {}) or {}).get("createPost", {}) or {}
+        typename = payload.get("__typename")
+        if typename != "PostActionSuccess":
+            msg = payload.get("message") or f"Buffer returned {typename}"
+            raise RuntimeError(f"Buffer error ({typename}): {msg}")
+        post_id = (payload.get("post") or {}).get("id")
+        return {"buffer_id": post_id, "raw": data}
 
 
 # ---------- Router factory ----------
