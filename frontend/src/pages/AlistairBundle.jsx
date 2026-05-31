@@ -89,6 +89,21 @@ export default function AlistairBundle() {
       }}
     >
       <div className="max-w-3xl mx-auto px-6 py-20">
+        {/* Hero illustration — Matrix Aurin × Alistair Course Room */}
+        <div className="mb-12" data-testid="alistair-bundle-hero">
+          <img
+            src="/assets/alistair/alistair-bundle-hero.webp"
+            alt="The Alistair Bundle — three foundational curricula breaking through the borrowed-belief matrix"
+            className="w-full rounded-2xl"
+            style={{
+              border: `1px solid ${COLORS.border}`,
+              boxShadow: "0 12px 60px rgba(0,0,0,0.45)",
+            }}
+            loading="eager"
+            data-testid="alistair-bundle-hero-image"
+          />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-3">
           <Eyebrow testid="alistair-bundle-eyebrow">
