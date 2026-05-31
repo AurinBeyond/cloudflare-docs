@@ -52,7 +52,7 @@ STORIES = [
             "One night, a child looked out of the window. The night was cold and the room felt dark. The child whispered, \u201cI wish I had one tiny light, just for me.\u201d",
             "Little Star heard the whisper. She held her breath and shone as softly as she could. Not bright. Not loud. Just a small, warm light, like a candle far away.",
             "The child smiled. \u201cThere you are,\u201d they said. \u201cI see you.\u201d",
-            "Little Star learned something that night: a small light, given gently, is enough. You do not have to be the biggest to be loved. You only have to be here.",
+            "That night, Little Star shone a little brighter than before. Not because she had grown bigger, but because she knew she had been seen.",
             "And every night after, when the room felt too dark, the child would look up and find her \u2014 small, calm, and exactly enough.",
         ],
         "together": [

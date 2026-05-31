@@ -60,7 +60,7 @@ export const STORIES = [
       "One night, a child looked out of the window. The night was cold and the room felt dark. The child whispered, \"I wish I had one tiny light, just for me.\"",
       "Little Star heard the whisper. She held her breath and shone as softly as she could. Not bright. Not loud. Just a small, warm light, like a candle far away.",
       "The child smiled. \"There you are,\" they said. \"I see you.\"",
-      "Little Star learned something that night: a small light, given gently, is enough. You do not have to be the biggest to be loved. You only have to be here.",
+      "That night, Little Star shone a little brighter than before. Not because she had grown bigger, but because she knew she had been seen.",
       "And every night after, when the room felt too dark, the child would look up and find her — small, calm, and exactly enough.",
     ],
   },

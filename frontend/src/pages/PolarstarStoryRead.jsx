@@ -10,12 +10,13 @@
  */
 
 import { Link, useParams, Navigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Headphones } from "lucide-react";
 import PolarstarThemePage from "@/components/PolarstarThemePage";
 import { getStoryBySlug, getStoriesByGroup } from "@/data/aurinStories";
 import { getRoom } from "@/data/polarstarContentMap";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
+const FALLBACK_COVER = "/assets/aurin/aurin-companion.png";
 
 export default function PolarstarStoryRead() {
   const { roomId, storySlug } = useParams();
@@ -30,6 +31,15 @@ export default function PolarstarStoryRead() {
   const siblings = getStoriesByGroup(story.ageGroup);
   const idx = siblings.findIndex((s) => s.slug === story.slug);
   const next = idx >= 0 && idx + 1 < siblings.length ? siblings[idx + 1] : null;
+
+  /* §POLARSTAR-CONTENT iter 86n 2026-03-01 — defensive render.
+   * Hero image block renders only if story.cover is set and is NOT
+   * the shared Aurin companion fallback. Audio player renders only
+   * if story.audio is a non-empty string. These two conditions are
+   * mutually independent: a story may have audio without a hero
+   * image (Phase 1.1) or a hero without audio (mid-Phase-2). */
+  const hasHero = Boolean(story.cover) && story.cover !== FALLBACK_COVER;
+  const hasAudio = Boolean(story.audio);
 
   return (
     <PolarstarThemePage
@@ -54,6 +64,30 @@ export default function PolarstarStoryRead() {
           fontFamily: SERIF,
         }}
       >
+        {hasHero && (
+          <figure
+            data-testid="polarstar-story-hero"
+            style={{
+              margin: "0 0 24px",
+              borderRadius: 18,
+              overflow: "hidden",
+              border: `1px solid ${room.palette.accent}33`,
+              background: "rgba(255,251,241,0.6)",
+            }}
+          >
+            <img
+              src={story.cover}
+              alt={`${story.title} — illustration`}
+              loading="lazy"
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+              }}
+            />
+          </figure>
+        )}
+
         <div
           style={{
             fontSize: 12,
@@ -66,6 +100,34 @@ export default function PolarstarStoryRead() {
         >
           {story.minutes ? `${story.minutes} min reading` : "Reading"}
         </div>
+
+        {hasAudio && (
+          <div
+            data-testid="polarstar-story-audio"
+            style={{
+              margin: "0 0 22px",
+              padding: "14px 16px",
+              borderRadius: 14,
+              background: "rgba(255,243,217,0.6)",
+              border: `1px solid ${room.palette.accent}33`,
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <Headphones size={18} style={{ color: room.palette.accent, flexShrink: 0 }} />
+            <audio
+              src={story.audio}
+              controls
+              preload="metadata"
+              data-testid="polarstar-story-audio-element"
+              style={{ flex: 1, height: 38 }}
+            >
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        )}
+
         {story.body.map((para, i) => (
           <p
             key={i}

@@ -81,33 +81,40 @@ PDF_URL = os.environ.get(
 RATE_LIMIT_SECONDS = 1.2  # gentle on Resend free tier
 
 # ── Email content ────────────────────────────────────────────
-SUBJECT = "A free audio companion for the bedtime stories you bought"
+SUBJECT = "We polished one line. And here's a small free gift."
 
 def _build_html(first_name: str | None) -> str:
     greeting = f"Hello {first_name}," if first_name else "Hello,"
     return f"""<!doctype html>
 <html><body style="font-family: Georgia, 'Times New Roman', serif; color: #3a2a18; max-width: 560px; margin: 0 auto; padding: 32px 24px; background: #fffbf1; line-height: 1.6;">
   <div style="text-align:center; color:#b97a3a; font-size:11px; letter-spacing:0.32em; text-transform:uppercase; margin-bottom:24px;">
-    Polarstar Kids · A small gift for early readers
+    Polarstar Kids · A small thank-you for early readers
   </div>
 
   <p style="font-size:17px;">{greeting}</p>
 
   <p style="font-size:16px;">
-    Some weeks ago you bought the <em>Bedtime Stories</em> PDF.
-    Thank you. You were one of the first families to read these
-    stories aloud, and that means more than I am good at saying.
+    Some weeks ago you bought the <em>Bedtime Stories</em> PDF. Thank
+    you. You were one of the first families to read these stories
+    aloud, and that means more than I am good at saying.
   </p>
 
   <p style="font-size:16px;">
-    There is one small new thing. I read the first story —
-    <strong>Little Star</strong> — aloud, in my own voice, and recorded
-    it. No music. No app. No account. Just the story, the way it would
-    sound at your kitchen table.
+    Two small updates for you, both free.
   </p>
 
   <p style="font-size:16px;">
-    It is yours to listen to whenever:
+    <strong>1. A line we polished.</strong> In <em>Little Star</em>,
+    the original closing thought sounded a touch like a small lesson
+    being explained. The new line trusts the reader more. A fresh
+    copy of the PDF is attached to this email. Same five stories,
+    one cleaner closing breath.
+  </p>
+
+  <p style="font-size:16px;">
+    <strong>2. An audio gift.</strong> I read <em>Little Star</em>
+    aloud, in my own voice. No music. No app. No account. Just the
+    story, the way it would sound at your kitchen table.
   </p>
 
   <div style="text-align:center; margin: 32px 0;">
@@ -126,8 +133,8 @@ def _build_html(first_name: str | None) -> str:
 
   <p style="font-size:14px; color:#5b4a32;">
     If the other four stories would also be welcome in audio one day,
-    write back and let me know. The reception of this first one
-    decides whether the next four get recorded.
+    write back and let me know. The reception of this first one decides
+    whether the next four get recorded.
   </p>
 
   <p style="font-size:14px; color:#5b4a32;">
@@ -151,19 +158,23 @@ Some weeks ago you bought the Bedtime Stories PDF. Thank you. You were
 one of the first families to read these stories aloud, and that means
 more than I am good at saying.
 
-There is one small new thing. I read the first story — Little Star —
-aloud, in my own voice, and recorded it. No music. No app. No account.
-Just the story, the way it would sound at your kitchen table.
+Two small updates for you, both free.
 
-It is yours to listen to whenever:
+1. A line we polished. In Little Star, the original closing thought
+sounded a touch like a small lesson being explained. The new line
+trusts the reader more. A fresh copy of the PDF is attached to this
+email. Same five stories, one cleaner closing breath.
+
+2. An audio gift. I read Little Star aloud, in my own voice. No
+music. No app. No account. Just the story, the way it would sound
+at your kitchen table.
 
     {LISTEN_URL}
 
 No account required. No signup. Audio plays in the browser.
 
 If the other four stories would also be welcome in audio one day,
-write back and let me know. The reception of this first one decides
-whether the next four get recorded.
+write back and let me know.
 
 With warmth,
 — Polarstar Kids
