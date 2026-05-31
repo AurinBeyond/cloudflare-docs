@@ -87,6 +87,22 @@ export default function TheHearthProtocol() {
     >
       <div className="max-w-3xl mx-auto px-6 py-20">
 
+        {/* §HEARTH-LIVE 2026-05-31 — Founder-supplied hero image:
+            Anna at the fireplace, kids' drawings, "The Hearth" book on the mantle */}
+        <div className="mb-12" data-testid="hearth-hero">
+          <img
+            src="/assets/hearth/the-hearth-hero.webp"
+            alt="A parent sitting by the fire, kids' drawings on the wall, The Hearth book on the mantle"
+            className="w-full rounded-2xl"
+            style={{
+              border: `1px solid ${COLORS.border}`,
+              boxShadow: "0 12px 60px rgba(0,0,0,0.45)",
+            }}
+            loading="eager"
+            data-testid="hearth-hero-image"
+          />
+        </div>
+
         {/* Eyebrow */}
         <div
           className="text-xs tracking-[0.42em] uppercase mb-6 text-center"
@@ -268,31 +284,30 @@ export default function TheHearthProtocol() {
             instant download · 14-day no-questions refund · no app required
           </p>
 
-          {/* Preview the PDFs (visible only while the product is being prepared.
-              Once Anna confirms audio is recorded, this is replaced by the Gumroad CTA). */}
+          {/* §HEARTH-LIVE 2026-05-31 — Gumroad SKU is now LIVE.
+              CTA now points to the real Gumroad product. */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
             <a
-              href="/assets/pdfs/the-hearth.pdf"
+              href="https://aurinbeyond.gumroad.com/l/the-hearth"
               target="_blank"
               rel="noopener noreferrer"
-              data-testid="hearth-preview-pdf"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm"
+              data-testid="hearth-buy-cta"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm"
               style={{
                 background: COLORS.amber,
                 color: COLORS.bg,
                 textDecoration: "none",
                 letterSpacing: "0.04em",
-                fontWeight: 500,
+                fontWeight: 600,
+                boxShadow: "0 4px 28px rgba(214, 165, 96, 0.3)",
               }}
             >
-              Preview the 12-page PDF
+              Step inside · €19
               <ArrowRight size={15} />
             </a>
             <a
-              href="/assets/pdfs/inheritance-inventory.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="hearth-preview-worksheet"
+              href="/listen/hearth"
+              data-testid="hearth-preview-audio"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm"
               style={{
                 border: `1px solid ${COLORS.amber}`,
@@ -301,7 +316,7 @@ export default function TheHearthProtocol() {
                 letterSpacing: "0.04em",
               }}
             >
-              View the worksheet
+              Listen to a free story first
             </a>
           </div>
 

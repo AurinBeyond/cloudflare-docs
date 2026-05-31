@@ -35,7 +35,7 @@ const COLORS = {
 // creating the bundle SKU in Gumroad UI. Reading from window or
 // fallback to a "soon" page so the link never 404s during pre-launch.
 const GUMROAD_BUNDLE_URL =
-  "https://prulesoul.gumroad.com/l/alistair-bundle";
+  "https://aurinbeyond.gumroad.com/l/alistair-bundle";
 
 const COURSES = [
   {
