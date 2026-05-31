@@ -87,6 +87,7 @@ import PolarstarActivity from "@/pages/PolarstarActivity";
 import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
 import ListenLittleStar from "@/pages/ListenLittleStar";
 import SevenQuietNights from "@/pages/SevenQuietNights";
+import TheHearthProtocol from "@/pages/TheHearthProtocol";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -136,6 +137,8 @@ function AppRouter() {
         <Route path="/listen/little-star" element={<ListenLittleStar />} />
         {/* §POLARSTAR-CHALLENGE 2026-05-31 — Seven Quiet Nights, family challenge funnel */}
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
+        {/* §SPRINT-3 2026-05-31 — The Hearth Protocol (Parents' Room product, €19) */}
+        <Route path="/the-hearth-protocol" element={<TheHearthProtocol />} />
         {/* Legacy kids-universe surface — all redirect to Polarstar */}
         <Route path="/kids-universe/legacy" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/kids-universe/coloring" element={<Navigate to="/kids-universe/polarstar" replace />} />

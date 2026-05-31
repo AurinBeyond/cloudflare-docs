@@ -336,6 +336,49 @@ export default function ParentsRoom() {
         </section>
       )}
 
+      {/* §SPRINT-3 2026-05-31 — Hearth Protocol announcement.
+          For the parent ALONE (NOT parent+child). Quiet, no urgency. */}
+      <section className="aurin-section-sm" data-testid="parents-hearth-announcement">
+        <div className="aurin-container max-w-[860px]">
+          <div
+            className="aurin-card p-7 md:p-9"
+            style={{
+              background: "rgba(214, 165, 96, 0.06)",
+              borderColor: "rgba(214, 165, 96, 0.25)",
+            }}
+          >
+            <div className="aurin-eyebrow !mb-2" style={{ color: "#d6a560" }}>
+              In the slow making · for the parent alone
+            </div>
+            <h2 className="aurin-display text-2xl md:text-3xl leading-snug mt-1 mb-3">
+              The Hearth Protocol —{" "}
+              <span className="aurin-serif-italic" style={{ color: "#d6a560" }}>
+                the 20 minutes after the children are asleep.
+              </span>
+            </h2>
+            <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[64ch] mb-4">
+              A structured wind-down for the parent who has been Anchor
+              OS for the household all day. One short PDF, one worksheet,
+              two audios. Not therapy. Not advice. A protocol you run.
+            </p>
+            <Link
+              to="/the-hearth-protocol"
+              data-testid="parents-hearth-link"
+              className="inline-flex items-center gap-2 text-sm tracking-wider uppercase"
+              style={{
+                color: "#d6a560",
+                textDecoration: "underline",
+                textUnderlineOffset: "4px",
+                fontWeight: 500,
+              }}
+            >
+              Read what it is
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Lens selector */}
       <section className="aurin-section-sm" data-testid="parents-lens-selector">
         <div className="aurin-container max-w-[1020px]">
