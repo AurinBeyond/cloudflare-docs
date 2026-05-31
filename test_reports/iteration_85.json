@@ -1,0 +1,39 @@
+{
+  "summary": "Verified Sprint 3 (Hearth audio story) + Sprint 4 (Alistair Bundle €39 page) end-to-end on the live preview URL. All 11 backend/asset pytest cases + 14 Playwright assertions on /listen/hearth/the-sock-on-the-stairs + 21 Playwright assertions on /alistair-bundle passed cleanly. Audio asset HTTP 200, Content-Type=audio/mpeg, 8.95 MB. /api/courses returns the 3 expected Alistair slugs each at €25 (sum=€75, validates the struck-through copy on the bundle page). All four target frontend routes serve the SPA shell and mount correctly. Anti-marketing constraint upheld on both new pages — no 'Buy now', no countdown, no urgency language, no pop-ups.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter85_sprints_3_4.py",
+    "/app/test_reports/pytest/iter85_sprints_3_4.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ListenSockOnStairs.jsx hard-codes the 36-paragraph story prose inline (~1.5 KB) — fine for one story, but if more Hearth stories follow this pattern the prose should move to /app/frontend/src/content/hearth/*.json or be served from /api/hearth/stories/:slug so a backend mutation can update wording without a deploy.",
+    "AlistairBundle.jsx: GUMROAD_BUNDLE_URL is a hard-coded constant pointing to https://prulesoul.gumroad.com/l/alistair-bundle (placeholder per founder note). Recommend reading from REACT_APP_GUMROAD_ALISTAIR_URL or a /api/billing/gumroad/skus endpoint so the founder can flip the real SKU without a code change. Current state is OK because the testing scope explicitly treats it as 'href correctness only'.",
+    "Both new pages duplicate the same Cormorant + lantern-amber palette inline via style={...}. Consider promoting COLORS + SERIF + the player-card / pricing-card classes into a shared Hearth/CourseRoom design-tokens module to avoid drift across future Sprint pages.",
+    "ListenSockOnStairs play button: onError handler is missing on the <audio> element. If the mp3 ever 404s the user will see a frozen 0:00 / 0:00 player with no feedback. Recommend an onError that sets an inline 'Audio is resting — try again later' line.",
+    "AlistairBundle CTA uses target=_blank + rel=noopener noreferrer (correct). Nothing else to flag.",
+    "No data-testid on the audio progress thumb / scrubber click target — currently the progress-bar is read-only (no seek). If seeking is in scope for a later sprint, add a clickable handler with data-testid='listen-sock-seek'.",
+    "The /api/courses endpoint returned the 3 expected slugs at €25 each — backend regression clean. No code change suggested."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter85_sprints_3_4.py (new — 11 pytest cases for sprint 3+4)"
+  ],
+  "success_rate": {
+    "backend": "100% (11/11 pytest cases)",
+    "frontend": "100% (35/35 Playwright assertions across both new pages)"
+  },
+  "seed_data_creation": "None — read-only verification.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Reusable regression file at /app/backend/tests/test_iter85_sprints_3_4.py covers: the 5 sprint-3/4 frontend routes (SPA shell), the Hearth mp3 asset (HTTP 200 + audio/mpeg + MPEG/ID3 magic bytes), /api/courses shape + 3 Alistair slugs + €25 price, and /api/ root health. Audio asset is served by Express static + Cloudflare with no-store cache-control and accept-ranges:bytes. Gumroad bundle URL https://prulesoul.gumroad.com/l/alistair-bundle is a PLACEHOLDER — founder will create the real SKU. Treat as href-correctness only; do NOT follow the redirect in future tests.",
+  "rca_of_the_issue": "No bugs reproduced. Sprint 3 (Hearth audio + landing) and Sprint 4 (Alistair Bundle €39 page) both verified clean on the live preview."
+}
