@@ -52,7 +52,7 @@ export const STORIES = [
     minutes: 3,
     intro:
       "A tiny star learns that being small is not the same as being unseen.",
-    cover: "/assets/aurin/aurin-companion.png",
+    cover: "/assets/aurin/stories/little-star-hero.webp",
     audio: "/assets/audio/polarstar/little-star.mp3",
     pdf: null,
     body: [
