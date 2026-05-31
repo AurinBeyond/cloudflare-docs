@@ -87,6 +87,8 @@ import PolarstarActivity from "@/pages/PolarstarActivity";
 import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
 import ListenLittleStar from "@/pages/ListenLittleStar";
 import ListenSockOnStairs from "@/pages/ListenSockOnStairs";
+import ListenLightInHallway from "@/pages/ListenLightInHallway";
+import ListenHearthIndex from "@/pages/ListenHearthIndex";
 import AlistairBundle from "@/pages/AlistairBundle";
 import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
@@ -139,6 +141,11 @@ function AppRouter() {
         <Route path="/listen/little-star" element={<ListenLittleStar />} />
         {/* §HEARTH-AUDIO 2026-05-31 — first Hearth evening story (Anna's clone voice) */}
         <Route path="/listen/hearth/the-sock-on-the-stairs" element={<ListenSockOnStairs />} />
+        {/* §HEARTH-AUDIO 2026-05-31 — second Hearth evening story */}
+        <Route path="/listen/hearth/the-light-in-the-hallway" element={<ListenLightInHallway />} />
+        {/* §HEARTH-GATEWAY 2026-05-31 — short URL → latest story (outreach + Substack) */}
+        <Route path="/listen/hearth" element={<ListenHearthIndex />} />
+        <Route path="/listen/hearth/" element={<ListenHearthIndex />} />
         {/* §POLARSTAR-CHALLENGE 2026-05-31 — Seven Quiet Nights, family challenge funnel */}
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
         {/* §SPRINT-3 2026-05-31 — The Hearth (Parents' Room product, €19) */}
