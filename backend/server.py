@@ -16577,6 +16577,11 @@ kids_universe_endpoints.init(
 )
 app.include_router(kids_universe_endpoints.router, prefix="/api")
 
+# §MARKETING 2026-05-31 — omnichannel publishing queue (Buffer-backed).
+# See /app/backend/marketing_queue.py for the full surface.
+from marketing_queue import build_router as _marketing_router  # noqa: E402
+app.include_router(_marketing_router(db), prefix="/api")
+
 
 @app.on_event("startup")
 async def on_startup():
