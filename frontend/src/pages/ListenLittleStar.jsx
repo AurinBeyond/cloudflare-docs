@@ -194,8 +194,19 @@ export default function ListenLittleStar() {
           </a>
         </div>
 
+        {/* Lantern line — quiet anti-marketing micro-conversion */}
+        <p
+          className="text-center italic text-sm mt-16 leading-relaxed"
+          style={{ color: "#8a7a5a", maxWidth: 460, marginLeft: "auto", marginRight: "auto" }}
+          data-testid="listen-lantern-line"
+        >
+          If this story helped someone fall asleep tonight,
+          <br />
+          leave the lantern lit for the next quiet evening.
+        </p>
+
         {/* Footer breadcrumb back */}
-        <div className="mt-20 text-center">
+        <div className="mt-12 text-center">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm tracking-widest uppercase"
