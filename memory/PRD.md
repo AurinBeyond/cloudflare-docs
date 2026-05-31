@@ -49,6 +49,28 @@ Stories" sold via Gumroad.
 - Audio mastered via ffmpeg (little-star.mp3, 2.3 MB)
 - `PolarstarStoryRead.jsx` defensive/conditional rendering for hero + audio
 
+### 2026-05-31 (Sprint 3 + Sprint 4 — preview, awaits Deploy)
+- **Hearth Story #1 audio**: `/app/frontend/public/assets/audio/hearth/the-sock-on-the-stairs.mp3`
+  - 6:12 min, 8.5 MB, ElevenLabs Voice ID `JRsw5bVcIrltULIav9RK` (Anna Adult clone — LOCKED standard)
+  - Settings: `stability=0.55`, `similarity=0.85`, `style=0.08`, model `eleven_multilingual_v2`, 1.0s ffmpeg silence padding both ends
+- **`/listen/hearth/the-sock-on-the-stairs`** — new sanctuary listen page (`ListenSockOnStairs.jsx`)
+  - Deep blue + lantern-amber palette mirror of `/the-hearth`
+  - Collapsible "Read along" toggle (story prose hidden by default)
+  - Anti-marketing "keep the lantern lit" link → `/the-hearth` (no price button)
+- **`/alistair-bundle`** — Sprint 4 Course Room product (`AlistairBundle.jsx`)
+  - €39 bundle of 3 courses (letting-the-old-stories-rest + the-language-you-forgot + the-body-knows-first)
+  - €75 individually struck-through; 14-day refund; CTA target=_blank to placeholder Gumroad URL
+  - Bridge cards to N · Body Room and S · Clarity Release
+- **`/app/scripts/gumroad_create_alistair_bundle.py`** — locks the bundle Gumroad description + custom_receipt once the founder creates the SKU and exports `GUMROAD_ALISTAIR_PRODUCT_ID`
+- **Hearth full collection planned (5 stories total):**
+  1. The Sock on the Stairs ✅ (audio live)
+  2. The Light in the Hallway (manuscript pending)
+  3. The Coat on the Chair (manuscript pending)
+  4. The Window Left Open (manuscript pending)
+  5. The Garden in November (manuscript pending)
+- **Tests:** testing_agent_v3 iter 85 → 100% pass (11 backend pytest + 35 frontend Playwright assertions)
+  - New file: `/app/backend/tests/test_iter85_sprints_3_4.py`
+
 ### 2026-05-31 (Sprint 2 — preview, awaits Deploy)
 - **Sitemap.xml v2** — added `/listen/little-star`, `/seven-quiet-nights`,
   all 5 per-story reader routes, `/clarity-release` (15 URLs total, +9 new)
