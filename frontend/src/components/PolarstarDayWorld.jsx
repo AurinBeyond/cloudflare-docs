@@ -149,6 +149,29 @@ export default function PolarstarDayWorld({ navigate }) {
         </div>
         <h1>POLARSTAR KIDS</h1>
         <p>One World. Three Paths. One Family.</p>
+        <p
+          data-testid="polarstar-audio-companion-banner-day"
+          style={{
+            fontStyle: "italic",
+            fontSize: "0.95rem",
+            color: "rgba(255, 243, 217, 0.82)",
+            marginTop: "0.85rem",
+            maxWidth: 540,
+            marginLeft: "auto",
+            marginRight: "auto",
+            lineHeight: 1.55,
+          }}
+        >
+          Free audio companion:{" "}
+          <a
+            href="/listen/little-star"
+            style={{ color: "#f5c97a", textDecoration: "underline", textUnderlineOffset: "3px", fontWeight: 600 }}
+            data-testid="polarstar-audio-companion-link-day"
+          >
+            Little Star
+          </a>{" "}
+          is live now. More stories follow as I record them with care.
+        </p>
       </header>
 
       {/* §POLARSTAR NAV-CONTRACT v1 2026-02-13 (iter 85i) — Per the

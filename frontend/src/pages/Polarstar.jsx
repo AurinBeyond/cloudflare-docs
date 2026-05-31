@@ -120,6 +120,31 @@ function NightClickMap({ navigate, openWaitlist, mode }) {
         <p className="ps9-subtitle" data-testid="polarstar-subtitle" style={{ fontFamily: SERIF }}>
           One World. <span className="ps9-italic">Three Paths.</span> One Family.
         </p>
+        <p
+          data-testid="polarstar-audio-companion-banner"
+          style={{
+            fontFamily: SERIF,
+            fontStyle: "italic",
+            fontSize: "0.95rem",
+            color: "rgba(255, 243, 217, 0.78)",
+            marginTop: "1.25rem",
+            maxWidth: 540,
+            marginLeft: "auto",
+            marginRight: "auto",
+            lineHeight: 1.55,
+            textAlign: "center",
+          }}
+        >
+          Free audio companion:{" "}
+          <a
+            href="/listen/little-star"
+            style={{ color: "#f5c97a", textDecoration: "underline", textUnderlineOffset: "3px" }}
+            data-testid="polarstar-audio-companion-link"
+          >
+            Little Star
+          </a>{" "}
+          is live now. More stories follow as I record them with care.
+        </p>
       </header>
 
       <div className="pw8-stage" data-testid="pw8-stage">
