@@ -53,7 +53,7 @@ export const STORIES = [
     intro:
       "A tiny star learns that being small is not the same as being unseen.",
     cover: "/assets/aurin/aurin-companion.png",
-    audio: null,
+    audio: "/assets/audio/polarstar/little-star.mp3",
     pdf: null,
     body: [
       "High in the quiet sky lived a very little star. The other stars sparkled and laughed, but Little Star was so small she thought no one could see her.",

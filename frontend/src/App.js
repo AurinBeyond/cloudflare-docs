@@ -85,6 +85,7 @@ import Polarstar from "@/pages/Polarstar";
 import PolarstarRoom from "@/pages/PolarstarRoom";
 import PolarstarActivity from "@/pages/PolarstarActivity";
 import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
+import ListenLittleStar from "@/pages/ListenLittleStar";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -130,6 +131,8 @@ function AppRouter() {
         {/* §POLARSTAR-CONTENT iter 86 — themed content layer */}
         <Route path="/kids-universe/polarstar/:roomId/story-time/:storySlug" element={<PolarstarStoryRead />} />
         <Route path="/kids-universe/polarstar/:roomId/:activitySlug" element={<PolarstarActivity />} />
+        {/* §POLARSTAR-AUDIO-PHASE-1.1 iter 86o — public free audio preview */}
+        <Route path="/listen/little-star" element={<ListenLittleStar />} />
         {/* Legacy kids-universe surface — all redirect to Polarstar */}
         <Route path="/kids-universe/legacy" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/kids-universe/coloring" element={<Navigate to="/kids-universe/polarstar" replace />} />
