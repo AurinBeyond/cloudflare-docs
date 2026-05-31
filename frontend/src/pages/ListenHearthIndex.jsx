@@ -22,6 +22,11 @@ import { Navigate } from "react-router-dom";
 // Ordered NEWEST FIRST. Prepend each new story when its audio ships.
 export const HEARTH_STORIES = [
   {
+    slug: "the-coat-on-the-chair",
+    title: "The Coat on the Chair",
+    publishedAt: "2026-05-31",
+  },
+  {
     slug: "the-light-in-the-hallway",
     title: "The Light in the Hallway",
     publishedAt: "2026-05-31",
