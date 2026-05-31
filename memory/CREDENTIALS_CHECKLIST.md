@@ -170,15 +170,10 @@ without needing manual prompts in another tool.
 
 ## 🟦 BONUS — Things YOU should know that the other agent might not have set up
 
-### 11. Plausible Analytics (already scaffolded, just needs flipping on)
-**Status:** script is in `/app/frontend/public/index.html`, commented
-out. To activate:
-1. Sign up at https://plausible.io ($9/mo, EU-hosted, privacy-first).
-2. Add `prulesoul.site` as a tracked domain.
-3. Send me the embed snippet — I uncomment one line.
-**Why:** you'll see what's actually working without breaking the
-"no tracking" promise — Plausible doesn't use cookies and doesn't
-collect personal data.
+### 11. Plausible Analytics ✅ ALREADY LIVE
+**Status:** verified 2026-05-31. Script tag is in `/app/frontend/public/index.html` line 46 (`pa-cAlID0tYe0jB6T4Z50GmY.js`). The marketing agent set this up earlier.
+**What to do:** check https://plausible.io/prulesoul.site dashboard to confirm hits are arriving.
+**Note:** Plausible doesn't use cookies and doesn't collect personal data, so this preserves the "no tracking" promise.
 
 ### 12. Google Search Console
 **Status:** meta-tag placeholder in `index.html`. To activate:

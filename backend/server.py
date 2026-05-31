@@ -10192,127 +10192,59 @@ SEED_COURSES: List[dict] = [
         "letters": [
             {
                 "day": 1,
-                "title": "The story you did not write",
+                "title": "The line you didn't write",
                 "body": (
-                    "Some of the lines we are still living were placed in our hands before we could write our own. "
-                    "They came from kitchens that were tense in ways no one named. From a parent who had survived something they never spoke. "
-                    "From a teacher who learned to speak harshly because someone once spoke harshly to them. From a culture that handed the same script to a thousand quiet rooms.\n\n"
-                    "None of those hands were monstrous. Most were tired. Some were frightened. A few were grieving inside a body that had to keep moving. "
-                    "They passed on what they knew. They could not pass on what they had not yet learned for themselves.\n\n"
-                    "Tonight is not about blaming any of them. Tonight is about naming, very softly, one of the lines you are still living that you did not write. "
-                    "The naming changes nothing in the world outside. It changes one thing inside: the line stops being invisible. "
-                    "And anything that is no longer invisible can begin, slowly, to be set down.\n\n"
-                    "**Day practice:** Take a single sheet of paper. At the top, write: *Tonight I notice I am still living this line —* and let one sentence come without editing it. "
-                    "Below it, write: *It came to me through —* and name the hand or the room. Do not try to release it yet. Naming is the whole task of this evening.\n\n"
-                    "**Quiet line:** *I did not write this line. I am allowed to put down what was never mine to carry.*"
+                    'You\'re 38. You\'re on a Zoom call. Your boss says something that lands in your chest in a way that\'s much heavier than the actual sentence deserved.\n\nHalf a second later, before you can stop it, you hear yourself reply in a voice that isn\'t quite yours. Slightly too apologetic. Slightly too quick to agree. Slightly too small.\n\nThat voice came from somewhere. You didn\'t write it.\n\nMost of what you call your personality was loaded at boot by people who were tired, or scared, or grieving inside a body that had to keep moving. They handed you a script. You memorised it before you knew you had a choice.\n\nThis week is about naming one of those lines. Not changing it yet. Just seeing that it exists.\n\n**Today\'s input:**\nWrite down one sentence you find yourself saying, or thinking, that you suspect isn\'t actually yours. The kind of line that comes out too fast to be examined.\n\nDon\'t analyse it. Don\'t try to "release" anything. Just see it on the page in your own handwriting.\n\nThat single act — writing the line down so it\'s no longer running in the background — is the entire job today.\n\nThe next letter arrives in 24 hours.'
                 ),
-                "prompt": "Which inherited story do I most want to set down?",
+                "prompt": "What line do I find myself saying that doesn't sound like me?",
             },
             {
                 "day": 2,
-                "title": "Who handed it to you",
+                "title": 'The hands that gave it to you',
                 "body": (
-                    "Stories arrive through hands. Behind every line we live, there are real people who lived through real weather. "
-                    "The line is not their crime. It is the residue of their unfinished evening. Tonight, picture the hands. "
-                    "Not to forgive prematurely. Not to defend. Just to see them as they were — tired, hopeful, occasionally lost, occasionally kind.\n\n"
-                    "This is not the same as agreeing with what those hands did. Some hands were dangerous. Some were cold. Some were absent. "
-                    "Naming the truth of a hand is not the same as inviting it back into your life. We can see clearly and still keep our distance.\n\n"
-                    "What we are doing tonight is loosening the grip. As long as the story feels mythic and faceless, it stays in charge. "
-                    "As soon as we see it in human hands, it shrinks back to human size. A human-sized story can be set down.\n\n"
-                    "**Day practice:** Write one sentence beginning *The hands that placed this line in mine were carrying —* and let yourself name what those hands had not yet been given. "
-                    "Then a second sentence: *I can see them clearly without becoming them.*\n\n"
-                    "**Quiet line:** *I am allowed to see them as they were. I am also allowed to live differently.*"
+                    'You wrote the line down yesterday.\n\nNow look at it. Read it slowly. Where did you learn that exact sentence?\n\nFor most of us, it\'s not abstract. It\'s a specific person, in a specific room, who said something — or repeated something, or silently expected something — and you absorbed it before you had language to push back.\n\nToday is not about blaming that person. Most of the people who handed you these lines were carrying scripts of their own that they had also not written.\n\nWhat today is about: shrinking the line from mythic to human-sized.\n\nA line that comes from "the universe" or "just how I am" stays in charge of you. A line that comes from one specific tired person in one specific room is the size of one tired person in one specific room. It can be put down.\n\n**Today\'s input:**\nBeside yesterday\'s line, write one more sentence:\n\n*This line was handed to me by ___, who at the time was carrying ___.*\n\nThat\'s it. Two sentences total on the page. You\'re not forgiving anyone. You\'re just downsizing the line so it stops being a god.\n\n24 hours.'
                 ),
-                "prompt": "What would I say to those hands today, with kindness?",
+                "prompt": 'Who handed me this line, and what were they carrying at the time?',
             },
             {
                 "day": 3,
-                "title": "What it cost you to carry it",
+                "title": 'What it has cost you to keep carrying',
                 "body": (
-                    "Every line we live has a tax. Sometimes the tax was paid in a relationship that bent under the weight. "
-                    "Sometimes in a body that learned to brace before the day began. Sometimes in a quieter currency — choices not made, doors not opened, "
-                    "a voice held back at the moment it needed to come forward.\n\n"
-                    "This is not for blame. The cost was not your fault. It is information. You have been paying for a story that was never priced honestly. "
-                    "Knowing the price does not erase what was lost — it returns the right to pay differently from here on.\n\n"
-                    "Tonight we are not solving the cost. We are seeing it. Some readers find tears arrive at this stage. Some find quiet anger, surprisingly clean. "
-                    "Some find a tender grief for the version of themselves who paid the bill without ever being shown the receipt. All of it is allowed.\n\n"
-                    "**Day practice:** Take three lines. *This story has cost me — in my body —* / *— in my closeness with others —* / *— in what I have not yet allowed myself.* "
-                    "Name without softening. Then one closing sentence: *Knowing this, I no longer have to keep paying without noticing.*\n\n"
-                    "**Quiet line:** *The cost was real. So is my right to pay differently from here.*"
+                    'Every inherited line has a bill.\n\nSometimes the bill is paid in a relationship that bent because you couldn\'t say a thing. Sometimes it\'s paid in a job you took because the line told you the better one was "not for people like you." Sometimes it\'s paid in the body — the shoulder that locks up before a difficult email, the breath you stop taking when your phone buzzes.\n\nYou\'ve been paying this bill for years without anyone ever showing you the receipt.\n\nThis isn\'t about getting angry. Anger is fine if it shows up, but that\'s not the task. The task is to look at the cost honestly and let yourself know it.\n\nThe reason this matters: as long as the cost is invisible, the line feels free to carry. The moment the cost is visible, the body starts asking a different question — *do I still want to pay this?*\n\n**Today\'s input:**\nOne line. Where in your life has this script cost you the most?\n\nCareer? Body? Specific relationship? The version of yourself you haven\'t allowed?\n\nPick one. Write it down. Don\'t fix it. Just see the receipt.\n\n24 hours.'
                 ),
-                "prompt": "What did I lose, and what did I learn?",
+                "prompt": 'Where in my life has this line cost me the most?',
             },
             {
                 "day": 4,
-                "title": "The shape of a softer ending",
+                "title": "The ending you weren't shown",
                 "body": (
-                    "A story does not have to end the way we were taught it ends. The taught ending often arrives like a wall — "
-                    "*people like us don't*, *this always goes wrong*, *love eventually leaves*, *I will be too much* — and the wall feels like fact "
-                    "because it has been touched a thousand times.\n\n"
-                    "Tonight, just for one quiet hour, we are imagining the wall is a curtain. Behind it, a softer ending. Not a fairy ending. "
-                    "Not a denial of difficulty. A version of this story where you are still you, the world is still the world, and yet the line bends a little kinder at the close. "
-                    "What does that look like, even faintly?\n\n"
-                    "This is not naive. Imagining a softer ending is how the body begins to believe such an ending is possible. "
-                    "Without imagining it, the body stays braced for the old one.\n\n"
-                    "**Day practice:** Write the old ending in one sentence. Then write three softer endings, side by side. "
-                    "Choose one — not as a vow, just as a possibility you are willing to keep company with this week.\n\n"
-                    "**Quiet line:** *I am allowed to imagine an ending I was never shown.*"
+                    'The line you\'ve been carrying came with an ending attached.\n\nThe ending is usually a wall. *People like me don\'t get this.* *This kind of love eventually leaves.* *If I\'m too much, they\'ll go.* *I\'ll always be the one who has to manage.*\n\nThe wall feels like a fact. It isn\'t. It\'s a sentence someone said in a room when you were small, repeated until your body started budgeting around it.\n\nFor tonight only: imagine the wall is a curtain.\n\nBehind the curtain, the same story, the same you, but the line at the end bends a little kinder. Not magical. Not denial. Just a softer landing.\n\nWhat does that look like? Even faintly?\n\n**Today\'s input:**\nWrite the old ending in one sentence.\n\nBeside it, write three alternative endings. Not "good" ones. Just *different* ones. The exercise is to prove to your nervous system that the old ending isn\'t the only ending physics will allow.\n\nChoose one of the three. Keep company with it this week. You don\'t have to commit to it. Just don\'t reject it.\n\n24 hours.'
                 ),
-                "prompt": "What is one new sentence I could write tonight?",
+                "prompt": 'What is one alternative ending I am willing to keep company with?',
             },
             {
                 "day": 5,
-                "title": "Releasing without rejecting",
+                "title": 'Release without rejection',
                 "body": (
-                    "We do not have to hate a story to put it down. Some stories were once useful — a child learned to be quiet because quiet was safer; "
-                    "a young person learned to over-give because being needed was the only ticket to belonging. The story did its work. It kept something alive. "
-                    "Now it is asking too much.\n\n"
-                    "Releasing is not rejection. Rejection says: *this was always wrong, I was a fool to hold it.* "
-                    "Release says: *thank you for what you carried, I am older now, I can put you down.* Release is a gentler verb. "
-                    "It leaves the room without slamming the door.\n\n"
-                    "There is room here for tenderness toward the younger version of you who first picked the story up. "
-                    "They were doing what they could. They are not in trouble for it. They are about to be allowed to rest.\n\n"
-                    "**Day practice:** Write one short letter beginning *Thank you, story, for —* and name what it once protected. "
-                    "Then *I am ready to put you down because —* and finish that sentence with what feels true tonight, not what sounds noble.\n\n"
-                    "**Quiet line:** *Gratitude is not the same as obligation. I can be grateful and still walk on.*"
+                    'You don\'t have to hate the line to put it down.\n\nThat\'s a trap a lot of people fall into around now. They start to see the script and the natural reflex is *I should have known better, I was an idiot, this whole part of my life is wasted.*\n\nThat reflex is itself an inherited line. Watch it. Don\'t follow it.\n\nThe story you\'ve been carrying did a job once. The 7-year-old version of you picked it up because the room they were in required them to. That kid wasn\'t stupid. They were surviving.\n\nWhat you\'re doing now is different. You\'re an adult. The room is different. The job the script did then is no longer the job that needs doing now. You can thank it and walk on.\n\n**Today\'s input:**\nWrite a one-line "thank you" to the script.\n\n*Thank you, [story], for keeping me [what it protected].*\n\nThen a second line:\n\n*I\'m ready to walk on because [what\'s true now that wasn\'t then].*\n\nThat\'s the whole letter today. Two lines on a page. Not a vow. Not a manifesto. A receipt.\n\n24 hours.'
                 ),
-                "prompt": "What would I thank this story for, before letting it go?",
+                "prompt": 'What would I thank this line for, before walking on?',
             },
             {
                 "day": 6,
-                "title": "The space that opens",
+                "title": 'The space that opens',
                 "body": (
-                    "When a heavy story is set down, there is a strange, quiet space inside. The mind, used to the noise, does not always know what to do with it. "
-                    "Sometimes the first instinct is to fill the space at once — with another story, with busyness, with a new self-improvement project. "
-                    "Resist that, gently.\n\n"
-                    "The space is not empty. The space is the medicine. It is the inside of you without the old reflex pulling at every choice. "
-                    "It feels uneven at first. It may feel boring. It may feel exposed. All of that is normal and temporary. "
-                    "The body is learning a new shape.\n\n"
-                    "If grief arrives, let it arrive. If a long exhale comes, follow it. If you simply want to stand at a window and look at the sky longer than usual, do that. "
-                    "The space is recalibrating you. You do not need to direct it.\n\n"
-                    "**Day practice:** Sit for ten minutes without a screen. Notice what wants to fill the silence. "
-                    "Write down only one line: *In the space that is opening, I notice —* and let yourself describe what is there, even if it is only colour, weather, or a single word.\n\n"
-                    "**Quiet line:** *I do not have to fill this space. The space is the medicine.*"
+                    'When you set down a story you\'ve been carrying for 20 years, the first thing you\'ll feel is not relief.\n\nYou\'ll feel weird. Unmoored. Strangely bored. Slightly anxious in a way you can\'t name. Some people describe it as walking around a house that\'s been remodelled while they slept.\n\nDon\'t fix it.\n\nThe instinct will be to immediately fill the space with another project, another story, another self-improvement loop. *Now that I\'ve put this down, I should start [new thing] right away.* Resist that, gently.\n\nThe space is the medicine. The discomfort is the body learning a new shape. If you fill it too fast, you\'ve just swapped one borrowed line for another.\n\nWhat to do instead: notice. For the next 24 hours, when the urge to fill the space arrives, name it ("the filling urge is here right now"), and let it pass without acting on it.\n\n**Today\'s input:**\nSit somewhere quiet for 5 minutes today and do nothing.\n\nNot meditate. Not breathe deliberately. Not "be present." Just sit in the new shape and let the body get used to it.\n\nIf 5 minutes feels too long, do 90 seconds. The duration is not the point. The honest emptiness is.\n\n24 hours.'
                 ),
-                "prompt": "What does this space feel like, in my body?",
+                "prompt": 'What did I notice when I sat in the space without filling it?',
             },
             {
                 "day": 7,
-                "title": "A letter to the next version of you",
+                "title": 'What you take with you',
                 "body": (
-                    "This is the closing evening of the first walk. The line you came in with is no longer invisible. "
-                    "It has been named, traced to its hands, weighed for its cost, allowed a softer ending, thanked, set down. "
-                    "The space it leaves behind is yours.\n\n"
-                    "Tonight, write to the version of you that wakes up tomorrow. Not the version five years from now. "
-                    "The one in the morning, in their kitchen, with their first quiet breath of a day in which this line is no longer running the show. "
-                    "They do not need a manifesto. They need a small, true sentence to start with.\n\n"
-                    "This is not the end of the work. New lines will surface as the old ones rest. That is the natural order of an honest life. "
-                    "But this — this naming, this releasing, this empty soft space — this is yours now. It does not get taken back.\n\n"
-                    "**Day practice:** One handwritten letter, no longer than half a page. Begin: *Dear me, when you wake tomorrow —* "
-                    "and let yourself say what they need to hear. Sign it. Date it. Keep it where you will find it again.\n\n"
-                    "**Quiet line:** *What I have set down tonight does not have to be picked up again.*"
+                    'You started this week with a single line you didn\'t write.\n\nYou\'ve now:\n- Named it\n- Sized it down to one human\'s room\n- Counted what it cost\n- Imagined a softer ending\n- Thanked it and put it down\n- Sat in the empty space without filling it\n\nThat\'s the entire architecture of letting an old story rest.\n\nYou\'ll need to run it again. Not because this one didn\'t work, but because the human mind has more than one inherited line. Most of us have a dozen. This is the protocol for releasing them, one at a time, on whatever cadence the body can hold.\n\nThe other two sequences in this room handle adjacent vectors:\n\n→ **"The language you forgot"** — restoring the soft inner voice that the day-noise has been overwriting. Letter 1 free preview.\n\n→ **"The body knows first"** — the same work, run through the hardware instead of the cognitive layer. Letter 1 free preview.\n\nThe bundle of all three is €39 (saves €36 vs. individual). Or stay with this one a while. There\'s no urgency.\n\n**Today\'s input:**\nWrite one sentence: *The line I put down this week was ___.*\n\nPin it somewhere you\'ll see it next month. Not because you\'ll need reminding. Because future-you should know what past-you released, and on what date.\n\nThat\'s the whole work.\n\nUntil the next room.\n\n— Alistair'
                 ),
-                "prompt": "Dear me — tomorrow, I want you to remember…",
+                "prompt": 'The line I put down this week was…',
             },
         ],
     },
