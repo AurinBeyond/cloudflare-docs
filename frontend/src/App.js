@@ -86,6 +86,7 @@ import PolarstarRoom from "@/pages/PolarstarRoom";
 import PolarstarActivity from "@/pages/PolarstarActivity";
 import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
 import ListenLittleStar from "@/pages/ListenLittleStar";
+import ListenSockOnStairs from "@/pages/ListenSockOnStairs";
 import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
 import { useEffect } from "react";
@@ -135,6 +136,8 @@ function AppRouter() {
         <Route path="/kids-universe/polarstar/:roomId/:activitySlug" element={<PolarstarActivity />} />
         {/* §POLARSTAR-AUDIO-PHASE-1.1 iter 86o — public free audio preview */}
         <Route path="/listen/little-star" element={<ListenLittleStar />} />
+        {/* §HEARTH-AUDIO 2026-05-31 — first Hearth evening story (Anna's clone voice) */}
+        <Route path="/listen/hearth/the-sock-on-the-stairs" element={<ListenSockOnStairs />} />
         {/* §POLARSTAR-CHALLENGE 2026-05-31 — Seven Quiet Nights, family challenge funnel */}
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
         {/* §SPRINT-3 2026-05-31 — The Hearth (Parents' Room product, €19) */}
