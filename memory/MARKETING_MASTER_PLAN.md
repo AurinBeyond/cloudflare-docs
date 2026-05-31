@@ -1,19 +1,30 @@
 # PRULESOUL · MARKETING MASTER PLAN
-**Locked:** 2026-05-31 (post Phase 1.1 Deploy)
-**Author:** Anna + agent, synthesised from GPT strategy + agent audit
-**Status:** Operational — execution starts immediately.
+**Last updated:** 2026-05-31 (v1.1 — Four Worlds Rule applied)
+**Project:** Matrix Aurin / Polarstar Kids / Clarity Release / Author Anna
+**Brand philosophy:** "Screen-Down, Ears-Open" · strictly anti-wellness · platform-native, audience-respectful
+
+> ⚠️ **THIS DOCUMENT IS SUBORDINATE TO** `/app/memory/FOUR_WORLDS_RULE.md`.
+> If any line below contradicts the Four Worlds Rule, the Four Worlds
+> Rule wins. The Rule forbids cross-world message contamination.
 
 ---
 
-## 1. THREE PARALLEL LINES (each runs independently)
+## 0. THE FOUR WORLDS (audience discipline)
 
-| Line | Audience | Hero product | PSP | Primary URL |
-|------|----------|--------------|-----|-------------|
-| **🌐 Polarstar Kids** | Tired parents, screen-free families | €9 PDF + free audio companion | Gumroad | `/kids-universe/polarstar` + `/listen/little-star` |
-| **🌑 Matrix Aurin (Adults)** | Night thinkers, creators, engineers, parents-after-9pm | Sanctuary rooms, soundscapes, essays | (TBD next sprint) | `/` + four mentor rooms |
-| **⚡ Clarity Release** | High-performers, founders, leaders | Premium pass — daytime cognitive clarity | LemonSqueezy | `/clarity-release` |
+| World | Audience | Allowed platforms | Forbidden mix |
+|-------|----------|-------------------|---------------|
+| 🌟 Polarstar Kids | Parents, teachers, screen-free families | Pinterest, IG, FB parenting groups, parenting Reddits | NOT on HN, NOT on r/productivity |
+| 🌿 Matrix Aurin | Reflective adults, slow living, digital minimalism | Substack, Medium, r/digitalminimalism, r/simpleliving | NOT for parenting feeds |
+| ⚡ Clarity Release | Builders, founders, focus-seekers, ADHD-curious | Hacker News, Product Hunt, r/productivity, r/getdisciplined, LinkedIn, Indie Hackers | NOT for parenting feeds |
+| 📖 Author Anna | People who follow the maker | Substack (separate section), Medium, LinkedIn | Never sells directly |
 
-**Rule:** Each line gets its own funnel, its own social presence, its own analytics goal. No cross-contamination of language ("bedtime" never appears on Clarity; "founder mode" never appears on Polarstar).
+**The Four-Step Filter (mandatory):**
+1. Identify audience
+2. Identify platform
+3. Identify which World
+4. Create platform-native content for that World only
+
+Never copy a campaign across worlds. Never force one product into unrelated communities.
 
 ---
 
@@ -45,32 +56,46 @@ A single founder cannot maintain 5 platforms daily. The system below uses **batc
 
 ---
 
-## 3. THE BIG SWINGS (low-frequency, high-impact)
+## 3. THE BIG SWINGS — Show HN sequenced by audience fit (revised v1.1)
 
-### Swing #1 — Show HN (one shot)
-- **When:** within 14 days of deploy, Tuesday 10:00 UTC
-- **Title:** *"Show HN: I built a bedtime story platform with no app, no tracking, no AI for kids (€9 PDF, free audio)"*
-- **Body:** founder confession (anti-marketing). Pure Anna voice.
-- **Backup:** if it doesn't hit front page, recycle as the FIRST Substack essay (the post is already 80% of an essay)
-- **File:** `/app/memory/show_hn_draft.md` (exists, needs final pass)
+### Swing #1 — Clarity Release (Week 2) — **HN's natural audience**
+- **Title:** *"Show HN: I built a daytime focus protocol because every productivity app made me anxious"*
+- **Why first:** Clarity Release is the HN-native product. Builders + founders read HN. Polarstar would tank here.
+- **Body:** builder's confession. No streaks, no notifications, no AI coach.
+- **CTA:** `/clarity-release` + free 1-page focus guide PDF.
+- **Best time:** Tuesday 10:00 UTC.
 
-### Swing #2 — Adult-line Substack launch essay
-- **Title:** *"The Cognitive Cost of Unfinished Loops"* (GPT's suggestion — strong)
-- **Anchors:** Matrix Aurin sanctuary as the "container" for closing loops
-- **CTA:** Free read; if it resonates, visit `/clarity-release` (Clarity) OR a future Matrix Aurin sound pass
+### Swing #2 — Matrix Aurin (Week 6)
+- **Title:** *"Show HN: A private, non-therapy sanctuary to offload cognitive debt"*
+- **Why second:** quietly establish the adult sanctuary surface as a separate thing from Clarity. OS-metaphor language resonates with HN.
+- **Body:** the unfinished-loops essay condensed to HN length.
+- **CTA:** free 5-min night soundscape + Substack section "Matrix Aurin Notes".
+- **Best time:** Wednesday 09:00 UTC.
 
-### Swing #3 — YouTube channel seeding (3 videos in batch)
-- **Format:** Static hero image + gentle pulsating star (CSS-style animation, ffmpeg-rendered) + voiced story
-- **Length:** 2 min each, vertical 9:16 + horizontal 16:9 versions
-- **Videos:**
-  1. Little Star (already have audio + hero)
-  2. Why I built Polarstar (founder voice, 90s)
-  3. "Night-mind protocol" (Matrix Aurin teaser, adult line — 2 min meditation script + quiet ambient)
-- **Effort:** 1 weekend production sprint with agent's ffmpeg help
+### Swing #3 — Polarstar Kids (Week 10) — **lowest priority on HN**
+- **Title:** *"Show HN: I built a screen-free bedtime story platform for my daughter (€9 PDF, no app)"*
+- **Why last:** Polarstar's real audience is **NOT on HN**. Its real audience is on Pinterest, parenting blogs, sleep-specialist Instagrams. HN is a curiosity post for Polarstar, not its growth engine.
+- **Best time:** Tuesday 10:00 UTC.
+- **Note:** if Worlds 1 + 2 are already producing revenue by Week 10, this shot is optional.
+
+### Swing #4 — Matrix Aurin Substack launch essay (parallel to HN)
+- **Title:** *"The Cognitive Cost of Unfinished Loops"*
+- **Section:** "Matrix Aurin Notes" subscribers only.
+- **CTA:** free read; if it resonates, visit `/clarity-release` OR future Matrix Aurin pass.
+
+### Swing #5 — YouTube channel seeding (3 videos batched, but ONE per World)
+- **Video 1 — Polarstar:** Little Star audio + hero (60s + 2min versions, vertical + 16:9)
+- **Video 2 — Matrix Aurin:** "Night Mind Protocol" (90s, dark navy + drifting stars, no face)
+- **Video 3 — Clarity Release:** "Builder's Hour" (60s candle time-lapse, silent + caption)
+- **Effort:** 1 weekend production sprint with agent's ffmpeg help.
 
 ---
 
-## 4. INFLUENCER OUTREACH — 20-NAME BATCHED PLAN
+## 4. INFLUENCER OUTREACH — segmented by World
+
+**Discipline:** each World keeps its own batch list. World 1 (Polarstar)
+has the 20-name list in `/app/memory/influencer_log.md`. Future lists
+for Worlds 2 and 3 will live in separate files.
 
 **Discipline:** never approach more than 5 at a time. Pause 7 days between batches to track responses. No paid campaigns — only **gifted** access.
 
@@ -209,4 +234,12 @@ A single founder cannot maintain 5 platforms daily. The system below uses **batc
 *Agent reads this before any marketing or content production. Updates require founder approval; rationale logged in CHANGELOG section below.*
 
 ## CHANGELOG
-- **2026-05-31** · v1.0 · Initial lock. Three lines mapped. Sprint 2 task list issued. 20 influencers batched into 4 waves. Plausible + Substack + sitemap selected as foundation tools.
+- **2026-05-31** · v1.1 · **Four Worlds Rule applied.** Show HN sequencing
+  reordered: Clarity Release first (Week 2, HN-native), Matrix Aurin
+  second (Week 6), Polarstar last (Week 10, low priority on HN).
+  Substack restructured into 4 sections under one publication.
+  Influencer outreach segmented per World — World 1 keeps existing
+  20-name list; Worlds 2 and 3 build their own lists later.
+  The Four Worlds Rule (`/app/memory/FOUR_WORLDS_RULE.md`) is now
+  the supreme document; this plan is subordinate to it.
+- **2026-05-31** · v1.0 · Initial lock.

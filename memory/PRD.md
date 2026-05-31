@@ -59,7 +59,10 @@ Stories" sold via Gumroad.
 - **`/seven-quiet-nights`** challenge landing page shipped — Idea A from
   the marketing master plan. One CTA → Gumroad PDF. Brand-aligned, no
   urgency, no streaks, no notifications.
-- **`/app/memory/MARKETING_MASTER_PLAN.md`** — locked v1.0 marketing
+- **`/app/memory/FOUR_WORLDS_RULE.md`** — **supreme** marketing rule
+  (locked 2026-05-31): four audiences, four platforms maps, no message
+  contamination. Overrides any conflicting line in other marketing files.
+- **`/app/memory/MARKETING_MASTER_PLAN.md`** — v1.1 marketing
   blueprint. Three product lines, weekly publishing cadence, 20-name
   influencer batched plan.
 - **`/app/memory/CONTENT_DISTRIBUTION_PLAYBOOK.md`** — 3 Show HN angles
