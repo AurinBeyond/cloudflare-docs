@@ -73,7 +73,8 @@ WORLD_DIRS = {
 # §DIRECTIVE 2026-05-31 — style locked to 0.00 for adult/sanctuary worlds
 # to enforce a completely flat, non-theatrical, grounding cadence.
 WORLD_SETTINGS = {
-    "hearth":    {"stability": 0.65, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
+    # §DIRECTIVE 2026-05-31 (v2 — Anna's locked params for her cloned voice)
+    "hearth":    {"stability": 0.53, "similarity_boost": 0.85, "style": 0.05, "use_speaker_boost": True},
     "polarstar": {"stability": 0.55, "similarity_boost": 0.80, "style": 0.15, "use_speaker_boost": True},
     "clarity":   {"stability": 0.60, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
     "course":    {"stability": 0.60, "similarity_boost": 0.80, "style": 0.00, "use_speaker_boost": True},
