@@ -35,10 +35,10 @@ const COLORS = {
 
 const INCLUDED = [
   {
-    title: "The Hearth Protocol — written guide",
+    title: "The Hearth — written guide",
     sub: "PDF · A5 · 12 pages · designed to be read in one sitting (≈ 20 min)",
     body:
-      "A short, structured wind-down for the parent who has been Anchor OS for the household all day. Not advice. Not pedagogy. A protocol you run, end-to-end, after the children are asleep.",
+      "A short, unhurried evening companion for the parent who has carried more than their own thoughts today. Not advice. Not pedagogy. A return — once a night, once a week, or whenever the house has gone quiet — to yourself.",
   },
   {
     title: "The Inheritance Inventory — worksheet",
@@ -98,22 +98,20 @@ export default function TheHearthProtocol() {
 
         {/* Title */}
         <h1
-          className="text-5xl md:text-6xl text-center mb-7"
+          className="text-5xl md:text-6xl text-center mb-4"
           style={{ fontWeight: 500, letterSpacing: "-0.012em", lineHeight: 1.05 }}
           data-testid="hearth-title"
         >
-          The Hearth Protocol
+          The Hearth
         </h1>
 
         {/* Subtitle */}
         <p
-          className="text-center text-lg md:text-xl italic mb-12 leading-relaxed"
-          style={{ color: COLORS.amberSoft, maxWidth: 580, marginLeft: "auto", marginRight: "auto" }}
+          className="text-center text-xl md:text-2xl italic mb-12 leading-relaxed"
+          style={{ color: COLORS.amberSoft, maxWidth: 580, marginLeft: "auto", marginRight: "auto", fontWeight: 400 }}
           data-testid="hearth-subtitle"
         >
-          A 20-minute structured wind-down for the parent who has been Anchor
-          OS for the household all day. Not advice. Not pedagogy. A protocol
-          you run.
+          A Quiet Evening Return To Yourself
         </p>
 
         {/* Hero card */}
@@ -129,7 +127,8 @@ export default function TheHearthProtocol() {
             You spent the day decoding what your parents handed you,
             and what your children hand you. The 20 minutes after they
             fall asleep are not free time — they are the only window in
-            which you are not on call. This is a protocol for that window.
+            which you are not on call. This is a quiet return to yourself,
+            once a night.
           </p>
           <p className="text-sm italic" style={{ color: COLORS.mute }}>
             One PDF · one worksheet · two audios · no app, no login, no streak.
@@ -273,7 +272,7 @@ export default function TheHearthProtocol() {
               Once Anna confirms audio is recorded, this is replaced by the Gumroad CTA). */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
             <a
-              href="/assets/pdfs/the-hearth-protocol.pdf"
+              href="/assets/pdfs/the-hearth.pdf"
               target="_blank"
               rel="noopener noreferrer"
               data-testid="hearth-preview-pdf"

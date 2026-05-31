@@ -31,17 +31,16 @@ BASE = "https://api.gumroad.com/v2"
 
 POLARSTAR_PERMALINK = "fwqmha"   # existing live product
 
-HEARTH_NAME = "The Hearth Protocol"
+HEARTH_NAME = "The Hearth — A Quiet Evening Return To Yourself"
 HEARTH_PRICE_CENTS = 1900        # €19.00
 
 HEARTH_DESCRIPTION_HTML = (
-    "<p><strong>A 20-minute structured wind-down for the parent who has "
-    "been Anchor OS for the household all day.</strong></p>"
-    "<p>The Hearth Protocol is for the parent <em>alone</em> — for the "
-    "20 minutes after the children are asleep, when most evenings get "
-    "lost to scrolling or to nothing at all. It is the protocol I run "
-    "in those minutes. Not therapy, not advice, not pedagogy. A "
-    "protocol you run, end to end, and own forever.</p>"
+    "<p><strong>20 minutes after the house has gone quiet — a quiet "
+    "evening return to yourself.</strong></p>"
+    "<p>The Hearth is for the parent who has carried more than their "
+    "own thoughts today. Not therapy, not advice, not pedagogy. Not a "
+    "course or a streak. A short, unhurried evening companion you keep "
+    "by the bed.</p>"
     "<p><strong>Inside:</strong></p>"
     "<p>• The Hearth Protocol — a 12-page A5 PDF written for one "
     "sitting (≈ 20 min reading).</p>"

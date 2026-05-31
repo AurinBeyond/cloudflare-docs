@@ -351,18 +351,17 @@ export default function ParentsRoom() {
               In the slow making · for the parent alone
             </div>
             <h2 className="aurin-display text-2xl md:text-3xl leading-snug mt-1 mb-3">
-              The Hearth Protocol —{" "}
+              The Hearth —{" "}
               <span className="aurin-serif-italic" style={{ color: "#d6a560" }}>
-                the 20 minutes after the children are asleep.
+                a quiet evening return to yourself.
               </span>
             </h2>
             <p className="text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[64ch] mb-4">
-              A structured wind-down for the parent who has been Anchor
-              OS for the household all day. One short PDF, one worksheet,
-              two audios. Not therapy. Not advice. A protocol you run.
+              20 minutes after the house has gone quiet. One short PDF,
+              one worksheet, two audios. Not therapy. Not advice. A return.
             </p>
             <Link
-              to="/the-hearth-protocol"
+              to="/the-hearth"
               data-testid="parents-hearth-link"
               className="inline-flex items-center gap-2 text-sm tracking-wider uppercase"
               style={{

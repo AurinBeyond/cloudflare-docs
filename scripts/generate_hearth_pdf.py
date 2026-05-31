@@ -116,13 +116,13 @@ PAGES = [
     # PAGE 1 — Cover
     {
         "eyebrow": "PARENTS' ROOM · MATRIX AURIN · 2026",
-        "title": "The Hearth Protocol",
-        "subtitle": "A Quiet Closing Ritual For Parents",
+        "title": "The Hearth",
+        "subtitle": "A Quiet Evening Return To Yourself",
         "is_cover": True,
         "intro": [
             "20 minutes after the house has gone quiet.",
             "",
-            "A practical evening protocol for stepping out",
+            "A practical evening companion for stepping out",
             "of today's role before sleep.",
             "",
             "For the parent who has carried more than their own thoughts today.",
@@ -721,7 +721,7 @@ def build_main_pdf():
             render_cover(pdf, page)
         else:
             render_content_page(pdf, page)
-    out = OUT_DIR / "the-hearth-protocol.pdf"
+    out = OUT_DIR / "the-hearth.pdf"
     pdf.output(str(out))
     print(f"OK  main PDF → {out}  ({out.stat().st_size // 1024} KB)")
     return out

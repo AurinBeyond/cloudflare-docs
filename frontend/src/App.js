@@ -137,8 +137,10 @@ function AppRouter() {
         <Route path="/listen/little-star" element={<ListenLittleStar />} />
         {/* §POLARSTAR-CHALLENGE 2026-05-31 — Seven Quiet Nights, family challenge funnel */}
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
-        {/* §SPRINT-3 2026-05-31 — The Hearth Protocol (Parents' Room product, €19) */}
-        <Route path="/the-hearth-protocol" element={<TheHearthProtocol />} />
+        {/* §SPRINT-3 2026-05-31 — The Hearth (Parents' Room product, €19) */}
+        <Route path="/the-hearth" element={<TheHearthProtocol />} />
+        {/* Legacy redirect for any pre-rename inbound links */}
+        <Route path="/the-hearth-protocol" element={<Navigate to="/the-hearth" replace />} />
         {/* Legacy kids-universe surface — all redirect to Polarstar */}
         <Route path="/kids-universe/legacy" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/kids-universe/coloring" element={<Navigate to="/kids-universe/polarstar" replace />} />
