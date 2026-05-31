@@ -49,7 +49,27 @@ Stories" sold via Gumroad.
 - Audio mastered via ffmpeg (little-star.mp3, 2.3 MB)
 - `PolarstarStoryRead.jsx` defensive/conditional rendering for hero + audio
 
-### 2026-05-31 (this fork)
+### 2026-05-31 (Sprint 2 — preview, awaits Deploy)
+- **Sitemap.xml v2** — added `/listen/little-star`, `/seven-quiet-nights`,
+  all 5 per-story reader routes, `/clarity-release` (15 URLs total, +9 new)
+- **Google Search Console** verification meta-tag scaffold in `index.html`
+  (placeholder token, founder swaps in real token after first auth)
+- **Plausible analytics** snippet scaffolded in `index.html` (commented
+  out by default; uncomment after Plausible account is created)
+- **`/seven-quiet-nights`** challenge landing page shipped — Idea A from
+  the marketing master plan. One CTA → Gumroad PDF. Brand-aligned, no
+  urgency, no streaks, no notifications.
+- **`/app/memory/MARKETING_MASTER_PLAN.md`** — locked v1.0 marketing
+  blueprint. Three product lines, weekly publishing cadence, 20-name
+  influencer batched plan.
+- **`/app/memory/CONTENT_DISTRIBUTION_PLAYBOOK.md`** — 3 Show HN angles
+  (one per line, spaced 4 weeks), 9-subreddit infiltration map,
+  12-essay Substack backlog, YouTube/TikTok/Pinterest format specs,
+  weekly execution checklist
+- **`/app/memory/influencer_log.md`** — 4-batch tracker with pitch
+  template + per-category pitch variants
+
+### 2026-05-31 (Phase 1.1 — LIVE in production)
 - **Gumroad product description updated via API** (`PUT /v2/products/:id`)
   - Added "Free audio companion (NEW)" section
   - Updated custom_receipt copy

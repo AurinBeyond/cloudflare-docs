@@ -33,6 +33,25 @@
         <!-- §FOUNDER 2026-02-09 — Handwriting font for /about's Carrot Story (gilded-frame personal memory). Caveat is light, warm, legible. -->
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <title>Matrix Aurin · prulesoul — a sanctuary, not a service</title>
+
+        <!-- §SEO 2026-05-31 — Google Search Console verification.
+             Replace VERIFICATION_TOKEN below with the value Google
+             gives you in Search Console → Settings → Ownership
+             verification → HTML tag. Then redeploy. -->
+        <meta name="google-site-verification" content="REPLACE_WITH_TOKEN_FROM_SEARCH_CONSOLE" />
+
+        <!-- §ANALYTICS 2026-05-31 — Plausible (privacy-first, no cookies).
+             Inactive by default. To activate:
+               1. Create an account at plausible.io and add prulesoul.site
+               2. Uncomment the <script> tag below
+               3. Replace DOMAIN if it differs from prulesoul.site
+               4. Redeploy.
+             No GDPR cookie banner is needed because Plausible does not
+             use cookies and does not collect personal data. -->
+        <!--
+        <script defer data-domain="prulesoul.site" src="https://plausible.io/js/script.js"></script>
+        -->
+
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>
