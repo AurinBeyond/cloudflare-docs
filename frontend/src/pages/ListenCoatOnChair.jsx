@@ -9,6 +9,7 @@
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { ArrowLeft, Play, Pause, ChevronDown, ChevronUp } from "lucide-react";
+import HearthFunnelOptIn from "../components/HearthFunnelOptIn";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const AUDIO_SRC = "/assets/audio/hearth/the-coat-on-the-chair.mp3";
@@ -243,6 +244,9 @@ export default function ListenCoatOnChair() {
             The Light in the Hallway
           </Link>
         </p>
+
+        {/* §HEARTH-FUNNEL — quiet email opt-in for the 3-letter sequence */}
+        <HearthFunnelOptIn source="listen/hearth/the-coat-on-the-chair" />
 
         <p
           className="text-center italic text-sm mt-16 leading-relaxed"

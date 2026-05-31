@@ -19,6 +19,7 @@
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Play, Pause, ChevronDown, ChevronUp } from "lucide-react";
+import HearthFunnelOptIn from "../components/HearthFunnelOptIn";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const AUDIO_SRC = "/assets/audio/hearth/the-sock-on-the-stairs.mp3";
@@ -257,6 +258,9 @@ export default function ListenSockOnStairs() {
             ))}
           </article>
         )}
+
+        {/* §HEARTH-FUNNEL — quiet email opt-in for the 3-letter sequence */}
+        <HearthFunnelOptIn source="listen/hearth/the-sock-on-the-stairs" />
 
         {/* Lantern line — quiet anti-marketing micro-conversion to /the-hearth */}
         <p

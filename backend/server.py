@@ -16514,6 +16514,11 @@ app.include_router(kids_universe_endpoints.router, prefix="/api")
 from marketing_queue import build_router as _marketing_router  # noqa: E402
 app.include_router(_marketing_router(db), prefix="/api")
 
+# §HEARTH-FUNNEL 2026-05-31 — lead magnet + 3-letter email sequence,
+# powered by existing Resend integration. See hearth_funnel.py.
+from hearth_funnel import build_router as _hearth_funnel_router  # noqa: E402
+app.include_router(_hearth_funnel_router(db), prefix="/api")
+
 
 @app.on_event("startup")
 async def on_startup():

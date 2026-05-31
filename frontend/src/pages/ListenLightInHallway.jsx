@@ -13,6 +13,7 @@
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Play, Pause, ChevronDown, ChevronUp } from "lucide-react";
+import HearthFunnelOptIn from "../components/HearthFunnelOptIn";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const AUDIO_SRC = "/assets/audio/hearth/the-light-in-the-hallway.mp3";
@@ -264,6 +265,9 @@ export default function ListenLightInHallway() {
             The Sock on the Stairs
           </Link>
         </p>
+
+        {/* §HEARTH-FUNNEL — quiet email opt-in for the 3-letter sequence */}
+        <HearthFunnelOptIn source="listen/hearth/the-light-in-the-hallway" />
 
         <p
           className="text-center italic text-sm mt-16 leading-relaxed"

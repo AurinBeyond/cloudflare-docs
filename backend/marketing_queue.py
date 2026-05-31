@@ -257,10 +257,14 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
         return {"count": len(items), "items": items}
 
     @router.post("/dispatch")
-    async def dispatch(authorization: Optional[str] = Header(None)):
-        """Push all due 'scheduled' auto-channel posts to Buffer.
-        Idempotent — only acts on posts whose scheduled_at <= now AND
-        status == scheduled."""
+    async def dispatch(
+        all: bool = False,
+        authorization: Optional[str] = Header(None),
+    ):
+        """Push due 'scheduled' auto-channel posts to Buffer.
+        If all=true, processes ALL future-scheduled posts (handing
+        the dueAt to Buffer so Buffer keeps them in its own queue).
+        Otherwise only posts whose scheduled_at <= now."""
         _check_admin(authorization)
         if not buffer_client.configured:
             raise HTTPException(
@@ -269,15 +273,11 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
                 "BUFFER_PROFILE_* env vars first.",
             )
         now = datetime.now(timezone.utc)
-        cursor = db.marketing_queue.find(
-            {
-                "status": "scheduled",
-                "manual": False,
-                "scheduled_at": {"$lte": now},
-            },
-            {"_id": 0},
-        )
-        due = await cursor.to_list(length=100)
+        query: dict = {"status": "scheduled", "manual": False}
+        if not all:
+            query["scheduled_at"] = {"$lte": now}
+        cursor = db.marketing_queue.find(query, {"_id": 0})
+        due = await cursor.to_list(length=500)
         results = {"posted": 0, "failed": 0, "skipped": 0, "details": []}
         for post in due:
             ch = post["channel"]
