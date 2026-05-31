@@ -269,23 +269,56 @@ export default function TheHearthProtocol() {
             instant download · 14-day no-questions refund · no app required
           </p>
 
-          {/* Quiet preorder / notify state — Gumroad product is created
-              once manuscript and audio are uploaded. Until then this is
-              an honest "in the slow making" notice. */}
+          {/* Preview the PDFs (visible only while the product is being prepared.
+              Once Anna confirms audio is recorded, this is replaced by the Gumroad CTA). */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
+            <a
+              href="/assets/pdfs/the-hearth-protocol.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="hearth-preview-pdf"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm"
+              style={{
+                background: COLORS.amber,
+                color: COLORS.bg,
+                textDecoration: "none",
+                letterSpacing: "0.04em",
+                fontWeight: 500,
+              }}
+            >
+              Preview the 12-page PDF
+              <ArrowRight size={15} />
+            </a>
+            <a
+              href="/assets/pdfs/inheritance-inventory.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="hearth-preview-worksheet"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm"
+              style={{
+                border: `1px solid ${COLORS.amber}`,
+                color: COLORS.amber,
+                textDecoration: "none",
+                letterSpacing: "0.04em",
+              }}
+            >
+              View the worksheet
+            </a>
+          </div>
+
           <a
             href="https://prulesoullife.substack.com"
             target="_blank"
             rel="noopener noreferrer"
             data-testid="hearth-notify-cta"
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-base"
+            className="inline-flex items-center gap-2 text-sm italic"
             style={{
-              border: `1px solid ${COLORS.amber}`,
-              color: COLORS.amber,
-              textDecoration: "none",
-              letterSpacing: "0.04em",
+              color: COLORS.mute,
+              textDecoration: "underline",
+              textUnderlineOffset: "3px",
             }}
           >
-            Notify me when it opens
+            Or subscribe to be notified when the audio companion is ready
             <ArrowRight size={16} />
           </a>
           <p className="text-xs italic mt-6" style={{ color: COLORS.mute }}>
