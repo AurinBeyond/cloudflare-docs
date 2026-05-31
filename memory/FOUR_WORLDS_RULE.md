@@ -151,7 +151,8 @@ are already producing real revenue.
 
 ## Substack publication structure
 
-**One Substack, four sections (using Substack's "sections" feature):**
+**One Substack, four sections:** `prulesoullife.substack.com`
+(locked 2026-05-31, Anna's handle).
 
 ```
 prulesoul.substack.com

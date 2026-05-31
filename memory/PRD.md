@@ -59,6 +59,11 @@ Stories" sold via Gumroad.
 - **`/seven-quiet-nights`** challenge landing page shipped — Idea A from
   the marketing master plan. One CTA → Gumroad PDF. Brand-aligned, no
   urgency, no streaks, no notifications.
+- **`/app/memory/PLATFORM_INVENTORY.md`** — **CRITICAL course-correction
+  doc.** Full audit of the actual house: 5 rooms, 7 audience groups,
+  4 existing products, 5 empty product slots, 4 influencer-list
+  directions. Agent reads this every session to avoid Polarstar
+  fixation.
 - **`/app/memory/FOUR_WORLDS_RULE.md`** — **supreme** marketing rule
   (locked 2026-05-31): four audiences, four platforms maps, no message
   contamination. Overrides any conflicting line in other marketing files.
