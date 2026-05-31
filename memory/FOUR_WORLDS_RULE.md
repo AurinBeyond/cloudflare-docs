@@ -61,6 +61,42 @@ Before any post, ad, comment, video, or essay leaves the building:
 
 ---
 
+## THE DOOR RULE (5th principle, added 2026-05-31 evening)
+
+> Every piece of content must answer:
+> **"What door is the reader entering?"**
+> If the answer is unclear, the content is not ready.
+
+### Worked examples
+
+🌟 **Polarstar Pinterest pin**
+- Headline candidate: *"5 minutes of bedtime reading"*
+- Door = **parent looking for the slow part of the evening**
+- ✅ Clear → publish
+
+⚡ **Clarity Hacker News post**
+- Headline candidate: *"Why every productivity app made me more distracted"*
+- Door = **knowledge worker tired of streak-based UX**
+- ✅ Clear → publish
+
+🌿 **Matrix Aurin Substack essay**
+- Headline candidate: *"The cost of unfinished thoughts"*
+- Door = **reflective adult lying awake at 2am**
+- ✅ Clear → publish
+
+❌ **Counter-example (rejected)**
+- Headline: *"How my bedtime story platform also helps founders focus"*
+- Door = ??? Parent or builder? Both? Neither knows where to step.
+- ❌ Reject → rewrite as **two separate pieces**, each with its own door.
+
+### Failure mode
+
+A piece that tries to open two doors at once opens neither. The reader
+stands in the corridor and walks away. This is how brands lose audiences
+without realising it.
+
+---
+
 ## Allowed cross-link patterns
 
 The Worlds are not silos — but cross-linking only happens **inside the
