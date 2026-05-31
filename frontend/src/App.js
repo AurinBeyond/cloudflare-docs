@@ -87,6 +87,7 @@ import PolarstarActivity from "@/pages/PolarstarActivity";
 import PolarstarStoryRead from "@/pages/PolarstarStoryRead";
 import ListenLittleStar from "@/pages/ListenLittleStar";
 import ListenSockOnStairs from "@/pages/ListenSockOnStairs";
+import AlistairBundle from "@/pages/AlistairBundle";
 import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
 import { useEffect } from "react";
@@ -142,6 +143,8 @@ function AppRouter() {
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
         {/* §SPRINT-3 2026-05-31 — The Hearth (Parents' Room product, €19) */}
         <Route path="/the-hearth" element={<TheHearthProtocol />} />
+        {/* §SPRINT-4 2026-05-31 — Alistair Bundle (Course Room product, €39) */}
+        <Route path="/alistair-bundle" element={<AlistairBundle />} />
         {/* Legacy redirect for any pre-rename inbound links */}
         <Route path="/the-hearth-protocol" element={<Navigate to="/the-hearth" replace />} />
         {/* Legacy kids-universe surface — all redirect to Polarstar */}
