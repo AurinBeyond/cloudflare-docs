@@ -275,6 +275,13 @@ top of this foundation, not in place of it.
   added (GPT correction accepted). Replaces flat single palette.
   All 5 hero illustrations confirmed Night Palette; Day Palette
   reserved for Discovery/Exploration/Creation Day-world activities.
+- **v1.2** · 2026-03-01 morning · Founder asset-naming lock:
+  (1) all hero illustrations use `.webp` (not `.png`) — smaller file
+  size, faster mobile, lossless quality, transparent BG capable;
+  (2) asset filenames must follow the canonical slug 1:1 — no
+  short-form exceptions. The Aurin Lantern hero is therefore
+  `aurin-and-the-lantern-hero.webp`, not `aurin-lantern-hero.webp`.
+  Rule applies retroactively to every Polarstar asset.
 - Future bumps documented in CHANGELOG with reason + approved by founder.
 
 ---

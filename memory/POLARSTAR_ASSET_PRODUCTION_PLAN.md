@@ -1,9 +1,25 @@
 # POLARSTAR ASSET PRODUCTION PLAN
-**Version:** 1.0 · **Date:** 2026-02-29 (iter 86m)
+**Version:** 1.1 · **Date:** 2026-03-01 (iter 86n)
 **Scope:** Existing 5 stories only. NO new stories. NO code. NO image
 generation. NO audio generation. NO frontend modification.
 **Purpose:** One production table that organises the asset work before
 a single credit is spent.
+
+---
+
+## Naming discipline (locked v1.1)
+
+Every Polarstar asset MUST follow the canonical story slug 1:1:
+
+```
+audio:        <slug>.mp3
+hero image:   <slug>-hero.webp
+per-story PDF (future):  <slug>.pdf
+```
+
+Hero illustrations are `.webp`, not `.png`. No short-form exceptions.
+No "we'll just rename this one to make it tidier" cases — that path
+leads to special-case if/else logic and tomorrow's bugs.
 
 ---
 
@@ -49,11 +65,11 @@ Aurin Lantern recorded in one weekend by founder.
 
 | # | Story | Hero image scene (per Visual Bible) | Image generation prompt (foundation + scene) | Output filename | Implementation location | Status |
 |---|-------|--------------------------------------|----------------------------------------------|-----------------|------------------------|--------|
-| 1 | Little Star | A small golden star shining softly above a sleeping village. Moonlit sky, quiet clouds, warm light, peaceful night. | `[VISUAL BIBLE FOUNDATION]` + *"a single small golden star shining softly in the upper night sky above a quiet sleeping village of cottages with warm window lights, gentle moonlit clouds, peaceful nighttime atmosphere, no characters, no faces, soft amber and indigo palette, painted bedtime mood"* | `little-star-hero.png` | `/app/frontend/public/assets/aurin/stories/little-star-hero.png` + update `cover` field in `aurinStories.js` | ⏸ awaits Phase 1 ship |
-| 2 | The Moon Boat | A tiny wooden boat sailing across moonlit clouds. Silver moon, soft clouds, calm sky, glowing reflections. | `[FOUNDATION]` + *"a tiny wooden boat with a small lantern at its bow sailing gently across silver moonlit clouds, a large peaceful crescent moon in the sky, soft glowing reflections on the cloud surface, dreamlike but safe atmosphere, no characters visible, soft silver and warm cream palette"* | `moon-boat-hero.png` | `/app/frontend/public/assets/aurin/stories/moon-boat-hero.png` | ⏸ |
-| 3 | The Night Forest | A child standing on a forest path illuminated by lantern light. Warm lantern glow, tall trees, friendly woodland animals, stars visible through branches. | `[FOUNDATION]` + *"a child of about 7 years with realistic proportions standing on a softly lit forest path holding a warm amber lantern, tall trees on either side, two friendly woodland animals (small fox, hare) at peaceful distance, gentle starlight breaking through branches above, mysterious but welcoming atmosphere"* | `night-forest-hero.png` | `/app/frontend/public/assets/aurin/stories/night-forest-hero.png` | ⏸ |
-| 4 | The Quiet Dragon | A peaceful dragon resting near a lake at sunset. Calm dragon, soft scales, warm sky, reflections on water. | `[FOUNDATION]` + *"a large peaceful dragon resting calmly beside a still lake at golden sunset, soft scales rendered as gentle gouache texture, warm orange-pink sky reflecting on calm water, the dragon's posture protective and serene not threatening, no claws or aggression visible, painted in the spirit of an old children's storybook"* | `quiet-dragon-hero.png` | `/app/frontend/public/assets/aurin/stories/quiet-dragon-hero.png` | ⏸ |
-| 5 | Aurin Lantern | A child carrying a glowing lantern through twilight. Golden lantern, winding path, evening sky, distant stars. | `[FOUNDATION]` + *"a child of about 11 years walking forward along a winding path through twilight, holding a golden glowing lantern in front, soft lavender-and-gold evening sky above, a scattering of distant stars beginning to appear, hopeful and calm atmosphere, the child's expression serene and inward, realistic proportions, timeless clothing"* | `aurin-lantern-hero.png` | `/app/frontend/public/assets/aurin/stories/aurin-lantern-hero.png` | ⏸ |
+| 1 | Little Star | A small golden star shining softly above a sleeping village. Moonlit sky, quiet clouds, warm light, peaceful night. | `[VISUAL BIBLE FOUNDATION]` + *"a single small golden star shining softly in the upper night sky above a quiet sleeping village of cottages with warm window lights, gentle moonlit clouds, peaceful nighttime atmosphere, no characters, no faces, soft amber and indigo palette, painted bedtime mood"* | `little-star-hero.webp` | `/app/frontend/public/assets/aurin/stories/little-star-hero.webp` + update `cover` field in `aurinStories.js` | ⏸ awaits Phase 1 ship |
+| 2 | The Moon Boat | A tiny wooden boat sailing across moonlit clouds. Silver moon, soft clouds, calm sky, glowing reflections. | `[FOUNDATION]` + *"a tiny wooden boat with a small lantern at its bow sailing gently across silver moonlit clouds, a large peaceful crescent moon in the sky, soft glowing reflections on the cloud surface, dreamlike but safe atmosphere, no characters visible, soft silver and warm cream palette"* | `moon-boat-hero.webp` | `/app/frontend/public/assets/aurin/stories/moon-boat-hero.webp` | ⏸ |
+| 3 | The Night Forest | A child standing on a forest path illuminated by lantern light. Warm lantern glow, tall trees, friendly woodland animals, stars visible through branches. | `[FOUNDATION]` + *"a child of about 7 years with realistic proportions standing on a softly lit forest path holding a warm amber lantern, tall trees on either side, two friendly woodland animals (small fox, hare) at peaceful distance, gentle starlight breaking through branches above, mysterious but welcoming atmosphere"* | `night-forest-hero.webp` | `/app/frontend/public/assets/aurin/stories/night-forest-hero.webp` | ⏸ |
+| 4 | The Quiet Dragon | A peaceful dragon resting near a lake at sunset. Calm dragon, soft scales, warm sky, reflections on water. | `[FOUNDATION]` + *"a large peaceful dragon resting calmly beside a still lake at golden sunset, soft scales rendered as gentle gouache texture, warm orange-pink sky reflecting on calm water, the dragon's posture protective and serene not threatening, no claws or aggression visible, painted in the spirit of an old children's storybook"* | `quiet-dragon-hero.webp` | `/app/frontend/public/assets/aurin/stories/quiet-dragon-hero.webp` | ⏸ |
+| 5 | Aurin Lantern | A child carrying a glowing lantern through twilight. Golden lantern, winding path, evening sky, distant stars. | `[FOUNDATION]` + *"a child of about 11 years walking forward along a winding path through twilight, holding a golden glowing lantern in front, soft lavender-and-gold evening sky above, a scattering of distant stars beginning to appear, hopeful and calm atmosphere, the child's expression serene and inward, realistic proportions, timeless clothing"* | `aurin-and-the-lantern-hero.webp` | `/app/frontend/public/assets/aurin/stories/aurin-and-the-lantern-hero.webp` | ⏸ |
 
 **Phase 2 success criteria:**
 - 5 PNG files in `/app/frontend/public/assets/aurin/stories/`
@@ -114,6 +130,11 @@ process: founder drafts → submits text → agent runs Story Bible
 
 - **v1.0** · 2026-02-29 · initial lock, 5 audio + 5 illustrations +
   2 future Dreamweavers entries.
+- **v1.1** · 2026-03-01 morning · Naming discipline locked. All hero
+  illustrations switch from `.png` to `.webp`. All asset filenames
+  follow story slug 1:1 (no short-form exceptions). Aurin Lantern
+  hero filename corrected from `aurin-lantern-hero.png` to
+  `aurin-and-the-lantern-hero.webp`. Plan tables updated accordingly.
 - Bumps require founder approval; rationale logged in CHANGELOG.
 
 ---
