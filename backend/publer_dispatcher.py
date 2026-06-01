@@ -146,10 +146,36 @@ class PublerClient:
         scheduled_at: datetime,
         media_url: Optional[str] = None,
     ) -> dict:
-        """POST /posts/schedule — asynchronous. Returns:
-            {"job_id": "...", "polled": {...final status...}}
-        The dispatcher in marketing_queue.py persists posted_url as
-        publer://<job_id> so we can audit-trail every dispatch.
+        """POST /posts/schedule — asynchronous, SINGLE post.
+
+        For batched dispatches, prefer `schedule_posts_batch()` which
+        packs many posts into one bulk call (Publer Free is limited
+        to 5 bulks/day — batching turns 30 posts into 1 bulk).
+        """
+        return await self.schedule_posts_batch([
+            {
+                "channel": channel,
+                "text": text,
+                "scheduled_at": scheduled_at,
+                "media_url": media_url,
+            }
+        ])
+
+    async def schedule_posts_batch(self, items: list[dict]) -> dict:
+        """POST /posts/schedule with MANY posts in one bulk call.
+
+        items: list of dicts each with keys
+            channel       — internal name (linkedin, bluesky, …)
+            text          — body
+            scheduled_at  — datetime (UTC; will be normalised)
+            media_url     — optional URL (forces type=photo)
+
+        Returns:
+            {"job_id": "...", "polled": {...}, "accepted": N}
+
+        Raises RuntimeError on auth/HTTP/schema errors. If a single
+        item has no mapped account, it is silently dropped (caller
+        is responsible for warning the user via the dispatch result).
         """
         if not self.configured:
             raise RuntimeError("PUBLER_API_KEY not set")
@@ -157,48 +183,39 @@ class PublerClient:
             raise RuntimeError(
                 "PUBLER_WORKSPACE_ID not set — run publer_bootstrap.py"
             )
-        account_id = self.accounts.get(channel)
-        if not account_id:
-            raise RuntimeError(f"No Publer account id for channel '{channel}'")
+        if not items:
+            return {"job_id": None, "polled": None, "accepted": 0}
 
-        # Publer requires scheduled_at strictly in the future. If our
-        # queue ran late, bump by +2 min so the API accepts it and
-        # Publer posts almost immediately.
-        sched = scheduled_at
-        if sched.tzinfo is None:
-            sched = sched.replace(tzinfo=timezone.utc)
+        posts_payload: list[dict] = []
         now_utc = datetime.now(timezone.utc)
-        target = sched if sched > now_utc + timedelta(seconds=30) else now_utc + timedelta(minutes=2)
-        scheduled_iso = target.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        for it in items:
+            channel = it["channel"]
+            account_id = self.accounts.get(channel)
+            if not account_id:
+                # Silently skip; caller already filters but be defensive.
+                continue
+            sched = it["scheduled_at"]
+            if sched.tzinfo is None:
+                sched = sched.replace(tzinfo=timezone.utc)
+            target = sched if sched > now_utc + timedelta(seconds=30) else now_utc + timedelta(minutes=2)
+            scheduled_iso = target.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
-        # Payload shape per https://publer.com/docs/posting/create-posts
-        # Bulk wrapper → state → posts → networks (keyed by provider) +
-        # accounts (with per-account scheduled_at). Single post per call.
+            network_block: dict = {"type": "status", "text": it["text"]}
+            if it.get("media_url"):
+                network_block["type"] = "photo"
+                network_block["media"] = [{"path": it["media_url"], "type": "image"}]
 
-        network_block: dict = {"type": "status", "text": text}
-        if media_url:
-            # media must be pre-uploaded via Publer's media endpoint
-            # to reference by id. For now, pass URL as-is; Publer will
-            # reject a status-typed post with media. If we need image
-            # posts later, switch type to "photo" and call /media first.
-            network_block["type"] = "photo"
-            network_block["media"] = [{"path": media_url, "type": "image"}]
+            posts_payload.append({
+                "networks": {channel: network_block},
+                "accounts": [{"id": account_id, "scheduled_at": scheduled_iso}],
+            })
 
-        payload = {
-            "bulk": {
-                "state": "scheduled",
-                "posts": [
-                    {
-                        "networks": {channel: network_block},
-                        "accounts": [
-                            {"id": account_id, "scheduled_at": scheduled_iso}
-                        ],
-                    }
-                ],
-            }
-        }
+        if not posts_payload:
+            return {"job_id": None, "polled": None, "accepted": 0}
 
-        async with httpx.AsyncClient(timeout=30) as c:
+        payload = {"bulk": {"state": "scheduled", "posts": posts_payload}}
+
+        async with httpx.AsyncClient(timeout=60) as c:
             r = await c.post(
                 f"{self.base}/posts/schedule",
                 headers=self._headers(),
@@ -210,7 +227,6 @@ class PublerClient:
             data = r.json()
         except Exception:
             raise RuntimeError(f"Publer non-JSON response: {r.text[:300]}")
-        # Successful payload: {"success": true, "data": {"job_id": "..."}}
         job_id = (
             (data.get("data") or {}).get("job_id")
             or data.get("job_id")
@@ -219,12 +235,8 @@ class PublerClient:
         if not job_id:
             raise RuntimeError(f"Publer returned no job_id: {str(data)[:300]}")
 
-        # Best-effort poll — Publer schedules asynchronously. We poll
-        # briefly so we can surface "complete" / "failed" in the queue
-        # doc. If polling exceeds budget, we accept the job_id and
-        # mark the queue row 'posted' (Publer owns the scheduling).
-        polled = await self._poll_job(job_id, max_attempts=6, delay=0.8)
-        return {"job_id": job_id, "polled": polled}
+        polled = await self._poll_job(job_id, max_attempts=8, delay=1.0)
+        return {"job_id": job_id, "polled": polled, "accepted": len(posts_payload)}
 
     async def _poll_job(self, job_id: str, max_attempts: int = 6, delay: float = 1.0) -> dict:
         for attempt in range(max_attempts):

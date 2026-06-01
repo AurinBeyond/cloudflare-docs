@@ -293,10 +293,11 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
     ):
         """Push due 'scheduled' auto-channel posts to the active
         provider (Publer if configured, else Buffer).
-        If all=true, processes ALL future-scheduled posts (handing
-        the scheduled_at to the provider so the provider keeps them
-        in its own queue). Otherwise only posts whose
-        scheduled_at <= now."""
+
+        Publer path: all due posts are packed into ONE bulk call to
+        conserve the Free-plan 5-bulks/day budget. Buffer path keeps
+        the legacy per-post loop.
+        """
         _check_admin(authorization)
         provider = _active_provider()
         if provider == "none":
@@ -319,13 +320,71 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
             "skipped": 0,
             "details": [],
         }
+
+        if provider == "publer":
+            # Batch all sendable posts into one Publer bulk call.
+            batch_items: list[dict] = []
+            sendable_posts: list[dict] = []
+            for post in due:
+                ch = post["channel"]
+                if not publer_client.has_channel(ch):
+                    results["skipped"] += 1
+                    results["details"].append(
+                        {"id": post["id"], "channel": ch, "skip_reason": "no account id for channel"}
+                    )
+                    continue
+                sched_at = (
+                    post["scheduled_at"]
+                    if isinstance(post["scheduled_at"], datetime)
+                    else datetime.fromisoformat(str(post["scheduled_at"]).replace("Z", "+00:00"))
+                )
+                batch_items.append({
+                    "channel": ch,
+                    "text": post["body"],
+                    "scheduled_at": sched_at,
+                    "media_url": post.get("media_url"),
+                })
+                sendable_posts.append(post)
+
+            if batch_items:
+                try:
+                    resp = await publer_client.schedule_posts_batch(batch_items)
+                    job_id = resp.get("job_id")
+                    posted_url = f"publer://{job_id}" if job_id else None
+                    for post in sendable_posts:
+                        await db.marketing_queue.update_one(
+                            {"id": post["id"]},
+                            {
+                                "$set": {
+                                    "status": "posted",
+                                    "posted_at": datetime.now(timezone.utc),
+                                    "posted_url": posted_url,
+                                    "provider": "publer",
+                                }
+                            },
+                        )
+                    results["posted"] = len(sendable_posts)
+                    results["details"].append({
+                        "batch_job_id": job_id,
+                        "batch_size": len(sendable_posts),
+                        "polled": resp.get("polled"),
+                    })
+                except Exception as e:
+                    logger.exception("publer batch dispatch failed")
+                    for post in sendable_posts:
+                        await db.marketing_queue.update_one(
+                            {"id": post["id"]},
+                            {"$set": {"status": "failed", "error": str(e)[:500], "provider": "publer"}},
+                        )
+                    results["failed"] = len(sendable_posts)
+                    results["details"].append({"batch_error": str(e)[:300]})
+            results["now"] = now.isoformat()
+            return results
+
+        # ---- Buffer legacy path (per-post loop) ----
         for post in due:
             ch = post["channel"]
-            client_has_channel = (
-                publer_client.has_channel(ch) if provider == "publer"
-                else buffer_client.has_channel(ch)
-            )
-            if not client_has_channel:
+            if not buffer_client.has_channel(ch):
                 results["skipped"] += 1
                 results["details"].append(
                     {"id": post["id"], "channel": ch, "skip_reason": "no account id for channel"}
@@ -337,54 +396,34 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
                     if isinstance(post["scheduled_at"], datetime)
                     else datetime.fromisoformat(str(post["scheduled_at"]).replace("Z", "+00:00"))
                 )
-                if provider == "publer":
-                    resp = await publer_client.schedule_post(
-                        channel=ch,
-                        text=post["body"],
-                        scheduled_at=sched_at,
-                        media_url=post.get("media_url"),
-                    )
-                    external_id = resp.get("job_id")
-                    posted_url = f"publer://{external_id}"
-                else:
-                    resp = await buffer_client.create_update(
-                        channel=ch,
-                        text=post["body"],
-                        scheduled_at=sched_at,
-                        media_url=post.get("media_url"),
-                    )
-                    external_id = resp.get("buffer_id")
-                    posted_url = f"buffer://{external_id}"
+                resp = await buffer_client.create_update(
+                    channel=ch,
+                    text=post["body"],
+                    scheduled_at=sched_at,
+                    media_url=post.get("media_url"),
+                )
+                external_id = resp.get("buffer_id")
                 await db.marketing_queue.update_one(
                     {"id": post["id"]},
                     {
                         "$set": {
                             "status": "posted",
                             "posted_at": datetime.now(timezone.utc),
-                            "posted_url": posted_url,
-                            "provider": provider,
+                            "posted_url": f"buffer://{external_id}",
+                            "provider": "buffer",
                         }
                     },
                 )
                 results["posted"] += 1
-                results["details"].append(
-                    {
-                        "id": post["id"],
-                        "channel": ch,
-                        "provider": provider,
-                        "external_id": external_id,
-                    }
-                )
+                results["details"].append({"id": post["id"], "channel": ch, "buffer_id": external_id})
             except Exception as e:
                 logger.exception("marketing dispatch failed")
                 await db.marketing_queue.update_one(
                     {"id": post["id"]},
-                    {"$set": {"status": "failed", "error": str(e)[:500], "provider": provider}},
+                    {"$set": {"status": "failed", "error": str(e)[:500], "provider": "buffer"}},
                 )
                 results["failed"] += 1
-                results["details"].append(
-                    {"id": post["id"], "channel": ch, "error": str(e)[:200]}
-                )
+                results["details"].append({"id": post["id"], "channel": ch, "error": str(e)[:200]})
         results["now"] = now.isoformat()
         return results
 

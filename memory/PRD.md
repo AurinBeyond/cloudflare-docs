@@ -212,20 +212,32 @@ Stories" sold via Gumroad.
 - All Python lints pass (ruff). All JSX lints pass (eslint).
 
 ### Next actions (priority order)
-1. ✅ (Agent) Hearth audio #4 + #5 generated via ElevenLabs Anna Adult,
-   1.0s ffmpeg padding applied (ffmpeg was missing → apt-get installed →
-   retroactively padded #4, native pad on #5). App.js routes wired,
-   HEARTH_STORIES index prepended. Both pages smoke-tested on preview:
-   `/listen/hearth/the-window-left-open` (5:50) and
-   `/listen/hearth/the-garden-in-november` (6:46) render with correct
-   "Story 4/5 of 5" shelf signals + previous-story breadcrumbs.
-2. ✅ (Agent) Gumroad Family Bundle script:
-   `/app/scripts/gumroad_create_family_bundle.py` — €25 combo
-   (Polarstar €9 + Hearth €19), description + custom_receipt locked,
-   awaits founder to create SKU in Gumroad UI and set
-   `GUMROAD_FAMILY_BUNDLE_PRODUCT_ID`.
-3. (Anna, this evening) Finish Publer Business signup → paste API
-   key → run bootstrap → dispatch.
-4. (Agent, P2) Body Room (North Cardinal) product brief.
-5. (Agent, P2) Apple Books packaging for the now-complete Hearth shelf.
+1. ✅ (Agent) Hearth audio #4 + #5 generated + frontend wired (5/5 shelf complete).
+2. ✅ (Agent) Gumroad Family Bundle script.
+3. ✅ (Anna + Agent) Publer Business-tier API access UNLOCKED for FREE
+   account (Publer's docs were misleading — Anna's API key returned
+   `plan.rate: business`). API working end-to-end:
+   - Workspace `6a1d2f7553fde0170ee38948` (prulesoul.site)
+   - LinkedIn (Anna Lipasina) + Bluesky (prulesoul.bsky.social) connected
+   - Free plan quota: 5 bulks/day (each bulk can contain N posts)
+4. ✅ (Agent) `PublerClient.schedule_posts_batch()` — packs many posts
+   into ONE bulk call so a full 30-day sprint = 1 bulk = 1/5 daily quota.
+5. ✅ (Agent) Dispatch endpoint rewritten to batch for Publer (kept
+   per-post loop for Buffer fallback).
+6. ✅ (Agent) New 30-day sprint: `/app/scripts/queue_publer_sprint.py`
+   — 36 posts (12 LinkedIn long-form, 24 Bluesky short ≤300 chars),
+   themes: anti-wellness foundation → 11pm parent / Hearth shelf →
+   the voice that isn't yours → garden in November + Family Bundle.
+   Queued + dispatched — verified 12 LinkedIn + 24 Bluesky scheduled in
+   Publer dashboard, all under 300 chars for Bluesky.
+
+### Next actions (this evening / tomorrow)
+- (Anna) Optional: add 3rd Publer channel (Threads or Pinterest) — Free
+  plan likely allows 3 channels. Re-run bootstrap to discover the new
+  account id, paste into .env, restart backend.
+- (Anna) Create Gumroad Family Bundle SKU in UI, paste product id into
+  env, run `python3 /app/scripts/gumroad_create_family_bundle.py`.
+- (Agent, P1) Build `/family-bundle` landing page once SKU live.
+- (Agent, P2) Body Room (North Cardinal) product brief.
+- (Agent, P2) Apple Books packaging for 5-story Hearth shelf.
 
