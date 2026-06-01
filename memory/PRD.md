@@ -165,3 +165,59 @@ Stories" sold via Gumroad.
 - All services running (frontend, backend, MongoDB)
 - Gumroad webhook live
 - Audio + hero illustration verified end-to-end on preview URL
+
+---
+
+## 2026-06-01 (this session — fork after deploy)
+
+### Decision: drop Buffer, drop Make.com for social. Lock in Publer Business.
+- Founder rejected Buffer Essentials ($18/mo for 3 channels) as too expensive.
+- Founder rejected Make.com as wrong tool for social media distribution
+  (it's better suited for email triggers / Gumroad webhooks).
+- Locked choice: **Publer Business** (~$8/mo on yearly billing,
+  10+ channels, REST API, scopes: posts + media).
+
+### Code staged (PUBLER_API_KEY still pending — will arrive this evening)
+- `/app/backend/publer_dispatcher.py` — new `PublerClient` (REST,
+  Bearer-API auth, Publer-Workspace-Id header, async /posts/schedule
+  with job-status polling).
+- `/app/backend/marketing_queue.py` — provider auto-selection: if
+  `PUBLER_API_KEY` is set, Publer is the active provider; otherwise
+  legacy Buffer client remains the fallback. `/status` endpoint now
+  reports `active_provider` + 8 channel slots (added: threads,
+  tiktok, facebook, youtube).
+- `/app/backend/.env` — added `PUBLER_API_KEY`, `PUBLER_WORKSPACE_ID`,
+  and `PUBLER_ACCOUNT_*` placeholder block (8 channels).
+- `/app/scripts/publer_bootstrap.py` — one-shot helper that calls
+  `GET /workspaces` + `GET /accounts` and prints ready-to-paste
+  `.env` lines for the channel ids.
+
+### Hearth shelf — stories #4 and #5 staged
+- `/app/memory/hearth_story_04_the_window_left_open.md` — manuscript v1
+- `/app/memory/hearth_story_05_the_garden_in_november.md` — manuscript v1
+- `/app/frontend/src/pages/ListenWindowLeftOpen.jsx` — listen page (NOT routed yet)
+- `/app/frontend/src/pages/ListenGardenInNovember.jsx` — listen page (NOT routed yet)
+- Audio generation deferred until Anna is back: two-line text_to_voice
+  invocation listed in `PUBLER_EVENING_CHECKLIST.md` track B.
+
+### Resume tonight (single document)
+- `/app/memory/PUBLER_EVENING_CHECKLIST.md` — covers BOTH tracks
+  (Publer flip + Hearth audio + App.js wire-up + index update).
+
+### Smoke-tested
+- Backend restarted clean, `/api/marketing/status` reports
+  `active_provider: buffer` (correct — Publer key not yet set).
+- PublerClient instantiates with 8 empty channel mappings ready for
+  bootstrap.
+- All Python lints pass (ruff). All JSX lints pass (eslint).
+
+### Next actions (priority order)
+1. (Anna) Finish Publer Business signup → connect channels → paste API
+   key into `.env` → run bootstrap → restart → dispatch (~5 min).
+2. (Agent) Generate Hearth audio #4 + #5 via ElevenLabs Anna Adult
+   voice → wire App.js routes → prepend HEARTH_STORIES index (~10 min).
+3. (Agent, P1) Gumroad Family Bundle script (Polarstar €9 + Hearth €19
+   = €25 combo SKU).
+4. (Agent, P2) Body Room (North Cardinal) product brief.
+5. (Agent, P2) Apple Books packaging for the now-complete Hearth shelf.
+

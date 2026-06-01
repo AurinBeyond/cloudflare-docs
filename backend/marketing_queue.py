@@ -49,16 +49,27 @@ from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel, Field, ConfigDict
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from publer_dispatcher import PublerClient, PUBLER_ACCOUNT_ENV
+
 logger = logging.getLogger(__name__)
 
 BUFFER_API = "https://api.buffer.com/graphql"
 
 Channel = Literal[
-    "linkedin", "twitter", "instagram", "pinterest", "reddit", "substack"
+    "linkedin", "twitter", "instagram", "pinterest",
+    "threads", "tiktok", "facebook", "youtube",
+    "reddit", "substack",
 ]
 Status = Literal["scheduled", "posted", "failed", "manual_pending"]
 
-AUTO_CHANNELS = {"linkedin", "twitter", "instagram", "pinterest"}
+# §PUBLER 2026-06-01 — Publer Business adds 4 more auto channels
+# (Threads, TikTok, Facebook, YouTube Shorts) over the legacy Buffer
+# Free tier. The dispatcher only attempts a channel if PublerClient
+# has an account id mapped for it (env-driven, see publer_dispatcher).
+AUTO_CHANNELS = {
+    "linkedin", "twitter", "instagram", "pinterest",
+    "threads", "tiktok", "facebook", "youtube",
+}
 MANUAL_CHANNELS = {"reddit", "substack"}
 
 
@@ -193,7 +204,17 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
     """
     router = APIRouter(prefix="/marketing", tags=["marketing"])
     buffer_client = BufferClient()
+    publer_client = PublerClient()
     ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN") or ""
+
+    # §PUBLER 2026-06-01 — provider preference. If both are
+    # configured we use Publer; founder explicitly migrated off Buffer.
+    def _active_provider() -> str:
+        if publer_client.configured:
+            return "publer"
+        if buffer_client.configured:
+            return "buffer"
+        return "none"
 
     def _check_admin(auth: Optional[str]):
         if not ADMIN_TOKEN:
@@ -205,13 +226,20 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
 
     @router.get("/status")
     async def status():
-        """Lightweight health + readiness check."""
+        """Lightweight health + readiness check. Reports which
+        provider is active and which channels are wired."""
+        provider = _active_provider()
+        if provider == "publer":
+            auto = {ch: publer_client.has_channel(ch) for ch in AUTO_CHANNELS}
+        else:
+            auto = {ch: buffer_client.has_channel(ch) for ch in AUTO_CHANNELS}
         return {
             "queue_collection": "marketing_queue",
+            "active_provider": provider,
+            "publer_configured": publer_client.configured,
+            "publer_workspace_set": bool(publer_client.workspace_id),
             "buffer_configured": buffer_client.configured,
-            "buffer_channels": {
-                ch: buffer_client.has_channel(ch) for ch in AUTO_CHANNELS
-            },
+            "auto_channels": auto,
             "manual_channels": sorted(MANUAL_CHANNELS),
             "now": datetime.now(timezone.utc).isoformat(),
         }
@@ -261,16 +289,20 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
         all: bool = False,
         authorization: Optional[str] = Header(None),
     ):
-        """Push due 'scheduled' auto-channel posts to Buffer.
+        """Push due 'scheduled' auto-channel posts to the active
+        provider (Publer if configured, else Buffer).
         If all=true, processes ALL future-scheduled posts (handing
-        the dueAt to Buffer so Buffer keeps them in its own queue).
-        Otherwise only posts whose scheduled_at <= now."""
+        the scheduled_at to the provider so the provider keeps them
+        in its own queue). Otherwise only posts whose
+        scheduled_at <= now."""
         _check_admin(authorization)
-        if not buffer_client.configured:
+        provider = _active_provider()
+        if provider == "none":
             raise HTTPException(
                 503,
-                "Buffer is not configured. Set BUFFER_ACCESS_TOKEN and "
-                "BUFFER_PROFILE_* env vars first.",
+                "No social provider configured. Set PUBLER_API_KEY "
+                "(preferred) or BUFFER_ACCESS_TOKEN + BUFFER_PROFILE_* "
+                "in /app/backend/.env.",
             )
         now = datetime.now(timezone.utc)
         query: dict = {"status": "scheduled", "manual": False}
@@ -278,43 +310,74 @@ def build_router(db: AsyncIOMotorDatabase) -> APIRouter:
             query["scheduled_at"] = {"$lte": now}
         cursor = db.marketing_queue.find(query, {"_id": 0})
         due = await cursor.to_list(length=500)
-        results = {"posted": 0, "failed": 0, "skipped": 0, "details": []}
+        results: dict = {
+            "provider": provider,
+            "posted": 0,
+            "failed": 0,
+            "skipped": 0,
+            "details": [],
+        }
         for post in due:
             ch = post["channel"]
-            if not buffer_client.has_channel(ch):
+            client_has_channel = (
+                publer_client.has_channel(ch) if provider == "publer"
+                else buffer_client.has_channel(ch)
+            )
+            if not client_has_channel:
                 results["skipped"] += 1
                 results["details"].append(
-                    {"id": post["id"], "channel": ch, "skip_reason": "no profile id"}
+                    {"id": post["id"], "channel": ch, "skip_reason": "no account id for channel"}
                 )
                 continue
             try:
-                resp = await buffer_client.create_update(
-                    channel=ch,
-                    text=post["body"],
-                    scheduled_at=post["scheduled_at"]
+                sched_at = (
+                    post["scheduled_at"]
                     if isinstance(post["scheduled_at"], datetime)
-                    else datetime.fromisoformat(str(post["scheduled_at"]).replace("Z", "+00:00")),
-                    media_url=post.get("media_url"),
+                    else datetime.fromisoformat(str(post["scheduled_at"]).replace("Z", "+00:00"))
                 )
+                if provider == "publer":
+                    resp = await publer_client.schedule_post(
+                        channel=ch,
+                        text=post["body"],
+                        scheduled_at=sched_at,
+                        media_url=post.get("media_url"),
+                    )
+                    external_id = resp.get("job_id")
+                    posted_url = f"publer://{external_id}"
+                else:
+                    resp = await buffer_client.create_update(
+                        channel=ch,
+                        text=post["body"],
+                        scheduled_at=sched_at,
+                        media_url=post.get("media_url"),
+                    )
+                    external_id = resp.get("buffer_id")
+                    posted_url = f"buffer://{external_id}"
                 await db.marketing_queue.update_one(
                     {"id": post["id"]},
                     {
                         "$set": {
                             "status": "posted",
                             "posted_at": datetime.now(timezone.utc),
-                            "posted_url": f"buffer://{resp.get('buffer_id')}",
+                            "posted_url": posted_url,
+                            "provider": provider,
                         }
                     },
                 )
                 results["posted"] += 1
                 results["details"].append(
-                    {"id": post["id"], "channel": ch, "buffer_id": resp.get("buffer_id")}
+                    {
+                        "id": post["id"],
+                        "channel": ch,
+                        "provider": provider,
+                        "external_id": external_id,
+                    }
                 )
             except Exception as e:
                 logger.exception("marketing dispatch failed")
                 await db.marketing_queue.update_one(
                     {"id": post["id"]},
-                    {"$set": {"status": "failed", "error": str(e)[:500]}},
+                    {"$set": {"status": "failed", "error": str(e)[:500], "provider": provider}},
                 )
                 results["failed"] += 1
                 results["details"].append(
