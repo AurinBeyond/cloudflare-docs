@@ -70,7 +70,7 @@ Status = Literal["scheduled", "posted", "failed", "manual_pending"]
 AUTO_CHANNELS = {
     "linkedin", "twitter", "instagram", "pinterest",
     "threads", "tiktok", "facebook", "youtube",
-    "bluesky",
+    "bluesky", "telegram", "mastodon",
 }
 MANUAL_CHANNELS = {"reddit", "substack"}
 

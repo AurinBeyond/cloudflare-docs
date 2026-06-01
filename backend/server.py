@@ -16519,6 +16519,11 @@ app.include_router(_marketing_router(db), prefix="/api")
 from hearth_funnel import build_router as _hearth_funnel_router  # noqa: E402
 app.include_router(_hearth_funnel_router(db), prefix="/api")
 
+# §PUBLER-ANALYTICS 2026-06-01 — Monday-morning quiet digest of last
+# week's Publer-published posts. See publer_analytics.py.
+from publer_analytics import build_router as _publer_analytics_router  # noqa: E402
+app.include_router(_publer_analytics_router(), prefix="/api")
+
 
 @app.on_event("startup")
 async def on_startup():
