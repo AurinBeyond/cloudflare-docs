@@ -89,6 +89,8 @@ import ListenLittleStar from "@/pages/ListenLittleStar";
 import ListenSockOnStairs from "@/pages/ListenSockOnStairs";
 import ListenLightInHallway from "@/pages/ListenLightInHallway";
 import ListenCoatOnChair from "@/pages/ListenCoatOnChair";
+import ListenWindowLeftOpen from "@/pages/ListenWindowLeftOpen";
+import ListenGardenInNovember from "@/pages/ListenGardenInNovember";
 import ListenHearthIndex from "@/pages/ListenHearthIndex";
 import AlistairBundle from "@/pages/AlistairBundle";
 import SevenQuietNights from "@/pages/SevenQuietNights";
@@ -146,6 +148,10 @@ function AppRouter() {
         <Route path="/listen/hearth/the-light-in-the-hallway" element={<ListenLightInHallway />} />
         {/* §HEARTH-AUDIO 2026-05-31 — third Hearth evening story */}
         <Route path="/listen/hearth/the-coat-on-the-chair" element={<ListenCoatOnChair />} />
+        {/* §HEARTH-AUDIO 2026-06-01 — fourth Hearth evening story */}
+        <Route path="/listen/hearth/the-window-left-open" element={<ListenWindowLeftOpen />} />
+        {/* §HEARTH-AUDIO 2026-06-01 — fifth (final) Hearth evening story, shelf complete */}
+        <Route path="/listen/hearth/the-garden-in-november" element={<ListenGardenInNovember />} />
         {/* §HEARTH-GATEWAY 2026-05-31 — short URL → latest story (outreach + Substack) */}
         <Route path="/listen/hearth" element={<ListenHearthIndex />} />
         <Route path="/listen/hearth/" element={<ListenHearthIndex />} />

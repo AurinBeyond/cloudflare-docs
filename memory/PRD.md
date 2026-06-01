@@ -212,12 +212,20 @@ Stories" sold via Gumroad.
 - All Python lints pass (ruff). All JSX lints pass (eslint).
 
 ### Next actions (priority order)
-1. (Anna) Finish Publer Business signup → connect channels → paste API
-   key into `.env` → run bootstrap → restart → dispatch (~5 min).
-2. (Agent) Generate Hearth audio #4 + #5 via ElevenLabs Anna Adult
-   voice → wire App.js routes → prepend HEARTH_STORIES index (~10 min).
-3. (Agent, P1) Gumroad Family Bundle script (Polarstar €9 + Hearth €19
-   = €25 combo SKU).
+1. ✅ (Agent) Hearth audio #4 + #5 generated via ElevenLabs Anna Adult,
+   1.0s ffmpeg padding applied (ffmpeg was missing → apt-get installed →
+   retroactively padded #4, native pad on #5). App.js routes wired,
+   HEARTH_STORIES index prepended. Both pages smoke-tested on preview:
+   `/listen/hearth/the-window-left-open` (5:50) and
+   `/listen/hearth/the-garden-in-november` (6:46) render with correct
+   "Story 4/5 of 5" shelf signals + previous-story breadcrumbs.
+2. ✅ (Agent) Gumroad Family Bundle script:
+   `/app/scripts/gumroad_create_family_bundle.py` — €25 combo
+   (Polarstar €9 + Hearth €19), description + custom_receipt locked,
+   awaits founder to create SKU in Gumroad UI and set
+   `GUMROAD_FAMILY_BUNDLE_PRODUCT_ID`.
+3. (Anna, this evening) Finish Publer Business signup → paste API
+   key → run bootstrap → dispatch.
 4. (Agent, P2) Body Room (North Cardinal) product brief.
 5. (Agent, P2) Apple Books packaging for the now-complete Hearth shelf.
 
