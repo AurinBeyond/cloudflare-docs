@@ -80,7 +80,7 @@ export default function About() {
                 data-testid="about-cta-begin"
                 className="aurin-btn aurin-btn-primary"
               >
-                Step inside the sanctuary <ArrowRight size={14} />
+                Step inside <ArrowRight size={14} />
               </Link>
               <Link
                 to="/sanctuary-preview"

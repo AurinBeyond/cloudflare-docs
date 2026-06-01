@@ -136,7 +136,7 @@ export default function WhatThisIs() {
           <span className="text-[#c4a46b] tracking-[0.18em] text-[12px] uppercase block mb-2">
             ✦ For Individuals
           </span>
-          A confidential sanctuary to lay down your armor. A space where
+          A confidential evening room to lay down your armor. A space where
           you do not have to perform, explain, or be anything other than
           your true self. Your words belong to you; they are protected
           and never used to train public models.

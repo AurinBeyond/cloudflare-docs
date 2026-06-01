@@ -95,6 +95,7 @@ import ListenHearthIndex from "@/pages/ListenHearthIndex";
 import AlistairBundle from "@/pages/AlistairBundle";
 import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
+import FamilyBundle from "@/pages/FamilyBundle";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -159,6 +160,8 @@ function AppRouter() {
         <Route path="/seven-quiet-nights" element={<SevenQuietNights />} />
         {/* §SPRINT-3 2026-05-31 — The Hearth (Parents' Room product, €19) */}
         <Route path="/the-hearth" element={<TheHearthProtocol />} />
+        {/* §FAMILY-BUNDLE 2026-06-01 — €25 combo (Polarstar + Hearth) */}
+        <Route path="/family-bundle" element={<FamilyBundle />} />
         {/* §SPRINT-4 2026-05-31 — Alistair Bundle (Course Room product, €39) */}
         <Route path="/alistair-bundle" element={<AlistairBundle />} />
         {/* Legacy redirect for any pre-rename inbound links */}
