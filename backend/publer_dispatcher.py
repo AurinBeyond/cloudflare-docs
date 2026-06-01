@@ -65,6 +65,7 @@ PUBLER_ACCOUNT_ENV = {
     "tiktok": "PUBLER_ACCOUNT_TIKTOK",
     "facebook": "PUBLER_ACCOUNT_FACEBOOK",
     "youtube": "PUBLER_ACCOUNT_YOUTUBE",
+    "bluesky": "PUBLER_ACCOUNT_BLUESKY",
 }
 
 
@@ -171,18 +172,31 @@ class PublerClient:
         scheduled_iso = target.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
         # Payload shape per https://publer.com/docs/posting/create-posts
-        # Publer accepts `posts: [...]` even when scheduling a single
-        # post; we always send a list of one to keep the surface simple.
-        post_obj: dict = {
-            "accounts": [account_id],
-            "scheduled_at": scheduled_iso,
-            "text": text,
-            "state": "scheduled",
-        }
-        if media_url:
-            post_obj["media"] = [{"path": media_url}]
+        # Bulk wrapper → state → posts → networks (keyed by provider) +
+        # accounts (with per-account scheduled_at). Single post per call.
 
-        payload = {"posts": [post_obj]}
+        network_block: dict = {"type": "status", "text": text}
+        if media_url:
+            # media must be pre-uploaded via Publer's media endpoint
+            # to reference by id. For now, pass URL as-is; Publer will
+            # reject a status-typed post with media. If we need image
+            # posts later, switch type to "photo" and call /media first.
+            network_block["type"] = "photo"
+            network_block["media"] = [{"path": media_url, "type": "image"}]
+
+        payload = {
+            "bulk": {
+                "state": "scheduled",
+                "posts": [
+                    {
+                        "networks": {channel: network_block},
+                        "accounts": [
+                            {"id": account_id, "scheduled_at": scheduled_iso}
+                        ],
+                    }
+                ],
+            }
+        }
 
         async with httpx.AsyncClient(timeout=30) as c:
             r = await c.post(
@@ -196,7 +210,12 @@ class PublerClient:
             data = r.json()
         except Exception:
             raise RuntimeError(f"Publer non-JSON response: {r.text[:300]}")
-        job_id = data.get("job_id") or data.get("id")
+        # Successful payload: {"success": true, "data": {"job_id": "..."}}
+        job_id = (
+            (data.get("data") or {}).get("job_id")
+            or data.get("job_id")
+            or data.get("id")
+        )
         if not job_id:
             raise RuntimeError(f"Publer returned no job_id: {str(data)[:300]}")
 
@@ -217,7 +236,9 @@ class PublerClient:
                     )
                 if r.status_code >= 400:
                     return {"polled": False, "http": r.status_code, "body": r.text[:200]}
-                data = r.json()
+                payload = r.json()
+                # Publer response: {"success": true, "data": {"status": "complete", "result": {...}}}
+                data = payload.get("data") or payload
                 status = (data.get("status") or "").lower()
                 if status in ("complete", "completed", "success", "succeeded"):
                     return {"polled": True, "status": status, "data": data}
