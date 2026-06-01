@@ -52,6 +52,8 @@ PROVIDER_TO_CHANNEL = {
     "facebook_page": "facebook",
     "youtube": "youtube",
     "bluesky": "bluesky",
+    "telegram": "telegram",
+    "mastodon": "mastodon",
 }
 
 

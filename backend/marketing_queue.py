@@ -58,7 +58,7 @@ BUFFER_API = "https://api.buffer.com/graphql"
 Channel = Literal[
     "linkedin", "twitter", "instagram", "pinterest",
     "threads", "tiktok", "facebook", "youtube",
-    "bluesky",
+    "bluesky", "telegram", "mastodon",
     "reddit", "substack",
 ]
 Status = Literal["scheduled", "posted", "failed", "manual_pending"]

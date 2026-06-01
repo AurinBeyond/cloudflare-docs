@@ -66,6 +66,8 @@ PUBLER_ACCOUNT_ENV = {
     "facebook": "PUBLER_ACCOUNT_FACEBOOK",
     "youtube": "PUBLER_ACCOUNT_YOUTUBE",
     "bluesky": "PUBLER_ACCOUNT_BLUESKY",
+    "telegram": "PUBLER_ACCOUNT_TELEGRAM",
+    "mastodon": "PUBLER_ACCOUNT_MASTODON",
 }
 
 
