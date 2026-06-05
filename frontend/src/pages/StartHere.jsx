@@ -70,7 +70,7 @@ const PATHS = [
   {
     id: "together",
     numeral: "III",
-    label: "Together",
+    label: "For Your Family",
     cameWith: "an evening that disappeared.",
     needs: "one shared moment back.",
     why:
@@ -79,7 +79,7 @@ const PATHS = [
     listenLine:
       "A gentle bedtime listen for the youngest one in the room — and for whoever is sitting beside them.",
     listenRoute: "/listen/little-star",
-    listenLabel: "Listen together · 2 min",
+    listenLabel: "Listen as a family · 2 min",
     roomLabel: "Enter Polarstar",
     roomRoute: "/kids-universe/polarstar",
     roomLine:
