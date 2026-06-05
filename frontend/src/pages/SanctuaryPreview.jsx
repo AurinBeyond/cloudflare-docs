@@ -544,7 +544,7 @@ function TwoWorldsSection() {
             style={{ fontFamily: SERIF }}
           >
             A space where reflection and structure<br />
-            <span className="italic text-[#d4b67d]">quietly bring you back to yourself.</span>
+            <span className="italic text-[#d4b67d]">quietly bring you back to what matters most.</span>
           </h2>
         </RevealBlock>
 
@@ -1240,7 +1240,7 @@ function ClosingSection() {
               data-testid="closing-cta"
               className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
-              Step Inside
+              Continue Reading
             </Link>
           </div>
         </RevealBlock>
