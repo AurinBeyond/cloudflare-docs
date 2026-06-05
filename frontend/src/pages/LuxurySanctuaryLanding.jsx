@@ -171,6 +171,11 @@ export default function LuxurySanctuaryLanding() {
         </div>
       </nav>
 
+      {/*
+        SPRINT 0 — "Less Noise. More Meaning." (2026-02)
+        4-layer hero, locked after 5-day brainstorm.
+        Previous V6 hero archived → /app/memory/archive/hero_2026_06.md
+      */}
       <section className="hero" id="hero" ref={heroRef}>
         <div className="hero-visual">
           <img
@@ -180,14 +185,86 @@ export default function LuxurySanctuaryLanding() {
           />
           <div className="hero-image-overlay" />
         </div>
-        <div className="hero-content">
-          <p className="hero-whisper">Matrix Aurin</p>
-          <div className="hero-breath" />
-          <h1 className="hero-headline">
-            Welcome back<br />to yourself.
+        <div className="hero-content" data-testid="luxury-hero-content">
+          {/* Layer 1 — What this is */}
+          <h1 className="hero-headline hero-headline--statement" data-testid="luxury-hero-headline">
+            Matrix Aurin is a quiet place<br />
+            to read, listen, reflect,<br />
+            and reconnect with what matters most.
           </h1>
-          <p className="hero-subtext">You do not have to perform here.</p>
-          <a href="#threshold" className="hero-cta">Step inside</a>
+          <p className="hero-subtext hero-subtext--frame" data-testid="luxury-hero-subtext">
+            Built around books and five guided rooms<br />
+            for people, parents, and families.
+          </p>
+        </div>
+      </section>
+
+      {/* Layer 2 — Concrete transformation (came with → leave with) */}
+      <section className="transformation" id="transformation" data-testid="luxury-transformation">
+        <div className="transformation-inner">
+          <div className="transformation-head">
+            <span className="transformation-col-label">If you came here with…</span>
+            <span className="transformation-col-divider" aria-hidden="true" />
+            <span className="transformation-col-label">you may leave with…</span>
+          </div>
+          <ul className="transformation-rows">
+            <li className="transformation-row">
+              <span className="transformation-from">too many thoughts</span>
+              <span className="transformation-arrow" aria-hidden="true">→</span>
+              <span className="transformation-to">one thought clearer</span>
+            </li>
+            <li className="transformation-row">
+              <span className="transformation-from">tension your body has carried</span>
+              <span className="transformation-arrow" aria-hidden="true">→</span>
+              <span className="transformation-to">one quieter breath</span>
+            </li>
+            <li className="transformation-row">
+              <span className="transformation-from">a hard conversation at home</span>
+              <span className="transformation-arrow" aria-hidden="true">→</span>
+              <span className="transformation-to">one new way to begin it</span>
+            </li>
+            <li className="transformation-row">
+              <span className="transformation-from">an evening that disappeared</span>
+              <span className="transformation-arrow" aria-hidden="true">→</span>
+              <span className="transformation-to">one shared moment back</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Layer 3 — Self-recognition trio */}
+      <section className="audience" id="audience" data-testid="luxury-audience">
+        <div className="audience-inner">
+          <p className="audience-line">For people who want a little more clarity.</p>
+          <p className="audience-line">For parents who want a little more patience.</p>
+          <p className="audience-line">For families who want a little more time together.</p>
+        </div>
+      </section>
+
+      {/* Layer 4 — Three CTAs with clear hierarchy */}
+      <section className="hero-ctas" id="hero-ctas" data-testid="luxury-hero-ctas">
+        <div className="hero-ctas-inner">
+          <a
+            href="/start-here"
+            className="hero-cta-primary"
+            data-testid="luxury-cta-start-here"
+          >
+            Start Here
+          </a>
+          <a
+            href="#doors"
+            className="hero-cta-secondary"
+            data-testid="luxury-cta-see-rooms"
+          >
+            See the Five Rooms
+          </a>
+          <a
+            href="/bookstore"
+            className="hero-cta-secondary"
+            data-testid="luxury-cta-browse-books"
+          >
+            Browse Books
+          </a>
         </div>
       </section>
 

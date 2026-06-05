@@ -1,6 +1,6 @@
 # Polarstar / Aurin Hub — Product Requirements
 
-**Last updated:** 2026-05-31 (iter 86o-fork)
+**Last updated:** 2026-02 (Sprint 0 complete — "Less Noise. More Meaning." hero live)
 **Project:** Matrix Aurin · Polarstar Kids platform
 **Brand philosophy:** "Screen-Down, Ears-Open" · strictly anti-wellness · parent-managed ambient media
 

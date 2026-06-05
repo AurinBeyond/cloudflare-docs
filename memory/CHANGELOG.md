@@ -3,6 +3,72 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02 — Sprint 0: "Less Noise. More Meaning." 4-layer hero
+
+After a 5-day locked-room brainstorm (Anna + GPT + Norwegian AI + agent),
+the production homepage hero was rewritten to pass the 5-second test for
+new visitors. The page now sells the **outcome** before the architecture.
+
+### What changed
+- **Real production file:** `SanctuaryPreview.jsx` (`/` route), not
+  `LuxurySanctuaryLanding.jsx` as the previous handoff suggested. The
+  `/luxury` route was retired on 2026-02-12 and redirects to `/`.
+- **HeroSection (`SanctuaryPreview.jsx`)** — Layer 1 only. The right-anchored
+  mask visual + parallax + brass spotlight are preserved verbatim. Only the
+  left-side text block was rewritten.
+  - **Old headline:** *Welcome back / to yourself.*
+  - **New headline:** *Matrix Aurin is a quiet place to read, listen, reflect,
+    and reconnect with what matters most.*
+  - **Old support:** *A quiet room for noticing what is already shaping your
+    life. You do not have to perform here. Step Inside / Walk through truth
+    first. The doors are open this season.*
+  - **New support:** *Built around books and five guided rooms for people,
+    parents, and families.*
+  - **Eyebrow / season / Truth-Sequence CTAs removed from the hero.** The
+    `TruthSequenceModal` wiring remains for future entry points but no longer
+    fires from the hero.
+- **New `SprintZeroLayersSection`** inserted between `HeroSection` and
+  `HeroCompass`. Contains:
+  - **Layer 2 — Transformation table** (4 rows, "If you came here with… you
+    may leave with…"). Cormorant serif, italic on the left (muted), ivory on
+    the right.
+    - too many thoughts → one thought clearer
+    - tension your body has carried → one quieter breath
+    - a hard conversation at home → one new way to begin it
+    - an evening that disappeared → one shared moment back
+  - **Layer 3 — Audience trio** (For people / parents / families who want a
+    little more clarity / patience / time together).
+  - **Layer 4 — Three CTAs**, visual hierarchy locked:
+    - 🟢 `[Start Here]` → `/start-here` (filled brass, primary)
+    - ⚪ `[See the Five Rooms]` → `#worlds` (outline, secondary)
+    - ⚪ `[Browse Books]` → `/bookstore` (outline, secondary)
+- **`LuxurySanctuaryLanding.jsx`** (dead `/luxury` route, kept for reference)
+  also received the 4-layer treatment in a single section so the file
+  documents the intended pattern. Pure CSS extension in
+  `styles/luxury-sanctuary.css` (`.transformation`, `.audience`, `.hero-ctas`).
+
+### Strict rules honoured (per Founder lock)
+- ❌ No "digital place" — Norwegian AI suggestion rejected.
+- ❌ No "everyday life" — kept the warmer "what matters most".
+- ❌ No "reflective tools" — the 4-day no-system-talk rule held.
+- ❌ No "wellness" framing anywhere.
+- ✅ "who want" not "looking for".
+- ✅ "See the Five Rooms" not "Explore" (lower threshold).
+- ✅ Start Here = visually dominant primary (filled brass button).
+
+### Archived
+- Original production hero → `/app/memory/archive/hero_2026_06.md`
+- Original `/luxury` hero → same file (correction notice appended).
+
+### Why
+The previous hero answered "How does the platform feel?" before it answered
+"What is this and what will I get?". New visitors failed the 5-second test:
+they could not say what the place is, what they would get, who it is for, or
+where to start. The 4-layer structure orientates a stranger before the
+architecture (rooms, books, curators) is introduced.
+
+---
+
 ## 2026-02-13 — Title hierarchy lock + PSP-safe redirect (iter 85e)
 
 Founder locked the title hierarchy and asked us to neutralise the

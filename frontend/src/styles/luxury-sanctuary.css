@@ -239,6 +239,266 @@
     color: var(--brass-warm);
 }
 
+/* Hero headline — statement variant (Sprint 0).
+   Long single-sentence brand statement needs smaller clamp than the
+   original "Welcome back to yourself" headline. */
+.hero-headline--statement {
+    font-size: clamp(1.85rem, 4.4vw, 3.4rem);
+    line-height: 1.28;
+    letter-spacing: -0.2px;
+    margin-bottom: 36px;
+}
+
+/* Subtext frame — sits just under the brand statement. */
+.hero-subtext--frame {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    font-style: italic;
+    color: var(--ivory-soft);
+    opacity: 0.85;
+    letter-spacing: 0.4px;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* ===================================
+   SPRINT 0 — LAYER 2: TRANSFORMATION
+   "If you came here with… you may leave with…"
+   =================================== */
+
+.transformation {
+    padding: var(--space-3xl) 48px;
+    background: var(--black);
+    position: relative;
+}
+
+.transformation::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 64px;
+    background: linear-gradient(to bottom, transparent, var(--brass-muted));
+}
+
+.transformation-inner {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.transformation-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.transformation-col-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.78rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 400;
+}
+
+.transformation-col-label:first-child {
+    text-align: right;
+}
+
+.transformation-col-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border-strong);
+}
+
+.transformation-rows {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.transformation-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+}
+
+.transformation-from {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-style: italic;
+    color: var(--text-secondary);
+    text-align: right;
+    line-height: 1.5;
+}
+
+.transformation-arrow {
+    font-size: 0.9rem;
+    color: var(--brass);
+    opacity: 0.6;
+    font-weight: 200;
+    letter-spacing: 0;
+}
+
+.transformation-to {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+    color: var(--ivory);
+    text-align: left;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+}
+
+/* ===================================
+   SPRINT 0 — LAYER 3: AUDIENCE TRIO
+   "For people / parents / families who want a little more…"
+   =================================== */
+
+.audience {
+    padding: var(--space-2xl) 48px;
+    background: var(--black);
+    text-align: center;
+}
+
+.audience-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.audience-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+    color: var(--ivory-soft);
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    font-weight: 300;
+}
+
+/* ===================================
+   SPRINT 0 — LAYER 4: THREE CTAs
+   Start Here = primary · See Five Rooms + Browse Books = secondary
+   =================================== */
+
+.hero-ctas {
+    padding: var(--space-xl) 48px var(--space-3xl);
+    background: var(--black);
+}
+
+.hero-ctas-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.hero-cta-primary {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--brass);
+    text-decoration: none;
+    padding: 20px 56px;
+    border: 1px solid var(--brass);
+    font-weight: 500;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.hero-cta-primary:hover {
+    background: var(--brass-warm);
+    border-color: var(--brass-warm);
+    transform: translateY(-1px);
+}
+
+.hero-cta-secondary {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--brass);
+    background: transparent;
+    text-decoration: none;
+    padding: 19px 40px;
+    border: 1px solid var(--border-strong);
+    font-weight: 400;
+    transition: all 0.5s ease;
+}
+
+.hero-cta-secondary:hover {
+    border-color: var(--brass);
+    color: var(--brass-warm);
+}
+
+/* ===================================
+   SPRINT 0 — RESPONSIVE (mobile)
+   =================================== */
+
+@media (max-width: 720px) {
+    .transformation {
+        padding: var(--space-2xl) 24px;
+    }
+    .transformation-head {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        text-align: center;
+    }
+    .transformation-col-label,
+    .transformation-col-label:first-child {
+        text-align: center;
+    }
+    .transformation-col-divider {
+        display: none;
+    }
+    .transformation-rows {
+        gap: 28px;
+    }
+    .transformation-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        text-align: center;
+    }
+    .transformation-from,
+    .transformation-to {
+        text-align: center;
+    }
+    .transformation-arrow {
+        transform: rotate(90deg);
+        opacity: 0.4;
+    }
+    .audience {
+        padding: var(--space-xl) 24px;
+    }
+    .hero-ctas {
+        padding: var(--space-lg) 24px var(--space-2xl);
+    }
+    .hero-ctas-inner {
+        flex-direction: column;
+        gap: 14px;
+    }
+    .hero-cta-primary,
+    .hero-cta-secondary {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+    }
+}
+
 /* ===================================
    SANCTUARY PRINCIPLES
    =================================== */

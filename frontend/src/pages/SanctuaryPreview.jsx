@@ -304,65 +304,170 @@ function HeroSection({ onWalkTruthFirst }) {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <p
-            data-testid="hero-eyebrow"
-            className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-9 font-light"
-          >
-            — Matrix Aurin · Pure Soul Life
-          </p>
+          {/* §SPRINT-0 2026-02 — "Less Noise. More Meaning." 4-layer hero.
+              Layer 1 is the brand statement (what this is + who it's for).
+              Layers 2, 3, 4 live just below the hero in <SprintZeroLayersSection />.
+              Previous "Welcome back to yourself" archived to /app/memory/archive/hero_2026_06.md */}
           <h1
             data-testid="hero-title"
-            className="font-light text-[38px] sm:text-[56px] lg:text-[72px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
+            className="font-light text-[28px] sm:text-[42px] lg:text-[54px] leading-[1.15] text-[#f0eadd] tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            Welcome back<br />
-            <span className="italic text-[#d4b67d]">to yourself.</span>
+            Matrix Aurin is a quiet place<br />
+            to read, listen, reflect,<br />
+            <span className="italic text-[#d4b67d]">and reconnect with what matters most.</span>
           </h1>
           <p
             data-testid="hero-compass-line"
-            className="mt-7 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#d4b67d] font-light max-w-[520px] leading-[1.6]"
+            className="mt-9 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#bcb4a3] font-light italic max-w-[520px] leading-[1.7]"
             style={{ fontFamily: SERIF }}
           >
-            A quiet room for noticing<br />
-            what is already shaping your life.
-          </p>
-          <p
-            data-testid="hero-subtitle"
-            className="mt-8 text-[15px] sm:text-[17px] tracking-[0.04em] text-[#bcb4a3] italic font-light max-w-[520px]"
-            style={{ fontFamily: SERIF }}
-          >
-            You do not have to perform here.
-          </p>
-          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
-            <button
-              type="button"
-              onClick={onWalkTruthFirst}
-              data-testid="hero-cta-step-inside"
-              className="inline-flex items-center justify-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
-            >
-              Step Inside
-            </button>
-            <button
-              type="button"
-              onClick={onWalkTruthFirst}
-              data-testid="hero-cta-walk"
-              className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline self-start sm:self-auto"
-            >
-              Walk through truth first
-            </button>
-          </div>
-          <p
-            data-testid="hero-season"
-            className="mt-20 sm:mt-24 text-[12px] tracking-[0.18em] italic text-[#7a7468] font-light"
-            style={{ fontFamily: SERIF }}
-          >
-            The doors are open this season.
+            Built around books and five guided rooms<br />
+            for people, parents, and families.
           </p>
         </div>
       </div>
     </section>
   );
 }
+
+// §SPRINT-0 2026-02 — "Less Noise. More Meaning." 4-layer hero (Layers 2, 3, 4).
+// Sits directly under HeroSection. Layer 1 (brand statement) lives in HeroSection.
+// Locked after a 5-day brainstorm (Anna + GPT + Norwegian AI + agent).
+// Strict rules: no SaaS words, no "digital", no "reflective tools", no "wellness".
+// "Start Here" is the primary CTA. "See the Five Rooms" + "Browse Books" are secondary.
+function SprintZeroLayersSection() {
+  const transformationRows = [
+    { from: "too many thoughts", to: "one thought clearer" },
+    { from: "tension your body has carried", to: "one quieter breath" },
+    { from: "a hard conversation at home", to: "one new way to begin it" },
+    { from: "an evening that disappeared", to: "one shared moment back" },
+  ];
+  const audience = [
+    "For people who want a little more clarity.",
+    "For parents who want a little more patience.",
+    "For families who want a little more time together.",
+  ];
+  return (
+    <section
+      data-testid="sprint-zero-layers"
+      className="relative w-full bg-[#0b0a08]"
+    >
+      {/* Quiet vertical hairline above the transformation table */}
+      <div
+        aria-hidden="true"
+        className="mx-auto h-16 w-px bg-gradient-to-b from-transparent to-[rgba(196,164,107,0.28)]"
+      />
+
+      {/* ── Layer 2 — Transformation table ─────────────────────────── */}
+      <RevealBlock>
+        <div
+          data-testid="hero-transformation"
+          className="max-w-[880px] mx-auto px-6 sm:px-10 pt-20 sm:pt-28 pb-16 sm:pb-24"
+        >
+          <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-6 pb-6 mb-12 border-b border-[rgba(196,164,107,0.14)]">
+            <span
+              className="text-right text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] font-light"
+              style={{ fontFamily: SERIF }}
+            >
+              If you came here with…
+            </span>
+            <span aria-hidden="true" className="block w-px h-4 bg-[rgba(196,164,107,0.35)]" />
+            <span
+              className="text-left text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] font-light"
+              style={{ fontFamily: SERIF }}
+            >
+              you may leave with…
+            </span>
+          </div>
+
+          <ul className="flex flex-col gap-9 sm:gap-10 list-none p-0 m-0">
+            {transformationRows.map((row, i) => (
+              <li
+                key={i}
+                data-testid={`hero-transformation-row-${i}`}
+                className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-6 text-center sm:text-left"
+              >
+                <span
+                  className="text-[18px] sm:text-[22px] lg:text-[24px] italic text-[#8e887d] leading-[1.4] sm:text-right"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {row.from}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="text-[#c4a46b] opacity-60 text-[16px] sm:text-[14px] inline-block sm:inline rotate-90 sm:rotate-0"
+                >
+                  →
+                </span>
+                <span
+                  className="text-[19px] sm:text-[23px] lg:text-[26px] text-[#f0eadd] leading-[1.4] sm:text-left tracking-[0.005em]"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {row.to}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </RevealBlock>
+
+      {/* ── Layer 3 — Audience trio (self-recognition) ──────────────── */}
+      <RevealBlock delay={120}>
+        <div
+          data-testid="hero-audience"
+          className="max-w-[720px] mx-auto px-6 sm:px-10 py-16 sm:py-24 text-center"
+        >
+          <div className="flex flex-col gap-4 sm:gap-5">
+            {audience.map((line, i) => (
+              <p
+                key={i}
+                data-testid={`hero-audience-line-${i}`}
+                className="text-[17px] sm:text-[20px] lg:text-[22px] text-[#d9d3c5] font-light leading-[1.55] tracking-[0.005em]"
+                style={{ fontFamily: SERIF }}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      </RevealBlock>
+
+      {/* ── Layer 4 — Three CTAs (Start Here = primary) ─────────────── */}
+      <RevealBlock delay={200}>
+        <div
+          data-testid="hero-ctas"
+          className="max-w-[980px] mx-auto px-6 sm:px-10 pt-4 pb-28 sm:pb-36"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 sm:gap-6">
+            <Link
+              to="/start-here"
+              data-testid="hero-cta-start-here"
+              className="inline-flex items-center justify-center text-[12px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] hover:bg-[#d4b67d] border border-[#c4a46b] hover:border-[#d4b67d] px-12 sm:px-14 py-5 font-medium transition-all duration-500 hover:-translate-y-px"
+            >
+              Start Here
+            </Link>
+            <a
+              href="#worlds"
+              data-testid="hero-cta-see-rooms"
+              className="inline-flex items-center justify-center text-[11.5px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.45)] hover:border-[#c4a46b] hover:text-[#d4b67d] px-10 sm:px-12 py-5 transition-colors duration-500"
+            >
+              See the Five Rooms
+            </a>
+            <Link
+              to="/bookstore"
+              data-testid="hero-cta-browse-books"
+              className="inline-flex items-center justify-center text-[11.5px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.45)] hover:border-[#c4a46b] hover:text-[#d4b67d] px-10 sm:px-12 py-5 transition-colors duration-500"
+            >
+              Browse Books
+            </Link>
+          </div>
+        </div>
+      </RevealBlock>
+    </section>
+  );
+}
+
 
 // §BRAND-CLARITY 2026-02-11 — A Quiet Note. Sits between the hero
 // and the deeper worlds. Tells a first-time visitor in 8 seconds:
@@ -1300,6 +1405,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
         <SanctuaryNav production={production} />
         <main>
           <HeroSection onWalkTruthFirst={openTruth} />
+          <SprintZeroLayersSection />
           <HeroCompass />
           <QuietNoteSection />
           <TwoWorldsSection />
