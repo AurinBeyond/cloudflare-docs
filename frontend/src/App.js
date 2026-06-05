@@ -96,6 +96,7 @@ import AlistairBundle from "@/pages/AlistairBundle";
 import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
 import FamilyBundle from "@/pages/FamilyBundle";
+import StartHere from "@/pages/StartHere";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -322,6 +323,14 @@ function AppRouter() {
           component is kept in the codebase for reference and may be
           archived in a future cleanup sprint. */}
       <Route path="/luxury" element={<Navigate to="/" replace />} />
+      {/* §SPRINT-1+2 2026-02 — `/start-here` is the single quiet door
+          new visitors land in after clicking the Sprint-0 primary CTA.
+          Three paths (For Yourself / As a Parent / Together), each
+          opening a 3-minute audio + a secondary "enter room" link.
+          Self-contained nav + footer so the page feels like its own
+          quiet room. Lives OUTSIDE Layout so the global nav does not
+          double up. */}
+      <Route path="/start-here" element={<StartHere />} />
       {/* §2026-05-18 — /sanctuary-preview is a founder-review-only
           route. Full-bleed polished landing, Atoms audit applied,
           locked pricing structure visible as atmospheric "Thresholds".
