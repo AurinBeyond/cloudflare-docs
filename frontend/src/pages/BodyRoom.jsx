@@ -27,6 +27,8 @@ import {
 import { ArrowRight, X, Wind, Sparkles, ChevronDown, ChevronUp, BookOpen, Sprout, Compass } from "lucide-react";
 import { track } from "@/lib/telemetry";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
+// §SPRINT-4 — 3-minute first step that sits under the hero.
+import FirstActionBlock from "@/components/FirstActionBlock";
 
 
 /**
@@ -138,6 +140,11 @@ export default function BodyRoom() {
         italicWord="with your body."
         description="Before words, the body already knows. This room is a quiet place to listen — to what tightness, fatigue, or restlessness has been trying to say for a long time."
       />
+
+      {/* §SPRINT-4 2026-02 — Kaelan's 3-minute first step. Sits directly
+          under the hero. One shared component, content in
+          /src/data/firstActions.js. */}
+      <FirstActionBlock id="kaelan" />
 
       {/* Intro chapter — "The Body Is Your First Temple" */}
       <section className="aurin-section-sm" data-testid="body-room-intro">

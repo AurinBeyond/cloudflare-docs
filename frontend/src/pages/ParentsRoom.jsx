@@ -42,6 +42,8 @@ import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
 import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCard";
 import SaraCrisisSearch from "@/components/SaraCrisisSearch";
+// §SPRINT-4 — 3-minute first step that sits under the hero.
+import FirstActionBlock from "@/components/FirstActionBlock";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -147,6 +149,11 @@ export default function ParentsRoom() {
         title="Three lenses, one calm room for parents."
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
+
+      {/* §SPRINT-4 2026-02 — Sara's 3-minute first step. Sits directly
+          under the hero. One shared component, content in
+          /src/data/firstActions.js. */}
+      <FirstActionBlock id="sara" />
 
       {/* §CURATOR-INTRO 2026-05-28 — Sara's pre-recorded 15s hello. */}
       <section className="aurin-section-sm" data-testid="parents-room-sara-intro">

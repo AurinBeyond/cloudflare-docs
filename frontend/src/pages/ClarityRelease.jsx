@@ -54,6 +54,8 @@ import {
   VolumeX,
   History,
 } from "lucide-react";
+// §SPRINT-4 — 3-minute first step that sits under the hero.
+import FirstActionBlock from "@/components/FirstActionBlock";
 
 /**
  * Clarity Release — formerly "Private Room".
@@ -428,6 +430,11 @@ export default function ClarityRelease() {
         italicWord="Clarity Release."
         description="Your private sanctuary for the soul — a bridge between current burdens and inner peace. You are met with absolute confidentiality and a non-judgemental Light-side guide. For heavy loads, for the quiet fog of loneliness, and for the days you no longer recognise yourself."
       />
+
+      {/* §SPRINT-4 2026-02 — Grace's 3-minute first step. Sits directly
+          under the hero, before the doorway illustration. One shared
+          component, content in /src/data/firstActions.js. */}
+      <FirstActionBlock id="grace" />
 
       {/* Inner Mirror — founder-supplied illustration of the doorway */}
       <section className="aurin-section-xs" data-testid="clarity-doorway-section">
