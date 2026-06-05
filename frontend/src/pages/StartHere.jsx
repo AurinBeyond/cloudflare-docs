@@ -43,7 +43,7 @@ const PATHS = [
     listenLine:
       "A short evening story about the small things that wait quietly for you to come back to yourself.",
     listenRoute: "/listen/hearth/the-coat-on-the-chair",
-    listenLabel: "Listen now · 3 min",
+    listenLabel: "Listen now · 6 min",
     roomLabel: "Enter Grace's room",
     roomRoute: "/clarity-release",
     roomLine:
@@ -61,7 +61,7 @@ const PATHS = [
     listenLine:
       "A short Hearth story about the moment you walk past the small thing on the stairs — and what happens if you stop and pick it up.",
     listenRoute: "/listen/hearth/the-sock-on-the-stairs",
-    listenLabel: "Listen now · 3 min",
+    listenLabel: "Listen now · 6 min",
     roomLabel: "Enter The Hearth",
     roomRoute: "/the-hearth",
     roomLine:
@@ -79,7 +79,7 @@ const PATHS = [
     listenLine:
       "A gentle bedtime listen for the youngest one in the room — and for whoever is sitting beside them.",
     listenRoute: "/listen/little-star",
-    listenLabel: "Listen together · 3 min",
+    listenLabel: "Listen together · 2 min",
     roomLabel: "Enter Polarstar",
     roomRoute: "/kids-universe/polarstar",
     roomLine:
@@ -147,7 +147,7 @@ function PathCard({ path }) {
         className="text-[10.5px] tracking-[0.32em] uppercase mb-3"
         style={{ color: COLORS.brass }}
       >
-        A 3-minute first step
+        A short evening first step
       </p>
       <p
         className="text-[19px] sm:text-[20px] leading-[1.4] mb-3 italic"
@@ -291,7 +291,7 @@ export default function StartHere() {
           className="max-w-[580px] mx-auto text-[15.5px] sm:text-[17px] leading-[1.75] italic font-light"
           style={{ color: COLORS.muted, fontFamily: SERIF }}
         >
-          Each path begins with a 3-minute listen. No screen needed after that.
+          Each path begins with a short evening listen. No screen needed after that.
           When you are ready, the matching room is one quiet click away.
         </p>
       </section>
