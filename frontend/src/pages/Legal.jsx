@@ -21,10 +21,10 @@ const OPERATOR = {
   // Legal person behind the trading name. Anna can refine.
   trader: "Anna, operating as Matrix Aurin / Prulesoul (sole trader)",
   // Country governs which consumer law and which GDPR supervisory
-  // authority applies. Default chosen from language + domain registry.
-  country: "Estonia",
+  // authority applies. Anna lives and operates from Norway.
+  country: "Norway",
   // Working contact email for refunds, privacy requests, support.
-  email: "hello@prulesoul.site",
+  email: "info@prulesoul.site",
   // What a buyer can realistically expect.
   responseWindow: "within 5 working days",
   // Last reviewed — bump this whenever the page is edited.
@@ -243,8 +243,9 @@ export default function Legal() {
                 Your rights
               </h3>
               <p>
-                Under the EU GDPR and the {OPERATOR.country} data
-                protection act, you have the right to ask us:
+                Under the EU GDPR (which applies in Norway via the EEA
+                Agreement) and the Norwegian Personal Data Act
+                (personopplysningsloven), you have the right to ask us:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-2">
                 <li>what data we hold about you</li>

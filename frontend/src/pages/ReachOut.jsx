@@ -97,11 +97,11 @@ export default function ReachOut() {
                   <Mail size={14} /> Email
                 </div>
                 <a
-                  href="mailto:hello@matrix-aurin.test"
+                  href="mailto:info@prulesoul.site"
                   data-testid="reach-out-email"
                   className="aurin-display text-2xl mt-2 inline-block hover:text-[hsl(var(--aurin-sage))] transition-colors"
                 >
-                  hello@matrix-aurin.test
+                  info@prulesoul.site
                 </a>
                 <p className="mt-2 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
                   We answer within two working days. Often sooner.
