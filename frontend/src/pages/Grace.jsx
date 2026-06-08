@@ -27,6 +27,7 @@ import {
   ArrowRight,
   Quote,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 
 const BG_IMAGE = "/assets/grace/grace-light-bg.png";
@@ -70,6 +71,13 @@ const SIDEBAR = [
     icon: MessageSquare,
     href: "/grace/messages",
     tooltip: "Past conversations, notes, and saved thoughts. Pick up where you left off.",
+  },
+  {
+    id: "library",
+    label: "Library",
+    icon: BookOpen,
+    href: "/grace/library",
+    tooltip: "A quiet reading room beside the fireplace. Short pieces written in the same tone as Grace.",
   },
 ];
 

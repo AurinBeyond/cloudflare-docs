@@ -53,6 +53,8 @@ import GraceSpeak from "@/pages/grace/Speak";
 import GraceWrite from "@/pages/grace/Write";
 import GraceEvening from "@/pages/grace/Evening";
 import GraceMessages from "@/pages/grace/Messages";
+import GraceLibrary from "@/pages/grace/Library";
+import GraceLibraryArticle from "@/pages/grace/LibraryArticle";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
@@ -237,6 +239,12 @@ function AppRouter() {
         <Route path="/grace/write" element={<GraceWrite />} />
         <Route path="/grace/evening" element={<GraceEvening />} />
         <Route path="/grace/messages" element={<GraceMessages />} />
+        {/* §GRACE-LIBRARY v1 2026-02 — five-article reading room.
+            Landing lists three sections (Understanding Yourself /
+            Relationships / Moving Forward); each article renders in
+            the founder 7-block shape with native browser PDF export. */}
+        <Route path="/grace/library" element={<GraceLibrary />} />
+        <Route path="/grace/library/:slug" element={<GraceLibraryArticle />} />
         {/* §GRACE-ROOM 2026-02 — The real Grace room (Wanderer's
             Gate, ConvAI voice, text chat, reflections, passes,
             encryption). Same component that used to live at

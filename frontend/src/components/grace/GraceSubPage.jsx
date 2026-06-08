@@ -16,6 +16,7 @@ import {
   Pen,
   Moon,
   MessageSquare,
+  BookOpen,
   Quote,
   ArrowLeft,
 } from "lucide-react";
@@ -26,6 +27,7 @@ const SIDEBAR = [
   { id: "write",    label: "Write",              icon: Pen,            href: "/grace/write" },
   { id: "evening",  label: "Evening reflection", icon: Moon,           href: "/grace/evening" },
   { id: "messages", label: "My messages",        icon: MessageSquare,  href: "/grace/messages" },
+  { id: "library",  label: "Library",            icon: BookOpen,       href: "/grace/library" },
 ];
 
 export default function GraceSubPage({
