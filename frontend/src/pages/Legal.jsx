@@ -19,10 +19,7 @@ const OPERATOR = {
   // Trading name displayed everywhere a buyer might read it.
   brand: "Matrix Aurin · Prulesoul",
   // Legal person behind the trading name. Anna can refine.
-  trader: "Anna, operating as Matrix Aurin / Prulesoul (sole trader)",
-  // Country governs which consumer law and which GDPR supervisory
-  // authority applies. Anna lives and operates from Norway.
-  country: "Norway",
+  trader: "Anna, trading as Matrix Aurin / Prulesoul",
   // Working contact email for refunds, privacy requests, support.
   email: "info@prulesoul.site",
   // What a buyer can realistically expect.
@@ -85,7 +82,7 @@ export default function Legal() {
             >
               <p>
                 <strong>{OPERATOR.brand}</strong> is operated by{" "}
-                {OPERATOR.trader}, based in {OPERATOR.country}.
+                {OPERATOR.trader}.
               </p>
               <p>
                 If you need to reach a real person — about a refund,
