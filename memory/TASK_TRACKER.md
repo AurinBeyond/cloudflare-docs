@@ -188,6 +188,7 @@ Legend:
 | 11.10 | Body Temple hero + modal unlock CTA paused | ✅ |
 | 11.11 | Homepage Ways-to-be-here CTAs → "Join the quiet list" | ✅ |
 | 11.12 | Smoke-test verified on 7 surfaces | ✅ |
-| 11.13 | RoomCard10s (10-sec business card) component | ⚪ deferred to next PR |
+| 11.13 | RoomIntroCard (10-sec selguse kaart) component | ✅ |
+| 11.14 | RoomIntroCard mounted in 5 rooms (Grace, Kaelan, Sara, Alistair, Aurin) | ✅ |
 
 **Update rule:** every time a status flips, append a one-line note with the date below the relevant row instead of editing in place. Keep history.

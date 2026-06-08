@@ -58,6 +58,7 @@ import {
 } from "lucide-react";
 // §SPRINT-4 — 3-minute first step that sits under the hero.
 import FirstActionBlock from "@/components/FirstActionBlock";
+import RoomIntroCard from "@/components/RoomIntroCard";
 
 /**
  * Clarity Release — formerly "Private Room".
@@ -432,6 +433,11 @@ export default function ClarityRelease() {
         italicWord="Clarity Release."
         description="Your private sanctuary for the soul — a bridge between current burdens and inner peace. You are met with absolute confidentiality and a non-judgemental Light-side guide. For heavy loads, for the quiet fog of loneliness, and for the days you no longer recognise yourself."
       />
+
+      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" — who walks in
+          here, what this room is, what you'll find, what it is NOT,
+          one free thing to try right now. NOT a sales card. */}
+      <RoomIntroCard roomId="grace" />
 
       {/* §SPRINT-4 2026-02 — Grace's 3-minute first step. Sits directly
           under the hero, before the doorway illustration. One shared

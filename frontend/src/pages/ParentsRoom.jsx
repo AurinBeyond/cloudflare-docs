@@ -44,6 +44,7 @@ import CuratorIntroCard, { CURATOR_PALETTES } from "@/components/CuratorIntroCar
 import SaraCrisisSearch from "@/components/SaraCrisisSearch";
 // §SPRINT-4 — 3-minute first step that sits under the hero.
 import FirstActionBlock from "@/components/FirstActionBlock";
+import RoomIntroCard from "@/components/RoomIntroCard";
 
 const STORE_KEY = "aurin_parents_lens_v1";
 const DEFAULT_LENS = "intuitive";
@@ -150,10 +151,15 @@ export default function ParentsRoom() {
         subtitle="Not a course. Not advice. A handful of tiny sentences and small rituals — drawn from Japanese rhythm, Maria Montessori, and positive-language work — that you can carry into tonight."
       />
 
+      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Sara. */}
+      <RoomIntroCard roomId="sara" />
+
       {/* §SPRINT-4 2026-02 — Sara's 3-minute first step. Sits directly
           under the hero. One shared component, content in
           /src/data/firstActions.js. */}
-      <FirstActionBlock id="sara" />
+      <div id="first-action">
+        <FirstActionBlock id="sara" />
+      </div>
 
       {/* §CURATOR-INTRO 2026-05-28 — Sara's pre-recorded 15s hello. */}
       <section className="aurin-section-sm" data-testid="parents-room-sara-intro">

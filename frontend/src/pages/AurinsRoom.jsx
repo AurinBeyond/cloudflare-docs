@@ -13,6 +13,7 @@
 
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
+import RoomIntroCard from "@/components/RoomIntroCard";
 import { Sprout, BookHeart, Stars, ArrowRight, BookOpen } from "lucide-react";
 import { AURIN_AGE_GROUPS } from "@/lib/aurinPrompts";
 import KidsDayPassRow from "@/components/sanctuary/KidsDayPassRow";
@@ -31,6 +32,9 @@ export default function AurinsRoom() {
         title="Aurin's Room"
         subtitle="A gentle companion who listens, plays, and remembers that childhood deserves to feel safe. Choose the path that fits the child."
       />
+
+      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Aurin. */}
+      <RoomIntroCard roomId="aurin" />
 
       <section className="mx-auto max-w-5xl px-6 pb-24">
         <ol

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
+import RoomIntroCard from "@/components/RoomIntroCard";
 import FirstLetterWidget from "@/components/FirstLetterWidget";
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
 // §AUDIT-SCALE 2026-05-20 — Course Room joins Clarity in tracking
@@ -79,6 +80,9 @@ export default function CourseRoom() {
         description="Not a course shelf. A protocol library. Each transmission is a single short letter, released on a 24-hour cadence-lock — no binge, no dopamine loop. You read one. You sit with it. The next will not arrive before its hour. This is how high-bandwidth operators retrain their own operating system."
         testid="course-room-header"
       />
+
+      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Alistair. */}
+      <RoomIntroCard roomId="alistair" />
 
       {/* §CURATOR-INTRO 2026-05-28 — Alistair's pre-recorded 15s hello. */}
       <section className="aurin-section-sm" data-testid="course-room-alistair-intro">

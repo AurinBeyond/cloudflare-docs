@@ -29,6 +29,7 @@ import { track } from "@/lib/telemetry";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
 // §SPRINT-4 — 3-minute first step that sits under the hero.
 import FirstActionBlock from "@/components/FirstActionBlock";
+import RoomIntroCard from "@/components/RoomIntroCard";
 
 
 /**
@@ -140,6 +141,9 @@ export default function BodyRoom() {
         italicWord="with your body."
         description="Before words, the body already knows. This room is a quiet place to listen — to what tightness, fatigue, or restlessness has been trying to say for a long time."
       />
+
+      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Kaelan. */}
+      <RoomIntroCard roomId="kaelan" />
 
       {/* §SPRINT-4 2026-02 — Kaelan's 3-minute first step. Sits directly
           under the hero. One shared component, content in

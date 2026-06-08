@@ -61,6 +61,40 @@ toodet mida ei ole olemas."*
 
 ---
 
+## 2026-02 — RoomIntroCard ("selguse kaart") — five rooms
+
+Founder mandate: shift the user journey from "Room → Product → Buy"
+to Intuvio-style inbound flow "Problem → Understanding → Trust → Interest → Contact". Every adult room must answer five plain questions within ten seconds — without selling anything.
+
+### What shipped
+- `frontend/src/data/roomIntros.js` — copy for all five rooms (Grace, Kaelan, Sara, Alistair, Aurin). Each entry contains: `forWhom` (5 problems), `whatItIs` (2-3 sentences), `whatYoullFind` (concrete list), `whatItIsNot` (expectation-setting list), `freeThing` (one real, free link), `reflectionPrompt` (one italic question), `furtherReading` (3 free paths).
+- `frontend/src/components/RoomIntroCard.jsx` — shared component renders five sections + a free CTA + a reflection prompt blockquote + three further-reading links + a footer "Nothing here asks you to buy anything to be welcome." All on a calm cream `#f5ebd5` background, so it reads cleanly under any parent room theme (dark or light).
+- Mounted directly under the `<PageHeader />` in five rooms:
+  - `/clarity-release` (Grace)
+  - `/body-room` (Kaelan)
+  - `/parents-room` (Sara) — also wraps FirstActionBlock in `id="first-action"` so Sara's "free thing" anchor link resolves
+  - `/course-room` (Alistair)
+  - `/aurins-room` (Aurin)
+
+### Vocabulary rule observed
+- No "sanctuary, holy, sacred, pühadus" anywhere in this new copy.
+- Uses "quiet, small, room, library, evening, presence" instead.
+
+### Verified live (smoke-test 2026-02)
+- Grace card visible after consent; "One free thing" reads "Read one quiet reflection — free".
+- Kaelan card visible; "One free thing" reads "Read Day 1 of Body Temple 28 — free".
+- Sara card visible; "One free thing" reads "Try the three-minute first action below" (anchor jumps to FirstActionBlock).
+- Alistair card visible; "One free thing" reads "Read one full sample letter — free".
+- Aurin card visible; "One free thing" reads "Listen to the Little Star — free".
+
+### Untouched
+- Existing hero copy in every room (left as-is — founder may polish later).
+- FirstActionBlock — still mounted below RoomIntroCard.
+- CuratorIntroCard — still mounted below FirstActionBlock.
+- All checkout CTAs remain in Launch Pause Mode.
+
+---
+
 # Matrix Aurin — CHANGELOG
 
 Append-only log of implemented features. PRD.md remains the static
