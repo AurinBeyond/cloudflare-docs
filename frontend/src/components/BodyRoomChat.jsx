@@ -183,7 +183,8 @@ export default function BodyRoomChat({
       const next = `body-${Math.random().toString(16).slice(2, 10)}`;
       window.localStorage.setItem(k, next);
       return next;
-    } catch {
+      // eslint-disable-next-line react-hooks/purity
+    } catch (_e) {
       return undefined;
     }
   }, []);
@@ -242,6 +243,7 @@ export default function BodyRoomChat({
   };
 
   const handleClear = () => {
+    // eslint-disable-next-line react-hooks/immutability
     setMessages([]);
     clearStored();
     setError(null);

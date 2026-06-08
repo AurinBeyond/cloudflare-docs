@@ -59,7 +59,7 @@ export default function AlistairModeSelector() {
         <div data-testid="alistair-mode-selector" className="aurin-card p-5 md:p-6">
             <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                    <div className="aurin-eyebrow !mb-1">Today's focus</div>
+                    <div className="aurin-eyebrow !mb-1">Today&apos;s focus</div>
                     <p className="text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text))/0.9] max-w-[55ch]">
                         Optional. Pick one weight Alistair should hold with you
                         today. Skip it any time — the room works without it.
@@ -119,7 +119,7 @@ export default function AlistairModeSelector() {
                         Alistair will open with
                     </p>
                     <p className="aurin-serif-italic text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.92]">
-                        "{activeFrame.first_message}"
+                        &ldquo;{activeFrame.first_message}&rdquo;
                     </p>
                     <p className="text-[12px] mt-2.5 sanctuary-muted">
                         {activeFrame.blurb}

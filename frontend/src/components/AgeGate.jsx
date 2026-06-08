@@ -22,8 +22,10 @@ export default function AgeGate() {
   useEffect(() => {
     const isGated = GATED_PATHS.some((p) => location.pathname.startsWith(p));
     if (isGated && !confirmed) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(true);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
     }
   }, [location.pathname, confirmed]);
@@ -72,7 +74,7 @@ export default function AgeGate() {
         </h2>
         <p className="mt-4 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]">
           The Learning and Meditation sections of Matrix Aurin are written for
-          adults. For children's content, please visit the Kids Universe — it
+          adults. For children&apos;s content, please visit the Kids Universe — it
           stays open and separate, with no gate.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">

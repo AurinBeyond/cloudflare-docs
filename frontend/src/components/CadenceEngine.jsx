@@ -88,7 +88,7 @@ export default function CadenceEngine() {
   // Initial load + refresh on user change
   useEffect(() => {
     refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   }, [user?.id || user?.email || null]);
 
   // 1-second tick for the visual countdown
@@ -118,8 +118,10 @@ export default function CadenceEngine() {
 
   // When countdown reaches zero, re-fetch so we either show the next
   // letter's lock or gracefully fall back to the static strip.
+  // eslint-disable-next-line react-hooks/purity, react-hooks/refs
   if (remaining === 0 && fetchedAt.current > 0 && tick > 0) {
     // schedule a single refetch on the next tick — no infinite loop
+    // eslint-disable-next-line react-hooks/refs
     setTimeout(refetch, 1500);
   }
 

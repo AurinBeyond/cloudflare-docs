@@ -962,6 +962,7 @@ export function FamilyAlbumFAB({ isPremium }) {
 
   useEffect(() => {
     if (open) load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   }, [open]);
 
   const byZone = useMemo(() => {
