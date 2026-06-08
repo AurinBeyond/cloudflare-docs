@@ -4,13 +4,17 @@
  * §AUDIT-77 2026-02-09 — Production deploy audit found that bare URLs
  * like /origin (typo'd internal link) silently returned a blank page
  * because App.js had no catch-all <Route>. This component is the
- * gentle fallback: same warm Sanctuary tone as the rest of the app,
- * no shouty "ERROR 404" copy, and three soft suggestions back to
- * the most useful routes.
+ * gentle fallback.
+ *
+ * §GRACE-CLEANUP 2026-02 — Founder directive: the adult Grace surface
+ * must never link to children/Kids Universe content. The 404 page is
+ * a global surface (a wrong URL anywhere on the site can land here),
+ * so we drop Kids Universe from the suggestion list and keep three
+ * neutral adult doors: Home, Grace, Reach Out.
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { ArrowRight, Home, Heart, Sparkles } from "lucide-react";
+import { ArrowRight, Home, Sparkles, Mail } from "lucide-react";
 
 export default function NotFound() {
   const location = useLocation();
@@ -26,7 +30,7 @@ export default function NotFound() {
           The path <code className="text-[hsl(var(--aurin-amber))] text-[13.5px]">{location.pathname}</code> isn't one of our rooms.
         </p>
         <p className="text-[15px] text-[hsl(var(--aurin-text-muted))] leading-relaxed mb-8">
-          No harm done. Pick a soft door below — Aurin is in any of them.
+          No harm done. Pick a soft door below.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link to="/" data-testid="not-found-home"
@@ -35,17 +39,17 @@ export default function NotFound() {
             <p className="text-[14px] font-medium text-[hsl(var(--aurin-text))]">Home</p>
             <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">Start again, softly.</p>
           </Link>
-          <Link to="/clarity-release" data-testid="not-found-clarity"
+          <Link to="/grace" data-testid="not-found-grace"
                 className="aurin-card p-5 text-left hover:-translate-y-0.5 transition">
             <Sparkles size={16} className="text-[hsl(var(--aurin-amber))] mb-2" />
-            <p className="text-[14px] font-medium text-[hsl(var(--aurin-text))]">Clarity Release</p>
-            <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">Voice rooms with Aurin.</p>
+            <p className="text-[14px] font-medium text-[hsl(var(--aurin-text))]">Grace</p>
+            <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">A quiet adult room.</p>
           </Link>
-          <Link to="/kids-universe" data-testid="not-found-kids"
+          <Link to="/reach-out" data-testid="not-found-reach-out"
                 className="aurin-card p-5 text-left hover:-translate-y-0.5 transition">
-            <Heart size={16} className="text-[hsl(var(--aurin-amber))] mb-2" />
-            <p className="text-[14px] font-medium text-[hsl(var(--aurin-text))]">Kids Universe</p>
-            <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">A bright room for children.</p>
+            <Mail size={16} className="text-[hsl(var(--aurin-amber))] mb-2" />
+            <p className="text-[14px] font-medium text-[hsl(var(--aurin-text))]">Reach Out</p>
+            <p className="text-[12px] text-[hsl(var(--aurin-text-muted))] mt-1">Tell us where the link broke.</p>
           </Link>
         </div>
         <p className="mt-8 text-[12.5px] italic text-[hsl(var(--aurin-text-muted))]">

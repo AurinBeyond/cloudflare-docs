@@ -204,26 +204,41 @@ function AppRouter() {
         <Route path="/aurin-philosophy" element={<AurinPhilosophy />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/private-room" element={<Navigate to="/grace" replace />} />
+        <Route path="/private-room" element={<Navigate to="/grace/room" replace />} />
         {/* §AUDIT 2026-05-21 — `/pricing` was referenced from 3 places
             (RoomConvaiChat blocked-card, ConvaiPresenceTracker, AurinsRoomChat)
             but the route was NEVER registered → users hit a blank black
-            page when topping up credits. Redirect to /grace
+            page when topping up credits. Redirect to /grace/room
             where the real Wanderer Passes + LemonSqueezy checkout live. */}
-        <Route path="/pricing" element={<Navigate to="/grace" replace />} />
+        <Route path="/pricing" element={<Navigate to="/grace/room" replace />} />
+        {/* §GRACE-CLEANUP 2026-02 — `/aurin` is NOT a Grace surface.
+            Founder directive: any old /aurin link belongs to the
+            kids universe, never to the adult Grace room. */}
+        <Route path="/aurin" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/portal/guest" element={<Guest />} />
         <Route path="/portal/referral" element={<Referral />} />
         <Route path="/refer-a-friend" element={<Navigate to="/portal/referral" replace />} />
         {/* §GRACE-LIGHT-HOMEPAGE 2026-02 — Public warm-light Grace
-            landing page (founder spec, Estonian session). Replaces
-            "Clarity Release" as the user-facing Grace front door.
-            No WandererGate here — the gate fires when the user enters
-            the actual chat/voice surface via /aurin?mode=grace. */}
+            landing page (founder spec, Estonian session). No
+            WandererGate here — the gate fires at /grace/room where
+            the actual chat / voice / passes live. */}
         <Route path="/grace" element={<Grace />} />
-        {/* Legacy redirect — keep /clarity-release alive only for old
-            inbound links. New traffic lands on /grace. */}
-        <Route path="/clarity-release" element={<Navigate to="/grace" replace />} />
+        {/* §GRACE-ROOM 2026-02 — The real Grace room (Wanderer's
+            Gate, ConvAI voice, text chat, reflections, passes,
+            encryption). Same component that used to live at
+            /clarity-release; the URL changes, the functionality is
+            preserved untouched. */}
+        <Route
+          path="/grace/room"
+          element={
+            <WandererGate scope="private">
+              <ClarityRelease />
+            </WandererGate>
+          }
+        />
+        {/* Legacy redirects — keep old inbound links alive. */}
+        <Route path="/clarity-release" element={<Navigate to="/grace/room" replace />} />
         <Route path="/clarity-release/threshold" element={<ClarityThreshold />} />
         {/* §Phase 1 — public Grace-only demo route (no auth, no
             consent gate). Founder-shareable link for bank / demo. */}

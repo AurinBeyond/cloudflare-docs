@@ -31,13 +31,46 @@ import {
 
 const BG_IMAGE = "/assets/grace/grace-light-bg.png";
 
-/* Sidebar items — match founder mockup verbatim. */
+/* Sidebar items — match founder mockup verbatim. Each sidebar entry
+   carries a tooltip line so a first-time visitor understands what is
+   behind each icon (founder spec, Estonian session). */
 const SIDEBAR = [
-  { id: "home", label: "Home", icon: Home, active: true },
-  { id: "speak", label: "Speak", icon: Mic },
-  { id: "write", label: "Write", icon: Pen },
-  { id: "evening", label: "Evening reflection", icon: Moon },
-  { id: "messages", label: "My messages", icon: MessageSquare },
+  {
+    id: "home",
+    label: "Home",
+    icon: Home,
+    active: true,
+    href: "/grace",
+    tooltip: "Back to the Grace Room front page. This is where the journey begins.",
+  },
+  {
+    id: "speak",
+    label: "Speak",
+    icon: Mic,
+    href: "/grace/room#speak",
+    tooltip: "Talk with Grace using your voice. A safe place to speak out loud.",
+  },
+  {
+    id: "write",
+    label: "Write",
+    icon: Pen,
+    href: "/grace/room#write",
+    tooltip: "Write down your thoughts, feelings, or short journal notes.",
+  },
+  {
+    id: "evening",
+    label: "Evening reflection",
+    icon: Moon,
+    href: "/grace/room#reflection",
+    tooltip: "An evening pause — a quiet review of the day and a gentle self-check.",
+  },
+  {
+    id: "messages",
+    label: "My messages",
+    icon: MessageSquare,
+    href: "/grace/room#messages",
+    tooltip: "Past conversations, notes, and saved thoughts. Pick up where you left off.",
+  },
 ];
 
 /* Right panel — "How Grace Works". Five steps, founder copy. */
@@ -46,31 +79,31 @@ const HOW_STEPS = [
     n: 1,
     label: "BE PRESENT",
     icon: Heart,
-    text: "Take a breath. Arrive here. This is your space. There's no rush.",
+    text: "Pause for a moment. This is your room. You don't have to prove or solve anything.",
   },
   {
     n: 2,
     label: "SPEAK",
     icon: Mic,
-    text: "Talk freely about what's on your mind. Grace listens without judgment.",
+    text: "If you want to talk, choose Speak. Grace listens without judgment and without interrupting.",
   },
   {
     n: 3,
     label: "WRITE",
     icon: Pen,
-    text: "Put your thoughts on paper. Write whatever comes up. There's no right or wrong.",
+    text: "If words are easier on paper than out loud, choose Write. Every thought is allowed.",
   },
   {
     n: 4,
     label: "EVENING REFLECTION",
     icon: Moon,
-    text: "Look back on your day with kindness. Notice, learn, and let go.",
+    text: "At the end of the day, look back gently: what went well, what stayed with you, what you wish to release.",
   },
   {
     n: 5,
     label: "MY MESSAGES",
     icon: MessageSquare,
-    text: "Read your saved conversations and notes. Return to what matters to you.",
+    text: "Find your earlier conversations, notes, and thoughts here. You can always continue where you left off.",
   },
 ];
 
@@ -98,8 +131,9 @@ const RECENT_NOTES = [
 
 export default function Grace() {
   const startConversation = () => {
-    // Existing voice/chat surface — preserved untouched.
-    window.location.href = "/aurin?mode=grace";
+    // Real Grace room — Wanderer's Gate, ConvAI voice, text chat,
+    // reflections, passes. Preserved untouched at /grace/room.
+    window.location.href = "/grace/room";
   };
 
   return (
@@ -197,7 +231,7 @@ export default function Grace() {
               <br />
               Speak, write, or simply be.
               <br />
-              I'm here.
+              I&apos;m here.
             </p>
             <button
               type="button"
@@ -328,12 +362,20 @@ function SidebarNav() {
       <ul className="space-y-1.5">
         {SIDEBAR.map((it) => {
           const Icon = it.icon;
+          const handleClick = (e) => {
+            // Home is no-op (we're already on /grace).
+            if (it.id === "home") return;
+            e.preventDefault();
+            window.location.href = it.href;
+          };
           return (
             <li key={it.id}>
-              <button
-                type="button"
+              <a
+                href={it.href}
+                title={it.tooltip}
+                aria-label={`${it.label} — ${it.tooltip}`}
                 data-testid={`grace-sidebar-${it.id}`}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-[14px] transition-all text-left ${
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-[14px] transition-all text-left no-underline ${
                   it.active ? "" : "hover:bg-[rgba(200,154,90,0.12)]"
                 }`}
                 style={{
@@ -347,19 +389,13 @@ function SidebarNav() {
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
                   fontWeight: it.active ? 500 : 400,
                   letterSpacing: "0.01em",
+                  textDecoration: "none",
                 }}
-                onClick={() => {
-                  // Sidebar items scroll/route — Home is no-op (we're already
-                  // home). Speak routes to chat; others scroll to anchors that
-                  // will be wired in next sprint.
-                  if (it.id === "speak") {
-                    window.location.href = "/aurin?mode=grace";
-                  }
-                }}
+                onClick={handleClick}
               >
                 <Icon size={16} strokeWidth={1.5} />
                 <span>{it.label}</span>
-              </button>
+              </a>
             </li>
           );
         })}
@@ -392,7 +428,7 @@ function PrincipleCard() {
           fontFamily: '"Cormorant Garamond", Georgia, serif',
         }}
       >
-        You don't have to be perfect right now. You just have to be here.
+        You don&apos;t have to be perfect right now. You just have to be here.
       </p>
       <p
         className="mt-3 text-[11.5px] tracking-[0.18em] uppercase"
@@ -498,7 +534,7 @@ function HowGraceWorks() {
 function GraceProfileCard() {
   return (
     <Link
-      to="/aurin?mode=grace"
+      to="/grace/room"
       data-testid="grace-profile-card"
       className="block rounded-2xl p-5 backdrop-blur-md transition-all hover:scale-[1.02] hover:shadow-lg"
       style={{
@@ -517,13 +553,11 @@ function GraceProfileCard() {
           }}
           aria-hidden="true"
         >
-          {/* Existing Grace portrait */}
           <img
             src="/avatars/grace.png"
             alt=""
             className="w-full h-full object-cover"
             onError={(e) => {
-              // Fallback: monogram if avatar missing
               e.currentTarget.style.display = "none";
             }}
           />
@@ -540,13 +574,35 @@ function GraceProfileCard() {
             Grace
           </p>
           <p
-            className="text-[13px] leading-[1.65] italic"
+            className="text-[14px] leading-tight mb-2"
+            style={{
+              color: "#2a1f12",
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              fontWeight: 500,
+              fontStyle: "italic",
+            }}
+          >
+            I am here to listen.
+          </p>
+          <ul
+            className="text-[12.5px] leading-[1.7] mb-2 list-none space-y-0.5"
             style={{
               color: "#5a4a30",
               fontFamily: '"Cormorant Garamond", Georgia, serif',
             }}
           >
-            I'm here. I see you. You are not alone.
+            <li>Speak when you need a voice.</li>
+            <li>Write when you need space.</li>
+            <li>Return whenever you wish.</li>
+          </ul>
+          <p
+            className="text-[12px] leading-[1.65] italic"
+            style={{
+              color: "#7a5a26",
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+            }}
+          >
+            No pressure. No judgment. Just presence.
           </p>
         </div>
       </div>
@@ -617,7 +673,7 @@ function RecentNotes() {
       </div>
       <div className="mt-6 text-center">
         <Link
-          to="/aurin?mode=grace"
+          to="/grace/room#messages"
           data-testid="grace-view-all-notes"
           className="inline-flex items-center gap-2 text-[13px]"
           style={{
