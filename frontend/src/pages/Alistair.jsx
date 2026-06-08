@@ -76,7 +76,10 @@ const WORDS = [
 
 export default function Alistair() {
   const beginExploring = () => {
-    window.location.href = "/course-room/room";
+    // §LABS-OF-LIFE 2026-02 — Founder spec: "Begin Exploring" now
+    // sends visitors to the laboratory selection page, not directly
+    // into chat. They first choose which inquiry world to enter.
+    window.location.href = "/course-room/laboratories";
   };
 
   return (

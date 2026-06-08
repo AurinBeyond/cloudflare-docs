@@ -74,6 +74,9 @@ import AlistairExperiments from "@/pages/alistair/Experiments";
 import AlistairNotes from "@/pages/alistair/Notes";
 import AlistairLibrary from "@/pages/alistair/Library";
 import AlistairLibraryArticle from "@/pages/alistair/LibraryArticle";
+import AlistairLaboratories from "@/pages/alistair/Laboratories";
+import AlistairLab from "@/pages/alistair/Lab";
+import AlistairLabArticle from "@/pages/alistair/LabArticle";
 import CourseDetail from "@/pages/CourseDetail";
 import Catalogue from "@/pages/Catalogue";
 import Faq from "@/pages/Faq";
@@ -348,6 +351,12 @@ function AppRouter() {
         <Route path="/course-room/notes" element={<AlistairNotes />} />
         <Route path="/course-room/library" element={<AlistairLibrary />} />
         <Route path="/course-room/library/:slug" element={<AlistairLibraryArticle />} />
+        {/* §LABS-OF-LIFE 2026-02 — Founder spec: five core laboratories.
+            Money Tree ships fully; the other four are catalogue-only
+            previews ("Soon") until their content is written. */}
+        <Route path="/course-room/laboratories" element={<AlistairLaboratories />} />
+        <Route path="/course-room/lab/:labSlug" element={<AlistairLab />} />
+        <Route path="/course-room/lab/:labSlug/library/:slug" element={<AlistairLabArticle />} />
         <Route
           path="/course-room/room"
           element={
