@@ -34,6 +34,17 @@ export default function Navigation() {
     setOpen(false);
   }, [location.pathname]);
 
+  /* §GRACE-ISOLATION 2026-02 — Founder directive (Anna, Estonian
+     session): Grace must feel like its own world. When the visitor is
+     inside /grace* the global navigation must shed every other room
+     (Body Room, Parents' Room, Polarstar Kids, Courses, etc.) and
+     leave only a minimal "stay anchored, find your way home" set:
+     brand logo, Home, Grace (the current room), Enter Portal. */
+  const inGraceContext = location.pathname.startsWith("/grace");
+  const visibleItems = inGraceContext
+    ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
+    : NAV_ITEMS;
+
   return (
     <header
       data-testid="site-header"
@@ -70,7 +81,7 @@ export default function Navigation() {
         </Link>
 
         <nav className="hidden xl:flex items-center gap-6 flex-nowrap" data-testid="desktop-nav">
-          {NAV_ITEMS.map((item) => (
+          {visibleItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -113,7 +124,7 @@ export default function Navigation() {
           className="xl:hidden border-t border-[hsl(var(--aurin-border-soft))] bg-[hsl(var(--aurin-bg))]"
         >
           <div className="aurin-container py-6 flex flex-col gap-4">
-            {NAV_ITEMS.map((item) => (
+            {visibleItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
