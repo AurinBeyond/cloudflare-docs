@@ -49,6 +49,10 @@ import LibraryKids from "@/pages/LibraryKids";
 import LibraryKidsRead from "@/pages/LibraryKidsRead";
 import ClarityRelease from "@/pages/ClarityRelease";
 import Grace from "@/pages/Grace";
+import GraceSpeak from "@/pages/grace/Speak";
+import GraceWrite from "@/pages/grace/Write";
+import GraceEvening from "@/pages/grace/Evening";
+import GraceMessages from "@/pages/grace/Messages";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
@@ -224,6 +228,15 @@ function AppRouter() {
             WandererGate here — the gate fires at /grace/room where
             the actual chat / voice / passes live. */}
         <Route path="/grace" element={<Grace />} />
+        {/* §GRACE-SUB-SURFACES 2026-02 — Public warm Grace sub-pages:
+            Speak / Write / Evening Reflection / My Messages. Each is
+            an Intuvio-style "soft door" — informational, not a chat.
+            Clicking a CTA on any of them routes to /grace/room
+            (the real Wanderer-gated chat surface). */}
+        <Route path="/grace/speak" element={<GraceSpeak />} />
+        <Route path="/grace/write" element={<GraceWrite />} />
+        <Route path="/grace/evening" element={<GraceEvening />} />
+        <Route path="/grace/messages" element={<GraceMessages />} />
         {/* §GRACE-ROOM 2026-02 — The real Grace room (Wanderer's
             Gate, ConvAI voice, text chat, reflections, passes,
             encryption). Same component that used to live at

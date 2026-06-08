@@ -47,28 +47,28 @@ const SIDEBAR = [
     id: "speak",
     label: "Speak",
     icon: Mic,
-    href: "/grace/room#speak",
+    href: "/grace/speak",
     tooltip: "Talk with Grace using your voice. A safe place to speak out loud.",
   },
   {
     id: "write",
     label: "Write",
     icon: Pen,
-    href: "/grace/room#write",
+    href: "/grace/write",
     tooltip: "Write down your thoughts, feelings, or short journal notes.",
   },
   {
     id: "evening",
     label: "Evening reflection",
     icon: Moon,
-    href: "/grace/room#reflection",
+    href: "/grace/evening",
     tooltip: "An evening pause — a quiet review of the day and a gentle self-check.",
   },
   {
     id: "messages",
     label: "My messages",
     icon: MessageSquare,
-    href: "/grace/room#messages",
+    href: "/grace/messages",
     tooltip: "Past conversations, notes, and saved thoughts. Pick up where you left off.",
   },
 ];
@@ -128,6 +128,28 @@ const RECENT_NOTES = [
     date: "May 12, 2024",
   },
 ];
+
+/* Today's Reflection — a single short sentence shown on the homepage.
+   Rotated daily by day-of-year so every visit can feel different,
+   never random in the same session. Founder examples used as seed. */
+const REFLECTIONS = [
+  "Some days are not meant for solving. Some days are meant for noticing.",
+  "What you carry today does not have to be carried alone.",
+  "Rest is not the reward for finishing. It is the ground that lets you finish.",
+  "The next breath is enough.",
+  "Slow is also a direction.",
+  "You are allowed to start the day in the middle of it.",
+  "Being here at all is already an answer to something.",
+];
+
+/* Words For You — short cards the visitor can take or leave. */
+const WORDS_FOR_YOU = [
+  { id: 1, text: "Rest is productive too." },
+  { id: 2, text: "Small steps still count." },
+  { id: 3, text: "You do not have to carry everything today." },
+  { id: 4, text: "The next breath is enough." },
+];
+
 
 export default function Grace() {
   const startConversation = () => {
@@ -260,6 +282,8 @@ export default function Grace() {
         </div>
 
         {/* ───── RECENT NOTES (full width below) ───── */}
+        <TodaysReflection />
+        <WordsForYou />
         <RecentNotes />
       </div>
 
@@ -611,6 +635,92 @@ function GraceProfileCard() {
 }
 
 /* ───────────────────── RECENT NOTES (FULL-WIDTH) ───────────────────── */
+
+function TodaysReflection() {
+  // Deterministic day-of-year index so the line is stable within a day.
+  const today = new Date();
+  const start = new Date(today.getFullYear(), 0, 0);
+  const diff = today - start;
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const line = REFLECTIONS[dayOfYear % REFLECTIONS.length];
+
+  return (
+    <section
+      data-testid="grace-todays-reflection"
+      className="mt-10 rounded-2xl p-8 md:p-10 text-center backdrop-blur-md"
+      style={{
+        background: "rgba(253, 246, 232, 0.82)",
+        border: "1px solid rgba(200, 154, 90, 0.25)",
+        boxShadow: "0 12px 36px -16px rgba(120, 85, 50, 0.22)",
+      }}
+    >
+      <p
+        className="text-[11px] tracking-[0.28em] uppercase mb-5"
+        style={{ color: "#c89a5a" }}
+      >
+        Today&apos;s Reflection
+      </p>
+      <p
+        className="mx-auto max-w-[680px] leading-[1.5] italic"
+        style={{
+          color: "#2a1f12",
+          fontFamily: '"Cormorant Garamond", Georgia, serif',
+          fontSize: "clamp(1.4rem, 2.4vw, 1.9rem)",
+        }}
+      >
+        “{line}”
+      </p>
+    </section>
+  );
+}
+
+function WordsForYou() {
+  return (
+    <section
+      data-testid="grace-words-for-you"
+      className="mt-6 rounded-2xl p-6 md:p-8 backdrop-blur-md"
+      style={{
+        background: "rgba(253, 246, 232, 0.82)",
+        border: "1px solid rgba(200, 154, 90, 0.25)",
+        boxShadow: "0 12px 36px -16px rgba(120, 85, 50, 0.22)",
+      }}
+    >
+      <div className="flex items-center gap-2 mb-6">
+        <Sparkles size={14} strokeWidth={1.5} style={{ color: "#c89a5a" }} />
+        <p
+          className="text-[11px] tracking-[0.24em] uppercase"
+          style={{ color: "#c89a5a" }}
+        >
+          Words For You
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {WORDS_FOR_YOU.map((w) => (
+          <article
+            key={w.id}
+            data-testid={`grace-word-${w.id}`}
+            className="rounded-xl p-5 text-center"
+            style={{
+              background: "rgba(255, 250, 240, 0.92)",
+              border: "1px solid rgba(200, 154, 90, 0.2)",
+              boxShadow: "0 6px 18px -10px rgba(120, 85, 50, 0.18)",
+            }}
+          >
+            <p
+              className="text-[15px] leading-[1.55] italic"
+              style={{
+                color: "#3d2f1f",
+                fontFamily: '"Cormorant Garamond", Georgia, serif',
+              }}
+            >
+              {w.text}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function RecentNotes() {
   return (
