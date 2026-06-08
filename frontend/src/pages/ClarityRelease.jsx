@@ -24,6 +24,8 @@ import PostSessionMoodReflect from "@/components/PostSessionMoodReflect";
 import useVoiceIO from "@/hooks/useVoiceIO";
 import { useAuth } from "@/contexts/AuthProvider";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 import {
   fetchCabinet,
   startCabinet,
@@ -1050,6 +1052,16 @@ function TierCard({ pass, betaActive, alreadyHasPass, betaGrantingTier, onBetaGr
         (() => {
           const checkoutUrl = buildLemonCheckoutUrl(pass.lemonsqueezy_variant_id);
           if (checkoutUrl) {
+            if (LAUNCH_PAUSE) {
+              return (
+                <LaunchPauseButton
+                  testid={`clarity-tier-${pass.tier}-buy`}
+                  label="Doors open soon"
+                  hideSubtext
+                  size="sm"
+                />
+              );
+            }
             return (
               <a
                 href={checkoutUrl}

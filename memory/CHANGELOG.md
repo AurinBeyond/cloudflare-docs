@@ -3,6 +3,69 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02 — Launch Pause Mode (active site-wide)
+
+Founder mandate: *"Ükski külastaja ei saa enne lõplikku PSP/valuuta
+otsust kogemata osta valest süsteemist ega ka valet toodet, vöi
+toodet mida ei ole olemas."*
+
+### Rationale
+- Site silently ran two PSPs (Gumroad + LemonSqueezy) with currency drift (EUR vs USD).
+- Books were not uploaded to Gumroad yet, but Bookstore buy buttons still resolved a working LemonSqueezy checkout.
+- Alistair Bundle €39 promised 21 letters; codebase had 0 letter files.
+- "Payments soon" chip contradicted active checkouts.
+
+### What shipped
+- New flag `frontend/src/lib/launchPause.js` — single boolean `LAUNCH_PAUSE = true`. Flip to `false` reverses every change in this PR.
+- New component `frontend/src/components/LaunchPauseButton.jsx` — calm "Coming soon" disabled pill + supportive subtext, with optional `size="sm"` for inline cards.
+- Eight files updated (every active checkout CTA wrapped):
+  - `SevenQuietNights.jsx` — Gumroad CTA → "Coming soon · €9 PDF"
+  - `TheHearthProtocol.jsx` — Gumroad CTA → "Coming soon · €19"
+  - `AlistairBundle.jsx` — Gumroad CTA → "Doors open later" + Alistair-specific subtext ("We are finishing the letters before we open the shelf.") · NO waitlist (21 letters not yet authored)
+  - `FamilyBundle.jsx` — Gumroad CTA → "Coming soon · €25"
+  - `Bookstore.jsx` — chip rewritten to "Reading catalogue · purchases open soon"; per-book LemonSqueezy buy → "Notify me" (free books and admin previews untouched)
+  - `ClarityRelease.jsx` — 3 tier LemonSqueezy buys → "Doors open soon" (beta-grant branch + waitlist branch preserved)
+  - `CourseDetail.jsx` — per-course buy → "Notify me when this opens" (enroll / sign-in branches preserved)
+  - `BodyTemple.jsx` — hero unlock CTA → "Coming soon — Day 1 still free to read"; modal unlock → "Coming soon" (Day 1 free preview unchanged)
+  - `SanctuaryPreview.jsx` — three "Ways to be here" CTAs renamed from "Begin quietly / Step in / Enter gently" to a single "Join the quiet list" (no PSP wiring existed here, only label tightening)
+
+### Untouched (intentionally)
+- Polarstar Kids universe (entire surface free, no PSP).
+- All `/listen/*` audio pages.
+- `/library`, `/start-here`, `/legal`, `/about`, `/reach-out`, `/faq`.
+- Navigation, footer, homepage hero.
+- Free books in the Bookstore (price `$0`) — they keep the "Take it" / "Read it" CTA.
+- Admin preview links inside Bookstore.
+- WandererGate beta-grant ("Activate free pass") branch in Clarity Release.
+- Backend (FastAPI / MongoDB / webhooks) — existing customers continue to be served.
+
+### Verified live (smoke-test 2026-02)
+- `/the-hearth` — `hearth-buy-cta` renders as SPAN, label "Coming soon · €19", subtext shown.
+- `/alistair-bundle` — `alistair-bundle-cta` SPAN, label "Doors open later", subtext "We are finishing the letters before we open the shelf...".
+- `/family-bundle` — `family-bundle-buy-cta` SPAN, label "Coming soon · €25".
+- `/seven-quiet-nights` — `sqn-gumroad-cta` SPAN, label "Coming soon · €9 PDF".
+- `/bookstore` — chip = "· Reading catalogue · purchases open soon"; 7 paid buy buttons all "Notify me" (the one free kids book keeps "Take it").
+- `/body-temple` — `body-temple-unlock-cta` SPAN, label "Coming soon — Day 1 still free to read"; "Read Day 1 first (free)" link unchanged.
+- `/` (homepage) — three "Ways to be here" CTAs all read "Join the quiet list".
+
+### Reversal recipe
+1. Open `frontend/src/lib/launchPause.js`.
+2. Change `LAUNCH_PAUSE = true` to `false`.
+3. Save. Hot-reload restores every original Gumroad / LemonSqueezy CTA in place.
+
+### Inventory + plan files (read-only references)
+- `/app/memory/PRODUCT_INVENTORY_2026-02.md` — 28 paid surfaces mapped.
+- `/app/memory/LAUNCH_PAUSE_PLAN.md` — what changes, what does not.
+- `/app/memory/AUDIT_COMPREHENSIVE_2026-02.md` — full blind-spot audit reconciling earlier contradictory audits.
+- `/app/memory/TASK_TRACKER.md` — single source of truth for "what's done, open, blocked".
+
+---
+
+# Matrix Aurin — CHANGELOG
+
+Append-only log of implemented features. PRD.md remains the static
+source of truth for problem statement and architecture.
+
 ## 2026-02 — Sprint 0: "Less Noise. More Meaning." 4-layer hero
 
 After a 5-day locked-room brainstorm (Anna + GPT + Norwegian AI + agent),

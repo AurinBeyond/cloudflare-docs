@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import StonePath from "@/components/StonePath";
 import KidsJourneyPath from "@/components/KidsJourneyPath";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 import AurinsPromise from "@/components/sanctuary/AurinsPromise";
 
 const WEEK_ICONS = {
@@ -209,18 +211,26 @@ export default function BodyTemple() {
 
                         <div className="mt-7 flex flex-wrap items-center gap-3">
                             {!overview.unlocked ? (
-                                <Link to="/clarity-release"
-                                      data-testid="body-temple-unlock-cta"
-                                      className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-medium transition"
-                                      style={{
-                                          background: "#4a3a1c",
-                                          color: "#f8efde",
-                                          boxShadow: "0 8px 20px -10px rgba(74,58,28,0.6)",
-                                      }}>
-                                    <Sparkles size={14} />
-                                    Unlock all 28 days — ${overview.price_usd}
-                                    <ArrowRight size={14} />
-                                </Link>
+                                LAUNCH_PAUSE ? (
+                                    <LaunchPauseButton
+                                        testid="body-temple-unlock-cta"
+                                        label="Coming soon — Day 1 still free to read"
+                                        hideSubtext
+                                    />
+                                ) : (
+                                    <Link to="/clarity-release"
+                                          data-testid="body-temple-unlock-cta"
+                                          className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-medium transition"
+                                          style={{
+                                              background: "#4a3a1c",
+                                              color: "#f8efde",
+                                              boxShadow: "0 8px 20px -10px rgba(74,58,28,0.6)",
+                                          }}>
+                                        <Sparkles size={14} />
+                                        Unlock all 28 days — ${overview.price_usd}
+                                        <ArrowRight size={14} />
+                                    </Link>
+                                )
                             ) : (
                                 <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full"
                                      data-testid="body-temple-unlocked-badge"
@@ -408,13 +418,22 @@ export default function BodyTemple() {
                                             {activeDayPayload.day.body}
                                         </p>
                                         <div className="mt-2">
-                                            <Link to="/clarity-release"
-                                                  data-testid="body-temple-modal-unlock"
-                                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium"
-                                                  style={{ background: "#4a3a1c", color: "#f8efde" }}>
-                                                <Lock size={13} />
-                                                Unlock Body Temple 28 — ${overview.price_usd}
-                                            </Link>
+                                            {LAUNCH_PAUSE ? (
+                                                <LaunchPauseButton
+                                                    testid="body-temple-modal-unlock"
+                                                    label="Coming soon"
+                                                    hideSubtext
+                                                    size="sm"
+                                                />
+                                            ) : (
+                                                <Link to="/clarity-release"
+                                                      data-testid="body-temple-modal-unlock"
+                                                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium"
+                                                      style={{ background: "#4a3a1c", color: "#f8efde" }}>
+                                                    <Lock size={13} />
+                                                    Unlock Body Temple 28 — ${overview.price_usd}
+                                                </Link>
+                                            )}
                                         </div>
                                     </div>
                                 ) : (

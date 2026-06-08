@@ -14,6 +14,8 @@
  */
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
@@ -215,27 +217,36 @@ export default function SevenQuietNights() {
             If even one of these nights goes well, the full PDF holds
             the five stories — printed, read-aloud-ready, no app required.
           </p>
-          <a
-            href="https://prulesoul.gumroad.com/l/fwqmha"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="sqn-gumroad-cta"
-            className="inline-flex items-center gap-2 text-base"
-            style={{
-              color: "#b97a3a",
-              fontWeight: 600,
-              textDecoration: "underline",
-              textUnderlineOffset: "4px",
-            }}
-          >
-            See the full Polarstar collection (€9 PDF)
-          </a>
-          <p
-            className="text-xs italic mt-5"
-            style={{ color: "#8a7a5a" }}
-          >
-            14-day no-questions refund. One-time purchase. No subscription.
-          </p>
+          {LAUNCH_PAUSE ? (
+            <LaunchPauseButton
+              testid="sqn-gumroad-cta"
+              label="Coming soon · €9 PDF"
+            />
+          ) : (
+            <>
+              <a
+                href="https://prulesoul.gumroad.com/l/fwqmha"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="sqn-gumroad-cta"
+                className="inline-flex items-center gap-2 text-base"
+                style={{
+                  color: "#b97a3a",
+                  fontWeight: 600,
+                  textDecoration: "underline",
+                  textUnderlineOffset: "4px",
+                }}
+              >
+                See the full Polarstar collection (€9 PDF)
+              </a>
+              <p
+                className="text-xs italic mt-5"
+                style={{ color: "#8a7a5a" }}
+              >
+                14-day no-questions refund. One-time purchase. No subscription.
+              </p>
+            </>
+          )}
         </div>
 
         {/* Why this exists */}

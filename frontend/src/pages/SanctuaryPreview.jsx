@@ -936,7 +936,7 @@ function WaysToBeHereSection() {
       ],
       price: "€45",
       cadence: "one session",
-      cta: "Begin quietly",
+      cta: "Join the quiet list",
     },
     {
       key: "steady-presence",
@@ -951,7 +951,7 @@ function WaysToBeHereSection() {
       ],
       price: "€120",
       cadence: "per month",
-      cta: "Step in",
+      cta: "Join the quiet list",
       featured: true,
     },
     {
@@ -968,7 +968,7 @@ function WaysToBeHereSection() {
       ],
       price: "€380",
       cadence: "per month",
-      cta: "Enter gently",
+      cta: "Join the quiet list",
     },
   ];
 

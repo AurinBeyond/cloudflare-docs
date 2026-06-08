@@ -19,6 +19,8 @@
  */
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
@@ -287,24 +289,31 @@ export default function TheHearthProtocol() {
           {/* §HEARTH-LIVE 2026-05-31 — Gumroad SKU is now LIVE.
               CTA now points to the real Gumroad product. */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
-            <a
-              href="https://aurinbeyond.gumroad.com/l/the-hearth"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="hearth-buy-cta"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm"
-              style={{
-                background: COLORS.amber,
-                color: COLORS.bg,
-                textDecoration: "none",
-                letterSpacing: "0.04em",
-                fontWeight: 600,
-                boxShadow: "0 4px 28px rgba(214, 165, 96, 0.3)",
-              }}
-            >
-              Step inside · €19
-              <ArrowRight size={15} />
-            </a>
+            {LAUNCH_PAUSE ? (
+              <LaunchPauseButton
+                testid="hearth-buy-cta"
+                label="Coming soon · €19"
+              />
+            ) : (
+              <a
+                href="https://aurinbeyond.gumroad.com/l/the-hearth"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="hearth-buy-cta"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm"
+                style={{
+                  background: COLORS.amber,
+                  color: COLORS.bg,
+                  textDecoration: "none",
+                  letterSpacing: "0.04em",
+                  fontWeight: 600,
+                  boxShadow: "0 4px 28px rgba(214, 165, 96, 0.3)",
+                }}
+              >
+                Step inside · €19
+                <ArrowRight size={15} />
+              </a>
+            )}
             <a
               href="/listen/hearth"
               data-testid="hearth-preview-audio"

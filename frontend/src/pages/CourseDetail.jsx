@@ -4,6 +4,8 @@ import PageHeader from "@/components/layout/PageHeader";
 import { useAuth } from "@/contexts/AuthProvider";
 import { fetchCourse, enrollCourse, fetchClarityPrefs } from "@/lib/api";
 import { buildLemonCheckoutUrl } from "@/lib/lemonsqueezy";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 import useFreeAccess from "@/hooks/useFreeAccess";
 import FreeAccessBadge from "@/components/FreeAccessBadge";
 import {
@@ -188,6 +190,16 @@ export default function CourseDetail() {
             }
             const checkoutUrl = buildLemonCheckoutUrl(course.lemonsqueezy_variant_id);
             if (!checkoutUrl || !course.price) return null;
+            if (LAUNCH_PAUSE) {
+              return (
+                <LaunchPauseButton
+                  testid="course-detail-buy"
+                  label="Notify me when this opens"
+                  hideSubtext
+                  size="sm"
+                />
+              );
+            }
             return (
               <a
                 href={checkoutUrl}

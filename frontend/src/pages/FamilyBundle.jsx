@@ -19,6 +19,8 @@
  */
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
@@ -251,24 +253,31 @@ export default function FamilyBundle() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5">
-            <a
-              href={GUMROAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="family-bundle-buy-cta"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm"
-              style={{
-                background: COLORS.amber,
-                color: COLORS.bg,
-                textDecoration: "none",
-                letterSpacing: "0.04em",
-                fontWeight: 600,
-                boxShadow: "0 4px 28px rgba(214, 165, 96, 0.3)",
-              }}
-            >
-              Take both shelves · €25
-              <ArrowRight size={15} />
-            </a>
+            {LAUNCH_PAUSE ? (
+              <LaunchPauseButton
+                testid="family-bundle-buy-cta"
+                label="Coming soon · €25"
+              />
+            ) : (
+              <a
+                href={GUMROAD_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="family-bundle-buy-cta"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm"
+                style={{
+                  background: COLORS.amber,
+                  color: COLORS.bg,
+                  textDecoration: "none",
+                  letterSpacing: "0.04em",
+                  fontWeight: 600,
+                  boxShadow: "0 4px 28px rgba(214, 165, 96, 0.3)",
+                }}
+              >
+                Take both shelves · €25
+                <ArrowRight size={15} />
+              </a>
+            )}
             <a
               href="/listen/hearth"
               data-testid="family-bundle-preview-audio"

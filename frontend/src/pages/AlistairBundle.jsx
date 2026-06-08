@@ -16,6 +16,8 @@
  */
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookOpen, Mail, Headphones } from "lucide-react";
+import { LAUNCH_PAUSE, PAUSE_SUBTEXT_ALISTAIR } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
@@ -253,31 +255,43 @@ export default function AlistairBundle() {
             re-read, and return to whenever the noise rises again.
           </p>
 
-          <a
-            href={GUMROAD_BUNDLE_URL}
-            className="inline-flex items-center gap-3 mt-8 px-9 py-4 rounded-full transition-all hover:scale-[1.02]"
-            style={{
-              background: COLORS.amber,
-              color: COLORS.bg,
-              fontWeight: 600,
-              letterSpacing: "0.02em",
-              boxShadow: "0 4px 28px rgba(214, 165, 96, 0.32)",
-            }}
-            data-testid="alistair-bundle-cta"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Take the shelf
-            <ArrowRight size={18} strokeWidth={2} />
-          </a>
+          <div className="mt-8 flex justify-center">
+            {LAUNCH_PAUSE ? (
+              <LaunchPauseButton
+                testid="alistair-bundle-cta"
+                label="Doors open later"
+                subtext={PAUSE_SUBTEXT_ALISTAIR}
+              />
+            ) : (
+              <a
+                href={GUMROAD_BUNDLE_URL}
+                className="inline-flex items-center gap-3 px-9 py-4 rounded-full transition-all hover:scale-[1.02]"
+                style={{
+                  background: COLORS.amber,
+                  color: COLORS.bg,
+                  fontWeight: 600,
+                  letterSpacing: "0.02em",
+                  boxShadow: "0 4px 28px rgba(214, 165, 96, 0.32)",
+                }}
+                data-testid="alistair-bundle-cta"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Take the shelf
+                <ArrowRight size={18} strokeWidth={2} />
+              </a>
+            )}
+          </div>
 
-          <p
-            className="mt-6 text-xs italic"
-            style={{ color: COLORS.muteDeep }}
-            data-testid="alistair-bundle-refund"
-          >
-            14-day no-questions refund · Instant delivery via Gumroad
-          </p>
+          {!LAUNCH_PAUSE && (
+            <p
+              className="mt-6 text-xs italic"
+              style={{ color: COLORS.muteDeep }}
+              data-testid="alistair-bundle-refund"
+            >
+              14-day no-questions refund · Instant delivery via Gumroad
+            </p>
+          )}
         </section>
 
         {/* Quiet bridge to the rest of the compass */}

@@ -172,4 +172,22 @@ Legend:
 
 ---
 
+## SECTION 11 — Launch Pause Mode (2026-02, active)
+
+| ID | Item | Status |
+|---|---|---|
+| 11.1 | `LAUNCH_PAUSE` flag created in `frontend/src/lib/launchPause.js` | ✅ |
+| 11.2 | `<LaunchPauseButton />` shared component | ✅ |
+| 11.3 | Seven Quiet Nights buy CTA paused | ✅ |
+| 11.4 | The Hearth Protocol buy CTA paused | ✅ |
+| 11.5 | Alistair Bundle buy CTA paused (no waitlist — content gap) | ✅ |
+| 11.6 | Family Bundle buy CTA paused | ✅ |
+| 11.7 | Bookstore "Payments soon" chip rewritten + per-book buy → Notify me | ✅ |
+| 11.8 | Clarity Release 3 tier buys paused | ✅ |
+| 11.9 | Course Detail buy CTA paused | ✅ |
+| 11.10 | Body Temple hero + modal unlock CTA paused | ✅ |
+| 11.11 | Homepage Ways-to-be-here CTAs → "Join the quiet list" | ✅ |
+| 11.12 | Smoke-test verified on 7 surfaces | ✅ |
+| 11.13 | RoomCard10s (10-sec business card) component | ⚪ deferred to next PR |
+
 **Update rule:** every time a status flips, append a one-line note with the date below the relevant row instead of editing in place. Keep history.

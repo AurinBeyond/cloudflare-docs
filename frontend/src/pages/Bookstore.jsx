@@ -8,6 +8,8 @@ import InstagramCTA from "@/components/InstagramCTA";
 import { useAdmin } from "@/hooks/useAdmin";
 import { adminBookPreviewUrl } from "@/lib/admin";
 import useFreeAccess from "@/hooks/useFreeAccess";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
@@ -75,7 +77,7 @@ export default function Bookstore() {
             · 0% VAT · digital books · Norway
           </span>
           <span className="aurin-chip" data-testid="bookstore-payments-chip">
-            · Payments soon
+            · Reading catalogue · purchases open soon
           </span>
         </div>
       </PageHeader>
@@ -309,6 +311,16 @@ export default function Bookstore() {
                           }
                           const checkoutUrl = buildLemonCheckoutUrl(b.lemonsqueezy_variant_id);
                           if (checkoutUrl) {
+                            if (LAUNCH_PAUSE) {
+                              return (
+                                <LaunchPauseButton
+                                  testid={`bookstore-item-${b.slug}-buy`}
+                                  label="Notify me"
+                                  hideSubtext
+                                  size="sm"
+                                />
+                              );
+                            }
                             return (
                               <a
                                 href={checkoutUrl}
