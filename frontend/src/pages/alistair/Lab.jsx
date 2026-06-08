@@ -51,16 +51,37 @@ export default function Lab() {
         style={{
           backgroundImage: 'url("/assets/alistair/alistair-light-bg.png")',
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(3px) brightness(0.94) saturate(0.96)",
+          backgroundPosition: "center 30%",
         }}
       />
+      {/* §LAB-VISUAL v2 2026-02 — Founder feedback: previous page was
+          too washed-out ("udune, puudub konkreetika"). Reduced the
+          cream overlay opacity so the painted study scene now breathes
+          through the page, and dropped the blur to 0 so the texture
+          stays crisp. A subtle accent wash keyed to each lab's accent
+          colour adds atmosphere specific to the inquiry — green for
+          Money Tree, etc. — instead of a single generic cream wash. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 z-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(245,235,215,0.86) 0%, rgba(245,235,215,0.78) 50%, rgba(245,235,215,0.92) 100%)",
+            "linear-gradient(180deg, rgba(245,235,215,0.58) 0%, rgba(245,235,215,0.45) 30%, rgba(245,235,215,0.72) 100%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse 70% 55% at 50% 18%, ${lab.accent}1f 0%, transparent 60%)`,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 120% 85% at 50% 100%, rgba(43, 31, 15, 0.22) 0%, transparent 60%)",
         }}
       />
 
@@ -80,75 +101,92 @@ export default function Lab() {
         </Link>
 
         {/* HERO */}
-        <section className="text-center mb-12" data-testid="lab-hero">
+        <section className="text-center mb-14" data-testid="lab-hero">
+          {/* §LAB-HERO v2 — Founder directive (Money Tree visual upgrade):
+              the emoji disc is now a proper accent-keyed sigil with a
+              concentric inner ring so it reads as a "laboratory crest",
+              not a flat icon. Pairs with a horizontal hairline above
+              the laboratory label for clearer hierarchy. */}
           <div
-            className="mx-auto w-20 h-20 rounded-full flex items-center justify-center text-[40px] mb-5"
-            style={{
-              background: lab.accentSoft,
-              border: `1.5px solid ${lab.accent}`,
-            }}
+            className="mx-auto relative w-[120px] h-[120px] mb-6"
             aria-hidden="true"
           >
-            {lab.emoji}
+            <div className="absolute inset-0 rounded-full"
+              style={{
+                background: `radial-gradient(circle at 50% 45%, ${lab.accent}33, transparent 70%)`,
+              }} />
+            <div className="absolute inset-[14px] rounded-full flex items-center justify-center text-[44px]"
+              style={{
+                background: `radial-gradient(circle at 35% 30%, #fdf6e6, ${lab.accentSoft})`,
+                border: `1.5px solid ${lab.accent}`,
+                boxShadow: `0 14px 36px -14px ${lab.accent}aa`,
+              }}>
+              {lab.emoji}
+            </div>
           </div>
-          <p
-            className="text-[10.5px] tracking-[0.28em] uppercase mb-3"
-            style={{ color: lab.accent }}
-          >
-            Laboratory of Life
-          </p>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <span aria-hidden="true" style={{ width: 36, height: 1, background: lab.accent, opacity: 0.55 }} />
+            <p
+              className="text-[10.5px] tracking-[0.32em] uppercase"
+              style={{ color: lab.accent }}
+            >
+              Laboratory of Life
+            </p>
+            <span aria-hidden="true" style={{ width: 36, height: 1, background: lab.accent, opacity: 0.55 }} />
+          </div>
           <h1
-            className="leading-[1.05] mb-4"
+            className="leading-[1.02] mb-5"
             style={{
-              color: "#2b1f0f",
+              color: "#1f1606",
               fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 400,
-              fontSize: "clamp(2.4rem, 5vw, 3.8rem)",
-              letterSpacing: "-0.01em",
+              fontSize: "clamp(2.8rem, 6vw, 4.4rem)",
+              letterSpacing: "-0.012em",
             }}
             data-testid="lab-title"
           >
             {lab.name}
           </h1>
           <p
-            className="text-[18px] leading-[1.5] italic mb-6 max-w-[560px] mx-auto"
-            style={{ color: "#5b4226", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            className="text-[19px] leading-[1.5] italic mb-8 max-w-[560px] mx-auto"
+            style={{ color: "#4a3618", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
           >
             {lab.subtitle}
           </p>
           <div
-            className="inline-block px-5 py-3 rounded-full"
+            className="inline-block px-7 py-4 rounded-md"
             style={{
-              background: lab.accentSoft,
-              border: `1px solid ${lab.accent}55`,
+              background: "rgba(253, 246, 232, 0.88)",
+              border: `1px solid ${lab.accent}`,
+              boxShadow: `0 10px 28px -16px ${lab.accent}99`,
             }}
           >
             <p
-              className="text-[10.5px] tracking-[0.22em] uppercase mb-1"
+              className="text-[10.5px] tracking-[0.28em] uppercase mb-1.5"
               style={{ color: lab.accent }}
             >
-              Core Question
+              ◆ Core Question
             </p>
             <p
-              className="text-[16px] italic"
-              style={{ color: "#2b1f0f", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+              className="text-[18px] italic leading-[1.4]"
+              style={{ color: "#1f1606", fontFamily: '"Cormorant Garamond", Georgia, serif' }}
             >
               {lab.coreQuestion}
             </p>
           </div>
-          <div className="mt-8">
+          <div className="mt-10">
             <button
               type="button"
               onClick={startConversation}
               data-testid="lab-primary-cta"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-[15px] transition-all hover:scale-[1.03] hover:shadow-xl"
+              className="inline-flex items-center gap-3 px-9 py-4 rounded-full text-[15px] transition-all hover:scale-[1.03] hover:shadow-xl"
               style={{
                 background: lab.accent,
                 color: "#fdf6e6",
                 fontFamily: '"Cormorant Garamond", Georgia, serif',
                 fontWeight: 500,
                 letterSpacing: "0.02em",
-                boxShadow: `0 10px 32px -10px ${lab.accent}b3`,
+                boxShadow: `0 12px 36px -10px ${lab.accent}cc`,
               }}
             >
               Start this laboratory with Alistair

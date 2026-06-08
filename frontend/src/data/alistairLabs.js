@@ -113,13 +113,27 @@ export const LABS = {
 
   /* Four other labs — preview only in this iteration. */
   "self-sabotage": {
-    slug: "self-sabotage", emoji: "🔬",
-    name: "The Self-Sabotage Laboratory",
+    slug: "self-sabotage", emoji: "🥚",
+    name: "Self-Sabotage",
     subtitle: "The patterns that quietly stand in our own way.",
     coreQuestion: "Why do I stop myself when I want something important?",
     accent: "#9a6c3a", accentSoft: "rgba(154, 108, 58, 0.12)",
     status: "coming-soon",
-    short: "Procrastination, perfectionism, the inner critic, the hidden rewards of staying stuck.",
+    short: "Self-sabotage is not your enemy. It is a protective pattern that once helped you survive — explored here with curiosity, compassion and courage.",
+  },
+  /* §ALISTAIR-v2 2026-02 — Old Stories: founder-renamed inheritance/
+   * narrative lab. Preserves Child & Parent themes but reframes the
+   * inquiry around the inherited stories themselves rather than the
+   * roles. Kept in the catalogue alongside Child & Parent until the
+   * founder decides which final shape to ship. */
+  "old-stories": {
+    slug: "old-stories", emoji: "📖",
+    name: "Old Stories",
+    subtitle: "The stories you carry and how they shape your reality.",
+    coreQuestion: "Which inherited story am I still living inside?",
+    accent: "#8a5a36", accentSoft: "rgba(138, 90, 54, 0.12)",
+    status: "coming-soon",
+    short: "The sentences we were handed before we could choose. Family scripts, cultural defaults, half-remembered childhood lines that still steer us today.",
   },
   "child-parent": {
     slug: "child-parent", emoji: "👶",
@@ -129,6 +143,19 @@ export const LABS = {
     accent: "#7a5fa7", accentSoft: "rgba(122, 95, 167, 0.12)",
     status: "coming-soon",
     short: "Inner child, inner parent, critic vs caretaker, the need beneath the reaction.",
+  },
+  /* §ALISTAIR-v2 2026-02 — Body Knows First: founder-introduced lab
+   * pairing somatic inquiry with the existing mind-led labs. Carries
+   * a sub-theme "The Body Language" which will be its own nested page
+   * in the next sprint. */
+  "body-knows-first": {
+    slug: "body-knows-first", emoji: "🫀",
+    name: "The Body Knows First",
+    subtitle: "Listen to your body's wisdom and the subtle inner signals.",
+    coreQuestion: "What does my body already know?",
+    accent: "#b6582c", accentSoft: "rgba(182, 88, 44, 0.12)",
+    status: "coming-soon",
+    short: "Before the mind makes sense of it, the body already knows. It feels. It reacts. It remembers. This laboratory learns to listen.",
   },
   "masks": {
     slug: "masks", emoji: "🎭",
@@ -150,4 +177,24 @@ export const LABS = {
   },
 };
 
-export const LAB_ORDER = ["money-tree", "self-sabotage", "child-parent", "masks", "compass"];
+/* §ALISTAIR-v2 2026-02 — Two ordering arrays so we can show the FULL
+ * catalogue on /course-room/laboratories (all 7) while the home page
+ * `/course-room` features only the founder-approved 4-card path of
+ * exploration. No labs are removed; nothing breaks; visibility on the
+ * home grid is the only thing this affects. */
+export const LAB_ORDER = [
+  "money-tree",
+  "old-stories",
+  "self-sabotage",
+  "body-knows-first",
+  "child-parent",
+  "masks",
+  "compass",
+];
+
+export const HOME_PATH_OF_EXPLORATION = [
+  "money-tree",
+  "old-stories",
+  "body-knows-first",
+  "compass",
+];

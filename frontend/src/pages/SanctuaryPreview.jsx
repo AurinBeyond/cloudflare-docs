@@ -244,7 +244,7 @@ function HeroSection({ onWalkTruthFirst }) {
               src={HERO_FALLBACK}
               alt=""
               aria-hidden="true"
-              fetchpriority="high"
+              fetchPriority="high"
               loading="eager"
               decoding="async"
               data-testid="hero-mask-image"
@@ -308,14 +308,19 @@ function HeroSection({ onWalkTruthFirst }) {
               Layer 1 is the brand statement (what this is + who it's for).
               Layers 2, 3, 4 live just below the hero in <SprintZeroLayersSection />.
               Previous "Welcome back to yourself" archived to /app/memory/archive/hero_2026_06.md */}
+          {/* §HERO 2026-02 Founder fix: the italic gold line previously
+              sat as the third line of the h1 and, at desktop widths,
+              ran into the painted face on the right. Moved BELOW the
+              compass line into its own paragraph anchored against the
+              dark left column so the gold typography reads clearly on
+              the deep canvas instead of being lost on the portrait. */}
           <h1
             data-testid="hero-title"
-            className="font-light text-[28px] sm:text-[42px] lg:text-[54px] leading-[1.15] text-[#f0eadd] tracking-[-0.012em]"
+            className="font-light text-[28px] sm:text-[42px] lg:text-[54px] leading-[1.15] text-[#f0eadd] tracking-[-0.012em] max-w-[560px]"
             style={{ fontFamily: SERIF }}
           >
             Matrix Aurin is a quiet place<br />
-            to read, listen, reflect,<br />
-            <span className="italic text-[#d4b67d]">and reconnect with what matters most.</span>
+            to read, listen, reflect.
           </h1>
           <p
             data-testid="hero-compass-line"
@@ -324,6 +329,13 @@ function HeroSection({ onWalkTruthFirst }) {
           >
             Built around books and five guided rooms<br />
             for people, parents, and families.
+          </p>
+          <p
+            data-testid="hero-reconnect-line"
+            className="mt-8 italic text-[22px] sm:text-[28px] lg:text-[32px] leading-[1.3] text-[#d4b67d] max-w-[520px] tracking-[-0.005em]"
+            style={{ fontFamily: SERIF }}
+          >
+            And reconnect with what matters most.
           </p>
         </div>
       </div>

@@ -73,3 +73,57 @@ configuration dashboard as ambient media.
 - 22/22 routes render clean, 6/6 mobile no horiz scroll
 - Backend + packages: 0 changes
 - Known risks: pre-existing lint debt (13), auth/ConvAI runtime UNKNOWN (Anna tests tomorrow)
+
+## Alistair v2 sprint (2026-02-08, deployment-freeze lifted by founder)
+
+**What shipped this sprint**
+- Homepage hero fix: gold italic line *"And reconnect with what matters most."* moved out of the H1 and into its own paragraph below the subtitle so it sits on the dark left column instead of running into the painted face (Founder explicit fix).
+- `Alistair.jsx` (`/course-room`) completely rebuilt to match the founder's approved English mockup: solid dark navy sidebar with brass-accent Alistair star monogram, EXPLORE section, sidebar nav (Home/Explore/Read/Experiments/Notes/Library), Alistair quote, painted study scene as the centre hero, "Alistair / Laboratory of Life" headline, "YOUR PATH OF EXPLORATION" 4-card grid, right column with "HOW WE EXPLORE" 4-step panel (NOTICE / INQUIRE / EXPERIMENT / INTEGRATE) + extended Alistair bio "Guide. Explorer. Questioner." + "Let's explore together" CTA + bottom centered italic quote *"Life is not something to be solved, but a mystery to be lived."*
+- `alistairLabs.js`: added two new founder-introduced lab entries — `old-stories` (📖) and `body-knows-first` (🫀, with future sub-lab "The Body Language"). All 5 pre-existing labs preserved untouched per explicit founder rule "do NOT change the laboratory data model from 5 to 4 until we explicitly decide which laboratory is being removed". Total = 7 labs in catalogue. Two new exports added: `LAB_ORDER` (all 7) and `HOME_PATH_OF_EXPLORATION` (4 featured slugs shown on the home grid: money-tree, old-stories, body-knows-first, compass).
+- `alistair/Lab.jsx` Money Tree visual upgrade: cream wash opacity reduced 0.86→0.58, background blur dropped 3px→0px so the painted arch-window study scene reads crisply. New laboratory crest with concentric rings + accent-key drop-shadow, horizontal hairline dividers around the LABORATORY OF LIFE kicker, bigger H1 (clamp 2.4rem→2.8rem min), stronger Core Question card with solid border + accent shadow. Founder feedback "udused pildid, puudub konkreetika" addressed.
+- Pre-existing blocking lint fix: `fetchpriority` → `fetchPriority` (camelCase) in SanctuaryPreview hero `<img>`.
+
+**Founder design law captured**
+- Public-facing system language is **English only** (UI, nav, buttons, room content, placeholders, hero text, onboarding, laboratories, articles, gates, notifications, emails to users, error messages shown to users). Estonian is allowed only for: Anna comms, internal audits, technical reports, dev notes, implementation discussions. **Any Estonian in user-facing surface = bug.**
+- Every room must function as a 10-second business card: where am I, who guides me, what to expect.
+- Same "painted-scene + overlay navigation" principle as Polarstar and Grace must be applied to Alistair and (next) Body Room + Parents' Room.
+
+**Verified routes after this sprint**
+- `/` — hero text repositioned, mask face fully visible. PASS.
+- `/course-room` — new dark-sidebar v2 design rendering correctly with 4 path cards + how-we-explore + bio. PASS.
+- `/course-room/lab/money-tree` — crisp painted background visible, stronger hero hierarchy. PASS.
+- `/course-room/laboratories` — all 7 labs (1 OPEN, 6 SOON) listed and clickable. PASS.
+
+## Next actions (P0/P1)
+
+**P0 — Alistair lab pages v2 (founder mockups received)**
+Each top-level lab gets a dedicated dark-sidebar v2 detail page matching the mockups the founder sent on 2026-02-08:
+- `The Body Knows First` lab page (with right-side feel/breathe/listen/trust/integrate panel, IN THIS LABORATORY WE EXPLORE 5 cards, body check-in, reflection questions, Alistair note, quick actions bar).
+- `The Body Language` SUB-PAGE under `/course-room/lab/body-knows-first/body-language` (mirror + body-meridian hero, THE BODY SPEAKS THROUGH 7 items panel, COMMON BODY SIGNALS 6-card grid).
+- `Self-Sabotage` lab page (cracked-egg hero, HOW WE EXPLORE right panel, WHAT WE EXPLORE HERE 5 cards, About Alistair bio).
+- These require founder to deliver the specific Nano-Banana hero/thumbnail images. Founder said in this sprint message: "kui selle run löpetad lisan veel sulle pildi visaali juurde sarnaste teemadega" — images coming.
+
+**P0 — Body Room (Kaelan) refactor to v2 inbound architecture**
+Mirror the Alistair v2 pattern (dark sidebar + painted hero + path cards + how-we-explore + bio + bottom quote). Founder said: "pärast liigume veel 2 tuba korda tegema" — Body Room then Parents' Room.
+
+**P0 — Parents' Room (Sara) refactor to v2 inbound architecture**
+Same as Body Room.
+
+**P1 — Pre-existing lint debt cleanup**
+Legacy hook warnings in AgeGate.jsx, BodyRoomChat.jsx, CadenceEngine.jsx, KidsRooms.jsx. **DO NOT use `eslint-disable` for `react-hooks/set-state-in-effect`, `react-hooks/purity`, `react-hooks/refs`, `react-hooks/immutability` — these are Emergent-internal rules and adding the disables crashes the build with "Rule not found". Refactor the actual hook dependencies instead.
+
+**P1 — Wire "Recent Notes" / "Recent Discoveries" UI to real user data**
+Currently placeholder arrays on Grace and Alistair homepages.
+
+**P2 — Lab data model 5→4 final decision**
+Founder rule: "Do NOT change the laboratory data model from 5 to 4 until we explicitly decide which laboratory is being removed or merged." Pending decision on whether `child-parent` + `masks` get merged or removed.
+
+**P2 — USD/EUR currency toggle in header.**
+
+**P3 — Remove Launch Pause Mode once PSP strategy (Gumroad/LemonSqueezy) resolved.**
+
+**Future / Backlog**
+- Emergent LLM Key budget top-up (over budget by ~$0.03; daily coloring page generator failed for 1 of 3 age groups on 2026-06-08).
+- ConvAI/voice manual smoke test on production (cannot be tested headlessly).
+- Real-device mobile visual verification (tooling can't honour 390×844 viewport).
+
