@@ -22,10 +22,8 @@ export default function AgeGate() {
   useEffect(() => {
     const isGated = GATED_PATHS.some((p) => location.pathname.startsWith(p));
     if (isGated && !confirmed) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(true);
     } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
     }
   }, [location.pathname, confirmed]);
