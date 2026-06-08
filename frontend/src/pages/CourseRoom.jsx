@@ -74,10 +74,10 @@ export default function CourseRoom() {
   return (
     <div data-testid="course-room-page" className="sanctuary-room relative">
       <PageHeader
-        eyebrow="W · 270° · Alistair"
-        title="Strategic"
-        italicWord="Architecture"
-        description="Not a course shelf. A protocol library. Each transmission is a single short letter, released on a 24-hour cadence-lock — no binge, no dopamine loop. You read one. You sit with it. The next will not arrive before its hour. This is how high-bandwidth operators retrain their own operating system."
+        eyebrow="Alistair"
+        title="A small library of"
+        italicWord="slow explorations."
+        description="Not a course, not a class, not a self-help bootcamp. You bring a question — childhood, money, body, evenings. You read one short piece, you sit with it, the next arrives when its hour comes. No binge, no streaks. Slow, on purpose."
         testid="course-room-header"
       />
 

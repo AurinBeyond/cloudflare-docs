@@ -431,7 +431,7 @@ export default function ClarityRelease() {
         eyebrow="Clarity Release"
         title="Welcome to"
         italicWord="Clarity Release."
-        description="Your private sanctuary for the soul — a bridge between current burdens and inner peace. You are met with absolute confidentiality and a non-judgemental Light-side guide. For heavy loads, for the quiet fog of loneliness, and for the days you no longer recognise yourself."
+        description="A quiet room where you can think out loud. A calm partner who listens, mirrors, and helps you put your own thoughts in order — for heavy loads, for the quiet fog of loneliness, and for the days you don't quite recognise yourself."
       />
 
       {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" — who walks in
