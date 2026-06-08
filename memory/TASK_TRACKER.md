@@ -190,5 +190,12 @@ Legend:
 | 11.12 | Smoke-test verified on 7 surfaces | ✅ |
 | 11.13 | RoomIntroCard (10-sec selguse kaart) component | ✅ |
 | 11.14 | RoomIntroCard mounted in 5 rooms (Grace, Kaelan, Sara, Alistair, Aurin) | ✅ |
+| 11.15 | Grace + Alistair hero copy cleanup (sanctuary / high-bandwidth removed) | ✅ |
+| 11.16 | RoomShell mockup layout (sidebar + hero + right panel + curator) — Alistair (The Life Laboratory) | ✅ |
+| 11.17 | RoomShell mockup layout — Grace (The Hearth) | ✅ |
+| 11.18 | RoomShell mockup layout — Kaelan (The Observatory) | ⚪ next |
+| 11.19 | RoomShell mockup layout — Sara (The Family Table) | ⚪ next |
+| 11.20 | Replace monogram avatars with Nano-Banana-generated portraits | ⚪ deferred |
+| 11.21 | Replace CSS atmosphere with Nano-Banana cinematic backgrounds | ⚪ deferred |
 
 **Update rule:** every time a status flips, append a one-line note with the date below the relevant row instead of editing in place. Keep history.

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
 import RoomIntroCard from "@/components/RoomIntroCard";
+import RoomShell from "@/components/RoomShell";
+import { ALISTAIR_ROOM } from "@/data/roomConfigs";
 import FirstLetterWidget from "@/components/FirstLetterWidget";
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
 // §AUDIT-SCALE 2026-05-20 — Course Room joins Clarity in tracking
@@ -73,16 +75,10 @@ export default function CourseRoom() {
 
   return (
     <div data-testid="course-room-page" className="sanctuary-room relative">
-      <PageHeader
-        eyebrow="Alistair"
-        title="A small library of"
-        italicWord="slow explorations."
-        description="Not a course, not a class, not a self-help bootcamp. You bring a question — childhood, money, body, evenings. You read one short piece, you sit with it, the next arrives when its hour comes. No binge, no streaks. Slow, on purpose."
-        testid="course-room-header"
-      />
-
-      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Alistair. */}
-      <RoomIntroCard roomId="alistair" />
+      {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout for Alistair. */}
+      <RoomShell room={ALISTAIR_ROOM}>
+        {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Alistair. */}
+        <RoomIntroCard roomId="alistair" />
 
       {/* §CURATOR-INTRO 2026-05-28 — Alistair's pre-recorded 15s hello. */}
       <section className="aurin-section-sm" data-testid="course-room-alistair-intro">
@@ -277,6 +273,7 @@ export default function CourseRoom() {
           </div>
         </section>
       )}
+      </RoomShell>
     </div>
   );
 }

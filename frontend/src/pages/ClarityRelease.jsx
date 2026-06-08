@@ -59,6 +59,8 @@ import {
 // §SPRINT-4 — 3-minute first step that sits under the hero.
 import FirstActionBlock from "@/components/FirstActionBlock";
 import RoomIntroCard from "@/components/RoomIntroCard";
+import RoomShell from "@/components/RoomShell";
+import { GRACE_ROOM } from "@/data/roomConfigs";
 
 /**
  * Clarity Release — formerly "Private Room".
@@ -426,23 +428,15 @@ export default function ClarityRelease() {
 
   return (
     <div data-testid="page-clarity-release" className="sanctuary-room relative">
-      <PageHeader
-        tone="default"
-        eyebrow="Clarity Release"
-        title="Welcome to"
-        italicWord="Clarity Release."
-        description="A quiet room where you can think out loud. A calm partner who listens, mirrors, and helps you put your own thoughts in order — for heavy loads, for the quiet fog of loneliness, and for the days you don't quite recognise yourself."
-      />
+      {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout (sidebar +
+          centre hero + right "How it works" panel + curator card).
+          Wraps the existing room body as children below. */}
+      <RoomShell room={GRACE_ROOM}>
+        {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart". */}
+        <RoomIntroCard roomId="grace" />
 
-      {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" — who walks in
-          here, what this room is, what you'll find, what it is NOT,
-          one free thing to try right now. NOT a sales card. */}
-      <RoomIntroCard roomId="grace" />
-
-      {/* §SPRINT-4 2026-02 — Grace's 3-minute first step. Sits directly
-          under the hero, before the doorway illustration. One shared
-          component, content in /src/data/firstActions.js. */}
-      <FirstActionBlock id="grace" />
+        {/* §SPRINT-4 2026-02 — Grace's 3-minute first step. */}
+        <FirstActionBlock id="grace" />
 
       {/* Inner Mirror — founder-supplied illustration of the doorway */}
       <section className="aurin-section-xs" data-testid="clarity-doorway-section">
@@ -620,6 +614,7 @@ export default function ClarityRelease() {
 
       {/* Emergency Exit — visible on every signed-in surface */}
       {user && <EmergencyExit />}
+      </RoomShell>
     </div>
   );
 }
