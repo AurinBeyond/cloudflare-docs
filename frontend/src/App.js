@@ -48,6 +48,7 @@ import LibraryHub from "@/pages/LibraryHub";
 import LibraryKids from "@/pages/LibraryKids";
 import LibraryKidsRead from "@/pages/LibraryKidsRead";
 import ClarityRelease from "@/pages/ClarityRelease";
+import Grace from "@/pages/Grace";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
@@ -203,25 +204,26 @@ function AppRouter() {
         <Route path="/aurin-philosophy" element={<AurinPhilosophy />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/private-room" element={<Navigate to="/clarity-release" replace />} />
+        <Route path="/private-room" element={<Navigate to="/grace" replace />} />
         {/* §AUDIT 2026-05-21 — `/pricing` was referenced from 3 places
             (RoomConvaiChat blocked-card, ConvaiPresenceTracker, AurinsRoomChat)
             but the route was NEVER registered → users hit a blank black
-            page when topping up credits. Redirect to /clarity-release
+            page when topping up credits. Redirect to /grace
             where the real Wanderer Passes + LemonSqueezy checkout live. */}
-        <Route path="/pricing" element={<Navigate to="/clarity-release" replace />} />
+        <Route path="/pricing" element={<Navigate to="/grace" replace />} />
         <Route path="/guest" element={<Guest />} />
         <Route path="/portal/guest" element={<Guest />} />
         <Route path="/portal/referral" element={<Referral />} />
         <Route path="/refer-a-friend" element={<Navigate to="/portal/referral" replace />} />
-        <Route
-          path="/clarity-release"
-          element={
-            <WandererGate scope="private">
-              <ClarityRelease />
-            </WandererGate>
-          }
-        />
+        {/* §GRACE-LIGHT-HOMEPAGE 2026-02 — Public warm-light Grace
+            landing page (founder spec, Estonian session). Replaces
+            "Clarity Release" as the user-facing Grace front door.
+            No WandererGate here — the gate fires when the user enters
+            the actual chat/voice surface via /aurin?mode=grace. */}
+        <Route path="/grace" element={<Grace />} />
+        {/* Legacy redirect — keep /clarity-release alive only for old
+            inbound links. New traffic lands on /grace. */}
+        <Route path="/clarity-release" element={<Navigate to="/grace" replace />} />
         <Route path="/clarity-release/threshold" element={<ClarityThreshold />} />
         {/* §Phase 1 — public Grace-only demo route (no auth, no
             consent gate). Founder-shareable link for bank / demo. */}

@@ -8,7 +8,7 @@ const COLUMNS = [
       { to: "/", label: "Home" },
       { to: "/six-nights", label: "Six Nights" },
       { to: "/the-beginning", label: "The Beginning" },
-      { to: "/clarity-release", label: "Clarity Release" },
+      { to: "/grace", label: "Grace" },
       { to: "/cabinet/booking", label: "Quiet hours" },
       { to: "/body-room", label: "Body Room" },
       { to: "/parents-room", label: "Parents' Room" },

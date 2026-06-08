@@ -17,6 +17,7 @@ export default function Layout() {
   // soon") teaser on every mentor surface so it never overlaps the
   // wanderer's speaking experience.
   const isSanctuary = (
+    location.pathname.startsWith("/grace") ||
     location.pathname.startsWith("/clarity-release") ||
     location.pathname.startsWith("/body-room") ||
     location.pathname.startsWith("/parents-room") ||
