@@ -19,11 +19,10 @@ export const GRACE_ROOM = {
   symbolGlyph: "🜂",
   question: "Would you like to stay awhile?",
 
-  /* Hero photograph — Nano Banana generated image planned (see
-     /app/memory/NANO_BANANA_PROMPTS.md). Currently empty so the
-     RoomShell falls back to CSS-only fireplace atmosphere — 100%
-     English, no embedded Estonian UI elements. */
-  heroImage: null,
+  /* Hero image — Nano Banana generated, no embedded UI text.
+     Prompt source: /app/memory/NANO_BANANA_PROMPTS.md (founder spec).
+     Generation script: /app/scripts/generate_grace_hero.py */
+  heroImage: "/assets/rooms/grace-hearth.png",
   heroImageAlt:
     "The Hearth — a warm, intimate evening room with a fireplace, rain on the window, soft candlelight, an armchair, deep navy and amber tones.",
 
