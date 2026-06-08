@@ -52,26 +52,26 @@ const HOW_STEPS = [
 ];
 
 const RECENT_DISCOVERIES = [
-  { id: 1, icon: "◇", text: "I noticed I say yes most when I am the most tired.", date: "May 18, 2024" },
-  { id: 2, icon: "◯", text: "Three minutes of silence before answering changes the answer.", date: "May 15, 2024" },
-  { id: 3, icon: "✦", text: "The thing I avoid in the morning is the thing I need most at noon.", date: "May 12, 2024" },
+  { id: 1, icon: "◇", text: "A pattern I noticed today", date: "Add your first observation" },
+  { id: 2, icon: "◯", text: "A question I want to return to", date: "Save a question worth keeping" },
+  { id: 3, icon: "✦", text: "A small experiment worth repeating", date: "Mark what worked" },
 ];
 
 const THOUGHTS = [
-  "A question, sat with long enough, often becomes its own answer.",
-  "Curiosity outlives motivation.",
-  "Most of what we call thinking is actually rehearsing.",
-  "You learn faster from one careful experiment than from ten confident opinions.",
-  "Pay attention long enough and the world starts paying you back.",
-  "The mind that admits not knowing is the mind that begins to know.",
-  "Small data, gathered honestly, beats big theories every time.",
+  "A question held gently can change the way you see the day.",
+  "Not every pattern needs to be broken. Some first need to be understood.",
+  "The smallest observation can become the beginning of a new life.",
+  "Before you react, notice what is asking to be seen.",
+  "Sometimes clarity arrives after you stop forcing it.",
+  "What you repeat may be trying to teach you something.",
+  "A quiet experiment is often wiser than a loud decision.",
 ];
 
 const WORDS = [
-  { id: 1, text: "Questions outlast answers." },
-  { id: 2, text: "Notice before naming." },
-  { id: 3, text: "Curiosity does not require courage. Only honesty." },
-  { id: 4, text: "Slow is also a method." },
+  { id: 1, text: "Notice before naming." },
+  { id: 2, text: "Ask before assuming." },
+  { id: 3, text: "Try something small." },
+  { id: 4, text: "Let the pattern speak." },
 ];
 
 export default function Alistair() {
