@@ -313,25 +313,76 @@ export default function RoomShell({ room, children }) {
               >
                 {room.curator} · {room.roomName}
               </p>
-              <h1
-                className="leading-[1.04] mb-7"
-                style={{
-                  color: m.text,
-                  fontFamily: '"Cormorant Garamond", Georgia, serif',
-                  fontWeight: 400,
-                  fontSize: "clamp(2.6rem, 5vw, 4.2rem)",
-                }}
-                data-testid={`${testidRoot}-title`}
-              >
-                {room.hero.title}
-              </h1>
-              <p
-                className="text-[17px] md:text-[18px] leading-[1.75] max-w-[560px] mb-9"
-                style={{ color: m.textMute }}
-                data-testid={`${testidRoot}-subtitle`}
-              >
-                {room.hero.subtitle}
-              </p>
+
+              {/* If a hero photograph is provided in roomConfig, paint
+                  it full-bleed with a deep gradient overlay; the title
+                  and subtitle then sit OVER the photo. Else fall back to
+                  the plain title/subtitle layout below. */}
+              {room.heroImage ? (
+                <div
+                  className="relative rounded-2xl overflow-hidden mb-8"
+                  style={{
+                    boxShadow: `0 20px 60px -20px ${m.accent}22`,
+                  }}
+                  data-testid={`${testidRoot}-hero-image`}
+                >
+                  <img
+                    src={room.heroImage}
+                    alt={room.heroImageAlt || ""}
+                    className="w-full h-[320px] md:h-[440px] object-cover"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        `linear-gradient(to top, ${m.bg} 0%, ${m.bg}66 45%, transparent 85%)`,
+                    }}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-7 md:p-10">
+                    <h1
+                      className="leading-[1.05] mb-3"
+                      style={{
+                        color: m.text,
+                        fontFamily: '"Cormorant Garamond", Georgia, serif',
+                        fontWeight: 400,
+                        fontSize: "clamp(2.2rem, 4.2vw, 3.4rem)",
+                      }}
+                      data-testid={`${testidRoot}-title`}
+                    >
+                      {room.hero.title}
+                    </h1>
+                    <p
+                      className="text-[15px] md:text-[17px] leading-[1.7] max-w-[520px]"
+                      style={{ color: m.textMute }}
+                      data-testid={`${testidRoot}-subtitle`}
+                    >
+                      {room.hero.subtitle}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h1
+                    className="leading-[1.04] mb-7"
+                    style={{
+                      color: m.text,
+                      fontFamily: '"Cormorant Garamond", Georgia, serif',
+                      fontWeight: 400,
+                      fontSize: "clamp(2.6rem, 5vw, 4.2rem)",
+                    }}
+                    data-testid={`${testidRoot}-title`}
+                  >
+                    {room.hero.title}
+                  </h1>
+                  <p
+                    className="text-[17px] md:text-[18px] leading-[1.75] max-w-[560px] mb-9"
+                    style={{ color: m.textMute }}
+                    data-testid={`${testidRoot}-subtitle`}
+                  >
+                    {room.hero.subtitle}
+                  </p>
+                </>
+              )}
 
               {room.hero.primary && (
                 <a
@@ -343,7 +394,7 @@ export default function RoomShell({ room, children }) {
                     color: "#1c1208",
                     fontWeight: 500,
                     letterSpacing: "0.04em",
-                    boxShadow: "0 8px 28px -10px rgba(214, 165, 96, 0.5)",
+                    boxShadow: `0 8px 28px -10px ${m.accent}80`,
                   }}
                 >
                   {room.hero.primary.label}
@@ -380,6 +431,55 @@ export default function RoomShell({ room, children }) {
             <CuratorCard card={room.curatorCard} mood={m} testidRoot={testidRoot} />
           </div>
         </div>
+
+        {/* Notes Left By The Fire — Atomsi reflection cards. Rendered
+            inside the hero band (still on dark backdrop) when the
+            roomConfig provides a `notes` block. */}
+        {room.notes && (
+          <div className="relative max-w-[1480px] mx-auto px-5 md:px-8 pb-14">
+            <h3
+              className="text-[18px] md:text-[20px] mb-6"
+              style={{
+                color: m.accent2 || m.accent,
+                fontFamily: '"Cormorant Garamond", Georgia, serif',
+                fontWeight: 500,
+              }}
+              data-testid={`${testidRoot}-notes-title`}
+            >
+              {room.notes.title}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {room.notes.cards.map((note) => (
+                <div
+                  key={note.id}
+                  data-testid={`${testidRoot}-note-${note.id}`}
+                  className="p-5 rounded-xl transition-all duration-500"
+                  style={{
+                    background: m.panelBg,
+                    border: `1px solid ${m.panelBorder}`,
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  <p
+                    className="text-[14px] italic leading-relaxed mb-3"
+                    style={{
+                      color: m.text,
+                      fontFamily: '"Cormorant Garamond", Georgia, serif',
+                    }}
+                  >
+                    "{note.text}"
+                  </p>
+                  <p
+                    className="text-[11px] tracking-[0.14em] uppercase"
+                    style={{ color: m.textMute, opacity: 0.7 }}
+                  >
+                    {note.meta}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* CHILDREN — the existing room body (RoomIntroCard, FirstActionBlock,

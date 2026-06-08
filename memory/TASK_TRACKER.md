@@ -192,7 +192,8 @@ Legend:
 | 11.14 | RoomIntroCard mounted in 5 rooms (Grace, Kaelan, Sara, Alistair, Aurin) | ✅ |
 | 11.15 | Grace + Alistair hero copy cleanup (sanctuary / high-bandwidth removed) | ✅ |
 | 11.16 | RoomShell mockup layout (sidebar + hero + right panel + curator) — Alistair (The Life Laboratory) | ✅ |
-| 11.17 | RoomShell mockup layout — Grace (The Hearth) | ✅ |
+| 11.17 | RoomShell mockup layout — Grace (The Hearth) + Atomsi spec + hero image + Notes Left By The Fire | ✅ |
+| 11.18 | Replace Atomsi mockup-image with a clean Nano-Banana cinematic fireplace background (no embedded UI text) | ⚪ next — required because current image contains Estonian UI snippets baked into it |
 | 11.18 | RoomShell mockup layout — Kaelan (The Observatory) | ⚪ next |
 | 11.19 | RoomShell mockup layout — Sara (The Family Table) | ⚪ next |
 | 11.20 | Replace monogram avatars with Nano-Banana-generated portraits | ⚪ deferred |

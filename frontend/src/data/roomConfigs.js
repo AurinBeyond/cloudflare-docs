@@ -19,21 +19,28 @@ export const GRACE_ROOM = {
   symbolGlyph: "🜂",
   question: "Would you like to stay awhile?",
 
-  /* mood — used by RoomHeroBackdrop to paint the CSS atmosphere */
+  /* Hero photograph — the real fireplace room image (provided by founder).
+     If present, RoomShell renders the picture full-width in the centre
+     column instead of the CSS-only atmosphere. */
+  heroImage: "/assets/rooms/grace-hearth.png",
+  heroImageAlt:
+    "The Hearth — a warm, intimate evening room with a fireplace, rain on the window, soft candlelight, an armchair, deep navy and amber tones.",
+
+  /* Atomsi-spec palette: deep navy + warm amber + fireplace gold + cream. */
   mood: {
     time: "Late evening",
-    bg: "#0c121e",
+    bg: "#0f0f23",
     bgGradient:
-      "radial-gradient(ellipse 90% 70% at 70% 60%, rgba(214, 142, 74, 0.18) 0%, rgba(36, 22, 14, 0.85) 45%, #0c121e 90%)",
-    accent: "#d6a560",
-    accent2: "#b97a3a",
-    text: "#f0e3c4",
-    textMute: "#a89478",
-    panelBg: "rgba(20, 14, 22, 0.55)",
-    panelBorder: "rgba(214, 165, 96, 0.22)",
-    panelText: "#f0e3c4",
-    panelTextMute: "#a89478",
-    sidebarBg: "rgba(12, 16, 24, 0.85)",
+      "radial-gradient(ellipse 90% 70% at 50% 60%, rgba(212, 165, 116, 0.18) 0%, rgba(15, 15, 35, 0.85) 50%, #0f0f23 90%)",
+    accent: "#e8a838",
+    accent2: "#d4a574",
+    text: "#f5f0e8",
+    textMute: "#a09080",
+    panelBg: "rgba(10, 10, 26, 0.62)",
+    panelBorder: "rgba(212, 165, 116, 0.22)",
+    panelText: "#f5f0e8",
+    panelTextMute: "#a09080",
+    sidebarBg: "rgba(10, 10, 26, 0.92)",
   },
 
   hero: {
@@ -102,7 +109,18 @@ export const GRACE_ROOM = {
     name: "Grace",
     initial: "G",
     role: "Keeper of the Hearth · Listener · Witness · Companion",
-    line: "I listen. I am here. When you are ready, speak.",
+    line: "The fire is here. The chair is waiting. Whenever you are ready.",
+  },
+
+  /* Notes Left By The Fire — Atomsi-spec'd reflection cards rendered
+     directly below the hero band by RoomShell when present. */
+  notes: {
+    title: "Notes Left By The Fire",
+    cards: [
+      { id: 1, text: "Like letters never sent.",                                                  meta: "Left by the fire" },
+      { id: 2, text: "Like thoughts that needed a place to rest.",                                meta: "A quiet evening" },
+      { id: 3, text: "Some things are not problems to solve. They are truths to sit with.",       meta: "Before the rain stopped" },
+    ],
   },
 };
 
