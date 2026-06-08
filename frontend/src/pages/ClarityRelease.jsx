@@ -60,6 +60,7 @@ import {
 import FirstActionBlock from "@/components/FirstActionBlock";
 import RoomIntroCard from "@/components/RoomIntroCard";
 import RoomShell from "@/components/RoomShell";
+import GracePanels from "@/components/GracePanels";
 import { GRACE_ROOM } from "@/data/roomConfigs";
 
 /**
@@ -89,6 +90,7 @@ export default function ClarityRelease() {
   const navigate = useNavigate();
 
   const [phase, setPhase] = useState(PHASES.GATE);
+  const [hearthPanel, setHearthPanel] = useState(null);
   const [confirms, setConfirms] = useState({ a: false, b: false, c: false, d: false, e: false });
   const [keepThread, setKeepThread] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -431,7 +433,11 @@ export default function ClarityRelease() {
       {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout (sidebar +
           centre hero + right "How it works" panel + curator card).
           Wraps the existing room body as children below. */}
-      <RoomShell room={GRACE_ROOM}>
+      <RoomShell
+        room={GRACE_ROOM}
+        onSidebarClick={(item) => setHearthPanel(item.id)}
+        onPrimaryCta={() => setHearthPanel("speak")}
+      >
         {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart". */}
         <RoomIntroCard roomId="grace" />
 
@@ -615,6 +621,9 @@ export default function ClarityRelease() {
       {/* Emergency Exit — visible on every signed-in surface */}
       {user && <EmergencyExit />}
       </RoomShell>
+
+      {/* §GRACE-PANELS 2026-02 — sidebar items open modal panels */}
+      <GracePanels openId={hearthPanel} onClose={() => setHearthPanel(null)} />
     </div>
   );
 }
@@ -1718,4 +1727,3 @@ function GuideHologram({ gender, sending, toneTag, runtimeState, mouthOpenRef })
     </div>
   );
 }
-

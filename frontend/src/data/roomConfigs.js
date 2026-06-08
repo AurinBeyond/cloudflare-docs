@@ -19,10 +19,11 @@ export const GRACE_ROOM = {
   symbolGlyph: "🜂",
   question: "Would you like to stay awhile?",
 
-  /* Hero photograph — the real fireplace room image (provided by founder).
-     If present, RoomShell renders the picture full-width in the centre
-     column instead of the CSS-only atmosphere. */
-  heroImage: "/assets/rooms/grace-hearth.png",
+  /* Hero photograph — Nano Banana generated image planned (see
+     /app/memory/NANO_BANANA_PROMPTS.md). Currently empty so the
+     RoomShell falls back to CSS-only fireplace atmosphere — 100%
+     English, no embedded Estonian UI elements. */
+  heroImage: null,
   heroImageAlt:
     "The Hearth — a warm, intimate evening room with a fireplace, rain on the window, soft candlelight, an armchair, deep navy and amber tones.",
 

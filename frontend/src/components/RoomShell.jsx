@@ -41,15 +41,28 @@ function RoomHeroBackdrop({ mood }) {
         backgroundImage: mood.bgGradient,
       }}
     >
-      {/* Atmosphere: warm glow */}
+      {/* Atmosphere: warm fireplace glow at the bottom centre */}
       <div
         className="absolute"
         style={{
-          right: "18%", top: "35%",
-          width: "520px", height: "520px",
+          left: "30%", bottom: "5%",
+          width: "640px", height: "400px",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(214, 165, 96, 0.22) 0%, transparent 65%)",
+            `radial-gradient(circle, ${mood.accent}3a 0%, ${mood.accent2 || mood.accent}1a 35%, transparent 70%)`,
+          filter: "blur(50px)",
+          animation: "gracePulse 5s ease-in-out infinite",
+        }}
+      />
+      {/* Secondary candlelight pool, top-right */}
+      <div
+        className="absolute"
+        style={{
+          right: "12%", top: "20%",
+          width: "320px", height: "320px",
+          borderRadius: "50%",
+          background:
+            `radial-gradient(circle, ${mood.accent}26 0%, transparent 65%)`,
           filter: "blur(40px)",
         }}
       />
@@ -61,12 +74,18 @@ function RoomHeroBackdrop({ mood }) {
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.42'/></svg>\")",
         }}
       />
+      <style>{`
+        @keyframes gracePulse {
+          0%, 100% { opacity: 0.65; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.06); }
+        }
+      `}</style>
     </div>
   );
 }
 
 /* ----------------------------- SIDEBAR ------------------------------ */
-function Sidebar({ items, mood, testidRoot }) {
+function Sidebar({ items, mood, testidRoot, onItemClick }) {
   return (
     <nav
       className="rounded-2xl p-3 self-start"
@@ -80,22 +99,36 @@ function Sidebar({ items, mood, testidRoot }) {
       <ul className="space-y-1">
         {items.map((it, i) => {
           const isFirst = i === 0;
+          const baseClass = "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] transition-all w-full text-left";
+          const style = {
+            color: isFirst ? mood.text : mood.textMute,
+            background: isFirst ? "rgba(214, 165, 96, 0.1)" : "transparent",
+            border: isFirst ? `1px solid ${mood.panelBorder}` : "1px solid transparent",
+            letterSpacing: "0.01em",
+          };
+          if (onItemClick) {
+            return (
+              <li key={it.id}>
+                <button
+                  type="button"
+                  data-testid={`${testidRoot}-sidebar-${it.id}`}
+                  onClick={() => onItemClick(it)}
+                  className={baseClass + " hover:bg-[rgba(214,165,96,0.08)]"}
+                  style={style}
+                >
+                  <IconFor name={it.icon} size={15} />
+                  <span>{it.label}</span>
+                </button>
+              </li>
+            );
+          }
           return (
             <li key={it.id}>
               <a
                 href={it.href}
                 data-testid={`${testidRoot}-sidebar-${it.id}`}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] transition-all`}
-                style={{
-                  color: isFirst ? mood.text : mood.textMute,
-                  background: isFirst
-                    ? "rgba(214, 165, 96, 0.1)"
-                    : "transparent",
-                  border: isFirst
-                    ? `1px solid ${mood.panelBorder}`
-                    : "1px solid transparent",
-                  letterSpacing: "0.01em",
-                }}
+                className={baseClass}
+                style={style}
               >
                 <IconFor name={it.icon} size={15} />
                 <span>{it.label}</span>
@@ -277,7 +310,7 @@ function PrinciplePanel({ principle, mood, testidRoot }) {
 }
 
 /* ----------------------------- ROOM SHELL --------------------------- */
-export default function RoomShell({ room, children }) {
+export default function RoomShell({ room, children, onSidebarClick, onPrimaryCta }) {
   const m = room.mood;
   const testidRoot = `room-shell-${room.id}`;
 
@@ -290,16 +323,13 @@ export default function RoomShell({ room, children }) {
       >
         <RoomHeroBackdrop mood={m} />
 
-        {/* Three-column grid */}
+        {/* Three-column grid (stacks on mobile/tablet) */}
         <div
-          className="relative grid gap-6 px-5 md:px-8 py-10 md:py-14 max-w-[1480px] mx-auto"
-          style={{
-            gridTemplateColumns: "minmax(220px, 240px) 1fr minmax(320px, 380px)",
-          }}
+          className="relative grid gap-6 px-5 md:px-8 py-10 md:py-14 max-w-[1480px] mx-auto grid-cols-1 lg:[grid-template-columns:minmax(220px,_240px)_1fr_minmax(320px,_380px)]"
         >
           {/* LEFT — sidebar + principle */}
           <div className="space-y-6">
-            <Sidebar items={room.sidebar} mood={m} testidRoot={testidRoot} />
+            <Sidebar items={room.sidebar} mood={m} testidRoot={testidRoot} onItemClick={onSidebarClick} />
             <PrinciplePanel principle={room.principle} mood={m} testidRoot={testidRoot} />
           </div>
 
@@ -385,21 +415,40 @@ export default function RoomShell({ room, children }) {
               )}
 
               {room.hero.primary && (
-                <a
-                  href={room.hero.primary.href}
-                  data-testid={`${testidRoot}-primary-cta`}
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[14px] transition-all hover:scale-[1.02]"
-                  style={{
-                    background: m.accent,
-                    color: "#1c1208",
-                    fontWeight: 500,
-                    letterSpacing: "0.04em",
-                    boxShadow: `0 8px 28px -10px ${m.accent}80`,
-                  }}
-                >
-                  {room.hero.primary.label}
-                  <ArrowRight size={14} strokeWidth={1.7} />
-                </a>
+                onPrimaryCta ? (
+                  <button
+                    type="button"
+                    onClick={onPrimaryCta}
+                    data-testid={`${testidRoot}-primary-cta`}
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[14px] transition-all hover:scale-[1.02]"
+                    style={{
+                      background: m.accent,
+                      color: "#1c1208",
+                      fontWeight: 500,
+                      letterSpacing: "0.04em",
+                      boxShadow: `0 8px 28px -10px ${m.accent}80`,
+                    }}
+                  >
+                    {room.hero.primary.label}
+                    <ArrowRight size={14} strokeWidth={1.7} />
+                  </button>
+                ) : (
+                  <a
+                    href={room.hero.primary.href}
+                    data-testid={`${testidRoot}-primary-cta`}
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[14px] transition-all hover:scale-[1.02]"
+                    style={{
+                      background: m.accent,
+                      color: "#1c1208",
+                      fontWeight: 500,
+                      letterSpacing: "0.04em",
+                      boxShadow: `0 8px 28px -10px ${m.accent}80`,
+                    }}
+                  >
+                    {room.hero.primary.label}
+                    <ArrowRight size={14} strokeWidth={1.7} />
+                  </a>
+                )
               )}
             </div>
 
