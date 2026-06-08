@@ -67,6 +67,13 @@ import AurinStoryWorld from "@/pages/AurinStoryWorld";
 import AurinStoryRead from "@/pages/AurinStoryRead";
 import BetaTestGroup from "@/pages/BetaTestGroup";
 import CourseRoom from "@/pages/CourseRoom";
+import Alistair from "@/pages/Alistair";
+import AlistairExplore from "@/pages/alistair/Explore";
+import AlistairRead from "@/pages/alistair/Read";
+import AlistairExperiments from "@/pages/alistair/Experiments";
+import AlistairNotes from "@/pages/alistair/Notes";
+import AlistairLibrary from "@/pages/alistair/Library";
+import AlistairLibraryArticle from "@/pages/alistair/LibraryArticle";
 import CourseDetail from "@/pages/CourseDetail";
 import Catalogue from "@/pages/Catalogue";
 import Faq from "@/pages/Faq";
@@ -326,8 +333,23 @@ function AppRouter() {
           }
         />
         <Route path="/test-group" element={<BetaTestGroup />} />
+        {/* §ALISTAIR-LIGHT-HOMEPAGE 2026-02 — Grace architecture
+            mirrored for Alistair. `/course-room` is now the public
+            "Laboratory of Life" landing; `/course-room/room` is the
+            real Wanderer-gated voice/chat surface (preserves the old
+            CourseRoom.jsx untouched). All five sub-pages mirror the
+            Grace ones (Explore / Read / Experiments / Notes /
+            Library). Order matters: every concrete sub-route must
+            appear BEFORE the legacy `:slug` catch-all below. */}
+        <Route path="/course-room" element={<Alistair />} />
+        <Route path="/course-room/explore" element={<AlistairExplore />} />
+        <Route path="/course-room/read" element={<AlistairRead />} />
+        <Route path="/course-room/experiments" element={<AlistairExperiments />} />
+        <Route path="/course-room/notes" element={<AlistairNotes />} />
+        <Route path="/course-room/library" element={<AlistairLibrary />} />
+        <Route path="/course-room/library/:slug" element={<AlistairLibraryArticle />} />
         <Route
-          path="/course-room"
+          path="/course-room/room"
           element={
             <WandererGate scope="private">
               <CourseRoom />

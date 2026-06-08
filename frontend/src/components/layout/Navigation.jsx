@@ -39,11 +39,17 @@ export default function Navigation() {
      inside /grace* the global navigation must shed every other room
      (Body Room, Parents' Room, Polarstar Kids, Courses, etc.) and
      leave only a minimal "stay anchored, find your way home" set:
-     brand logo, Home, Grace (the current room), Enter Portal. */
+     brand logo, Home, Grace (the current room), Enter Portal.
+     §ALISTAIR-ISOLATION 2026-02 — Same rule applied to /course-room*:
+     Alistair's Laboratory of Life is also its own world. */
   const inGraceContext = location.pathname.startsWith("/grace");
-  const visibleItems = inGraceContext
-    ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
-    : NAV_ITEMS;
+  const inAlistairContext = location.pathname.startsWith("/course-room");
+  const visibleItems =
+    inGraceContext
+      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
+      : inAlistairContext
+      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/course-room")
+      : NAV_ITEMS;
 
   return (
     <header
