@@ -9,7 +9,7 @@
 
 | # | Product | Page | Price | Currency | Gumroad URL | Account | Content ready? | Active sale? |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **Seven Quiet Nights** *(aka Polarstar Bedtime Stories PDF)* | `/seven-quiet-nights` | **€7** | EUR | `prulesoul.gumroad.com/l/fwqmha` | `prulesoul` | ✅ PDF + 1 audio (Little Star) | 🟢 YES |
+| 1 | **Seven Quiet Nights** *(aka Polarstar Bedtime Stories PDF)* | `/seven-quiet-nights` | **€9** | EUR | `prulesoul.gumroad.com/l/fwqmha` | `prulesoul` | ✅ PDF + 1 audio (Little Star) | 🟢 YES |
 | 2 | **The Hearth Protocol** | `/the-hearth` | **€19** | EUR | `aurinbeyond.gumroad.com/l/the-hearth` | `aurinbeyond` | ✅ 5 audios + 5 listen pages | 🟢 YES |
 | 3 | **Alistair Bundle** | `/alistair-bundle` | **€39** | EUR | `aurinbeyond.gumroad.com/l/alistair-bundle` | `aurinbeyond` | 🔴 **0 of 21 letters authored** | 🟢 YES (risk!) |
 | 4 | **Family Bundle** *(Polarstar + Hearth combo)* | `/family-bundle` | **€25** | EUR | `aurinbeyond.gumroad.com/l/vjurjm` | `aurinbeyond` | ✅ inherits (1) + (2) content | 🟢 YES |
