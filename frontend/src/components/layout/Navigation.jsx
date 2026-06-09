@@ -41,15 +41,21 @@ export default function Navigation() {
      leave only a minimal "stay anchored, find your way home" set:
      brand logo, Home, Grace (the current room), Enter Portal.
      §ALISTAIR-ISOLATION 2026-02 — Same rule applied to /course-room*:
-     Alistair's Laboratory of Life is also its own world. */
+     Alistair's Laboratory of Life is also its own world.
+     §FULL-HIDE 2026-02-08 — Anna repeated request: when inside a
+     room with its own dedicated dark sidebar (Grace v2, Alistair v2)
+     the global top-bar must disappear *entirely*. The room sidebar
+     becomes the only navigation. The 10-second business-card rule:
+     once you step into a room the global system stops competing for
+     attention. */
   const inGraceContext = location.pathname.startsWith("/grace");
   const inAlistairContext = location.pathname.startsWith("/course-room");
-  const visibleItems =
-    inGraceContext
-      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
-      : inAlistairContext
-      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/course-room")
-      : NAV_ITEMS;
+
+  if (inGraceContext || inAlistairContext) {
+    return null;
+  }
+
+  const visibleItems = NAV_ITEMS;
 
   return (
     <header

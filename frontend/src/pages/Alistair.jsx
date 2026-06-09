@@ -199,23 +199,27 @@ function CentreColumn() {
           backgroundPosition: "center",
         }}
       />
+      {/* §HERO-CONTRAST 2026-02-08 — Founder repeated complaint: text
+          must NEVER sit on bright areas (sky in the arched window, the
+          lake, the face). A deep gradient is anchored against the LEFT
+          edge of the painted scene so the hero typography lives on the
+          dark library/bookshelf side of the room only. The bright sky
+          and water in the centre stay untouched. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 85% 85% at 50% 45%, transparent 35%, rgba(12,15,23,0.55) 100%)",
+            "linear-gradient(90deg, rgba(12,15,23,0.86) 0%, rgba(12,15,23,0.62) 28%, rgba(12,15,23,0.12) 48%, transparent 62%)",
         }}
       />
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-[60px] pointer-events-none"
-        style={{ background: "linear-gradient(90deg, rgba(12,15,23,0.85), transparent)" }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-y-0 right-0 w-[60px] pointer-events-none"
-        style={{ background: "linear-gradient(270deg, rgba(12,15,23,0.85), transparent)" }}
+        className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, rgba(12,15,23,0.55) 55%, rgba(12,15,23,0.92) 100%)",
+        }}
       />
 
       <div className="relative z-[2] px-8 lg:px-12 pt-12 lg:pt-14 pb-14">
@@ -228,9 +232,9 @@ function CentreColumn() {
 
 function HeroTitle() {
   return (
-    <header data-testid="alistair-hero" className="max-w-[600px]">
+    <header data-testid="alistair-hero" className="max-w-[440px]">
       <p
-        className="text-[26px] leading-none mb-2"
+        className="text-[22px] leading-none mb-2"
         style={{ color: CREAM, fontFamily: SERIF, letterSpacing: "0.005em" }}
       >
         Alistair
@@ -241,7 +245,7 @@ function HeroTitle() {
         style={{
           color: CREAM,
           fontFamily: SERIF,
-          fontSize: "clamp(2.6rem, 5.2vw, 4.6rem)",
+          fontSize: "clamp(2.2rem, 3.6vw, 3.4rem)",
           letterSpacing: "-0.005em",
         }}
       >
@@ -249,7 +253,7 @@ function HeroTitle() {
       </h1>
       <p
         data-testid="alistair-hero-subtitle"
-        className="text-[16.5px] leading-[1.7] italic max-w-[440px]"
+        className="text-[15px] leading-[1.7] italic max-w-[360px]"
         style={{ color: "#cfc7b3", fontFamily: SERIF }}
       >
         A place for deep inquiry, living experiments<br />
@@ -282,31 +286,63 @@ function LabCard({ lab }) {
   const href = isOpen
     ? `/course-room/lab/${lab.slug}`
     : "/course-room/laboratories";
+  /* §LAB-CARD v3 2026-02-08 — Founder directive: lab cards MUST match
+     the cream/light style in the approved Alistair Laboratory of Life
+     mockup. Each card has a painted thumbnail (delivered by founder
+     separately) sitting in the top half, and a cream body with caps
+     name + serif description + bordered Continue exploring CTA. While
+     the painted thumbnail is not yet delivered, an empty light slot
+     placeholder of the correct dimensions is shown so the layout is
+     pixel-stable for when the asset arrives. NO emoji substitutes. */
   return (
     <Link
       to={href}
       data-testid={`alistair-path-card-${lab.slug}`}
       className="group relative flex flex-col overflow-hidden rounded-md transition-transform hover:-translate-y-px no-underline"
       style={{
-        background: SIDEBAR_BG_SOFT,
-        border: "1px solid rgba(196,164,107,0.22)",
+        background: "rgba(245, 235, 215, 0.96)",
+        border: "1px solid rgba(196,164,107,0.42)",
         textDecoration: "none",
+        boxShadow: "0 12px 32px -18px rgba(0,0,0,0.65)",
       }}
     >
+      {/* Painted thumbnail slot — awaits founder-delivered painting */}
       <div
-        className="relative h-[150px] flex items-center justify-center"
+        className="relative h-[160px] overflow-hidden"
         style={{
-          background: `radial-gradient(ellipse 80% 70% at 50% 45%, ${lab.accent}55, ${SIDEBAR_BG} 75%)`,
+          background:
+            "linear-gradient(180deg, rgba(196,164,107,0.18), rgba(245,235,215,0.42))",
         }}
       >
-        <span aria-hidden="true" className="text-[42px]" style={{ filter: `drop-shadow(0 4px 14px ${lab.accent}aa)` }}>
-          {lab.emoji}
-        </span>
+        {lab.thumbnail ? (
+          <img
+            src={lab.thumbnail}
+            alt=""
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="w-full h-full flex items-center justify-center"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(196,164,107,0.10), rgba(196,164,107,0.04))",
+            }}
+          >
+            <span
+              className="text-[9px] tracking-[0.32em] uppercase"
+              style={{ color: "rgba(43,31,15,0.32)" }}
+            >
+              Image · pending
+            </span>
+          </div>
+        )}
         {!isOpen && (
           <span
-            className="absolute top-2 right-2 text-[9px] tracking-[0.28em] uppercase px-2 py-1"
+            className="absolute top-3 right-3 text-[9px] tracking-[0.28em] uppercase px-2 py-1"
             style={{
-              background: "rgba(12,15,23,0.72)",
+              background: "rgba(12,15,23,0.78)",
               border: "1px solid rgba(196,164,107,0.32)",
               color: BRASS,
             }}
@@ -318,20 +354,24 @@ function LabCard({ lab }) {
 
       <div className="p-5 flex flex-col grow">
         <p
-          className="text-[12.5px] tracking-[0.26em] uppercase mb-2"
-          style={{ color: BRASS_BRIGHT, fontFamily: SERIF }}
+          className="text-[12.5px] tracking-[0.26em] uppercase mb-2.5"
+          style={{ color: "#2b1f0f", fontFamily: SERIF, fontWeight: 500 }}
         >
           {lab.name}
         </p>
         <p
           className="text-[13.5px] leading-[1.6] mb-4 grow"
-          style={{ color: "#bcb4a3", fontFamily: SERIF }}
+          style={{ color: "#5b4226", fontFamily: SERIF }}
         >
           {lab.short}
         </p>
         <span
-          className="inline-flex items-center gap-2 text-[11px] tracking-[0.22em] uppercase mt-auto pt-3 border-t"
-          style={{ color: BRASS, borderColor: "rgba(196,164,107,0.18)" }}
+          className="inline-flex items-center gap-2 self-start text-[11px] tracking-[0.22em] uppercase px-3.5 py-2 rounded-sm border"
+          style={{
+            color: "#2b1f0f",
+            borderColor: lab.accent,
+            background: "rgba(245,235,215,0.5)",
+          }}
         >
           Continue exploring <ArrowRight size={12} />
         </span>
