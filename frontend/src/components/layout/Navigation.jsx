@@ -43,6 +43,14 @@ export default function Navigation() {
   const inGraceContext = location.pathname.startsWith("/grace");
   const inAlistairContext = location.pathname.startsWith("/course-room");
 
+  /* §HIDE-ON-LAB-PAGES 2026-02-10 — Founder success criterion: the
+     global header MUST be hidden on individual lab pages
+     (/course-room/lab/{slug}) so the painted Polarstar pattern reads
+     edge-to-edge. The hub /course-room and other Alistair sub-pages
+     keep their filtered top-bar. */
+  const isLabPage = location.pathname.startsWith("/course-room/lab/");
+  if (isLabPage) return null;
+
   /* §FULL-HIDE-REVERT 2026-02-08 — The full hide introduced earlier in
      this session has been reverted. Founder clarified: she did not
      ask for a system-wide top-bar change; she was talking about

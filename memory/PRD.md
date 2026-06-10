@@ -18,7 +18,30 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-06-08)
 
-### 2026-02-10 — Alistair Hub (Polarstar Pattern, v3)
+### 2026-02-10 (B) — Alistair Hub v4: 11 Laboratories
+- Founder decision: hub MUST show ALL 11 labs (not 4). Polarstar
+  single-image pattern relaxed to a composition: dark CSS sidebar +
+  scenic backdrop hero + 11 painted-thumbnail cards (LAB_ORDER) +
+  dark CSS right column.
+- `/app/frontend/src/pages/Alistair.jsx` rewritten:
+  - Source of truth: `LAB_ORDER` (11 slugs), NOT
+    `HOME_PATH_OF_EXPLORATION` (4).
+  - 11 cards rendered with numbered badges 1–11, painted lab
+    thumbnails, cream body, mockup-matched short descriptions.
+  - Each card → `/course-room/lab/{slug}` (no invented routes).
+  - Sidebar: ALISTAIR mark + Home / Explore (→ /laboratories) /
+    Read / Experiments / Notes / Library + Alistair quote.
+  - Right column: HOW WE EXPLORE 4 steps + Alistair bio + "Let's
+    explore together" → `/course-room/room`.
+- `data/alistairLabs.js`: lab names/short descriptions aligned with
+  founder mockup (Self-Sabotage, Masks, The Code, Invisible Strings,
+  Body Language, Body Language V2, Child & Parent, Compass of
+  Meaning).
+- `components/layout/Navigation.jsx`: global header now HIDDEN on
+  `/course-room/lab/*` (success criterion) so painted lab pages read
+  edge-to-edge; hub `/course-room` still shows the filtered top-bar.
+
+### 2026-02-10 (A) — Alistair Hub (Polarstar Pattern, v3) [SUPERSEDED]
 - `/app/frontend/src/pages/Alistair.jsx` rewritten to use the
   Polarstar pattern: full-bleed painted `course-room-hub.png` image
   + invisible percentage-based hotspots. NO CSS recreation.

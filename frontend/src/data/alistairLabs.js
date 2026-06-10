@@ -121,7 +121,7 @@ export const LABS = {
     accent: "#9a6c3a", accentSoft: "rgba(154, 108, 58, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/self-sabotage.png",
-    short: "Self-sabotage is not your enemy. It is a protective pattern that once helped you survive — explored here with curiosity, compassion and courage.",
+    short: "Discover the patterns that hold you back and learn how to break free.",
   },
   /* §ALISTAIR-v2 2026-02 — Old Stories: founder-renamed inheritance/
    * narrative lab. Preserves Child & Parent themes but reframes the
@@ -140,13 +140,13 @@ export const LABS = {
   },
   "child-parent": {
     slug: "child-parent", emoji: "👶",
-    name: "The Child and the Parent",
+    name: "Child & Parent",
     subtitle: "The two voices that often speak through us.",
     coreQuestion: "Who is speaking right now?",
     accent: "#7a5fa7", accentSoft: "rgba(122, 95, 167, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/child-vs-parent.png",
-    short: "Inner child, inner parent, critic vs caretaker, the need beneath the reaction.",
+    short: "Heal the past and create a new relationship with your inner child.",
   },
   /* §ALISTAIR-v2 2026-02 — Body Knows First: founder-introduced lab
    * pairing somatic inquiry with the existing mind-led labs. Carries
@@ -164,17 +164,17 @@ export const LABS = {
   },
   "masks": {
     slug: "masks", emoji: "🎭",
-    name: "The Masks We Wear",
+    name: "Masks",
     subtitle: "Roles, identity and belonging.",
     coreQuestion: "Who am I when no role is required?",
     accent: "#b65a4f", accentSoft: "rgba(182, 90, 79, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/masks-we-wear.png",
-    short: "Social roles, expectations, authenticity, belonging without pretending.",
+    short: "Explore the roles you play and discover who you truly are beneath them.",
   },
   "compass": {
     slug: "compass", emoji: "🧭",
-    name: "The Compass of Meaning",
+    name: "Compass of Meaning",
     subtitle: "Direction, values and purpose.",
     coreQuestion: "What truly matters?",
     accent: "#4a7ba6", accentSoft: "rgba(74, 123, 166, 0.12)",
@@ -190,7 +190,7 @@ export const LABS = {
     accent: "#6b8aa6", accentSoft: "rgba(107, 138, 166, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/the-code.png",
-    short: "Conditioning, social programming, belief systems, automatic reactions.",
+    short: "Understand the deeper principles and laws that shape your life.",
   },
   "invisible-strings": {
     slug: "invisible-strings", emoji: "🎭",
@@ -200,7 +200,7 @@ export const LABS = {
     accent: "#a07346", accentSoft: "rgba(160, 115, 70, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/invisible-strings.png",
-    short: "Influence, approval seeking, dependency, manipulation.",
+    short: "See the hidden dynamics in your relationships and emotional bonds.",
   },
   "body-language": {
     slug: "body-language", emoji: "✨",
@@ -210,17 +210,17 @@ export const LABS = {
     accent: "#b8895a", accentSoft: "rgba(184, 137, 90, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/body-language-v1.png",
-    short: "Posture, movement, behavioural patterns, unconscious communication.",
+    short: "Understand the unspoken language of the body in daily life.",
   },
   "body-language-v2": {
     slug: "body-language-v2", emoji: "🌌",
-    name: "Body Language Advanced",
+    name: "Body Language V2",
     subtitle: "Deeper body patterns and behavioural loops.",
     coreQuestion: "How do deeper body patterns shape behaviour?",
     accent: "#8b6f47", accentSoft: "rgba(139, 111, 71, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/body-language-v2.png",
-    short: "Body memory, trauma patterns, protection strategies, behavioural loops.",
+    short: "Deepen your mastery of nonverbal communication and energetic presence.",
   },
 };
 
