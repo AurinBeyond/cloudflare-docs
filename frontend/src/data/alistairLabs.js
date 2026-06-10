@@ -27,7 +27,7 @@ export const LABS = {
     accentSoft: "rgba(63, 138, 90, 0.12)",
     status: "open",
     thumbnail: "/assets/alistair/labs/money-tree.png",
-    short: "Not investment advice. A quiet inquiry into the stories you carry about value, receiving, scarcity, and worth.",
+    short: "Explore your inner relationship with money, value and abundance.",
     explore: [
       {
         id: "scarcity-stories",
@@ -203,8 +203,5 @@ export const HOME_PATH_OF_EXPLORATION = [
   "money-tree",
   "old-stories",
   "body-knows-first",
-  "compass",
-];
-,
   "compass",
 ];
