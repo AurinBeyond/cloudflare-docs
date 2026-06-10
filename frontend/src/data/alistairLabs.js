@@ -182,6 +182,46 @@ export const LABS = {
     thumbnail: "/assets/alistair/labs/compass.png",
     short: "Align your choices with what truly matters to you.",
   },
+  "the-code": {
+    slug: "the-code", emoji: "🧬",
+    name: "The Code",
+    subtitle: "The invisible programs running your life.",
+    coreQuestion: "Which invisible programs are running my life?",
+    accent: "#6b8aa6", accentSoft: "rgba(107, 138, 166, 0.12)",
+    status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/the-code.png",
+    short: "Conditioning, social programming, belief systems, automatic reactions.",
+  },
+  "invisible-strings": {
+    slug: "invisible-strings", emoji: "🎭",
+    name: "Invisible Strings",
+    subtitle: "Influence, approval, dependency.",
+    coreQuestion: "Who or what is pulling my decisions?",
+    accent: "#a07346", accentSoft: "rgba(160, 115, 70, 0.12)",
+    status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/invisible-strings.png",
+    short: "Influence, approval seeking, dependency, manipulation.",
+  },
+  "body-language": {
+    slug: "body-language", emoji: "✨",
+    name: "Body Language",
+    subtitle: "What your body is expressing.",
+    coreQuestion: "What is my body expressing?",
+    accent: "#b8895a", accentSoft: "rgba(184, 137, 90, 0.12)",
+    status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/body-language-v1.png",
+    short: "Posture, movement, behavioural patterns, unconscious communication.",
+  },
+  "body-language-v2": {
+    slug: "body-language-v2", emoji: "🌌",
+    name: "Body Language Advanced",
+    subtitle: "Deeper body patterns and behavioural loops.",
+    coreQuestion: "How do deeper body patterns shape behaviour?",
+    accent: "#8b6f47", accentSoft: "rgba(139, 111, 71, 0.12)",
+    status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/body-language-v2.png",
+    short: "Body memory, trauma patterns, protection strategies, behavioural loops.",
+  },
 };
 
 /* §ALISTAIR-v2 2026-02 — Two ordering arrays so we can show the FULL
@@ -192,11 +232,15 @@ export const LABS = {
 export const LAB_ORDER = [
   "money-tree",
   "old-stories",
-  "self-sabotage",
   "body-knows-first",
-  "child-parent",
-  "masks",
   "compass",
+  "self-sabotage",
+  "the-code",
+  "invisible-strings",
+  "masks",
+  "body-language",
+  "child-parent",
+  "body-language-v2",
 ];
 
 export const HOME_PATH_OF_EXPLORATION = [
