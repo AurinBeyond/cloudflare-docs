@@ -43,15 +43,19 @@ export default function Navigation() {
   const inGraceContext = location.pathname.startsWith("/grace");
   const inAlistairContext = location.pathname.startsWith("/course-room");
 
-  /* §FULL-HIDE 2026-02-08 — Anna repeated request: when inside a room
-     with its own dedicated dark sidebar (Grace v2, Alistair v2) the
-     global top-bar must disappear *entirely*. The room sidebar becomes
-     the only navigation. The 10-second business-card rule. */
-  if (inGraceContext || inAlistairContext) {
-    return null;
-  }
-
-  const visibleItems = NAV_ITEMS;
+  /* §FULL-HIDE-REVERT 2026-02-08 — The full hide introduced earlier in
+     this session has been reverted. Founder clarified: she did not
+     ask for a system-wide top-bar change; she was talking about
+     navigation INSIDE Alistair (between its 11 themes). The original
+     pre-session behaviour is restored: on /grace* and /course-room*
+     the shared top-bar stays visible but FILTERED to its anchor links
+     (Home + current room + Enter Portal). */
+  const visibleItems =
+    inGraceContext
+      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
+      : inAlistairContext
+      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/course-room")
+      : NAV_ITEMS;
 
   return (
     <header
