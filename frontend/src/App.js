@@ -76,6 +76,7 @@ import AlistairLibrary from "@/pages/alistair/Library";
 import AlistairLibraryArticle from "@/pages/alistair/LibraryArticle";
 import AlistairLaboratories from "@/pages/alistair/Laboratories";
 import AlistairLab from "@/pages/alistair/Lab";
+import AlistairLabDashboard from "@/pages/alistair/LabDashboard";
 import AlistairLabArticle from "@/pages/alistair/LabArticle";
 import CourseDetail from "@/pages/CourseDetail";
 import Catalogue from "@/pages/Catalogue";
@@ -355,6 +356,10 @@ function AppRouter() {
             Money Tree ships fully; the other four are catalogue-only
             previews ("Soon") until their content is written. */}
         <Route path="/course-room/laboratories" element={<AlistairLaboratories />} />
+        {/* §LAB-DASHBOARD 2026-02-08 — Self-Sabotage test route uses the
+            new Tier-2 dashboard layout. Must be declared BEFORE the
+            generic /lab/:labSlug catch-all below. */}
+        <Route path="/course-room/lab/self-sabotage" element={<AlistairLabDashboard />} />
         <Route path="/course-room/lab/:labSlug" element={<AlistairLab />} />
         <Route path="/course-room/lab/:labSlug/library/:slug" element={<AlistairLabArticle />} />
         <Route
