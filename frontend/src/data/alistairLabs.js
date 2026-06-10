@@ -136,7 +136,7 @@ export const LABS = {
     accent: "#8a5a36", accentSoft: "rgba(138, 90, 54, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/old-stories.png",
-    short: "The sentences we were handed before we could choose. Family scripts, cultural defaults, half-remembered childhood lines that still steer us today.",
+    short: "Discover the stories you carry and how they shape your reality.",
   },
   "child-parent": {
     slug: "child-parent", emoji: "👶",
@@ -160,7 +160,7 @@ export const LABS = {
     accent: "#b6582c", accentSoft: "rgba(182, 88, 44, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/body-knows-first.png",
-    short: "Before the mind makes sense of it, the body already knows. It feels. It reacts. It remembers. This laboratory learns to listen.",
+    short: "Learn to listen to your body's wisdom and subtle inner signals.",
   },
   "masks": {
     slug: "masks", emoji: "🎭",
@@ -180,7 +180,7 @@ export const LABS = {
     accent: "#4a7ba6", accentSoft: "rgba(74, 123, 166, 0.12)",
     status: "coming-soon",
     thumbnail: "/assets/alistair/labs/compass.png",
-    short: "Meaning before motivation, values as navigation, living in alignment.",
+    short: "Align your choices with what truly matters to you.",
   },
 };
 
@@ -203,5 +203,8 @@ export const HOME_PATH_OF_EXPLORATION = [
   "money-tree",
   "old-stories",
   "body-knows-first",
+  "compass",
+];
+,
   "compass",
 ];
