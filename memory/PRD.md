@@ -17,6 +17,26 @@ configuration dashboard as ambient media.
 - Nano Banana (Gemini) via Emergent LLM Key for hero backgrounds
 
 ## What's been implemented (THIS SESSION 2026-06-08)
+
+### 2026-02-10 — Alistair Hub (Polarstar Pattern, v3)
+- `/app/frontend/src/pages/Alistair.jsx` rewritten to use the
+  Polarstar pattern: full-bleed painted `course-room-hub.png` image
+  + invisible percentage-based hotspots. NO CSS recreation.
+- Hotspots wired (calibrated against painted UI):
+  - Sidebar: Home, Explore→/course-room/laboratories, Read, Experiments,
+    Notes, Library + ALISTAIR logo→/course-room
+  - 4 painted lab cards on hub → /course-room/lab/{slug} for
+    money-tree, old-stories, body-knows-first, compass (matching
+    HOME_PATH_OF_EXPLORATION from data/alistairLabs.js)
+  - Right-column "Let's explore together" CTA → /course-room/room
+- `?debug=1` URL param visualises hotspot outlines for founder
+  calibration.
+- Constraint: the painted hub image only depicts 4 lab cards. The
+  remaining 7 labs are reachable in one click via the painted "Explore"
+  sidebar item → /course-room/laboratories index. A new painted hub
+  image with all 11 cards would be required to expose 11 direct
+  hotspots on the hub.
+
 ### Grace Room (warm-light homepage)
 - `/grace` = public homepage (Welcome back. — light, fireplace, daylight)
 - `/grace/room` = real Wanderer's Gate + ConvAI + chat (legacy ClarityRelease.jsx behind /grace/room)
