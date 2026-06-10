@@ -306,37 +306,18 @@ function LabCard({ lab }) {
         boxShadow: "0 12px 32px -18px rgba(0,0,0,0.65)",
       }}
     >
-      {/* Painted thumbnail slot — awaits founder-delivered painting */}
+      {/* Painted thumbnail — founder-supplied visual specification. */}
       <div
         className="relative h-[160px] overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(196,164,107,0.18), rgba(245,235,215,0.42))",
-        }}
+        style={{ background: SIDEBAR_BG }}
       >
-        {lab.thumbnail ? (
+        {lab.thumbnail && (
           <img
             src={lab.thumbnail}
             alt=""
             className="w-full h-full object-cover"
             loading="lazy"
           />
-        ) : (
-          <div
-            aria-hidden="true"
-            className="w-full h-full flex items-center justify-center"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(196,164,107,0.10), rgba(196,164,107,0.04))",
-            }}
-          >
-            <span
-              className="text-[9px] tracking-[0.32em] uppercase"
-              style={{ color: "rgba(43,31,15,0.32)" }}
-            >
-              Image · pending
-            </span>
-          </div>
         )}
         {!isOpen && (
           <span

@@ -30,27 +30,23 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  /* §NAV-CLOSE 2026-02-08 — Previously this component closed the mobile
+     menu via a useEffect watching location.pathname, but that pattern
+     trips Emergent's react-hooks/set-state-in-effect rule (a blocker
+     in the lint stage). The eslint-disable directive cannot be used
+     because the rule is internal and adding it crashes the build with
+     "rule not found". The correct refactor is to close the menu at
+     the source of the navigation itself — every NavLink + the Enter
+     Portal CTA calls closeMenu() on click. No state-in-effect needed. */
+  const closeMenu = () => setOpen(false);
 
-  /* §GRACE-ISOLATION 2026-02 — Founder directive (Anna, Estonian
-     session): Grace must feel like its own world. When the visitor is
-     inside /grace* the global navigation must shed every other room
-     (Body Room, Parents' Room, Polarstar Kids, Courses, etc.) and
-     leave only a minimal "stay anchored, find your way home" set:
-     brand logo, Home, Grace (the current room), Enter Portal.
-     §ALISTAIR-ISOLATION 2026-02 — Same rule applied to /course-room*:
-     Alistair's Laboratory of Life is also its own world.
-     §FULL-HIDE 2026-02-08 — Anna repeated request: when inside a
-     room with its own dedicated dark sidebar (Grace v2, Alistair v2)
-     the global top-bar must disappear *entirely*. The room sidebar
-     becomes the only navigation. The 10-second business-card rule:
-     once you step into a room the global system stops competing for
-     attention. */
   const inGraceContext = location.pathname.startsWith("/grace");
   const inAlistairContext = location.pathname.startsWith("/course-room");
 
+  /* §FULL-HIDE 2026-02-08 — Anna repeated request: when inside a room
+     with its own dedicated dark sidebar (Grace v2, Alistair v2) the
+     global top-bar must disappear *entirely*. The room sidebar becomes
+     the only navigation. The 10-second business-card rule. */
   if (inGraceContext || inAlistairContext) {
     return null;
   }
@@ -99,6 +95,7 @@ export default function Navigation() {
               to={item.to}
               end={item.to === "/"}
               data-testid={item.testid}
+              onClick={closeMenu}
               className={({ isActive }) =>
                 `aurin-link text-[13.5px] tracking-wide whitespace-nowrap ${
                   isActive ? "" : "text-[hsl(var(--aurin-text))/0.82]"
@@ -114,6 +111,7 @@ export default function Navigation() {
           <Link
             to="/portal"
             data-testid="nav-cta-enter"
+            onClick={closeMenu}
             className="aurin-btn aurin-btn-ghost whitespace-nowrap"
           >
             Enter Portal
@@ -142,6 +140,7 @@ export default function Navigation() {
                 to={item.to}
                 end={item.to === "/"}
                 data-testid={`${item.testid}-mobile`}
+                onClick={closeMenu}
                 className={({ isActive }) =>
                   `text-base py-2 border-b border-[hsl(var(--aurin-border-soft))] ${
                     isActive
@@ -157,6 +156,7 @@ export default function Navigation() {
               to="/portal"
               className="aurin-btn aurin-btn-ghost mt-2 self-start"
               data-testid="nav-cta-enter-mobile"
+              onClick={closeMenu}
             >
               Enter Portal
             </Link>

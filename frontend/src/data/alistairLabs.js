@@ -26,6 +26,7 @@ export const LABS = {
     accent: "#3f8a5a",
     accentSoft: "rgba(63, 138, 90, 0.12)",
     status: "open",
+    thumbnail: "/assets/alistair/labs/money-tree.png",
     short: "Not investment advice. A quiet inquiry into the stories you carry about value, receiving, scarcity, and worth.",
     explore: [
       {
@@ -119,6 +120,7 @@ export const LABS = {
     coreQuestion: "Why do I stop myself when I want something important?",
     accent: "#9a6c3a", accentSoft: "rgba(154, 108, 58, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/self-sabotage.png",
     short: "Self-sabotage is not your enemy. It is a protective pattern that once helped you survive — explored here with curiosity, compassion and courage.",
   },
   /* §ALISTAIR-v2 2026-02 — Old Stories: founder-renamed inheritance/
@@ -133,6 +135,7 @@ export const LABS = {
     coreQuestion: "Which inherited story am I still living inside?",
     accent: "#8a5a36", accentSoft: "rgba(138, 90, 54, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/old-stories.png",
     short: "The sentences we were handed before we could choose. Family scripts, cultural defaults, half-remembered childhood lines that still steer us today.",
   },
   "child-parent": {
@@ -142,6 +145,7 @@ export const LABS = {
     coreQuestion: "Who is speaking right now?",
     accent: "#7a5fa7", accentSoft: "rgba(122, 95, 167, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/child-vs-parent.png",
     short: "Inner child, inner parent, critic vs caretaker, the need beneath the reaction.",
   },
   /* §ALISTAIR-v2 2026-02 — Body Knows First: founder-introduced lab
@@ -155,6 +159,7 @@ export const LABS = {
     coreQuestion: "What does my body already know?",
     accent: "#b6582c", accentSoft: "rgba(182, 88, 44, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/body-knows-first.png",
     short: "Before the mind makes sense of it, the body already knows. It feels. It reacts. It remembers. This laboratory learns to listen.",
   },
   "masks": {
@@ -164,6 +169,7 @@ export const LABS = {
     coreQuestion: "Who am I when no role is required?",
     accent: "#b65a4f", accentSoft: "rgba(182, 90, 79, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/masks-we-wear.png",
     short: "Social roles, expectations, authenticity, belonging without pretending.",
   },
   "compass": {
@@ -173,6 +179,7 @@ export const LABS = {
     coreQuestion: "What truly matters?",
     accent: "#4a7ba6", accentSoft: "rgba(74, 123, 166, 0.12)",
     status: "coming-soon",
+    thumbnail: "/assets/alistair/labs/compass.png",
     short: "Meaning before motivation, values as navigation, living in alignment.",
   },
 };
