@@ -356,11 +356,11 @@ function AppRouter() {
             Money Tree ships fully; the other four are catalogue-only
             previews ("Soon") until their content is written. */}
         <Route path="/course-room/laboratories" element={<AlistairLaboratories />} />
-        {/* §LAB-DASHBOARD 2026-02-08 — Self-Sabotage test route uses the
-            new Tier-2 dashboard layout. Must be declared BEFORE the
-            generic /lab/:labSlug catch-all below. */}
-        <Route path="/course-room/lab/self-sabotage" element={<AlistairLabDashboard />} />
-        <Route path="/course-room/lab/:labSlug" element={<AlistairLab />} />
+        {/* §LAB-DASHBOARD 2026-02-08 — Generic Polarstar-pattern dashboard
+            for all 11 Alistair laboratories. Each lab renders its
+            supplied painted mockup full-bleed with invisible hotspots
+            over the painted nav. */}
+        <Route path="/course-room/lab/:labSlug" element={<AlistairLabDashboard />} />
         <Route path="/course-room/lab/:labSlug/library/:slug" element={<AlistairLabArticle />} />
         <Route
           path="/course-room/room"

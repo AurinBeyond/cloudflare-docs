@@ -68,6 +68,26 @@ configuration dashboard as ambient media.
 - `/app/frontend/src/components/layout/Navigation.jsx` (context isolation)
 - `/app/scripts/generate_grace_light_bg.py`, `generate_alistair_bg.py`
 
+## Alistair v3 sprint complete — Polarstar pattern, all 11 labs (2026-02-08)
+
+**What shipped (technical-execution only, no design invention)**
+- `Alistair.jsx` v2 hub: dark sidebar + painted study scene + 4-card path of exploration with founder-supplied painted thumbnails (money-tree, old-stories, body-knows-first, compass) + HOW WE EXPLORE 4-step panel + Alistair bio + bottom italic quote. All emoji/placeholder/pending art removed.
+- `alistair/LabDashboard.jsx` v3: single Polarstar-pattern component serving all 11 laboratory routes (`/course-room/lab/:labSlug`). Each lab renders its supplied painted mockup edge-to-edge with 7 invisible Link-hotspots over the painted nav (back-to-labs + 6 sidebar items). No CSS panels. No recreated UI. The image IS the design.
+- `alistairLabs.js`: full 11-lab catalogue with `thumbnail` field for each. Founder copy adopted on cards.
+- `Navigation.jsx`: full global header hide on `/grace*` and `/course-room*`. setState-in-effect refactored to onClick handlers.
+- `SanctuaryPreview.jsx`: gold italic line repositioned out of the H1 onto its own paragraph below the subtitle so the painted face on the right is no longer obscured.
+
+**Locked design law (founder, 2026-02-08)**
+- The uploaded Alistair images are not references or inspiration. They are the visual specification. Reproduce them as closely as possible. Do not redesign. Do not improvise.
+- Same technique as Polarstar: supplied painted image as the full-bleed background + invisible navigation hotspots layered on top. No rebuilding the painted UI in CSS.
+- 11 laboratories on equal footing — no Tier-1 / Tier-2 split. All share the same Polarstar dashboard pattern.
+- Public-facing system language: English only.
+
+**Still pending (founder asset uploads)**
+- `course-room-hub.png` (ChatGPT 9. juni 07_48_06) — `/course-room` hub background
+- `invisible-strings.png` (ChatGPT 8. juni 23_38_03) — laboratory #11 hero
+- Hotspot coordinate refinements per laboratory if the shared sidebar coordinates do not align perfectly with each painted mockup
+
 ## Deploy verdict (2026-06-08)
 **B) READY FOR DEPLOY WITH KNOWN RISKS**
 - 22/22 routes render clean, 6/6 mobile no horiz scroll
