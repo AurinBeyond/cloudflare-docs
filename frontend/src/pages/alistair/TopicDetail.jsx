@@ -169,7 +169,9 @@ const TOPIC_TITLES = {
   "life-consumer": "As a Consumer",
   "code-conditioning": "Conditioning",
   "code-repetition": "Repetition",
+  "code-identity": "Identity (Code)",
   "code-loyalty": "Loyalty",
+  "code-fear": "Fear (Code)",
   "code-shame": "Shame",
   "your-freedom": "Your Freedom",
   // ── Invisible Strings ──────────────────────────────
@@ -224,6 +226,7 @@ const TOPIC_TITLES = {
   "body-stomach": "Stomach — I feel",
   "body-hips": "Hips — I allow",
   "posture": "Posture",
+  "breath": "Breath",
   "tension": "Tension",
   "movement": "Movement",
   "gesture": "Gesture",
