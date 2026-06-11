@@ -373,6 +373,226 @@ const INVISIBLE_STRINGS_ZONES = (() => {
   ];
 })();
 
+/* §MASKS-TOPIC-ZONES 2026-02-10
+ * Painted groups in masks-we-wear.png (Alistair sidebar present):
+ *   - 6 floating masks (right): Achiever, Strong One, Good One,
+ *     Provider, Pleaser, Helper
+ *   - Tab bar (8): Overview, Masks, Why We Wear Them, Costs, Discovery,
+ *     Integration, Insights, Journal
+ *   - 6 sub-cards: Recognize, Understand, Release, Remember, Integrate, Express
+ *   - REFLECT panel (5 questions)
+ *   - MASKS EXAMPLES list (9 archetypes) */
+const MASKS_ZONES = (() => {
+  const slug = "masks";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 6 floating masks (right portrait)
+    z("achiever", 8,  50, 12, 6, "topic-mask-achiever"),
+    z("provider", 8,  77, 11, 6, "topic-mask-provider"),
+    z("strong-one", 28, 47, 13, 6, "topic-mask-strong-one"),
+    z("pleaser", 24, 80, 11, 6, "topic-mask-pleaser"),
+    z("good-one", 36, 42, 11, 6, "topic-mask-good-one"),
+    z("helper",  37, 75, 11, 6, "topic-mask-helper"),
+    // tabs (8)
+    z("overview",    47, 16, 10, 4, "topic-tab-overview"),
+    z("masks-tab",   47, 24, 10, 4, "topic-tab-masks"),
+    z("why-we-wear", 47, 32, 13, 4, "topic-tab-why-wear"),
+    z("costs",       47, 44, 8,  4, "topic-tab-costs"),
+    z("discovery",   47, 51, 11, 4, "topic-tab-discovery"),
+    z("integration", 47, 61, 11, 4, "topic-tab-integration"),
+    z("insights",    47, 72, 9,  4, "topic-tab-insights"),
+    z("journal",     47, 80, 9,  4, "topic-tab-journal"),
+    // 6 sub-cards
+    z("recognize",  60, 14, 9, 27, "topic-mcard-recognize"),
+    z("understand", 60, 24, 9, 27),
+    z("release",    60, 34, 9, 27, "topic-mcard-release"),
+    z("remember",   60, 44, 9, 27, "topic-mcard-remember"),
+    z("integrate",  60, 54, 9, 27, "topic-mcard-integrate"),
+    z("express",    60, 64, 9, 27),
+    // REFLECT panel (5 questions)
+    z("reflect-masks-most-often",  60, 72, 16, 5, "topic-mreflect-most-often"),
+    z("reflect-where-learn",       66, 72, 16, 5, "topic-mreflect-where-learn"),
+    z("reflect-afraid-took-off",   70, 72, 16, 6, "topic-mreflect-afraid-off"),
+    z("reflect-who-without",       76, 72, 16, 6, "topic-mreflect-without"),
+    z("reflect-authenticity-change", 82, 72, 16, 6, "topic-mreflect-authenticity"),
+    // MASKS EXAMPLES (9 archetypes, far right)
+    z("ex-achiever",         60, 88, 11, 3.5, "topic-ex-achiever"),
+    z("ex-pleaser",          64, 88, 11, 3.5, "topic-ex-pleaser"),
+    z("ex-strong-one",       68, 88, 11, 3.5, "topic-ex-strong-one"),
+    z("ex-provider",         71, 88, 11, 3.5, "topic-ex-provider"),
+    z("ex-helper",           74, 88, 11, 3.5, "topic-ex-helper"),
+    z("ex-good-one",         78, 88, 11, 3.5, "topic-ex-good-one"),
+    z("ex-control-freak",    82, 88, 11, 3.5, "topic-ex-control-freak"),
+    z("ex-independent-one",  85, 88, 11, 3.5, "topic-ex-independent-one"),
+    z("ex-caregiver",        89, 88, 11, 3.5, "topic-ex-caregiver"),
+  ];
+})();
+
+/* §BODY-LANGUAGE-TOPIC-ZONES 2026-02-10
+ * Painted groups in body-language-v1.png (Alistair sidebar present):
+ *   - 6 body part labels on figure: Shoulders, Jaw, Back, Heart, Stomach, Hips
+ *   - 7 right side "THE BODY SPEAKS THROUGH": Posture, Breath, Tension,
+ *     Movement, Gesture, Micro-expressions, Energy
+ *   - 6 sub-cards (body signals): Tight Shoulders, Tight Jaw, Shallow Breath,
+ *     Crossed Arms, Tight Stomach, Fidgeting Hands
+ *   - PRACTICE IN THIS LAB list (7): Body Scan, Posture Check-In,
+ *     Breath Awareness, Tension Release, Mirror Practice, Movement
+ *     Awareness, Emotion Mapping
+ *   - REFLECTION QUESTIONS (4) */
+const BODY_LANGUAGE_ZONES = (() => {
+  const slug = "body-language";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 6 body part labels on the figure
+    z("body-shoulders", 13, 40, 8, 5, "topic-bp-shoulders"),
+    z("body-jaw",       13, 60, 8, 5, "topic-bp-jaw"),
+    z("body-back",      31, 39, 8, 5, "topic-bp-back"),
+    z("body-heart",     31, 60, 8, 5, "topic-bp-heart"),
+    z("body-stomach",   48, 39, 8, 5, "topic-bp-stomach"),
+    z("body-hips",      48, 61, 8, 5, "topic-bp-hips"),
+    // 7 right panel "THE BODY SPEAKS THROUGH"
+    z("posture",          13, 81, 16, 6, "topic-speaks-posture"),
+    z("breath",           20, 81, 16, 6, "topic-speaks-breath"),
+    z("tension",          27, 81, 16, 6, "topic-speaks-tension"),
+    z("movement",         34, 81, 16, 6, "topic-speaks-movement"),
+    z("gesture",          41, 81, 16, 6, "topic-speaks-gesture"),
+    z("micro-expressions", 48, 81, 16, 6, "topic-speaks-micro"),
+    z("energy",           55, 81, 16, 6, "topic-speaks-energy"),
+    // 6 sub-cards (body signals)
+    z("tight-shoulders", 60, 14, 9, 27, "topic-sig-tight-shoulders"),
+    z("tight-jaw",       60, 24, 9, 27, "topic-sig-tight-jaw"),
+    z("shallow-breath",  60, 34, 9, 27, "topic-sig-shallow-breath"),
+    z("crossed-arms",    60, 44, 9, 27, "topic-sig-crossed-arms"),
+    z("tight-stomach",   60, 54, 9, 27, "topic-sig-tight-stomach"),
+    z("fidgeting-hands", 60, 64, 9, 27, "topic-sig-fidgeting-hands"),
+    // PRACTICE IN THIS LAB (7)
+    z("practice-body-scan",         62, 71, 14, 4, "topic-prac-body-scan"),
+    z("practice-posture-checkin",   66, 71, 14, 4, "topic-prac-posture-checkin"),
+    z("practice-breath-awareness",  70, 71, 14, 4, "topic-prac-breath-awareness"),
+    z("practice-tension-release",   74, 71, 14, 4, "topic-prac-tension-release"),
+    z("practice-mirror",            78, 71, 14, 4, "topic-prac-mirror"),
+    z("practice-movement-awareness", 82, 71, 14, 4, "topic-prac-movement"),
+    z("practice-emotion-mapping",   86, 71, 14, 4, "topic-prac-emotion-mapping"),
+    // REFLECTION QUESTIONS (4)
+    z("reflect-body-tell-me",       62, 86, 14, 6, "topic-blreflect-tell-me"),
+    z("reflect-tension-most-often", 70, 86, 14, 6, "topic-blreflect-tension-often"),
+    z("reflect-emotion-behind",     78, 86, 14, 6, "topic-blreflect-emotion-behind"),
+    z("reflect-last-listened",      86, 86, 14, 6, "topic-blreflect-last-listened"),
+  ];
+})();
+
+/* §CHILD-PARENT-TOPIC-ZONES 2026-02-10
+ * Painted groups in child-vs-parent.png (no Alistair sidebar):
+ *   - 4 wooden signposts (left CHILD WORLD): Imagine, Play, Discover, Wonder
+ *   - 4 right panels (PARENT WORLD): Awareness, Choice, Growth, Transformation
+ *   - 10 centre comparison categories: Focus, Energy, Learning, Language,
+ *     Questions, Time, World, Guides, Strength, Themes
+ *   - Child traits (9 visible): Explores, Plays, Imagines, Feels, Asks "What if?",
+ *     Lives in the moment, Adventures, Characters, Expresses freely
+ *   - Parent traits (9): Reflects, Guides, Understands, Communicates, Asks "Why?",
+ *     Learns from time, Navigates life, Mentors, Responsibility */
+const CHILD_PARENT_ZONES = (() => {
+  const slug = "child-parent";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // Child world signposts (left)
+    z("imagine",  22, 3, 11, 5, "topic-sign-imagine"),
+    z("play",     28, 3, 11, 5, "topic-sign-play"),
+    z("discover", 34, 3, 11, 5, "topic-sign-discover"),
+    z("wonder",   40, 3, 11, 5, "topic-sign-wonder"),
+    // Parent world panels (right)
+    z("awareness",     11, 91, 9, 5, "topic-pp-awareness"),
+    z("choice",        18, 91, 9, 5, "topic-pp-choice"),
+    z("growth",        25, 91, 9, 5, "topic-pp-growth"),
+    z("transformation", 32, 91, 12, 5, "topic-pp-transformation"),
+    // Centre comparison categories (10)
+    z("focus",      53, 41, 13, 4, "topic-cmp-focus"),
+    z("energy",     59, 41, 13, 4, "topic-cmp-energy"),
+    z("learning",   65, 41, 13, 4, "topic-cmp-learning"),
+    z("language",   71, 41, 13, 4, "topic-cmp-language"),
+    z("questions",  77, 41, 13, 4, "topic-cmp-questions"),
+    z("time",       83, 41, 13, 4, "topic-cmp-time"),
+    z("world",      89, 41, 13, 4, "topic-cmp-world"),
+    z("guides",     94, 41, 13, 4, "topic-cmp-guides"),
+    z("strength",   97, 41, 13, 3, "topic-cmp-strength"),
+    // child traits left (9)
+    z("child-explores",  58, 6,  20, 4, "topic-c-explores"),
+    z("child-plays",     63, 6,  20, 4, "topic-c-plays"),
+    z("child-imagines",  68, 6,  20, 4, "topic-c-imagines"),
+    z("child-feels",     72, 6,  20, 4, "topic-c-feels"),
+    z("child-asks-what-if", 77, 6, 20, 4, "topic-c-what-if"),
+    z("child-lives-moment", 81, 6, 20, 4, "topic-c-lives-moment"),
+    z("child-adventures",   86, 6, 20, 4, "topic-c-adventures"),
+    z("child-characters",   90, 6, 20, 4, "topic-c-characters"),
+    z("child-expresses",    94, 6, 20, 4, "topic-c-expresses"),
+    // parent traits right (9)
+    z("parent-reflects",     58, 74, 20, 4, "topic-p-reflects"),
+    z("parent-guides",       63, 74, 20, 4, "topic-p-guides"),
+    z("parent-understands",  68, 74, 20, 4, "topic-p-understands"),
+    z("parent-communicates", 72, 74, 20, 4, "topic-p-communicates"),
+    z("parent-asks-why",     77, 74, 20, 4, "topic-p-why"),
+    z("parent-learns-time",  81, 74, 20, 4, "topic-p-learns-time"),
+    z("parent-navigates",    86, 74, 20, 4, "topic-p-navigates"),
+    z("parent-mentors",      90, 74, 20, 4, "topic-p-mentors"),
+    z("parent-responsibility", 94, 74, 20, 4, "topic-p-responsibility"),
+  ];
+})();
+
+/* §BODY-LANGUAGE-V2-TOPIC-ZONES 2026-02-10
+ * Painted groups in body-language-v2.png (Alistair sidebar present):
+ *   - 6 right panel body areas: Jaw (Holding back), Shoulders (Carrying weight),
+ *     Heart (Connection), Breath (Safety & flow), Belly (Intuition),
+ *     Hands (Expression)
+ *   - Tab bar (8): Overview, Expressions, Posture, Gestures, Emotions,
+ *     Awareness, Insights, Journal
+ *   - 6 sub-cards: Awareness, Interpret, Align, Release, Express, Embody
+ *   - BODY LANGUAGE MAP (7 areas): Head & Mind, Face & Expression,
+ *     Shoulders & Chest, Heart & Breath, Belly & Gut, Hands & Arms, Legs & Feet
+ *   - REFLECTION QUESTIONS (5) */
+const BODY_LANGUAGE_V2_ZONES = (() => {
+  const slug = "body-language-v2";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 6 right panel body areas
+    z("jaw-holding-back",       9,  81, 17, 6, "topic-area-jaw"),
+    z("shoulders-carrying",     15, 81, 17, 6, "topic-area-shoulders"),
+    z("heart-connection",       22, 81, 17, 6, "topic-area-heart"),
+    z("breath-safety-flow",     28, 81, 17, 6, "topic-area-breath"),
+    z("belly-intuition",        34, 81, 17, 6, "topic-area-belly"),
+    z("hands-expression",       40, 81, 17, 6, "topic-area-hands"),
+    // tab bar (8)
+    z("overview",    47, 16, 10, 4, "topic-tab-overview"),
+    z("expressions", 47, 26, 12, 4, "topic-tab-expressions"),
+    z("posture",     47, 37, 9,  4, "topic-tab-posture"),
+    z("gestures",    47, 45, 10, 4, "topic-tab-gestures"),
+    z("emotions",    47, 53, 10, 4, "topic-tab-emotions"),
+    z("awareness",   47, 62, 11, 4, "topic-tab-awareness"),
+    z("insights",    47, 72, 9,  4, "topic-tab-insights"),
+    z("journal",     47, 80, 9,  4, "topic-tab-journal"),
+    // 6 sub-cards
+    z("awareness-card", 60, 14, 8, 27, "topic-blv2-awareness"),
+    z("interpret",      60, 23, 8, 27, "topic-blv2-interpret"),
+    z("align",          60, 32, 8, 27, "topic-blv2-align"),
+    z("release",        60, 41, 8, 27, "topic-blv2-release"),
+    z("express",        60, 50, 8, 27, "topic-blv2-express"),
+    z("embody",         60, 59, 8, 27, "topic-blv2-embody"),
+    // BODY LANGUAGE MAP (7 areas)
+    z("map-head-mind",          60, 67, 14, 4, "topic-map-head-mind"),
+    z("map-face-expression",    65, 67, 14, 4, "topic-map-face"),
+    z("map-shoulders-chest",    70, 67, 14, 4, "topic-map-shoulders-chest"),
+    z("map-heart-breath",       75, 67, 14, 4, "topic-map-heart-breath"),
+    z("map-belly-gut",          80, 67, 14, 4, "topic-map-belly-gut"),
+    z("map-hands-arms",         85, 67, 14, 4, "topic-map-hands-arms"),
+    z("map-legs-feet",          90, 67, 14, 4, "topic-map-legs-feet"),
+    // REFLECTION QUESTIONS (5)
+    z("reflect-body-most-often", 60, 84, 16, 5, "topic-blv2-reflect-most-often"),
+    z("reflect-hold-tension",    66, 84, 16, 5, "topic-blv2-reflect-tension"),
+    z("reflect-posture-feel",    71, 84, 16, 5, "topic-blv2-reflect-posture"),
+    z("reflect-when-safe",       76, 84, 16, 5, "topic-blv2-reflect-when-safe"),
+    z("reflect-love-to-express", 82, 84, 16, 6, "topic-blv2-reflect-love-express"),
+  ];
+})();
+
 /* §LAB-ZONES 2026-02-10 — Per-laboratory hotspots configuration.
  * Money Tree is the calibration prototype; other labs receive their
  * topic zones in LAB_ORDER. */
@@ -384,10 +604,10 @@ const LAB_ZONES = {
   "self-sabotage":      { topics: SELF_SABOTAGE_ZONES },
   "the-code":           { topics: THE_CODE_ZONES, hideSharedSidebar: true },
   "invisible-strings":  { topics: INVISIBLE_STRINGS_ZONES, hideSharedSidebar: true },
-  "masks":              { topics: [] },
-  "body-language":      { topics: [] },
-  "child-parent":       { topics: [] },
-  "body-language-v2":   { topics: [] },
+  "masks":              { topics: MASKS_ZONES },
+  "body-language":      { topics: BODY_LANGUAGE_ZONES },
+  "child-parent":       { topics: CHILD_PARENT_ZONES, hideSharedSidebar: true },
+  "body-language-v2":   { topics: BODY_LANGUAGE_V2_ZONES },
 };
 
 export default function LabDashboard() {

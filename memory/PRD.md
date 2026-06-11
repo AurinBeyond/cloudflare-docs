@@ -18,6 +18,30 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-06-08)
 
+### 2026-02-10 (E) — Final 4 labs internal hotspots (masks → body-language-v2)
+- `pages/alistair/LabDashboard.jsx` extended with topic zones for the
+  final 4 labs in LAB_ORDER, completing 11/11 lab coverage.
+- Topic zone counts added this session: masks 34 · body-language 30 ·
+  child-parent 35 · body-language-v2 32.
+- `pages/alistair/TopicDetail.jsx` TOPIC_TITLES extended to cover
+  every new topic ID. No placeholder fallback strings shown in UI.
+- Verified end-to-end navigation:
+  - masks → achiever → "The Achiever"
+  - body-language → body-shoulders → "Shoulders — I carry"
+  - child-parent → imagine → "Imagine"
+  - body-language-v2 → jaw-holding-back → "Jaw — Holding back"
+
+### 2026-02-10 (FINAL AUDIT) — 11/11 Laboratories Complete
+- Total topic hotspots: **295** across 11 labs.
+- Labs using `hideSharedSidebar: true` (no painted Alistair sidebar
+  in their mockups): money-tree, compass, the-code,
+  invisible-strings, child-parent.
+- Labs using shared Alistair sidebar (painted sidebar present in
+  their mockups): old-stories, body-knows-first, self-sabotage,
+  masks, body-language, body-language-v2.
+- All routes /course-room/lab/{slug}/topic/{topicId} resolve to a
+  named placeholder via TopicDetail. Zero dead-end links.
+
 ### 2026-02-10 (D) — 6 more labs internal hotspots (old-stories → invisible-strings)
 - `pages/alistair/LabDashboard.jsx` extended with topic zones for the
   next 6 labs in LAB_ORDER. Total 124 topic hotspots added.
