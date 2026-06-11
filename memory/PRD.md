@@ -18,6 +18,36 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-02-13)
 
+### 2026-02-13 (BODY-WORLD-V1 LOCK · canonical URL /body-world)
+- **URL canonicalised**: `/body-world` is now the canonical hub URL.
+  `/body-room` and `/body-room/world/:slug` 301 redirect there.
+- **Stone count tightened from 15 → 14** per founder lock:
+  - Stone 11 "Body & Joy" replaced with **"Stress & Nervous System"**
+    (slug: `stress-nervous-system`) — joy arises from a regulated
+    nervous system, so the world teaches the substrate, not the
+    symptom.
+  - Stone 12 title shortened to **"Body as Language"** (slug stays
+    `body-language`); locked NOT to be replaced by Connection &
+    Relationships (World 8 owns relationships).
+  - Stone 15 "Body Attention" removed (folded back into Stone 1
+    Know Your Body).
+- **World detail pages now Polarstar** (`pages/BodyWorldStone.jsx`):
+  when a stone has an `image` URL in `data/bodyWorldStones.js`, the
+  painted mockup renders edge-to-edge with invisible hotspots over
+  the centre stone, the 6 surrounding sub-stones, the back-to-map
+  pill, the sidebar, the right-column cards, and (Stone 1 only)
+  the three chat / voice / check-in cards. Stones without an image
+  fall back to the Field Study skeleton.
+- **Painted worlds shipping**: Know Your Body, Emotional Body,
+  Body Identity. Sub-stones authored per world (6 each).
+- **Topic route added**: `/body-world/world/:s/topic/:t` →
+  `pages/BodyWorldTopic.jsx` (Field Study placeholder).
+- **Layout sanctuary list** updated to include `/body-world` so the
+  AiDock teaser stays hidden inside the painted experience.
+- **Reference**: `/app/memory/BODY_WORLD_V2_BRIEF.md` updated with
+  the full lock spec, stone table, world page structure, and
+  implementation status.
+
 ### 2026-02-13 (BODY-WORLD-V2 SKELETON · Polarstar pattern)
 - **New hub** `/body-room` → `pages/BodyWorld.jsx`. Painted founder
   mockup (traveller-with-backpack by the lake, 15 stones) renders

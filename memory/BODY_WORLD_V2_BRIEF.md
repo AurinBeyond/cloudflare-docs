@@ -1,91 +1,166 @@
-# Body World V2 · Founder Design Brief (LOCKED)
+# BODY WORLD V1 — IMPLEMENTATION LOCK (2026-02-13)
 
-Date: 2026-02-10
+> **STRUCTURAL LOCK · DO NOT REDESIGN, INVENT, OR MERGE WORLDS.**
+> This document is the single source of truth for the Body World
+> system. Any agent working on Body World must respect this lock.
+
+## Canonical URL
+
+```
+/body-world
+```
+
+Backwards-compatible aliases:
+- `/body-room`             → 301 redirects to `/body-world`
+- `/body-room/world/:slug` → 301 redirects to `/body-world/world/:slug`
+- `/body-room/v1`          → legacy `BodyRoom.jsx` (preserved)
+- `/body-world/v1`         → legacy `BodyRoom.jsx` (preserved)
+
+## Architecture
+
+```
+BODY WORLD (Hub)               /body-world
+↓
+14 Worlds (Stones)             /body-world/world/:stoneSlug
+↓
+Sub-stones (Sub-themes)        /body-world/world/:stoneSlug/topic/:topicSlug
+↓
+Topics & Content               (authored later — Field Study skeleton today)
+```
+
+Mirrors the architecture already proven in **Polarstar** and the
+**Alistair Laboratory**.
 
 ## Core Principle
-Body World is **a map of the relationship between a person and their body**.
-NOT a wellness portal. NOT fitness. NOT yoga. NOT medical.
-The visitor enters a **landscape**, not a course.
 
-## Central Question
-**Your body knows you. But do you know your body?**
+**Traveller ≠ Kaelen.**
+The man by the lake is the **visitor**. Kaelen is the **guide** —
+he appears in the sidebar, in chat, in voice. Never by the lake.
 
-## The Traveler
-The man by the lake = the visitor. Carrying experiences, emotions, habits, memories, stories, burdens.
+## Stone Map (14 worlds — LOCKED)
 
-## The Stones
-Stones are NOT menu buttons. Each stone = a burden / story / pattern / lesson / question. **The metaphor must remain.**
+| # | Title                          | Slug                      | Question                                       | Visual  |
+|---|--------------------------------|---------------------------|------------------------------------------------|---------|
+| 1 | Know Your Body                 | `know-your-body`          | What is my body trying to tell me?             | painted |
+| 2 | Emotional Body                 | `emotional-body`          | What am I still carrying?                      | painted |
+| 3 | Body Memory & Inheritance      | `body-memory`             | Where do the roots begin?                      | pending |
+| 4 | Body Identity                  | `body-identity`           | Who do I believe I am?                         | painted |
+| 5 | Body Protection Mechanisms     | `body-protection`         | What is this protecting me from?               | pending |
+| 6 | Body as a Partner              | `body-as-partner`         | Who is leading?                                | pending |
+| 7 | Body Engineering               | `body-engineering`        | How do I work WITH my body?                    | pending |
+| 8 | Body & Relationships           | `body-relationships`      | How do people affect my body?                  | pending |
+| 9 | Body & Environment             | `body-environment`        | What surrounds me?                             | pending |
+|10 | Body & Time                    | `body-time`               | Am I living according to body rhythm?          | pending |
+|11 | **Stress & Nervous System**    | `stress-nervous-system`   | Is my nervous system at war, or at rest?       | pending |
+|12 | **Body as Language** *(LOCKED)*| `body-language`           | How does my body speak?                        | pending |
+|13 | Consequences                   | `consequences`            | What future am I creating?                     | pending |
+|14 | Living or Surviving *(BUBBLES)*| `living-or-surviving`     | Am I living or coping?                         | pending |
 
-## The Path
-The glowing path = "Everything is connected." No topic exists independently.
+**Notes on the lock:**
 
-## Kaelen's Role
-**Guide, not teacher.** Asks questions, connects dots, helps the visitor understand themselves.
+- Stone 11 was previously "Body & Joy" — replaced by founder directive.
+  Joy is a state that arises naturally from a regulated nervous system,
+  so the world teaches the substrate, not the symptom.
+- Stone 12 is **Body as Language**. DO NOT replace with "Connection &
+  Relationships". World 8 (Body & Relationships) already owns
+  relationships.
+- Stone 14 (Living or Surviving) intentionally departs from stone
+  iconography → uses **bubbles**. Bubbles convey freedom, possibility,
+  future choices, lightness.
+- Stones 1, 2, 4 currently have full painted Polarstar mockups in
+  `bodyWorldStones.js → image`. Stones 3, 5-14 fall back to the Field
+  Study skeleton until founder provides their painted views.
 
-## Navigation Priority
-Visitor must answer "Why am I here?" within 30 seconds.
+## World Page Structure (proven, locked)
 
-### Primary Entry Points
-1. **Talk to Kaelen** (Voice-to-Voice)
-2. **Chat with Kaelen** (Text-to-Text)
-3. **Body Check-In** (1 min → suggested starting stones)
+Each world page (e.g. `/body-world/world/emotional-body`) layers
+the founder's painted mockup as full-bleed background and stacks
+invisible hotspots over every painted UI element:
 
-### Sidebar (left, dark)
-Home · Map of Body World · Chat with Kaelen · Talk to Kaelen · My Journey · Tools & Practices · Insights · Favorites · Journals · Assessments · Settings · Help Center
-Bottom: Kaelen portrait + "Your body is wise…" quote.
+```
+- Back to Stone Map (top centre pill)
+- Sidebar: 13 nav items (Home, Stone Map, Chat, Talk, My Journey,
+  Body Check-In, Tools & Practices, Insights, Favourites, Journals,
+  Assessments, Settings, Help Center)
+- Centre stone (the world itself — no nav, decorative)
+- 6 surrounding sub-stones at clock positions 12 / 2 / 4 / 6 / 8 / 10
+  → each routes to /body-world/world/:s/topic/:subSlug
+- Right column: About This World · Hero Topics · All Topics · Your Journey
+- Stone 1 (Know Your Body) only: 3 chat/voice/check-in cards
+  above the sub-stones
+```
 
-### Right Column (dark)
-START HERE (4 entry options: problem / understand / improve / don't know) · BODY CHECK-IN · YOUR JOURNEY (resume).
+Append `?debug=1` to any world page to visualise hotspots (founder
+calibration mode).
 
-## 15 Worlds (the stones)
-1. KNOW YOUR BODY — "What is my body trying to tell me?"
-2. EMOTIONAL BODY — "What am I carrying?"
-3. BODY MEMORY & INHERITANCE — "Where do the roots begin?"
-4. BODY IDENTITY — "How do I see myself?"
-5. BODY PROTECTION MECHANISMS — "What is this protecting me from?"
-6. BODY AS A PARTNER — "Who is leading?"
-7. BODY ENGINEERING — "How do I work WITH my body?"
-8. BODY & RELATIONSHIPS — "How do people affect my body?"
-9. BODY & ENVIRONMENT — "What surrounds me?"
-10. BODY & TIME — "Living according to body rhythm?"
-11. BODY & JOY — "What makes my body feel alive?"
-12. BODY AS VERBAL LANGUAGE — "How does my body speak?" (founder priority)
-13. CONSEQUENCES — "What future am I creating?"
-14. LIVING OR SURVIVING — "Am I living or coping?"
-15. BODY ATTENTION — "Where attention goes, energy flows"
-+ centre stone: **ALL CONNECTED**
+## Sub-stones (sample — Emotional Body)
 
-## DO
-Traveler by lake · stone map · connected path · Kaelen as guide · chat + voice visible · check-in visible.
+```
+1. Recognize         · Learn to see what you carry
+2. Understand        · Learn why it stays
+3. The Weight We Carry · Learn the cost of holding on
+4. Release           · Learn to put down the stone
+5. Freedom           · Life beyond the burden
+6. Integration       · Turning pain into wisdom
+```
 
-## DO NOT
-Yoga · medical · course portal · chakra system · symptom database.
+Bottom legend (when painted): AWARENESS · UNDERSTANDING · RELEASE ·
+FREEDOM · INTEGRATION.
 
-## Final Vision
-> A traveler sitting by the lake of his own life, looking at all the stones he carries, deciding which one he is finally ready to understand.
+## Chat System (UNTOUCHED)
 
-## What MUST be preserved from current Body Room
-Per `/app/memory/BODY_ROOM_INVENTORY.md`:
-- `/body-room` + `/body-temple` URLs (`/body-room` can become the new Body World; legacy can move to `/body-room/v1` if needed)
-- 8 silhouette regions logic (crown / throat / heart / solar_plexus / belly / hips / hands / feet)
-- BodyRoomChat voice + text (Kaelan voice I/O)
-- Honesty Quiz (region → pattern logic)
-- 4 Body Architecture audio keys (Breath / Armor / Radical Pause / Coming Home)
-- Children + Adult patterns sections
-- Body Temple 28-day journey (Stripe unlock, Letter of Admission email)
-- BodyLensSelector
+The Chat with Kaelen, Talk to Kaelen, and Body Check-In surfaces all
+route to `/body-world/v1#kaelan` / `#body-room-questionnaire`, where
+the legacy `BodyRoom.jsx` (BodyRoomChat voice + text, the four Body
+Architecture audio keys, the Honesty Quiz, the Body Temple entry,
+BodyLensSelector) lives **completely intact**. Zero content loss.
 
+## Content Status
+
+Per Alistair Laboratory's proven model:
+- **Hero Topics**: a handful per world, fully authored.
+- **Field Study · In Progress**: standardised placeholder for every
+  sub-stone that hasn't been authored yet.
+
+V1 ships with all 14 worlds skeleton-complete; authored content
+arrives world-by-world as the founder writes it.
+
+## Purpose Lock
+
+Body World is:
+
+- understanding the body
+- learning to listen
+- understanding patterns
+- understanding burdens
+- learning release
+- learning practical body stewardship
+
+Body World is **NOT**:
+
+- medical diagnosis
+- therapy
+- disease treatment
 
 ---
 
 ## Implementation Status (2026-02-13)
 
-- ✅ Polarstar hub built: `pages/BodyWorld.jsx` mounted at `/body-room`.
-- ✅ Painted hub image (traveller with backpack, lake, 15 stones) used edge-to-edge.
-- ✅ 35 invisible hotspots layered (12 sidebar · 2 chat/voice · 15 stones · 6 right column).
-- ✅ Stone registry `data/bodyWorldStones.js` carries all 15 slugs + titles + founder questions.
-- ✅ Per-stone placeholder route `/body-room/world/:stoneSlug` → `pages/BodyWorldStone.jsx` (Field Study skeleton).
-- ✅ Legacy `BodyRoom.jsx` moved to `/body-room/v1` — every legacy interaction (silhouette, quiz, audio keys, voice chat, lens selector, Body Temple entry) still reachable.
-- ✅ Nav label "Body Room" → "Body World" across Navigation, Footer, SanctuaryPreview, Catalogue, FAQ.
-- ⏳ Hotspot coordinate calibration via `?debug=1` — founder pass pending; current values are best-fit visual placement.
-- ⏳ Per-stone authored content — founder is still creating the individual stone artwork + writing the inner content. When ready, swap the Field Study placeholder for an authored renderer (same pattern as `MONEY_TREE_CONTENT`).
+- ✅ Hub `/body-world` shipping with the painted traveller-by-the-lake
+  mockup, 14 stone hotspots, 12 sidebar entries, 2 chat cards, 6
+  right-column entries (34 hotspots total).
+- ✅ World pages `/body-world/world/:stoneSlug` shipping.
+- ✅ Three worlds shipping with painted Polarstar views: Know Your
+  Body, Emotional Body, Body Identity.
+- ✅ Eleven worlds shipping with Field Study skeleton.
+- ✅ Topic placeholder `/body-world/world/:s/topic/:t` shipping.
+- ✅ Legacy `/body-room/*` URLs preserved via 301 redirects.
+- ✅ Legacy `BodyRoom.jsx` content reachable at `/body-room/v1` and
+  `/body-world/v1`.
+- ✅ Navigation label "Body Room" → "Body World" across Navigation,
+  Footer, SanctuaryPreview, Catalogue, FAQ.
+- ⏳ Hotspot coordinate calibration via `?debug=1` — founder pass
+  pending; current values are visual best-fit.
+- ⏳ Per-world painted mockups for stones 3, 5-14 — founder still
+  creating.
+- ⏳ Authored Hero Topic content per world — incremental, founder-led.

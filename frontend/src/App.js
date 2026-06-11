@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useParams } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthProvider";
 import Layout from "@/components/layout/Layout";
 import Home from "@/pages/Home";
@@ -60,6 +60,7 @@ import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
 import BodyWorld from "@/pages/BodyWorld";
 import BodyWorldStone from "@/pages/BodyWorldStone";
+import BodyWorldTopic from "@/pages/BodyWorldTopic";
 import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
 import SubsystemWing from "@/pages/SubsystemWing";
@@ -120,6 +121,14 @@ import FamilyBundle from "@/pages/FamilyBundle";
 import StartHere from "@/pages/StartHere";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
+
+// §BODY-ROOM-LEGACY-REDIRECT 2026-02-13 — Old `/body-room/world/:slug`
+// URLs (created during the 2026-02-13 V2 skeleton sprint, before the
+// V1 LOCK rename to `/body-world`) are preserved by 301-style redirect.
+function RedirectStone() {
+  const { stoneSlug } = useParams();
+  return <Navigate to={`/body-world/world/${stoneSlug}`} replace />;
+}
 
 function AppRouter() {
   const location = useLocation();
@@ -278,21 +287,51 @@ function AppRouter() {
         {/* §Phase 1 — public Grace-only demo route (no auth, no
             consent gate). Founder-shareable link for bank / demo. */}
         <Route path="/presence" element={<Presence />} />
-        {/* §BODY-WORLD-V2 2026-02-13 — `/body-room` now serves the new
-            Polarstar-pattern Body World hub (painted traveller-by-lake
-            with 15 stone hotspots). Legacy BodyRoom.jsx (silhouette,
-            Honesty Quiz, Body Architecture audio shelf, BodyRoomChat,
-            BodyLensSelector) remains untouched at /body-room/v1 so no
-            content or interaction is lost. Per-stone authored pages
-            arrive later via BodyWorldStone.jsx (Field Study skeleton). */}
+        {/* §BODY-WORLD-V1-LOCKED 2026-02-13 — Canonical URL is
+            /body-world (per founder's BODY WORLD V1 IMPLEMENTATION
+            LOCK). The Polarstar painted hub (traveller + lake + 14
+            stones) is the hub. Each stone routes to a world page —
+            painted Polarstar view when an image exists, Field Study
+            skeleton otherwise. /body-room is preserved as a backward-
+            compatible redirect so existing inbound links still work.
+            Legacy BodyRoom.jsx (silhouette, Honesty Quiz, Body
+            Architecture audio shelf, BodyRoomChat, BodyLensSelector,
+            Body Temple entry) remains untouched at /body-world/v1
+            (and /body-room/v1 for legacy URLs). */}
         <Route
-          path="/body-room"
+          path="/body-world"
           element={
             <WandererGate scope="private">
               <BodyWorld />
             </WandererGate>
           }
         />
+        <Route
+          path="/body-world/v1"
+          element={
+            <WandererGate scope="private">
+              <BodyRoom />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/body-world/world/:stoneSlug"
+          element={
+            <WandererGate scope="private">
+              <BodyWorldStone />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/body-world/world/:stoneSlug/topic/:topicSlug"
+          element={
+            <WandererGate scope="private">
+              <BodyWorldTopic />
+            </WandererGate>
+          }
+        />
+        {/* §BODY-ROOM-REDIRECTS — preserve legacy URLs */}
+        <Route path="/body-room" element={<Navigate to="/body-world" replace />} />
         <Route
           path="/body-room/v1"
           element={
@@ -303,11 +342,7 @@ function AppRouter() {
         />
         <Route
           path="/body-room/world/:stoneSlug"
-          element={
-            <WandererGate scope="private">
-              <BodyWorldStone />
-            </WandererGate>
-          }
+          element={<RedirectStone />}
         />
         {/* §BODY-TEMPLE 2026-02-09 — Public route so the course page
             is visible to non-signed-in visitors as a marketing surface;

@@ -1,29 +1,18 @@
 /**
- * BodyWorld.jsx — § BODY WORLD V2 · HUB 2026-02-13
+ * BodyWorld.jsx — § BODY WORLD V1 · HUB 2026-02-13 (LOCKED)
  *
- * Polarstar-pattern hub page for the Body Room (re-launched as
- * "Body World"). Per /app/memory/BODY_WORLD_V2_BRIEF.md the visitor
- * enters a landscape, not a course: a traveller by a lake, carrying
- * burdens (a backpack), facing 15 stones — each stone a question.
+ * Polarstar-pattern hub page. The painted founder mockup (traveller
+ * with backpack at the lake, 14 stones, sidebar, chat/voice cards,
+ * right column) IS the literal UI. Invisible click-zones layer over
+ * every painted UI element.
  *
- * The supplied painted mockup IS the design. This component:
- *   1. Renders the painted hub image edge-to-edge.
- *   2. Layers invisible click-zones over every painted UI element
- *      (sidebar nav, chat / voice cards, the 15 stones, right
- *      column entry points).
- *   3. Routes every stone to /body-room/world/:slug (placeholder
- *      until founder authors per-stone content — same skeleton
- *      pattern as Alistair labs).
- *
- * Coordinates are percentage-based so the layout scales with the
- * viewport. Append ?debug=1 to the URL to visualise every hotspot
- * with its id (founder calibration mode).
- *
- * IMPORTANT: legacy /body-room content (BodyRoom.jsx — silhouette,
- * Honesty Quiz, Body Architecture audio shelf, Body Temple entry,
- * BodyRoomChat, BodyLensSelector) is preserved untouched and still
- * reachable via /body-room/v1. Per-stone authored content arrives
- * later via the BodyWorldStone.jsx renderer.
+ * STRUCTURE LOCK
+ *   - Traveller by the lake = the visitor.  Kaelen = guide (sidebar,
+ *     chat, voice — never the man by the lake).
+ *   - 14 stones total. Stones 1-13 use stone iconography. Stone 14
+ *     (Living or Surviving) uses bubbles — visual language shifts.
+ *   - URL: /body-world (canonical). /body-room redirects here.
+ *   - Append ?debug=1 to visualise hotspots (founder calibration).
  */
 import { Link, useSearchParams } from "react-router-dom";
 import { BODY_WORLD_STONES } from "@/data/bodyWorldStones";
@@ -31,34 +20,29 @@ import { BODY_WORLD_STONES } from "@/data/bodyWorldStones";
 const HUB_IMAGE =
   "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/9ndllntz_ChatGPT%20Image%2011.%20juni%202026%2C%2021_05_25.png";
 
-/* §SIDEBAR-ZONES — left dark sidebar, painted into the hub image. */
 const SIDEBAR_ZONES = [
-  { id: "sidebar-home",         label: "Home",                 route: "/body-room",                 top: 18, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-map",          label: "Map of Body World",    route: "/body-room",                 top: 22.5, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-chat-kaelen",  label: "Chat with Kaelen",     route: "/body-room/v1#kaelan",       top: 27, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-talk-kaelen",  label: "Talk to Kaelen",       route: "/body-room/v1#kaelan",       top: 31.5, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-journey",      label: "My Journey",           route: "/body-room/journey",         top: 36, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-tools",        label: "Tools & Practices",    route: "/body-room/tools",           top: 40.5, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-insights",     label: "Insights",             route: "/body-room/insights",        top: 45, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-favourites",   label: "Favourites",           route: "/body-room/favourites",      top: 49.5, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-journals",     label: "Journals",             route: "/body-room/journals",        top: 54, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-assessments",  label: "Assessments",          route: "/body-room/v1#body-room-questionnaire", top: 58.5, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-settings",     label: "Settings",             route: "/portal",                    top: 63, left: 1,  w: 13, h: 4 },
-  { id: "sidebar-help",         label: "Help Center",          route: "/faq",                       top: 67.5, left: 1,  w: 13, h: 4 },
+  { id: "sidebar-home",         label: "Home",                 route: "/body-world",                top: 18.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-map",          label: "Map of Body World",    route: "/body-world",                top: 22.5, left: 1, w: 13, h: 4 },
+  { id: "sidebar-chat-kaelen",  label: "Chat with Kaelen",     route: "/body-world/v1#kaelan",      top: 27.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-talk-kaelen",  label: "Talk to Kaelen",       route: "/body-world/v1#kaelan",      top: 31.5, left: 1, w: 13, h: 4 },
+  { id: "sidebar-journey",      label: "My Journey",           route: "/body-world/journey",        top: 36.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-tools",        label: "Tools & Practices",    route: "/body-world/tools",          top: 40.5, left: 1, w: 13, h: 4 },
+  { id: "sidebar-insights",     label: "Insights",             route: "/body-world/insights",       top: 45.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-favourites",   label: "Favourites",           route: "/body-world/favourites",     top: 49.5, left: 1, w: 13, h: 4 },
+  { id: "sidebar-journals",     label: "Journals",             route: "/body-world/journals",       top: 54.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-assessments",  label: "Assessments",          route: "/body-world/v1#body-room-questionnaire", top: 58.5, left: 1, w: 13, h: 4 },
+  { id: "sidebar-settings",     label: "Settings",             route: "/portal",                    top: 63.0, left: 1, w: 13, h: 4 },
+  { id: "sidebar-help",         label: "Help Center",          route: "/faq",                       top: 67.5, left: 1, w: 13, h: 4 },
 ];
 
-/* §CHAT-CARDS — two large painted cards in the centre-top:
- * "CHAT WITH KAELEN" (text) and "TALK TO KAELEN" (voice).
- * Both currently route to the existing /body-room/v1 surface where
- * BodyRoomChat (voice + text I/O) lives untouched. */
 const CHAT_CARD_ZONES = [
-  { id: "card-chat-kaelen",  label: "Chat with Kaelen",  route: "/body-room/v1#kaelan", top: 24, left: 18, w: 27, h: 13 },
-  { id: "card-talk-kaelen",  label: "Talk to Kaelen",    route: "/body-room/v1#kaelan", top: 24, left: 46, w: 27, h: 13 },
+  { id: "card-chat-kaelen", label: "Chat with Kaelen", route: "/body-world/v1#kaelan", top: 24, left: 18, w: 27, h: 13 },
+  { id: "card-talk-kaelen", label: "Talk to Kaelen",   route: "/body-world/v1#kaelan", top: 24, left: 46, w: 27, h: 13 },
 ];
 
-/* §STONE-ZONES — 15 stones painted on the lake-shore map. Coordinates
- * are visual best-fit from the founder mockup; refine via ?debug=1.
- * Stones map 1:1 to BODY_WORLD_STONES in /data/bodyWorldStones.js. */
+/* §STONE-ZONES — 14 stones on the lake-shore map.  Coordinates are
+ * visual best-fit; refine via ?debug=1. Stone slugs map 1:1 to
+ * BODY_WORLD_STONES (14 entries, locked). */
 const STONE_ZONES = [
   { n: 1,  top: 51, left: 16, w: 9, h: 8 },
   { n: 2,  top: 51, left: 27, w: 9, h: 8 },
@@ -71,21 +55,18 @@ const STONE_ZONES = [
   { n: 9,  top: 67, left: 39, w: 9, h: 8 },
   { n: 10, top: 67, left: 27, w: 9, h: 8 },
   { n: 11, top: 67, left: 16, w: 9, h: 8 },
-  { n: 12, top: 83, left: 16, w: 9, h: 8 },
-  { n: 13, top: 83, left: 30, w: 9, h: 8 },
-  { n: 14, top: 83, left: 45, w: 9, h: 8 },
-  { n: 15, top: 83, left: 60, w: 9, h: 8 },
+  { n: 12, top: 83, left: 22, w: 9, h: 8 },
+  { n: 13, top: 83, left: 41, w: 9, h: 8 },
+  { n: 14, top: 83, left: 60, w: 9, h: 8 },
 ];
 
-/* §RIGHT-COLUMN-ZONES — Start Here (4 entry questions), Body Check-In,
- * Your Journey (resume) — painted into the right dark column. */
 const RIGHT_COLUMN_ZONES = [
-  { id: "start-have-problem",   label: "I have a problem",     route: "/body-room/world/emotional-body",     top: 18, left: 85, w: 14, h: 5 },
-  { id: "start-understand",     label: "I want to understand", route: "/body-room/world/know-your-body",     top: 24, left: 85, w: 14, h: 5 },
-  { id: "start-improve",        label: "I want to improve",    route: "/body-room/world/body-engineering",   top: 30, left: 85, w: 14, h: 5 },
-  { id: "start-dont-know",      label: "I don't know",         route: "/body-room/v1#kaelan",                top: 36, left: 85, w: 14, h: 5 },
-  { id: "body-check-in",        label: "Body Check-In",        route: "/body-room/v1#body-room-questionnaire", top: 46, left: 85, w: 14, h: 12 },
-  { id: "your-journey",         label: "Your Journey",         route: "/body-room/journey",                  top: 63, left: 85, w: 14, h: 18 },
+  { id: "start-have-problem", label: "I have a problem",     route: "/body-world/world/emotional-body",    top: 18, left: 85, w: 14, h: 5 },
+  { id: "start-understand",   label: "I want to understand", route: "/body-world/world/know-your-body",    top: 24, left: 85, w: 14, h: 5 },
+  { id: "start-improve",      label: "I want to improve",    route: "/body-world/world/body-engineering",  top: 30, left: 85, w: 14, h: 5 },
+  { id: "start-dont-know",    label: "I don't know",         route: "/body-world/v1#kaelan",               top: 36, left: 85, w: 14, h: 5 },
+  { id: "body-check-in",      label: "Body Check-In",        route: "/body-world/v1#body-room-questionnaire", top: 46, left: 85, w: 14, h: 12 },
+  { id: "your-journey",       label: "Your Journey",         route: "/body-world/journey",                 top: 63, left: 85, w: 14, h: 18 },
 ];
 
 export default function BodyWorld() {
@@ -97,7 +78,7 @@ export default function BodyWorld() {
     return {
       id: `stone-${stone.slug}`,
       label: `${stone.n}. ${stone.title}`,
-      route: `/body-room/world/${stone.slug}`,
+      route: `/body-world/world/${stone.slug}`,
       top: s.top,
       left: s.left,
       w: s.w,
@@ -124,7 +105,7 @@ export default function BodyWorld() {
       >
         <img
           src={HUB_IMAGE}
-          alt="Body World — a traveler by the lake, fifteen stones, Kaelen as guide."
+          alt="Body World — a traveler by the lake, fourteen stones, Kaelen as guide."
           className="absolute inset-0 w-full h-full object-cover select-none"
           draggable={false}
           loading="eager"

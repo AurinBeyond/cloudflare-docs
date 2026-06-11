@@ -20,6 +20,7 @@ export default function Layout() {
     location.pathname.startsWith("/grace") ||
     location.pathname.startsWith("/clarity-release") ||
     location.pathname.startsWith("/body-room") ||
+    location.pathname.startsWith("/body-world") ||
     location.pathname.startsWith("/parents-room") ||
     location.pathname.startsWith("/kids-universe") ||
     location.pathname.startsWith("/cabinet") ||
