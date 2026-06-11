@@ -78,6 +78,7 @@ import AlistairLaboratories from "@/pages/alistair/Laboratories";
 import AlistairLab from "@/pages/alistair/Lab";
 import AlistairLabDashboard from "@/pages/alistair/LabDashboard";
 import AlistairLabArticle from "@/pages/alistair/LabArticle";
+import AlistairTopicDetail from "@/pages/alistair/TopicDetail";
 import CourseDetail from "@/pages/CourseDetail";
 import Catalogue from "@/pages/Catalogue";
 import Faq from "@/pages/Faq";
@@ -361,6 +362,7 @@ function AppRouter() {
             supplied painted mockup full-bleed with invisible hotspots
             over the painted nav. */}
         <Route path="/course-room/lab/:labSlug" element={<AlistairLabDashboard />} />
+        <Route path="/course-room/lab/:labSlug/topic/:topicId" element={<AlistairTopicDetail />} />
         <Route path="/course-room/lab/:labSlug/library/:slug" element={<AlistairLabArticle />} />
         <Route
           path="/course-room/room"

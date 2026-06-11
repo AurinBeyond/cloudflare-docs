@@ -18,6 +18,42 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-06-08)
 
+### 2026-02-10 (C) — Money Tree internal hotspots (calibration prototype)
+- New stable route layer: `/course-room/lab/:labSlug/topic/:topicId`
+  rendered by `pages/alistair/TopicDetail.jsx` placeholder. Topic
+  titles dictionary covers all 28 unique Money Tree topic IDs.
+- `pages/alistair/LabDashboard.jsx` upgraded (v5):
+  - `?debug=1` URL param visualises hotspot outlines with their zone
+    ids — used for founder visual calibration.
+  - Per-lab `hideSharedSidebar` flag opts a lab out of the shared
+    Alistair sidebar zones when the painted mockup has no nav
+    sidebar painted in. `money-tree` opts out.
+  - Per-lab `topics: TopicZone[]` array allows attaching painted-area
+    hotspots that each route to a stable `/topic/{topicId}`.
+- Money Tree calibrated with **40 hotspots → 28 unique topic IDs**
+  across 8 painted groups:
+    GARDENER ACTIONS (3): prune, water, plant
+    NOURISHED BRANCHES (5): opportunity, relationships, work-impact,
+      creativity, leadership
+    TRUNK / INTERNAL BELIEFS (5): worth, trust, identity, value,
+      receiving (trunk variants)
+    NEGLECTED BRANCHES (5): fear, guilt, scarcity, overworking,
+      self-sabotage (branch variants)
+    DEEPER ROOTS (5): family, childhood, safety, belonging, love
+    OLD STORIES quotes (5): money-doesnt-grow, be-realistic,
+      dont-disappoint, work-harder, who-do-you-think
+    CORE BELIEFS / INTERNAL PROGRAMS (6): worth, fear, approval,
+      control, trust, receiving (belief variants)
+    FRUITS / LIFE RESULTS (6): abundance, freedom, contribution,
+      financial-flow, inner-peace, meaning
+- Verified end-to-end: click "Approval" topic → routed to
+  `/course-room/lab/money-tree/topic/approval`, placeholder
+  "Approval" page rendered, "Back to Money Tree Within" returns
+  to the painted hub.
+- Same topic ID is reused across multiple painted locations within
+  the same image (e.g. `worth` appears in TRUNK and CORE BELIEFS;
+  `fear` in NEGLECTED BRANCHES and CORE BELIEFS).
+
 ### 2026-02-10 (B) — Alistair Hub v4: 11 Laboratories
 - Founder decision: hub MUST show ALL 11 labs (not 4). Polarstar
   single-image pattern relaxed to a composition: dark CSS sidebar +
