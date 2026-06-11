@@ -13,8 +13,16 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { LABS } from "@/data/alistairLabs";
+import MONEY_TREE_CONTENT from "@/data/moneyTreeContent";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
+
+/* §LAB-CONTENT-REGISTRY 2026-02-10 — authored content indexed by labSlug.
+ * Other labs will receive their own data modules as content is written;
+ * topics without authored content fall back to the placeholder copy. */
+const LAB_CONTENT = {
+  "money-tree": MONEY_TREE_CONTENT,
+};
 
 /* §TOPIC-TITLES 2026-02-10 — display titles for every authored topic
  * ID. New topic IDs added to LabDashboard zones should be mirrored
@@ -308,6 +316,19 @@ export default function TopicDetail() {
     topicId?.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()) ||
     "Topic";
   const labName = lab?.name || labSlug;
+  const authored = LAB_CONTENT[labSlug]?.[topicId];
+
+  if (authored) {
+    return (
+      <AuthoredTopic
+        labSlug={labSlug}
+        labName={labName}
+        topicId={topicId}
+        topicTitle={topicTitle}
+        content={authored}
+      />
+    );
+  }
 
   return (
     <div
@@ -358,6 +379,146 @@ export default function TopicDetail() {
           Back to {labName}
         </Link>
       </div>
+    </div>
+  );
+}
+
+/* §AUTHORED-TOPIC 2026-02-10 — rich rendering for topics that have
+ * content in LAB_CONTENT. Sections: eyebrow → title → core question
+ * → body paragraphs → reflection prompts → related-topic chips →
+ * back-to-lab CTA. Preserves the data-testid contract so the audit
+ * harness keeps passing. */
+function AuthoredTopic({ labSlug, labName, topicId, topicTitle, content }) {
+  const { eyebrow, coreQuestion, body, reflection, related } = content;
+  return (
+    <div
+      data-testid={`topic-detail-${labSlug}-${topicId}`}
+      className="min-h-screen w-full px-6 sm:px-10 py-16 sm:py-24"
+      style={{ background: "#0c0f17", color: "#f0eadd", fontFamily: SERIF }}
+    >
+      <article className="max-w-2xl mx-auto">
+        <p
+          className="text-[11px] tracking-[0.34em] uppercase mb-5"
+          style={{ color: "#c4a46b" }}
+          data-testid="topic-lab-label"
+        >
+          {eyebrow || `${labName} · Laboratory of Life`}
+        </p>
+
+        <h1
+          className="font-light leading-[1.04] mb-7"
+          style={{
+            fontSize: "clamp(2.4rem, 5vw, 3.8rem)",
+            letterSpacing: "-0.012em",
+            color: "#f0eadd",
+          }}
+          data-testid="topic-title"
+        >
+          {topicTitle}
+        </h1>
+
+        {coreQuestion && (
+          <p
+            className="text-[17px] sm:text-[19px] italic leading-[1.55] mb-9 pl-4 border-l"
+            style={{
+              color: "#cfc7b3",
+              borderColor: "rgba(196,164,107,0.4)",
+            }}
+            data-testid="topic-core-question"
+          >
+            {coreQuestion}
+          </p>
+        )}
+
+        {body && body.length > 0 && (
+          <div data-testid="topic-body" className="space-y-5 mb-11">
+            {body.map((para, i) => (
+              <p
+                key={i}
+                className="text-[15.5px] leading-[1.75]"
+                style={{ color: "#bcb4a3" }}
+              >
+                {para}
+              </p>
+            ))}
+          </div>
+        )}
+
+        {reflection && reflection.length > 0 && (
+          <section
+            data-testid="topic-reflection"
+            className="mb-11 pt-7 border-t"
+            style={{ borderColor: "rgba(196,164,107,0.18)" }}
+          >
+            <p
+              className="text-[10.5px] tracking-[0.34em] uppercase mb-4"
+              style={{ color: "#c4a46b" }}
+            >
+              Reflection
+            </p>
+            <ul className="space-y-3.5">
+              {reflection.map((q, i) => (
+                <li
+                  key={i}
+                  className="text-[15px] italic leading-[1.7]"
+                  style={{ color: "#cfc7b3" }}
+                >
+                  — {q}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {related && related.length > 0 && (
+          <section
+            data-testid="topic-related"
+            className="mb-11 pt-7 border-t"
+            style={{ borderColor: "rgba(196,164,107,0.18)" }}
+          >
+            <p
+              className="text-[10.5px] tracking-[0.34em] uppercase mb-4"
+              style={{ color: "#c4a46b" }}
+            >
+              Continue Wandering
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              {related.map((rid) => (
+                <Link
+                  key={rid}
+                  to={`/course-room/lab/${labSlug}/topic/${rid}`}
+                  data-testid={`topic-related-${rid}`}
+                  className="inline-flex items-center px-3.5 py-2 rounded-full text-[12px] no-underline transition-colors"
+                  style={{
+                    color: "#d4b67d",
+                    border: "1px solid rgba(196,164,107,0.32)",
+                    background: "rgba(196,164,107,0.04)",
+                    textDecoration: "none",
+                    fontFamily: SERIF,
+                  }}
+                >
+                  {TOPIC_TITLES[rid] || rid}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <Link
+          to={`/course-room/lab/${labSlug}`}
+          data-testid="topic-back-to-lab"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] tracking-[0.28em] uppercase no-underline transition-colors"
+          style={{
+            color: "#d4b67d",
+            border: "1px solid rgba(196,164,107,0.42)",
+            background: "rgba(196,164,107,0.06)",
+            textDecoration: "none",
+          }}
+        >
+          <ArrowLeft size={12} />
+          Back to {labName}
+        </Link>
+      </article>
     </div>
   );
 }

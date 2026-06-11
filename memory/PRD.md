@@ -31,6 +31,33 @@ configuration dashboard as ambient media.
   - child-parent → imagine → "Imagine"
   - body-language-v2 → jaw-holding-back → "Jaw — Holding back"
 
+### 2026-02-10 (NAV-V1 FREEZE + MONEY TREE CONTENT)
+- **Step 1 · Freeze.** Navigation graph frozen at v1 via
+  `/app/memory/NAV_V1_LOCKED.md`. Topic IDs and route shape are
+  immutable until founder calibration completes.
+- **Step 2 · Calibration.** Founder-side, no agent credit spent.
+  Founder sweeps each lab at `?debug=1`, reports any zone-id drift.
+- **Step 3 · Lock coords.** Waits on Step 2 report.
+- **Step 4 · Money Tree content (DONE).**
+  - New data module `/app/frontend/src/data/moneyTreeContent.js`
+    authored in Alistair's voice (screen-down, anti-wellness,
+    contemplative). 36 / 36 unique Money Tree topic IDs covered.
+  - Per topic: eyebrow, single-line core question, 2–3 short body
+    paragraphs, 2 reflection prompts, 2–3 related-topic chips.
+  - `pages/alistair/TopicDetail.jsx` upgraded with an
+    `AuthoredTopic` renderer that activates whenever
+    `LAB_CONTENT[labSlug][topicId]` exists; falls back to the
+    placeholder for unauthored topics (preserves audit contract,
+    no dead ends).
+- Audit:
+  - Money Tree: 36 / 36 routes render authored content (eyebrow +
+    title + core question + body + reflection + related chips +
+    back-to-lab).
+  - Spot check on 3 unauthored labs (old-stories, the-code,
+    body-language-v2): placeholder still renders correctly, back-nav
+    intact.
+  - 0 console errors, 0 page errors across the sweep.
+
 ### 2026-02-10 (LIVE E2E AUDIT) — 295/295 hotspots verified
 - Full automated traversal of every hotspot in every lab.
 - Method: collect every `[data-testid^='lab-zone-topic']` href from
