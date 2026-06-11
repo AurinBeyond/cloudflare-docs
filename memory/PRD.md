@@ -31,6 +31,27 @@ configuration dashboard as ambient media.
   - child-parent → imagine → "Imagine"
   - body-language-v2 → jaw-holding-back → "Jaw — Holding back"
 
+### 2026-02-10 (LIVE E2E AUDIT) — 295/295 hotspots verified
+- Full automated traversal of every hotspot in every lab.
+- Method: collect every `[data-testid^='lab-zone-topic']` href from
+  all 11 lab pages, deduplicate (295 hotspots → 291 unique routes),
+  navigate to every unique route, assert each renders
+  `[data-testid='topic-title']`, `[data-testid='topic-back-to-lab']`
+  and `[data-testid='topic-lab-label']`. Capture console + page
+  errors throughout.
+- Result (3 sequential batches to avoid Playwright session timeout):
+    Batch 1 — money-tree + old-stories + body-knows-first + compass:
+      99/99 PASS · 0 console errors · 0 page errors
+    Batch 2 — self-sabotage + the-code + invisible-strings + masks:
+      95/95 PASS · 0 console errors · 0 page errors
+    Batch 3 — body-language + child-parent + body-language-v2:
+      97/97 PASS · 0 console errors · 0 page errors
+- **Total: 291/291 unique routes PASS, 295/295 hotspots resolved,
+  0 dead ends, 0 console errors, 0 page errors, 0 malformed hrefs.**
+- Difference (295 → 291): 4 hotspots in money-tree share topic IDs
+  across painted groups (worth, fear, trust, receiving each appear
+  in both TRUNK and CORE BELIEFS rows — same topicId by design).
+
 ### 2026-02-10 (FINAL AUDIT) — 11/11 Laboratories Complete
 - Total topic hotspots: **295** across 11 labs.
 - Labs using `hideSharedSidebar: true` (no painted Alistair sidebar
