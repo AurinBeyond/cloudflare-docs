@@ -131,17 +131,259 @@ const MONEY_TREE_ZONES = (() => {
   ];
 })();
 
+/* §OLD-STORIES-TOPIC-ZONES 2026-02-10
+ * Painted groups in old-stories.png:
+ *   - 5 STORY SCRAPS (right side, near book): I'm not enough,
+ *     I always fail, I don't belong, I have to prove myself,
+ *     It's not safe.
+ *   - 5 SUB-CARDS (IN THIS LABORATORY WE EXPLORE, bottom row):
+ *     Recognize, Question, Release, Rewrite, Remember.
+ *   - 4 REFLECTION QUESTIONS (right column panel). */
+const OLD_STORIES_ZONES = (() => {
+  const slug = "old-stories";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // story scraps (5)
+    z("im-not-enough",        7,  50, 13, 5, "topic-scrap-not-enough"),
+    z("i-always-fail",        13, 43, 13, 5, "topic-scrap-always-fail"),
+    z("i-dont-belong",        12, 63, 13, 5, "topic-scrap-dont-belong"),
+    z("must-prove-myself",    20, 41, 13, 6, "topic-scrap-prove-myself"),
+    z("not-safe",             19, 73, 13, 5, "topic-scrap-not-safe"),
+    // sub-cards (5)
+    z("recognize", 56, 14.5, 9, 26),
+    z("question",  56, 24.5, 9, 26),
+    z("release",   56, 34.5, 9, 26),
+    z("rewrite",   56, 44.5, 9, 26),
+    z("remember",  56, 54.5, 9, 26),
+    // reflection questions (4)
+    z("reflect-learned-long-ago", 58, 69, 16, 6, "topic-reflect-learned-ago"),
+    z("reflect-from-whom",        65, 69, 16, 5, "topic-reflect-from-whom"),
+    z("reflect-100-true",         70, 69, 16, 5, "topic-reflect-100-true"),
+    z("reflect-help-limit",       75, 69, 16, 7, "topic-reflect-help-limit"),
+  ];
+})();
+
+/* §BODY-KNOWS-FIRST-TOPIC-ZONES 2026-02-10
+ * Painted groups in body-knows-first.png:
+ *   - 5 right side panel items: Feel, Breathe, Listen, Trust, Integrate
+ *   - Tab bar (6): Overview, Body Signals, Nervous System, Practices,
+ *     Insights, Journal
+ *   - 5 sub-cards: Sensations, Triggers, Patterns, Regulation, Integration
+ *   - Body Check-in 7 states + Check-in CTA
+ *   - 4 reflection questions */
+const BODY_KNOWS_FIRST_ZONES = (() => {
+  const slug = "body-knows-first";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // right side panel (5)
+    z("feel",      11, 84, 14, 6, "topic-side-feel"),
+    z("breathe",   18, 84, 14, 6, "topic-side-breathe"),
+    z("listen",    25, 84, 14, 6, "topic-side-listen"),
+    z("trust",     32, 84, 14, 6, "topic-side-trust"),
+    z("integrate", 39, 84, 14, 6, "topic-side-integrate"),
+    // tab bar (6)
+    z("overview",       42, 14, 10, 4, "topic-tab-overview"),
+    z("body-signals",   42, 25, 12, 4, "topic-tab-body-signals"),
+    z("nervous-system", 42, 38, 13, 4, "topic-tab-nervous-system"),
+    z("practices",      42, 52, 11, 4, "topic-tab-practices"),
+    z("insights",       42, 64, 10, 4, "topic-tab-insights"),
+    z("journal",        42, 74, 10, 4, "topic-tab-journal"),
+    // sub-cards (5)
+    z("sensations",  53, 14, 10, 27),
+    z("triggers",    53, 24.5, 10, 27),
+    z("patterns",    53, 35, 10, 27),
+    z("regulation",  53, 45.5, 10, 27),
+    z("integration", 53, 56, 10, 27),
+    // body check-in 7 states (compact column)
+    z("state-tense",    59, 67, 8, 3, "topic-state-tense"),
+    z("state-tired",    62.5, 67, 8, 3, "topic-state-tired"),
+    z("state-restless", 66, 67, 8, 3, "topic-state-restless"),
+    z("state-calm",     69.5, 67, 8, 3, "topic-state-calm"),
+    z("state-open",     73, 67, 8, 3, "topic-state-open"),
+    z("state-energized", 76.5, 67, 8, 3, "topic-state-energized"),
+    z("state-other",    80, 67, 8, 3, "topic-state-other"),
+    // reflection questions (4)
+    z("reflect-trying-to-tell", 58, 78, 15, 6, "topic-reflect-body-trying"),
+    z("reflect-tension",        65, 78, 15, 5, "topic-reflect-tension"),
+    z("reflect-need-more",      71, 78, 15, 6, "topic-reflect-need-more"),
+    z("reflect-next-small-step", 78, 78, 15, 5, "topic-reflect-next-step"),
+  ];
+})();
+
+/* §COMPASS-TOPIC-ZONES 2026-02-10
+ * Painted groups in compass.png (no Alistair sidebar):
+ *   - 6 compass topics around the soul compass: PURPOSE, TRUTH,
+ *     CALLING, GROWTH, JOY, GIFTS.
+ *   - 4 paths bottom row: OLD PATH, HEALING PATH, EXPANSION PATH, SOUL PATH.
+ *   - SIGNS YOU'RE OFF PATH panel (left bottom): 6 items.
+ *   - COMPASS CHECK-IN panel (right top): 4 items.
+ *   - YOUR NEXT RIGHT STEP, REMEMBER panels (right). */
+const COMPASS_ZONES = (() => {
+  const slug = "compass";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 6 compass topics
+    z("purpose", 10, 31, 12, 11),
+    z("truth",   10, 60, 12, 11),
+    z("gifts",   28, 30, 12, 11),
+    z("calling", 28, 60, 12, 11),
+    z("joy",     45, 32, 12, 11),
+    z("growth",  45, 60, 12, 11),
+    // 4 paths
+    z("old-path",       77, 14, 13, 13, "topic-path-old"),
+    z("healing-path",   77, 28, 13, 13, "topic-path-healing"),
+    z("expansion-path", 77, 47, 13, 13, "topic-path-expansion"),
+    z("soul-path",      77, 63, 13, 13, "topic-path-soul"),
+    // SIGNS OFF PATH (left bottom) — 6 items
+    z("sign-drained",        45, 1, 14, 5, "topic-sign-drained"),
+    z("sign-weekends",       51, 1, 14, 5, "topic-sign-weekends"),
+    z("sign-ignore-nudges",  57, 1, 14, 5, "topic-sign-ignore"),
+    z("sign-people-please",  62, 1, 14, 5, "topic-sign-people-please"),
+    z("sign-stuck",          68, 1, 14, 5, "topic-sign-stuck"),
+    z("sign-doubt-self",     73, 1, 14, 5, "topic-sign-doubt"),
+    // COMPASS CHECK-IN (right top) — 4 items
+    z("checkin-alignment",  7,  83, 16, 5, "topic-checkin-alignment"),
+    z("checkin-expand",     12, 83, 16, 5, "topic-checkin-expand"),
+    z("checkin-closer",     18, 83, 16, 5, "topic-checkin-closer"),
+    z("checkin-future-self", 24, 83, 16, 5, "topic-checkin-future-self"),
+    // YOUR NEXT RIGHT STEP, REMEMBER
+    z("next-right-step", 41, 83, 16, 16, "topic-next-step"),
+    z("remember",        76, 83, 16, 12, "topic-remember-panel"),
+  ];
+})();
+
+/* §SELF-SABOTAGE-TOPIC-ZONES 2026-02-10
+ * Painted groups in self-sabotage.png (with Alistair sidebar):
+ *   - HOW WE EXPLORE (right column): NOTICE, INQUIRE, EXPERIMENT, INTEGRATE
+ *   - 5 sub-cards: HIDDEN PATTERNS, ROOT BELIEFS, EMOTIONAL TRIGGERS,
+ *     NEW CHOICES, SELF-TRUST */
+const SELF_SABOTAGE_ZONES = (() => {
+  const slug = "self-sabotage";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // HOW WE EXPLORE (right column)
+    z("notice",     6,  77, 21, 12, "topic-step-notice"),
+    z("inquire",    19, 77, 21, 12, "topic-step-inquire"),
+    z("experiment", 32, 77, 21, 12, "topic-step-experiment"),
+    z("integrate",  46, 77, 21, 12, "topic-step-integrate"),
+    // 5 sub-cards
+    z("hidden-patterns",   62, 17, 10, 30),
+    z("root-beliefs",      62, 28, 10, 30),
+    z("emotional-triggers", 62, 38, 10, 30),
+    z("new-choices",       62, 49, 10, 30),
+    z("self-trust",        62, 59, 10, 30),
+  ];
+})();
+
+/* §THE-CODE-TOPIC-ZONES 2026-02-10
+ * Painted groups in the-code.png (no Alistair sidebar):
+ *   - 5 external influencer figures top: PARENTS, SOCIETY, CULTURE,
+ *     PARTNER, SYSTEMS
+ *   - 6 "code thoughts" around middle figure: I SHOULD MAKE THEM
+ *     PROUD, I NEED TO KEEP THE PEACE, I DON'T WANT TO DISAPPOINT,
+ *     I NEED TO BE LOVED, I'LL DO IT SOMEDAY, I CAN'T ROCK THE BOAT
+ *   - INTERNAL INFLUENCERS panel (left mid): 6 items
+ *   - EXTERNAL INFLUENCERS panel (right top): 6 items
+ *   - 5 life-area panels (right): AT WORK, IN RELATIONSHIPS, ONLINE,
+ *     IN SOCIETY, AS A CONSUMER
+ *   - THE CODE chain bottom: CONDITIONING > REPETITION > IDENTITY >
+ *     LOYALTY > FEAR > SHAME
+ *   - YOUR NEXT RIGHT STEP, YOUR FREEDOM panels */
+const THE_CODE_ZONES = (() => {
+  const slug = "the-code";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 5 external influencer figures
+    z("ext-parents",  4, 22, 13, 18, "topic-ext-parents"),
+    z("ext-society",  4, 36, 13, 18, "topic-ext-society"),
+    z("ext-culture",  4, 50, 13, 18, "topic-ext-culture"),
+    z("ext-partner",  4, 63, 13, 18, "topic-ext-partner"),
+    z("ext-systems",  4, 76, 13, 18, "topic-ext-systems"),
+    // 6 code thoughts around figure
+    z("thought-make-proud",   30, 27, 12, 6, "topic-thought-proud"),
+    z("thought-keep-peace",   30, 58, 12, 6, "topic-thought-peace"),
+    z("thought-disappoint",   42, 28, 13, 5, "topic-thought-disappoint"),
+    z("thought-be-loved",     42, 58, 13, 5, "topic-thought-loved"),
+    z("thought-someday",      57, 27, 12, 5, "topic-thought-someday"),
+    z("thought-rock-boat",    57, 58, 12, 5, "topic-thought-rock-boat"),
+    // INTERNAL INFLUENCERS panel (left)
+    z("int-fear-not-enough",  43, 2, 13, 5, "topic-int-fear-enough"),
+    z("int-need-approval",    50, 2, 13, 5, "topic-int-approval"),
+    z("int-old-stories",      56, 2, 13, 5, "topic-int-old-stories"),
+    z("int-self-doubt",       62, 2, 13, 5, "topic-int-self-doubt"),
+    z("int-comfort-addiction", 68, 2, 13, 5, "topic-int-comfort"),
+    z("int-avoiding-pain",    74, 2, 13, 5, "topic-int-avoiding-pain"),
+    // EXTERNAL INFLUENCERS panel (right)
+    z("ext-judgment",       18, 84, 13, 4, "topic-ext-judgment"),
+    z("ext-comparison",     24, 84, 13, 4, "topic-ext-comparison"),
+    z("ext-social-media",   30, 84, 13, 4, "topic-ext-social-media"),
+    z("ext-money-status",   36, 84, 13, 4, "topic-ext-money-status"),
+    z("ext-rules-authority", 42, 84, 13, 4, "topic-ext-rules"),
+    z("ext-masks-roles",    48, 84, 13, 4, "topic-ext-masks"),
+    // 5 life-area panels (far right)
+    z("life-at-work",          11, 91, 9, 7, "topic-life-at-work"),
+    z("life-relationships",    24, 91, 9, 7, "topic-life-relationships"),
+    z("life-online",           38, 91, 9, 7, "topic-life-online"),
+    z("life-society",          54, 91, 9, 7, "topic-life-society"),
+    z("life-consumer",         68, 91, 9, 7, "topic-life-consumer"),
+    // THE CODE chain (bottom)
+    z("code-conditioning", 85, 28, 9, 8, "topic-code-conditioning"),
+    z("code-repetition",   85, 36, 9, 8, "topic-code-repetition"),
+    z("code-identity",     85, 44, 9, 8, "topic-code-identity"),
+    z("code-loyalty",      85, 51, 9, 8, "topic-code-loyalty"),
+    z("code-fear",         85, 58, 9, 8, "topic-code-fear-shame"),
+    z("code-shame",        85, 65, 9, 8, "topic-code-shame"),
+    // panels
+    z("next-right-step", 56, 80, 17, 18, "topic-next-step"),
+    z("your-freedom",    88, 80, 17, 10, "topic-your-freedom"),
+  ];
+})();
+
+/* §INVISIBLE-STRINGS-TOPIC-ZONES 2026-02-10
+ * Painted groups in invisible-strings.png (no Alistair sidebar):
+ *   - 5 corner panels: CAREER & WORK, FINANCES, SOCIAL IMAGE,
+ *     HABITS & ADDICTIONS, SELF IMAGE
+ *   - 7 painted "string thoughts" around figure: I NEED APPROVAL,
+ *     I CAN'T DISAPPOINT, I MUST BE BUSY, I NEED MORE TO BE ENOUGH,
+ *     I'LL BE HAPPY WHEN, I CAN'T SAY NO, I DON'T WANT CONFLICT
+ *   - 4-step bottom nav: THE TRUTH, AWARENESS, FREEDOM, YOUR TURN */
+const INVISIBLE_STRINGS_ZONES = (() => {
+  const slug = "invisible-strings";
+  const z = (id, t, l, w, h, hid) => topicZone(slug, id, t, l, w, h, hid);
+  return [
+    // 5 corner panels
+    z("panel-career-work",     33, 2,  13, 17, "topic-panel-career"),
+    z("panel-finances",        66, 2,  13, 13, "topic-panel-finances"),
+    z("panel-social-image",    13, 84, 14, 17, "topic-panel-social"),
+    z("panel-habits-addictions", 38, 84, 14, 14, "topic-panel-habits"),
+    z("panel-self-image",      67, 84, 14, 14, "topic-panel-self-image"),
+    // 7 painted string thoughts
+    z("string-need-approval",   32, 33, 14, 5, "topic-string-approval"),
+    z("string-cant-disappoint", 32, 53, 14, 5, "topic-string-disappoint"),
+    z("string-must-be-busy",    44, 31, 12, 5, "topic-string-busy"),
+    z("string-need-more",       44, 56, 14, 5, "topic-string-need-more"),
+    z("string-happy-when",      62, 34, 12, 5, "topic-string-happy"),
+    z("string-cant-say-no",     62, 56, 11, 5, "topic-string-cant-say-no"),
+    z("string-no-conflict",     80, 39, 14, 5, "topic-string-no-conflict"),
+    // 4-step bottom nav
+    z("step-truth",     93, 8,  18, 6, "topic-step-truth"),
+    z("step-awareness", 93, 28, 18, 6, "topic-step-awareness"),
+    z("step-freedom",   93, 50, 18, 6, "topic-step-freedom"),
+    z("step-your-turn", 93, 72, 18, 6, "topic-step-your-turn"),
+  ];
+})();
+
 /* §LAB-ZONES 2026-02-10 — Per-laboratory hotspots configuration.
  * Money Tree is the calibration prototype; other labs receive their
  * topic zones in LAB_ORDER. */
 const LAB_ZONES = {
   "money-tree":         { topics: MONEY_TREE_ZONES, hideSharedSidebar: true },
-  "old-stories":        { topics: [] },
-  "body-knows-first":   { topics: [] },
-  "compass":            { topics: [] },
-  "self-sabotage":      { topics: [] },
-  "the-code":           { topics: [] },
-  "invisible-strings":  { topics: [] },
+  "old-stories":        { topics: OLD_STORIES_ZONES },
+  "body-knows-first":   { topics: BODY_KNOWS_FIRST_ZONES },
+  "compass":            { topics: COMPASS_ZONES, hideSharedSidebar: true },
+  "self-sabotage":      { topics: SELF_SABOTAGE_ZONES },
+  "the-code":           { topics: THE_CODE_ZONES, hideSharedSidebar: true },
+  "invisible-strings":  { topics: INVISIBLE_STRINGS_ZONES, hideSharedSidebar: true },
   "masks":              { topics: [] },
   "body-language":      { topics: [] },
   "child-parent":       { topics: [] },

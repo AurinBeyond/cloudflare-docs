@@ -18,6 +18,31 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-06-08)
 
+### 2026-02-10 (D) — 6 more labs internal hotspots (old-stories → invisible-strings)
+- `pages/alistair/LabDashboard.jsx` extended with topic zones for the
+  next 6 labs in LAB_ORDER. Total 124 topic hotspots added.
+- Per-lab `hideSharedSidebar` set where the painted image has no
+  Alistair sidebar painted in:
+    - money-tree: hide  (already set)
+    - old-stories: keep (painted sidebar present)
+    - body-knows-first: keep
+    - compass: hide
+    - self-sabotage: keep
+    - the-code: hide
+    - invisible-strings: hide
+- Topic zone counts: old-stories 14 · body-knows-first 27 · compass 22 ·
+  self-sabotage 9 · the-code 36 · invisible-strings 16.
+- `pages/alistair/TopicDetail.jsx` TOPIC_TITLES updated with ~115
+  human-readable titles so every painted hotspot opens a named
+  placeholder page (no dead ends).
+- Verified end-to-end navigation for each lab (one hotspot per lab):
+  - old-stories → recognize → "Recognize"
+  - body-knows-first → feel → "Feel"
+  - compass → purpose → "Purpose"
+  - self-sabotage → hidden-patterns → "Hidden Patterns"
+  - the-code → ext-parents → "Parents"
+  - invisible-strings → string-need-more → "I need more to be enough"
+
 ### 2026-02-10 (C) — Money Tree internal hotspots (calibration prototype)
 - New stable route layer: `/course-room/lab/:labSlug/topic/:topicId`
   rendered by `pages/alistair/TopicDetail.jsx` placeholder. Topic
