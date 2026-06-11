@@ -1,8 +1,8 @@
 # Alistair · Founder Content Inventory
 
-Generated: 2026-02-10
+Generated: 2026-02-10 · **v2 (waterfall update)**
 
-Legend:  **●** AUTHORED (rich content)   **○** PLACEHOLDER (route exists, copy not yet written)
+Legend:  **●** AUTHORED hero topic   **◐** AUTHORED supporting topic   **○** FIELD STUDY · IN PROGRESS
 
 ---
 
@@ -65,17 +65,17 @@ Legend:  **●** AUTHORED (rich content)   **○** PLACEHOLDER (route exists, co
 ---
 
 ## 2 · Old Stories  → `/course-room/lab/old-stories`
-**Hotspots: 14   ·   Unique topics: 14   ·   Authored: 0 / 14**
+**Hotspots: 14   ·   Unique topics: 14   ·   Authored: 3 / 14 (hero set)**
 
 ### ▸ Story Scraps (painted around the open book)
-- ○ I'm Not Enough — `im-not-enough`
+- **●** I'm Not Enough — `im-not-enough` *(hero)*
 - ○ I Always Fail — `i-always-fail`
 - ○ I Don't Belong — `i-dont-belong`
 - ○ I Have to Prove Myself — `must-prove-myself`
 - ○ It's Not Safe — `not-safe`
 
 ### ▸ Sub-Cards (In This Laboratory We Explore)
-- ○ Recognize — `recognize`
+- **●** Recognize — `recognize` *(hero)*
 - ○ Question — `question`
 - ○ Release — `release`
 - ○ Rewrite — `rewrite`
@@ -84,7 +84,7 @@ Legend:  **●** AUTHORED (rich content)   **○** PLACEHOLDER (route exists, co
 ### ▸ Reflection Questions
 - ○ What story did I learn long ago? — `reflect-learned-long-ago`
 - ○ Who did I learn it from? — `reflect-from-whom`
-- ○ Is this story 100% true? — `reflect-100-true`
+- **●** Is this story 100% true? — `reflect-100-true` *(hero)*
 - ○ How has this story helped and limited me? — `reflect-help-limit`
 
 ---
@@ -459,16 +459,40 @@ Legend:  **●** AUTHORED (rich content)   **○** PLACEHOLDER (route exists, co
 
 ---
 
-## Global Totals
+## Global Totals — v2
 
 | Metric | Count |
 |---|---:|
 | Total laboratories | **11** |
-| Total hotspots (incl. duplicate IDs across painted groups) | **295** |
+| Total hotspots | **295** |
 | Total unique routes | **291** |
-| Money Tree authored (●) | **36 / 36** |
-| Other 10 labs authored | **0 / 255** |
-| **Overall authoring coverage** | **36 / 291 = 12 %** |
+| Money Tree fully authored | **36 / 36** ✅ |
+| Other 10 labs · hero topics authored | **27 / 30** (3 per lab × 9 newly-authored) + 3 already in Old Stories above |
+| Other 10 labs · field-study cards | rest |
+| **Overall authored hero set** | **66 / 291 ≈ 23 %** |
+
+### v2 Hero Topics (per lab)
+
+| # | Lab | Hero 1 | Hero 2 | Hero 3 |
+|---|---|---|---|---|
+| 1 | Money Tree Within | (all 36 authored) | — | — |
+| 2 | Old Stories | I'm Not Enough | Recognize | Is this story 100% true? |
+| 3 | The Body Knows First | Feel | Sensations | What is my body trying to tell me? |
+| 4 | Compass of Meaning | Purpose | Soul Path | You feel drained |
+| 5 | Self-Sabotage | Hidden Patterns | Root Beliefs | Notice |
+| 6 | The Code | Conditioning | I should make them proud | Your Freedom |
+| 7 | Invisible Strings | I need approval | I can't say no | The Truth |
+| 8 | Masks | The Pleaser | What masks do I wear most often? | Recognize |
+| 9 | Body Language | Shoulders — I carry | Tight Jaw | Body Scan |
+| 10 | Child & Parent | Wonder | Imagine | Awareness |
+| 11 | Body Language V2 | Heart — Connection | Breath — Safety & flow | Awareness (practice) |
+
+### Placeholder copy
+Field Study cards now display:
+> **FIELD STUDY · IN PROGRESS**
+> *A deeper inquiry into [topic] is accumulating in this laboratory. Alistair returns to this card as the work matures — a laboratory is not a finished course, it is a place where field notes are gathered over time.*
+
+This frames every un-authored card as **part of the laboratory aesthetic**, not a missing page.
 
 ### Authoring waterfall
 

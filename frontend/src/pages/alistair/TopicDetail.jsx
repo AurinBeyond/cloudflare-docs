@@ -14,14 +14,36 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { LABS } from "@/data/alistairLabs";
 import MONEY_TREE_CONTENT from "@/data/moneyTreeContent";
+import {
+  OLD_STORIES_CONTENT,
+  BODY_KNOWS_FIRST_CONTENT,
+  COMPASS_CONTENT,
+  SELF_SABOTAGE_CONTENT,
+  THE_CODE_CONTENT,
+  INVISIBLE_STRINGS_CONTENT,
+  MASKS_CONTENT,
+  BODY_LANGUAGE_CONTENT,
+  CHILD_PARENT_CONTENT,
+  BODY_LANGUAGE_V2_CONTENT,
+} from "@/data/alistairLabContent";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 /* §LAB-CONTENT-REGISTRY 2026-02-10 — authored content indexed by labSlug.
- * Other labs will receive their own data modules as content is written;
- * topics without authored content fall back to the placeholder copy. */
+ * Each lab opens with 2–3 hero topics (fully authored); remaining
+ * painted topics render as "Field Study In Progress" working cards. */
 const LAB_CONTENT = {
-  "money-tree": MONEY_TREE_CONTENT,
+  "money-tree":         MONEY_TREE_CONTENT,
+  "old-stories":        OLD_STORIES_CONTENT,
+  "body-knows-first":   BODY_KNOWS_FIRST_CONTENT,
+  "compass":            COMPASS_CONTENT,
+  "self-sabotage":      SELF_SABOTAGE_CONTENT,
+  "the-code":           THE_CODE_CONTENT,
+  "invisible-strings":  INVISIBLE_STRINGS_CONTENT,
+  "masks":              MASKS_CONTENT,
+  "body-language":      BODY_LANGUAGE_CONTENT,
+  "child-parent":       CHILD_PARENT_CONTENT,
+  "body-language-v2":   BODY_LANGUAGE_V2_CONTENT,
 };
 
 /* §TOPIC-TITLES 2026-02-10 — display titles for every authored topic
@@ -348,7 +370,7 @@ export default function TopicDetail() {
           {labName} · Laboratory of Life
         </p>
         <h1
-          className="font-light leading-[1.05] mb-5"
+          className="font-light leading-[1.05] mb-4"
           style={{
             fontSize: "clamp(2.4rem, 5vw, 3.6rem)",
             letterSpacing: "-0.01em",
@@ -359,13 +381,25 @@ export default function TopicDetail() {
           {topicTitle}
         </h1>
         <p
-          className="text-[15px] italic leading-[1.7] mb-9"
+          className="inline-block text-[10.5px] tracking-[0.32em] uppercase mb-6 px-3 py-1.5"
+          style={{
+            color: "#c4a46b",
+            border: "1px solid rgba(196,164,107,0.42)",
+            background: "rgba(196,164,107,0.06)",
+          }}
+          data-testid="topic-status-tag"
+        >
+          Field Study · In Progress
+        </p>
+        <p
+          className="text-[15px] italic leading-[1.7] mb-9 max-w-md mx-auto"
           style={{ color: "#a89e8b" }}
           data-testid="topic-placeholder-copy"
         >
-          A deeper inquiry into <em>{topicTitle.toLowerCase()}</em> is being
-          prepared in this laboratory. The page exists so this hotspot
-          routes correctly; the content will be authored next.
+          A deeper inquiry into <em>{topicTitle.toLowerCase()}</em> is
+          accumulating in this laboratory. Alistair returns to this card
+          as the work matures — a laboratory is not a finished course,
+          it is a place where field notes are gathered over time.
         </p>
         <Link
           to={`/course-room/lab/${labSlug}`}
