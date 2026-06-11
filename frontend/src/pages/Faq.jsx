@@ -61,8 +61,8 @@ const SECTIONS = [
         a: "A reflective hour with a quiet companion. It is not therapy and not counselling. It helps you hear yourself more clearly. The first three replies are free; deeper hours are unlocked by a Clarity pass.",
       },
       {
-        q: "What is the Body Room?",
-        a: "Eight quiet hotspots on a vertical body map. You hover where something is held — back, chest, jaw — and the room offers a pattern reading and an optional somatic companion line. Free. Capped at 12 messages per day shared with the Cabinet.",
+        q: "What is Body World?",
+        a: "A landscape, not a course. The traveler by the lake is you, carrying experiences, emotions, habits, memories. Fifteen stones lie on the shore — each a question your body already knows. Kaelen walks beside you as a guide, not a teacher. Free. Capped at 12 messages per day shared with the Cabinet.",
       },
       {
         q: "What is the Course Room?",
@@ -120,7 +120,7 @@ const SECTIONS = [
       },
       {
         q: "How do I leave a room mid-session?",
-        a: "Every room has an emergency exit corner — a small Leave link in the upper area of Clarity Release and Body Room. You can also simply close the tab. Nothing locks you in. The session closes itself after a brief idle period.",
+        a: "Every room has an emergency exit corner — a small Leave link in the upper area of Clarity Release and Body World. You can also simply close the tab. Nothing locks you in. The session closes itself after a brief idle period.",
       },
       {
         q: "How do I request full account deletion?",

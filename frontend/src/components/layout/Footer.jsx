@@ -10,7 +10,7 @@ const COLUMNS = [
       { to: "/the-beginning", label: "The Beginning" },
       { to: "/grace", label: "Grace" },
       { to: "/cabinet/booking", label: "Quiet hours" },
-      { to: "/body-room", label: "Body Room" },
+      { to: "/body-room", label: "Body World" },
       { to: "/parents-room", label: "Parents' Room" },
       { to: "/aurin-philosophy", label: "Aurin Philosophy" },
       { to: "/bookstore", label: "Bookstore" },

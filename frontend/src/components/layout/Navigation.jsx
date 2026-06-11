@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { to: "/six-nights", label: "Six Nights", testid: "nav-six-nights" },
   { to: "/the-beginning", label: "The Beginning", testid: "nav-the-beginning" },
   { to: "/grace", label: "Grace", testid: "nav-grace" },
-  { to: "/body-room", label: "Body Room", testid: "nav-body-room" },
+  { to: "/body-room", label: "Body World", testid: "nav-body-room" },
   { to: "/parents-room", label: "Parents' Room", testid: "nav-parents-room" },
   { to: "/kids-universe/polarstar", label: "Polarstar Kids", testid: "nav-kids-universe" },
   { to: "/high-performers", label: "For Leaders", testid: "nav-high-performers" },

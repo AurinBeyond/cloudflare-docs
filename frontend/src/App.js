@@ -58,6 +58,8 @@ import GraceLibraryArticle from "@/pages/grace/LibraryArticle";
 import ClarityThreshold from "@/pages/ClarityThreshold";
 import Presence from "@/pages/Presence";
 import BodyRoom from "@/pages/BodyRoom";
+import BodyWorld from "@/pages/BodyWorld";
+import BodyWorldStone from "@/pages/BodyWorldStone";
 import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
 import SubsystemWing from "@/pages/SubsystemWing";
@@ -276,11 +278,34 @@ function AppRouter() {
         {/* §Phase 1 — public Grace-only demo route (no auth, no
             consent gate). Founder-shareable link for bank / demo. */}
         <Route path="/presence" element={<Presence />} />
+        {/* §BODY-WORLD-V2 2026-02-13 — `/body-room` now serves the new
+            Polarstar-pattern Body World hub (painted traveller-by-lake
+            with 15 stone hotspots). Legacy BodyRoom.jsx (silhouette,
+            Honesty Quiz, Body Architecture audio shelf, BodyRoomChat,
+            BodyLensSelector) remains untouched at /body-room/v1 so no
+            content or interaction is lost. Per-stone authored pages
+            arrive later via BodyWorldStone.jsx (Field Study skeleton). */}
         <Route
           path="/body-room"
           element={
             <WandererGate scope="private">
+              <BodyWorld />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/body-room/v1"
+          element={
+            <WandererGate scope="private">
               <BodyRoom />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/body-room/world/:stoneSlug"
+          element={
+            <WandererGate scope="private">
+              <BodyWorldStone />
             </WandererGate>
           }
         />

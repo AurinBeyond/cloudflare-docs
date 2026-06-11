@@ -634,7 +634,7 @@ function RoomsSection() {
       },
       {
         n: "II",
-        name: "Body Room",
+        name: "Body World",
         sub: "N · 360° · Kaelan · The Listening Room",
         body: "Where the body is read first. The architecture remembers what the mind has rehearsed away.",
         intro: "N · 360°. Kaelan curates the northern cardinal — the room that asks the body before it asks the mind. Slow attention to the structural load you have been carrying without naming. Three channels are open: writing, voice, and a live dialogue. If the line breaks, write — Kaelan will answer aloud. This is hardware-level work, not commentary.",

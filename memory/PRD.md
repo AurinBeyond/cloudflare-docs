@@ -16,6 +16,41 @@ configuration dashboard as ambient media.
 - Emergent platform with auto-commit per turn
 - Nano Banana (Gemini) via Emergent LLM Key for hero backgrounds
 
+## What's been implemented (THIS SESSION 2026-02-13)
+
+### 2026-02-13 (BODY-WORLD-V2 SKELETON · Polarstar pattern)
+- **New hub** `/body-room` → `pages/BodyWorld.jsx`. Painted founder
+  mockup (traveller-with-backpack by the lake, 15 stones) renders
+  edge-to-edge with 35 invisible hotspots layered over the painted
+  UI (12 sidebar nav items · 2 chat/voice cards · 15 stones ·
+  6 right-column entries). `?debug=1` mode shows yellow outlines
+  for founder coordinate calibration. Same Polarstar contract as
+  Alistair labs.
+- **Stone data registry** `data/bodyWorldStones.js` — 15 stones
+  per `/app/memory/BODY_WORLD_V2_BRIEF.md` (Know Your Body,
+  Emotional Body, Body Memory & Inheritance, Body Identity, Body
+  Protection Mechanisms, Body as a Partner, Body Engineering,
+  Body & Relationships, Body & Environment, Body & Time, Body &
+  Joy, Body as Verbal Language, Consequences, Living or
+  Surviving, Body Attention) + the central "All Connected".
+- **Per-stone placeholder** `/body-room/world/:stoneSlug` →
+  `pages/BodyWorldStone.jsx`. Renders stone number, title, the
+  founder question in italics, and a "Field Study · In Progress"
+  card (same skeleton as Alistair lab placeholders). Prev / next
+  stone navigation. All 15 stone routes verified live.
+- **Legacy preserved untouched** at `/body-room/v1` → original
+  `pages/BodyRoom.jsx` (silhouette, Honesty Quiz, Body
+  Architecture audio shelf, BodyRoomChat voice + text, BodyLens
+  Selector, Body Temple entry). Zero content loss. Chat / voice
+  / quiz / journey hotspots from the new hub all link back into
+  the legacy surface so nothing is dead.
+- **Navigation rename** "Body Room" → "Body World" in
+  `components/layout/Navigation.jsx`, `Footer.jsx`,
+  `pages/SanctuaryPreview.jsx` (room card), `pages/Catalogue.jsx`,
+  `pages/Faq.jsx` (question + privacy note). URL `/body-room`
+  intentionally preserved for SEO + inbound links.
+
+
 ## What's been implemented (THIS SESSION 2026-06-08)
 
 ### 2026-02-10 (E) — Final 4 labs internal hotspots (masks → body-language-v2)

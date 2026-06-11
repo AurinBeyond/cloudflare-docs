@@ -74,3 +74,18 @@ Per `/app/memory/BODY_ROOM_INVENTORY.md`:
 - Children + Adult patterns sections
 - Body Temple 28-day journey (Stripe unlock, Letter of Admission email)
 - BodyLensSelector
+
+
+---
+
+## Implementation Status (2026-02-13)
+
+- ✅ Polarstar hub built: `pages/BodyWorld.jsx` mounted at `/body-room`.
+- ✅ Painted hub image (traveller with backpack, lake, 15 stones) used edge-to-edge.
+- ✅ 35 invisible hotspots layered (12 sidebar · 2 chat/voice · 15 stones · 6 right column).
+- ✅ Stone registry `data/bodyWorldStones.js` carries all 15 slugs + titles + founder questions.
+- ✅ Per-stone placeholder route `/body-room/world/:stoneSlug` → `pages/BodyWorldStone.jsx` (Field Study skeleton).
+- ✅ Legacy `BodyRoom.jsx` moved to `/body-room/v1` — every legacy interaction (silhouette, quiz, audio keys, voice chat, lens selector, Body Temple entry) still reachable.
+- ✅ Nav label "Body Room" → "Body World" across Navigation, Footer, SanctuaryPreview, Catalogue, FAQ.
+- ⏳ Hotspot coordinate calibration via `?debug=1` — founder pass pending; current values are best-fit visual placement.
+- ⏳ Per-stone authored content — founder is still creating the individual stone artwork + writing the inner content. When ready, swap the Field Study placeholder for an authored renderer (same pattern as `MONEY_TREE_CONTENT`).
