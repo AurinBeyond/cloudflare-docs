@@ -238,8 +238,8 @@ function Hero() {
           className="text-[15px] leading-[1.7] italic max-w-[360px]"
           style={{ color: "#cfc7b3", fontFamily: SERIF }}
         >
-          A place for deep inquiry, living experiments<br />
-          and meaningful transformation.
+          Your life is the laboratory.<br />
+          Start exploring.
         </p>
       </div>
     </header>
