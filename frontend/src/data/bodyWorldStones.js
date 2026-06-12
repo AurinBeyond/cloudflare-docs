@@ -1,24 +1,30 @@
 /**
  * bodyWorldStones.js — § BODY WORLD V1 · LOCKED REGISTRY 2026-02-13
  *
- * The 14 worlds (stones) of Body World, per the founder's
- * "BODY WORLD V1 — IMPLEMENTATION LOCK" directive.
+ * STONE NAMES LOCK (founder directive 2026-02-13):
+ *   Stone 11 = Stress & Nervous System
+ *   Stone 12 = Body as Language    (NOT "Connection & Relationships")
+ *   Stone 13 = Growth & Transformation
+ *   Stone 14 = Living or Surviving (BUBBLES, not stones)
  *
- * STRUCTURE
- *   /body-world                       → Hub (traveler + lake + 14 stones)
- *   /body-world/world/:stoneSlug      → World page (centre stone + 6 sub-stones)
- *   /body-world/world/:s/topic/:t     → Topic placeholder (arrives later)
+ * UNUSED IMAGES (DO NOT WIRE — founder explicitly excluded):
+ *   - "Connection & Relationships" painting (Stone 8 already owns relationships)
+ *   - "Living Your Purpose" painting (Stone 14 stays "Living or Surviving";
+ *     "Living Your Purpose" may become a sub-topic later)
+ *   - "Mind & Thoughts" painting (duplicate Stone 11 numbering; reserved
+ *     as a potential sub-topic under Body as Language or Stress &
+ *     Nervous System)
  *
- * Each painted stone carries:
- *   - `image`         : the founder's painted world mockup (full-bleed)
- *   - `subStoneSlots` : per-world hotspot coordinates for the 6 sub-stones
- *                       (top/left/width/height as % of the image)
+ * PENDING-CONFLICT (waiting for founder ruling):
+ *   - "Purpose & Meaning" painting labeled "STONE 10 OF 14".  Locked
+ *     Stone 10 is "Body & Time".  Image is held until founder confirms
+ *     either (a) rename Stone 10, or (b) reassign painting to a
+ *     different stone, or (c) discard.
  *
- * Coordinates were extracted from the painted mockups via Gemini
- * vision pass on 2026-02-13. They reflect each world's exact layout
- * — for example "Know Your Body" sits lower because three chat cards
- * are painted above the stones; "Body Identity" sits higher because
- * its title is shorter.
+ * SUB-STONE COUNT:
+ *   Stones 1, 2, 4         → 6 sub-stones (hexagon)
+ *   Stones 11, 13          → 8 sub-stones (octagon — once wired)
+ *   Stone 14               → bubble cluster (geometry pending)
  */
 
 // §LAYOUT-NOTE-2026-02-13 — The painted mockups all share an identical

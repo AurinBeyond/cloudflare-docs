@@ -144,23 +144,45 @@ Body World is **NOT**:
 
 ---
 
-## Implementation Status (2026-02-13)
+## Implementation Status (2026-02-13 · v2 — calibrated + LOCK reaffirmed)
 
-- ✅ Hub `/body-world` shipping with the painted traveller-by-the-lake
-  mockup, 14 stone hotspots, 12 sidebar entries, 2 chat cards, 6
-  right-column entries (34 hotspots total).
+- ✅ Hub `/body-world` shipping with 14 stones painted hub.
 - ✅ World pages `/body-world/world/:stoneSlug` shipping.
-- ✅ Three worlds shipping with painted Polarstar views: Know Your
-  Body, Emotional Body, Body Identity.
-- ✅ Eleven worlds shipping with Field Study skeleton.
+- ✅ Three worlds shipping with painted Polarstar views (per-world sub-stone slots, calibrated via Gemini vision pass): Stone 1 Know Your Body, Stone 2 Emotional Body, Stone 4 Body Identity.
 - ✅ Topic placeholder `/body-world/world/:s/topic/:t` shipping.
 - ✅ Legacy `/body-room/*` URLs preserved via 301 redirects.
-- ✅ Legacy `BodyRoom.jsx` content reachable at `/body-room/v1` and
-  `/body-world/v1`.
-- ✅ Navigation label "Body Room" → "Body World" across Navigation,
-  Footer, SanctuaryPreview, Catalogue, FAQ.
-- ⏳ Hotspot coordinate calibration via `?debug=1` — founder pass
-  pending; current values are visual best-fit.
-- ⏳ Per-world painted mockups for stones 3, 5-14 — founder still
-  creating.
-- ⏳ Authored Hero Topic content per world — incremental, founder-led.
+- ✅ Field Study placeholder copy → "Coming Soon · This World Is Still Being Created".
+
+## REMAINING PAINTED WORLDS (8 — pending founder uploads)
+
+| #  | Stone                          | Status                                          |
+|----|--------------------------------|-------------------------------------------------|
+| 3  | Body Memory & Inheritance      | ⏳ awaiting painting                            |
+| 5  | Body Protection Mechanisms     | ⏳ awaiting painting                            |
+| 6  | Body as a Partner              | ⏳ awaiting painting                            |
+| 7  | Body Engineering               | ⏳ awaiting painting                            |
+| 8  | Body & Relationships           | ⏳ awaiting painting                            |
+| 9  | Body & Environment             | ⏳ awaiting painting                            |
+| 10 | Body & Time                    | ⏳ awaiting painting (founder uploaded "Purpose & Meaning" labeled Stone 10 — PENDING ruling) |
+| 12 | Body as Language               | ⏳ awaiting painting                            |
+
+## READY-TO-WIRE PAINTINGS (lock-compliant, awaiting URL confirmation)
+
+- 🪨 **Stone 11** — Stress & Nervous System (8 sub-stones octagon)
+- 🪨 **Stone 13** — Growth & Transformation (8 sub-stones octagon)
+
+Founder must confirm which uploaded asset URL maps to which stone before I can wire them. Code already supports per-stone `subStoneSlots` arrays — only need to add the 8-position octagon arrangement when wiring.
+
+## STONE 14 — BUBBLE WORLD (special)
+
+Stone 14 "Living or Surviving" intentionally uses BUBBLES (not stones) — bubbles symbolise freedom from the weight of stones. Awaiting founder painting in bubble visual language.
+
+## EXCLUDED PAINTINGS (do not wire)
+
+- ❌ "Connection & Relationships" — Stone 12 lock forbids replacing "Body as Language"; Stone 8 already covers relationships
+- ❌ "Living Your Purpose" — Stone 14 stays "Living or Surviving"
+- ❌ "Mind & Thoughts" — duplicate Stone 11 numbering, reserved as potential sub-topic
+
+## ROOM ISOLATION RULE (founder lock)
+
+Every Body World stone has ITS OWN topic and target audience. Stones DO NOT share content, themes, sub-topics, or audience. Architecture pattern (Polarstar + sub-stones + sidebar + right column) is shared; content is strictly per-stone.
