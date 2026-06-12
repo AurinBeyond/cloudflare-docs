@@ -1,23 +1,27 @@
 /**
- * BodyWorldStone.jsx — § BODY WORLD V1 · WORLD PAGE 2026-02-13 (LOCKED)
+ * BodyWorldStone.jsx — § BODY WORLD V1 · WORLD PAGE 2026-02-13 (CALIBRATED)
  *
  * Polarstar-pattern world detail page (one per stone).
  *
  * BEHAVIOUR
  *   - If the stone in BODY_WORLD_STONES carries an `image` URL, the
  *     painted world mockup is rendered edge-to-edge and invisible
- *     hotspots are layered over the centre stone, the 6 surrounding
- *     sub-stones, the back-to-map button, the sidebar nav, the right-
- *     column cards, and (when present) the three "Chat with Kaelen /
- *     Talk to Kaelen / Body Check-In" cards.
- *   - If no image yet, the Field Study placeholder skeleton is shown
+ *     hotspots are layered over:
+ *       • the back-to-map pill (top-left)
+ *       • the 13-item sidebar nav
+ *       • the centre stone's sub-stones (per-world coordinates
+ *         from `stone.subStoneSlots`)
+ *       • the stone's painted chat/voice cards if any
+ *         (per-world from `stone.chatCardSlots`)
+ *       • the right-column card stack (About / Hero / All Topics
+ *         / Your Journey)
+ *   - If no image yet, a Field Study placeholder skeleton is shown
  *     (same skeleton as Alistair lab placeholders).
  *
  * SUB-STONE ROUTES
  *   /body-world/world/:stoneSlug/topic/:topicSlug
- *   For now this resolves to a Field Study topic placeholder. When
- *   founder authors content, swap in an authored renderer (same
- *   pattern as MONEY_TREE_CONTENT in the Alistair lab system).
+ *   Resolves to a Field Study topic placeholder until founder
+ *   authors content (same contract as Alistair lab topics).
  */
 import { Link, useParams, useSearchParams, Navigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -28,56 +32,43 @@ import {
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
-/* §WORLD-PAGE-SIDEBAR-ZONES — left dark sidebar shared by every world
- * page (painted into each mockup). Co-ordinates are visual best-fit. */
+/* §SHARED-CHROME-ZONES — coordinates extracted from the founder's
+ * mockups (Gemini vision pass, 2026-02-13). Every painted world page
+ * uses the same sidebar, back-button and right-column geometry. */
+
+const BACK_BUTTON_ZONE = {
+  id: "back-to-stone-map",
+  label: "Back to Stone Map",
+  route: "/body-world",
+  top: 3.0, left: 2.0, w: 14, h: 4.5,
+};
+
 const SIDEBAR_ZONES = [
-  { id: "sidebar-home",        label: "Home",              route: "/",                          top: 18.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-map",         label: "Stone Map",         route: "/body-world",                top: 22.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-chat-kaelen", label: "Chat with Kaelen",  route: "/body-world/v1#kaelan",      top: 27.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-talk-kaelen", label: "Talk to Kaelen",    route: "/body-world/v1#kaelan",      top: 31.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-journey",     label: "My Journey",        route: "/body-world/journey",        top: 36.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-checkin",     label: "Body Check-In",     route: "/body-world/v1#body-room-questionnaire", top: 40.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-tools",       label: "Tools & Practices", route: "/body-world/tools",          top: 45.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-insights",    label: "Insights",          route: "/body-world/insights",       top: 49.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-favourites",  label: "Favourites",        route: "/body-world/favourites",     top: 54.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-journals",    label: "Journals",          route: "/body-world/journals",       top: 58.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-assessments", label: "Assessments",       route: "/body-world/v1#body-room-questionnaire", top: 63.0, left: 1, w: 12, h: 3 },
-  { id: "sidebar-settings",    label: "Settings",          route: "/portal",                    top: 67.5, left: 1, w: 12, h: 3 },
-  { id: "sidebar-help",        label: "Help Center",       route: "/faq",                       top: 72.0, left: 1, w: 12, h: 3 },
+  { id: "sidebar-home",        label: "Home",              route: "/",                                       top: 22.2, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-map",         label: "Stone Map",         route: "/body-world",                             top: 26.4, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-chat-kaelen", label: "Chat with Kaelen",  route: "/body-world/v1#kaelan",                   top: 30.6, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-talk-kaelen", label: "Talk to Kaelen",    route: "/body-world/v1#kaelan",                   top: 34.8, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-journey",     label: "My Journey",        route: "/body-world/journey",                     top: 39.0, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-checkin",     label: "Body Check-In",     route: "/body-world/v1#body-room-questionnaire",  top: 43.2, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-tools",       label: "Tools & Practices", route: "/body-world/tools",                       top: 47.4, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-insights",    label: "Insights",          route: "/body-world/insights",                    top: 51.6, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-favourites",  label: "Favourites",        route: "/body-world/favourites",                  top: 55.8, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-journals",    label: "Journals",          route: "/body-world/journals",                    top: 60.0, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-assessments", label: "Assessments",       route: "/body-world/v1#body-room-questionnaire",  top: 64.2, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-settings",    label: "Settings",          route: "/portal",                                 top: 68.4, left: 4.0, w: 10, h: 3.4 },
+  { id: "sidebar-help",        label: "Help Center",       route: "/faq",                                    top: 72.6, left: 4.0, w: 10, h: 3.4 },
 ];
 
-/* §SUB-STONE-ZONES — hexagon arrangement around the centre stone.
- * 6 surrounding stones at clock positions 12 / 2 / 4 / 6 / 8 / 10.
- * Centre stone (slot 0) is the world itself (no nav). */
-const SUB_STONE_SLOTS = [
-  { slot: 1, top: 41, left: 47, w: 14, h: 14 }, // 12 o'clock (top)
-  { slot: 2, top: 50, left: 64, w: 14, h: 14 }, // 2 o'clock
-  { slot: 3, top: 71, left: 64, w: 14, h: 14 }, // 4 o'clock
-  { slot: 4, top: 82, left: 47, w: 14, h: 14 }, // 6 o'clock (bottom)
-  { slot: 5, top: 71, left: 30, w: 14, h: 14 }, // 8 o'clock
-  { slot: 6, top: 50, left: 30, w: 14, h: 14 }, // 10 o'clock
-];
-
-/* §STONE-1-CHAT-CARDS — Stone 1 (Know Your Body) has three additional
- * cards painted above the sub-stones: Chat / Talk / Body Check-In. */
-const STONE1_CHAT_CARDS = [
-  { id: "world-chat-kaelen", label: "Chat with Kaelen", route: "/body-world/v1#kaelan",                  top: 31, left: 16, w: 16, h: 8 },
-  { id: "world-talk-kaelen", label: "Talk to Kaelen",   route: "/body-world/v1#kaelan",                  top: 31, left: 33, w: 16, h: 8 },
-  { id: "world-body-checkin",label: "Body Check-In",    route: "/body-world/v1#body-room-questionnaire", top: 31, left: 50, w: 16, h: 8 },
-];
-
-/* §RIGHT-COLUMN-ZONES — About This World, Hero Topics, All Topics,
- * Your Journey cards painted in the right column of each world page. */
 const RIGHT_COLUMN_ZONES = [
-  { id: "world-about",        label: "About This World", route: null,                  top: 11, left: 84, w: 15, h: 18 },
-  { id: "world-hero-topics",  label: "Hero Topics",      route: null,                  top: 33, left: 84, w: 15, h: 24 },
-  { id: "world-all-topics",   label: "All Topics",       route: null,                  top: 60, left: 84, w: 15, h: 8 },
-  { id: "world-journey",      label: "Your Journey",     route: "/body-world/journey", top: 72, left: 84, w: 15, h: 12 },
+  { id: "world-about",       label: "About This World", route: null,                  top: 10.0, left: 84.0, w: 14.5, h: 17 },
+  { id: "world-hero-topics", label: "Hero Topics",      route: null,                  top: 33.0, left: 84.0, w: 14.5, h: 30 },
+  { id: "world-all-topics",  label: "All Topics",       route: null,                  top: 64.0, left: 84.0, w: 14.5, h: 8  },
+  { id: "world-journey",     label: "Your Journey",     route: "/body-world/journey", top: 73.0, left: 84.0, w: 14.5, h: 13 },
 ];
 
 function PaintedWorldView({ stone, debug }) {
   const subStoneZones = (stone.subStones || []).map((sub, idx) => {
-    const slot = SUB_STONE_SLOTS[idx];
+    const slot = (stone.subStoneSlots || [])[idx];
     if (!slot) return null;
     return {
       id: `substone-${sub.slug}`,
@@ -90,20 +81,20 @@ function PaintedWorldView({ stone, debug }) {
     };
   }).filter(Boolean);
 
-  // §BACK-BUTTON-ZONE — painted "← Back to Stone Map" pill, top centre.
-  const backZone = {
-    id: "back-to-stone-map",
-    label: "Back to Stone Map",
-    route: "/body-world",
-    top: 3, left: 15, w: 14, h: 5,
-  };
-
-  const chatCards = stone.slug === "know-your-body" ? STONE1_CHAT_CARDS : [];
+  const chatCardZones = (stone.chatCardSlots || []).map((c) => ({
+    id: c.id,
+    label: c.label,
+    route: c.route,
+    top: c.top,
+    left: c.left,
+    w: c.w,
+    h: c.h,
+  }));
 
   const allZones = [
-    backZone,
+    BACK_BUTTON_ZONE,
     ...SIDEBAR_ZONES,
-    ...chatCards,
+    ...chatCardZones,
     ...subStoneZones,
     ...RIGHT_COLUMN_ZONES.filter((z) => z.route),
   ];
@@ -223,7 +214,7 @@ function FieldStudySkeleton({ stone }) {
             className="text-xs tracking-[0.3em] uppercase opacity-60"
             style={{ color: "#a89968" }}
           >
-            Field Study · In Progress
+            Coming Soon · This World Is Still Being Created
           </p>
           <p className="mt-4 text-base sm:text-lg leading-relaxed opacity-90">
             This stone is being shaped. The traveler will be invited
