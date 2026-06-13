@@ -1,10 +1,29 @@
-# BODY WORLD · LEGACY → 14-STONE MIGRATION MAP (2026-02-13)
+# BODY WORLD · LEGACY → 14-STONE MIGRATION MAP (2026-02-13 · FOUNDER LOCKED)
 
 > Per founder directive: **do not create content. do not redesign.
 > do not move anything yet.** This is a mapping document only —
 > a complete migration table for every existing Body Room asset.
 >
 > Goal: verify nothing valuable is lost before V1 LOCK.
+>
+> **STATUS: Founder ruling received 2026-02-13 — Section F decisions
+> LOCKED. Implementation cleared to begin (P1 phase).**
+
+## FOUNDER DECISIONS (LOCKED 2026-02-13)
+
+1. **Stone 4 (Body Identity)** — accept 0 legacy items. Stone 4 is a
+   pure reflection / identity world. No forced legacy content.
+2. **Silhouette `solar_plexus / control`** → **Stone 5** (control IS a
+   protection mechanism). Stone 11 cross-link allowed but home is 5.
+3. **Body Temple surface** → Right column "Continue Deeper · Body
+   Temple · 28-Day Guided Journey" tile (NOT footer).
+4. **Cross-stone tools** → Kaelan chat + Honesty Quiz + Crisis
+   fallback stay shared. They are system tools, not stone content.
+5. **`child-sleep`** → **Stone 10** (Body & Time · circadian rhythm).
+   Stone 11 cross-reference allowed.
+6. **`pattern-screen`** → **Stone 9 primary** (environment shapes
+   patterns) + **Stone 7 secondary reference** (habits / systems
+   cement patterns).
 
 ---
 
@@ -259,21 +278,16 @@ ruling needed.
 
 ---
 
-## F. FOUNDER DECISIONS REQUIRED
+## F. FOUNDER DECISIONS — LOCKED 2026-02-13
 
-Before any move:
-
-1. **Confirm Stone 4 (Body Identity)** — accept 0 legacy items, or
-   propose a transfer (e.g. children patterns relating to body image).
-2. **Confirm silhouette-region mapping** — especially the *control*
-   ↔ Stone 5 mapping (could also be Stone 11 `triggers`).
-3. **Confirm Body Temple surface** — right-column "Continue Deeper"
-   tile vs separate Body World footer.
-4. **Confirm cross-stone tools** — Kaelan / Body Check-In / Crisis
-   fallback stay shared (proposed).
-5. **Confirm "child-sleep" → Stone 10** vs Stone 11 — both make sense.
-6. **Confirm "pattern-screen"** — single home (Stone 9) or split
-   (Stone 9 + Stone 7).
+| # | Decision | Locked outcome |
+|---|----------|----------------|
+| 1 | Stone 4 — 0 legacy items, accept? | ✅ **OK** — pure reflection world |
+| 2 | Solar Plexus / Control destination | ✅ **Stone 5** (Stone 11 cross-link allowed) |
+| 3 | Body Temple surface | ✅ **Right column "Continue Deeper" tile** |
+| 4 | Cross-stone tools (Kaelan / Quiz / Crisis) | ✅ **Stays shared** |
+| 5 | `child-sleep` destination | ✅ **Stone 10** (Stone 11 cross-link allowed) |
+| 6 | `pattern-screen` destination | ✅ **Stone 9 primary + Stone 7 secondary** |
 
 ---
 

@@ -61,6 +61,7 @@ import BodyRoom from "@/pages/BodyRoom";
 import BodyWorld from "@/pages/BodyWorld";
 import BodyWorldStone from "@/pages/BodyWorldStone";
 import BodyWorldTopic from "@/pages/BodyWorldTopic";
+import BodyWorldStub from "@/pages/BodyWorldStub";
 import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
 import SubsystemWing from "@/pages/SubsystemWing";
@@ -330,6 +331,21 @@ function AppRouter() {
             </WandererGate>
           }
         />
+        {/* §SIDEBAR-STUBS 2026-02-13 — Painted into every world page
+            but not yet a real surface. Replaces hard 404 with a quiet
+            "This area is being prepared" placeholder so trust is not
+            broken. Swap for the real page at each route when built. */}
+        {["journey","tools","insights","favourites","journals"].map((s) => (
+          <Route
+            key={`stub-${s}`}
+            path={`/body-world/${s}`}
+            element={
+              <WandererGate scope="private">
+                <BodyWorldStub />
+              </WandererGate>
+            }
+          />
+        ))}
         {/* §BODY-ROOM-REDIRECTS — preserve legacy URLs */}
         <Route path="/body-room" element={<Navigate to="/body-world" replace />} />
         <Route
