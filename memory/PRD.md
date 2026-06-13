@@ -18,7 +18,19 @@ configuration dashboard as ambient media.
 
 ## What's been implemented (THIS SESSION 2026-02-13)
 
-### 2026-02-13 (BODY-WORLD-V1 LOCK · canonical URL /body-world)
+### 2026-02-13 (BODY-WORLD-V1 FINAL WIRING · RC-1)
+
+- **14 stones · 96 sub-stones authored** (slug + title + hint each).
+- **Painted Polarstar wired**: Stones 1, 2, 4 with per-image calibrated slots.
+- **11 Painted URLs marked TBD-FOUNDER-PASTE** for Stones 3, 5-14. Founder pastes URL into `data/bodyWorldStones.js` → painted view auto-activates.
+- **Stone 13 final name LOCKED** = "Growth & Transformation" (slug `consequences` kept for URL stability).
+- **Stone 14 LOCKED** = "Living or Surviving" with BUBBLE geometry (10 sub-bubbles, NEW female-traveller painting). Previous lilac Stone 14 reserved for future "Crossing the Threshold" screen.
+- **Stone 5 ON HOLD** — painted sild "of 15" awaits GPT re-render to "of 14".
+- **Hub painting visual mismatch** flagged (painted 15 stones, code routes 14 LOCK-aligned). Cosmetic, not blocking RC.
+- **Release audit**: `/app/memory/BODY_WORLD_RELEASE_AUDIT.md`.
+
+### 2026-02-13 (BODY-WORLD-V1 LOCK reaffirmed + calibration)
+
 - **URL canonicalised**: `/body-world` is now the canonical hub URL.
   `/body-room` and `/body-room/world/:slug` 301 redirect there.
 - **Stone count tightened from 15 → 14** per founder lock:
