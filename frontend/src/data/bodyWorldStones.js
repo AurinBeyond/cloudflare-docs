@@ -337,7 +337,7 @@ export const BODY_WORLD_STONES = [
   },
   {
     n: 13,
-    slug: "consequences",
+    slug: "growth-transformation",
     title: "Growth & Transformation",
     question: "What future am I creating?",
     image: "", // TBD-FOUNDER-PASTE — Stone 13 painting (8 sub-stones, octagon)
