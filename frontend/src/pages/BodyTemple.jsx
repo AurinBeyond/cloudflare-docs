@@ -2,26 +2,29 @@
  * BodyTemple.jsx — § ARCHIVED 2026-02-13
  *
  * FOUNDER DIRECTIVE 2026-02-13:
- *   "Body Temple = 28-päevane kursus = Alistari tuba. Body World =
- *    kivid = koormad. Tube EI MIX. Course peab olema Alistari tuba.
- *    Kursus ootab ümberkujundamist meie uue ideoloogia järgi.
+ *   "Body Temple = 28-päevane kursus. Body World = kivid = koormad.
+ *    Tube EI MIX. Body Temple jääb eraldi tooteks /body-temple all
+ *    ja ootab ümberkujundamist meie uue ideoloogia järgi.
  *    Sisu EI kustutata — arhiveerime."
+ *
+ *   "Iga tuba jääb oma stiiliga ja sisuga." — Body Temple on
+ *   iseseisev product, MITTE Alistari alamosa.
  *
  * STATUS:
  *   - Page render replaced with "Under Redesign" notice.
  *   - Original component preserved in `_BodyTempleLegacy.jsx`
- *     (renamed alongside this file). When the redesign is ready
- *     under /alistair-laboratory/courses/body-temple (or similar),
- *     port the curriculum + day modal + Anna note from there.
- *   - All cross-room links (UserPortal, HighPerformers, KidsHub,
- *     StoryGiftRead, MentorHookCard, BodyRoom legacy) will resolve
- *     to this archived notice until the Alistair port is live.
+ *     (502 lines, full 28-day curriculum + day modal + Anna note +
+ *     Stripe unlock CTA). Restored from git history.
+ *   - Backend `body_temple_curriculum.py` + Stripe unlock flow
+ *     (`/clarity-release`) + `/api/body-temple/*` endpoints all
+ *     untouched and ready to wire when redesign is complete.
  *
  * DO NOT:
- *   - delete the curriculum file (`backend/body_temple_curriculum.py`)
- *   - delete the Stripe unlock flow (`/clarity-release`)
+ *   - delete the curriculum file
+ *   - delete the Stripe unlock flow
  *   - delete `_BodyTempleLegacy.jsx`
- *   - link to /body-temple from inside Body World again
+ *   - link to /body-temple from inside Body World
+ *   - merge Body Temple into Alistair Laboratory or any other room
  */
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -73,21 +76,20 @@ export default function BodyTemple() {
           }}
         >
           <p className="text-xs tracking-[0.3em] uppercase opacity-60" style={{ color: "#a89968" }}>
-            Moving Home
+            Quietly Being Reworked
           </p>
           <p className="mt-4 text-base sm:text-lg leading-relaxed opacity-90">
-            Body Temple is being redesigned and will return as a course
-            inside the <span style={{ color: "#f3e9cc" }}>Alistair Laboratory</span>,
-            where all guided courses now live. The original twenty-eight
-            days are preserved — nothing has been lost.
+            Body Temple is being redesigned. The original twenty-eight
+            days, the breath, the touch, the rest and the presence —
+            all of it is preserved and waiting. When the new shape is
+            ready, it will return here.
           </p>
           <p className="mt-4 text-sm leading-relaxed opacity-70">
-            Rooms stay distinct. Body World is for noticing the stones
-            you carry. Alistair Laboratory is for the courses that help
-            you set them down.
+            Nothing is lost. Only quieter for a while.
           </p>
         </div>
       </div>
     </div>
   );
 }
+
