@@ -157,10 +157,10 @@ export default function BodyTemple() {
         <div className="sanctuary-cream" data-testid="body-temple-page">
             {/* Hero */}
             <section className="px-6 pt-12 md:pt-16 pb-10 max-w-[920px] mx-auto">
-                <Link to="/body-room"
+                <Link to="/body-world"
                       data-testid="body-temple-back-to-room"
                       className="inline-flex items-center gap-2 text-[13px] sanctuary-muted hover:text-[#3d2e15] transition mb-6">
-                    <ArrowLeft size={14} /> Back to the Body Room
+                    <ArrowLeft size={14} /> Back to Body World
                 </Link>
 
                 <div className="grid md:grid-cols-[1fr_220px] gap-8 items-center">
