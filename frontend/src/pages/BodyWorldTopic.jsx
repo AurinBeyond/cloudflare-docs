@@ -83,6 +83,48 @@ export default function BodyWorldTopic() {
             world grows.
           </p>
         </div>
+
+        {subStone.legacyAudio && (
+          <div
+            data-testid="body-world-topic-legacy-audio"
+            className="mt-8 p-6 rounded-sm border"
+            style={{ borderColor: "rgba(212, 201, 143, 0.25)", background: "rgba(255,255,255,0.02)" }}
+          >
+            <p className="text-xs tracking-[0.3em] uppercase opacity-60" style={{ color: "#a89968" }}>
+              {subStone.legacyAudio.credit}
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl" style={{ color: "#f3e9cc" }}>
+              {subStone.legacyAudio.title}
+            </h2>
+            <audio
+              controls
+              preload="none"
+              src={subStone.legacyAudio.src}
+              data-testid="body-world-topic-legacy-audio-player"
+              className="mt-4 w-full"
+              style={{ filter: "invert(0.85) hue-rotate(180deg)" }}
+            />
+          </div>
+        )}
+
+        {subStone.legacyQuiz && (
+          <Link
+            to={subStone.legacyQuiz.href}
+            data-testid="body-world-topic-legacy-quiz"
+            className="mt-8 block p-6 rounded-sm border hover:opacity-90 transition-opacity"
+            style={{ borderColor: "rgba(212, 201, 143, 0.25)", background: "rgba(255,255,255,0.02)", color: "#e8dfc9" }}
+          >
+            <p className="text-xs tracking-[0.3em] uppercase opacity-60" style={{ color: "#a89968" }}>
+              Cross-Stone Tool
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl" style={{ color: "#f3e9cc" }}>
+              {subStone.legacyQuiz.title} →
+            </h2>
+            <p className="mt-2 text-sm italic opacity-80" style={{ color: "#cdbf8a" }}>
+              {subStone.legacyQuiz.subtitle}
+            </p>
+          </Link>
+        )}
       </div>
     </div>
   );
