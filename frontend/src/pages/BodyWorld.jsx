@@ -145,55 +145,6 @@ export default function BodyWorld() {
           </Link>
         ))}
       </div>
-      {/* §BODY-TEMPLE-CTA 2026-02-13 — Continue Deeper tile.  Sits in
-          the dark canvas BELOW the painted hub image (outside the
-          painted asset's visual frame) so the Polarstar pattern stays
-          intact while restoring the Body Temple revenue surface that
-          previously lived inside the legacy BodyRoom.jsx CTA. */}
-      <div
-        className="w-full border-t"
-        style={{
-          borderColor: "rgba(212, 201, 143, 0.15)",
-          background: "#0a0d15",
-        }}
-      >
-        <Link
-          to="/body-temple"
-          data-testid="body-world-temple-cta"
-          className="block max-w-5xl mx-auto px-6 py-10 sm:py-12"
-          style={{
-            color: "#e8dfc9",
-            fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif',
-          }}
-        >
-          <p
-            className="text-xs tracking-[0.3em] uppercase opacity-60"
-            style={{ color: "#a89968" }}
-          >
-            Continue Deeper
-          </p>
-          <div className="mt-3 flex items-baseline justify-between gap-6 flex-wrap">
-            <h2
-              className="text-3xl sm:text-4xl leading-tight"
-              style={{ color: "#f3e9cc" }}
-            >
-              Body Temple
-            </h2>
-            <p
-              className="text-sm sm:text-base italic opacity-80"
-              style={{ color: "#cdbf8a" }}
-            >
-              28-Day Guided Journey
-            </p>
-            <span
-              className="text-sm tracking-[0.2em] uppercase opacity-80 hover:opacity-100 transition-opacity"
-              style={{ color: "#d4c98f" }}
-            >
-              Enter →
-            </span>
-          </div>
-        </Link>
-      </div>
     </div>
   );
 }
