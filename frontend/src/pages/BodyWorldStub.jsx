@@ -22,10 +22,10 @@ import { ArrowLeft } from "lucide-react";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 const TITLES = {
-  "/body-world/journey":     { title: "My Journey",         line: "Your path through the worlds is being prepared." },
-  "/body-world/tools":       { title: "Tools & Practices",  line: "The practice library is being curated." },
-  "/body-world/insights":    { title: "Insights",           line: "The reflection layer is being assembled." },
-  "/body-world/favourites":  { title: "Favourites",         line: "Saved stones and topics will live here." },
+  "/body-world/journey":     { title: "My Journey",         line: "Your path through the worlds is taking shape." },
+  "/body-world/tools":       { title: "Tools & Practices",  line: "The practice library is growing alongside the worlds." },
+  "/body-world/insights":    { title: "Insights",           line: "A space for your reflections is being shaped." },
+  "/body-world/favourites":  { title: "Favourites",         line: "The stones that call you back will live here." },
   "/body-world/journals":    { title: "Journals",           line: "A quiet place for your own writing is on its way." },
 };
 
@@ -77,13 +77,12 @@ export default function BodyWorldStub() {
           }}
         >
           <p className="text-xs tracking-[0.3em] uppercase opacity-60" style={{ color: "#a89968" }}>
-            This Area Is Being Prepared
+            Under Exploration
           </p>
           <p className="mt-4 text-base sm:text-lg leading-relaxed opacity-90">
-            Body World is still being shaped, world by world. This area
-            will open when its time arrives. The stones themselves are
-            already walkable — return to the map and continue your
-            exploration there.
+            Body World is a living archive. This area is being shaped
+            alongside the stones. Return to the map and continue
+            exploring — new layers arrive as the worlds expand.
           </p>
         </div>
       </div>

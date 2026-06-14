@@ -214,16 +214,17 @@ function FieldStudySkeleton({ stone }) {
             className="text-xs tracking-[0.3em] uppercase opacity-60"
             style={{ color: "#a89968" }}
           >
-            Coming Soon · This World Is Still Being Created
+            Field Study · This World Is Growing
           </p>
           <p className="mt-4 text-base sm:text-lg leading-relaxed opacity-90">
-            This stone is being shaped. The traveler will be invited
-            here when the path is ready — Kaelen is still listening
-            for the questions only this world can answer.
+            New reflections, practices and insights will be added to
+            this world over time. Kaelen is still listening for the
+            questions only this stone can answer.
           </p>
           <p className="mt-4 text-sm leading-relaxed opacity-70">
-            Until then, sit with the question above. Notice where it
-            lands in your body. That noticing is already the work.
+            Until the next layer arrives, sit with the question above.
+            Notice where it lands in your body. That noticing is
+            already the work.
           </p>
         </div>
 

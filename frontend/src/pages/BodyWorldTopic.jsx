@@ -75,11 +75,12 @@ export default function BodyWorldTopic() {
             className="text-xs tracking-[0.3em] uppercase opacity-60"
             style={{ color: "#a89968" }}
           >
-            Field Study · In Progress
+            Field Study · Under Exploration
           </p>
           <p className="mt-4 text-base sm:text-lg leading-relaxed opacity-90">
-            This topic is being authored. The traveler will be invited
-            here when the path is ready.
+            This sub-stone is part of a living archive. New
+            reflections, practices and questions are added as the
+            world grows.
           </p>
         </div>
       </div>
