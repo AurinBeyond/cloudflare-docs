@@ -21,7 +21,7 @@
 | 10| Body & Time                    | `body-time`                | 8          | OCT_SLOTS    | ⏳ TBD-FOUNDER-PASTE |
 | 11| Stress & Nervous System        | `stress-nervous-system`    | 8          | OCT_SLOTS    | ⏳ TBD-FOUNDER-PASTE |
 | 12| Body as Language               | `body-language`            | 8          | OCT_SLOTS    | ⏳ TBD-FOUNDER-PASTE |
-| 13| Growth & Transformation        | `consequences`             | 8          | OCT_SLOTS    | ⏳ TBD-FOUNDER-PASTE |
+| 13| Growth & Transformation        | `growth-transformation`    | 8          | OCT_SLOTS    | ⏳ TBD-FOUNDER-PASTE |
 | 14| Living or Surviving 🫧         | `living-or-surviving`      | 10 bubbles | BUBBLE_SLOTS | ⏳ TBD-FOUNDER-PASTE (NEW image — female traveller, 10 bubbles) |
 
 **Numbering verified:** 1 → 14 sequential, no gaps, all locked names match founder directive.
