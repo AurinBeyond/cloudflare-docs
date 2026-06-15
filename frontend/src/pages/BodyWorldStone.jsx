@@ -1,7 +1,9 @@
 /**
  * BodyWorldStone.jsx — § BODY WORLD V1 · WORLD PAGE 2026-02-13 (CALIBRATED)
  *
- * Polarstar-pattern world detail page (one per stone).
+ * Painted Map Pattern world detail page (one per stone).
+ * (Painted Map Pattern = background image + invisible hotspots — a
+ * generic technical principle.)
  *
  * BEHAVIOUR
  *   - If the stone in BODY_WORLD_STONES carries an `image` URL, the

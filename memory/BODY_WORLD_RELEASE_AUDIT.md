@@ -38,7 +38,7 @@
 | Route | Component | Status |
 |-------|-----------|--------|
 | `/body-world` | `BodyWorld.jsx` | ✅ painted hub (backpack traveller) |
-| `/body-world/world/:stoneSlug` | `BodyWorldStone.jsx` | ✅ Polarstar if `image`, else Field Study skeleton |
+| `/body-world/world/:stoneSlug` | `BodyWorldStone.jsx` | ✅ Painted map view if `image`, else Field Study skeleton |
 | `/body-world/world/:s/topic/:t` | `BodyWorldTopic.jsx` | ✅ Field Study placeholder |
 | `/body-world/v1` · `/body-room/v1` | `BodyRoom.jsx` legacy | ✅ untouched |
 | `/body-room` | redirect → `/body-world` | ✅ |
@@ -46,7 +46,7 @@
 
 ## 4. URL Paste Pass — Founder Action
 
-Open `/app/frontend/src/data/bodyWorldStones.js` and replace every `image: ""` marked `TBD-FOUNDER-PASTE` with the matching painted-world URL. The Polarstar view activates the moment the URL is non-empty — no other change required.
+Open `/app/frontend/src/data/bodyWorldStones.js` and replace every `image: ""` marked `TBD-FOUNDER-PASTE` with the matching painted-world URL. The painted map view activates the moment the URL is non-empty — no other change required.
 
 11 paintings await the paste pass (Stone 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, plus Stone 5 once re-rendered).
 
@@ -96,7 +96,7 @@ This does NOT block Release Candidate. It is cosmetic and self-healing once foun
 ## 10. Routes Smoke Test (2026-02-13)
 
 All 14 stone routes verified live:
-- `/body-world/world/{know-your-body, emotional-body, body-identity}` → painted Polarstar ✅
+- `/body-world/world/{know-your-body, emotional-body, body-identity}` → painted map view ✅
 - `/body-world/world/{body-memory, body-protection, body-as-partner, body-engineering, body-relationships, body-environment, body-time, stress-nervous-system, body-language, consequences, living-or-surviving}` → Field Study skeleton ✅
 - `/body-world/world/:s/topic/:t` (sampled 5) → topic placeholders ✅
 

@@ -24,8 +24,8 @@
  *
  * URL-MAPPING NOTE (2026-02-13):
  *   URLs marked TBD-FOUNDER-PASTE are awaiting founder verification.
- *   When founder pastes an URL into a TBD slot, the painted Polarstar
- *   view auto-activates for that stone. Until then the stone shows the
+ *   When founder pastes an URL into a TBD slot, the painted map view
+ *   auto-activates for that stone. Until then the stone shows the
  *   Field Study skeleton — link graph stays intact.
  *
  * ARCHIVED (do not wire):

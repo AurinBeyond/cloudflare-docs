@@ -47,9 +47,9 @@
 | Stones (worlds) | 14 / 14 | ✅ slug · title · question · About · Kaelen quote |
 | Sub-stones | 96 / 96 | ✅ slug · title · hint (one-liner only) |
 | Sub-stone topic content | 0 / 96 | 🔴 **all Field Study placeholder — no authored content** |
-| Painted Polarstar views | 3 / 14 | ✅ Stone 1, 2, 4 wired |
-| Painted Polarstar URLs awaiting paste | 10 / 14 | ⏳ Stone 3, 6, 7, 8, 9, 10, 11, 12, 13, 14 |
-| Painted Polarstar on hold | 1 / 14 | ⛔ Stone 5 (sild "of 15") |
+| Painted map views | 3 / 14 | ✅ Stone 1, 2, 4 wired |
+| Painted map URLs awaiting paste | 10 / 14 | ⏳ Stone 3, 6, 7, 8, 9, 10, 11, 12, 13, 14 |
+| Painted map on hold | 1 / 14 | ⛔ Stone 5 (sild "of 15") |
 
 ### Content gap
 
@@ -91,7 +91,7 @@ Founder-content mapping that **needs** to happen for V1 to stop being a skeleton
 ### Routes that work ✅
 
 - `/body-world` → painted hub (14 stone hotspots)
-- `/body-world/world/:stoneSlug` → painted Polarstar (3) or Field Study (11)
+- `/body-world/world/:stoneSlug` → painted map view (3) or Field Study (11)
 - `/body-world/world/:stoneSlug/topic/:topicSlug` → Field Study topic placeholder
 - `/body-world/v1` and `/body-room/v1` → legacy `BodyRoom.jsx`
 - `/body-room` and `/body-room/world/:slug` → 301 redirects ✓

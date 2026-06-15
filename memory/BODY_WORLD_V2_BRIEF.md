@@ -28,7 +28,7 @@ Sub-stones (Sub-themes)        /body-world/world/:stoneSlug/topic/:topicSlug
 Topics & Content               (authored later — Field Study skeleton today)
 ```
 
-Mirrors the architecture already proven in **Polarstar** and the
+Mirrors the architecture already proven in **Alistair Laboratory** and the
 **Alistair Laboratory**.
 
 ## Core Principle
@@ -67,7 +67,7 @@ he appears in the sidebar, in chat, in voice. Never by the lake.
 - Stone 14 (Living or Surviving) intentionally departs from stone
   iconography → uses **bubbles**. Bubbles convey freedom, possibility,
   future choices, lightness.
-- Stones 1, 2, 4 currently have full painted Polarstar mockups in
+- Stones 1, 2, 4 currently have full painted map mockups in
   `bodyWorldStones.js → image`. Stones 3, 5-14 fall back to the Field
   Study skeleton until founder provides their painted views.
 
@@ -148,7 +148,7 @@ Body World is **NOT**:
 
 - ✅ Hub `/body-world` shipping with 14 stones painted hub.
 - ✅ World pages `/body-world/world/:stoneSlug` shipping.
-- ✅ Three worlds shipping with painted Polarstar views (per-world sub-stone slots, calibrated via Gemini vision pass): Stone 1 Know Your Body, Stone 2 Emotional Body, Stone 4 Body Identity.
+- ✅ Three worlds shipping with painted map views (per-world sub-stone slots, calibrated via Gemini vision pass): Stone 1 Know Your Body, Stone 2 Emotional Body, Stone 4 Body Identity.
 - ✅ Topic placeholder `/body-world/world/:s/topic/:t` shipping.
 - ✅ Legacy `/body-room/*` URLs preserved via 301 redirects.
 - ✅ Field Study placeholder copy → "Coming Soon · This World Is Still Being Created".
@@ -185,4 +185,4 @@ Stone 14 "Living or Surviving" intentionally uses BUBBLES (not stones) — bubbl
 
 ## ROOM ISOLATION RULE (founder lock)
 
-Every Body World stone has ITS OWN topic and target audience. Stones DO NOT share content, themes, sub-topics, or audience. Architecture pattern (Polarstar + sub-stones + sidebar + right column) is shared; content is strictly per-stone.
+Every Body World stone has ITS OWN topic and target audience. Stones DO NOT share content, themes, sub-topics, or audience. Architecture pattern (Painted Map + sub-stones + sidebar + right column) is shared; content is strictly per-stone.

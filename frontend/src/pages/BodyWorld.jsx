@@ -1,10 +1,11 @@
 /**
  * BodyWorld.jsx — § BODY WORLD V1 · HUB 2026-02-13 (LOCKED)
  *
- * Polarstar-pattern hub page. The painted founder mockup (traveller
- * with backpack at the lake, 14 stones, sidebar, chat/voice cards,
- * right column) IS the literal UI. Invisible click-zones layer over
- * every painted UI element.
+ * Painted Map Pattern hub page (background image + invisible
+ * hotspots — a generic technical principle). The painted founder
+ * mockup (traveller with backpack at the lake, 14 stones, sidebar,
+ * chat/voice cards, right column) IS the literal UI. Invisible
+ * click-zones layer over every painted UI element.
  *
  * STRUCTURE LOCK
  *   - Traveller by the lake = the visitor.  Kaelen = guide (sidebar,

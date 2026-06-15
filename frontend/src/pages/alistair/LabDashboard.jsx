@@ -1,7 +1,9 @@
 /**
  * LabDashboard.jsx — § ALISTAIR LAB DASHBOARD v5 2026-02-10
  *
- * Generic Polarstar-pattern dashboard for ALL 11 Alistair laboratories.
+ * Generic Painted Map Pattern dashboard for ALL 11 Alistair laboratories.
+ * (Painted Map Pattern = background image + invisible hotspots — a
+ * generic technical principle.)
  *
  * Each laboratory's supplied painted mockup IS the design. The image
  * contains everything painted in — sidebar (where applicable), panels,

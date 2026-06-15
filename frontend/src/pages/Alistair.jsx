@@ -13,7 +13,7 @@
  *      "Let's explore together" CTA → /course-room/room
  *
  * Each of the 11 cards routes to /course-room/lab/{slug} where the
- * existing Polarstar-pattern LabDashboard renders the lab's own
+ * existing Painted Map Pattern LabDashboard renders the lab's own
  * painted image with its own internal hotspots.
  *
  * Source of truth: LAB_ORDER from data/alistairLabs.js (NOT
