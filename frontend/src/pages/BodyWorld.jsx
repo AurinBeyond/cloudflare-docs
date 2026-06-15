@@ -41,24 +41,25 @@ const CHAT_CARD_ZONES = [
   { id: "card-talk-kaelen", label: "Talk to Kaelen",   route: "/body-world/v1#kaelan", top: 24, left: 46, w: 27, h: 13 },
 ];
 
-/* §STONE-ZONES — 14 stones on the lake-shore map.  Coordinates are
- * visual best-fit; refine via ?debug=1. Stone slugs map 1:1 to
- * BODY_WORLD_STONES (14 entries, locked). */
+/* §STONE-ZONES — 14 hotspots calibrated to painted stone positions on
+ * current hub image (1536x1024). Coordinates measured via AI vision
+ * pass + visual verification. Each n:N covers the painted "N" stone.
+ * Refine via ?debug=1. Stone slugs map 1:1 to BODY_WORLD_STONES. */
 const STONE_ZONES = [
-  { n: 1,  top: 51, left: 16, w: 9, h: 8 },
-  { n: 2,  top: 51, left: 27, w: 9, h: 8 },
-  { n: 3,  top: 51, left: 39, w: 9, h: 8 },
-  { n: 4,  top: 51, left: 50, w: 9, h: 8 },
-  { n: 5,  top: 51, left: 62, w: 9, h: 8 },
-  { n: 6,  top: 67, left: 73, w: 9, h: 8 },
-  { n: 7,  top: 67, left: 62, w: 9, h: 8 },
-  { n: 8,  top: 67, left: 50, w: 9, h: 8 },
-  { n: 9,  top: 67, left: 39, w: 9, h: 8 },
-  { n: 10, top: 67, left: 27, w: 9, h: 8 },
-  { n: 11, top: 67, left: 16, w: 9, h: 8 },
-  { n: 12, top: 83, left: 22, w: 9, h: 8 },
-  { n: 13, top: 83, left: 41, w: 9, h: 8 },
-  { n: 14, top: 83, left: 60, w: 9, h: 8 },
+  { n: 1,  top: 55, left: 17, w: 12, h: 16 },
+  { n: 2,  top: 55, left: 28, w: 12, h: 16 },
+  { n: 3,  top: 56, left: 43, w: 12, h: 16 },
+  { n: 4,  top: 55, left: 58, w: 12, h: 16 },
+  { n: 5,  top: 55, left: 74, w: 12, h: 16 },
+  { n: 6,  top: 66, left: 83, w: 12, h: 16 },
+  { n: 7,  top: 78, left: 74, w: 12, h: 16 },
+  { n: 8,  top: 78, left: 58, w: 12, h: 16 },
+  { n: 9,  top: 78, left: 43, w: 12, h: 16 },
+  { n: 10, top: 78, left: 28, w: 12, h: 16 },
+  { n: 11, top: 78, left: 17, w: 12, h: 16 },
+  { n: 12, top: 67, left: 17, w: 12, h: 16 },
+  { n: 13, top: 91, left: 28, w: 12, h: 8  },
+  { n: 14, top: 91, left: 58, w: 12, h: 8  },
 ];
 
 const RIGHT_COLUMN_ZONES = [
