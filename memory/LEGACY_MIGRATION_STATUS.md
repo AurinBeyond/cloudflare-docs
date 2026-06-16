@@ -74,7 +74,7 @@ need founder input or content authoring, not migration work.
 
 | Surface (V1) | Target | Status |
 |--------------|--------|--------|
-| Luule Viilma further reading | Stone 3 `ancestral-stories` | ⏳ |
+| Luule Viilma further reading | Stone 3 `ancestral-stories` | 📭 **Optional supplemental material** — `/api/body-room/further-reading` returns empty. Treat as future inspiration link, NOT a P0 blocker. Defer to founder-supplied content. |
 | Mood Reflect (PostSessionMoodReflect) | Stone 14 `awareness` *or* Stone 2 `integration` | ⏳ |
 | Body Lens Selector | Hub-level tool OR Stone 1 `body-awareness` (founder to decide) | ⏳ |
 | Children medical disclaimer | Stone 3 (children sub-stones) + Stone 12 (adult patterns) | ⏳ |
