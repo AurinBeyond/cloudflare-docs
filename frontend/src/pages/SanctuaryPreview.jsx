@@ -549,7 +549,7 @@ function TwoWorldsSection() {
       <div className="relative z-10 max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
-            — Two Worlds, One Sanctuary
+            — Two Worlds, One Place
           </p>
           <h2
             className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[860px] mx-auto tracking-[-0.012em]"
@@ -574,7 +574,7 @@ function TwoWorldsSection() {
                 className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
                 style={{ fontFamily: SERIF }}
               >
-                The Sanctuary <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
+                The Room <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
                 A quiet inner space for the moments when life asks too much.
@@ -582,7 +582,7 @@ function TwoWorldsSection() {
                 hurry, without scoring, without storage of who you have been.
               </p>
               <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
-                Journeys · Reflection · Sanctuary atmosphere
+                Journeys · Reflection · Honest atmosphere
               </div>
             </div>
           </RevealBlock>
@@ -788,7 +788,7 @@ function RoomsSection() {
               style={{ fontFamily: SERIF }}
             >
               Kids Universe — angel stories, gentle coloring, and the
-              softest version of the sanctuary, held for the little ones.
+              softest version of this place, held for the little ones.
             </p>
           </div>
         </RevealBlock>
@@ -831,7 +831,7 @@ function OpenWorldSection() {
     },
     {
       title: "Kids Universe",
-      body: "Angel stories, coloring pages, and the gentlest version of the sanctuary for the youngest visitors.",
+      body: "Angel stories, coloring pages, and the gentlest version of this place for the youngest visitors.",
       badge: "Free to enter",
       tone: "free",
       href: "/kids-universe",
@@ -970,7 +970,7 @@ function WaysToBeHereSection() {
       key: "your-own-room",
       name: "Your Own Room",
       tagline: "A space held only for you.",
-      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full sanctuary access, and a private channel — your own corner of this sanctuary.",
+      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full access to everything, and a private channel — your own corner of this work.",
       includes: [
         "Full access to all rooms — reading, reflection, text-to-text chat",
         "Weekly private live voice sessions — four sessions per month",
@@ -1116,7 +1116,7 @@ function VoiceMeterSection() {
             className="text-center text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            Your sanctuary stays open.<br />
+            This place stays open.<br />
             <span className="italic text-[#d4b67d]">Voice runs on its own quiet meter.</span>
           </h2>
           <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
@@ -1159,7 +1159,7 @@ function VoiceMeterSection() {
             className="mt-16 text-center text-[14px] italic text-[#7a7468] max-w-[560px] mx-auto leading-[1.85] font-light"
             style={{ fontFamily: SERIF }}
           >
-            We hold the sanctuary. You hold the meter. Nothing is ever
+            We hold the room. You hold the meter. Nothing is ever
             on by accident.
           </p>
         </RevealBlock>
@@ -1234,7 +1234,7 @@ function ClosingSection() {
             <span className="italic text-[#d4b67d]">a door is already open.</span>
           </h2>
           <p className="mt-9 text-[15px] sm:text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[560px] mx-auto font-light">
-            No urgency. No invitation required this season. The sanctuary
+            No urgency. No invitation required this season. The room
             keeps its own quiet hours, and the inner pages remember nothing
             of who has visited.
           </p>

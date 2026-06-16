@@ -171,7 +171,7 @@ export default function KidsActivities() {
               {detail.is_premium && (
                 <p className="text-[11px] uppercase tracking-[0.24em]"
                    style={{ color: detail.locked ? "#B89B6E" : palette.accent }}>
-                  60h Sanctuary package
+                  60h Companion package
                 </p>
               )}
             </div>
@@ -198,7 +198,7 @@ export default function KidsActivities() {
                 <div>
                   <h3 className="font-serif text-[18px] mb-1.5"
                       style={{ color: palette.text }}>
-                    Inside the 60-hour Sanctuary package
+                    Inside the 60-hour Companion package
                   </h3>
                   <p className="text-[14px] leading-relaxed mb-4"
                      style={{ color: palette.textMuted }}>
@@ -350,7 +350,7 @@ export default function KidsActivities() {
                  style={{ color: palette.textMuted }}>
               Free starter activities are open to everyone. The full Clarity
               Curriculum (workbooks, recipe collections, craft bundles) lives
-              inside the 60-hour Sanctuary package.
+              inside the 60-hour Companion package.
             </div>
             <Link to="/clarity-release"
                   data-testid="kids-activities-banner-cta"

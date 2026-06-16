@@ -162,7 +162,7 @@ const WORDS_FOR_YOU = [
 export default function Grace() {
   /* §HERO-RECOGNITION 2026-02-16 — Founder removed the "Welcome / Welcome
      back" greeting. Replaced with a single short recognition line (Tony
-     Robbins x Sanctuary register): immediate, dignified, anti-wellness,
+     Robbins x human register): immediate, dignified, anti-wellness,
      designed to give a 3-second "this is for me" moment. */
 
   const startConversation = () => {

@@ -24,7 +24,7 @@ const BUNDLES = [
   {
     tier: "I",
     name: "Quiet Entry",
-    role: "A reading sanctuary for adults",
+    role: "A reading home for adults",
     body: "All four cardinal rooms in read mode. The daily cadence stream of curator letters. The full essay and audio meditation archive. A small taste of curator audio sessions.",
     prices: [
       { sku: "quiet.entry.month",   label: "Monthly",   amount: "€89"  },
@@ -57,7 +57,7 @@ const BUNDLES = [
   },
   {
     tier: "IV",
-    name: "Sanctuary Compass",
+    name: "Family Compass",
     badge: "Family",
     role: "The full family architecture",
     body: "Inner Compass for the adult plus parent-guided bedtime storytelling, drawing prompts and creative family activities for up to three child profiles. Two separate wallets keep adult sessions and family storytelling firewalled.",

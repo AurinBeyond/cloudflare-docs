@@ -109,7 +109,7 @@ const ZONE_COPY = {
     storytellingPremium:
       "Today's tale waits in the crystal cave. Tap below — Aurin will tell you a story with a small puzzle inside.",
     storytellingLocked:
-      "The voice of Aurin sleeps until a grown-up opens the Sanctuary. Every stone holds its own riddle-tale, told without a screen.",
+      "The voice of Aurin sleeps until a grown-up opens this place. Every stone holds its own riddle-tale, told without a screen.",
     reflectionEyebrow: "✦ A signal from inside",
     reflectionHeadline: "What is the\nweather of you today?",
     reflectionBody:
@@ -141,7 +141,7 @@ const ZONE_COPY = {
     storytellingPremium:
       "Today's tale waits in the canopy. Open the voice chamber — Aurin will tell you a story that asks something of you in return.",
     storytellingLocked:
-      "Aurin's voice stays still until your account opens the Sanctuary. Every stone holds its own architecture — a tale, a reflection, a star, a memory.",
+      "Aurin's voice stays still until your account opens this place. Every stone holds its own architecture — a tale, a reflection, a star, a memory.",
     reflectionEyebrow: "✦ A quiet calibration",
     reflectionHeadline: "What is the\nshape of today?",
     reflectionBody:

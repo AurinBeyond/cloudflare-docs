@@ -417,7 +417,7 @@ export default function LuxurySanctuaryLanding() {
             An Open Library for the curious mind.<br />
             A Kids Universe for the ones still close to wonder.<br />
             A Quiet Store for objects that hold meaning.<br />
-            A Voice Sanctuary for what needs to be spoken aloud.
+            A Voice Room for what needs to be spoken aloud.
           </p>
           <p className="wings-closing">In time. Without rush.</p>
         </div>

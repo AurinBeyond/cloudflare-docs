@@ -25,7 +25,7 @@
 - Total authored topics: 36 (Money Tree) + 3 each × 10 = 66
 
 ### GRACE (`/grace` light home + `/grace/room` dark Hearth)
-- Hero H1: "You stopped performing. That's why you're here." (Tony Robbins × Sanctuary register)
+- Hero H1: "You stopped performing. That's why you're here." (Tony Robbins × human register, anti-wellness)
 - Sidebar sub-pages (Speak, Write, Evening, Messages, Library) — all authored
 - Library: 5 full articles, 3 sections (Understanding Yourself, Relationships, Moving Forward)
 - Prompt-piping `/grace/write → /grace/room?write=...` auto-opens Write panel + pre-fills textarea

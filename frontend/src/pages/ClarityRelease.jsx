@@ -846,7 +846,7 @@ function HubPanel({
               You have an active pass:{" "}
               <span className="aurin-serif-italic text-[hsl(var(--aurin-sage))]">
                 {access.tier === "season_30days"
-                  ? "Sanctuary Access"
+                  ? "Full Access"
                   : access.tier === "60min"
                   ? "60-Minute Release"
                   : "30-Minute Release"}
