@@ -24,6 +24,41 @@
 import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { LABS } from "@/data/alistairLabs";
+import {
+  OLD_STORIES_CONTENT,
+  BODY_KNOWS_FIRST_CONTENT,
+  COMPASS_CONTENT,
+  SELF_SABOTAGE_CONTENT,
+  THE_CODE_CONTENT,
+  INVISIBLE_STRINGS_CONTENT,
+  MASKS_CONTENT,
+  BODY_LANGUAGE_CONTENT,
+  CHILD_PARENT_CONTENT,
+  BODY_LANGUAGE_V2_CONTENT,
+} from "@/data/alistairLabContent";
+import { MONEY_TREE_CONTENT } from "@/data/moneyTreeContent";
+
+/* §AUTHORED-CONTENT-MAP 2026-06-16 — Founder directive: visitors must
+ * NOT be able to navigate to topic pages that have no authored content
+ * (the "Field Study · In Progress" placeholder is treated as no-content).
+ * We mirror TopicDetail's LAB_CONTENT here and gate topic hotspots at
+ * the dashboard layer so the click is disabled entirely for empty
+ * topics, with a "Coming Soon" tooltip instead. Money Tree is fully
+ * authored; the other 10 labs have a curated hero set ("preview")
+ * authored — everything else is locked. */
+const LAB_AUTHORED_CONTENT = {
+  "money-tree":        MONEY_TREE_CONTENT,
+  "old-stories":       OLD_STORIES_CONTENT,
+  "body-knows-first":  BODY_KNOWS_FIRST_CONTENT,
+  "compass":           COMPASS_CONTENT,
+  "self-sabotage":     SELF_SABOTAGE_CONTENT,
+  "the-code":          THE_CODE_CONTENT,
+  "invisible-strings": INVISIBLE_STRINGS_CONTENT,
+  "masks":             MASKS_CONTENT,
+  "body-language":     BODY_LANGUAGE_CONTENT,
+  "child-parent":      CHILD_PARENT_CONTENT,
+  "body-language-v2":  BODY_LANGUAGE_V2_CONTENT,
+};
 
 /* §SIDEBAR-NAV-ZONES 2026-02-08 — Reused only by labs whose painted
  * mockup includes an Alistair sidebar. Labs whose mockups do NOT have
@@ -651,39 +686,109 @@ export default function LabDashboard() {
           loading="eager"
           data-testid="lab-dashboard-image"
         />
-        {zones.map((z) => (
-          <Link
-            key={z.id}
-            to={z.route}
-            data-testid={`lab-zone-${z.id}`}
-            aria-label={z.label}
-            title={z.label}
-            className="absolute block"
-            style={{
-              top: `${z.top}%`,
-              left: `${z.left}%`,
-              width: `${z.w}%`,
-              height: `${z.h}%`,
-              cursor: "pointer",
-              background: debug ? "rgba(255, 80, 80, 0.22)" : "transparent",
-              border: debug ? "1px dashed rgba(255, 80, 80, 0.9)" : "none",
-            }}
-          >
-            {debug && (
-              <span
-                className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+        {zones.map((z) => {
+          /* §SIDEBAR-VS-TOPIC 2026-06-16 — Topic zones (id starts with
+             "topic-") are gated by authored content; if the lab does
+             not yet have a written entry for that topic, render a
+             disabled div with a "Coming Soon" cursor + tooltip so
+             visitors cannot dead-end on a placeholder. All other
+             zones (sidebar nav, "back to laboratories", chrome) are
+             always linkable. */
+          const isTopicZone = z.id?.startsWith("topic-");
+          const topicId = z.label;
+          const hasContent =
+            !isTopicZone || !!LAB_AUTHORED_CONTENT[labSlug]?.[topicId];
+
+          const baseStyle = {
+            top: `${z.top}%`,
+            left: `${z.left}%`,
+            width: `${z.w}%`,
+            height: `${z.h}%`,
+            background: debug
+              ? hasContent
+                ? "rgba(80, 220, 120, 0.22)"
+                : "rgba(255, 80, 80, 0.22)"
+              : "transparent",
+            border: debug
+              ? `1px dashed ${hasContent ? "rgba(80,220,120,0.9)" : "rgba(255,80,80,0.9)"}`
+              : "none",
+          };
+
+          if (!hasContent) {
+            return (
+              <div
+                key={z.id}
+                data-testid={`lab-zone-locked-${z.id}`}
+                aria-label={`${z.label} — Coming Soon`}
+                title="Coming Soon — this field study is being written."
+                className="absolute block"
                 style={{
-                  background: "rgba(255,80,80,0.9)",
-                  color: "#fff",
-                  pointerEvents: "none",
-                  whiteSpace: "nowrap",
+                  ...baseStyle,
+                  cursor: "not-allowed",
+                  background: debug
+                    ? "rgba(255, 80, 80, 0.22)"
+                    : "rgba(8, 11, 18, 0.42)",
+                  backdropFilter: debug ? undefined : "blur(0.5px) saturate(0.6)",
                 }}
               >
-                {z.id}
-              </span>
-            )}
-          </Link>
-        ))}
+                {!debug && (
+                  <span
+                    className="absolute bottom-1 right-1 text-[8.5px] tracking-[0.22em] uppercase px-1.5 py-0.5 pointer-events-none"
+                    style={{
+                      background: "rgba(8,11,18,0.85)",
+                      color: "#c4a46b",
+                      border: "1px solid rgba(196,164,107,0.32)",
+                      borderRadius: "2px",
+                      letterSpacing: "0.18em",
+                      lineHeight: 1,
+                    }}
+                  >
+                    Soon
+                  </span>
+                )}
+                {debug && (
+                  <span
+                    className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+                    style={{
+                      background: "rgba(255,80,80,0.9)",
+                      color: "#fff",
+                      pointerEvents: "none",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {z.id} · LOCKED
+                  </span>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={z.id}
+              to={z.route}
+              data-testid={`lab-zone-${z.id}`}
+              aria-label={z.label}
+              title={z.label}
+              className="absolute block"
+              style={{ ...baseStyle, cursor: "pointer" }}
+            >
+              {debug && (
+                <span
+                  className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+                  style={{
+                    background: "rgba(80,220,120,0.9)",
+                    color: "#04222b",
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {z.id}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
