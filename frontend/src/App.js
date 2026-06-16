@@ -449,6 +449,30 @@ function AppRouter() {
           }
         />
         <Route path="/course-room/:slug" element={<CourseDetail />} />
+        {/* §ALISTAIR-CANONICAL 2026-02-13 — Founder UX directive: one name,
+            one URL, one brand. /alistair is now the canonical URL; the
+            legacy /course-room routes above are kept for backward
+            compatibility (sub-rooms, old links). All entry points should
+            prefer /alistair going forward. */}
+        <Route path="/alistair" element={<Alistair />} />
+        <Route path="/alistair/explore" element={<AlistairExplore />} />
+        <Route path="/alistair/read" element={<AlistairRead />} />
+        <Route path="/alistair/experiments" element={<AlistairExperiments />} />
+        <Route path="/alistair/notes" element={<AlistairNotes />} />
+        <Route path="/alistair/library" element={<AlistairLibrary />} />
+        <Route path="/alistair/library/:slug" element={<AlistairLibraryArticle />} />
+        <Route path="/alistair/laboratories" element={<AlistairLaboratories />} />
+        <Route path="/alistair/lab/:labSlug" element={<AlistairLabDashboard />} />
+        <Route path="/alistair/lab/:labSlug/topic/:topicId" element={<AlistairTopicDetail />} />
+        <Route path="/alistair/lab/:labSlug/library/:slug" element={<AlistairLabArticle />} />
+        <Route
+          path="/alistair/room"
+          element={
+            <WandererGate scope="private">
+              <CourseRoom />
+            </WandererGate>
+          }
+        />
         <Route path="/catalogue" element={<Catalogue />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/admin/observation" element={<AdminObservation />} />

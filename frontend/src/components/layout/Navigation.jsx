@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { to: "/parents-room", label: "Parents' Room", testid: "nav-parents-room" },
   { to: "/kids-universe/polarstar", label: "Polarstar Kids", testid: "nav-kids-universe" },
   { to: "/high-performers", label: "For Leaders", testid: "nav-high-performers" },
-  { to: "/course-room", label: "Courses", testid: "nav-course-room" },
+  { to: "/alistair", label: "Alistair", testid: "nav-alistair" },
   { to: "/aurin-philosophy", label: "Philosophy", testid: "nav-aurin-philosophy" },
   { to: "/library", label: "Library", testid: "nav-library" },
   { to: "/bookstore", label: "Bookstore", testid: "nav-bookstore" },
@@ -41,14 +41,14 @@ export default function Navigation() {
   const closeMenu = () => setOpen(false);
 
   const inGraceContext = location.pathname.startsWith("/grace");
-  const inAlistairContext = location.pathname.startsWith("/course-room");
+  const inAlistairContext = location.pathname.startsWith("/course-room") || location.pathname.startsWith("/alistair");
 
   /* §HIDE-ON-LAB-PAGES 2026-02-10 — Founder success criterion: the
      global header MUST be hidden on individual lab pages
      (/course-room/lab/{slug}) so the painted Polarstar pattern reads
      edge-to-edge. The hub /course-room and other Alistair sub-pages
      keep their filtered top-bar. */
-  const isLabPage = location.pathname.startsWith("/course-room/lab/");
+  const isLabPage = location.pathname.startsWith("/course-room/lab/") || location.pathname.startsWith("/alistair/lab/");
   if (isLabPage) return null;
 
   /* §FULL-HIDE-REVERT 2026-02-08 — The full hide introduced earlier in
@@ -62,7 +62,7 @@ export default function Navigation() {
     inGraceContext
       ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/grace")
       : inAlistairContext
-      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/course-room")
+      ? NAV_ITEMS.filter((i) => i.to === "/" || i.to === "/alistair")
       : NAV_ITEMS;
 
   return (

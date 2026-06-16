@@ -17,6 +17,7 @@
  * single primary CTA that routes to the existing voice/chat surface.
  */
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   Home,
   Mic,
@@ -160,6 +161,22 @@ const WORDS_FOR_YOU = [
 
 
 export default function Grace() {
+  /* §FIRST-VISIT 2026-02-13 — Detect whether this is the visitor's first
+     time landing on Grace; the hero greeting must respect that ("Welcome"
+     for new arrivals, "Welcome back" only for returning visitors).
+     Lazy initialiser reads localStorage synchronously on the first
+     render to avoid the Emergent react-hooks/set-state-in-effect rule. */
+  const [isReturning] = useState(() => {
+    try {
+      const visited = localStorage.getItem("grace_visited_v1");
+      if (visited) return true;
+      localStorage.setItem("grace_visited_v1", new Date().toISOString());
+      return false;
+    } catch {
+      return false;
+    }
+  });
+
   const startConversation = () => {
     // Real Grace room — Wanderer's Gate, ConvAI voice, text chat,
     // reflections, passes. Preserved untouched at /grace/room.
@@ -237,7 +254,7 @@ export default function Grace() {
               }}
               data-testid="grace-hero-title"
             >
-              Welcome back<span style={{ color: "#c89a5a" }}>.</span>
+              Welcome{isReturning ? " back" : ""}<span style={{ color: "#c89a5a" }}>.</span>
             </h1>
             <div
               aria-hidden="true"

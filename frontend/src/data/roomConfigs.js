@@ -44,7 +44,7 @@ export const GRACE_ROOM = {
   },
 
   hero: {
-    title: "Welcome Back",
+    title: "Welcome",
     subtitle: "The fire is still warm. Take a seat. Stay as long as you need.",
     primary: { label: "Start a Conversation", href: "/aurin?mode=grace" },
     quote:
@@ -52,12 +52,19 @@ export const GRACE_ROOM = {
     quoteBy: "Grace",
   },
 
+  /* §GRACE-UX-UNIFY 2026-02-13 — Sidebar vocabulary unified with the
+   * /grace home page so a visitor sees the same six rooms whether
+   * they land on /grace or /grace/room. Previous Hearth-themed labels
+   * (Enter / Speak With Grace / Leave a Thought / Sit By The Fire /
+   * Reflections) are retired. Each sidebar item now navigates to its
+   * dedicated sub-room route instead of in-page hash anchors. */
   sidebar: [
-    { id: "enter",        label: "Enter",            icon: "home",     href: "#hearth-home" },
-    { id: "speak",        label: "Speak With Grace", icon: "mic",      href: "/aurin?mode=grace-voice" },
-    { id: "write",        label: "Leave a Thought",  icon: "pen",      href: "#hearth-write" },
-    { id: "sit",          label: "Sit By The Fire",  icon: "moon",     href: "#hearth-silence" },
-    { id: "reflections",  label: "Reflections",      icon: "messages", href: "#hearth-reflections" },
+    { id: "home",        label: "Home",     icon: "home",     href: "/grace" },
+    { id: "speak",       label: "Speak",    icon: "mic",      href: "/grace/speak" },
+    { id: "write",       label: "Write",    icon: "pen",      href: "/grace/write" },
+    { id: "evening",     label: "Evening",  icon: "moon",     href: "/grace/evening" },
+    { id: "messages",    label: "Messages", icon: "messages", href: "/grace/messages" },
+    { id: "library",     label: "Library",  icon: "book",     href: "/grace/library" },
   ],
 
   rightPanel: {

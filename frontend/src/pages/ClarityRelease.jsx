@@ -433,9 +433,22 @@ export default function ClarityRelease() {
       {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout (sidebar +
           centre hero + right "How it works" panel + curator card).
           Wraps the existing room body as children below. */}
+      {/* §GRACE-UX-UNIFY 2026-02-13 — Sidebar items now navigate to
+          dedicated Grace sub-routes (/grace, /grace/speak, /grace/write,
+          /grace/evening, /grace/messages, /grace/library). The "speak"
+          item still opens the in-room voice panel because that is the
+          actual chat target for this page. */}
       <RoomShell
         room={GRACE_ROOM}
-        onSidebarClick={(item) => setHearthPanel(item.id)}
+        onSidebarClick={(item) => {
+          if (item.id === "speak") {
+            setHearthPanel("speak");
+          } else if (item.href && item.href.startsWith("/")) {
+            window.location.href = item.href;
+          } else {
+            setHearthPanel(item.id);
+          }
+        }}
         onPrimaryCta={() => setHearthPanel("speak")}
       >
         {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart". */}
