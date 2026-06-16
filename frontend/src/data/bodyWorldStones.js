@@ -20,9 +20,10 @@
  * GEOMETRY HELPERS:
  *   HEX_SLOTS         · 6 stones at clock 12/2/4/6/8/10
  *   OCT_SLOTS         · 8 stones at clock 12/1.5/3/4.5/6/7.5/9/10.5
- *   STONE_11_SLOTS    · 7 stones, vision-calibrated to painted asset bw1xcf7q_…
+ *   STONE_3_SLOTS     · 7 sub-stones, vision-calibrated to painted asset 997a5r7f_…
+ *   STONE_5_SLOTS     · 7 sub-stones, vision-calibrated to painted asset c4qmrbde_…
+ *   STONE_11_SLOTS    · 7 sub-stones, vision-calibrated to painted asset bw1xcf7q_…
  *   STONE_14_SLOTS    · 9 bubbles, vision-calibrated to painted asset 79cg7fh3_…
- *   BUBBLE_SLOTS      · legacy 10-bubble cluster (kept for reference)
  *
  * URL-MAPPING NOTE (2026-02-13):
  *   URLs marked TBD-FOUNDER-PASTE are awaiting founder verification.
@@ -61,19 +62,7 @@ const OCT_SLOTS = [
   { slot: 8, top: 27, left: 23, w: 17, h: 16 }, // 10.5
 ];
 
-// §BUBBLE-SLOTS — Stone 14 organic 10-bubble cluster around centre
-const BUBBLE_SLOTS = [
-  { slot: 1,  top: 12, left: 42, w: 17, h: 16 }, // 1. Survival Mode (top centre)
-  { slot: 2,  top: 22, left: 60, w: 16, h: 15 }, // 2. Living Mode
-  { slot: 3,  top: 41, left: 67, w: 16, h: 15 }, // 3. Awareness
-  { slot: 4,  top: 58, left: 65, w: 16, h: 15 }, // 4. Choice
-  { slot: 5,  top: 73, left: 56, w: 16, h: 15 }, // 5. Freedom
-  { slot: 6,  top: 75, left: 38, w: 16, h: 15 }, // 6. Presence (under traveller)
-  { slot: 7,  top: 73, left: 22, w: 16, h: 15 }, // 7. Presence (left mirror)
-  { slot: 8,  top: 58, left: 14, w: 16, h: 15 }, // 8. Aliveness
-  { slot: 9,  top: 41, left: 12, w: 16, h: 15 }, // 9. Trust
-  { slot: 10, top: 22, left: 20, w: 16, h: 15 }, // 10. Possibility
-];
+// §BUBBLE_SLOTS removed 2026-02-13 — replaced by per-stone STONE_14_SLOTS.
 
 // §STONE-11-SLOTS — 7 stones, vision-calibrated 2026-02-13 to painted asset
 // (bw1xcf7q_ChatGPT Image 16. juni 2026, 09_33_00.png). Two stones at top,
@@ -86,6 +75,32 @@ const STONE_11_SLOTS = [
   { slot: 5, top: 78, left: 28, w: 16, h: 20 }, // 5. VAGUS NERVE & SAFETY (bottom-left)
   { slot: 6, top: 78, left: 56, w: 16, h: 20 }, // 6. FROM SURVIVAL TO THRIVING (bottom-mid)
   { slot: 7, top: 78, left: 80, w: 16, h: 20 }, // 7. INTEGRATION (bottom-right)
+];
+
+// §STONE-3-SLOTS — 7 sub-stones, vision-calibrated 2026-02-13 to painted asset
+// (997a5r7f_ChatGPT Image 12. juni 2026, 11_09_36.png). Heptagonal arrangement
+// around the central blue stone. Centre data from vision model (w≈18%, h≈10%).
+const STONE_3_SLOTS = [
+  { slot: 1, top: 26, left: 44, w: 18, h: 12 }, // 1. ANCESTRAL STORIES (top-right)
+  { slot: 2, top: 41, left: 60, w: 18, h: 12 }, // 2. INHERITED PATTERNS (right-upper)
+  { slot: 3, top: 59, left: 54, w: 18, h: 12 }, // 3. PROTECTIVE LEGACIES (right-lower)
+  { slot: 4, top: 69, left: 38, w: 18, h: 12 }, // 4. UNRESOLVED TRAUMA (bottom)
+  { slot: 5, top: 67, left: 20, w: 18, h: 12 }, // 5. HEALING THE LINEAGE (left-lower)
+  { slot: 6, top: 55, left: 5,  w: 18, h: 12 }, // 6. CHOOSING MY LEGACY (left-upper)
+  { slot: 7, top: 33, left: 10, w: 18, h: 12 }, // 7. GENERATIONAL CONNECTION (top-left)
+];
+
+// §STONE-5-SLOTS — 7 sub-stones, vision-calibrated 2026-02-13 to painted asset
+// (c4qmrbde_ChatGPT Image 12. juni 2026, 10_57_06.png). Diamond-plus-top
+// arrangement: 1 at top, 2-6 in middle ring, 7 at very top above. Width 15%, height 17%.
+const STONE_5_SLOTS = [
+  { slot: 1, top: 28, left: 43, w: 15, h: 17 }, // 1. FIGHT RESPONSE (upper-centre)
+  { slot: 2, top: 42, left: 62, w: 15, h: 17 }, // 2. FLIGHT RESPONSE (right)
+  { slot: 3, top: 56, left: 43, w: 15, h: 17 }, // 3. FREEZE RESPONSE (lower-centre)
+  { slot: 4, top: 56, left: 23, w: 15, h: 17 }, // 4. PEOPLE-PLEASING (lower-left)
+  { slot: 5, top: 42, left: 4,  w: 15, h: 17 }, // 5. CONTROL RESPONSE (left)
+  { slot: 6, top: 28, left: 23, w: 15, h: 17 }, // 6. HEALTHY BOUNDARIES (upper-left)
+  { slot: 7, top: 13, left: 43, w: 15, h: 17 }, // 7. SAFETY IN THE BODY (very top)
 ];
 
 // §STONE-14-SLOTS — 9 bubbles, vision-calibrated 2026-02-13 to painted asset
@@ -176,7 +191,7 @@ export const BODY_WORLD_STONES = [
       { n: 6, slug: "choosing-my-legacy",    title: "Choosing My Legacy",    hint: "What you pass on from here" },
       { n: 7, slug: "generational-connection", title: "Generational Connection", hint: "Honouring without inheriting" },
     ],
-    subStoneSlots: HEX_SLOTS, // 7th stone overflows to centre — adjust via ?debug=1
+    subStoneSlots: STONE_3_SLOTS, // vision-calibrated 2026-02-13 to painted asset
   },
   {
     n: 4,
@@ -223,7 +238,7 @@ export const BODY_WORLD_STONES = [
       { n: 6, slug: "healthy-boundaries",title: "Healthy Boundaries", hint: "Protection without imprisonment" },
       { n: 7, slug: "safety-in-the-body",title: "Safety in the Body", hint: "Coming home to yourself" },
     ],
-    subStoneSlots: HEX_SLOTS,
+    subStoneSlots: STONE_5_SLOTS, // vision-calibrated 2026-02-13 to painted asset
   },
   {
     n: 6,

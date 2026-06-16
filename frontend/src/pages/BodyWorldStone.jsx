@@ -70,6 +70,24 @@ const RIGHT_COLUMN_ZONES = [
 
 function PaintedWorldView({ stone, debug }) {
   const stoneAspect = stone.aspectRatio || "1536 / 1024";
+
+  // §INVARIANT — every painted sub-stone MUST have a clickable hotspot.
+  // If counts diverge, log loudly so the mismatch is caught instead of
+  // silently dropping a navigation target.
+  if (
+    process.env.NODE_ENV !== "production" &&
+    Array.isArray(stone.subStones) &&
+    Array.isArray(stone.subStoneSlots) &&
+    stone.subStones.length !== stone.subStoneSlots.length
+  ) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `[BodyWorld] Hotspot/sub-stone count mismatch on stone "${stone.slug}": ` +
+      `${stone.subStones.length} sub-stones declared, ${stone.subStoneSlots.length} slots provided. ` +
+      `Add a dedicated per-stone slot config in bodyWorldStones.js so every painted sub-stone has a clickable hotspot.`
+    );
+  }
+
   const subStoneZones = (stone.subStones || []).map((sub, idx) => {
     const slot = (stone.subStoneSlots || [])[idx];
     if (!slot) return null;
