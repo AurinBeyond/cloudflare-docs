@@ -120,7 +120,7 @@ export default function BodyWorld() {
             data-testid={`body-world-zone-${z.id}`}
             aria-label={z.label}
             title={z.label}
-            className="absolute block"
+            className="absolute block group"
             style={{
               top: `${z.top}%`,
               left: `${z.left}%`,
@@ -131,6 +131,33 @@ export default function BodyWorld() {
               border: debug ? "1px dashed rgba(255, 200, 80, 0.9)" : "none",
             }}
           >
+            {/* §HUB-LOCK-LABEL 2026-02-13 — Visible LOCK-name overlay on
+                every painted stone (only on the 14 LOCK stones, not on
+                sidebar / chat-card / right-column zones). The underlying
+                painting still carries its legacy 15-stone labels; this
+                overlay makes the correct 14-stone LOCK names the
+                user-facing navigation truth. */}
+            {z.id.startsWith("stone-") && (
+              <span
+                data-testid={`body-world-zone-label-${z.id}`}
+                className="absolute inset-0 flex items-center justify-center text-center px-1 pointer-events-none"
+                style={{
+                  fontFamily: '"Cormorant Garamond", Georgia, serif',
+                  fontSize: "clamp(10px, 0.85vw, 14px)",
+                  lineHeight: 1.15,
+                  fontWeight: 500,
+                  letterSpacing: "0.02em",
+                  color: "#fdf6e6",
+                  textShadow:
+                    "0 1px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
+                  background:
+                    "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
+                  borderRadius: "8px",
+                }}
+              >
+                {z.label}
+              </span>
+            )}
             {debug && (
               <span
                 className="absolute top-0 left-0 px-1 text-[10px] font-mono"

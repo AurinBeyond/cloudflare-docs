@@ -155,10 +155,9 @@ function StarMonogram() {
               <path d="M22 22 L48 48 M78 22 L52 48 M78 78 L52 52 M22 78 L48 52" opacity="0.55" />
               <circle cx="50" cy="50" r="36" opacity="0.18" />
             </g>
-            <text x="50" y="58" textAnchor="middle"
-              style={{ fill: BRASS_BRIGHT, fontFamily: SERIF, fontSize: "28px", fontWeight: 400 }}>
-              A
-            </text>
+            {/* §ALISTAIR-LOGO 2026-02-13 — Removed inner "A" glyph per
+                founder's approved reference (clean four-point star, no
+                centred letter). */}
           </svg>
         </div>
         <div>
