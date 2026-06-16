@@ -1,13 +1,30 @@
 """
-parents_lenses.py — Parents' Room Multi-Lens registry (Stage 3.2).
+parents_lenses.py — Parents' Room Multi-Lens registry (Stage 3.3).
 
-Three opt-in parenting wisdom lenses, mirroring the body_lenses.py
-architecture so the same Multi-Lens UX scales beyond the body:
+Seven parenting wisdom lenses. The first four are surfaced to the
+parent as opt-in cards (mirroring body_lenses.py). The remaining
+three are *hidden wisdom sources* — Sara reads from them silently
+when the parent's situation calls for it, but they are never
+rendered as menu items in the UI.
 
-  - shitsuke         · Japanese Shitsuke + Itadakimasu + Amae
-  - montessori       · Montessori + Waldorf + developmental biology
-  - positive_coding  · Positive psychology + affirmation language
-  - intuitive        · the default · the room reads + chooses silently
+  Visible (opt-in cards):
+    - intuitive        · the default · the room reads + chooses silently
+    - shitsuke         · Japanese Ikuji (Shitsuke + Itadakimasu + Amae
+                         + Ganbaru + Omoiyari + Soji)
+    - montessori       · Montessori + developmental biology
+    - positive_coding  · Positive psychology + affirmation language
+
+  Hidden (behind-the-scenes wisdom for Sara only):
+    - scandinavian     · Nordic free play, friluftsliv, lagom, hygge
+    - french_cadre     · the French frame · le cadre · "non veut dire non"
+    - reggio_emilia    · the child as competent researcher · 100 languages
+    - waldorf          · Steiner / Waldorf rhythm · fantasy · natural materials
+
+Visibility is governed by the `visible` flag on each lens entry.
+`list_lenses()` returns only visible lenses (the four named above);
+`get_lens()` resolves any lens id (visible or hidden) so Sara can
+still anchor a reply on a hidden lens when the Intuitive Flow
+selects it silently.
 
 §MATRIX-AURIN AUTHORIAL OVERLAY (founder-locked 2026-02-11)
 -------------------------------------------------------------------
@@ -129,29 +146,41 @@ LENSES: Dict[str, dict] = {
     # -----------------------------------------------------------------
     "shitsuke": {
         "id": "shitsuke",
-        "name": "Japanese Shitsuke",
-        "subtitle": "rhythm, ritual, and the quiet bow",
+        "name": "Japanese Ikuji",
+        "subtitle": "rhythm, ritual, care, the quiet bow",
         "plain": "raising through example, not instruction",
+        "visible": True,
         "scope": (
             "Best when the home has been loud, transitions have been "
             "rough, or the parent feels they have been correcting more "
-            "than connecting. Shitsuke is not discipline — it is the "
-            "soft architecture of a day."
+            "than connecting. Ikuji — the broader Japanese art of "
+            "raising — is not discipline. It is the soft architecture "
+            "of a day, built from small rituals, shared chores, and "
+            "the welcome of healthy dependence."
         ),
         "attribution": (
             "Drawing on the Japanese practices of Shitsuke (gentle "
             "shaping through ritual), Itadakimasu (gratitude before "
-            "meals), and Amae (the welcome of healthy dependence). "
+            "meals), Amae (the welcome of healthy dependence), "
+            "Ganbaru (steady, kind perseverance — not grit), "
+            "Omoiyari (sensing what another may feel before they "
+            "say it), and Soji (the daily ritual of caring for "
+            "shared space — sweeping, wiping, setting right). "
             "Used here only as inspiration — never as a rulebook."
         ),
         "prompt_anchor": (
-            "Active lens for this reply: SHITSUKE. Speak in the calm "
-            "register of Japanese rhythm parenting. You MAY, at most "
-            "once, mention one Japanese term — always followed by its "
-            "plain meaning (e.g. 'itadakimasu — a small word said "
-            "before eating, a quiet bow to the food'). Never imply "
-            "Western parenting is wrong. Offer one small ritual, not "
-            "a method. Never use shame language."
+            "Active lens for this reply: JAPANESE IKUJI (Shitsuke "
+            "family). Speak in the calm register of Japanese rhythm "
+            "parenting. You MAY, at most once, mention one Japanese "
+            "term — always followed by its plain meaning in the same "
+            "sentence (e.g. 'itadakimasu — a small word said before "
+            "eating, a quiet bow to the food'; 'omoiyari — sensing "
+            "what another feels before they say it'; 'soji — the "
+            "small daily act of caring for shared space'; 'ganbaru "
+            "— a steady, kind kind of perseverance, not grit'; "
+            "'amae — the welcome of healthy dependence'). Never "
+            "imply Western parenting is wrong. Offer one small "
+            "ritual, not a method. Never use shame language."
         ),
         "situations": {
             "bedtime": {
