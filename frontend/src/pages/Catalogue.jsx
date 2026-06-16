@@ -191,7 +191,7 @@ export default function Catalogue() {
                 className="grid sm:grid-cols-2 gap-3 text-[14px] leading-relaxed text-[hsl(var(--aurin-text-muted))]"
                 data-testid="catalogue-free"
               >
-                <li>· Body World — fifteen stones, Kaelen as guide</li>
+                <li>· Body World — fourteen stones, Kaelen as guide</li>
                 <li>· Six Nights — six gentle emails, a lead-magnet walk</li>
                 <li>· Kids coloring page (daily) + free angel story</li>
                 <li>· Aurin Philosophy &amp; The Beginning</li>

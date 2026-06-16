@@ -62,12 +62,12 @@ No rush, no follow-up. Sleep well.`,
 
 const ASSETS = [
   {
-    label: "Body Room — Throat (the unspoken)",
+    label: "Body World — Throat (the unspoken)",
     href: "/api/body-room/image/throat-unspoken",
     description: "1:1 sage-on-black silhouette · ideal for IG square",
   },
   {
-    label: "Body Room — Hips (the archive)",
+    label: "Body World — Hips (the archive)",
     href: "/api/body-room/image/hips-archive",
     description: "1:1 sage-on-black · works well as a Pin",
   },

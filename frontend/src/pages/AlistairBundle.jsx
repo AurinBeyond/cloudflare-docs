@@ -313,11 +313,11 @@ export default function AlistairBundle() {
             If a sequence triggers something structural in the hardware,
             the adjacent compass headings handle it directly —{" "}
             <Link
-              to="/body-room"
+              to="/body-world"
               style={{ color: COLORS.amber, borderBottom: `1px solid ${COLORS.border}` }}
               data-testid="alistair-bundle-link-body"
             >
-              N · Body Architecture
+              N · Body World
             </Link>{" "}
             for somatic-load discharge, or{" "}
             <Link

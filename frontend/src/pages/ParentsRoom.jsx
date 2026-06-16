@@ -539,8 +539,8 @@ export default function ParentsRoom() {
           </p>
 
           <div className="mt-6 flex gap-3 flex-wrap">
-            <Link to="/body-room" className="aurin-btn aurin-btn-ghost !py-2 !px-4 text-[12.5px]">
-              Visit the Body Room
+            <Link to="/body-world" className="aurin-btn aurin-btn-ghost !py-2 !px-4 text-[12.5px]">
+              Enter Body World
             </Link>
             <Link to="/clarity-release" className="aurin-btn aurin-btn-ghost !py-2 !px-4 text-[12.5px]">
               Visit Clarity Release

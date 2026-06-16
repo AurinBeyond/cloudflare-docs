@@ -212,7 +212,7 @@ export default function Home() {
               quiet, no exclamation marks. Routes straight to the
               Body Room where the lens selector lives. */}
           <Link
-            to="/body-room"
+            to="/body-world"
             data-testid="home-multilens-tile"
             className="mt-5 inline-flex flex-col items-start gap-1 px-5 py-4 border border-[hsl(var(--aurin-sage))/0.25] hover:border-[hsl(var(--aurin-sage))/0.6] rounded-md transition-colors aurin-fade-up aurin-delay-4 group"
           >

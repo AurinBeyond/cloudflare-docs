@@ -254,7 +254,7 @@ export default function CourseRoom() {
             <p className="mt-3 text-[13.5px] text-[hsl(var(--aurin-text-muted))]">
               When a transmission triggers something structural in the
               hardware, the adjacent compass headings handle it directly:
-              {" "}<Link className="aurin-link" to="/body-room">N · Body Architecture</Link>{" "}
+              {" "}<Link className="aurin-link" to="/body-world">N · Body World</Link>{" "}
               for somatic-load discharge, or{" "}
               <Link className="aurin-link" to="/clarity-release">S · Clarity Release</Link>{" "}
               for cognitive-load extraction. Same compass. Different vector.

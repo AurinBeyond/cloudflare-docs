@@ -41,7 +41,7 @@ export default function WanderersAgreement() {
             </div>
             <p className="text-[14px] leading-[1.85] text-[hsl(var(--aurin-text))/0.9]">
               Matrix Aurin is an inner-work companion and a quiet reflection
-              space. The rooms you enter here — the Body Room, Clarity
+              space. The rooms you enter here — Body World, Clarity
               Release, the Course Room — are designed to support your own
               listening. They offer new angles, soft somatic rhythms, and a
               trained AI companion tuned to the brand's voice.
@@ -207,7 +207,7 @@ export default function WanderersAgreement() {
               The room is mine to enter — and mine to pause."
             </p>
             <p className="text-[12.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] pt-2">
-              By continuing into Clarity Release, the Body Room questionnaire,
+              By continuing into Clarity Release, the Body World questionnaire,
               or a paid pass, you accept this Agreement. Formal terms and the
               refund policy live on{" "}
               <Link
