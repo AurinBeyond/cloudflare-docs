@@ -300,7 +300,7 @@ export const BODY_WORLD_STONES = [
     slug: "stress-nervous-system",
     title: "Stress & Nervous System",
     question: "Is my nervous system at war, or at rest?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 11 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/bw1xcf7q_ChatGPT%20Image%2016.%20juni%202026%2C%2009_33_00.png", // Stone 11 Stress & Nervous System
     aboutThisWorld: "Stress is not the enemy. Disconnection from your nervous system is. This world teaches the substrate so the symptoms can soften.",
     kaelenQuote: "A regulated nervous system is the foundation of every joy.",
     subStones: [
