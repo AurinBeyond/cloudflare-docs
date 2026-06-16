@@ -69,6 +69,7 @@ const RIGHT_COLUMN_ZONES = [
 ];
 
 function PaintedWorldView({ stone, debug }) {
+  const stoneAspect = stone.aspectRatio || "1536 / 1024";
   const subStoneZones = (stone.subStones || []).map((sub, idx) => {
     const slot = (stone.subStoneSlots || [])[idx];
     if (!slot) return null;
@@ -109,7 +110,7 @@ function PaintedWorldView({ stone, debug }) {
     >
       <div
         className="relative w-full"
-        style={{ aspectRatio: "1024 / 1024", maxWidth: "100vw" }}
+        style={{ aspectRatio: stoneAspect, maxWidth: "100vw" }}
       >
         <img
           src={stone.image}

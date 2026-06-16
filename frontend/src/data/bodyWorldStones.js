@@ -18,9 +18,11 @@
  *  14  Living or Surviving         · 9 sub-bubbles (cluster) 🫧 BUBBLE world (LOCK realigned 2026-02-13 to painted asset)
  *
  * GEOMETRY HELPERS:
- *   HEX_SLOTS  · 6 stones at clock 12/2/4/6/8/10
- *   OCT_SLOTS  · 8 stones at clock 12/1.5/3/4.5/6/7.5/9/10.5
- *   BUBBLE_SLOTS · 10 bubbles in organic cluster around centre
+ *   HEX_SLOTS         · 6 stones at clock 12/2/4/6/8/10
+ *   OCT_SLOTS         · 8 stones at clock 12/1.5/3/4.5/6/7.5/9/10.5
+ *   STONE_11_SLOTS    · 7 stones, vision-calibrated to painted asset bw1xcf7q_…
+ *   STONE_14_SLOTS    · 9 bubbles, vision-calibrated to painted asset 79cg7fh3_…
+ *   BUBBLE_SLOTS      · legacy 10-bubble cluster (kept for reference)
  *
  * URL-MAPPING NOTE (2026-02-13):
  *   URLs marked TBD-FOUNDER-PASTE are awaiting founder verification.
@@ -71,6 +73,34 @@ const BUBBLE_SLOTS = [
   { slot: 8,  top: 58, left: 14, w: 16, h: 15 }, // 8. Aliveness
   { slot: 9,  top: 41, left: 12, w: 16, h: 15 }, // 9. Trust
   { slot: 10, top: 22, left: 20, w: 16, h: 15 }, // 10. Possibility
+];
+
+// §STONE-11-SLOTS — 7 stones, vision-calibrated 2026-02-13 to painted asset
+// (bw1xcf7q_ChatGPT Image 16. juni 2026, 09_33_00.png). Two stones at top,
+// two in middle row, three across bottom row.
+const STONE_11_SLOTS = [
+  { slot: 1, top: 21, left: 14, w: 16, h: 20 }, // 1. STRESS RESPONSE (top-left)
+  { slot: 2, top: 22, left: 70, w: 16, h: 20 }, // 2. NERVOUS SYSTEM BASICS (top-right)
+  { slot: 3, top: 55, left: 14, w: 16, h: 20 }, // 3. THE BODY KEEPS THE SCORE (mid-left)
+  { slot: 4, top: 55, left: 70, w: 16, h: 20 }, // 4. REGULATION TOOLS (mid-right)
+  { slot: 5, top: 78, left: 28, w: 16, h: 20 }, // 5. VAGUS NERVE & SAFETY (bottom-left)
+  { slot: 6, top: 78, left: 56, w: 16, h: 20 }, // 6. FROM SURVIVAL TO THRIVING (bottom-mid)
+  { slot: 7, top: 78, left: 80, w: 16, h: 20 }, // 7. INTEGRATION (bottom-right)
+];
+
+// §STONE-14-SLOTS — 9 bubbles, vision-calibrated 2026-02-13 to painted asset
+// (79cg7fh3_ChatGPT Image 13. juni 2026, 16_56_29.png). Bubbles flow clockwise
+// from top-centre around the traveller silhouette.
+const STONE_14_SLOTS = [
+  { slot: 1, top: 9,  left: 41, w: 16, h: 16 }, // 1. CHOOSING LIFE (top)
+  { slot: 2, top: 19, left: 59, w: 16, h: 16 }, // 2. LETTING GO OF SURVIVAL PATTERNS
+  { slot: 3, top: 33, left: 64, w: 16, h: 16 }, // 3. TRUSTING THE FLOW
+  { slot: 4, top: 48, left: 63, w: 16, h: 16 }, // 4. EXPANSION & POSSIBILITY
+  { slot: 5, top: 62, left: 53, w: 16, h: 16 }, // 5. JOY & ALIVENESS
+  { slot: 6, top: 66, left: 36, w: 16, h: 16 }, // 6. PURPOSE & MEANING
+  { slot: 7, top: 61, left: 19, w: 16, h: 16 }, // 7. COURAGE TO BE MYSELF
+  { slot: 8, top: 46, left: 10, w: 16, h: 16 }, // 8. FREEDOM IN THE BODY
+  { slot: 9, top: 31, left: 14, w: 16, h: 16 }, // 9. LIVING IN PRESENCE
 ];
 
 export const BODY_WORLD_STONES = [
@@ -241,6 +271,7 @@ export const BODY_WORLD_STONES = [
     title: "Body & Relationships",
     question: "How do my relationships affect my body and nervous system?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/g3bn25wk_ChatGPT%20Image%2013.%20juni%202026%2C%2016_41_15.png",
+    aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
     aboutThisWorld: "Every relationship leaves a trace in your body. This world helps you understand how connection, conflict, boundaries and support shape your nervous system — and how to build relationships that help you thrive.",
     kaelenQuote: "Your nervous system learns from every relationship. Some teach fear. Some teach safety.",
     subStones: [
@@ -261,6 +292,7 @@ export const BODY_WORLD_STONES = [
     title: "Body & Environment",
     question: "How does my environment affect my body, mind and energy?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/r37tmlnt_ChatGPT%20Image%2013.%20juni%202026%2C%2016_42_51.png",
+    aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
     aboutThisWorld: "Your environment is not neutral. It impacts your hormones, energy, mood, immunity and longevity. This world helps you design an environment that nourishes and protects your body.",
     kaelenQuote: "Your environment is not something separate from you. It is an extension of your body.",
     subStones: [
@@ -281,6 +313,7 @@ export const BODY_WORLD_STONES = [
     title: "Body & Time",
     question: "How do I live in rhythm with time instead of rushing or resisting?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/ceflczmw_ChatGPT%20Image%2013.%20juni%202026%2C%2016_46_23.png",
+    aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
     aboutThisWorld: "Time is not something to control — it's something to understand and flow with. When you align with your body's rhythms and life's seasons, you create more energy, ease and meaning.",
     kaelenQuote: "Time is not your enemy. Disconnection from time is. Come back into rhythm. Your body remembers.",
     subStones: [
@@ -301,6 +334,7 @@ export const BODY_WORLD_STONES = [
     title: "Stress & Nervous System",
     question: "Is my nervous system at war, or at rest?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/bw1xcf7q_ChatGPT%20Image%2016.%20juni%202026%2C%2009_33_00.png", // Stone 11 Stress & Nervous System
+    aspectRatio: "1536 / 1024", // landscape painting — matches image dimensions exactly (no cropping)
     aboutThisWorld: "Stress is not the enemy. Disconnection from your nervous system is. This world teaches the substrate so the symptoms can soften.",
     kaelenQuote: "A regulated nervous system is the foundation of every joy.",
     // §STONE-11 sub-stones — names sourced verbatim from the approved
@@ -315,7 +349,7 @@ export const BODY_WORLD_STONES = [
       { n: 6, slug: "survival-to-thriving",   title: "From Survival to Thriving", hint: "Heal your system. Expand your capacity for life." },
       { n: 7, slug: "integration",            title: "Integration",              hint: "Awareness becomes choice. Choice becomes freedom." },
     ],
-    subStoneSlots: HEX_SLOTS, // 7th stone overflows to centre — re-calibrate via ?debug=1
+    subStoneSlots: STONE_11_SLOTS, // vision-calibrated 2026-02-13 to painted asset
   },
   {
     n: 12,
@@ -323,6 +357,7 @@ export const BODY_WORLD_STONES = [
     title: "Body as Language",
     question: "How does my body communicate before I say a word?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/wkuhq886_ChatGPT%20Image%2013.%20juni%202026%2C%2016_49_23.png",
+    aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
     aboutThisWorld: "Your body speaks constantly — through movement, posture, gesture, expression and energy. This world helps you understand the language of your body and use it consciously to express, connect and influence.",
     kaelenQuote: "Your body speaks the truth even when your mind is trying to lie.",
     subStones: [
@@ -363,6 +398,7 @@ export const BODY_WORLD_STONES = [
     title: "Living or Surviving",
     question: "What kind of life do I choose?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/79cg7fh3_ChatGPT%20Image%2013.%20juni%202026%2C%2016_56_29.png",
+    aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
     aboutThisWorld: "This is the world of freedom, choice and creation. You are not here to just survive. You are here to live, love and leave your unique light in this world.",
     kaelenQuote: "You are not here to just survive. You are here to live, love and leave your light.",
     visualLanguage: "bubbles",
@@ -381,7 +417,7 @@ export const BODY_WORLD_STONES = [
       { n: 8, slug: "freedom-in-the-body",          title: "Freedom in the Body",             hint: "I am at home in my body, free." },
       { n: 9, slug: "living-in-presence",           title: "Living in Presence",              hint: "I am here, now.", legacyMoodReflect: "kaelan" },
     ],
-    subStoneSlots: BUBBLE_SLOTS, // 10 positions defined; first 9 used. Re-calibrate via ?debug=1.
+    subStoneSlots: STONE_14_SLOTS, // vision-calibrated 2026-02-13 to painted asset
   },
 ];
 
