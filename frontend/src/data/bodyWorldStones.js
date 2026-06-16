@@ -12,10 +12,10 @@
  *   8  Body & Relationships        · 8 sub-stones (octagon)
  *   9  Body & Environment          · 8 sub-stones (octagon)
  *  10  Body & Time                 · 8 sub-stones (octagon)
- *  11  Stress & Nervous System     · 8 sub-stones (octagon)
+ *  11  Stress & Nervous System     · 7 sub-stones (hex+1)   (LOCK realigned 2026-02-13 to painted asset)
  *  12  Body as Language            · 8 sub-stones (octagon)
  *  13  Growth & Transformation     · 8 sub-stones (octagon)
- *  14  Living or Surviving         · 10 sub-bubbles (cluster)  🫧 BUBBLE world
+ *  14  Living or Surviving         · 9 sub-bubbles (cluster) 🫧 BUBBLE world (LOCK realigned 2026-02-13 to painted asset)
  *
  * GEOMETRY HELPERS:
  *   HEX_SLOTS  · 6 stones at clock 12/2/4/6/8/10
@@ -303,17 +303,19 @@ export const BODY_WORLD_STONES = [
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/bw1xcf7q_ChatGPT%20Image%2016.%20juni%202026%2C%2009_33_00.png", // Stone 11 Stress & Nervous System
     aboutThisWorld: "Stress is not the enemy. Disconnection from your nervous system is. This world teaches the substrate so the symptoms can soften.",
     kaelenQuote: "A regulated nervous system is the foundation of every joy.",
+    // §STONE-11 sub-stones — names sourced verbatim from the approved
+    // painted asset (`bw1xcf7q_…`). 7 sub-stones, hex-plus-centre layout.
+    // Legacy audio + quiz follow the "Regulation Tools" concept.
     subStones: [
-      { n: 1, slug: "understanding-stress",    title: "Understanding Stress",    hint: "What is happening in me?" },
-      { n: 2, slug: "nervous-system-basics",   title: "Nervous System Basics",   hint: "The machinery beneath the mood" },
-      { n: 3, slug: "triggers",                title: "Triggers",                hint: "What sets the system off?" },
-      { n: 4, slug: "response-patterns",       title: "Response Patterns",       hint: "How my body answers stress" },
-      { n: 5, slug: "regulation-tools",        title: "Regulation Tools",        hint: "Coming back to ground", legacyAudio: { src: "/audio/body-architecture-week3-pause.mp3", title: "The Radical Pause", credit: "Body Architecture · Week 3" }, legacyQuiz: { href: "/body-world/v1#body-room-questionnaire", title: "Honesty Quiz", subtitle: "A guided body-region check-in" } },
-      { n: 6, slug: "safety-within",           title: "Safety Within",           hint: "Becoming a safe place to live" },
-      { n: 7, slug: "resilience",              title: "Resilience",              hint: "Bending without breaking" },
-      { n: 8, slug: "living-in-flow",          title: "Living in Flow",          hint: "When the system stops fighting" },
+      { n: 1, slug: "stress-response",        title: "Stress Response",          hint: "Fight, flight, freeze or fawn. Your body reacts to protect you." },
+      { n: 2, slug: "nervous-system-basics",  title: "Nervous System Basics",    hint: "Sympathetic activates. Parasympathetic restores." },
+      { n: 3, slug: "body-keeps-the-score",   title: "The Body Keeps the Score", hint: "Unprocessed stress lives on in the body." },
+      { n: 4, slug: "regulation-tools",       title: "Regulation Tools",         hint: "Breath, movement, sound, touch, nature. Simple tools, profound shifts.", legacyAudio: { src: "/audio/body-architecture-week3-pause.mp3", title: "The Radical Pause", credit: "Body Architecture · Week 3" }, legacyQuiz: { href: "/body-world/v1#body-room-questionnaire", title: "Honesty Quiz", subtitle: "A guided body-region check-in" } },
+      { n: 5, slug: "vagus-nerve-safety",     title: "Vagus Nerve & Safety",     hint: "Connection signals safety. Safety creates healing." },
+      { n: 6, slug: "survival-to-thriving",   title: "From Survival to Thriving", hint: "Heal your system. Expand your capacity for life." },
+      { n: 7, slug: "integration",            title: "Integration",              hint: "Awareness becomes choice. Choice becomes freedom." },
     ],
-    subStoneSlots: OCT_SLOTS,
+    subStoneSlots: HEX_SLOTS, // 7th stone overflows to centre — re-calibrate via ?debug=1
   },
   {
     n: 12,
@@ -364,19 +366,22 @@ export const BODY_WORLD_STONES = [
     aboutThisWorld: "This is the world of freedom, choice and creation. You are not here to just survive. You are here to live, love and leave your unique light in this world.",
     kaelenQuote: "You are not here to just survive. You are here to live, love and leave your light.",
     visualLanguage: "bubbles",
+    // §STONE-14 sub-bubbles — names sourced verbatim from the approved
+    // painted asset (`79cg7fh3_…`). 9 sub-bubbles in an organic cluster.
+    // Legacy AdultPattern follows the "Letting Go of Survival Patterns"
+    // concept; legacy MoodReflect follows "Living in Presence".
     subStones: [
-      { n: 1,  slug: "survival-mode",     title: "Survival Mode",                  hint: "I am safe, but not alive.", legacyAdultPattern: "pattern-postponed" },
-      { n: 2,  slug: "living-mode",       title: "Living Mode",                    hint: "I choose to live fully and freely." },
-      { n: 3,  slug: "awareness",         title: "Awareness",                      hint: "I see clearly what is happening within me.", legacyMoodReflect: "kaelan" },
-      { n: 4,  slug: "choice",            title: "Choice",                         hint: "I have the power to choose again." },
-      { n: 5,  slug: "freedom",           title: "Freedom",                        hint: "I release what no longer serves me." },
-      { n: 6,  slug: "presence",          title: "Presence",                       hint: "I am here, now." },
-      { n: 7,  slug: "courage-to-be",     title: "Courage to Be Myself",           hint: "I choose truth over approval." },
-      { n: 8,  slug: "aliveness",         title: "Aliveness",                      hint: "I feel deeply, I live vibrantly." },
-      { n: 9,  slug: "trust",             title: "Trust",                          hint: "I trust life and myself." },
-      { n: 10, slug: "possibility",       title: "Possibility",                    hint: "I am open to infinite possibilities." },
+      { n: 1, slug: "choosing-life",                title: "Choosing Life",                   hint: "I actively choose how I live." },
+      { n: 2, slug: "letting-go-survival-patterns", title: "Letting Go of Survival Patterns", hint: "I release the patterns that keep me small.", legacyAdultPattern: "pattern-postponed" },
+      { n: 3, slug: "trusting-the-flow",            title: "Trusting the Flow",               hint: "I move with life instead of against it." },
+      { n: 4, slug: "expansion-possibility",        title: "Expansion & Possibility",         hint: "I open to what is possible." },
+      { n: 5, slug: "joy-aliveness",                title: "Joy & Aliveness",                 hint: "I feel deeply, I live vibrantly." },
+      { n: 6, slug: "purpose-meaning",              title: "Purpose & Meaning",               hint: "I live with reason and intention." },
+      { n: 7, slug: "courage-to-be",                title: "Courage to Be Myself",            hint: "I choose truth over approval." },
+      { n: 8, slug: "freedom-in-the-body",          title: "Freedom in the Body",             hint: "I am at home in my body, free." },
+      { n: 9, slug: "living-in-presence",           title: "Living in Presence",              hint: "I am here, now.", legacyMoodReflect: "kaelan" },
     ],
-    subStoneSlots: BUBBLE_SLOTS,
+    subStoneSlots: BUBBLE_SLOTS, // 10 positions defined; first 9 used. Re-calibrate via ?debug=1.
   },
 ];
 

@@ -152,15 +152,15 @@ For each stone we verify:
 | Sub-stones | CIRCADIAN RHYTHM / ULTRADIAN RHYTHMS / MENSTRUAL & HORMONAL CYCLES / SEASONS OF LIFE / PATIENCE & TIMING / RITUALS & RHYTHMIC LIVING / TIME MANAGEMENT FOR WELL-BEING / HONOURING NATURAL TIME | ✅ all 8 match LOCK |
 | **Verdict** | ✅ **FULL MATCH** | |
 
-### STONE 11 · Stress & Nervous System ❌
+### STONE 11 · Stress & Nervous System ✅ (LOCK realigned 2026-02-13)
 | Layer | Value | Status |
 |---|---|---|
-| Painted | STONE 11 OF 14 · STRESS & NERVOUS SYSTEM · **7 sub-stones** | ⚠ painted only 7, LOCK has 8 |
-| LOCK    | n=11 · `stress-nervous-system` · 8 sub-stones | — |
+| Painted | STONE 11 OF 14 · STRESS & NERVOUS SYSTEM · 7 sub-stones | — |
+| LOCK    | n=11 · `stress-nervous-system` · 7 sub-stones | — |
 | Route   | `/body-world/world/stress-nervous-system` | ✅ |
-| Sub-stones | **Painted:** STRESS RESPONSE / NERVOUS SYSTEM BASICS / THE BODY KEEPS THE SCORE / REGULATION TOOLS / VAGUS NERVE & SAFETY / FROM SURVIVAL TO THRIVING / INTEGRATION | ❌ mismatch |
-|  | **LOCK:** Understanding Stress / Nervous System Basics / Triggers / Response Patterns / Regulation Tools / Safety Within / Resilience / Living in Flow | ❌ mismatch |
-| **Verdict** | ❌ **SUB-STONE NAME & COUNT MISMATCH** — user clicks "VAGUS NERVE & SAFETY" on painting and lands on "Regulation Tools" topic page. UX-confusing. |
+| Sub-stones | Stress Response / Nervous System Basics / The Body Keeps the Score / Regulation Tools / Vagus Nerve & Safety / From Survival to Thriving / Integration | ✅ all 7 match LOCK |
+| Legacy content | `legacyAudio` (Radical Pause) + `legacyQuiz` (Honesty Quiz) now on sub-stone 4 "Regulation Tools" | ✅ |
+| **Verdict** | ✅ **FULL MATCH** — LOCK realigned to painted asset. 7th hotspot ("Integration") needs `?debug=1` slot calibration (HEX_SLOTS only ships 6 positions; same Field Study calibration debt as Stones 3 and 5). |
 
 ### STONE 12 · Body as Language
 | Layer | Value | Status |
@@ -180,29 +180,29 @@ For each stone we verify:
 | Sub-stones | EMBRACING CHANGE / LEARNING & GROWING / STEPPING OUT OF COMFORT / HEALING & RENEWAL / ALIGNING WITH MY PURPOSE / BUILDING NEW HABITS / OVERCOMING FEAR / CELEBRATING PROGRESS | ✅ all 8 match LOCK |
 | **Verdict** | ✅ **FULL MATCH** | |
 
-### STONE 14 · Living or Surviving ❌
+### STONE 14 · Living or Surviving ✅ (LOCK realigned 2026-02-13)
 | Layer | Value | Status |
 |---|---|---|
-| Painted | STONE 14 OF 14 · LIVING OR SURVIVING · **9 sub-bubbles** | ❌ painted only 9, LOCK has 10 |
-| LOCK    | n=14 · `living-or-surviving` · 10 sub-bubbles | — |
+| Painted | STONE 14 OF 14 · LIVING OR SURVIVING · 9 sub-bubbles | — |
+| LOCK    | n=14 · `living-or-surviving` · 9 sub-bubbles | — |
 | Route   | `/body-world/world/living-or-surviving` | ✅ |
-| Sub-bubbles | **Painted:** CHOOSING LIFE / LETTING GO OF SURVIVAL PATTERNS / TRUSTING THE FLOW / EXPANSION & POSSIBILITY / JOY & ALIVENESS / PURPOSE & MEANING / COURAGE TO BE MYSELF / FREEDOM IN THE BODY / LIVING IN PRESENCE | ❌ mismatch |
-|  | **LOCK:** Survival Mode / Living Mode / Awareness / Choice / Freedom / Presence / Courage to Be Myself / Aliveness / Trust / Possibility | ❌ mismatch |
-| **Verdict** | ❌ **SUB-BUBBLE NAME & COUNT MISMATCH** — same UX problem as Stone 11. |
+| Sub-bubbles | Choosing Life / Letting Go of Survival Patterns / Trusting the Flow / Expansion & Possibility / Joy & Aliveness / Purpose & Meaning / Courage to Be Myself / Freedom in the Body / Living in Presence | ✅ all 9 match LOCK |
+| Legacy content | `legacyAdultPattern: pattern-postponed` now on bubble 2 "Letting Go of Survival Patterns"; `legacyMoodReflect: kaelan` now on bubble 9 "Living in Presence" | ✅ |
+| **Verdict** | ✅ **FULL MATCH** — LOCK realigned to painted asset. Bubble hotspot positions need `?debug=1` calibration to match new bubble cluster geometry. |
 
 ---
 
-## 3. AUDIT SUMMARY
+## 3. AUDIT SUMMARY (post-realignment 2026-02-13)
 
 | Audit category | Count | Stones |
 |---|---|---|
-| ✅ **FULL MATCH** (all 5 layers aligned) | **10 / 14** | 1, 2, 3, 4, 7, 8, 9, 10, 12, 13 |
+| ✅ **FULL MATCH** (all 5 layers aligned) | **12 / 14** | 1, 2, 3, 4, 7, 8, 9, 10, **11**, 12, 13, **14** |
 | ⚠ **COSMETIC** (content match, painted typo/old number) | **2 / 14** | 5 ("of 15"), 6 ("WISOM" typo) |
-| ❌ **STRUCTURAL** (painted sub-stones ≠ LOCK sub-stones) | **2 / 14** | 11, 14 |
-| ❌ **HUB** (15 stones, 4 wrong labels + 1 orphan) | **1 / 1** | Hub |
+| ❌ **STRUCTURAL** mismatch | **0 / 14** | — (resolved by LOCK realignment) |
+| ❌ **HUB** (15 stones, 4 wrong labels + 1 orphan) | **1 / 1** | Hub (awaiting new painting) |
 
 **Routes (`/body-world/world/:slug` → world page → topic page) are 100% correct in code.**
-The mismatches are all at the **painted-text** layer.
+Remaining mismatches are at the **painted-text** layer only (Hub + 2 cosmetic).
 
 ---
 

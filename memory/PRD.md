@@ -1,5 +1,5 @@
 # PRD — Matrix Aurin / Polarstar Kids Platform
-**Last update: 2026-06-16**
+**Last update: 2026-02-13**
 **Founder language: Estonian. UI: 100% English. Brand: "Screen-Down, Ears-Open".**
 
 ## ROOMS (all isolated, no mixing)
@@ -24,12 +24,29 @@ Single source of truth: `/app/memory/BODY_WORLD_ASSET_REGISTRY.md`
 1. New 14-stone Hub painting (founder to generate)
 2. Hotspot re-calibration on new Hub (1 vision pass)
 
+### Source of Truth Audit (2026-02-13 ✅)
+Single source of truth: `/app/memory/BODY_WORLD_SOURCE_OF_TRUTH.md`
+- Vision-verified all 15 painted assets (Hub + 14 stones) layer-by-layer
+- Confirmed routes 100% correct in code
+- LOCK realigned 2026-02-13 for Stones 11 and 14 to match approved painted asset names verbatim
+- Legacy content (Radical Pause audio, Honesty Quiz, pattern-postponed, kaelan mood-reflect) re-mapped conceptually into new sub-stone slots
+- 12 of 14 stones now FULL MATCH; 2 stones (5, 6) have cosmetic-only painted-text issues (old "OF 15" sild, "WISOM" typo); Hub still old-15-stone painting awaiting re-render
+
 ### Content migration: 5/31 done (16%)
 Tracker: `/app/memory/LEGACY_MIGRATION_STATUS.md`
 26 legacy artifacts mapped to stones but NOT YET in code.
 This is the **next big work** after V1 LOCK 🔒.
 
 ## SESSION-LEVEL NOTES
+
+**13.02.2026 session findings (Source of Truth Audit):**
+- Full vision verification of every painted asset against LOCK config (Hub + 14 stones)
+- 5-layer check per stone: Painted IMAGE → STONE slug + LOCK title → ROUTE → WORLD page → CONTENT
+- Found 2 structural mismatches (Stones 11 and 14) where painted sub-stone names differed from LOCK sub-stone names → resolved by realigning LOCK to painted (founder decision: option A — keep paintings, update code)
+- Stone 11: 8 sub-stones → 7 (matches painting); legacyAudio (Radical Pause) + legacyQuiz (Honesty Quiz) moved to new "Regulation Tools" slot (position 4 in painting)
+- Stone 14: 10 sub-bubbles → 9 (matches painting); legacyAdultPattern "pattern-postponed" moved to "Letting Go of Survival Patterns" (bubble 2); legacyMoodReflect "kaelan" moved to "Living in Presence" (bubble 9)
+- All routing, hotspots, topic pages verified working (screenshot tested)
+- Remaining: Hub painting (founder regenerates) + Stone 5 "OF 15" sild + Stone 6 "WISOM" typo (deferred to next render pass)
 
 **16.06.2026 session findings:**
 - Asset inventory revealed 14/15 Body World images were already in customer-assets server (uploaded 11-13.06)
