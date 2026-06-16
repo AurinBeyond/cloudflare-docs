@@ -78,7 +78,7 @@ export default function Laboratories() {
                           border: "1px solid rgba(176, 122, 63, 0.3)",
                         }}
                       >
-                        <Lock size={10} strokeWidth={2} /> Soon
+                        <Lock size={10} strokeWidth={2} /> Coming Soon
                       </span>
                     )}
                   </div>

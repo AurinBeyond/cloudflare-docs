@@ -319,6 +319,7 @@ function LabCard({ lab, number }) {
         </span>
         {!isOpen && (
           <span
+            data-testid={`alistair-lab-card-soon-${lab.slug}`}
             className="absolute top-3 right-3 text-[9px] tracking-[0.28em] uppercase px-2 py-1"
             style={{
               background: "rgba(12,15,23,0.78)",
@@ -326,7 +327,7 @@ function LabCard({ lab, number }) {
               color: BRASS,
             }}
           >
-            Soon
+            Coming Soon
           </span>
         )}
       </div>
