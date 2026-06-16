@@ -59,6 +59,12 @@ This is the **next big work** after V1 LOCK 🔒.
 - Requires founder visual brief
 - 72 files + 4 philosophies to organize
 
+### P1 — Luule Viilma knowledge layer (post-LOCK)
+- See `/app/memory/LUULE_VIILMA_POST_LOCK_NOTE.md`
+- NOT a P0 blocker — strategic content depth development
+- Cross-stone perspective layer (Fear/Guilt/Anger/Love/Body-as-messenger themes)
+- Awaits founder-supplied source material
+
 ### P2 — Polish
 - Currency toggle USD/EUR
 - Recent Notes UI ↔ DB connection
