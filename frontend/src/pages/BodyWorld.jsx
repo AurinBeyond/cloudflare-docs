@@ -134,33 +134,111 @@ export default function BodyWorld() {
             zIndex: 2,
           }}
         />
+        {/* §HUB-HERO-CARD 2026-06-16 — Painted hub asset carries a
+            legacy hero block ("Welcome to BODY WORLD / Understand.
+            Connect. Transform. / Your body speaks. Kaelen helps you
+            listen, understand and create real change."). Founder
+            directive: cover with a strong dark hero card carrying the
+            sharper Tony × Luule message instead of re-rendering the
+            painted asset. Saves credits + strengthens 3-second clarity
+            hook. */}
+        <div
+          data-testid="body-world-hero-card"
+          className="absolute pointer-events-none"
+          style={{
+            top: "8%",
+            left: "14.5%",
+            width: "44%",
+            height: "33%",
+            background:
+              "linear-gradient(135deg, rgba(8,11,18,0.96) 0%, rgba(10,14,22,0.94) 65%, rgba(10,14,22,0.85) 100%)",
+            border: "1px solid rgba(196,164,107,0.22)",
+            borderLeft: "3px solid #c4a46b",
+            backdropFilter: "blur(4px)",
+            zIndex: 2,
+            padding: "clamp(18px, 2.2vw, 32px)",
+            boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55)",
+          }}
+        >
+          <p
+            className="uppercase"
+            style={{
+              fontSize: "clamp(9px, 0.7vw, 11px)",
+              letterSpacing: "0.42em",
+              color: "#c4a46b",
+              marginBottom: "clamp(8px, 1vw, 14px)",
+            }}
+          >
+            — Body World · Kaelen as guide
+          </p>
+          <h1
+            data-testid="body-world-hero-title"
+            style={{
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              fontSize: "clamp(22px, 2.6vw, 40px)",
+              fontWeight: 300,
+              lineHeight: 1.08,
+              color: "#f0eadd",
+              letterSpacing: "-0.005em",
+              marginBottom: "clamp(10px, 1.3vw, 18px)",
+              maxWidth: "32ch",
+            }}
+          >
+            Your body has been trying to tell you something.
+          </h1>
+          <div
+            aria-hidden="true"
+            style={{
+              width: "56px",
+              height: "1px",
+              background: "linear-gradient(90deg, #c4a46b, transparent)",
+              marginBottom: "clamp(10px, 1.3vw, 18px)",
+            }}
+          />
+          <p
+            data-testid="body-world-hero-subtitle"
+            style={{
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              fontSize: "clamp(12px, 1vw, 16px)",
+              lineHeight: 1.65,
+              color: "#d9d1be",
+              maxWidth: "48ch",
+            }}
+          >
+            <span style={{ color: "#f0eadd", fontWeight: 500 }}>Not fitness. Not health advice.</span>{" "}
+            14 worlds — each a way to understand yourself
+            through what your body already knows.
+          </p>
+          <p
+            className="uppercase"
+            style={{
+              fontSize: "clamp(9px, 0.7vw, 11px)",
+              letterSpacing: "0.18em",
+              color: "#c4a46b",
+              marginTop: "clamp(12px, 1.5vw, 20px)",
+              opacity: 0.9,
+            }}
+          >
+            Pick a stone below or talk to Kaelen ↓
+          </p>
+        </div>
+        {/* §15-WORLDS-CAPTION-MASK 2026-06-16 — Painted asset still has
+            "15 worlds. All connected. Explore what calls to you." under
+            "MAP OF BODY WORLD". Cover it with a slim dark patch. */}
         <div
           aria-hidden="true"
           data-testid="body-world-15-worlds-mask"
-          className="absolute pointer-events-none flex items-center"
+          className="absolute pointer-events-none"
           style={{
-            top: "44.5%",
+            top: "44%",
             left: "13.5%",
-            width: "26%",
-            height: "3.8%",
+            width: "32%",
+            height: "4.2%",
             background:
-              "linear-gradient(90deg, rgba(8,11,18,0.98) 0%, rgba(10,14,22,0.95) 75%, rgba(10,14,22,0) 100%)",
+              "linear-gradient(90deg, rgba(8,11,18,1) 0%, rgba(10,14,22,0.98) 75%, rgba(10,14,22,0.4) 100%)",
             zIndex: 2,
           }}
-        >
-          <span
-            style={{
-              fontFamily: '"Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(11px, 0.92vw, 14px)",
-              color: "#cdbf8a",
-              opacity: 0.95,
-              letterSpacing: "0.01em",
-              paddingLeft: "10px",
-            }}
-          >
-            14 worlds. Not fitness. Not health advice. The body as a way to know yourself.
-          </span>
-        </div>
+        />
         {allZones.map((z) => (
           <Link
             key={z.id}

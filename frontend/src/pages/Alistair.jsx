@@ -190,7 +190,7 @@ function CentreColumn() {
 
 function Hero() {
   return (
-    <header data-testid="alistair-hero" className="relative" style={{ minHeight: "520px" }}>
+    <header data-testid="alistair-hero" className="relative" style={{ minHeight: "560px" }}>
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -200,51 +200,88 @@ function Hero() {
           backgroundPosition: "center",
         }}
       />
+      {/* §HERO-CARD-LEFT-MASK 2026-06-16 — Painted SCENIC_BG includes a
+          legacy left-side hero block ("A place for deep inquiry, living
+          experiments and meaningful transformation."). Founder approved
+          a "Variant 3 hero card": a strong dark panel that covers the
+          entire painted left hero region and carries the new, sharper
+          copy. Saves a re-render of the painted asset and strengthens
+          the 3-second clarity hook simultaneously. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-y-0 left-0 pointer-events-none"
         style={{
+          width: "min(560px, 48%)",
           background:
-            "linear-gradient(90deg, rgba(12,15,23,0.86) 0%, rgba(12,15,23,0.62) 28%, rgba(12,15,23,0.12) 48%, transparent 62%)",
+            "linear-gradient(90deg, rgba(8,11,18,0.98) 0%, rgba(8,11,18,0.96) 60%, rgba(8,11,18,0.88) 82%, rgba(8,11,18,0) 100%)",
         }}
       />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-[40%] pointer-events-none"
         style={{
           background:
             "linear-gradient(180deg, transparent 0%, rgba(12,15,23,0.55) 55%, rgba(12,15,23,0.92) 100%)",
         }}
       />
 
-      <div className="relative z-[2] px-8 lg:px-12 pt-12 lg:pt-14 pb-12 max-w-[440px]">
-        <p
-          className="text-[22px] leading-none mb-2"
-          style={{ color: CREAM, fontFamily: SERIF, letterSpacing: "0.005em" }}
-        >
-          Alistair
-        </p>
-        <h1
-          data-testid="alistair-hero-title"
-          className="font-light leading-[1.04] mb-5"
+      <div className="relative z-[2] px-8 lg:px-12 pt-6 lg:pt-8 pb-12 max-w-[520px]">
+        <div
+          data-testid="alistair-hero-card"
+          className="relative p-7 lg:p-9"
           style={{
-            color: CREAM,
-            fontFamily: SERIF,
-            fontSize: "clamp(2.2rem, 3.6vw, 3.4rem)",
-            letterSpacing: "-0.005em",
+            background: "rgba(8,11,18,0.94)",
+            border: "1px solid rgba(196,164,107,0.28)",
+            borderLeft: "3px solid #c4a46b",
+            backdropFilter: "blur(8px)",
+            boxShadow: "0 30px 80px -20px rgba(0,0,0,0.7)",
           }}
         >
-          Laboratory of Life
-        </h1>
-        <p
-          data-testid="alistair-hero-subtitle"
-          className="text-[15px] leading-[1.7] max-w-[400px]"
-          style={{ color: "#cfc7b3", fontFamily: SERIF }}
-        >
-          Not a course. Not a coach.<br />
-          Eleven open questions about your own life —<br />
-          and the patience to actually sit with them.
-        </p>
+          <p
+            className="text-[10px] tracking-[0.42em] uppercase mb-4"
+            style={{ color: BRASS }}
+          >
+            — Alistair · Guide
+          </p>
+          <h1
+            data-testid="alistair-hero-title"
+            className="font-light leading-[1.04] mb-5"
+            style={{
+              color: CREAM,
+              fontFamily: SERIF,
+              fontSize: "clamp(2.4rem, 3.8vw, 3.6rem)",
+              letterSpacing: "-0.005em",
+            }}
+          >
+            Laboratory of Life
+          </h1>
+          <div
+            aria-hidden="true"
+            className="mb-5"
+            style={{
+              width: "64px",
+              height: "1px",
+              background: "linear-gradient(90deg, #c4a46b, transparent)",
+            }}
+          />
+          <p
+            data-testid="alistair-hero-subtitle"
+            className="text-[15.5px] leading-[1.72] mb-6"
+            style={{ color: "#d9d1be", fontFamily: SERIF }}
+          >
+            <span style={{ color: CREAM, fontWeight: 500 }}>Not a course. Not a coach.</span>
+            <br />
+            Eleven open questions about your own life —
+            <br />
+            and the patience to actually sit with them.
+          </p>
+          <p
+            className="text-[12px] tracking-[0.18em] uppercase"
+            style={{ color: BRASS, opacity: 0.85 }}
+          >
+            Explore the 11 laboratories below ↓
+          </p>
+        </div>
       </div>
     </header>
   );
