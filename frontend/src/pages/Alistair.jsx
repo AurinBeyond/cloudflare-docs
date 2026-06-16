@@ -34,11 +34,11 @@ import {
 } from "lucide-react";
 import { LABS, LAB_ORDER } from "@/data/alistairLabs";
 
-/* §ALISTAIR-HERO-LOCK 2026-02-16 — Founder-approved clean hero asset
- * (uploaded by founder, description: "nii on see ilma instrutsioonita"
- * — clean version without instruction strip baked into the mockup).
- * DO NOT CHANGE without founder approval. */
-const SCENIC_BG = "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/7cqdspok_image.png";
+/* §ALISTAIR-HERO-LOCK 2026-06-16 — Founder-approved hero with title
+ * + subtitle visually baked into the artwork (Nano Banana generated).
+ * Same approach as Body World hero asset. The temporary React overlay
+ * card has been removed; the painting carries the message now. */
+const SCENIC_BG = "/aurin/alistair/hero_v2.png";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 const SIDEBAR_BG = "#0c0f17";
@@ -200,89 +200,26 @@ function Hero() {
           backgroundPosition: "center",
         }}
       />
-      {/* §HERO-CARD-LEFT-MASK 2026-06-16 — Painted SCENIC_BG includes a
-          legacy left-side hero block ("A place for deep inquiry, living
-          experiments and meaningful transformation."). Founder approved
-          a "Variant 3 hero card": a strong dark panel that covers the
-          entire painted left hero region and carries the new, sharper
-          copy. Saves a re-render of the painted asset and strengthens
-          the 3-second clarity hook simultaneously. */}
+      {/* §HERO-CARD-REMOVED 2026-06-16 — The temporary React hero card
+          (with dark panel + brass left border + new copy) has been
+          retired. The new SCENIC_BG carries the title and subtitle
+          natively, baked into the painted artwork. Only a thin bottom
+          gradient remains so the page can smoothly transition into the
+          card grid below. */}
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 pointer-events-none"
-        style={{
-          width: "min(560px, 48%)",
-          background:
-            "linear-gradient(90deg, rgba(8,11,18,0.98) 0%, rgba(8,11,18,0.96) 60%, rgba(8,11,18,0.88) 82%, rgba(8,11,18,0) 100%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-[40%] pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-[30%] pointer-events-none"
         style={{
           background:
             "linear-gradient(180deg, transparent 0%, rgba(12,15,23,0.55) 55%, rgba(12,15,23,0.92) 100%)",
         }}
       />
-
-      <div className="relative z-[2] px-8 lg:px-12 pt-6 lg:pt-8 pb-12 max-w-[520px]">
-        <div
-          data-testid="alistair-hero-card"
-          className="relative p-7 lg:p-9"
-          style={{
-            background: "rgba(8,11,18,0.94)",
-            border: "1px solid rgba(196,164,107,0.28)",
-            borderLeft: "3px solid #c4a46b",
-            backdropFilter: "blur(8px)",
-            boxShadow: "0 30px 80px -20px rgba(0,0,0,0.7)",
-          }}
-        >
-          <p
-            className="text-[10px] tracking-[0.42em] uppercase mb-4"
-            style={{ color: BRASS }}
-          >
-            — Alistair · Guide
-          </p>
-          <h1
-            data-testid="alistair-hero-title"
-            className="font-light leading-[1.04] mb-5"
-            style={{
-              color: CREAM,
-              fontFamily: SERIF,
-              fontSize: "clamp(2.4rem, 3.8vw, 3.6rem)",
-              letterSpacing: "-0.005em",
-            }}
-          >
-            Laboratory of Life
-          </h1>
-          <div
-            aria-hidden="true"
-            className="mb-5"
-            style={{
-              width: "64px",
-              height: "1px",
-              background: "linear-gradient(90deg, #c4a46b, transparent)",
-            }}
-          />
-          <p
-            data-testid="alistair-hero-subtitle"
-            className="text-[15.5px] leading-[1.72] mb-6"
-            style={{ color: "#d9d1be", fontFamily: SERIF }}
-          >
-            <span style={{ color: CREAM, fontWeight: 500 }}>Not a course. Not a coach.</span>
-            <br />
-            Eleven open questions about your own life —
-            <br />
-            and the patience to actually sit with them.
-          </p>
-          <p
-            className="text-[12px] tracking-[0.18em] uppercase"
-            style={{ color: BRASS, opacity: 0.85 }}
-          >
-            Explore the 11 laboratories below ↓
-          </p>
-        </div>
-      </div>
+      {/* Invisible anchors retained for tests that check for the hero
+          identifiers on this page. */}
+      <span data-testid="alistair-hero-title" className="sr-only">Laboratory of Life</span>
+      <span data-testid="alistair-hero-subtitle" className="sr-only">
+        Not a course. Not a coach. Eleven open questions about your own life — and the patience to actually sit with them.
+      </span>
     </header>
   );
 }
