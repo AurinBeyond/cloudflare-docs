@@ -15,7 +15,7 @@
  *      opts out for labs whose paintings do not include one).
  *   3. Layers per-lab topic hotspots over every painted conceptual
  *      area inside the lab image. Each routes to
- *      /course-room/lab/{labSlug}/topic/{topicId} (TopicDetail page).
+ *      /alistair/lab/{labSlug}/topic/{topicId} (TopicDetail page).
  *
  * Coordinates are percentage-based so the page scales with viewport.
  * Append ?debug=1 to the URL to visualise every hotspot outline with
@@ -29,30 +29,30 @@ import { LABS } from "@/data/alistairLabs";
  * mockup includes an Alistair sidebar. Labs whose mockups do NOT have
  * a sidebar painted in must set `hideSharedSidebar: true`. */
 const SHARED_SIDEBAR_ZONES = [
-  { id: "back-to-labs",          label: "Back to Laboratories", route: "/course-room/laboratories",
+  { id: "back-to-labs",          label: "Back to Laboratories", route: "/alistair/laboratories",
     top: 3,  left: 80, w: 15, h: 4 },
   { id: "sidebar-home",          label: "Home",          route: "/course-room",
     top: 21, left: 1,  w: 14, h: 5 },
-  { id: "sidebar-conversations", label: "Conversations", route: "/course-room/room",
+  { id: "sidebar-conversations", label: "Conversations", route: "/alistair/room",
     top: 27, left: 1,  w: 14, h: 5 },
-  { id: "sidebar-laboratories",  label: "Laboratories",  route: "/course-room/laboratories",
+  { id: "sidebar-laboratories",  label: "Laboratories",  route: "/alistair/laboratories",
     top: 33, left: 1,  w: 14, h: 5 },
-  { id: "sidebar-journal",       label: "Journal",       route: "/course-room/notes",
+  { id: "sidebar-journal",       label: "Journal",       route: "/alistair/notes",
     top: 39, left: 1,  w: 14, h: 5 },
-  { id: "sidebar-insights",      label: "Insights",      route: "/course-room/experiments",
+  { id: "sidebar-insights",      label: "Insights",      route: "/alistair/experiments",
     top: 45, left: 1,  w: 14, h: 5 },
-  { id: "sidebar-library",       label: "Library",       route: "/course-room/library",
+  { id: "sidebar-library",       label: "Library",       route: "/alistair/library",
     top: 51, left: 1,  w: 14, h: 5 },
 ];
 
 /* §TOPIC-ZONE 2026-02-10 — helper to build per-topic hotspots that
- * resolve to /course-room/lab/{labSlug}/topic/{topicId}. The same
+ * resolve to /alistair/lab/{labSlug}/topic/{topicId}. The same
  * topicId may have multiple hotspots inside the same image (e.g.
  * "fear" is painted in both NEGLECTED BRANCHES and CORE BELIEFS). */
 const topicZone = (labSlug, topicId, top, left, w, h, hotspotId) => ({
   id: hotspotId || `topic-${topicId}`,
   label: topicId,
-  route: `/course-room/lab/${labSlug}/topic/${topicId}`,
+  route: `/alistair/lab/${labSlug}/topic/${topicId}`,
   top, left, w, h,
 });
 
@@ -622,7 +622,7 @@ export default function LabDashboard() {
   /* §RENDER-GUARD 2026-02-08 — Navigate must be deferred to useEffect. */
   useEffect(() => {
     if (!lab) {
-      navigate("/course-room/laboratories", { replace: true });
+      navigate("/alistair/laboratories", { replace: true });
     }
   }, [lab, navigate]);
 

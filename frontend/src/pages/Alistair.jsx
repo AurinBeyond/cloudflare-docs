@@ -141,7 +141,7 @@ function Sidebar() {
 
 function StarMonogram() {
   return (
-    <Link to="/course-room" data-testid="alistair-monogram" className="block no-underline" style={{ textDecoration: "none" }}>
+    <Link to="/alistair" data-testid="alistair-monogram" className="block no-underline" style={{ textDecoration: "none" }}>
       <div className="flex flex-col items-start gap-3">
         <div className="relative w-[58px] h-[58px] flex items-center justify-center"
           style={{
@@ -234,11 +234,11 @@ function Hero() {
         </h1>
         <p
           data-testid="alistair-hero-subtitle"
-          className="text-[15px] leading-[1.7] italic max-w-[360px]"
+          className="text-[15px] leading-[1.7] max-w-[380px]"
           style={{ color: "#cfc7b3", fontFamily: SERIF }}
         >
-          Your life is the laboratory.<br />
-          Start exploring.
+          A place for deep inquiry, living experiments<br />
+          and meaningful transformation.
         </p>
       </div>
     </header>
@@ -258,7 +258,10 @@ function PathOfExploration() {
       <p className="text-[11px] tracking-[0.34em] uppercase mb-7" style={{ color: BRASS }}>
         Your Path of Exploration — 11 Laboratories
       </p>
-      <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6">
+      {/* §ALISTAIR-GRID 2026-02-13 — Reference image shows 6+5 cards
+          across two rows. Locked to 6 columns from lg upward so the
+          11-card laboratory grid matches the founder's reference exactly. */}
+      <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6">
         {labs.map((lab, i) => (
           <LabCard key={lab.slug} lab={lab} number={i + 1} />
         ))}
@@ -268,9 +271,10 @@ function PathOfExploration() {
 }
 
 function LabCard({ lab, number }) {
-  /* All 11 cards route to their lab page. Status badge ("Soon") still
-   * surfaces when the founder has not yet released the lab content. */
-  const href = `/course-room/lab/${lab.slug}`;
+  /* §ALISTAIR-CANONICAL-ROUTE 2026-02-13 — Card click routes to the
+   * canonical /alistair/lab/{slug} (legacy /course-room/lab/{slug} still
+   * resolves via duplicate route in App.js for old bookmarks). */
+  const href = `/alistair/lab/${lab.slug}`;
   const isOpen = lab.status === "open";
   return (
     <Link
