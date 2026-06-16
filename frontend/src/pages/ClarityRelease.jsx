@@ -90,24 +90,29 @@ export default function ClarityRelease() {
   const navigate = useNavigate();
 
   const [phase, setPhase] = useState(PHASES.GATE);
-  const [hearthPanel, setHearthPanel] = useState(null);
+  /* §GRACE-PROMPT-PIPING 2026-02-13 / 2026-06-16 — Sub-room prompts
+   * (Write, Evening, Speak) land on /grace/room with ?write=… /
+   * ?evening=… / ?speak=… URL params. We (a) auto-open the matching
+   * Hearth panel and (b) seed its textarea with the prompt text so
+   * the visitor's context is not lost between the curation page and
+   * the chat/writing surface. */
+  const urlPiping = (() => {
+    if (typeof window === "undefined") return { panel: null, seed: "" };
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("write")) return { panel: "write", seed: sp.get("write") };
+      if (sp.get("evening")) return { panel: "reflections", seed: sp.get("evening") };
+      if (sp.get("speak")) return { panel: "speak", seed: sp.get("speak") };
+      return { panel: null, seed: "" };
+    } catch {
+      return { panel: null, seed: "" };
+    }
+  })();
+  const [hearthPanel, setHearthPanel] = useState(urlPiping.panel);
   const [confirms, setConfirms] = useState({ a: false, b: false, c: false, d: false, e: false });
   const [keepThread, setKeepThread] = useState(false);
   const [messages, setMessages] = useState([]);
-  /* §GRACE-PROMPT-PIPING 2026-02-13 — Sub-room prompts (Write, Evening)
-   * land on /grace/room with ?write=… or ?evening=… URL params. Pre-fill
-   * the chat input with that prompt so the visitor's context is not lost
-   * between the prompt-curation page and the chat surface. */
-  const [input, setInput] = useState(() => {
-    if (typeof window === "undefined") return "";
-    try {
-      const sp = new URLSearchParams(window.location.search);
-      const seed = sp.get("write") || sp.get("evening") || sp.get("speak") || "";
-      return seed;
-    } catch {
-      return "";
-    }
-  });
+  const [input, setInput] = useState(urlPiping.seed);
   const [sending, setSending] = useState(false);
   const [showContinuation, setShowContinuation] = useState(false);
   const [threadKey, setThreadKey] = useState(null);
@@ -649,7 +654,7 @@ export default function ClarityRelease() {
       </RoomShell>
 
       {/* §GRACE-PANELS 2026-02 — sidebar items open modal panels */}
-      <GracePanels openId={hearthPanel} onClose={() => setHearthPanel(null)} />
+      <GracePanels openId={hearthPanel} onClose={() => setHearthPanel(null)} seed={urlPiping.seed} />
     </div>
   );
 }

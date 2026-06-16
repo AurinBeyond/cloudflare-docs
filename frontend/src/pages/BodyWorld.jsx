@@ -113,14 +113,13 @@ export default function BodyWorld() {
           loading="eager"
           data-testid="body-world-hub-image"
         />
-        {/* §HUB-LEGACY-15-STONE-MASK 2026-02-16 — Painted hub asset
-            still carries a legacy 15th stone "15 BODY ATTENTION"
-            (bottom-right, eye icon) that does NOT exist in the
-            14-stone LOCK. Founder approved masking it visually with
-            a dark radial patch until corrected painted asset arrives.
-            The "15 worlds." caption inside the painting is left for
-            the upcoming asset refresh — it does not affect navigation
-            functionality. */}
+        {/* §HUB-LEGACY-15-MASK 2026-02-16 — Painted hub asset still
+            carries (a) a legacy 15th stone "15 BODY ATTENTION" with
+            eye icon at bottom-right, and (b) a "15 worlds. All
+            connected." caption beneath the "MAP OF BODY WORLD"
+            heading. The 14-stone LOCK does NOT include either.
+            Founder approved masking both visually until corrected
+            painted asset arrives. */}
         <div
           aria-hidden="true"
           data-testid="body-world-15th-stone-mask"
@@ -135,6 +134,33 @@ export default function BodyWorld() {
             zIndex: 2,
           }}
         />
+        <div
+          aria-hidden="true"
+          data-testid="body-world-15-worlds-mask"
+          className="absolute pointer-events-none flex items-center"
+          style={{
+            top: "44.5%",
+            left: "13.5%",
+            width: "26%",
+            height: "3.8%",
+            background:
+              "linear-gradient(90deg, rgba(8,11,18,0.98) 0%, rgba(10,14,22,0.95) 75%, rgba(10,14,22,0) 100%)",
+            zIndex: 2,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              fontSize: "clamp(11px, 0.92vw, 14px)",
+              color: "#cdbf8a",
+              opacity: 0.95,
+              letterSpacing: "0.01em",
+              paddingLeft: "10px",
+            }}
+          >
+            14 worlds. All connected. Explore what calls to you.
+          </span>
+        </div>
         {allZones.map((z) => (
           <Link
             key={z.id}

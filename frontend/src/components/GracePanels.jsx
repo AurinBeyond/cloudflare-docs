@@ -35,11 +35,11 @@ function EnterPanel() {
 }
 
 /* ----- SPEAK ----- */
-function SpeakPanel() {
+function SpeakPanel({ seed }) {
   const [messages, setMessages] = useState([
     { role: "grace", text: "Take your time. What would you like to bring into the room tonight?" },
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(seed || "");
   const scrollRef = useRef(null);
   useEffect(() => { scrollRef.current?.scrollTo({ top: 9e9, behavior: "smooth" }); }, [messages]);
   const responses = [
@@ -100,8 +100,8 @@ function SpeakPanel() {
 }
 
 /* ----- WRITE ----- */
-function WritePanel() {
-  const [text, setText] = useState("");
+function WritePanel({ seed }) {
+  const [text, setText] = useState(seed || "");
   const [saved, setSaved] = useState([]);
   const [flash, setFlash] = useState(false);
   const save = () => {
@@ -210,7 +210,7 @@ function ReflectionsPanel() {
 }
 
 /* ----- MODAL WRAPPER ----- */
-export default function GracePanels({ openId, onClose }) {
+export default function GracePanels({ openId, onClose, seed }) {
   if (!openId) return null;
   const titleMap = { enter: "Enter", speak: "Speak With Grace", write: "Leave a Thought", sit: "Sit By The Fire", reflections: "Reflections" };
   const PanelMap = { enter: EnterPanel, speak: SpeakPanel, write: WritePanel, sit: SitPanel, reflections: ReflectionsPanel };
@@ -240,7 +240,7 @@ export default function GracePanels({ openId, onClose }) {
         >
           <X size={18} strokeWidth={1.6} />
         </button>
-        {Panel && <Panel />}
+        {Panel && <Panel seed={seed} />}
       </div>
     </div>
   );
