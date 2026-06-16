@@ -34,11 +34,10 @@ import {
 } from "lucide-react";
 import { LABS, LAB_ORDER } from "@/data/alistairLabs";
 
-/* §ALISTAIR-HERO-LOCK 2026-06-16 — Founder-approved hero with title
- * + subtitle visually baked into the artwork (Nano Banana generated).
- * Same approach as Body World hero asset. The temporary React overlay
- * card has been removed; the painting carries the message now. */
-const SCENIC_BG = "/aurin/alistair/hero_v2.png";
+/* §ALISTAIR-HERO-LOCK 2026-06-16 — Founder-approved hero asset (upload
+ * #1, "siin on öige"). Title + subtitle baked into the painted artwork.
+ * DO NOT CHANGE without founder approval. */
+const SCENIC_BG = "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/i9907rmc_image.png";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 const SIDEBAR_BG = "#0c0f17";
