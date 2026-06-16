@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { BODY_WORLD_STONE_BY_SLUG } from "@/data/bodyWorldStones";
+import PostSessionMoodReflect from "@/components/PostSessionMoodReflect";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -140,7 +141,8 @@ export default function BodyWorldTopic() {
     subStone.legacyChildPattern ||
     subStone.legacyAdultPattern ||
     subStone.legacyAudio ||
-    subStone.legacyQuiz;
+    subStone.legacyQuiz ||
+    subStone.legacyMoodReflect;
 
   return (
     <div

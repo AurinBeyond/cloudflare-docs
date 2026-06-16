@@ -367,7 +367,7 @@ export const BODY_WORLD_STONES = [
     subStones: [
       { n: 1,  slug: "survival-mode",     title: "Survival Mode",                  hint: "I am safe, but not alive.", legacyAdultPattern: "pattern-postponed" },
       { n: 2,  slug: "living-mode",       title: "Living Mode",                    hint: "I choose to live fully and freely." },
-      { n: 3,  slug: "awareness",         title: "Awareness",                      hint: "I see clearly what is happening within me." },
+      { n: 3,  slug: "awareness",         title: "Awareness",                      hint: "I see clearly what is happening within me.", legacyMoodReflect: "kaelan" },
       { n: 4,  slug: "choice",            title: "Choice",                         hint: "I have the power to choose again." },
       { n: 5,  slug: "freedom",           title: "Freedom",                        hint: "I release what no longer serves me." },
       { n: 6,  slug: "presence",          title: "Presence",                       hint: "I am here, now." },

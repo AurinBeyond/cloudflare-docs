@@ -10,13 +10,13 @@ Goal: each row goes from ⏳ to ✅ as content is migrated to its target stone/s
 
 | Status | Count |
 |--------|-------|
-| ✅ Migrated | **24** / 31 |
-| ⏳ Pending  | **7** / 31 |
+| ✅ Migrated | **27** / 31 |
+| ⏳ Pending founder decision | **2** / 31 (Body Lens Selector, Newsletter) |
+| 📭 No backend content (N/A) | **1** / 31 (Luule Viilma further-reading endpoint empty) |
 | ❌ Excluded (Body Temple — not migrated) | 1 |
 
-**77% done. 23% remaining.** Last session (2026-06-16) wired 18 legacy
-endpoints (silhouette, child patterns, adult patterns) via the new
-`legacyRegion` / `legacyChildPattern` / `legacyAdultPattern` keys.
+**87% migrated. 100% of migratable artifacts processed.** Remaining items
+need founder input or content authoring, not migration work.
 
 ---
 
