@@ -238,11 +238,12 @@ function Hero() {
         </h1>
         <p
           data-testid="alistair-hero-subtitle"
-          className="text-[15px] leading-[1.7] max-w-[380px]"
+          className="text-[15px] leading-[1.7] max-w-[400px]"
           style={{ color: "#cfc7b3", fontFamily: SERIF }}
         >
-          A place for deep inquiry, living experiments<br />
-          and meaningful transformation.
+          Not a course. Not a coach.<br />
+          Eleven open questions about your own life —<br />
+          and the patience to actually sit with them.
         </p>
       </div>
     </header>

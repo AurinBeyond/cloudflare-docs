@@ -259,19 +259,19 @@ export default function Grace() {
               }}
             />
             <p
-              className="max-w-[420px] leading-[1.75] mb-9"
+              data-testid="grace-hero-subtitle"
+              className="max-w-[440px] leading-[1.75] mb-9"
               style={{
                 color: "#3d2f1f",
                 fontSize: "18px",
                 fontFamily: '"Cormorant Garamond", Georgia, serif',
               }}
-              data-testid="grace-hero-subtitle"
             >
-              This is your safe space.
+              Some days you don&apos;t need advice.
               <br />
-              Speak, write, or simply be.
+              You need a room where you can hear yourself.
               <br />
-              I&apos;m here.
+              Speak, write, or simply sit. Your words stay yours.
             </p>
             <button
               type="button"

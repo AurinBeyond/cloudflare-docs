@@ -327,8 +327,9 @@ function HeroSection({ onWalkTruthFirst }) {
             className="mt-9 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#bcb4a3] font-light italic max-w-[520px] leading-[1.7]"
             style={{ fontFamily: SERIF }}
           >
-            Built around books and five guided rooms<br />
-            for people, parents, and families.
+            Not a course. Not therapy. Five rooms<br />
+            for people, parents, and families —<br />
+            to slow down and hear yourself again.
           </p>
           <p
             data-testid="hero-reconnect-line"

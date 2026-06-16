@@ -118,7 +118,7 @@ function NightClickMap({ navigate, openWaitlist, mode }) {
           POLARSTAR <span className="ps9-title-em">KIDS</span>
         </h1>
         <p className="ps9-subtitle" data-testid="polarstar-subtitle" style={{ fontFamily: SERIF }}>
-          One World. <span className="ps9-italic">Three Paths.</span> One Family.
+          Not another app to babysit. <span className="ps9-italic">Audio adventures the family lives together</span> — screen-down, ears-open.
         </p>
         <p
           data-testid="polarstar-audio-companion-banner"

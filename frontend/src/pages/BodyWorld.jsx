@@ -158,7 +158,7 @@ export default function BodyWorld() {
               paddingLeft: "10px",
             }}
           >
-            14 worlds. All connected. Explore what calls to you.
+            14 worlds. Not fitness. Not health advice. The body as a way to know yourself.
           </span>
         </div>
         {allZones.map((z) => (
