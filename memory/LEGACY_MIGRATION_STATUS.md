@@ -10,11 +10,13 @@ Goal: each row goes from ⏳ to ✅ as content is migrated to its target stone/s
 
 | Status | Count |
 |--------|-------|
-| ✅ Migrated | **5** / 31 |
-| ⏳ Pending  | **26** / 31 |
+| ✅ Migrated | **24** / 31 |
+| ⏳ Pending  | **7** / 31 |
 | ❌ Excluded (Body Temple — not migrated) | 1 |
 
-**16% done. 84% remaining.**
+**77% done. 23% remaining.** Last session (2026-06-16) wired 18 legacy
+endpoints (silhouette, child patterns, adult patterns) via the new
+`legacyRegion` / `legacyChildPattern` / `legacyAdultPattern` keys.
 
 ---
 
