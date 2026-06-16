@@ -317,9 +317,27 @@ function LabCard({ lab, number }) {
         >
           {number}
         </span>
-        {!isOpen && (
+        {/* §HUB-STATUS-INDICATOR 2026-06-16 — Founder lock: hub badges
+           communicate completeness ONLY. OPEN NOW = the lab is fully
+           authored (Money Tree). PREVIEW = the lab is still being
+           expanded but already has hero studies inside. The word
+           "Coming Soon" is reserved for the inside-lab gating on
+           individual unwritten topics; it is not used here. */}
+        {isOpen ? (
           <span
-            data-testid={`alistair-lab-card-soon-${lab.slug}`}
+            data-testid={`alistair-lab-card-status-${lab.slug}`}
+            className="absolute top-3 right-3 text-[9px] tracking-[0.28em] uppercase px-2 py-1"
+            style={{
+              background: "rgba(76, 122, 70, 0.92)",
+              border: "1px solid rgba(168, 214, 140, 0.55)",
+              color: "#f4f7e8",
+            }}
+          >
+            Open Now
+          </span>
+        ) : (
+          <span
+            data-testid={`alistair-lab-card-status-${lab.slug}`}
             className="absolute top-3 right-3 text-[9px] tracking-[0.28em] uppercase px-2 py-1"
             style={{
               background: "rgba(12,15,23,0.78)",
@@ -327,7 +345,7 @@ function LabCard({ lab, number }) {
               color: BRASS,
             }}
           >
-            Coming Soon
+            Preview
           </span>
         )}
       </div>

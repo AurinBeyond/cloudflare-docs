@@ -91,6 +91,19 @@ function PaintedWorldView({ stone, debug }) {
   const subStoneZones = (stone.subStones || []).map((sub, idx) => {
     const slot = (stone.subStoneSlots || [])[idx];
     if (!slot) return null;
+    /* §SUBSTONE-CONTENT-GATE 2026-06-16 — A sub-stone has authored
+       content when it carries any legacy* hook (region, child/adult
+       pattern, audio, quiz, mood-reflect). Without one, the topic
+       page renders only the "Field Study · Under Exploration"
+       placeholder, so the hotspot is locked at this layer. */
+    const hasContent = !!(
+      sub.legacyRegion ||
+      sub.legacyChildPattern ||
+      sub.legacyAdultPattern ||
+      sub.legacyAudio ||
+      sub.legacyQuiz ||
+      sub.legacyMoodReflect
+    );
     return {
       id: `substone-${sub.slug}`,
       label: `${sub.n}. ${sub.title}`,
@@ -99,6 +112,7 @@ function PaintedWorldView({ stone, debug }) {
       left: slot.left,
       w: slot.w,
       h: slot.h,
+      hasContent,
     };
   }).filter(Boolean);
 
@@ -172,65 +186,122 @@ function PaintedWorldView({ stone, debug }) {
           </span>
         </div>
 
-        {allZones.map((z) => (
-          <Link
-            key={z.id}
-            to={z.route}
-            data-testid={`body-world-painted-zone-${z.id}`}
-            aria-label={z.label}
-            title={z.label}
-            className="absolute block"
-            style={{
-              top: `${z.top}%`,
-              left: `${z.left}%`,
-              width: `${z.w}%`,
-              height: `${z.h}%`,
-              cursor: "pointer",
-              background: debug ? "rgba(120, 220, 255, 0.25)" : "transparent",
-              border: debug ? "1px dashed rgba(120, 220, 255, 0.9)" : "none",
-            }}
-          >
-            {/* §SUBSTONE-LOCK-LABEL 2026-02-16 — Render LOCK sub-stone
-                name overlay on each painted sub-stone hotspot. Masks
-                any painted typos (e.g. "WISOM" on Stone 6) and makes
-                the LOCK-approved name the user-facing truth. Sidebar,
-                chrome and right-column zones keep transparent surfaces. */}
-            {z.id.startsWith("substone-") && (
-              <span
-                data-testid={`body-world-painted-substone-label-${z.id}`}
-                className="absolute inset-0 flex items-center justify-center text-center px-2 pointer-events-none"
+        {allZones.map((z) => {
+          const isSubstone = z.id.startsWith("substone-");
+          const isLockedSubstone = isSubstone && z.hasContent === false;
+
+          if (isLockedSubstone) {
+            return (
+              <div
+                key={z.id}
+                data-testid={`body-world-painted-zone-locked-${z.id}`}
+                aria-label={`${z.label} — Coming Soon`}
+                title="Coming Soon — this sub-stone is being written."
+                className="absolute block"
                 style={{
-                  fontFamily: SERIF,
-                  fontSize: "clamp(10px, 0.95vw, 15px)",
-                  lineHeight: 1.15,
-                  fontWeight: 500,
-                  letterSpacing: "0.02em",
-                  color: "#fdf6e6",
-                  textShadow:
-                    "0 1px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
-                  background:
-                    "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
-                  borderRadius: "8px",
+                  top: `${z.top}%`,
+                  left: `${z.left}%`,
+                  width: `${z.w}%`,
+                  height: `${z.h}%`,
+                  cursor: "not-allowed",
+                  background: debug
+                    ? "rgba(255, 80, 80, 0.25)"
+                    : "rgba(8, 11, 18, 0.42)",
+                  border: debug ? "1px dashed rgba(255,80,80,0.9)" : "none",
                 }}
               >
-                {z.label}
-              </span>
-            )}
-            {debug && (
-              <span
-                className="absolute top-0 left-0 px-1 text-[10px] font-mono"
-                style={{
-                  background: "rgba(120,220,255,0.95)",
-                  color: "#04222b",
-                  pointerEvents: "none",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {z.id}
-              </span>
-            )}
-          </Link>
-        ))}
+                <span
+                  className="absolute inset-0 flex items-center justify-center text-center px-2 pointer-events-none"
+                  style={{
+                    fontFamily: SERIF,
+                    fontSize: "clamp(10px, 0.95vw, 15px)",
+                    lineHeight: 1.15,
+                    fontWeight: 500,
+                    letterSpacing: "0.02em",
+                    color: "#9aa19d",
+                    textShadow:
+                      "0 1px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
+                    background:
+                      "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
+                    borderRadius: "8px",
+                  }}
+                >
+                  {z.label}
+                </span>
+                {!debug && (
+                  <span
+                    className="absolute bottom-1 right-1 text-[8.5px] tracking-[0.22em] uppercase px-1.5 py-0.5 pointer-events-none"
+                    style={{
+                      background: "rgba(8,11,18,0.85)",
+                      color: "#c4a46b",
+                      border: "1px solid rgba(196,164,107,0.32)",
+                      borderRadius: "2px",
+                      letterSpacing: "0.18em",
+                      lineHeight: 1,
+                    }}
+                  >
+                    Soon
+                  </span>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={z.id}
+              to={z.route}
+              data-testid={`body-world-painted-zone-${z.id}`}
+              aria-label={z.label}
+              title={z.label}
+              className="absolute block"
+              style={{
+                top: `${z.top}%`,
+                left: `${z.left}%`,
+                width: `${z.w}%`,
+                height: `${z.h}%`,
+                cursor: "pointer",
+                background: debug ? "rgba(120, 220, 255, 0.25)" : "transparent",
+                border: debug ? "1px dashed rgba(120, 220, 255, 0.9)" : "none",
+              }}
+            >
+              {isSubstone && (
+                <span
+                  data-testid={`body-world-painted-substone-label-${z.id}`}
+                  className="absolute inset-0 flex items-center justify-center text-center px-2 pointer-events-none"
+                  style={{
+                    fontFamily: SERIF,
+                    fontSize: "clamp(10px, 0.95vw, 15px)",
+                    lineHeight: 1.15,
+                    fontWeight: 500,
+                    letterSpacing: "0.02em",
+                    color: "#fdf6e6",
+                    textShadow:
+                      "0 1px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
+                    background:
+                      "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
+                    borderRadius: "8px",
+                  }}
+                >
+                  {z.label}
+                </span>
+              )}
+              {debug && (
+                <span
+                  className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+                  style={{
+                    background: "rgba(120,220,255,0.95)",
+                    color: "#04222b",
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {z.id}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
