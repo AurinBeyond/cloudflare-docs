@@ -34,7 +34,10 @@ import {
 } from "lucide-react";
 import { LABS, LAB_ORDER } from "@/data/alistairLabs";
 
-const SCENIC_BG = "/assets/alistair/alistair-light-bg.png";
+/* §ALISTAIR-HERO-LOCK 2026-02-13 — Founder-approved hero asset
+ * (uploaded by founder; replaces previous gothic-window mismatch).
+ * DO NOT CHANGE without founder approval. */
+const SCENIC_BG = "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/g3ja4a52_ChatGPT%20Image%2016.%20juni%202026%2C%2012_43_17.png";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 const SIDEBAR_BG = "#0c0f17";
