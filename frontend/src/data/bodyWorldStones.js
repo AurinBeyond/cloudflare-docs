@@ -134,7 +134,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-memory",
     title: "Body Memory & Inheritance",
     question: "Where do the roots begin?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 3 painting (7 sub-stones)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/997a5r7f_ChatGPT%20Image%2012.%20juni%202026%2C%2011_09_36.png", // Stone 3 Body Memory (Stone 3 OF 14)
     aboutThisWorld: "Your body remembers what your mind has forgotten. This world helps you explore inherited patterns, ancestral stories, protective legacies and the imprints of unresolved trauma — so you can choose your own legacy.",
     kaelenQuote: "You inherited the patterns. You can rewrite the story.",
     subStones: [
@@ -178,10 +178,10 @@ export const BODY_WORLD_STONES = [
     slug: "body-protection",
     title: "Body Protection Mechanisms",
     question: "What is this protecting me from?",
-    // §STONE-5-HOLD — Painted sild reads "Stone 5 of 15" (vana 15-stone
-    // versioon). Per founder LOCK, awaiting re-render to "Stone 5 of 14"
-    // before wiring. Falls back to Field Study skeleton until then.
-    image: "",
+    // §STONE-5 — Stone 5 painted sild reads "Stone 5 of 15" (old version
+    // legacy). Code overlay shows correct "STONE 5 OF 14" above painted
+    // image. Topic and 7 sub-stones match LOCK perfectly.
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/c4qmrbde_ChatGPT%20Image%2012.%20juni%202026%2C%2010_57_06.png",
     aboutThisWorld: "Your body learned to protect you long before you could understand why. This world helps you see the protections — and choose which ones still serve you.",
     kaelenQuote: "The wall that once kept you safe may now keep you small.",
     subStones: [
@@ -200,7 +200,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-as-partner",
     title: "Body as a Partner",
     question: "How do I work with my body instead of against it?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 6 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/vg1lkp5u_ChatGPT%20Image%2012.%20juni%202026%2C%2011_50_58.png", // Stone 6 Body as a Partner
     aboutThisWorld: "Your body is not a machine to control. It is a partner to understand. This world helps you build a relationship based on trust, respect and cooperation.",
     kaelenQuote: "Your body is not something you have. It is someone you partner with.",
     subStones: [
@@ -220,7 +220,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-engineering",
     title: "Body Engineering",
     question: "How do I work WITH my body?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 7 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/j9502ba4_ChatGPT%20Image%2012.%20juni%202026%2C%2023_50_05.png", // Stone 7 Body Engineering
     aboutThisWorld: "Your body is the most sophisticated system you'll ever operate. This world gives you the practical tools, rituals and routines that let it run at its best.",
     kaelenQuote: "Care for the instrument and the music will follow.",
     subStones: [
@@ -240,7 +240,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-relationships",
     title: "Body & Relationships",
     question: "How do my relationships affect my body and nervous system?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 8 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/g3bn25wk_ChatGPT%20Image%2013.%20juni%202026%2C%2016_41_15.png",
     aboutThisWorld: "Every relationship leaves a trace in your body. This world helps you understand how connection, conflict, boundaries and support shape your nervous system — and how to build relationships that help you thrive.",
     kaelenQuote: "Your nervous system learns from every relationship. Some teach fear. Some teach safety.",
     subStones: [
@@ -260,7 +260,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-environment",
     title: "Body & Environment",
     question: "How does my environment affect my body, mind and energy?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 9 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/r37tmlnt_ChatGPT%20Image%2013.%20juni%202026%2C%2016_42_51.png",
     aboutThisWorld: "Your environment is not neutral. It impacts your hormones, energy, mood, immunity and longevity. This world helps you design an environment that nourishes and protects your body.",
     kaelenQuote: "Your environment is not something separate from you. It is an extension of your body.",
     subStones: [
@@ -280,7 +280,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-time",
     title: "Body & Time",
     question: "How do I live in rhythm with time instead of rushing or resisting?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 10 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/ceflczmw_ChatGPT%20Image%2013.%20juni%202026%2C%2016_46_23.png",
     aboutThisWorld: "Time is not something to control — it's something to understand and flow with. When you align with your body's rhythms and life's seasons, you create more energy, ease and meaning.",
     kaelenQuote: "Time is not your enemy. Disconnection from time is. Come back into rhythm. Your body remembers.",
     subStones: [
@@ -320,7 +320,7 @@ export const BODY_WORLD_STONES = [
     slug: "body-language",
     title: "Body as Language",
     question: "How does my body communicate before I say a word?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 12 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/wkuhq886_ChatGPT%20Image%2013.%20juni%202026%2C%2016_49_23.png",
     aboutThisWorld: "Your body speaks constantly — through movement, posture, gesture, expression and energy. This world helps you understand the language of your body and use it consciously to express, connect and influence.",
     kaelenQuote: "Your body speaks the truth even when your mind is trying to lie.",
     subStones: [
@@ -340,7 +340,7 @@ export const BODY_WORLD_STONES = [
     slug: "growth-transformation",
     title: "Growth & Transformation",
     question: "What future am I creating?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 13 painting (8 sub-stones, octagon)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/toeyztpw_ChatGPT%20Image%2011.%20juni%202026%2C%2022_20_19.png", // Stone 13 Growth & Transformation
     aboutThisWorld: "Every choice you make plants the future. This world teaches you to see the consequences of how you live in your body — and to grow on purpose.",
     kaelenQuote: "You don't grow when nothing changes. You grow when you choose to change.",
     subStones: [
@@ -360,7 +360,7 @@ export const BODY_WORLD_STONES = [
     slug: "living-or-surviving",
     title: "Living or Surviving",
     question: "What kind of life do I choose?",
-    image: "", // TBD-FOUNDER-PASTE — Stone 14 BUBBLE painting (10 bubbles)
+    image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/79cg7fh3_ChatGPT%20Image%2013.%20juni%202026%2C%2016_56_29.png",
     aboutThisWorld: "This is the world of freedom, choice and creation. You are not here to just survive. You are here to live, love and leave your unique light in this world.",
     kaelenQuote: "You are not here to just survive. You are here to live, love and leave your light.",
     visualLanguage: "bubbles",
