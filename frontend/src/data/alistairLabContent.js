@@ -202,6 +202,43 @@ export const SELF_SABOTAGE_CONTENT = {
     ],
     related: ["inquire", "hidden-patterns", "self-trust"],
   },
+  "emotional-triggers": {
+    eyebrow: E.SAB + " · Phantom Lack",
+    coreQuestion: "Why does the last apple in the bowl still make me feel empty, even when the fridge is full?",
+    body: [
+      "Lack is not always about food, or money, or time. Sometimes lack is a memory the body has forgotten how to put down.",
+      "Your stomach can be full and your mind can know tomorrow is safe — and still, the last apple can pull on something older than today. That feeling is not the present asking for more. It is the past asking to be witnessed.",
+      "When the table is loaded, the appetite often disappears. The nervous system was trained to function in shortage. When shortage lifts, the old job is gone and the system gets confused. That confusion is not a problem to be fed; it is a memory to be recognised.",
+      "Try, in that moment, instead of arguing with the feeling: \"My body is safe right now. The fear I feel is an old echo from a time when there really was not enough. Thank you, mind, for trying to protect me — and right now, all is well.\"",
+      "Practise letting the empty bowl stay empty on purpose. Look at it without panic. \"This bowl is empty, and that is okay. It does not mean I am empty. It does not mean the world is empty. It is just a bowl.\" Each time you sit with the empty bowl without filling it, the old reflex loosens its grip.",
+      "Ask yourself honestly: what is really missing? Often the last apple is standing in for something else — stability, recognition, rest, a sense of control. The mind reaches for the visible thing because the invisible thing feels harder to name.",
+    ],
+    reflection: [
+      "Where in my life does \"running out\" still feel like danger, even when I am not in danger?",
+      "If the empty bowl is not really about food, what is it about for me today?",
+      "What would change if I let the cupboard be half-empty without calling it a crisis?",
+    ],
+    related: ["hidden-patterns", "root-beliefs", "new-choices"],
+  },
+  "new-choices": {
+    eyebrow: E.SAB + " · When Good Feels Dangerous",
+    coreQuestion: "Why do I quietly ruin the moment things start to go well?",
+    body: [
+      "Self-sabotage is the most logical next step after a life lived in scarcity. Lock and key. If your nervous system learned to function in crisis, then crisis becomes the most familiar room in the house — even if you hate the room.",
+      "When the table is loaded, when there is money in the account, when the project finally starts to move, a quiet alarm goes off inside: \"When is the next hit coming?\" The mind does not know what to do with ease, so it reaches for the only tool it has practised — making something hard again.",
+      "This is not stupidity, and it is not laziness. It is a protection mechanism with the wrong settings. The system is trying to keep you safe from disappointment by making sure you are the one who breaks the good thing first.",
+      "Notice the shapes it takes in your own life. The unused opportunity. The credit poured into a system that is not working, instead of paused. The decision made at the last possible minute, so that the adrenaline can carry you again. None of these are character flaws. They are echoes.",
+      "Name it, out loud if you can: \"Stop. This is my self-sabotage. I am trying to pull myself back into the familiar hole because ease feels unfamiliar.\" Naming it does not fix it. Naming it weakens its grip.",
+      "Train the nervous system to tolerate the good. Sit at the loaded table on purpose. Sit with the working bank balance on purpose. \"I am uncomfortable right now because everything is fine. I allow myself to tolerate this good state. I am allowed to have it.\"",
+      "Then change your fuel. The old fuel was stress, the last slice of bread, the last-minute deadline — black smoke, working but burning you. New fuel: doing the thing because you want the outcome, not because hunger or panic is at your back. Your biggest fight right now is not with the world. It is with the identity of the survivor, learning to live as a person who is allowed to simply be.",
+    ],
+    reflection: [
+      "Where do I quietly create a crisis the moment things become calm?",
+      "What does ease feel like in my body — and what story does my mind tell about that feeling?",
+      "If I let the good thing stay good for one more day, what am I afraid would happen?",
+    ],
+    related: ["emotional-triggers", "hidden-patterns", "notice"],
+  },
 };
 
 export const THE_CODE_CONTENT = {
