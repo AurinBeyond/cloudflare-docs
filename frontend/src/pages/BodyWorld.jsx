@@ -18,8 +18,12 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { BODY_WORLD_STONES } from "@/data/bodyWorldStones";
 
+/* §BODY-WORLD-HUB-LOCK 2026-06-16 — Founder-approved hub asset (upload
+ * #1, "siin on sulle juba varem edastatud body pealehe visuaal").
+ * 14-stone LOCK, hero copy + "14 worlds" caption baked into the
+ * painting. DO NOT CHANGE without founder approval. */
 const HUB_IMAGE =
-  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/9ndllntz_ChatGPT%20Image%2011.%20juni%202026%2C%2021_05_25.png";
+  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/ojeug5v0_image.png";
 
 const SIDEBAR_ZONES = [
   { id: "sidebar-home",         label: "Home",                 route: "/body-world",                top: 18.0, left: 1, w: 13, h: 4 },
@@ -113,132 +117,11 @@ export default function BodyWorld() {
           loading="eager"
           data-testid="body-world-hub-image"
         />
-        {/* §HUB-LEGACY-15-MASK 2026-02-16 — Painted hub asset still
-            carries (a) a legacy 15th stone "15 BODY ATTENTION" with
-            eye icon at bottom-right, and (b) a "15 worlds. All
-            connected." caption beneath the "MAP OF BODY WORLD"
-            heading. The 14-stone LOCK does NOT include either.
-            Founder approved masking both visually until corrected
-            painted asset arrives. */}
-        <div
-          aria-hidden="true"
-          data-testid="body-world-15th-stone-mask"
-          className="absolute pointer-events-none"
-          style={{
-            top: "82%",
-            left: "65%",
-            width: "26%",
-            height: "18%",
-            background:
-              "radial-gradient(ellipse at 50% 55%, rgba(7,10,16,1) 0%, rgba(9,13,20,0.98) 45%, rgba(11,16,24,0.85) 75%, rgba(13,19,28,0) 100%)",
-            zIndex: 2,
-          }}
-        />
-        {/* §HUB-HERO-CARD 2026-06-16 — Painted hub asset carries a
-            legacy hero block ("Welcome to BODY WORLD / Understand.
-            Connect. Transform. / Your body speaks. Kaelen helps you
-            listen, understand and create real change."). Founder
-            directive: cover with a strong dark hero card carrying the
-            sharper Tony × Luule message instead of re-rendering the
-            painted asset. Saves credits + strengthens 3-second clarity
-            hook. */}
-        <div
-          data-testid="body-world-hero-card"
-          className="absolute pointer-events-none"
-          style={{
-            top: "8%",
-            left: "14.5%",
-            width: "44%",
-            height: "33%",
-            background:
-              "linear-gradient(135deg, rgba(8,11,18,0.96) 0%, rgba(10,14,22,0.94) 65%, rgba(10,14,22,0.85) 100%)",
-            border: "1px solid rgba(196,164,107,0.22)",
-            borderLeft: "3px solid #c4a46b",
-            backdropFilter: "blur(4px)",
-            zIndex: 2,
-            padding: "clamp(18px, 2.2vw, 32px)",
-            boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55)",
-          }}
-        >
-          <p
-            className="uppercase"
-            style={{
-              fontSize: "clamp(9px, 0.7vw, 11px)",
-              letterSpacing: "0.42em",
-              color: "#c4a46b",
-              marginBottom: "clamp(8px, 1vw, 14px)",
-            }}
-          >
-            — Body World · Kaelen as guide
-          </p>
-          <h1
-            data-testid="body-world-hero-title"
-            style={{
-              fontFamily: '"Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(22px, 2.6vw, 40px)",
-              fontWeight: 300,
-              lineHeight: 1.08,
-              color: "#f0eadd",
-              letterSpacing: "-0.005em",
-              marginBottom: "clamp(10px, 1.3vw, 18px)",
-              maxWidth: "32ch",
-            }}
-          >
-            Your body has been trying to tell you something.
-          </h1>
-          <div
-            aria-hidden="true"
-            style={{
-              width: "56px",
-              height: "1px",
-              background: "linear-gradient(90deg, #c4a46b, transparent)",
-              marginBottom: "clamp(10px, 1.3vw, 18px)",
-            }}
-          />
-          <p
-            data-testid="body-world-hero-subtitle"
-            style={{
-              fontFamily: '"Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(12px, 1vw, 16px)",
-              lineHeight: 1.65,
-              color: "#d9d1be",
-              maxWidth: "48ch",
-            }}
-          >
-            <span style={{ color: "#f0eadd", fontWeight: 500 }}>Not fitness. Not health advice.</span>{" "}
-            14 worlds — each a way to understand yourself
-            through what your body already knows.
-          </p>
-          <p
-            className="uppercase"
-            style={{
-              fontSize: "clamp(9px, 0.7vw, 11px)",
-              letterSpacing: "0.18em",
-              color: "#c4a46b",
-              marginTop: "clamp(12px, 1.5vw, 20px)",
-              opacity: 0.9,
-            }}
-          >
-            Pick a stone below or talk to Kaelen ↓
-          </p>
-        </div>
-        {/* §15-WORLDS-CAPTION-MASK 2026-06-16 — Painted asset still has
-            "15 worlds. All connected. Explore what calls to you." under
-            "MAP OF BODY WORLD". Cover it with a slim dark patch. */}
-        <div
-          aria-hidden="true"
-          data-testid="body-world-15-worlds-mask"
-          className="absolute pointer-events-none"
-          style={{
-            top: "44%",
-            left: "13.5%",
-            width: "32%",
-            height: "4.2%",
-            background:
-              "linear-gradient(90deg, rgba(8,11,18,1) 0%, rgba(10,14,22,0.98) 75%, rgba(10,14,22,0.4) 100%)",
-            zIndex: 2,
-          }}
-        />
+        {/* §HUB-OVERLAYS-REMOVED 2026-06-16 — Founder uploaded a new hub
+            asset with the title, "14 worlds." caption and the 14-stone
+            layout already baked into the painting. The previous React
+            hero card, "15 worlds" caption mask and 15th-stone mask are
+            no longer needed and have been removed. */}
         {allZones.map((z) => (
           <Link
             key={z.id}
