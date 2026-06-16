@@ -113,6 +113,28 @@ export default function BodyWorld() {
           loading="eager"
           data-testid="body-world-hub-image"
         />
+        {/* §HUB-LEGACY-15-STONE-MASK 2026-02-16 — Painted hub asset
+            still carries a legacy 15th stone "15 BODY ATTENTION"
+            (bottom-right, eye icon) that does NOT exist in the
+            14-stone LOCK. Founder approved masking it visually with
+            a dark radial patch until corrected painted asset arrives.
+            The "15 worlds." caption inside the painting is left for
+            the upcoming asset refresh — it does not affect navigation
+            functionality. */}
+        <div
+          aria-hidden="true"
+          data-testid="body-world-15th-stone-mask"
+          className="absolute pointer-events-none"
+          style={{
+            top: "82%",
+            left: "65%",
+            width: "26%",
+            height: "18%",
+            background:
+              "radial-gradient(ellipse at 50% 55%, rgba(7,10,16,1) 0%, rgba(9,13,20,0.98) 45%, rgba(11,16,24,0.85) 75%, rgba(13,19,28,0) 100%)",
+            zIndex: 2,
+          }}
+        />
         {allZones.map((z) => (
           <Link
             key={z.id}

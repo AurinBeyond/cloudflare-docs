@@ -138,6 +138,40 @@ function PaintedWorldView({ stone, debug }) {
           loading="eager"
           data-testid={`body-world-painted-image-${stone.slug}`}
         />
+
+        {/* §STONE-N-OF-14-MASK 2026-02-16 — Some painted assets still
+            carry legacy "STONE N OF 15" text in the top-left info
+            panel (Stone 5 in particular). We render a dark patch with
+            the correct "STONE N OF 14" indicator placed over the
+            painted indicator's position so the legacy typo is hidden
+            and the LOCK truth wins. */}
+        <div
+          data-testid={`body-world-stone-n-of-14-${stone.slug}`}
+          className="absolute pointer-events-none flex items-end"
+          style={{
+            top: "7%",
+            left: "12%",
+            width: "30%",
+            height: "8%",
+            background:
+              "linear-gradient(90deg, rgba(8,11,18,0.97) 0%, rgba(10,14,22,0.95) 75%, rgba(10,14,22,0) 100%)",
+            zIndex: 2,
+            paddingBottom: "6px",
+          }}
+        >
+          <span
+            className="px-2 tracking-[0.32em] uppercase"
+            style={{
+              fontFamily: SERIF,
+              fontSize: "clamp(11px, 0.95vw, 14px)",
+              color: "#d4c98f",
+              opacity: 0.95,
+            }}
+          >
+            Stone {stone.n} of 14
+          </span>
+        </div>
+
         {allZones.map((z) => (
           <Link
             key={z.id}
@@ -156,6 +190,32 @@ function PaintedWorldView({ stone, debug }) {
               border: debug ? "1px dashed rgba(120, 220, 255, 0.9)" : "none",
             }}
           >
+            {/* §SUBSTONE-LOCK-LABEL 2026-02-16 — Render LOCK sub-stone
+                name overlay on each painted sub-stone hotspot. Masks
+                any painted typos (e.g. "WISOM" on Stone 6) and makes
+                the LOCK-approved name the user-facing truth. Sidebar,
+                chrome and right-column zones keep transparent surfaces. */}
+            {z.id.startsWith("substone-") && (
+              <span
+                data-testid={`body-world-painted-substone-label-${z.id}`}
+                className="absolute inset-0 flex items-center justify-center text-center px-2 pointer-events-none"
+                style={{
+                  fontFamily: SERIF,
+                  fontSize: "clamp(10px, 0.95vw, 15px)",
+                  lineHeight: 1.15,
+                  fontWeight: 500,
+                  letterSpacing: "0.02em",
+                  color: "#fdf6e6",
+                  textShadow:
+                    "0 1px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
+                  background:
+                    "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
+                  borderRadius: "8px",
+                }}
+              >
+                {z.label}
+              </span>
+            )}
             {debug && (
               <span
                 className="absolute top-0 left-0 px-1 text-[10px] font-mono"

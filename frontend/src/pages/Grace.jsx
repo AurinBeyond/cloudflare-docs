@@ -17,7 +17,6 @@
  * single primary CTA that routes to the existing voice/chat surface.
  */
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import {
   Home,
   Mic,
@@ -161,21 +160,10 @@ const WORDS_FOR_YOU = [
 
 
 export default function Grace() {
-  /* §FIRST-VISIT 2026-02-13 — Detect whether this is the visitor's first
-     time landing on Grace; the hero greeting must respect that ("Welcome"
-     for new arrivals, "Welcome back" only for returning visitors).
-     Lazy initialiser reads localStorage synchronously on the first
-     render to avoid the Emergent react-hooks/set-state-in-effect rule. */
-  const [isReturning] = useState(() => {
-    try {
-      const visited = localStorage.getItem("grace_visited_v1");
-      if (visited) return true;
-      localStorage.setItem("grace_visited_v1", new Date().toISOString());
-      return false;
-    } catch {
-      return false;
-    }
-  });
+  /* §HERO-RECOGNITION 2026-02-16 — Founder removed the "Welcome / Welcome
+     back" greeting. Replaced with a single short recognition line (Tony
+     Robbins x Sanctuary register): immediate, dignified, anti-wellness,
+     designed to give a 3-second "this is for me" moment. */
 
   const startConversation = () => {
     // Real Grace room — Wanderer's Gate, ConvAI voice, text chat,
@@ -244,17 +232,22 @@ export default function Grace() {
               style={{ color: "#c89a5a" }}
             />
             <h1
-              className="leading-[1.02] mb-6"
+              className="leading-[1.05] mb-6"
               style={{
                 color: "#2a1f12",
                 fontFamily: '"Cormorant Garamond", Georgia, serif',
                 fontWeight: 400,
-                fontSize: "clamp(3rem, 6.5vw, 5.4rem)",
+                fontSize: "clamp(2.4rem, 5vw, 4.2rem)",
                 letterSpacing: "-0.01em",
+                maxWidth: "640px",
               }}
               data-testid="grace-hero-title"
             >
-              Welcome{isReturning ? " back" : ""}<span style={{ color: "#c89a5a" }}>.</span>
+              You stopped performing<span style={{ color: "#c89a5a" }}>.</span>
+              <br />
+              <span style={{ fontStyle: "italic", color: "#3d2f1f" }}>
+                That&apos;s why you&apos;re here.
+              </span>
             </h1>
             <div
               aria-hidden="true"
