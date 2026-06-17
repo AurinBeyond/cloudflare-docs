@@ -4,23 +4,35 @@
  * Painted Map Pattern hub page (background image + invisible
  * hotspots — a generic technical principle, identical to
  * BodyWorld.jsx). The painted founder mockup (lighthouse + cottage
- * + central nest + 15 stone-leaves + Sara avatar card + garden
- * card) IS the literal UI. Invisible click-zones layer over every
- * painted UI element.
+ * + central nest + 15 numbered vine-leaves + Sara avatar card +
+ * garden card) IS the literal UI. Invisible click-zones layer
+ * over every painted UI element.
+ *
+ * Terminology note: the navigable elements on this hub are *vine
+ * leaves* (taime lehed) wrapping the central nest — NOT stones.
+ * Body World uses stones; Sara uses leaves. Same Painted Map
+ * Pattern, different metaphor.
  *
  * STRUCTURE LOCK (founder direction 2026-06-17)
  *   - Sara is "The Quiet Heart of the Family" — Amae-style safe
  *     centre. The hero is NOT a lens menu. Lenses (Ikuji,
  *     Montessori, Scandinavian, French Cadre, Reggio, Waldorf,
  *     Positive Coding) live in the backend only.
- *   - 15 stone-leaves arranged around the central nest. Each is
- *     a real-life parenting concern (My Child, Our Family,
- *     Emotions & Safety, ...).
+ *   - 15 numbered vine-leaves arranged around the central nest
+ *     (founder copy: "kokku on 15 teemat sara pealehel"). Each
+ *     leaf carries one real-life parenting theme, painted with
+ *     its own numeral, icon and label.
  *   - Central nest holds the room's compass question:
  *     "What's going on between us?" with the chat entry.
  *   - URL: /parents-room (canonical). Legacy chat / 8-situation
  *     interior preserved at /parents-room/v1.
  *   - Append ?debug=1 to visualise hotspots (founder calibration).
+ *
+ * NOTE 2026-06-17 — Leaf #11 is currently absent from the painted
+ * asset (numerals jump 10 → 12). Founder will confirm whether the
+ * 15th theme returns to the painting or whether the wreath stays
+ * at 14 painted leaves. This file is wired for both: just append
+ * to LEAF_THEMES + LEAF_ZONES when the 15th leaf arrives.
  */
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -33,10 +45,11 @@ import { Link, useSearchParams } from "react-router-dom";
 const HUB_IMAGE =
   "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/qted5bys_image.png";
 
-/* §SARA-CATEGORIES — 15 real-life parenting concerns painted on the
- * hub. Slugs are kebab-case, stable for routing. Position numbers
- * match the gilded numerals painted on each stone-leaf. */
-const SARA_CATEGORIES = [
+/* §SARA-THEMES — Real-life parenting themes painted on the wreath
+ * of vine-leaves. Labels copied verbatim from the founder asset
+ * (qted5bys_image.png). Slugs are kebab-case, stable for routing.
+ * Numerals match the gilded numbers painted on each leaf. */
+const LEAF_THEMES = [
   { n: 1,  slug: "my-child",                   label: "My Child" },
   { n: 2,  slug: "our-family",                 label: "Our Family" },
   { n: 3,  slug: "emotions-safety",            label: "Emotions & Safety" },
@@ -47,17 +60,20 @@ const SARA_CATEGORIES = [
   { n: 8,  slug: "wisdom-garden",              label: "Wisdom Garden" },
   { n: 9,  slug: "weekly-digest",              label: "Weekly Digest" },
   { n: 10, slug: "stories-real-life",          label: "Stories from Real Life" },
+  /* §LEAF-11 — Absent from the current painted asset (numerals
+   * jump 10 → 12). When founder reintroduces leaf #11, append the
+   * entry here AND add the matching zone to LEAF_ZONES below. */
   { n: 12, slug: "school-friends-world",       label: "School, Friends & the World" },
   { n: 13, slug: "parenting-journey",          label: "Parenting Journey" },
   { n: 14, slug: "generations-roots",          label: "Generations & Roots" },
   { n: 15, slug: "home-memories-roots",        label: "Home, Memories & Roots" },
 ];
 
-/* §STONE-ZONES — 14 painted stone-leaf hotspots. Coordinates measured
+/* §LEAF-ZONES — Painted vine-leaf hotspots. Coordinates measured
  * against the founder hub asset (native 1536×1024, served at the
  * container's 1.5:1 aspect ratio). Each zone is sized to cover the
  * full leaf shape, not just the numeral. Refine via ?debug=1. */
-const STONE_ZONES = [
+const LEAF_ZONES = [
   { n: 1,  top: 23, left:  4, w: 14, h: 14 },  /* My Child                    */
   { n: 2,  top: 31, left: 25, w: 14, h: 14 },  /* Our Family                  */
   { n: 3,  top: 41, left: 11, w: 14, h: 14 },  /* Emotions & Safety           */
@@ -91,12 +107,12 @@ export default function SaraHub() {
   const [params] = useSearchParams();
   const debug = params.get("debug") === "1";
 
-  const stoneZones = STONE_ZONES.map((s) => {
-    const cat = SARA_CATEGORIES.find((c) => c.n === s.n);
+  const leafZones = LEAF_ZONES.map((s) => {
+    const theme = LEAF_THEMES.find((t) => t.n === s.n);
     return {
-      id: `stone-${cat.slug}`,
-      label: `${cat.n}. ${cat.label}`,
-      route: `/parents-room/category/${cat.slug}`,
+      id: `leaf-${theme.slug}`,
+      label: `${theme.n}. ${theme.label}`,
+      route: `/parents-room/category/${theme.slug}`,
       top: s.top,
       left: s.left,
       w: s.w,
@@ -104,7 +120,7 @@ export default function SaraHub() {
     };
   });
 
-  const allZones = [...stoneZones, ...CHAT_ZONES];
+  const allZones = [...leafZones, ...CHAT_ZONES];
 
   return (
     <div
@@ -118,7 +134,7 @@ export default function SaraHub() {
       >
         <img
           src={HUB_IMAGE}
-          alt="Sara — The Quiet Heart of the Family. A lighthouse, a cottage, a nest at the centre, and fifteen stone-leaves of family life."
+          alt="Sara — The Quiet Heart of the Family. A lighthouse, a cottage, a nest at the centre, and a wreath of numbered vine-leaves of family life."
           className="absolute inset-0 w-full h-full object-cover select-none"
           draggable={false}
           loading="eager"
