@@ -64,6 +64,8 @@ import BodyWorldTopic from "@/pages/BodyWorldTopic";
 import BodyWorldStub from "@/pages/BodyWorldStub";
 import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
+import SaraHub from "@/pages/SaraHub";
+import SaraCategoryStub from "@/pages/SaraCategoryStub";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -365,11 +367,35 @@ function AppRouter() {
             Day 1 is free preview, days 2-28 gate via the existing
             premium logic (clarity_passes + presence_seconds_left). */}
         <Route path="/body-temple" element={<BodyTemple />} />
+        {/* §SARA-HUB-LOCK 2026-06-17 — Founder-approved painted hub
+            (qted5bys_image.png) is now the canonical entry for
+            /parents-room. The legacy interior (chat, 8 situations,
+            ConvAI Sara) is preserved at /parents-room/v1, mirroring
+            the BodyWorld → /body-world (hub) + /body-world/v1
+            (interior) split. Each of the 15 painted stone-leaves
+            routes to /parents-room/category/<slug> (currently a
+            quiet stub until founder visuals arrive). */}
         <Route
           path="/parents-room"
           element={
             <WandererGate scope="private">
+              <SaraHub />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/v1"
+          element={
+            <WandererGate scope="private">
               <ParentsRoom />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/category/:slug"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
             </WandererGate>
           }
         />
