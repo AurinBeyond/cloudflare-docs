@@ -29,9 +29,9 @@ const CATEGORY_LABELS = {
   "wisdom-garden":             "Wisdom Garden",
   "weekly-digest":             "Weekly Digest",
   "stories-real-life":         "Stories from Real Life",
-  "school-friends-world":      "School, Friends & the World",
+  "tools-exercises":           "Tools & Exercises",
   "parenting-journey":         "Parenting Journey",
-  "generations-roots":         "Generations & Roots",
+  "generations-heritage":      "Generations & Heritage",
   "home-memories-roots":       "Home, Memories & Roots",
 };
 

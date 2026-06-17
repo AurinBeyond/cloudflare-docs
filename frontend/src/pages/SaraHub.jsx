@@ -36,19 +36,25 @@
  */
 import { Link, useSearchParams } from "react-router-dom";
 
-/* §SARA-HUB-LOCK 2026-06-17 — Founder-approved hub asset (newest
- * upload: qted5bys_image.png, 3.0 MB). Title "Sara", subtitle
- * "Your guide for every parenting moment", poem fragment, central
- * compass question "What's going on between us?", Sara avatar
- * card, garden card and 15 numbered stone-leaves all baked into
- * the painting. DO NOT CHANGE the asset without founder approval. */
+/* §SARA-HUB-LOCK 2026-06-17 (v2) — Founder-approved hub asset. The
+ * earlier asset (qted5bys_image.png) was missing leaf #11. This
+ * second-generation asset adds leaf #11 "Tools & Exercises" but
+ * drops the previous #12 "School, Friends & the World" — numerals
+ * now jump 11 → 13. Per founder direction the 15th theme is the
+ * central nest itself ("What's going on between us?"), counted as
+ * the heart of the room — same pattern as Body World's hub. */
 const HUB_IMAGE =
-  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/qted5bys_image.png";
+  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/36vfb47d_ChatGPT%20Image%2016.%20juni%202026%2C%2021_25_41.png";
 
 /* §SARA-THEMES — Real-life parenting themes painted on the wreath
- * of vine-leaves. Labels copied verbatim from the founder asset
- * (qted5bys_image.png). Slugs are kebab-case, stable for routing.
- * Numerals match the gilded numbers painted on each leaf. */
+ * of vine-leaves. Labels copied verbatim from the founder asset.
+ * Slugs are kebab-case, stable for routing. Numerals match the
+ * gilded numbers painted on each leaf.
+ *
+ * NOTE: 14 painted leaves + 1 central nest = 15 themes total. The
+ * nest is not a leaf — it is the heart of the room, holding the
+ * compass question "What's going on between us?". Numerals on the
+ * painted leaves jump 11 → 13 (no painted #12). */
 const LEAF_THEMES = [
   { n: 1,  slug: "my-child",                   label: "My Child" },
   { n: 2,  slug: "our-family",                 label: "Our Family" },
@@ -60,12 +66,9 @@ const LEAF_THEMES = [
   { n: 8,  slug: "wisdom-garden",              label: "Wisdom Garden" },
   { n: 9,  slug: "weekly-digest",              label: "Weekly Digest" },
   { n: 10, slug: "stories-real-life",          label: "Stories from Real Life" },
-  /* §LEAF-11 — Absent from the current painted asset (numerals
-   * jump 10 → 12). When founder reintroduces leaf #11, append the
-   * entry here AND add the matching zone to LEAF_ZONES below. */
-  { n: 12, slug: "school-friends-world",       label: "School, Friends & the World" },
+  { n: 11, slug: "tools-exercises",            label: "Tools & Exercises" },
   { n: 13, slug: "parenting-journey",          label: "Parenting Journey" },
-  { n: 14, slug: "generations-roots",          label: "Generations & Roots" },
+  { n: 14, slug: "generations-heritage",       label: "Generations & Heritage" },
   { n: 15, slug: "home-memories-roots",        label: "Home, Memories & Roots" },
 ];
 
@@ -84,9 +87,9 @@ const LEAF_ZONES = [
   { n: 8,  top: 77, left: 53, w: 14, h: 14 },  /* Wisdom Garden               */
   { n: 9,  top: 64, left: 64, w: 14, h: 14 },  /* Weekly Digest               */
   { n: 10, top: 53, left: 83, w: 14, h: 14 },  /* Stories from Real Life      */
-  { n: 12, top: 47, left: 67, w: 14, h: 14 },  /* School, Friends & the World */
+  { n: 11, top: 47, left: 67, w: 14, h: 14 },  /* Tools & Exercises           */
   { n: 13, top: 28, left: 60, w: 14, h: 14 },  /* Parenting Journey           */
-  { n: 14, top: 35, left: 74, w: 14, h: 14 },  /* Generations & Roots         */
+  { n: 14, top: 35, left: 74, w: 14, h: 14 },  /* Generations & Heritage      */
   { n: 15, top: 22, left: 83, w: 14, h: 14 },  /* Home, Memories & Roots      */
 ];
 
