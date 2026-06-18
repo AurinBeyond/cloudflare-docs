@@ -79,6 +79,24 @@
   14. Generations & Heritage
   15. Home, Memories & Roots
 
+### Deferred architectural candidate — "Every Child Is Our Child" (2026-06-18)
+- **Status:** Saved idea, decision deferred to the very end of Sara construction
+- **Origin:** Emerged during World 3 (Our Family) calibration when founder + GPT + agent considered replacing "Daily Life" zone. All three agreed: replacement is wrong (Daily Life is the most-used handle in real parenting), but the idea is too strong to discard.
+- **What it is:** A philosophical handle for the child's life *outside the four walls of the home* — community, neighbours, school, role models, what adults show children, shared responsibility, what we leave behind.
+- **Proposed nests (if it becomes a world):**
+  - 🪺 The Village Around the Child
+  - 🪺 Community & Belonging
+  - 🪺 Generations of Care
+  - 🪺 Role Models
+  - 🪺 Shared Responsibility
+  - 🪺 What We Leave Behind
+- **Three open possibilities — DO NOT decide yet:**
+  1. 16th standalone Sara world (requires new hub painted asset with 16th leaf)
+  2. Central spine of existing **World 12 · School, Friends & the World**
+  3. Cross-room philosophical thread (painted motto in multiple worlds, no dedicated nest)
+- **Decision trigger:** Revisit when construction of **World 12 · School, Friends & the World** begins. The natural test: does that world feel complete without "Every Child Is Our Child" as its centre? If yes → standalone. If no → spine.
+- **Rule until then:** Do NOT carve a hub slot. Do NOT place it under Generations & Heritage. Do NOT remove this PRD entry. Keep all 15 existing worlds + 6 nests in each untouched.
+
 ### Backend lenses (`parents_lenses.py`) — partial
 - ✅ shitsuke renamed → "Japanese Ikuji" (Shitsuke + Itadakimasu + Amae + Ganbaru + Omoiyari + Soji)
 - ✅ Header docstring updated to 7-lens registry with visible/hidden flag concept
