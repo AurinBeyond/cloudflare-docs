@@ -41,12 +41,18 @@ const CATEGORY_LABELS = {
  * as new founder assets arrive. */
 const SUB_THEME_LABELS = {
   /* §MY-CHILD nests */
-  "temperament":         "Temperament",
-  "strengths-gifts":     "Strengths & Gifts",
-  "needs":               "Needs",
-  "feelings":            "Feelings",
-  "learning-style":      "Learning Style",
-  "development-stages":  "Development Stages",
+  "temperament":           "Temperament",
+  "strengths-gifts":       "Strengths & Gifts",
+  "needs":                 "Needs",
+  "feelings":              "Feelings",
+  "learning-style":        "Learning Style",
+  "development-stages":    "Development Stages",
+  /* §EMOTIONS-SAFETY nests */
+  "safety-trust":          "Safety & Trust",
+  "fear":                  "Fear",
+  "anger":                 "Anger",
+  "sadness":               "Sadness",
+  "regulation-recovery":   "Regulation & Recovery",
 };
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';

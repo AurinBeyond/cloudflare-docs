@@ -67,6 +67,7 @@ import ParentsRoom from "@/pages/ParentsRoom";
 import SaraHub from "@/pages/SaraHub";
 import SaraCategoryStub from "@/pages/SaraCategoryStub";
 import SaraMyChild from "@/pages/SaraMyChild";
+import SaraEmotionsSafety from "@/pages/SaraEmotionsSafety";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -401,6 +402,16 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraMyChild />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-2 · EMOTIONS & SAFETY — painted interior.
+            Same routing pattern as Sara World 1. */}
+        <Route
+          path="/parents-room/category/emotions-safety"
+          element={
+            <WandererGate scope="private">
+              <SaraEmotionsSafety />
             </WandererGate>
           }
         />
