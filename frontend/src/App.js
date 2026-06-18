@@ -69,6 +69,7 @@ import SaraCategoryStub from "@/pages/SaraCategoryStub";
 import SaraMyChild from "@/pages/SaraMyChild";
 import SaraEmotionsSafety from "@/pages/SaraEmotionsSafety";
 import SaraOurFamily from "@/pages/SaraOurFamily";
+import SaraBoundariesResponsibility from "@/pages/SaraBoundariesResponsibility";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -424,6 +425,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraOurFamily />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-4 · BOUNDARIES & RESPONSIBILITY — painted
+            interior. A boundary is not a wall — it is a path that
+            helps us walk together. Guidance, not control. */}
+        <Route
+          path="/parents-room/category/boundaries-responsibility"
+          element={
+            <WandererGate scope="private">
+              <SaraBoundariesResponsibility />
             </WandererGate>
           }
         />
