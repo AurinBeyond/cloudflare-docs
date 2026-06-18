@@ -35,11 +35,35 @@ const CATEGORY_LABELS = {
   "home-memories-roots":       "Home, Memories & Roots",
 };
 
+/* §SUB-THEME-LABELS — Sub-theme labels for painted nest hotspots
+ * inside category interiors (e.g. /parents-room/category/my-child/
+ * temperament). Each painted Sara world adds its own sub-keys here
+ * as new founder assets arrive. */
+const SUB_THEME_LABELS = {
+  /* §MY-CHILD nests */
+  "temperament":         "Temperament",
+  "strengths-gifts":     "Strengths & Gifts",
+  "needs":               "Needs",
+  "feelings":            "Feelings",
+  "learning-style":      "Learning Style",
+  "development-stages":  "Development Stages",
+};
+
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 export default function SaraCategoryStub() {
-  const { slug } = useParams();
-  const label = CATEGORY_LABELS[slug] || "A corner of Sara's garden";
+  const { slug, sub } = useParams();
+  const categoryLabel = CATEGORY_LABELS[slug] || "A corner of Sara's garden";
+  const subLabel = sub ? SUB_THEME_LABELS[sub] : null;
+  const title = subLabel || categoryLabel;
+  /* Show the parent category as kicker when a sub-theme is open. */
+  const kicker = subLabel
+    ? `${categoryLabel} · a corner of Sara's garden`
+    : "A quiet corner of Sara's garden";
+  /* Back-link points to the parent painted world when in a sub-stub,
+   * otherwise back to the Sara hub. */
+  const backRoute = sub ? `/parents-room/category/${slug}` : "/parents-room";
+  const backLabel = sub ? `Back to ${categoryLabel}` : "Back to the garden";
 
   return (
     <div
@@ -58,7 +82,7 @@ export default function SaraCategoryStub() {
           style={{ color: "#c4a46b" }}
           data-testid="sara-category-stub-kicker"
         >
-          A quiet corner of Sara&rsquo;s garden
+          {kicker}
         </p>
 
         <h1
@@ -66,7 +90,7 @@ export default function SaraCategoryStub() {
           style={{ color: "#f0eadd", letterSpacing: "0.01em" }}
           data-testid="sara-category-stub-title"
         >
-          {label}
+          {title}
         </h1>
 
         <p
@@ -102,7 +126,7 @@ export default function SaraCategoryStub() {
             Chat with Sara
           </Link>
           <Link
-            to="/parents-room"
+            to={backRoute}
             data-testid="sara-category-stub-back-cta"
             className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm tracking-wider transition-all duration-300 border"
             style={{
@@ -112,7 +136,7 @@ export default function SaraCategoryStub() {
               letterSpacing: "0.08em",
             }}
           >
-            Back to the garden
+            {backLabel}
           </Link>
         </div>
       </div>

@@ -66,6 +66,7 @@ import BodyTemple from "@/pages/BodyTemple";
 import ParentsRoom from "@/pages/ParentsRoom";
 import SaraHub from "@/pages/SaraHub";
 import SaraCategoryStub from "@/pages/SaraCategoryStub";
+import SaraMyChild from "@/pages/SaraMyChild";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -388,6 +389,26 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <ParentsRoom />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-1 · MY CHILD — painted interior. MUST be
+            declared BEFORE the generic /category/:slug stub route
+            so React Router matches "my-child" to the painted world
+            instead of falling through to the placeholder. */}
+        <Route
+          path="/parents-room/category/my-child"
+          element={
+            <WandererGate scope="private">
+              <SaraMyChild />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/category/:slug/:sub"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
             </WandererGate>
           }
         />
