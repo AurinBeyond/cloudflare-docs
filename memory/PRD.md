@@ -72,8 +72,8 @@
 - ✅ **World 7 · Challenging Situations** (`SaraChallengingSituations.jsx`) — asset `qw6okgoh_image.png`, 6 nests calibrated first try, FIRST world to include small icon plaques per nest (🏠 ❓ 💔 🌱 ⚡ ☀️) — pattern recommended for all future worlds
 - ✅ **World 8 · Wisdom Garden** (`SaraWisdomGarden.jsx`) — asset `cmyiq27h_image.png`, 6 nests calibrated first try (different-ways-of-seeing · stories-that-teach · family-wisdom · questions-worth-asking · reflection-awareness · everyday-philosophy) — mother + daughter at the centre, grandparents present in the nests
 - ✅ **World 9 · Weekly Digest** (`SaraWeeklyDigest.jsx`) — asset `xj4ylrpo_image.png`, 6 nests calibrated first try (this-weeks-reflection · small-moments-that-matter · family-conversations · challenges-lessons · gratitude-joy · looking-ahead) — **father + daughter** at the journal (first non-mother centrepiece)
-- ⏳ Remaining 5 worlds (founder generates with GPT, agent places ~5 min each):
-  10. Stories from Real Life
+- ✅ **World 10 · Stories from Real Life** (`SaraStoriesRealLife.jsx`) — asset `uzdnty7e_image.png`, 6 nests calibrated first try (family-stories · turning-points · lessons-learned · voices-across-generations · courage-hope · small-moments-big-meaning) — multi-cast: every nest carries a different family configuration; the centre is a great open book unfolding into scenes of real family life. **Bridge between Wisdom Garden and lived experience.**
+- ⏳ Remaining 4 worlds (founder generates with GPT, agent places ~5 min each):
   11. Tools & Exercises
   13. Parenting Journey
   14. Generations & Heritage
@@ -98,7 +98,8 @@
   - World 7 Challenging Situations — mother + child after rain
   - World 8 Wisdom Garden — mother + daughter (grandparents in nests)
   - World 9 Weekly Digest — **father + daughter**
-- **Founder hint for Worlds 10-15:** prioritise grandparent+child, siblings, single parent, multi-generational angles to balance the roster.
+  - World 10 Stories from Real Life — **multi-cast** (every nest a different configuration)
+- **Founder hint for Worlds 11, 13-15:** prioritise grandparent+child, siblings, single parent, multi-generational angles to balance the roster.
 
 ### Deferred architectural candidate — "Every Child Is Our Child" (2026-06-18)
 - **Status:** Saved idea, decision deferred to the very end of Sara construction

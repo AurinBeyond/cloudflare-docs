@@ -75,6 +75,7 @@ import SaraRelationshipsCooperation from "@/pages/SaraRelationshipsCooperation";
 import SaraChallengingSituations from "@/pages/SaraChallengingSituations";
 import SaraWisdomGarden from "@/pages/SaraWisdomGarden";
 import SaraWeeklyDigest from "@/pages/SaraWeeklyDigest";
+import SaraStoriesRealLife from "@/pages/SaraStoriesRealLife";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -497,6 +498,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraWeeklyDigest />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-10 · STORIES FROM REAL LIFE — painted interior.
+            Sometimes the most powerful lessons come from ordinary
+            lives. Bridge between Wisdom Garden and lived experience. */}
+        <Route
+          path="/parents-room/category/stories-real-life"
+          element={
+            <WandererGate scope="private">
+              <SaraStoriesRealLife />
             </WandererGate>
           }
         />
