@@ -37,7 +37,7 @@ import { Link, useSearchParams } from "react-router-dom";
  * the painting. DO NOT change the asset without founder
  * approval. */
 const WORLD_IMAGE =
-  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/g1ag88vy_image.png";
+  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/pzbbdk2p_image.png";
 
 /* §OUR-FAMILY-NESTS — Six painted nest hotspots arranged around
  * the central family-reading embrace. Slugs are kebab-case,
