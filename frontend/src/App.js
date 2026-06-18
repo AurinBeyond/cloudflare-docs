@@ -72,6 +72,7 @@ import SaraOurFamily from "@/pages/SaraOurFamily";
 import SaraBoundariesResponsibility from "@/pages/SaraBoundariesResponsibility";
 import SaraGrowthDevelopment from "@/pages/SaraGrowthDevelopment";
 import SaraRelationshipsCooperation from "@/pages/SaraRelationshipsCooperation";
+import SaraChallengingSituations from "@/pages/SaraChallengingSituations";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -461,6 +462,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraRelationshipsCooperation />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-7 · CHALLENGING SITUATIONS — painted interior.
+            Even in difficult seasons, relationships can find a way
+            forward. Light after rain, not storm at midnight. */}
+        <Route
+          path="/parents-room/category/challenging-situations"
+          element={
+            <WandererGate scope="private">
+              <SaraChallengingSituations />
             </WandererGate>
           }
         />
