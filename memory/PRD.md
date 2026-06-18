@@ -39,8 +39,50 @@
 - Sub-stones with `legacy*` content = clickable + LOCK name overlay
 - Sub-stones without content = dimmed + "SOON" badge + non-clickable
 
-## Sara Room — next iteration
-Deferred per founder directive after current three rooms locked.
+## Sara Room — Painted Worlds (in active development, 2026-06-17/18)
+
+### Identity (locked)
+- **Sara = The Quiet Heart of the Family** — Amae-style safe centre, not a lens menu
+- Aurin = "The Places We Return To" / lighthouse-compass-northstar metaphor
+- Each room = one compass:
+  - Grace → return to yourself
+  - Kaelen → return to your body
+  - Sara → return to one another
+  - Alistair → return to clarity
+  - Polarstar → return to wonder · protects childhood itself
+- **Constitutional rule §1:** Rooms may be CONNECTED, never MIXED
+- Each room guards one question. Sara's question: *"What's going on between us?"*
+- Lenses (Ikuji, Montessori, Scandinavian, French Cadre, Reggio, Waldorf, Positive Coding) live BACKEND-ONLY — never exposed as UI menu
+
+### Architecture — Painted Map pattern (same as BodyWorld)
+- `/parents-room` → SaraHub (painted hub, 14 vine-leaves + central nest = 15 themes)
+- `/parents-room/category/<slug>` → painted Sara World OR poetic SaraCategoryStub
+- `/parents-room/category/<slug>/<sub>` → sub-theme stub (until founder visuals arrive)
+- `/parents-room/v1` → legacy ParentsRoom (chat + 8 situations + ConvAI Sara, preserved)
+- `?debug=1` on any painted page = founder calibration mode (visible hotspots)
+
+### Painted Worlds — progress
+- ✅ **Hub** (`SaraHub.jsx`) — asset `36vfb47d_...21_25_41.png`, 14 leaves calibrated
+- ✅ **World 1 · My Child** (`SaraMyChild.jsx`) — asset `rijfgst3_image.png`, 6 nests
+- ✅ **World 2 · Emotions & Safety** (`SaraEmotionsSafety.jsx`) — asset `pbiwwti2_...09_36_24.png`, 6 nests
+- ✅ **World 3 · Our Family** (`SaraOurFamily.jsx`) — asset `pzbbdk2p_image.png`, 6 nests
+- ⏳ Remaining 11 worlds (founder generates with GPT, agent places ~5 min each):
+  4. Boundaries & Responsibility
+  5. Growth & Development
+  6. Relationships & Cooperation
+  7. Challenging Situations
+  8. Wisdom Garden
+  9. Weekly Digest
+  10. Stories from Real Life
+  11. Tools & Exercises
+  13. Parenting Journey
+  14. Generations & Heritage
+  15. Home, Memories & Roots
+
+### Backend lenses (`parents_lenses.py`) — partial
+- ✅ shitsuke renamed → "Japanese Ikuji" (Shitsuke + Itadakimasu + Amae + Ganbaru + Omoiyari + Soji)
+- ✅ Header docstring updated to 7-lens registry with visible/hidden flag concept
+- ⏳ 4 new hidden lenses NOT YET ADDED (Scandinavian, French Cadre, Reggio Emilia, Waldorf) — founder paused this work to focus on visuals first
 
 ## 3rd-party integrations
 - Gumroad & LemonSqueezy (payments) — founder-supplied keys
