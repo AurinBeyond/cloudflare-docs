@@ -67,8 +67,8 @@
 - ✅ **World 2 · Emotions & Safety** (`SaraEmotionsSafety.jsx`) — asset `pbiwwti2_...09_36_24.png`, 6 nests
 - ✅ **World 3 · Our Family** (`SaraOurFamily.jsx`) — asset `pzbbdk2p_image.png`, 6 nests
 - ✅ **World 4 · Boundaries & Responsibility** (`SaraBoundariesResponsibility.jsx`) — asset `iis5gc3n_image.png`, 6 nests calibrated first try (boundaries · responsibility · choices-consequences · respect · consistency · freedom-within-structure)
-- ⏳ Remaining 10 worlds (founder generates with GPT, agent places ~5 min each):
-  5. Growth & Development
+- ✅ **World 5 · Growth & Development** (`SaraGrowthDevelopment.jsx`) — asset `fub9m0yw_image.png`, 6 nests calibrated first try (development-stages · learning-through-experience · confidence-resilience · curiosity-discovery · mistakes-growth · becoming-yourself)
+- ⏳ Remaining 9 worlds (founder generates with GPT, agent places ~5 min each):
   6. Relationships & Cooperation
   7. Challenging Situations
   8. Wisdom Garden

@@ -70,6 +70,7 @@ import SaraMyChild from "@/pages/SaraMyChild";
 import SaraEmotionsSafety from "@/pages/SaraEmotionsSafety";
 import SaraOurFamily from "@/pages/SaraOurFamily";
 import SaraBoundariesResponsibility from "@/pages/SaraBoundariesResponsibility";
+import SaraGrowthDevelopment from "@/pages/SaraGrowthDevelopment";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -436,6 +437,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraBoundariesResponsibility />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-5 · GROWTH & DEVELOPMENT — painted interior.
+            Growth is not a race. It is a journey of becoming.
+            Becoming, not racing. */}
+        <Route
+          path="/parents-room/category/growth-development"
+          element={
+            <WandererGate scope="private">
+              <SaraGrowthDevelopment />
             </WandererGate>
           }
         />
