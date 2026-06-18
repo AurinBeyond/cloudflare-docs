@@ -94,7 +94,7 @@
   1. 16th standalone Sara world (requires new hub painted asset with 16th leaf)
   2. Central spine of existing **World 12 · School, Friends & the World**
   3. Cross-room philosophical thread (painted motto in multiple worlds, no dedicated nest)
-- **Decision trigger:** Revisit when construction of **World 12 · School, Friends & the World** begins. The natural test: does that world feel complete without "Every Child Is Our Child" as its centre? If yes → standalone. If no → spine.
+- **Decision trigger:** Revisit AFTER all 14 painted Sara worlds are complete. (Hub v2 dropped the original "School, Friends & the World" leaf — numerals jump 11 → 13 — so there is no current World 12. The natural test will become: with all 14 worlds painted, does "Every Child Is Our Child" still feel orphaned? If yes → 16th standalone world OR re-introduce hub leaf #12 as its dedicated home. If no → cross-room motto, no dedicated nest.)
 - **Rule until then:** Do NOT carve a hub slot. Do NOT place it under Generations & Heritage. Do NOT remove this PRD entry. Keep all 15 existing worlds + 6 nests in each untouched.
 
 ### Backend lenses (`parents_lenses.py`) — partial
