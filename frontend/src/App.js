@@ -68,6 +68,7 @@ import SaraHub from "@/pages/SaraHub";
 import SaraCategoryStub from "@/pages/SaraCategoryStub";
 import SaraMyChild from "@/pages/SaraMyChild";
 import SaraEmotionsSafety from "@/pages/SaraEmotionsSafety";
+import SaraOurFamily from "@/pages/SaraOurFamily";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -412,6 +413,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraEmotionsSafety />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-3 · OUR FAMILY — painted interior. The
+            structural heart of Sara — where the compass question
+            "What's going on between us?" finds its deepest mirror. */}
+        <Route
+          path="/parents-room/category/our-family"
+          element={
+            <WandererGate scope="private">
+              <SaraOurFamily />
             </WandererGate>
           }
         />

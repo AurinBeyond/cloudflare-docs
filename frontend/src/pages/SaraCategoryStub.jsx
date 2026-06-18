@@ -53,6 +53,13 @@ const SUB_THEME_LABELS = {
   "anger":                 "Anger",
   "sadness":               "Sadness",
   "regulation-recovery":   "Regulation & Recovery",
+  /* §OUR-FAMILY nests */
+  "connection":            "Connection",
+  "communication":         "Communication",
+  "family-traditions":     "Family Traditions",
+  "daily-life":            "Daily Life",
+  "conflict-repair":       "Conflict & Repair",
+  "belonging":             "Belonging",
 };
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
