@@ -73,6 +73,8 @@ import SaraBoundariesResponsibility from "@/pages/SaraBoundariesResponsibility";
 import SaraGrowthDevelopment from "@/pages/SaraGrowthDevelopment";
 import SaraRelationshipsCooperation from "@/pages/SaraRelationshipsCooperation";
 import SaraChallengingSituations from "@/pages/SaraChallengingSituations";
+import SaraWisdomGarden from "@/pages/SaraWisdomGarden";
+import SaraWeeklyDigest from "@/pages/SaraWeeklyDigest";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -473,6 +475,28 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraChallengingSituations />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-8 · WISDOM GARDEN — painted interior.
+            Some answers are found in books. Others are found in
+            quiet moments of reflection. */}
+        <Route
+          path="/parents-room/category/wisdom-garden"
+          element={
+            <WandererGate scope="private">
+              <SaraWisdomGarden />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-9 · WEEKLY DIGEST — painted interior.
+            Sometimes the smallest moments tell us the most about
+            where we are going. Father + daughter at the journal. */}
+        <Route
+          path="/parents-room/category/weekly-digest"
+          element={
+            <WandererGate scope="private">
+              <SaraWeeklyDigest />
             </WandererGate>
           }
         />

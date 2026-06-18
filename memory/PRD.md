@@ -70,14 +70,35 @@
 - ✅ **World 5 · Growth & Development** (`SaraGrowthDevelopment.jsx`) — asset `fub9m0yw_image.png`, 6 nests calibrated first try (development-stages · learning-through-experience · confidence-resilience · curiosity-discovery · mistakes-growth · becoming-yourself)
 - ✅ **World 6 · Relationships & Cooperation** (`SaraRelationshipsCooperation.jsx`) — asset `b4uvi3j7_image.png`, 6 nests calibrated first try (communication · cooperation · friendship · understanding-differences · empathy-kindness · solving-conflicts-together)
 - ✅ **World 7 · Challenging Situations** (`SaraChallengingSituations.jsx`) — asset `qw6okgoh_image.png`, 6 nests calibrated first try, FIRST world to include small icon plaques per nest (🏠 ❓ 💔 🌱 ⚡ ☀️) — pattern recommended for all future worlds
-- ⏳ Remaining 7 worlds (founder generates with GPT, agent places ~5 min each):
-  8. Wisdom Garden
-  9. Weekly Digest
+- ✅ **World 8 · Wisdom Garden** (`SaraWisdomGarden.jsx`) — asset `cmyiq27h_image.png`, 6 nests calibrated first try (different-ways-of-seeing · stories-that-teach · family-wisdom · questions-worth-asking · reflection-awareness · everyday-philosophy) — mother + daughter at the centre, grandparents present in the nests
+- ✅ **World 9 · Weekly Digest** (`SaraWeeklyDigest.jsx`) — asset `xj4ylrpo_image.png`, 6 nests calibrated first try (this-weeks-reflection · small-moments-that-matter · family-conversations · challenges-lessons · gratitude-joy · looking-ahead) — **father + daughter** at the journal (first non-mother centrepiece)
+- ⏳ Remaining 5 worlds (founder generates with GPT, agent places ~5 min each):
   10. Stories from Real Life
   11. Tools & Exercises
   13. Parenting Journey
   14. Generations & Heritage
   15. Home, Memories & Roots
+
+### §SARA-CAST-VARIETY 2026-06-18 — Cast variation rule (founder)
+- **Rule:** Across the Sara worlds, deliberately vary the central figures so the cast mirrors real family life. Do NOT default to mother+child in every world.
+- **Rotation pool:**
+  - mother + child
+  - father + child
+  - both parents
+  - grandparent + child
+  - siblings
+  - step-parents
+  - single parent
+  - multi-generational household
+- **Encoded in code** at the top of every Sara World file (`§SARA-CAST-VARIETY` block in World 9, to be carried forward into Worlds 10-15 prompt generation).
+- **Current cast roster:**
+  - World 1 My Child — single child
+  - World 3 Our Family — full family
+  - World 6 Relationships & Cooperation — children together
+  - World 7 Challenging Situations — mother + child after rain
+  - World 8 Wisdom Garden — mother + daughter (grandparents in nests)
+  - World 9 Weekly Digest — **father + daughter**
+- **Founder hint for Worlds 10-15:** prioritise grandparent+child, siblings, single parent, multi-generational angles to balance the roster.
 
 ### Deferred architectural candidate — "Every Child Is Our Child" (2026-06-18)
 - **Status:** Saved idea, decision deferred to the very end of Sara construction
