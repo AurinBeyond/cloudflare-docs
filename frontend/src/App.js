@@ -71,6 +71,7 @@ import SaraEmotionsSafety from "@/pages/SaraEmotionsSafety";
 import SaraOurFamily from "@/pages/SaraOurFamily";
 import SaraBoundariesResponsibility from "@/pages/SaraBoundariesResponsibility";
 import SaraGrowthDevelopment from "@/pages/SaraGrowthDevelopment";
+import SaraRelationshipsCooperation from "@/pages/SaraRelationshipsCooperation";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -448,6 +449,18 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraGrowthDevelopment />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-6 · RELATIONSHIPS & COOPERATION — painted
+            interior. We grow through connection, understanding, and
+            learning to walk beside one another. Nobody leads —
+            everyone participates. */}
+        <Route
+          path="/parents-room/category/relationships-cooperation"
+          element={
+            <WandererGate scope="private">
+              <SaraRelationshipsCooperation />
             </WandererGate>
           }
         />
