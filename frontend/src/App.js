@@ -78,6 +78,7 @@ import SaraWeeklyDigest from "@/pages/SaraWeeklyDigest";
 import SaraStoriesRealLife from "@/pages/SaraStoriesRealLife";
 import SaraToolsExercises from "@/pages/SaraToolsExercises";
 import SaraParentingJourney from "@/pages/SaraParentingJourney";
+import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -533,6 +534,18 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraParentingJourney />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-14 · GENERATIONS & HERITAGE — painted interior.
+            Every family carries stories, wisdom and gifts across
+            generations. Three-generation household, curious not
+            judgemental. */}
+        <Route
+          path="/parents-room/category/generations-heritage"
+          element={
+            <WandererGate scope="private">
+              <SaraGenerationsHeritage />
             </WandererGate>
           }
         />

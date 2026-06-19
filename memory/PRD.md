@@ -75,8 +75,8 @@
 - ✅ **World 10 · Stories from Real Life** (`SaraStoriesRealLife.jsx`) — asset `uzdnty7e_image.png`, 6 nests calibrated first try (family-stories · turning-points · lessons-learned · voices-across-generations · courage-hope · small-moments-big-meaning) — multi-cast: every nest carries a different family configuration; the centre is a great open book unfolding into scenes of real family life. **Bridge between Wisdom Garden and lived experience.**
 - ✅ **World 11 · Tools & Exercises** (`SaraToolsExercises.jsx`) — asset `f5xlh6so_image.png` (**square 1:1, not 3:2**), 6 nests calibrated first try (conversation-cards · family-activities · reflection-prompts · weekly-practices · play-discovery · relationship-tools) — **grandmother + two grandchildren** at the conversation-card table; anti-classroom, anti-wellness, "small practices can open big conversations." First Sara world rendered at **1:1 aspect ratio** (matches founder's square painted asset).
 - ✅ **World 13 · Parenting Journey** (`SaraParentingJourney.jsx`) — asset `8shbu47m_image.png` (square 1:1), 6 nests calibrated first try (becoming-a-parent · growing-through-challenges · learning-about-yourself · letting-go-of-perfection · balancing-family-and-self · looking-back-looking-forward) — **multi-stage cast**: new parents + mid-life parents + grandparents all on the same woodland path. "As children grow, parents grow too." First Sara world that centres the parent's own inner journey rather than the child's.
-- ⏳ Remaining 2 worlds (founder generates with GPT, agent places ~5 min each):
-  14. Generations & Heritage
+- ✅ **World 14 · Generations & Heritage** (`SaraGenerationsHeritage.jsx`) — asset `ihmnen44_image.png` (square 1:1), 6 nests calibrated first try (family-stories · traditions-rituals · wisdom-passed-on · what-we-choose-to-carry-forward · patterns-across-generations · roots-belonging) — **three-generation household** (grandparents + parents + 3 children + dog on quilted blanket with photo album & memory chest). `§SARA-TONE-NOTE`: stays curious, never judgemental — no genealogy, no ethnic identity politics, no "broken generations" narrative.
+- ⏳ Remaining 1 world (founder generates with GPT, agent places ~5 min):
   15. Home, Memories & Roots
 
 ### §SARA-CAST-VARIETY 2026-06-18 — Cast variation rule (founder)
@@ -101,7 +101,8 @@
   - World 10 Stories from Real Life — **multi-cast** (every nest a different configuration)
   - World 11 Tools & Exercises — **grandmother + two grandchildren** (intergenerational, bridges to Worlds 14 & 15)
   - World 13 Parenting Journey — **multi-stage cast** (new parents + mid-life parents + grandparents on the same road simultaneously)
-- **Founder hint for Worlds 14-15:** prioritise siblings, single parent, step-family, father+children angles to balance the roster.
+  - World 14 Generations & Heritage — **three-generation household** (grandparents + parents + 3 children together on a blanket)
+- **Founder hint for World 15:** consider single parent, step-family, father+children, OR a quiet solo-with-memory cast to round out the roster.
 
 ### Deferred architectural candidate — "Every Child Is Our Child" (2026-06-18)
 - **Status:** Saved idea, decision deferred to the very end of Sara construction
