@@ -79,6 +79,7 @@ import SaraStoriesRealLife from "@/pages/SaraStoriesRealLife";
 import SaraToolsExercises from "@/pages/SaraToolsExercises";
 import SaraParentingJourney from "@/pages/SaraParentingJourney";
 import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
+import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -546,6 +547,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraGenerationsHeritage />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-15 · HOME, MEMORIES & ROOTS — painted interior.
+            Home is not only a place. It is the feeling of being known,
+            remembered and welcomed. The closing ring of the Sara forest. */}
+        <Route
+          path="/parents-room/category/home-memories-roots"
+          element={
+            <WandererGate scope="private">
+              <SaraHomeMemoriesRoots />
             </WandererGate>
           }
         />
