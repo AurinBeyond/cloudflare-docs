@@ -118,8 +118,8 @@ const CIRCLE_RIPPLE_ZONE = {
   id: "wider-circle-ripple",
   label: "The Circle We Create",
   route: "/parents-room/wider-circle",
-  top: 13,
-  left: 4,
+  top: 87,
+  left: 64,
   w: 9,
   h: 9,
 };
