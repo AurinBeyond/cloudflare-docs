@@ -106,6 +106,24 @@ const CHAT_ZONES = [
   { id: "garden-companion", label: "Sara's garden",  route: "/parents-room/v1", top: 87, left: 75, w: 23, h: 11 },
 ];
 
+/* §CIRCLE-RIPPLE-ZONE 2026-06-19 — Sea-ripple entrance to "The
+ * Circle We Create" secondary hub. Sits on the painted sea area
+ * near the lighthouse. SVG concentric circles drawn in ink-style
+ * black contour, pulsing softly on hover. Painted hub asset is
+ * NOT modified — this is a pure overlay.
+ *
+ * Initial guess: lower-left area (lighthouse sea). Refine via
+ * ?debug=1. */
+const CIRCLE_RIPPLE_ZONE = {
+  id: "wider-circle-ripple",
+  label: "The Circle We Create",
+  route: "/parents-room/wider-circle",
+  top: 13,
+  left: 4,
+  w: 9,
+  h: 9,
+};
+
 export default function SaraHub() {
   const [params] = useSearchParams();
   const debug = params.get("debug") === "1";
@@ -177,6 +195,123 @@ export default function SaraHub() {
             )}
           </Link>
         ))}
+
+        {/* §CIRCLE-RIPPLE-ENTRANCE — SVG ripple overlay on the
+            painted sea near the lighthouse. Clickable, animated,
+            with a small label beneath. Does NOT modify the
+            painted hub asset. */}
+        <Link
+          to={CIRCLE_RIPPLE_ZONE.route}
+          data-testid="sara-hub-circle-ripple"
+          aria-label={CIRCLE_RIPPLE_ZONE.label}
+          title={CIRCLE_RIPPLE_ZONE.label}
+          className="absolute block group"
+          style={{
+            top: `${CIRCLE_RIPPLE_ZONE.top}%`,
+            left: `${CIRCLE_RIPPLE_ZONE.left}%`,
+            width: `${CIRCLE_RIPPLE_ZONE.w}%`,
+            height: `${CIRCLE_RIPPLE_ZONE.h}%`,
+            cursor: "pointer",
+            background: debug ? "rgba(80, 180, 255, 0.18)" : "transparent",
+            border: debug ? "1px dashed rgba(80, 180, 255, 0.9)" : "none",
+            borderRadius: "12px",
+          }}
+        >
+          {/* Concentric ripple rings — ink-style contour. */}
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{ overflow: "visible" }}
+          >
+            {/* small centre stone */}
+            <circle cx="50" cy="50" r="2" fill="#1a1305" />
+            {/* ripple rings — pulsing */}
+            <circle
+              cx="50" cy="50" r="14"
+              fill="none" stroke="#1a1305" strokeWidth="1.4"
+              style={{
+                transformOrigin: "50% 50%",
+                animation: "saraCircleRipple 3.4s ease-out 0s infinite",
+              }}
+            />
+            <circle
+              cx="50" cy="50" r="22"
+              fill="none" stroke="#1a1305" strokeWidth="1.2" opacity="0.85"
+              style={{
+                transformOrigin: "50% 50%",
+                animation: "saraCircleRipple 3.4s ease-out 0.6s infinite",
+              }}
+            />
+            <circle
+              cx="50" cy="50" r="32"
+              fill="none" stroke="#1a1305" strokeWidth="1.0" opacity="0.7"
+              style={{
+                transformOrigin: "50% 50%",
+                animation: "saraCircleRipple 3.4s ease-out 1.2s infinite",
+              }}
+            />
+            <circle
+              cx="50" cy="50" r="42"
+              fill="none" stroke="#1a1305" strokeWidth="0.8" opacity="0.55"
+              style={{
+                transformOrigin: "50% 50%",
+                animation: "saraCircleRipple 3.4s ease-out 1.8s infinite",
+              }}
+            />
+          </svg>
+
+          {debug && (
+            <span
+              className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+              style={{
+                background: "rgba(80,180,255,0.95)",
+                color: "#0a1f3a",
+                pointerEvents: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {CIRCLE_RIPPLE_ZONE.id}
+            </span>
+          )}
+        </Link>
+
+        {/* Small HTML label beneath the ripple — title + subtitle. */}
+        <div
+          className="absolute pointer-events-none text-center"
+          style={{
+            top: `${CIRCLE_RIPPLE_ZONE.top + CIRCLE_RIPPLE_ZONE.h + 0.5}%`,
+            left: `${CIRCLE_RIPPLE_ZONE.left - 4}%`,
+            width: `${CIRCLE_RIPPLE_ZONE.w + 8}%`,
+            color: "#1a1305",
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            textShadow: "0 1px 2px rgba(255,240,210,0.6)",
+          }}
+          data-testid="sara-hub-circle-ripple-label"
+        >
+          <div
+            className="font-semibold"
+            style={{ fontSize: "clamp(0.65rem, 1.1vw, 0.95rem)", letterSpacing: "0.02em" }}
+          >
+            The Circle We Create
+          </div>
+          <div
+            className="italic opacity-80"
+            style={{ fontSize: "clamp(0.55rem, 0.85vw, 0.75rem)", marginTop: "0.15em" }}
+          >
+            Every choice reaches further than we think.
+          </div>
+        </div>
+
+        {/* Ripple keyframes — defined inline so the component is
+            self-contained and does not depend on a global stylesheet. */}
+        <style>{`
+          @keyframes saraCircleRipple {
+            0%   { transform: scale(0.6); opacity: 0; }
+            15%  { opacity: 0.85; }
+            100% { transform: scale(1.25); opacity: 0; }
+          }
+        `}</style>
       </div>
     </div>
   );

@@ -80,6 +80,7 @@ import SaraToolsExercises from "@/pages/SaraToolsExercises";
 import SaraParentingJourney from "@/pages/SaraParentingJourney";
 import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
 import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
+import WiderCircleHub from "@/pages/WiderCircleHub";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -558,6 +559,18 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraHomeMemoriesRoots />
+            </WandererGate>
+          }
+        />
+        {/* §CIRCLE-WE-CREATE · Secondary hub (placeholder for now).
+            Reached via the sea-ripple overlay near the lighthouse
+            on the Sara Forest hub. Tree = rooted family. Water =
+            moving influence. Same ecosystem. */}
+        <Route
+          path="/parents-room/wider-circle"
+          element={
+            <WandererGate scope="private">
+              <WiderCircleHub />
             </WandererGate>
           }
         />
