@@ -176,12 +176,21 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - Each world gets a `§ANTI-JUDGEMENT-LOCK` comment block
 
 **Phased plan:**
-- ETAPP 0: PRD lock + naming (✅ this entry)
-- ETAPP 1: 4 worlds' content design (founder + GPT, paper-only)
+- ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
+- ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
 - ETAPP 2: Wider Circle painted hub asset (GPT-generated)
 - ETAPP 3: 4 painted world interiors (sequential, same workflow as Worlds 8-15)
-- ETAPP 4: Entry point card on Sara Hub
+- ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay)
 - ETAPP 5: Content fill for nests (long phase, deferred)
+
+**§CIRCLE-RIPPLE-ENTRANCE-LOCK 2026-06-19 (Etapp 4 complete):**
+- Location: bottom-right free strip on Sara Hub, between Wisdom Garden leaf and Sara's Garden card
+- Coordinates: `top: 87%, left: 64%, w: 9%, h: 9%`
+- Implementation: pure SVG overlay (4 concentric ink-style circles + centre stone) with CSS `saraCircleRipple` keyframe pulse animation. Sara Hub painted asset NOT modified.
+- HTML label beneath: *"The Circle We Create"* + italic subtitle *"Every choice reaches further than we think."*
+- Click route: `/parents-room/wider-circle` → `WiderCircleHub.jsx` placeholder
+- Variant chosen: **C** (bottom-right free strip) — selected over sea-area to avoid conflict with hub's poem + leaves. The SVG ripple itself carries the water/circle symbol; explicit sea-placement was not needed.
+- Visual symmetry achieved: ripple ring ↔ Sara's Garden card at same baseline
 
 ### §SARA-CAST-VARIETY 2026-06-18 — Cast variation rule (founder)
 - **Rule:** Across the Sara worlds, deliberately vary the central figures so the cast mirrors real family life. Do NOT default to mother+child in every world.
