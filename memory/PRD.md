@@ -115,6 +115,31 @@
 3. 💞 **What Cannot Be Replaced** — *"What am I using in place of being truly here?"* (substitution patterns — money, gifts, broken promises, control, fear, manipulation; not just wealth — **renamed from "Presence vs Provision"**)
 4. 🫂 **When One Heart Holds the House** — *"How does one heart carry the whole home?"* (universal carrying — single parents, caregivers of sick spouses, special-needs parents, long-distance partner absences, recently widowed; **renamed from "Single Parents"** to widen the mirror)
 
+**Architecture (LOCKED 2026-06-19):**
+```
+Sara Forest (LOCKED — painted hub untouched)
+   ↓
+ONE new entry card on Sara Hub:
+   🌳 The Circle We Create
+   Every choice reaches further than we think.
+   ↓
+Secondary painted hub (own page, own asset, own navigation)
+   ↓
+4 Wider Worlds (own painted interiors)
+   ↓
+6 nests each — each passes the world's Completion Test
+```
+
+**Founder's poetic anchor (2026-06-19):**
+*"The Circle We Create" is the same question as "What's going on between us?" — just one ring wider. The Forest asks "between us" (family). The Circle asks "between all of us" (world). Same dynamic, larger scope. One nest grows into another ring.*
+
+**Routes (locked):**
+- Sara Hub entry card → `/parents-room/wider-circle` (secondary hub)
+- `/parents-room/wider-circle/voices-around-the-child`
+- `/parents-room/wider-circle/every-child-is-our-child`
+- `/parents-room/wider-circle/what-cannot-be-replaced`
+- `/parents-room/wider-circle/when-one-heart-holds-the-house`
+
 **§CIRCLE-TONE-LOCK:**
 - Wider Circle is NOT "harder Sara". It is **deeper Sara, not angrier Sara.**
 - Same Tony Robbins × Luule Viilma voice — never activism, never politics, never blame.
@@ -125,6 +150,24 @@
 - Speak in time, step, preparation language — not awakening/consciousness language
 - ✅ "I had nine months."   ❌ "I awakened to my responsibility."
 - Founder's own story (chose to keep her daughter at 24 despite no work, no education, no certainty) is the inner compass for this world's tone.
+
+**§CORE-PATTERN-RULE (founder + GPT methodology, 2026-06-19):**
+Before designing 6 nests for any Wider Circle world, lock TWO things first:
+1. **Core Pattern** — one sentence defining the central pattern this world guards
+2. **Completion Test** — fill-in-the-blank sentence every nest must complete naturally
+
+If a nest cannot complete the test, it does NOT belong to this world. It belongs to one of the other 3.
+
+**Locked Core Patterns + Completion Tests for all 4 Wider Worlds:**
+
+| World | Core Pattern | Completion Test | Domain |
+|---|---|---|---|
+| 💞 What Cannot Be Replaced | What am I using instead of being truly present? | "I am using ___ instead of being here." | SUBSTITUTION |
+| 🫂 When One Heart Holds the House | What weight do I carry when there is no one to share it? | "When I carry this alone, ___." | CARRYING |
+| 🌍 Every Child Is Our Child | A child has arrived. What do the adults around them choose? | "This life came among us, and we choose ___." | RECEPTION |
+| 🌎 The Voices Around the Child | Beside my voice, who else is shaping my child? | "While I am not speaking, ___ is speaking to my child." | EXTERNAL VOICES |
+
+The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 
 **Architecture (planned):**
 - Routes: `/parents-room/wider-circle` (hub) + `/parents-room/wider-circle/<slug>` (4 worlds)
