@@ -76,6 +76,7 @@ import SaraChallengingSituations from "@/pages/SaraChallengingSituations";
 import SaraWisdomGarden from "@/pages/SaraWisdomGarden";
 import SaraWeeklyDigest from "@/pages/SaraWeeklyDigest";
 import SaraStoriesRealLife from "@/pages/SaraStoriesRealLife";
+import SaraToolsExercises from "@/pages/SaraToolsExercises";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -509,6 +510,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraStoriesRealLife />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-11 · TOOLS & EXERCISES — painted interior.
+            Small practices can open big conversations. Grandmother +
+            two grandchildren at the conversation-card table. */}
+        <Route
+          path="/parents-room/category/tools-exercises"
+          element={
+            <WandererGate scope="private">
+              <SaraToolsExercises />
             </WandererGate>
           }
         />
