@@ -79,6 +79,67 @@
 - ✅ **World 15 · Home, Memories & Roots** (`SaraHomeMemoriesRoots.jsx`) — asset `nypj62t3_image.png` (square 1:1), 6 nests calibrated first try (places-we-remember · family-memories · traditions-of-home · returning-home · belonging · creating-home) — **multi-generation evening homecoming** (father with guitar, mother with heart-mug, grandmother with grandson + photo album, three children, golden retriever, lantern, "Home" sign). `§SARA-CLOSING-RING`: closes the forest — World 14 = where we come from, World 15 = where we belong.
 - 🎉 **ALL 14 SARA WORLDS COMPLETE.** First whole-forest checkpoint reached on 2026-06-19. The hub at `/parents-room` and the 14 painted interiors form a fully navigable, calibrated tree.
 
+---
+
+## 🔒 SARA FOREST — LOCKED (2026-06-19)
+
+**Status:** `LOCKED`. The 14-world Sara Forest is considered architecturally complete. **No new leaves will be added to the painted hub.** All future expansions go into a **secondary hub** below.
+
+**Locked components:**
+- Painted hub asset `36vfb47d_...21_25_41.png` — DO NOT redraw, DO NOT extend the leaf count
+- 14 LEAF_THEMES with numerals 1-11 + 13-15 (no World 12)
+- 14 painted interior worlds + their nest calibrations
+- 3 chat-zones (center nest, top-right Sara card, bottom-right garden card) → `/parents-room/v1`
+- Central compass question: **"What's going on between us?"**
+
+**The empty World 12 slot remains a painted gap on purpose.** The number is not filled; the gap is honoured.
+
+---
+
+## 🌳 THE CIRCLE WE CREATE — Secondary Hub (PLANNED 2026-06-19)
+
+**Founder's decision (with GPT consultation):** The 4 deeper philosophical questions that emerged after the forest was complete do NOT belong on the Sara Forest hub. They belong in a separate, parallel space — a **secondary hub** that opens *beside* the nest, not *inside* the tree.
+
+**Name:** 🌳 **The Circle We Create**
+**Subtitle:** *Every choice reaches further than we think.*
+
+**Rationale:**
+- Sara Forest answers *"What's going on between us?"* — warm sanctuary, family-inward
+- The Circle We Create answers *"What's going on around us?"* — philosophical, outward, value-facing
+- Different temperature, different breath. Same Sara universe.
+- Architecturally cleaner: no hub repaint, no calibration risk, future-extensible (5th, 6th world could be added later without breaking anything)
+
+**4 worlds planned:**
+1. 🌎 **The Voices Around the Child** — *"Who speaks to my child when I am not speaking?"* (social media, school, internet, peers, culture, state, parenting trends)
+2. 🌍 **Every Child Is Our Child** — *"What responsibility comes with creating and receiving life?"* (conscious choice, 9 months, mothers who stayed, abandonment, adoption, community responsibility — `§EVERY-CHILD-VOICE-LOCK`: speak in time/step/preparation language, not awakening/consciousness language)
+3. 💞 **What Cannot Be Replaced** — *"What am I using in place of being truly here?"* (substitution patterns — money, gifts, broken promises, control, fear, manipulation; not just wealth — **renamed from "Presence vs Provision"**)
+4. 🫂 **When One Heart Holds the House** — *"How does one heart carry the whole home?"* (universal carrying — single parents, caregivers of sick spouses, special-needs parents, long-distance partner absences, recently widowed; **renamed from "Single Parents"** to widen the mirror)
+
+**§CIRCLE-TONE-LOCK:**
+- Wider Circle is NOT "harder Sara". It is **deeper Sara, not angrier Sara.**
+- Same Tony Robbins × Luule Viilma voice — never activism, never politics, never blame.
+- Every visitor must find a mirror, not a verdict.
+- No pro/anti-abortion stances, no rich/poor judgements, no "ideal family" narrative.
+
+**§EVERY-CHILD-VOICE-LOCK (founder's lived language):**
+- Speak in time, step, preparation language — not awakening/consciousness language
+- ✅ "I had nine months."   ❌ "I awakened to my responsibility."
+- Founder's own story (chose to keep her daughter at 24 despite no work, no education, no certainty) is the inner compass for this world's tone.
+
+**Architecture (planned):**
+- Routes: `/parents-room/wider-circle` (hub) + `/parents-room/wider-circle/<slug>` (4 worlds)
+- Entry point: **6th card** alongside the existing 5 values strip at the bottom of Sara Hub (option C — most organic, leaves painted hub untouched)
+- Each world: same 6-nest Painted Map pattern
+- Each world gets a `§ANTI-JUDGEMENT-LOCK` comment block
+
+**Phased plan:**
+- ETAPP 0: PRD lock + naming (✅ this entry)
+- ETAPP 1: 4 worlds' content design (founder + GPT, paper-only)
+- ETAPP 2: Wider Circle painted hub asset (GPT-generated)
+- ETAPP 3: 4 painted world interiors (sequential, same workflow as Worlds 8-15)
+- ETAPP 4: Entry point card on Sara Hub
+- ETAPP 5: Content fill for nests (long phase, deferred)
+
 ### §SARA-CAST-VARIETY 2026-06-18 — Cast variation rule (founder)
 - **Rule:** Across the Sara worlds, deliberately vary the central figures so the cast mirrors real family life. Do NOT default to mother+child in every world.
 - **Rotation pool:**
