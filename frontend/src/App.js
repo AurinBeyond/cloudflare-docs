@@ -77,6 +77,7 @@ import SaraWisdomGarden from "@/pages/SaraWisdomGarden";
 import SaraWeeklyDigest from "@/pages/SaraWeeklyDigest";
 import SaraStoriesRealLife from "@/pages/SaraStoriesRealLife";
 import SaraToolsExercises from "@/pages/SaraToolsExercises";
+import SaraParentingJourney from "@/pages/SaraParentingJourney";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -521,6 +522,17 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <SaraToolsExercises />
+            </WandererGate>
+          }
+        />
+        {/* §SARA-WORLD-13 · PARENTING JOURNEY — painted interior.
+            As children grow, parents grow too. Multi-stage cast
+            walking the same woodland road simultaneously. */}
+        <Route
+          path="/parents-room/category/parenting-journey"
+          element={
+            <WandererGate scope="private">
+              <SaraParentingJourney />
             </WandererGate>
           }
         />

@@ -74,8 +74,8 @@
 - ✅ **World 9 · Weekly Digest** (`SaraWeeklyDigest.jsx`) — asset `xj4ylrpo_image.png`, 6 nests calibrated first try (this-weeks-reflection · small-moments-that-matter · family-conversations · challenges-lessons · gratitude-joy · looking-ahead) — **father + daughter** at the journal (first non-mother centrepiece)
 - ✅ **World 10 · Stories from Real Life** (`SaraStoriesRealLife.jsx`) — asset `uzdnty7e_image.png`, 6 nests calibrated first try (family-stories · turning-points · lessons-learned · voices-across-generations · courage-hope · small-moments-big-meaning) — multi-cast: every nest carries a different family configuration; the centre is a great open book unfolding into scenes of real family life. **Bridge between Wisdom Garden and lived experience.**
 - ✅ **World 11 · Tools & Exercises** (`SaraToolsExercises.jsx`) — asset `f5xlh6so_image.png` (**square 1:1, not 3:2**), 6 nests calibrated first try (conversation-cards · family-activities · reflection-prompts · weekly-practices · play-discovery · relationship-tools) — **grandmother + two grandchildren** at the conversation-card table; anti-classroom, anti-wellness, "small practices can open big conversations." First Sara world rendered at **1:1 aspect ratio** (matches founder's square painted asset).
-- ⏳ Remaining 3 worlds (founder generates with GPT, agent places ~5 min each):
-  13. Parenting Journey
+- ✅ **World 13 · Parenting Journey** (`SaraParentingJourney.jsx`) — asset `8shbu47m_image.png` (square 1:1), 6 nests calibrated first try (becoming-a-parent · growing-through-challenges · learning-about-yourself · letting-go-of-perfection · balancing-family-and-self · looking-back-looking-forward) — **multi-stage cast**: new parents + mid-life parents + grandparents all on the same woodland path. "As children grow, parents grow too." First Sara world that centres the parent's own inner journey rather than the child's.
+- ⏳ Remaining 2 worlds (founder generates with GPT, agent places ~5 min each):
   14. Generations & Heritage
   15. Home, Memories & Roots
 
@@ -100,7 +100,8 @@
   - World 9 Weekly Digest — **father + daughter**
   - World 10 Stories from Real Life — **multi-cast** (every nest a different configuration)
   - World 11 Tools & Exercises — **grandmother + two grandchildren** (intergenerational, bridges to Worlds 14 & 15)
-- **Founder hint for Worlds 13-15:** prioritise siblings, single parent, multi-generational, father+children, step-family angles to balance the roster.
+  - World 13 Parenting Journey — **multi-stage cast** (new parents + mid-life parents + grandparents on the same road simultaneously)
+- **Founder hint for Worlds 14-15:** prioritise siblings, single parent, step-family, father+children angles to balance the roster.
 
 ### Deferred architectural candidate — "Every Child Is Our Child" (2026-06-18)
 - **Status:** Saved idea, decision deferred to the very end of Sara construction
