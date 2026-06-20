@@ -116,10 +116,10 @@ const CIRCLE_RIPPLE_ZONE = {
   id: "wider-circle-ripple",
   label: "The Circle We Create",
   route: "/parents-room/wider-circle",
-  top: 11,
-  left: 38,
-  w: 14,
-  h: 18,
+  top: 8,
+  left: 36,
+  w: 18,
+  h: 36,
 };
 
 export default function SaraHub() {
@@ -194,16 +194,20 @@ export default function SaraHub() {
           </Link>
         ))}
 
-        {/* §CIRCLE-RIPPLE-CLICK-ZONE — Invisible click target over
-            the painted sea-ripples. Painting itself carries the
-            title "The Circle We Create" + subtitle. No SVG overlay,
-            no HTML label — clean click target only. */}
+        {/* §CIRCLE-RIPPLE-CLICK-ZONE — Click target over the painted
+            "The Circle We Create" composition (title + subtitle +
+            sea + painted ripples). The hub painting already carries
+            all the visual content. We add ONE simple affordance:
+            a subtle pulsing cream halo that breathes around the
+            painted composition — signals "alive / interactive"
+            without competing with the painting. Cursor: pointer
+            + tooltip = standard click cues. */}
         <Link
           to={CIRCLE_RIPPLE_ZONE.route}
           data-testid="sara-hub-circle-ripple"
-          aria-label={CIRCLE_RIPPLE_ZONE.label}
+          aria-label={`${CIRCLE_RIPPLE_ZONE.label} — every choice reaches further than we think`}
           title={CIRCLE_RIPPLE_ZONE.label}
-          className="absolute block"
+          className="absolute block group"
           style={{
             top: `${CIRCLE_RIPPLE_ZONE.top}%`,
             left: `${CIRCLE_RIPPLE_ZONE.left}%`,
@@ -212,16 +216,22 @@ export default function SaraHub() {
             cursor: "pointer",
             background: debug ? "rgba(80, 180, 255, 0.18)" : "transparent",
             border: debug ? "1px dashed rgba(80, 180, 255, 0.9)" : "none",
-            borderRadius: "12px",
-            transition: "background 200ms ease-out",
-          }}
-          onMouseEnter={(e) => {
-            if (!debug) e.currentTarget.style.background = "rgba(232, 217, 184, 0.08)";
-          }}
-          onMouseLeave={(e) => {
-            if (!debug) e.currentTarget.style.background = "transparent";
+            borderRadius: "50%",
           }}
         >
+          {/* Soft pulsing cream halo — always on, subtle. Becomes
+              brighter on hover to confirm interactivity. */}
+          {!debug && (
+            <div
+              className="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100"
+              style={{
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(ellipse at 50% 60%, rgba(232,217,184,0.18) 0%, rgba(232,217,184,0.08) 45%, rgba(232,217,184,0) 75%)",
+                animation: "saraRippleBreath 4.5s ease-in-out infinite",
+              }}
+            />
+          )}
           {debug && (
             <span
               className="absolute top-0 left-0 px-1 text-[10px] font-mono"
@@ -236,6 +246,14 @@ export default function SaraHub() {
             </span>
           )}
         </Link>
+
+        {/* §RIPPLE-BREATH-KEYFRAMES — gentle "breath" pulse. */}
+        <style>{`
+          @keyframes saraRippleBreath {
+            0%, 100% { transform: scale(0.96); }
+            50%      { transform: scale(1.05); }
+          }
+        `}</style>
       </div>
     </div>
   );
