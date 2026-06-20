@@ -183,14 +183,14 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay)
 - ETAPP 5: Content fill for nests (long phase, deferred)
 
-**§CIRCLE-RIPPLE-ENTRANCE-LOCK 2026-06-19 (Etapp 4 complete):**
-- Location: bottom-right free strip on Sara Hub, between Wisdom Garden leaf and Sara's Garden card
-- Coordinates: `top: 87%, left: 64%, w: 9%, h: 9%`
-- Implementation: pure SVG overlay (4 concentric ink-style circles + centre stone) with CSS `saraCircleRipple` keyframe pulse animation. Sara Hub painted asset NOT modified.
-- HTML label beneath: *"The Circle We Create"* + italic subtitle *"Every choice reaches further than we think."*
+**§CIRCLE-RIPPLE-ENTRANCE-LOCK 2026-06-20 (Etapp 4 complete, REVISED):**
+- Hub painted asset REPLACED with new image `nsl4baid_image.png` — the "The Circle We Create" ripples + title + subtitle are now BAKED INTO the painting itself (in the sea area between lighthouse and cottage). All 14 leaf names, icons, central nest, chat cards, values strip, and garden card preserved identically.
+- Implementation: invisible click-zone overlay (no SVG, no HTML label) over the painted ripples.
+- Click-zone: `top: 11%, left: 38%, w: 14%, h: 18%`
+- Hover affordance: subtle cream-glow (rgba(232,217,184,0.08)) on mouseEnter; transparent on mouseLeave
 - Click route: `/parents-room/wider-circle` → `WiderCircleHub.jsx` placeholder
-- Variant chosen: **C** (bottom-right free strip) — selected over sea-area to avoid conflict with hub's poem + leaves. The SVG ripple itself carries the water/circle symbol; explicit sea-placement was not needed.
-- Visual symmetry achieved: ripple ring ↔ Sara's Garden card at same baseline
+- All 14 leaf-zones + 3 chat-zones calibrated first try — no shifts needed (new image preserved layout)
+- Old SVG ripple overlay (V4) removed completely along with @keyframes saraCircleRipple
 
 ### §SARA-CAST-VARIETY 2026-06-18 — Cast variation rule (founder)
 - **Rule:** Across the Sara worlds, deliberately vary the central figures so the cast mirrors real family life. Do NOT default to mother+child in every world.
