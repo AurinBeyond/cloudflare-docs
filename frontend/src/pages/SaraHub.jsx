@@ -225,11 +225,11 @@ export default function SaraHub() {
             style={{ overflow: "visible" }}
           >
             {/* small centre stone */}
-            <circle cx="50" cy="50" r="2" fill="#1a1305" />
+            <circle cx="50" cy="50" r="2" fill="#e8d9b8" />
             {/* ripple rings — pulsing */}
             <circle
               cx="50" cy="50" r="14"
-              fill="none" stroke="#1a1305" strokeWidth="1.4"
+              fill="none" stroke="#e8d9b8" strokeWidth="1.4"
               style={{
                 transformOrigin: "50% 50%",
                 animation: "saraCircleRipple 3.4s ease-out 0s infinite",
@@ -237,7 +237,7 @@ export default function SaraHub() {
             />
             <circle
               cx="50" cy="50" r="22"
-              fill="none" stroke="#1a1305" strokeWidth="1.2" opacity="0.85"
+              fill="none" stroke="#e8d9b8" strokeWidth="1.2" opacity="0.85"
               style={{
                 transformOrigin: "50% 50%",
                 animation: "saraCircleRipple 3.4s ease-out 0.6s infinite",
@@ -245,7 +245,7 @@ export default function SaraHub() {
             />
             <circle
               cx="50" cy="50" r="32"
-              fill="none" stroke="#1a1305" strokeWidth="1.0" opacity="0.7"
+              fill="none" stroke="#e8d9b8" strokeWidth="1.0" opacity="0.7"
               style={{
                 transformOrigin: "50% 50%",
                 animation: "saraCircleRipple 3.4s ease-out 1.2s infinite",
@@ -253,7 +253,7 @@ export default function SaraHub() {
             />
             <circle
               cx="50" cy="50" r="42"
-              fill="none" stroke="#1a1305" strokeWidth="0.8" opacity="0.55"
+              fill="none" stroke="#e8d9b8" strokeWidth="0.8" opacity="0.55"
               style={{
                 transformOrigin: "50% 50%",
                 animation: "saraCircleRipple 3.4s ease-out 1.8s infinite",
@@ -283,9 +283,9 @@ export default function SaraHub() {
             top: `${CIRCLE_RIPPLE_ZONE.top + CIRCLE_RIPPLE_ZONE.h + 0.5}%`,
             left: `${CIRCLE_RIPPLE_ZONE.left - 4}%`,
             width: `${CIRCLE_RIPPLE_ZONE.w + 8}%`,
-            color: "#1a1305",
+            color: "#e8d9b8",
             fontFamily: "Georgia, 'Times New Roman', serif",
-            textShadow: "0 1px 2px rgba(255,240,210,0.6)",
+            textShadow: "0 1px 3px rgba(0,0,0,0.7)",
           }}
           data-testid="sara-hub-circle-ripple-label"
         >
