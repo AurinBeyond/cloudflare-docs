@@ -18,19 +18,19 @@ const HUB_IMAGE =
 
 const ZONES = [
   { id: "back-to-forest", label: "Back to Sara's World", route: "/parents-room",
-    top: 4, left: 3, w: 14, h: 14 },
+    top: 12, left: 1, w: 11, h: 10 },
   { id: "world-what-cannot-be-replaced", label: "What Cannot Be Replaced",
     route: "/parents-room/wider-circle/what-cannot-be-replaced",
-    top: 39, left: 11, w: 18, h: 56 },
+    top: 34, left: 7.5, w: 13.5, h: 42 },
   { id: "world-one-heart-holds-the-house", label: "When One Heart Holds the House",
     route: "/parents-room/wider-circle/when-one-heart-holds-the-house",
-    top: 39, left: 30, w: 18, h: 56 },
+    top: 34, left: 23, w: 13.5, h: 42 },
   { id: "world-every-child-is-our-child", label: "Every Child Is Our Child",
     route: "/parents-room/wider-circle/every-child-is-our-child",
-    top: 39, left: 49, w: 18, h: 56 },
+    top: 34, left: 39, w: 13.5, h: 42 },
   { id: "world-voices-around-the-child", label: "The Voices Around the Child",
     route: "/parents-room/wider-circle/voices-around-the-child",
-    top: 39, left: 68, w: 18, h: 56 },
+    top: 34, left: 55, w: 13.5, h: 42 },
 ];
 
 export default function WiderCircleHub() {
@@ -45,12 +45,12 @@ export default function WiderCircleHub() {
     >
       <div
         className="relative w-full mx-auto"
-        style={{ aspectRatio: "1 / 1", maxWidth: "1400px" }}
+        style={{ aspectRatio: "3 / 2", maxWidth: "1536px" }}
       >
         <img
           src={HUB_IMAGE}
           alt="The Circle We Create — Every choice reaches further than we think. A painted hub showing 4 wider worlds: What Cannot Be Replaced, When One Heart Holds the House, Every Child Is Our Child, and The Voices Around the Child."
-          className="absolute inset-0 w-full h-full object-cover select-none"
+          className="absolute inset-0 w-full h-full object-contain select-none"
           draggable={false}
           loading="eager"
           data-testid="wider-circle-hub-image"

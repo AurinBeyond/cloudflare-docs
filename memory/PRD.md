@@ -178,10 +178,23 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 **Phased plan:**
 - ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
 - ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
-- ETAPP 2: Wider Circle painted hub asset (GPT-generated)
+- ETAPP 2: Wider Circle painted hub asset (GPT-generated) — ✅ done 2026-06-20 (`tzl013rr_image.png`)
 - ETAPP 3: 4 painted world interiors (sequential, same workflow as Worlds 8-15)
-- ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay)
+- ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay; revised 2026-06-20 — invisible click-zone over painted ripples)
+- ETAPP 4b: Wider Circle Hub page calibrated (✅ done 2026-06-21 — `WiderCircleHub.jsx` 5 zones aligned to `tzl013rr_image.png`, navigation verified end-to-end)
 - ETAPP 5: Content fill for nests (long phase, deferred)
+
+**§CIRCLE-HUB-LOCK 2026-06-21 (Etapp 4b complete):**
+- Painted asset: `tzl013rr_image.png` (1536×1024, 3:2 aspect)
+- Container: `aspectRatio: 3/2, maxWidth: 1536px`, `object-contain` (changed from 1:1 + object-cover to prevent left/right cropping of wooden sign and 4th card)
+- 5 calibrated click zones (all rendered with debug-mode dashed outline):
+  - `back-to-forest` (wooden sign top-left) → `/parents-room` — `top:12, left:1, w:11, h:10`
+  - `world-what-cannot-be-replaced` → `/parents-room/wider-circle/what-cannot-be-replaced` — `top:34, left:7.5, w:13.5, h:42`
+  - `world-one-heart-holds-the-house` → `/parents-room/wider-circle/when-one-heart-holds-the-house` — `top:34, left:23, w:13.5, h:42`
+  - `world-every-child-is-our-child` → `/parents-room/wider-circle/every-child-is-our-child` — `top:34, left:39, w:13.5, h:42`
+  - `world-voices-around-the-child` → `/parents-room/wider-circle/voices-around-the-child` — `top:34, left:55, w:13.5, h:42`
+- Navigation verified: Sara Forest → sea-ripple click → Wider Circle Hub → world card click → soft-404 (worlds not yet built, P1 blocked on user-provided assets) → Back to Sara's World → Sara Forest.
+- The 14 Sara Forest worlds are LOCKED — untouched.
 
 **§CIRCLE-RIPPLE-ENTRANCE-LOCK 2026-06-20 (Etapp 4 complete, REVISED):**
 - Hub painted asset REPLACED with new image `nsl4baid_image.png` — the "The Circle We Create" ripples + title + subtitle are now BAKED INTO the painting itself (in the sea area between lighthouse and cottage). All 14 leaf names, icons, central nest, chat cards, values strip, and garden card preserved identically.
