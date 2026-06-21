@@ -8,6 +8,35 @@
 
 ---
 
+## §SARA-TEEN-MATERIAL-PLACEMENT 2026-06-21 (founder authorised, agent placed)
+
+Existing teen-material in repo:
+- `/app/memory/BROKEN_CLOCKWORK_COURSE_DRAFT.md` — HNW teen course (parent learns to read teen signals)
+- `CHANGELOG.md` references "HNW teen dynamics" and "Aurin as adolescent-facing curator"
+
+### Placement decision (agent-determined, founder may correct)
+
+The teen material is **LAND domain** — it speaks about the parent's
+relationship to a child who is becoming a young sailor. The boat is
+leaving the nest. This is precisely the **§SARA-DUAL-WORLD-LOCK's
+official bridge** between LAND and SEA.
+
+The material does NOT need a new world. It is naturally folded into:
+
+1. **🌳 W2 — When One Heart Holds the House** — for the HNW parent who carries everything as a teen pushes away. Particularly nest 2.5 (TRUST → release) and 2.6 (CONNECTION → witnessing) are this exact emotional terrain.
+2. **🌊 W4 — Voices Around the Child** — for the teen's growing exposure to outer voices (Pressure / Fear / Comparison / Belonging). The teen is the young sailor at the centre of W4's painting.
+
+### Action
+
+When this comes off the backlog (after W1–W4 founder-lock), the
+BROKEN_CLOCKWORK_COURSE_DRAFT.md content should be **re-cast as Sara
+content**, not held separately as a HNW course. The Sara voice and the
+8 locks must apply to every line. Decision deferred until founder
+verifies W1–W4 nest paintings.
+
+---
+
+
 ## §SARA-EXECUTION-MODE 2026-06-21 (founder, batch authorisation)
 
 Founder has authorised batch work on all 24 Sara Wider Circle nests.
