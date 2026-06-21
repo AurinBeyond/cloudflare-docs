@@ -5,6 +5,202 @@
 - Strictly anti-wellness — no coach / therapy / guru tone
 - 100% English UI; conversations with founder are in Estonian
 
+
+---
+
+## §SARA-SYMBOL-SYSTEM-LOCK 2026-06-21 (founder + GPT, ECOSYSTEM)
+
+> **Critical clarification.** Sara symbols are NOT a list of independent
+> objects. They are **one growth map** — chapters of the same story.
+> When creating any new nest brief, world, or visual, never ask
+> *"what does the compass mean?"* — always ask *"how does the compass
+> relate to the nest and the tree?"*
+
+### The Founding Story
+
+```
+🌳 TREE          (roots · generations · heritage · belonging)
+       ↓         The tree does not move. The tree holds.
+🪺 NEST          (first relationship · safety · closeness · starting point)
+       ↓         The nest is not a destination. It is where one departs from.
+⛵ BOAT          (child · family · person in motion)
+       ↓         The boat leaves the nest.
+🌊 SEA           (life · world · others · voices · uncertainty)
+       ↓         The sea is not the enemy.
+🧭 COMPASS       (inner orientation · values · discernment)
+       ↓         The compass does not lead. It shows direction.
+⚓ HARBOUR       (the place to return to)
+                 The harbour does not control. The harbour waits.
+```
+
+### Symbol functions (locked)
+
+| Symbol | Meaning |
+|---|---|
+| 🌳 TREE | Roots, generations, heritage, belonging |
+| 🪺 NEST | First relationship, safety, closeness, starting point |
+| ⛵ BOAT | Child, family, person in motion |
+| 🌊 SEA | Life, world, others, uncertainty |
+| 🧭 COMPASS | Inner orientation, values, discernment |
+| ⚓ HARBOUR | Place of return |
+| 💡 LIGHTHOUSE | Steady voice, orientation |
+| 🏮 LANTERN | Presence, warm light, connection |
+| 📜 PARCHMENT | Slow wisdom, reflection |
+
+### Validation rule
+
+When drafting a new nest, world, or visual, always ask:
+
+> **"Does this belong on the growth map?"**
+
+If yes → use the symbol exactly as the map defines it.
+If no → **do not invent an independent meaning**. The map is closed.
+
+### Foundational principle
+
+Sara is NOT a Parents' Room.
+Sara explores **how a person grows through relationship.**
+
+- The child is not a project.
+- The child is not a problem.
+- The child is not the centre of the system.
+- **The relationship is the centre.**
+
+New themes must support the question: *"What is happening between us — and what does that say about me?"*
+
+---
+
+## §SARA-VISUAL-SYSTEM-LOCK 2026-06-21 (founder, all future visuals)
+
+**Goal:** every future Sara visual must feel born from the same world
+as the existing Sara Forest + Wider Circle paintings.
+
+### Allowed colour palette
+- Warm cream
+- Old parchment
+- Ochre
+- Amber
+- Golden sunset
+- Muted orange
+- Deep sea blue
+- Dark blue
+- Greyish blue
+- Warm brown wood
+
+Visual feeling: **warm · calm · worn · timeless.**
+
+### Forbidden colours
+- Neon
+- Bright red
+- Bright green
+- Saturated purple
+- Pure white
+- Tech-blue
+- Corporate palettes
+
+### Art style — ALWAYS
+- Hand-painted feel
+- Watercolour
+- Visible paper grain
+- Soft light
+- Imperfection
+
+### Art style — NEVER
+- Photography
+- 3D render
+- Flat design
+- Stock illustration
+- Cartoon
+- Emoji style
+- Infographic
+
+> When in doubt ask: *"Does this look like an illustration?"*
+> The answer must be **NO. It must look like a painting.**
+
+### Composition standard
+- Central scene at the centre
+- 4–6 sub-themes around it
+- Top-left wooden Back-sign
+- Bottom reflection parchment
+- Small "This world is being painted." plaque at the bottom
+
+> The UI does NOT carry the story.
+> The painting carries the story.
+
+### Tone test (run before approving any visual)
+- Does this invite the wanderer to **pause**? — ✅ Sara.
+- Does this try to **influence** the wanderer? — ❌ Not Sara.
+
+### Founder lock
+- Sara does not shout.
+- Sara does not sell.
+- Sara does not push.
+- Sara does not teach.
+- Sara **waits**.
+- *Sara waits quietly in the harbour.*
+
+---
+
+## §SARA-CONTENT-VISUAL-ALIGNMENT-LOCK 2026-06-21 (founder, every nest)
+
+> **Quality rule #1:** a visual is not "Sara" because it is beautiful.
+> A visual is "Sara" because it supports its specific sub-theme.
+
+### Wrong approach
+
+```
+Title:        TIME
+Content:      hurrying, absence of presence
+Visual:       a beautiful sea at sunset
+              ❌ Beautiful — but says nothing about TIME.
+```
+
+### Right approach
+
+```
+Title:        TIME
+Content:      I am using speed instead of being here.
+Visual:       hourglass · a boat arriving late · a quiet harbour ·
+              the difference between speed and presence
+              ✅ The visual speaks the same sentence.
+```
+
+### Three tests every nest visual must pass
+
+**TEST 1 — Title support**
+If the title were removed, would the visual still point to the same theme?
+
+**TEST 2 — Completion-word support**
+The visual must speak about the specific substitution:
+- TIME → *speed*
+- LISTENING → *advice*
+- TRUST → *control*
+
+**TEST 3 — Cross-nest differentiation**
+TIME, ATTENTION and PRESENCE may not look like three versions of
+the same painting. Each must own a visual centre.
+
+### Hierarchy (in this exact order)
+
+1. Sub-theme
+2. Completion-word
+3. Content
+4. Symbol
+5. Visual
+
+> Never start by choosing a beautiful symbol.
+> Always start with the theme.
+
+### Sara standard
+
+Every visual must answer the question:
+**"Why does *this* picture belong to *this* nest?"**
+
+If the answer is unclear, the visual is not finished —
+**even if it is beautiful.**
+
+---
+
 ## Architecture
 - React frontend (`/app/frontend`)
 - FastAPI backend (`/app/backend`)
