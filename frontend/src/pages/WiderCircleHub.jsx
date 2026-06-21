@@ -1,86 +1,101 @@
 /**
- * WiderCircleHub.jsx — § THE CIRCLE WE CREATE (placeholder) 2026-06-19
+ * WiderCircleHub.jsx — § THE CIRCLE WE CREATE (painted hub) 2026-06-20
  *
- * Placeholder landing page for the secondary hub "The Circle We
- * Create". Reached from Sara Hub via the sea-ripple overlay near
- * the lighthouse. Will be replaced with the full painted hub
- * (4 wider worlds arranged as ripples on a pond) in Etapp 2.
+ * Secondary hub of the Sara universe. Reached from the Sara Forest
+ * hub via the sea-ripple entrance. Holds 4 painted "wider worlds"
+ * arranged as parchment cards. Each card click leads (placeholder)
+ * to its own painted world (Etapp 3).
  *
- * §CIRCLE-LOCK 2026-06-19 — Secondary hub of the Sara universe.
- * Forest = tree (rooted). Circle = water (moving). Same ecosystem.
- *
- * URL: /parents-room/wider-circle
+ * §CIRCLE-HUB-LOCK 2026-06-20 — Founder-approved painted asset
+ * `tzl013rr_image.png`. Cards + title + subtitle + "Back to
+ * Sara's World" wooden sign all baked into the painting.
+ * Append ?debug=1 to visualise click-zones.
  */
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+
+const HUB_IMAGE =
+  "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/tzl013rr_image.png";
+
+const ZONES = [
+  { id: "back-to-forest", label: "Back to Sara's World", route: "/parents-room",
+    top: 4, left: 3, w: 14, h: 14 },
+  { id: "world-what-cannot-be-replaced", label: "What Cannot Be Replaced",
+    route: "/parents-room/wider-circle/what-cannot-be-replaced",
+    top: 39, left: 11, w: 18, h: 56 },
+  { id: "world-one-heart-holds-the-house", label: "When One Heart Holds the House",
+    route: "/parents-room/wider-circle/when-one-heart-holds-the-house",
+    top: 39, left: 30, w: 18, h: 56 },
+  { id: "world-every-child-is-our-child", label: "Every Child Is Our Child",
+    route: "/parents-room/wider-circle/every-child-is-our-child",
+    top: 39, left: 49, w: 18, h: 56 },
+  { id: "world-voices-around-the-child", label: "The Voices Around the Child",
+    route: "/parents-room/wider-circle/voices-around-the-child",
+    top: 39, left: 68, w: 18, h: 56 },
+];
 
 export default function WiderCircleHub() {
+  const [params] = useSearchParams();
+  const debug = params.get("debug") === "1";
+
   return (
     <div
       data-testid="wider-circle-hub"
-      className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 py-16"
-      style={{
-        background:
-          "radial-gradient(ellipse at center, #1a1f2e 0%, #0a0d15 70%)",
-        color: "#e8d9b8",
-      }}
+      className="relative w-full"
+      style={{ backgroundColor: "#0a0d15", minHeight: "100vh" }}
     >
-      <div className="max-w-2xl text-center space-y-8">
-        <div
-          className="text-xs uppercase tracking-[0.3em] opacity-70"
-          style={{ fontFamily: "serif" }}
-          data-testid="wider-circle-eyebrow"
-        >
-          A wider circle of questions
-        </div>
-
-        <h1
-          className="text-4xl sm:text-5xl lg:text-6xl"
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontWeight: 400,
-            letterSpacing: "0.04em",
-          }}
-          data-testid="wider-circle-title"
-        >
-          The Circle We Create
-        </h1>
-
-        <p
-          className="text-base sm:text-lg italic opacity-80"
-          style={{ fontFamily: "Georgia, serif" }}
-          data-testid="wider-circle-subtitle"
-        >
-          Every choice reaches further than we think.
-        </p>
-
-        <div
-          className="mx-auto w-32 h-px opacity-30"
-          style={{ background: "#e8d9b8" }}
+      <div
+        className="relative w-full mx-auto"
+        style={{ aspectRatio: "1 / 1", maxWidth: "1400px" }}
+      >
+        <img
+          src={HUB_IMAGE}
+          alt="The Circle We Create — Every choice reaches further than we think. A painted hub showing 4 wider worlds: What Cannot Be Replaced, When One Heart Holds the House, Every Child Is Our Child, and The Voices Around the Child."
+          className="absolute inset-0 w-full h-full object-cover select-none"
+          draggable={false}
+          loading="eager"
+          data-testid="wider-circle-hub-image"
         />
-
-        <p
-          className="text-sm sm:text-base opacity-70 leading-relaxed"
-          data-testid="wider-circle-blurb"
-        >
-          Four wider worlds about presence, responsibility, influence
-          and what we pass forward — each a ripple moving outward
-          from the same quiet pond beside Sara's tree.
-        </p>
-
-        <p
-          className="text-xs uppercase tracking-[0.3em] opacity-50 pt-8"
-          data-testid="wider-circle-coming-soon"
-        >
-          Coming soon
-        </p>
-
-        <Link
-          to="/parents-room"
-          data-testid="wider-circle-back-to-forest"
-          className="inline-block mt-8 px-6 py-2 border border-current rounded-full text-sm tracking-wide hover:bg-white/5 transition-colors"
-        >
-          ← Return to Sara's Forest
-        </Link>
+        {ZONES.map((z) => (
+          <Link
+            key={z.id}
+            to={z.route}
+            data-testid={`wider-circle-zone-${z.id}`}
+            aria-label={z.label}
+            title={z.label}
+            className="absolute block"
+            style={{
+              top: `${z.top}%`,
+              left: `${z.left}%`,
+              width: `${z.w}%`,
+              height: `${z.h}%`,
+              cursor: "pointer",
+              background: debug ? "rgba(255, 200, 80, 0.25)" : "transparent",
+              border: debug ? "1px dashed rgba(255, 200, 80, 0.9)" : "none",
+              borderRadius: "12px",
+              transition: "background 200ms ease-out",
+            }}
+            onMouseEnter={(e) => {
+              if (!debug) e.currentTarget.style.background = "rgba(232, 217, 184, 0.08)";
+            }}
+            onMouseLeave={(e) => {
+              if (!debug) e.currentTarget.style.background = "transparent";
+            }}
+          >
+            {debug && (
+              <span
+                className="absolute top-0 left-0 px-1 text-[10px] font-mono"
+                style={{
+                  background: "rgba(255,200,80,0.95)",
+                  color: "#1a1305",
+                  pointerEvents: "none",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {z.id}
+              </span>
+            )}
+          </Link>
+        ))}
       </div>
     </div>
   );
