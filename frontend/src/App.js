@@ -83,6 +83,8 @@ import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
 import WiderCircleHub from "@/pages/WiderCircleHub";
 import WorldWhatCannotBeReplaced from "@/pages/WorldWhatCannotBeReplaced";
 import WorldOneHeartHoldsTheHouse from "@/pages/WorldOneHeartHoldsTheHouse";
+import WorldEveryChildIsOurChild from "@/pages/WorldEveryChildIsOurChild";
+import WorldEveryChildIsOurChildInvitation from "@/pages/WorldEveryChildIsOurChildInvitation";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -608,6 +610,34 @@ function AppRouter() {
         />
         <Route
           path="/parents-room/wider-circle/when-one-heart-holds-the-house/:sub"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
+            </WandererGate>
+          }
+        />
+        {/* §WIDER-CIRCLE-WORLD-3 2026-06-21 — "Every Child Is Our Child"
+            painted community-shore world. The /invitation child route
+            opens the long-form portrait "emotional anchor" canvas;
+            all other slugs land on SaraCategoryStub. */}
+        <Route
+          path="/parents-room/wider-circle/every-child-is-our-child"
+          element={
+            <WandererGate scope="private">
+              <WorldEveryChildIsOurChild />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/wider-circle/every-child-is-our-child/invitation"
+          element={
+            <WandererGate scope="private">
+              <WorldEveryChildIsOurChildInvitation />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/wider-circle/every-child-is-our-child/:sub"
           element={
             <WandererGate scope="private">
               <SaraCategoryStub />

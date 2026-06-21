@@ -179,7 +179,7 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
 - ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
 - ETAPP 2: Wider Circle painted hub asset (GPT-generated) — ✅ done 2026-06-20 (`tzl013rr_image.png`)
-- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); World 2 ✅ done 2026-06-21 (`js2g8gnk_image.png`); Worlds 3–4 BLOCKED on user-provided assets
+- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); World 2 ✅ done 2026-06-21 (`js2g8gnk_image.png`); World 3 ✅ done 2026-06-21 (`f7l2y33z_image.png` hub + `g82x79km_image.png` long-form anchor); World 4 BLOCKED on user-provided assets
 - ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay; revised 2026-06-20 — invisible click-zone over painted ripples)
 - ETAPP 4b: Wider Circle Hub page calibrated (✅ done 2026-06-21 — `WiderCircleHub.jsx` 5 zones aligned to `tzl013rr_image.png`, navigation verified end-to-end)
 - ETAPP 5: Content fill for nests (long phase, deferred)
@@ -221,6 +221,35 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 ### 🌉 Founder-approved backlog item — "Sara is listening" bridge (deferred 2026-06-21):
 - When all 4 Wider Circle worlds are complete, add a small link beneath each "This world is being painted." plaque labelled **"Sara is listening"**, routing to Sara Chat with a pre-filled prompt themed to that world (e.g. *"I want to talk about what cannot be replaced"*, *"I'm the one holding the house"*).
 - Founder said: "Mulle meeldivad sinu ettepanekud, palun salvesta see ja tuleme tagasi selle juurde kui selle mere teema valmis." → revisit after Worlds 3 & 4 land.
+
+**§WIDER-CIRCLE-WORLD-3-LOCK 2026-06-21 (Etapp 3, World 3 of 4 complete):**
+- Painted hub asset: `f7l2y33z_image.png` (1536×1024, 3:2 aspect)
+- File: `/app/frontend/src/pages/WorldEveryChildIsOurChild.jsx`
+- Container: `aspectRatio: 3/2, maxWidth: 1536px`, `object-contain`
+- 8 calibrated click zones (`?debug=1` to inspect):
+  - `back-to-wider-circle` (wooden sign top-left) → `/parents-room/wider-circle` — `top:1, left:2, w:12, h:14`
+  - LEFT column rowboat-nests (`top:13/38/63, left:7, w:21, h:26`): seeing (judgement→curiosity), speaking (criticism→encouragement), belonging (comparison→acceptance)
+  - RIGHT column rowboat-nests (`top:13/38/63, left:72, w:21, h:26`): including (exclusion→welcome), trusting (suspicion→belief), guiding (control→partnership)
+  - `the-invitation` (central parchment + figurines) → opens the long-form portrait anchor — `top:60, left:36, w:28, h:26`
+- Nest routes: `/parents-room/wider-circle/every-child-is-our-child/<slug>` → `SaraCategoryStub`
+- Subtitle: *"It takes a whole shore to raise a steady boat."* (baked into painting)
+- Core pattern (locked, community-facing replacements): every nest completes *"I am using ___ instead of ___."* —
+  · seeing → **judgement** instead of **curiosity**
+  · speaking → **criticism** instead of **encouragement**
+  · belonging → **comparison** instead of **acceptance**
+  · including → **exclusion** instead of **welcome**
+  · trusting → **suspicion** instead of **belief**
+  · guiding → **control** instead of **partnership**
+- Bottom parchment: *"Children do not need perfect people. They need many safe ones. When many hearts take small steps, a child can grow with roots and wings. We do not raise them alone. We raise them together."* (baked into painting)
+- Tone: anti-blame, community-noticing — no "village" cliché, no activist tone.
+- Navigation verified end-to-end (Wider Circle → Card 3 → World 3 → nest click → SaraCategoryStub → Back; invitation click → portrait anchor → Back).
+
+**§WIDER-CIRCLE-WORLD-3-INVITATION-LOCK 2026-06-21 (emotional anchor canvas):**
+- Painted asset: `g82x79km_image.png` (1024×1536, **portrait 2:3** aspect)
+- File: `/app/frontend/src/pages/WorldEveryChildIsOurChildInvitation.jsx`
+- Container: `aspectRatio: 2/3, maxWidth: 768px`, `object-contain`
+- 1 calibrated click zone: `back-to-world` (top-left "The Circle We Create" sign) → `/parents-room/wider-circle/every-child-is-our-child` — `top:2, left:4, w:22, h:9`
+- Long-form invitation body is baked into the painting (No single person can be everything to a child / Communities were never meant to be optional / Every child thrives when they belong to more / It does not mean everyone agrees / When a child feels held by many / This world is a reminder). Founder asked: "I don't know where to place it" — placed as a quiet "deep read" one step inside World 3, reachable via the central parchment hotspot on the painted hub.
 
 **§CIRCLE-HUB-LOCK 2026-06-21 (Etapp 4b complete):**
 - Painted asset: `tzl013rr_image.png` (1536×1024, 3:2 aspect)
