@@ -71,28 +71,48 @@ async def generate_nest(nest_id: str, prompt_text: str) -> None:
         print(f"[{nest_id}] saved {out} ({out.stat().st_size:,} bytes)")
 
 
-# §W1.1 — TIME — pocket watch resting in a nest with spilled sand.
+# §W1.1 — TIME — pocket watch resting in a nest with spilled sand,
+# painted navigation elements baked into the scene.
 W1_1_TIME_PROMPT = """\
 Create a new hand-painted watercolour illustration in the EXACT same style
 as the reference painting (same warm cream / ochre / muted blue palette,
 same visible paper grain, same soft amber lantern lighting, same painterly
-brushwork — preserve every visual property of the reference).
+brushwork, same children's-storybook illustrative quality — preserve every
+visual property of the reference).
 
-Change only the scene to depict the following:
+A 1:1 square watercolour painting. Compose THREE layers, all hand-painted
+into the same canvas — never as digital UI:
 
-A 1:1 square watercolour painting. At the centre: an antique open pocket
-watch lying flat inside a small woven wicker nest. The watch chain spills
-gently over the rim of the nest. A small heap of fine pale sand has
-drifted out of the watch onto the dark blue woollen blanket beneath the
-nest, as if the seconds had decided to rest. A single lit oil-lantern
-glows softly in the background to the right. No clock-face is visible
-anywhere else in the painting. Soft sunset light enters from the right.
-The background is warm cream parchment with visible paper texture.
-NO human figures, NO faces, NO text, NO writing, NO digital UI elements.
+CENTRAL SCENE (the heart of the painting, ~60% of canvas):
+An antique open pocket watch lying flat inside a small woven wicker nest.
+The watch chain spills gently over the rim of the nest. A small heap of
+fine pale sand has drifted out of the watch onto the dark blue woollen
+blanket beneath the nest, as if the seconds had decided to rest. A single
+lit oil-lantern glows softly in the background to the right. Soft sunset
+light from the right. Warm cream parchment background with paper grain.
+
+PAINTED NAVIGATION — TOP LEFT (small, ~12% of canvas):
+A small rectangular wooden sign painted to look hand-carved, hanging from
+a frayed rope from the top edge of the canvas. The sign is weathered pale
+wood. On the sign, painted in dark hand-lettered serif text on two lines:
+"Back to" / "What Cannot Be Replaced". The text must be readable but small.
+A tiny painted heart symbol below the words. The sign casts a soft shadow.
+
+PAINTED PLAQUE — BOTTOM CENTRE (small, ~30% width):
+A small dark-blue painted wooden plaque, edges weathered, hand-lettered
+in pale ivory: "This nest is being painted." on one line and below it
+"Return when the colour has settled." in smaller letters. The plaque rests
+on the wooden table near the foreground.
+
+ABSOLUTE RULES:
+- NO human figures, NO faces, NO hands
+- NO digital UI elements, NO buttons, NO icons
+- NO modern fonts — ALL lettering must look hand-painted with a quill
+- The two text elements must be PAINTED INTO the watercolour, not overlaid
+- The painting must read as ONE coherent hand-made artwork
 
 Theme: TIME — slowness held safe. The painting must feel quiet, unhurried,
-hand-made, timeless. It must look like a painting, NOT like an
-illustration, photograph, 3D render, or AI-generated image.
+timeless, like a page from a children's storybook of meaningful things.
 """
 
 
