@@ -624,7 +624,7 @@ function RoomsSection() {
     () => [
       {
         n: "I",
-        name: "Clarity Release",
+        name: "Grace",
         sub: "S · 180° · Grace · The Private Room",
         body: "A confidential channel for the cognitive load you cannot yet say aloud. Read by Grace, never by the room.",
         intro: "S · 180°. Grace curates the southern cardinal — the room where the thought consuming your bandwidth is brought, named, and released. She does not advise, she extracts. Three channels are open: writing, voice, and a live dialogue. If the voice line falters, write — Grace will answer aloud. Bring what is still circulating in your head at 2am; you can leave it here.",

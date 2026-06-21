@@ -601,7 +601,7 @@ export default function ClarityRelease() {
               >
                 <div
                   role="img"
-                  aria-label="Grace — your guide in Clarity Release"
+                  aria-label="Grace — your guide"
                   data-testid="clarity-grace-portrait-img"
                   className="relative aurin-breathe h-[440px] md:h-[520px] w-full"
                   style={{

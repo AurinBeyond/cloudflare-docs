@@ -76,7 +76,7 @@ const CARDINALS = [
     label: "S",
     angle: 90,
     curator: "Grace",
-    room: "Clarity Release",
+    room: "Grace",
     whisper: "Release the structure that no longer holds.",
     slug: "compass-clarity-release",
     testid: "compass-arm-south",

@@ -32,12 +32,6 @@ const GUIDES = [
     line: "A warm, unhurried voice. Listens longer than she speaks.",
     portrait: "/assets/illustrations/guide-female.jpg",
   },
-  {
-    gender: "male",
-    name: "Clarity",
-    line: "A grounded, quiet voice. Speaks plainly, without weight.",
-    portrait: "/assets/illustrations/guide-male.jpg",
-  },
 ];
 
 export default function Guest() {

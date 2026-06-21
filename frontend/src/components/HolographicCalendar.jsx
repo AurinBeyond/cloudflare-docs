@@ -16,8 +16,7 @@ import { api } from "@/lib/api";
 import GuidePresence from "@/components/GuidePresence";
 
 const GUIDES = [
-  { slug: "clarity", label: "Clarity", energy: "Direct · grounded · masculine register" },
-  { slug: "grace", label: "Grace", energy: "Flowing · warm · feminine register" },
+  { slug: "grace", label: "Grace", energy: "Flowing · warm · listens longer than she speaks" },
 ];
 
 const SESSION_TYPES = [
@@ -451,7 +450,7 @@ export default function HolographicCalendar({ onConfirmed }) {
                   {formatLocalDayLabel(b.start_at, tz)} · {formatLocalTime(b.start_at, tz)}
                 </div>
                 <div className="text-xs opacity-70 mt-1">
-                  {b.guide_name === "clarity" ? "Clarity" : "Grace"} · {b.session_type_label}
+                  Grace · {b.session_type_label}
                 </div>
               </div>
               <button

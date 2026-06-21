@@ -174,7 +174,7 @@ export default function BetaTestGroup() {
             <BenefitCard
               n="01"
               icon={Shield}
-              title="Clarity Release"
+              title="Grace"
               body="Encrypted private room (AES-256). A non-judgemental Light-side guide. No advice — only space."
               testid="beta-benefit-clarity"
             />

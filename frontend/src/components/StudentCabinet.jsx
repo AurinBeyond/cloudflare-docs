@@ -79,7 +79,7 @@ export default function StudentCabinet({ user }) {
   } else if (cabinet?.session && !cabinet.session.closed) {
     resume = {
       to: "/clarity-release",
-      label: "Clarity Release",
+      label: "Grace",
       title: "Your room is still open",
       hint: "Step back in when you feel ready",
       testid: "cabinet-resume-room",
@@ -195,7 +195,7 @@ export default function StudentCabinet({ user }) {
               {cabinet?.session && !cabinet.session.closed ? "Open" : "Quiet"}
             </span>
           </div>
-          <h3 className="aurin-display text-xl mt-6">Clarity Release</h3>
+          <h3 className="aurin-display text-xl mt-6">Grace</h3>
           <p className="mt-2 text-[13.5px] leading-relaxed text-[hsl(var(--aurin-text-muted))] flex-1">
             A private space that listens. Step in when you feel like writing
             the way it actually is.

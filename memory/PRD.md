@@ -8,6 +8,44 @@
 
 ---
 
+## §GRACE-NAMING-LOCK 2026-06-21 (founder demanded, multiple times)
+
+**"Clarity" and "Clarity Release" no longer exist in user-facing surfaces.**
+The Grace Room is now consistently labelled **Grace** across all UI.
+
+### Cleaned 2026-06-21
+- `StudentCabinet.jsx` — label + h3 → Grace
+- `HeroCompass.jsx` — `room: "Grace"`
+- `SanctuaryPreview.jsx` — `name: "Grace"`
+- `BetaTestGroup.jsx` — `title="Grace"`
+- `ClarityRelease.jsx` aria-label → "Grace — your guide"
+- `Guest.jsx` — removed legacy male "Clarity" guide persona (Grace is the single guide)
+- `HolographicCalendar.jsx` — removed `clarity` slug + ternary label, Grace is the only guide
+
+### Still legacy (deliberate, do NOT change without explicit founder decision)
+- File `ClarityRelease.jsx` (mounted at `/grace/room` route) — name kept until route + file rename refactor session
+- API endpoints `/api/clarity/*` — backend plumbing kept until coordinated refactor
+- Internal slugs (`clarity-release`, `7-days-of-clarity`) — order-affecting, kept until founder approves migration
+
+The user-facing brand is **Grace**. The internal scaffolding still
+echoes "clarity" in pipes only and never reaches the wanderer's eye.
+
+---
+
+## §WORLD-PREVIEW-CARD-BACKLOG 2026-06-21 (founder approved as backlog)
+
+After each Wider Circle world is founder-locked, auto-generate a small
+PDF "world preview card":
+- 1 page, 6 nest images thumbnailed
+- Each card shows: Title · Core Truth · Reflection Prompt #1
+- CSS-only template (no AI), shareable as email or Instagram post
+- Honours the 3-second rule: hooks instantly, depth below the surface
+
+Trigger: after World 1 founder-lock.
+
+---
+
+
 ## §SARA-TEEN-MATERIAL-PLACEMENT 2026-06-21 (founder authorised, agent placed)
 
 Existing teen-material in repo:
