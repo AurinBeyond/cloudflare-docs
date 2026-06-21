@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Sara Nest Differentiation Test</title>
+<style>
+  body { margin:0; background:#0a0d15; color:#e8d9b8; font-family:Georgia,serif; padding:24px; }
+  h1 { text-align:center; font-weight:300; letter-spacing:0.06em; margin-bottom:6px; }
+  .sub { text-align:center; opacity:0.6; margin-bottom:32px; font-style:italic; }
+  .row { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:1700px; margin:0 auto; }
+  .card { background:#12161f; border-radius:8px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.4); }
+  .card img { width:100%; display:block; aspect-ratio:1/1; object-fit:contain; background:#0a0d15; }
+  .label { padding:14px 18px; text-align:center; font-size:13px; letter-spacing:0.18em; opacity:0.55; }
+  .label-hidden { display:none; }
+  .toggle { display:block; margin:24px auto; padding:10px 22px; background:transparent; border:1px solid #e8d9b8; color:#e8d9b8; font-family:inherit; font-size:13px; letter-spacing:0.15em; cursor:pointer; border-radius:2px; }
+  .toggle:hover { background:rgba(232,217,184,0.08); }
+</style></head>
+<body>
+<h1>Sara Nest Differentiation Test — World 1</h1>
+<div class="sub">Look without titles. Does each painting say its own truth?</div>
+<button class="toggle" onclick="document.querySelectorAll('.label').forEach(e=>e.classList.toggle('label-hidden'))">toggle titles</button>
+<div class="row">
+  <div class="card">
+    <img src="/test_nest_images/w1_1_time_v3.png" alt="" />
+    <div class="label label-hidden">W1.1 · TIME · speed → slowness</div>
+  </div>
+  <div class="card">
+    <img src="/test_nest_images/w1_2_listening.png" alt="" />
+    <div class="label label-hidden">W1.2 · LISTENING · advice → silence</div>
+  </div>
+  <div class="card">
+    <img src="/test_nest_images/w1_3_attention.png" alt="" />
+    <div class="label label-hidden">W1.3 · ATTENTION · divided → undivided gaze</div>
+  </div>
+</div>
+</body></html>
