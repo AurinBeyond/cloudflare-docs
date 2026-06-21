@@ -219,6 +219,20 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - Navigation verified end-to-end (Sara Forest → sea-ripple → Wider Circle → Card 2 → World 2 → nest click → SaraCategoryStub → Back).
 
 ### 🌉 Founder-approved backlog — "Sara is listening" bridge (refined 2026-06-21, deferred):
+
+**§SARA-ROOM-PHILOSOPHY-LOCK 2026-06-21 (founder quote, captures the whole room):**
+> *"Sara ei seisa keset merd hüüdmas 'Tule räägi minuga!' vaid ootab vaikselt sadamas."*
+> *(Sara does not stand in the middle of the sea shouting 'Come speak to me!' — she waits quietly in the harbour.)*
+
+This is the locked tonal contract for every Sara-room surface — Sara Forest, Wider Circle, all current and future nests. Compare with the other three rooms to keep them distinct:
+- **Grace listens.**
+- **Kaelen observes.**
+- **Alistair asks.**
+- **Sara waits.**
+
+Any future copy, button, hover-state, prompt, or notification inside Sara's domain must honour "waits quietly in the harbour" — never call, never beckon, never sell.
+
+
 GPT proposed and founder approved a refined 3-point architecture. **Do NOT make this visible in every world or every nest.** Surface it only in three precise places:
 
 1. **The Invitation** (W3 portrait long-form canvas) — natural decision-point after the wanderer has walked the whole circle. Three options: go back · continue exploring · speak with Sara.
