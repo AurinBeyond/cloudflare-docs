@@ -8,6 +8,45 @@
 
 ---
 
+## §SARA-EXECUTION-MODE 2026-06-21 (founder, batch authorisation)
+
+Founder has authorised batch work on all 24 Sara Wider Circle nests.
+Agent does NOT pause for per-nest approval. Founder reviews per-world,
+not per-nest.
+
+### Agent autonomy
+
+Apply the locks below before each nest is written:
+- §SARA-FOUNDATIONAL-PHILOSOPHY-LOCK
+- §SARA-SYMBOL-SYSTEM-LOCK (ecosystem)
+- §SARA-DUAL-WORLD-LOCK (LAND vs SEA)
+- §SARA-NEST-TRUTH-LOCK (Title → Completion → Truth)
+- §SARA-NO-SOLUTION-LOCK (Notice → Question → Space)
+- §SARA-VISUAL-SYSTEM-LOCK
+- §SARA-CONTENT-VISUAL-ALIGNMENT-LOCK
+- §SARA-NEST-READY-LOCK
+
+If a nest fails any test → fix the nest. Do not deliver failing nests.
+
+### Agent pauses ONLY for
+
+1. A theme that cannot be placed in LAND or SEA.
+2. A theme that would violate the existing architecture.
+3. A theme that would require a new world or a new room.
+
+All other questions the agent resolves itself using the locks above.
+
+### Per-world delivery contract
+
+Each of the 4 worlds delivers as a complete block of 6 nests with:
+- Title · Completion · Core Truth · Intro · Reflection Prompts ·
+  Symbol · Visual Concept · Visual Description
+
+Status language: *draft / ready / founder-locked* — never percentages.
+
+---
+
+
 ## §SARA-FOUNDATIONAL-PHILOSOPHY-LOCK 2026-06-21 (founder, single sentence)
 
 > **Sara is NOT a Parents' Room. Sara explores how a person grows through relationship.**
