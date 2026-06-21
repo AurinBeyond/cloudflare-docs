@@ -72,7 +72,7 @@ async def generate_nest(nest_id: str, prompt_text: str) -> None:
 
 
 # §W1.1 — TIME — pocket watch resting in a nest with spilled sand,
-# painted navigation elements baked into the scene.
+# four painted navigation waypoints baked into the scene (Tase 2).
 W1_1_TIME_PROMPT = """\
 Create a new hand-painted watercolour illustration in the EXACT same style
 as the reference painting (same warm cream / ochre / muted blue palette,
@@ -80,10 +80,10 @@ same visible paper grain, same soft amber lantern lighting, same painterly
 brushwork, same children's-storybook illustrative quality — preserve every
 visual property of the reference).
 
-A 1:1 square watercolour painting. Compose THREE layers, all hand-painted
+A 1:1 square watercolour painting with FIVE painted layers, all hand-painted
 into the same canvas — never as digital UI:
 
-CENTRAL SCENE (the heart of the painting, ~60% of canvas):
+CENTRAL SCENE (~55% of canvas):
 An antique open pocket watch lying flat inside a small woven wicker nest.
 The watch chain spills gently over the rim of the nest. A small heap of
 fine pale sand has drifted out of the watch onto the dark blue woollen
@@ -91,24 +91,42 @@ blanket beneath the nest, as if the seconds had decided to rest. A single
 lit oil-lantern glows softly in the background to the right. Soft sunset
 light from the right. Warm cream parchment background with paper grain.
 
-PAINTED NAVIGATION — TOP LEFT (small, ~12% of canvas):
-A small rectangular wooden sign painted to look hand-carved, hanging from
-a frayed rope from the top edge of the canvas. The sign is weathered pale
-wood. On the sign, painted in dark hand-lettered serif text on two lines:
-"Back to" / "What Cannot Be Replaced". The text must be readable but small.
-A tiny painted heart symbol below the words. The sign casts a soft shadow.
+WAYPOINT 1 — TOP LEFT — BACK SIGN (small, ~13% of canvas):
+A small weathered wooden sign hanging from a frayed rope from the top
+edge. Hand-lettered dark serif text on two lines: "Back to" / "What Cannot
+Be Replaced". A tiny painted heart below. Soft shadow.
 
-PAINTED PLAQUE — BOTTOM CENTRE (small, ~30% width):
-A small dark-blue painted wooden plaque, edges weathered, hand-lettered
-in pale ivory: "This nest is being painted." on one line and below it
-"Return when the colour has settled." in smaller letters. The plaque rests
-on the wooden table near the foreground.
+WAYPOINT 2 — RIGHT-CENTRE — PAINTED THREE-LAYER PARCHMENT (~22% of canvas):
+A small aged-parchment scroll resting upright against the base of the
+lantern, half-curled, hand-lettered in dark brown ink on three lines,
+centred:
+   line 1 (large hand-lettered serif):  TIME
+   line 2 (smaller, in flowing script):  what I am using:  speed
+   line 3 (smaller, in flowing script):  what returns:  slowness
+The parchment edges are torn and warm-stained. Treat the text as PAINTED
+hand-lettering, never as printed type.
+
+WAYPOINT 3 — BOTTOM-RIGHT — NEXT-NEST SIGN (small, ~12% of canvas):
+A small rectangular weathered wooden sign hanging at an angle from the
+bottom-right corner, painted to look hand-carved. Hand-lettered:
+"Next:  Listening  →". A tiny painted leaf below the arrow. Less prominent
+than the Back sign.
+
+WAYPOINT 4 — BOTTOM-CENTRE — THEME-SPECIFIC CLOSING PLAQUE (~32% of canvas):
+A small dark-blue painted wooden plaque resting on the wooden table near
+the foreground. Hand-lettered in pale ivory on two lines:
+   "Slowness lives here."
+   "Stay as long as you need."
+Edges weathered. The plaque is theme-specific to TIME — NEVER use a
+generic "This nest is being painted" line.
 
 ABSOLUTE RULES:
 - NO human figures, NO faces, NO hands
-- NO digital UI elements, NO buttons, NO icons
-- NO modern fonts — ALL lettering must look hand-painted with a quill
-- The two text elements must be PAINTED INTO the watercolour, not overlaid
+- NO digital UI elements, NO buttons, NO icons, NO arrows that look like
+  cursors — only painted decorative arrows where stated
+- ALL lettering must look hand-painted with a quill — no modern fonts
+- The four navigation waypoints must feel like natural parts of the scene
+  — wooden signs, parchments, plaques — not stickers laid on top
 - The painting must read as ONE coherent hand-made artwork
 
 Theme: TIME — slowness held safe. The painting must feel quiet, unhurried,
