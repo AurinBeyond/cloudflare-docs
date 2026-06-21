@@ -85,6 +85,7 @@ import WorldWhatCannotBeReplaced from "@/pages/WorldWhatCannotBeReplaced";
 import WorldOneHeartHoldsTheHouse from "@/pages/WorldOneHeartHoldsTheHouse";
 import WorldEveryChildIsOurChild from "@/pages/WorldEveryChildIsOurChild";
 import WorldEveryChildIsOurChildInvitation from "@/pages/WorldEveryChildIsOurChildInvitation";
+import WorldVoicesAroundTheChild from "@/pages/WorldVoicesAroundTheChild";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -638,6 +639,26 @@ function AppRouter() {
         />
         <Route
           path="/parents-room/wider-circle/every-child-is-our-child/:sub"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
+            </WandererGate>
+          }
+        />
+        {/* §WIDER-CIRCLE-WORLD-4 2026-06-21 — "Voices Around the Child"
+            painted final world. 6 nests (4 voice-categories + 2 notebook
+            tools) routed through SaraCategoryStub until founder visuals
+            arrive for each. */}
+        <Route
+          path="/parents-room/wider-circle/voices-around-the-child"
+          element={
+            <WandererGate scope="private">
+              <WorldVoicesAroundTheChild />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/wider-circle/voices-around-the-child/:sub"
           element={
             <WandererGate scope="private">
               <SaraCategoryStub />

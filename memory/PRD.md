@@ -179,7 +179,7 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
 - ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
 - ETAPP 2: Wider Circle painted hub asset (GPT-generated) — ✅ done 2026-06-20 (`tzl013rr_image.png`)
-- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); World 2 ✅ done 2026-06-21 (`js2g8gnk_image.png`); World 3 ✅ done 2026-06-21 (`f7l2y33z_image.png` hub + `g82x79km_image.png` long-form anchor); World 4 BLOCKED on user-provided assets
+- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); World 2 ✅ done 2026-06-21 (`js2g8gnk_image.png`); World 3 ✅ done 2026-06-21 (`f7l2y33z_image.png` hub + `g82x79km_image.png` long-form anchor); World 4 ✅ done 2026-06-21 (`agtsx58u_image.png`). **All 4 painted hubs complete.**
 - ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay; revised 2026-06-20 — invisible click-zone over painted ripples)
 - ETAPP 4b: Wider Circle Hub page calibrated (✅ done 2026-06-21 — `WiderCircleHub.jsx` 5 zones aligned to `tzl013rr_image.png`, navigation verified end-to-end)
 - ETAPP 5: Content fill for nests (long phase, deferred)
@@ -250,6 +250,28 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - Container: `aspectRatio: 2/3, maxWidth: 768px`, `object-contain`
 - 1 calibrated click zone: `back-to-world` (top-left "The Circle We Create" sign) → `/parents-room/wider-circle/every-child-is-our-child` — `top:2, left:4, w:22, h:9`
 - Long-form invitation body is baked into the painting (No single person can be everything to a child / Communities were never meant to be optional / Every child thrives when they belong to more / It does not mean everyone agrees / When a child feels held by many / This world is a reminder). Founder asked: "I don't know where to place it" — placed as a quiet "deep read" one step inside World 3, reachable via the central parchment hotspot on the painted hub.
+
+**§WIDER-CIRCLE-WORLD-4-LOCK 2026-06-21 (Etapp 3, World 4 of 4 complete — all hubs done):**
+- Painted asset: `agtsx58u_image.png` (1536×1024, 3:2 aspect)
+- File: `/app/frontend/src/pages/WorldVoicesAroundTheChild.jsx`
+- Container: `aspectRatio: 3/2, maxWidth: 1536px`, `object-contain`
+- 7 calibrated click zones (`?debug=1` to inspect):
+  - `back-to-wider-circle` (wooden sign top-left) → `/parents-room/wider-circle` — `top:2, left:2, w:10, h:11`
+  - 4 voice-category parchments (`w:14, h:15-18`): pressure (top-left), fear (top-right), belonging (mid-left), comparison (mid-right)
+  - 2 notebook tools (`w:18, h:24`): good-voices (bottom-mid-left), ask-yourself (bottom-mid-right)
+- Nest routes: `/parents-room/wider-circle/voices-around-the-child/<slug>` → `SaraCategoryStub`
+- Subtitle: *"Not every voice deserves to become a compass."* (baked into painting)
+- Pattern pivot (locked): World 4 evolves the Core Pattern from "I am using ___ instead of ___" to **noun-based voice recognition** —
+  · PRESSURE pushes hard, leaves little room to breathe
+  · FEAR wants to protect, can also keep you stuck
+  · BELONGING welcomes you exactly as you are, lights the way home
+  · COMPARISON looks outward, steals the joy of your own path
+  · GOOD-VOICES checklist (Stay when it's hard / Speak truth with kindness / Make space for mistakes / Believe in your becoming)
+  · ASK-YOURSELF daily prompts (Which voices am I listening to? / Which voices do I repeat to others? / Which voices do I want my child to carry within? / Are my words helping them find their way home?)
+- 4 painted voice-bottles around the scene name the metaphor: **The Wind** (Go faster. Be the best. Prove yourself.) · **The Harbour** (Be careful. Don't fail. Stay small.) · **The Lighthouse** (You belong. You matter. We see you.) · **The Other Ships** (Be more. Look perfect. Make them proud.)
+- Closing question (baked): *"When the sea becomes loud, which voice remains? And is that voice helping the child find their way home?"*
+- Tone: anti-cynical, anti-shame — no media-bashing, no "kids these days" laments.
+- All 4 Wider Circle worlds (W1–W4) now wired end-to-end. Worlds 1–3 use 6-nest pattern with "I am using ___ instead of ___" completion; World 4 pivots to **voice-recognition** to honour the outward-facing nature of the final world.
 
 **§CIRCLE-HUB-LOCK 2026-06-21 (Etapp 4b complete):**
 - Painted asset: `tzl013rr_image.png` (1536×1024, 3:2 aspect)
