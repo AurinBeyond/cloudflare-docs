@@ -383,3 +383,45 @@ Founder reasoning: "Sara ei seisa keset merd hüüdmas 'Tule räägi minuga!' va
 - P3: Remove "Launch Pause Mode" once PSP strategy resolved
 - Post-Lock: Luule Viilma Knowledge Layer (alt-wisdom lens across Body World)
 - Tech debt: Lint cleanup in AgeGate.jsx, CadenceEngine.jsx, BodyRoomChat.jsx, KidsRooms.jsx
+
+
+## §WIDER-CIRCLE-BACKLOG 2026-06-21 (founder-agreed, do NOT architect yet)
+
+These ideas surfaced during the Wider Circle build. Founder approved
+their existence but explicitly asked to NOT build them now. Each
+carries a *status flag* so a future agent does not mistake an idea
+for an instruction.
+
+### 🌊 Wisdom Garden — delayed-return reflection pattern
+**Status:** *Interesting concept. Do not architect yet. Revisit after 24 nests exist.*
+- Each nest carries 2–3 reflection prompts. Possibly some prompts
+  return into the wanderer's Wisdom Garden on day 7 — unannounced,
+  when they have stopped waiting for it.
+- Founder reasoning (GPT-mirrored): we do not yet know which
+  prompts work in their nest's context only vs which carry weight
+  alone. Decision deferred until all 24 nests are written.
+
+### 🍃 Subtle ambient motion across Wider Circle (CSS-only)
+**Status:** *Awaiting founder verdict on whether this honours Sara's tonal contract.*
+- Possible candidate animations (all <2% opacity drift, CSS-only,
+  no JS, no perf cost):
+  - World 1: a single dust mote drifting near the lantern
+  - World 2: gentle horizon ripple every ~12s on the sea line
+  - World 3: distant lighthouse beam pulses slowly once a minute
+  - World 4: one of the corked bottles bobs ~6px every ~9s
+- Each motion designed to feel "the painting breathes" — never
+  to attract attention. Honours "Sara waits quietly in the harbour."
+- Implementation cost: ~30 minutes per world, zero asset changes.
+
+### 🌉 "Sara is listening" bridge — refined 3-point architecture
+**Status:** *Locked design. Build only after 24 nest briefs are written.*
+- Already specified in §SARA-ROOM-PHILOSOPHY-LOCK section above.
+
+### 🖼 World 1 review criteria (founder-locked rubric per GPT)
+When reading the 6 nests of World 1, do not only ask "is the tone right?".
+Ask also: **"Do these six nests feel distinct enough from each other?"** —
+especially the Time / Attention / Presence trio, which carry the
+highest visual and conceptual overlap risk. Cross-nest audit at the
+bottom of W1 already names the differentiation axes
+(motion · gaze · body). Founder verdict required before locking W1
+and starting W2.
