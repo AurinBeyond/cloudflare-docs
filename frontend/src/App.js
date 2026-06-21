@@ -82,6 +82,7 @@ import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
 import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
 import WiderCircleHub from "@/pages/WiderCircleHub";
 import WorldWhatCannotBeReplaced from "@/pages/WorldWhatCannotBeReplaced";
+import WorldOneHeartHoldsTheHouse from "@/pages/WorldOneHeartHoldsTheHouse";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -588,6 +589,25 @@ function AppRouter() {
         />
         <Route
           path="/parents-room/wider-circle/what-cannot-be-replaced/:sub"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
+            </WandererGate>
+          }
+        />
+        {/* §WIDER-CIRCLE-WORLD-2 2026-06-21 — "When One Heart Holds
+            the House" painted sea world. 6 nests routed through
+            SaraCategoryStub until founder visuals arrive for each. */}
+        <Route
+          path="/parents-room/wider-circle/when-one-heart-holds-the-house"
+          element={
+            <WandererGate scope="private">
+              <WorldOneHeartHoldsTheHouse />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/wider-circle/when-one-heart-holds-the-house/:sub"
           element={
             <WandererGate scope="private">
               <SaraCategoryStub />

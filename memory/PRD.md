@@ -179,7 +179,7 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
 - ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
 - ETAPP 2: Wider Circle painted hub asset (GPT-generated) — ✅ done 2026-06-20 (`tzl013rr_image.png`)
-- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); Worlds 2–4 BLOCKED on user-provided assets
+- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); World 2 ✅ done 2026-06-21 (`js2g8gnk_image.png`); Worlds 3–4 BLOCKED on user-provided assets
 - ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay; revised 2026-06-20 — invisible click-zone over painted ripples)
 - ETAPP 4b: Wider Circle Hub page calibrated (✅ done 2026-06-21 — `WiderCircleHub.jsx` 5 zones aligned to `tzl013rr_image.png`, navigation verified end-to-end)
 - ETAPP 5: Content fill for nests (long phase, deferred)
@@ -199,6 +199,28 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - Bottom plaque: *"This world is being painted. Return when the colour has settled."* (baked into painting)
 - Tone: anti-wellness, anti-guilt — notices without lecturing.
 - Navigation verified end-to-end: Sara Forest → sea-ripple → Wider Circle Hub → What Cannot Be Replaced → nest click → SaraCategoryStub; Back to Sara's World and Back to The Circle We Create both functional.
+
+**§WIDER-CIRCLE-WORLD-2-LOCK 2026-06-21 (Etapp 3, World 2 of 4 complete):**
+- Painted asset: `js2g8gnk_image.png` (1536×1024, 3:2 aspect)
+- File: `/app/frontend/src/pages/WorldOneHeartHoldsTheHouse.jsx`
+- Container: `aspectRatio: 3/2, maxWidth: 1536px`, `object-contain`
+- 7 calibrated click zones (`?debug=1` to inspect):
+  - `back-to-wider-circle` (small wooden sign top-left) → `/parents-room/wider-circle` — `top:1, left:2, w:9, h:12`
+  - LEFT column ring-nests (`top:13/38/63, left:8, w:18, h:26`): time (speed), listening (advice), attention (checking)
+  - RIGHT column ring-nests (`top:13/38/63, left:74, w:18, h:26`): presence (being nearby), trust (control), connection (fixing)
+- Nest routes: `/parents-room/wider-circle/when-one-heart-holds-the-house/<slug>` → `SaraCategoryStub`
+- Subtitle: *"The sea remembers what every family eventually learns: one heart cannot carry everything forever."* (baked into painting)
+- Core pattern (locked): every nest completes *"I am using ___ instead of being here."* — six founder-locked completions:
+  · time → **speed** · listening → **advice** · attention → **checking**
+  · presence → **being nearby** · trust → **control** · connection → **fixing**
+- Bottom parchment: same heart-line as World 1 ("Life is full of good intentions… I am here. With you.") — intentional binding between worlds.
+- Bottom plaque: *"This world is being painted. Return when the colour has settled."* (baked into painting)
+- Tone: anti-blame — notices the parent who carries the house without lecturing.
+- Navigation verified end-to-end (Sara Forest → sea-ripple → Wider Circle → Card 2 → World 2 → nest click → SaraCategoryStub → Back).
+
+### 🌉 Founder-approved backlog item — "Sara is listening" bridge (deferred 2026-06-21):
+- When all 4 Wider Circle worlds are complete, add a small link beneath each "This world is being painted." plaque labelled **"Sara is listening"**, routing to Sara Chat with a pre-filled prompt themed to that world (e.g. *"I want to talk about what cannot be replaced"*, *"I'm the one holding the house"*).
+- Founder said: "Mulle meeldivad sinu ettepanekud, palun salvesta see ja tuleme tagasi selle juurde kui selle mere teema valmis." → revisit after Worlds 3 & 4 land.
 
 **§CIRCLE-HUB-LOCK 2026-06-21 (Etapp 4b complete):**
 - Painted asset: `tzl013rr_image.png` (1536×1024, 3:2 aspect)
