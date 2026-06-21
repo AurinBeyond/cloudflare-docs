@@ -218,9 +218,15 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - Tone: anti-blame — notices the parent who carries the house without lecturing.
 - Navigation verified end-to-end (Sara Forest → sea-ripple → Wider Circle → Card 2 → World 2 → nest click → SaraCategoryStub → Back).
 
-### 🌉 Founder-approved backlog item — "Sara is listening" bridge (deferred 2026-06-21):
-- When all 4 Wider Circle worlds are complete, add a small link beneath each "This world is being painted." plaque labelled **"Sara is listening"**, routing to Sara Chat with a pre-filled prompt themed to that world (e.g. *"I want to talk about what cannot be replaced"*, *"I'm the one holding the house"*).
-- Founder said: "Mulle meeldivad sinu ettepanekud, palun salvesta see ja tuleme tagasi selle juurde kui selle mere teema valmis." → revisit after Worlds 3 & 4 land.
+### 🌉 Founder-approved backlog — "Sara is listening" bridge (refined 2026-06-21, deferred):
+GPT proposed and founder approved a refined 3-point architecture. **Do NOT make this visible in every world or every nest.** Surface it only in three precise places:
+
+1. **The Invitation** (W3 portrait long-form canvas) — natural decision-point after the wanderer has walked the whole circle. Three options: go back · continue exploring · speak with Sara.
+2. **Each world's bottom plaque** — beneath *"This world is being painted. Return when the colour has settled."* quietly add (no CTA styling, no button — just permission):
+   > *Or speak with Sara while you wait.*
+3. **Sara herself** — when the visitor opens Sara Chat from a world, the chat backend receives a `from_world` context (e.g. `voices-around-the-child`) so Sara knows which door they walked through. Sara does not greet them about it; she just already knows.
+
+Founder reasoning: "Sara ei seisa keset merd hüüdmas 'Tule räägi minuga!' vaid ootab vaikselt sadamas." Keep the painted sea-journey intact. Implement as a layer ON TOP of the existing structure — not woven into it. Revisit after 24 sub-nest content briefs are written.
 
 **§WIDER-CIRCLE-WORLD-3-LOCK 2026-06-21 (Etapp 3, World 3 of 4 complete):**
 - Painted hub asset: `f7l2y33z_image.png` (1536×1024, 3:2 aspect)
