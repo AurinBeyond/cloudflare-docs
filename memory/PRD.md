@@ -8,6 +8,160 @@
 
 ---
 
+## §SARA-FOUNDATIONAL-PHILOSOPHY-LOCK 2026-06-21 (founder, single sentence)
+
+> **Sara is NOT a Parents' Room. Sara explores how a person grows through relationship.**
+
+Position in the Aurin Hub:
+- **Grace** → human suffering
+- **Kaelen** → body wisdom
+- **Alistair** → inquiry
+- **Sara** → **growth through relationship**
+
+Implication for every future Sara theme:
+- The child is not a project.
+- The child is not a problem.
+- The child is not the centre of the system.
+- **The relationship is the centre.**
+
+New themes (e.g. "Parent Development Through Relationship", "The Voices Between the Words", "What Children Learn Without Being Taught") are **NOT** new worlds, new nests, or new routes. They are the **invisible philosophical layer beneath every existing world**. They must be honoured in tone, never built as standalone surfaces.
+
+> If a new theme tries to fix the child, it does not belong in Sara.
+> If a new theme reveals what is happening between people, it belongs already — inside every existing world.
+
+---
+
+## §SARA-DUAL-WORLD-LOCK 2026-06-21 (founder + GPT, hardest rule)
+
+> **🌳 LAND and 🌊 SEA must NEVER mix visually or thematically.**
+> They are two separate worlds. Mixing them creates symbol-soup.
+
+### 🌳 LAND (Tree / Nest domain)
+
+| | |
+|---|---|
+| **Symbols** | tree, roots, branches, leaves, nest, birds, forest path, home, generations |
+| **Themes** | belonging, safety, closeness, family, growing, roots, heritage, relationships |
+| **Question** | *"What is happening between us?"* |
+| **Feeling** | warm · close · held |
+
+### 🌊 SEA (Boat / Compass domain)
+
+| | |
+|---|---|
+| **Symbols** | boat, sea, waves, harbour, lighthouse, compass, map, wind, horizon |
+| **Themes** | world, becoming independent, choices, voices, orientation, community, journey, discernment |
+| **Question** | *"How does one find direction in the world?"* |
+| **Feeling** | open · vast · in motion |
+
+### Forbidden mixing
+
+- Do NOT put nest and sea in the same nest.
+- Do NOT mix roots and compass in the same core metaphor.
+- Do NOT paint a tree growing in the middle of the sea.
+- Do NOT paint a boat sitting inside a nest.
+- Do NOT blend the two main stories.
+
+### The single official bridge
+
+```
+🪺 NEST  →  ⛵ BOAT
+       The boat leaves the nest.
+```
+
+This is the **only** point where land and sea meet. After this point, the sea begins.
+
+### Visual validation test (every new visual)
+
+> *Does this belong to LAND or to SEA?*
+> If the answer is "a little of both" — the visual is not finished.
+
+### Content validation test (every new nest brief)
+
+> Does this theme speak about
+> 1) relationship + belonging → **LAND**, or
+> 2) world + choices + orientation → **SEA**?
+>
+> If a theme tries to do both at once, split it into two.
+>
+> **Sara's clarity matters more than symbolic beauty.**
+
+### Domain placement of existing worlds
+
+| Surface | Domain |
+|---|---|
+| Sara Forest (14 worlds: My Child, Our Family, Wisdom Garden, Generations & Heritage, Home/Memories/Roots, etc.) | 🌳 LAND |
+| Wider Circle World 1 — What Cannot Be Replaced (presence, listening, attention) | 🌳 LAND |
+| Wider Circle World 2 — When One Heart Holds the House (the sea is metaphor for invisible currents in the family) | ⚠️ HYBRID — founder verdict required (currently uses SEA imagery but treats family-internal themes) |
+| Wider Circle World 3 — Every Child Is Our Child (community shore, departing boats) | 🌊 SEA |
+| Wider Circle World 4 — Voices Around the Child (ocean map, compass, voices) | 🌊 SEA |
+
+---
+
+## §SARA-NEST-TRUTH-LOCK 2026-06-21 (founder + GPT, structure)
+
+> Every nest carries **three layers**, not two.
+
+```
+PEALKIRI      (the door — e.g. TIME)
+     ↓
+COMPLETION    (the substitution — e.g. speed)
+     ↓
+TÕDE          (the truth that returns — e.g. presence)
+```
+
+- **TIME** is not the theme. TIME is the container.
+- **speed** is the substitution.
+- **presence** is the truth.
+
+When drafting any nest, do not stop at "title → visual." Always find the third layer — the truth that returns when the substitution is set down.
+
+If the third layer cannot be named clearly in one word, the nest is not ready.
+
+---
+
+## §SARA-NO-SOLUTION-LOCK 2026-06-21 (founder + GPT, biggest risk)
+
+> **Sara does not solve. Sara opens space.**
+
+Forbidden pattern (the slow drift):
+```
+Problem → Explanation → Solution
+```
+
+Required pattern:
+```
+Notice → Question → Space
+```
+
+This risk grows as content grows. The more nests, the more tempting it becomes to offer 5-step relief. The moment Sara begins to offer relief in exchange for effort, Sara is gone.
+
+Every nest interior must end **without a fix**. The reader carries the question out, not the answer.
+
+---
+
+## §SARA-NEST-READY-LOCK 2026-06-21 (founder + GPT, definition of done)
+
+> A nest is NOT ready because a brief exists. A nest is ready only when all 8 criteria pass.
+
+```
+NEST READY = 
+
+  1. Title
+  2. Completion (the substitution word)
+  3. Intro (Sara voice, 5–8 sentences)
+  4. Reflection prompts (2–3 quiet questions)
+  5. Symbol brief (locked to the growth map)
+  6. Visual brief (passes §SARA-VISUAL-SYSTEM-LOCK)
+  7. Content-visual alignment passed (passes §SARA-CONTENT-VISUAL-ALIGNMENT-LOCK 3-test)
+  8. Founder approved
+```
+
+Status reporting must reflect this. A nest at criterion 3 is **not** "30% done" — it is "criterion 3 of 8". Use the language "draft" / "ready" / "founder-locked", never percentages, until step 8.
+
+---
+
+
 ## §SARA-SYMBOL-SYSTEM-LOCK 2026-06-21 (founder + GPT, ECOSYSTEM)
 
 > **Critical clarification.** Sara symbols are NOT a list of independent
