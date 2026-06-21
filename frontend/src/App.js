@@ -81,6 +81,7 @@ import SaraParentingJourney from "@/pages/SaraParentingJourney";
 import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
 import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
 import WiderCircleHub from "@/pages/WiderCircleHub";
+import WorldWhatCannotBeReplaced from "@/pages/WorldWhatCannotBeReplaced";
 import SubsystemWing from "@/pages/SubsystemWing";
 import AurinsRoom from "@/pages/AurinsRoom";
 import AurinsRoomChat from "@/pages/AurinsRoomChat";
@@ -571,6 +572,25 @@ function AppRouter() {
           element={
             <WandererGate scope="private">
               <WiderCircleHub />
+            </WandererGate>
+          }
+        />
+        {/* §WIDER-CIRCLE-WORLD-1 2026-06-21 — "What Cannot Be Replaced"
+            painted world. 6 nests routed through SaraCategoryStub
+            until founder visuals arrive for each. */}
+        <Route
+          path="/parents-room/wider-circle/what-cannot-be-replaced"
+          element={
+            <WandererGate scope="private">
+              <WorldWhatCannotBeReplaced />
+            </WandererGate>
+          }
+        />
+        <Route
+          path="/parents-room/wider-circle/what-cannot-be-replaced/:sub"
+          element={
+            <WandererGate scope="private">
+              <SaraCategoryStub />
             </WandererGate>
           }
         />

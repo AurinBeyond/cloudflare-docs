@@ -179,10 +179,26 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
 - ETAPP 0: PRD lock + naming (✅ done 2026-06-19)
 - ETAPP 1: 4 worlds' content design (founder + GPT, paper-only) — IN PROGRESS
 - ETAPP 2: Wider Circle painted hub asset (GPT-generated) — ✅ done 2026-06-20 (`tzl013rr_image.png`)
-- ETAPP 3: 4 painted world interiors (sequential, same workflow as Worlds 8-15)
+- ETAPP 3: 4 painted world interiors — World 1 ✅ done 2026-06-21 (`mghwh6or_image.png`); Worlds 2–4 BLOCKED on user-provided assets
 - ETAPP 4: Entry point on Sara Hub (✅ done 2026-06-19 — sea-ripple SVG overlay; revised 2026-06-20 — invisible click-zone over painted ripples)
 - ETAPP 4b: Wider Circle Hub page calibrated (✅ done 2026-06-21 — `WiderCircleHub.jsx` 5 zones aligned to `tzl013rr_image.png`, navigation verified end-to-end)
 - ETAPP 5: Content fill for nests (long phase, deferred)
+
+**§WIDER-CIRCLE-WORLD-1-LOCK 2026-06-21 (Etapp 3, World 1 of 4 complete):**
+- Painted asset: `mghwh6or_image.png` (1536×1024, 3:2 aspect)
+- File: `/app/frontend/src/pages/WorldWhatCannotBeReplaced.jsx`
+- Container: `aspectRatio: 3/2, maxWidth: 1536px`, `object-contain`
+- 7 calibrated click zones (`?debug=1` to inspect):
+  - `back-to-wider-circle` (wooden sign top-left) → `/parents-room/wider-circle` — `top:3, left:3, w:14, h:12`
+  - LEFT column nests (`top:19/43/67, left:17, w:14, h:22`): time, listening, attention
+  - RIGHT column nests (`top:19/43/67, left:69, w:14, h:22`): presence, trust, connection
+- Nest routes: `/parents-room/wider-circle/what-cannot-be-replaced/<slug>` → `SaraCategoryStub` (placeholder until founder visuals arrive for each nest).
+- Subtitle: *"Some things only presence can give."* (baked into painting)
+- Core pattern (locked): every nest must complete the sentence *"I am using ___ instead of being here."*
+- Bottom parchment: *"Life is full of good intentions. Yet the things that matter most cannot be swapped, rushed, or outsourced. They can only be given in one way: I am here. With you."* (baked into painting)
+- Bottom plaque: *"This world is being painted. Return when the colour has settled."* (baked into painting)
+- Tone: anti-wellness, anti-guilt — notices without lecturing.
+- Navigation verified end-to-end: Sara Forest → sea-ripple → Wider Circle Hub → What Cannot Be Replaced → nest click → SaraCategoryStub; Back to Sara's World and Back to The Circle We Create both functional.
 
 **§CIRCLE-HUB-LOCK 2026-06-21 (Etapp 4b complete):**
 - Painted asset: `tzl013rr_image.png` (1536×1024, 3:2 aspect)
@@ -193,7 +209,7 @@ The 4 domains are MUTUALLY EXCLUSIVE. No nest may live in two worlds at once.
   - `world-one-heart-holds-the-house` → `/parents-room/wider-circle/when-one-heart-holds-the-house` — `top:34, left:23, w:13.5, h:42`
   - `world-every-child-is-our-child` → `/parents-room/wider-circle/every-child-is-our-child` — `top:34, left:39, w:13.5, h:42`
   - `world-voices-around-the-child` → `/parents-room/wider-circle/voices-around-the-child` — `top:34, left:55, w:13.5, h:42`
-- Navigation verified: Sara Forest → sea-ripple click → Wider Circle Hub → world card click → soft-404 (worlds not yet built, P1 blocked on user-provided assets) → Back to Sara's World → Sara Forest.
+- Navigation verified: Sara Forest → sea-ripple click → Wider Circle Hub → world card click → World 1 ready, Worlds 2-4 land on soft-404 (intentional, awaiting assets).
 - The 14 Sara Forest worlds are LOCKED — untouched.
 
 **§CIRCLE-RIPPLE-ENTRANCE-LOCK 2026-06-20 (Etapp 4 complete, REVISED):**
