@@ -34,11 +34,11 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Time",
         completion: "speed",
         coreTruth: "slowness",
-        symbol: "🪺 nest — slowness held safe",
+        symbol: "nest — slowness held safe",
         image: `${IMG}/w1_1_time.png`,
         intro: [
           "Time is the only thing nobody can hand back to you.",
-          "Yet most days, we try to outrun it. We finish the bedtime story faster. We answer \"in a minute.\" We say \"later, sweetheart,\" and somehow later never comes.",
+          "Yet most days, we try to outrun it. We finish the bedtime story faster. We answer \"in a minute.\" We say \"later, little one,\" and somehow later never comes.",
           "It is not that we love less. It is that we have learned to live in a hurry.",
           "But a child does not measure love in efficiency.",
           "A child measures it in unhurried minutes.",
@@ -54,7 +54,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Listening",
         completion: "advice",
         coreTruth: "silence",
-        symbol: "🪺 nest — the listening kept warm",
+        symbol: "nest — the listening kept warm",
         image: `${IMG}/w1_2_listening.png`,
         intro: [
           "A child rarely asks for a solution.",
@@ -74,7 +74,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Attention",
         completion: "divided attention",
         coreTruth: "undivided gaze",
-        symbol: "🏮 lantern — single warm light",
+        symbol: "lantern — single warm light",
         image: `${IMG}/w1_3_attention.png`,
         intro: [
           "You can love someone with your whole heart and still not look at them.",
@@ -94,7 +94,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Presence",
         completion: "performance",
         coreTruth: "honesty",
-        symbol: "🪺 nest — the seat that asks to be filled truthfully",
+        symbol: "nest — the seat that asks to be filled truthfully",
         image: `${IMG}/w1_4_presence.png`,
         intro: [
           "There is a quiet kind of acting that happens in homes.",
@@ -115,7 +115,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Trust",
         completion: "control",
         coreTruth: "patience",
-        symbol: "🌳 tree — roots growing in time, unforced",
+        symbol: "tree — roots growing in time, unforced",
         image: `${IMG}/w1_5_trust.png`,
         intro: [
           "Trust grows the same way a plant grows.",
@@ -136,7 +136,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Connection",
         completion: "providing",
         coreTruth: "being",
-        symbol: "🏮 lantern — warm light passed from chest to chest",
+        symbol: "lantern — warm light passed from chest to chest",
         image: `${IMG}/w1_6_connection.png`,
         intro: [
           "We give our children many things.",
@@ -172,7 +172,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Time",
         completion: "speed",
         coreTruth: "stillness",
-        symbol: "🪺 nest — the quiet centre that holds when everything moves",
+        symbol: "nest — the quiet centre that holds when everything moves",
         image: `${IMG}/w2_1_time.png`,
         intro: [
           "A house that one heart carries often moves at one speed: faster.",
@@ -191,7 +191,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Listening",
         completion: "advice",
         coreTruth: "receiving",
-        symbol: "🪺 nest — the open palm of the home",
+        symbol: "nest — the open palm of the home",
         image: `${IMG}/w2_2_listening.png`,
         intro: [
           "When one person carries the house, advice becomes their reflex.",
@@ -211,7 +211,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Attention",
         completion: "checking",
         coreTruth: "ease",
-        symbol: "🏮 lantern — the lit window that does not also need to count the windows",
+        symbol: "lantern — the lit window that does not also need to count the windows",
         image: `${IMG}/w2_3_attention.png`,
         intro: [
           "The heart that holds the house often does not stop.",
@@ -232,7 +232,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Presence",
         completion: "being nearby",
         coreTruth: "arriving",
-        symbol: "🪺 nest — the seat that holds the one who finally stops",
+        symbol: "nest — the seat that holds the one who finally stops",
         image: `${IMG}/w2_4_presence.png`,
         intro: [
           "There is a difference between being in the house and being in the room.",
@@ -252,7 +252,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Trust",
         completion: "control",
         coreTruth: "release",
-        symbol: "🌳 tree — the branch that lets the bird fly without explanation",
+        symbol: "tree — the branch that lets the bird fly without explanation",
         image: `${IMG}/w2_5_trust.png`,
         intro: [
           "When one heart holds the house, control becomes a love-shape.",
@@ -272,7 +272,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Connection",
         completion: "fixing",
         coreTruth: "witnessing",
-        symbol: "🏮 lantern — the light that does not also need to mend the dark",
+        symbol: "lantern — the light that does not also need to mend the dark",
         image: `${IMG}/w2_6_connection.png`,
         intro: [
           "The heart that holds the house often confuses connection with repair.",
@@ -305,7 +305,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Seeing",
         completion: "judgement",
         coreTruth: "curiosity",
-        symbol: "🧭 compass — the inner needle that turns toward, not against",
+        symbol: "compass — the inner needle that turns toward, not against",
         image: `${IMG}/w3_1_seeing.png`,
         intro: [
           "A child crosses a stranger's path many times in a single day.",
@@ -326,7 +326,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Speaking",
         completion: "criticism",
         coreTruth: "encouragement",
-        symbol: "💡 lighthouse — the steady voice across the water",
+        symbol: "lighthouse — the steady voice across the water",
         image: `${IMG}/w3_2_speaking.png`,
         intro: [
           "A child can carry a single sentence for a lifetime.",
@@ -347,7 +347,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Belonging",
         completion: "comparison",
         coreTruth: "acceptance",
-        symbol: "⛵ boat — each one shaped differently, all on the same water",
+        symbol: "boat — each one shaped differently, all on the same water",
         image: `${IMG}/w3_3_belonging.png`,
         intro: [
           "A child learns very early to look sideways.",
@@ -367,7 +367,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Including",
         completion: "exclusion",
         coreTruth: "welcome",
-        symbol: "⚓ harbour — the door that does not check who you are",
+        symbol: "harbour — the door that does not check who you are",
         image: `${IMG}/w3_4_including.png`,
         intro: [
           "There is a moment in every gathering where a child either steps in or stays at the edge.",
@@ -387,7 +387,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Trusting",
         completion: "suspicion",
         coreTruth: "belief",
-        symbol: "🧭 compass — the needle that begins by assuming north exists",
+        symbol: "compass — the needle that begins by assuming north exists",
         image: `${IMG}/w3_5_trusting.png`,
         intro: [
           "A child often arrives at adults already half-defended.",
@@ -406,7 +406,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Guiding",
         completion: "control",
         coreTruth: "partnership",
-        symbol: "🧭 compass + ⛵ boat — two hands on the same wheel",
+        symbol: "compass + boat — two hands on the same wheel",
         image: `${IMG}/w3_6_guiding.png`,
         intro: [
           "Adults often think guiding means deciding.",
@@ -438,7 +438,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Pressure",
         completion: "the voice that pushes hard, leaves little room to breathe",
         coreTruth: "permission to breathe",
-        symbol: "🌊 sea — the wind that wants the boat to go faster than it can",
+        symbol: "sea — the wind that wants the boat to go faster than it can",
         image: `${IMG}/w4_1_pressure.png`,
         intro: [
           "A child can hear pressure long before they can name it.",
@@ -458,7 +458,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Fear",
         completion: "the voice that wants to protect, can also keep you stuck",
         coreTruth: "courage to step",
-        symbol: "⚓ harbour — the safe arms that, held too tight, become walls",
+        symbol: "harbour — the safe arms that, held too tight, become walls",
         image: `${IMG}/w4_2_fear.png`,
         intro: [
           "Fear is one of the oldest voices in a parent's house.",
@@ -478,7 +478,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Belonging",
         completion: "the trustworthy voice that welcomes you exactly as you are",
         coreTruth: "trustworthy compass",
-        symbol: "💡 lighthouse — the steady light a child can navigate by",
+        symbol: "lighthouse — the steady light a child can navigate by",
         image: `${IMG}/w4_3_belonging.png`,
         intro: [
           "Among the thousand voices around a child, a small number deserve to be trusted.",
@@ -499,7 +499,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Comparison",
         completion: "the voice that looks outward, steals the joy of your own path",
         coreTruth: "your own path",
-        symbol: "🧭 compass — the needle that points to your north, not someone else's",
+        symbol: "compass — the needle that points to your north, not someone else's",
         image: `${IMG}/w4_4_comparison.png`,
         intro: [
           "Comparison is the most reasonable-sounding voice in a child's day.",
@@ -519,7 +519,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Good Voices",
         completion: "a quiet checklist of what a steady voice looks like",
         coreTruth: "recognition",
-        symbol: "📜 parchment — the small notebook a child keeps in their inner pocket",
+        symbol: "parchment — the small notebook a child keeps in their inner pocket",
         image: `${IMG}/w4_5_good_voices.png`,
         intro: [
           "How does a child learn to tell a steady voice from a loud one?",
@@ -541,7 +541,7 @@ export const WIDER_CIRCLE_NESTS = {
         title: "Ask Yourself",
         completion: "daily questions to recognise the inner crew",
         coreTruth: "inner crew",
-        symbol: "📜 parchment — the daily log every sailor keeps",
+        symbol: "parchment — the daily log every sailor keeps",
         image: `${IMG}/w4_6_ask_yourself.png`,
         intro: [
           "Every child eventually sails beyond their parents' harbour.",

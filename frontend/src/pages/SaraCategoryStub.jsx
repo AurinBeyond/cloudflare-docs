@@ -69,7 +69,55 @@ export default function SaraCategoryStub() {
         fontFamily: SERIF,
       }}
     >
-      <div className="max-w-xl text-center space-y-8">
+      <div className="max-w-xl text-center space-y-7">
+        {/* §SARA-TEASER-VINJETT 2026-06-22 — Quiet decorative SVG that
+            softens the visual contrast between the painted Sara worlds
+            and the (still-text-only) sub-nest teasers. Hand-drawn
+            painted-arc feel · cream stroke · no AI-slop gradients. */}
+        <div
+          className="flex justify-center"
+          aria-hidden="true"
+          data-testid="sara-category-stub-vinjett"
+        >
+          <svg
+            width="96"
+            height="42"
+            viewBox="0 0 96 42"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* outer painted arc */}
+            <path
+              d="M6 30 Q 48 -6 90 30"
+              stroke="#c4a46b"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              fill="none"
+              opacity="0.55"
+            />
+            {/* inner painted arc */}
+            <path
+              d="M18 32 Q 48 8 78 32"
+              stroke="#c4a46b"
+              strokeWidth="0.8"
+              strokeLinecap="round"
+              fill="none"
+              opacity="0.35"
+            />
+            {/* small centre seed */}
+            <circle
+              cx="48"
+              cy="34"
+              r="2.2"
+              fill="#c4a46b"
+              opacity="0.7"
+            />
+            {/* two small flanking dots */}
+            <circle cx="30" cy="34" r="1" fill="#c4a46b" opacity="0.45" />
+            <circle cx="66" cy="34" r="1" fill="#c4a46b" opacity="0.45" />
+          </svg>
+        </div>
+
         <p
           className="uppercase tracking-[0.4em] text-[11px]"
           style={{ color: "#c4a46b" }}
@@ -115,11 +163,14 @@ export default function SaraCategoryStub() {
           to walk in.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+        {/* §SARA-TEASER-CTA 2026-06-22 — Single primary CTA + quiet
+            text-link return. Replaces the previous double-pill that
+            made the page feel "technical". */}
+        <div className="flex flex-col items-center gap-3 pt-2">
           <Link
             to="/parents-room/v1"
             data-testid="sara-category-stub-chat-cta"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm tracking-wider transition-all duration-300"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-full text-sm tracking-wider transition-all duration-300"
             style={{
               background: "#c4a46b",
               color: "#1a1305",
@@ -132,15 +183,19 @@ export default function SaraCategoryStub() {
           <Link
             to={backRoute}
             data-testid="sara-category-stub-back-cta"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm tracking-wider transition-all duration-300 border"
+            className="text-sm italic transition-colors duration-300"
             style={{
-              borderColor: "rgba(196, 164, 107, 0.5)",
-              color: "#f0eadd",
+              color: "#a09584",
               fontFamily: SERIF,
-              letterSpacing: "0.08em",
+              textDecoration: "underline",
+              textDecorationStyle: "dotted",
+              textUnderlineOffset: "4px",
+              textDecorationColor: "rgba(196, 164, 107, 0.35)",
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#e8d9b8")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#a09584")}
           >
-            {backLabel}
+            or {backLabel.toLowerCase()}
           </Link>
         </div>
       </div>
