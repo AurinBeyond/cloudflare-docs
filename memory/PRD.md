@@ -953,3 +953,30 @@ Recorded in `/app/memory/PAINTED_ASSET_DEBT_2026-06-22.md`. Five visual flaws li
 
 ### Founder downloadables
 - `/app/frontend/public/downloads/eesti_markmik.zip` — Estonian review notebook (10 files, ~10 KB) for offline founder use during the 24-nest review pass.
+
+
+---
+
+## §FIRST-VISITOR-JOURNEY 2026-06-22 (pre-Discord-beta polish)
+
+### What shipped
+- New `/app/frontend/src/data/wandererRoomIntros.js` — single source of truth for 4 room intros (Sara, Kaelen, Grace, Alistair). Each carries threshold + inhabitant + arrivalLine + 3 visitor-voice recognitions.
+- `WandererGate.jsx` — accepts `room` prop. When set, renders the positive-recognition intro ABOVE the medical/legal threshold. Visitor sees who lives in the room and three quiet recognitions BEFORE the 5 boxes. Maintains the legal copy intact.
+- App.js — 38 `<WandererGate scope="private">` instances now pass `room="sara" | "kaelen" | "grace" | "alistair"`. Six remaining (Aurin's Room, Cabinet booking) stay generic intentionally.
+- `SanctuaryPreview.jsx` — hero copy rewritten to positive identity ("A living place to read, listen, and reflect."). New `FiveRoomsRecognitionSection` injected between hero and SprintZeroLayersSection: 5 clickable rows (Sara, Grace, Kaelen, Alistair, Polarstar with *eventyr* in italics), each one Sara-voice recognition line. Coda "This is not a course. It is not a programme to complete. It is a place to return to." + small line "Two rooms (Sara and Kaelen) ask you to read a short threshold before entering."
+- `Polarstar.jsx` + `PolarstarDayWorld.jsx` — tagline reframed from "Not another app to babysit" (negation) to "Polarstar protects wonder. *Audio adventures the family lives together* — screen-down, ears-open." (positive recognition).
+- `LuxurySanctuaryLanding.jsx` (legacy /luxury route) — kept hero copy update + 5-row directory for consistency, though it's a legacy route.
+
+### Verified via screenshot
+- Landing renders the 5-row recognition with Polarstar eventyr italics in gold.
+- Sara gate intro renders with all 3 recognitions including "Something between us is asking to be noticed."
+- Kaelen gate intro renders with all 3 recognitions including "What have I stopped noticing?"
+- Lint clean on all 5 changed files.
+
+### Founder downloadables (carried forward)
+- `/app/frontend/public/downloads/eesti_markmik.zip` — Estonian review notebook
+- `/app/memory/PAINTED_ASSET_DEBT_2026-06-22.md` — debt list for Nano-Banana regeneration
+- `/app/memory/FIRST_VISITOR_JOURNEY_AUDIT_2026-06-22.md` — the audit this work answered
+
+### Deploy verdict
+🟢 **GO.** Critical pre-beta items C2, C3, C5 are live (the painted-asset C4 is intentionally framed in the Discord invite copy, not regenerated yet).

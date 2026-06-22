@@ -18,6 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { BACKEND_URL as __BACKEND_URL__ } from "@/lib/backendUrl";
+import { getRoomIntro } from "@/data/wandererRoomIntros";
 
 const API = __BACKEND_URL__;
 const AGREEMENT_VERSION = "1.1-2026-02-11-psych-exclusion";
@@ -46,7 +47,7 @@ const CLAUSES = [
   "I agree not to redistribute protected materials without permission.",
 ];
 
-export default function WandererGate({ scope = "private", children }) {
+export default function WandererGate({ scope = "private", room = null, children }) {
   const [accepted, setAccepted] = useState(null); // null | true | false
   const [checks, setChecks] = useState(
     () => Array(CLAUSES.length).fill(false),
@@ -100,7 +101,9 @@ export default function WandererGate({ scope = "private", children }) {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       try {
         localStorage.setItem(localKey, "1");
-      } catch {}
+      } catch (_e) {
+        /* localStorage may be disabled — backend record is the source of truth */
+      }
       setAccepted(true);
     } catch (e) {
       setError(
@@ -137,8 +140,60 @@ export default function WandererGate({ scope = "private", children }) {
       }}
     >
       <div className="max-w-xl w-full">
+        {/* §WANDERER-ROOM-INTRO 2026-06-22 — When a `room` prop is
+            passed, render a positive-recognition introduction BEFORE
+            the medical/legal copy. Names the room, names who lives
+            there, and offers three quiet visitor-voice recognitions.
+            Data lives in /app/frontend/src/data/wandererRoomIntros.js
+            so founder can edit copy without touching this component. */}
+        {(() => {
+          const intro = getRoomIntro(room);
+          if (!intro) return null;
+          return (
+            <div
+              className="mb-10"
+              data-testid={`wanderer-gate-intro-${room}`}
+            >
+              <div className="aurin-eyebrow text-[hsl(var(--aurin-sage))/0.85] mb-5">
+                Before you enter
+              </div>
+              <h2
+                data-testid="wanderer-gate-room-threshold"
+                className="aurin-display text-3xl md:text-4xl leading-tight mb-5 text-[hsl(var(--aurin-text))]"
+              >
+                {intro.threshold}
+              </h2>
+              <p
+                className="text-[16px] leading-relaxed text-[hsl(var(--aurin-text))/0.92] mb-6 italic"
+                data-testid="wanderer-gate-room-inhabitant"
+              >
+                {intro.inhabitant}
+              </p>
+              <p
+                className="text-[14px] uppercase tracking-[0.18em] text-[hsl(var(--aurin-text-muted))] mb-3"
+              >
+                {intro.arrivalLine}
+              </p>
+              <ul
+                className="space-y-2 mb-2"
+                data-testid="wanderer-gate-room-recognitions"
+              >
+                {intro.recognitions.map((line, i) => (
+                  <li
+                    key={i}
+                    className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text))/0.85] pl-3 border-l border-[hsl(var(--aurin-sage))/0.4] italic"
+                    data-testid={`wanderer-gate-recognition-${i}`}
+                  >
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })()}
+
         <div className="aurin-eyebrow text-[hsl(var(--aurin-sage))/0.85] mb-5">
-          Before you enter
+          {room ? "A few quiet lines, then in" : "Before you enter"}
         </div>
         <h2
           data-testid="wanderer-gate-title"
@@ -204,7 +259,7 @@ export default function WandererGate({ scope = "private", children }) {
             data-testid="wanderer-gate-read-full"
             className="aurin-link text-[13px] tracking-wide"
           >
-            Read the full Wanderer's Agreement
+            Read the full Wanderer&apos;s Agreement
           </Link>
         </div>
 

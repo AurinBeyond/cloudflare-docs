@@ -319,17 +319,16 @@ function HeroSection({ onWalkTruthFirst }) {
             className="font-light text-[28px] sm:text-[42px] lg:text-[54px] leading-[1.15] text-[#f0eadd] tracking-[-0.012em] max-w-[560px]"
             style={{ fontFamily: SERIF }}
           >
-            Matrix Aurin is a quiet place<br />
-            to read, listen, reflect.
+            A living place<br />
+            to read, listen, and reflect.
           </h1>
           <p
             data-testid="hero-compass-line"
             className="mt-9 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#bcb4a3] font-light italic max-w-[520px] leading-[1.7]"
             style={{ fontFamily: SERIF }}
           >
-            Not a course. Not therapy. Five rooms<br />
-            for people, parents, and families —<br />
-            to slow down and hear yourself again.
+            Five rooms for people, parents, and families.<br />
+            A space for conversation, reflection, and discovery.
           </p>
           <p
             data-testid="hero-reconnect-line"
@@ -339,6 +338,91 @@ function HeroSection({ onWalkTruthFirst }) {
             And reconnect with what matters most.
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+
+// §FIVE-ROOMS-RECOGNITION 2026-06-22 — Positive-recognition row that
+// sits between the hero and the deeper RoomsSection. Each line names
+// the experience, not the feature, so a fresh visitor scans the five
+// doors in under three seconds and chooses where to walk. Anti-wellness
+// lock, eventyr lock (Polarstar carries the Norwegian word italics).
+// §VOICE-LIVING-PLACE-LOCK · §RECOGNITION-NOT-PITCH-LOCK.
+function FiveRoomsRecognitionSection() {
+  const rooms = [
+    { to: "/parents-room",  glyph: "⛵", name: "Sara",      line: "for the spaces between people you love",                    testid: "five-rooms-sara" },
+    { to: "/grace",         glyph: "🔥", name: "Grace",     line: "for the room with no one watching",                          testid: "five-rooms-grace" },
+    { to: "/body-world",    glyph: "🌿", name: "Kaelen",    line: "for what the body has been quietly saying",                  testid: "five-rooms-kaelen" },
+    { to: "/alistair",      glyph: "🧭", name: "Alistair",  line: "for the questions that keep returning",                      testid: "five-rooms-alistair" },
+    { to: "/kids-universe", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures we live together",             testid: "five-rooms-polarstar", italicWord: "eventyr" },
+  ];
+  return (
+    <section
+      id="five-rooms-recognition"
+      data-testid="five-rooms-recognition"
+      className="relative w-full bg-[#0b0a08] py-24 sm:py-32"
+    >
+      <div className="max-w-[780px] mx-auto px-6 sm:px-10" style={{ fontFamily: SERIF }}>
+        <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] text-center mb-12">
+          Five rooms · choose a door
+        </p>
+        <ul className="list-none p-0 m-0">
+          {rooms.map((r) => (
+            <li key={r.testid} className="border-t border-[rgba(196,164,107,0.15)] last:border-b">
+              <a
+                href={r.to}
+                data-testid={r.testid}
+                className="block py-6 px-2 transition-all duration-300 hover:bg-[rgba(196,164,107,0.04)] hover:pl-6"
+                style={{ color: "#f0eadd", textDecoration: "none" }}
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="text-[1.5rem] leading-none opacity-80" aria-hidden="true">
+                    {r.glyph}
+                  </span>
+                  <div>
+                    <p
+                      className="m-0 text-[1.55rem] sm:text-[1.7rem] tracking-[0.005em] text-[#f0eadd] leading-tight"
+                      style={{ fontFamily: SERIF }}
+                    >
+                      {r.name}
+                    </p>
+                    <p
+                      className="m-0 mt-1 text-[0.95rem] sm:text-[1.05rem] italic text-[rgba(220,210,190,0.85)] leading-relaxed"
+                      style={{ fontFamily: SERIF }}
+                    >
+                      {r.italicWord ? (
+                        <>
+                          <em style={{ fontStyle: "italic", color: "#d4b67d" }}>{r.italicWord}</em>
+                          {" — "}
+                          {r.line}
+                        </>
+                      ) : (
+                        r.line
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p
+          data-testid="five-rooms-coda"
+          className="text-[0.95rem] italic text-center text-[rgba(220,210,190,0.78)] mt-14 leading-[1.7]"
+          style={{ fontFamily: SERIF }}
+        >
+          This is not a course. It is not a programme to complete.
+          <br />
+          It is a place to return to.
+        </p>
+        <p
+          className="text-[0.78rem] tracking-[0.05em] text-center text-[rgba(196,164,107,0.62)] mt-4 italic"
+          style={{ fontFamily: SERIF }}
+        >
+          Two rooms (Sara and Kaelen) ask you to read a short threshold before entering.
+        </p>
       </div>
     </section>
   );
@@ -1418,6 +1502,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
         <SanctuaryNav production={production} />
         <main>
           <HeroSection onWalkTruthFirst={openTruth} />
+          <FiveRoomsRecognitionSection />
           <SprintZeroLayersSection />
           <HeroCompass />
           <QuietNoteSection />

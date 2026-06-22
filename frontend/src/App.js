@@ -300,7 +300,7 @@ function AppRouter() {
         <Route
           path="/grace/room"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="grace">
               <ClarityRelease />
             </WandererGate>
           }
@@ -325,7 +325,7 @@ function AppRouter() {
         <Route
           path="/body-world"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="kaelen">
               <BodyWorld />
             </WandererGate>
           }
@@ -333,7 +333,7 @@ function AppRouter() {
         <Route
           path="/body-world/v1"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="kaelen">
               <BodyRoom />
             </WandererGate>
           }
@@ -341,7 +341,7 @@ function AppRouter() {
         <Route
           path="/body-world/world/:stoneSlug"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="kaelen">
               <BodyWorldStone />
             </WandererGate>
           }
@@ -349,7 +349,7 @@ function AppRouter() {
         <Route
           path="/body-world/world/:stoneSlug/topic/:topicSlug"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="kaelen">
               <BodyWorldTopic />
             </WandererGate>
           }
@@ -363,7 +363,7 @@ function AppRouter() {
             key={`stub-${s}`}
             path={`/body-world/${s}`}
             element={
-              <WandererGate scope="private">
+              <WandererGate scope="private" room="kaelen">
                 <BodyWorldStub />
               </WandererGate>
             }
@@ -374,7 +374,7 @@ function AppRouter() {
         <Route
           path="/body-room/v1"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="kaelen">
               <BodyRoom />
             </WandererGate>
           }
@@ -399,7 +399,7 @@ function AppRouter() {
         <Route
           path="/parents-room"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraHub />
             </WandererGate>
           }
@@ -407,7 +407,7 @@ function AppRouter() {
         <Route
           path="/parents-room/v1"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <ParentsRoom />
             </WandererGate>
           }
@@ -419,7 +419,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/my-child"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraMyChild />
             </WandererGate>
           }
@@ -429,7 +429,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/emotions-safety"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraEmotionsSafety />
             </WandererGate>
           }
@@ -440,7 +440,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/our-family"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraOurFamily />
             </WandererGate>
           }
@@ -451,7 +451,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/boundaries-responsibility"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraBoundariesResponsibility />
             </WandererGate>
           }
@@ -462,7 +462,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/growth-development"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraGrowthDevelopment />
             </WandererGate>
           }
@@ -474,7 +474,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/relationships-cooperation"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraRelationshipsCooperation />
             </WandererGate>
           }
@@ -485,7 +485,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/challenging-situations"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraChallengingSituations />
             </WandererGate>
           }
@@ -496,7 +496,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/wisdom-garden"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraWisdomGarden />
             </WandererGate>
           }
@@ -507,7 +507,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/weekly-digest"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraWeeklyDigest />
             </WandererGate>
           }
@@ -518,7 +518,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/stories-real-life"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraStoriesRealLife />
             </WandererGate>
           }
@@ -529,7 +529,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/tools-exercises"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraToolsExercises />
             </WandererGate>
           }
@@ -540,7 +540,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/parenting-journey"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraParentingJourney />
             </WandererGate>
           }
@@ -552,7 +552,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/generations-heritage"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraGenerationsHeritage />
             </WandererGate>
           }
@@ -563,7 +563,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/home-memories-roots"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraHomeMemoriesRoots />
             </WandererGate>
           }
@@ -575,7 +575,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WiderCircleHub />
             </WandererGate>
           }
@@ -586,7 +586,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/what-cannot-be-replaced"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WorldWhatCannotBeReplaced />
             </WandererGate>
           }
@@ -594,7 +594,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/what-cannot-be-replaced/:sub"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WiderCircleNest world="what-cannot-be-replaced" />
             </WandererGate>
           }
@@ -605,7 +605,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/when-one-heart-holds-the-house"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WorldOneHeartHoldsTheHouse />
             </WandererGate>
           }
@@ -613,7 +613,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/when-one-heart-holds-the-house/:sub"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WiderCircleNest world="when-one-heart-holds-the-house" />
             </WandererGate>
           }
@@ -625,7 +625,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/every-child-is-our-child"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WorldEveryChildIsOurChild />
             </WandererGate>
           }
@@ -633,7 +633,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/every-child-is-our-child/invitation"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WorldEveryChildIsOurChildInvitation />
             </WandererGate>
           }
@@ -641,7 +641,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/every-child-is-our-child/:sub"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WiderCircleNest world="every-child-is-our-child" />
             </WandererGate>
           }
@@ -653,7 +653,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/voices-around-the-child"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WorldVoicesAroundTheChild />
             </WandererGate>
           }
@@ -661,7 +661,7 @@ function AppRouter() {
         <Route
           path="/parents-room/wider-circle/voices-around-the-child/:sub"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <WiderCircleNest world="voices-around-the-child" />
             </WandererGate>
           }
@@ -669,7 +669,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/:slug/:sub"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraCategoryStub />
             </WandererGate>
           }
@@ -677,7 +677,7 @@ function AppRouter() {
         <Route
           path="/parents-room/category/:slug"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SaraCategoryStub />
             </WandererGate>
           }
@@ -687,7 +687,7 @@ function AppRouter() {
         <Route
           path="/parents-room/subsystem"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="sara">
               <SubsystemWing />
             </WandererGate>
           }
@@ -752,7 +752,7 @@ function AppRouter() {
         <Route
           path="/course-room/room"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="alistair">
               <CourseRoom />
             </WandererGate>
           }
@@ -777,7 +777,7 @@ function AppRouter() {
         <Route
           path="/alistair/room"
           element={
-            <WandererGate scope="private">
+            <WandererGate scope="private" room="alistair">
               <CourseRoom />
             </WandererGate>
           }

@@ -26,6 +26,7 @@
  *   - No backend / Lemon / presence_seconds_left changes
  */
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "../styles/luxury-sanctuary.css";
 
 const DOORS = [
@@ -188,13 +189,142 @@ export default function LuxurySanctuaryLanding() {
         <div className="hero-content" data-testid="luxury-hero-content">
           {/* Layer 1 — What this is */}
           <h1 className="hero-headline hero-headline--statement" data-testid="luxury-hero-headline">
-            Matrix Aurin is a quiet place<br />
-            to read, listen, reflect,<br />
-            and reconnect with what matters most.
+            A living place<br />
+            to read, listen, and reflect.
           </h1>
           <p className="hero-subtext hero-subtext--frame" data-testid="luxury-hero-subtext">
-            Built around books and five guided rooms<br />
-            for people, parents, and families.
+            Five rooms for people, parents, and families.<br />
+            A space for conversation, reflection, and discovery.
+          </p>
+        </div>
+      </section>
+
+      {/* §FIVE-ROOM-DIRECTORY 2026-06-22 — Positive-recognition row
+          for each of the five inhabited rooms. Each line names the
+          experience, not the feature. Visitor scans in under three
+          seconds and chooses where to walk. Anti-wellness lock,
+          eventyr lock (Polarstar carries the Norwegian word italics).
+          §VOICE-LIVING-PLACE-LOCK · §RECOGNITION-NOT-PITCH-LOCK. */}
+      <section
+        className="five-rooms"
+        id="five-rooms"
+        data-testid="luxury-five-rooms"
+        style={{
+          padding: "5rem 1.5rem 6rem",
+          background: "linear-gradient(180deg, transparent 0%, rgba(28, 22, 14, 0.35) 100%)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "780px",
+            margin: "0 auto",
+            fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif',
+          }}
+        >
+          <p
+            style={{
+              textTransform: "uppercase",
+              letterSpacing: "0.35em",
+              fontSize: "0.7rem",
+              color: "hsl(140, 18%, 65%)",
+              textAlign: "center",
+              marginBottom: "2.5rem",
+            }}
+          >
+            Five rooms · choose a door
+          </p>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {[
+              { to: "/parents-room",  glyph: "⛵", name: "Sara",     line: "for the spaces between people you love",                       testid: "five-rooms-sara"      },
+              { to: "/grace",         glyph: "🔥", name: "Grace",    line: "for the room with no one watching",                            testid: "five-rooms-grace"     },
+              { to: "/body-world",    glyph: "🌿", name: "Kaelen",   line: "for what the body has been quietly saying",                    testid: "five-rooms-kaelen"    },
+              { to: "/alistair",      glyph: "🧭", name: "Alistair", line: "for the questions that keep returning",                        testid: "five-rooms-alistair"  },
+              { to: "/kids-universe", glyph: "⭐", name: "Polarstar", line: "eventyr — wonder, childhood, adventures we live together",     testid: "five-rooms-polarstar", italicWord: "eventyr" },
+            ].map((r) => (
+              <li
+                key={r.testid}
+                style={{
+                  borderTop: "1px solid hsla(40, 22%, 70%, 0.15)",
+                }}
+              >
+                <Link
+                  to={r.to}
+                  data-testid={r.testid}
+                  style={{
+                    display: "block",
+                    padding: "1.5rem 0.5rem",
+                    textDecoration: "none",
+                    color: "hsl(40, 18%, 90%)",
+                    transition: "background 0.3s ease, padding-left 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "hsla(40, 22%, 70%, 0.04)";
+                    e.currentTarget.style.paddingLeft = "1.25rem";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.paddingLeft = "0.5rem";
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
+                    <span style={{ fontSize: "1.5rem", lineHeight: 1, opacity: 0.85 }} aria-hidden="true">
+                      {r.glyph}
+                    </span>
+                    <div>
+                      <p
+                        style={{
+                          fontSize: "1.6rem",
+                          margin: 0,
+                          letterSpacing: "0.01em",
+                          color: "hsl(40, 25%, 95%)",
+                        }}
+                      >
+                        {r.name}
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "1rem",
+                          fontStyle: "italic",
+                          margin: "0.25rem 0 0",
+                          color: "hsla(40, 20%, 78%, 0.85)",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {r.italicWord ? (
+                          <>
+                            <em style={{ fontStyle: "italic", color: "hsl(35, 35%, 80%)" }}>{r.italicWord}</em>
+                            {" — "}
+                            {r.line.replace(r.italicWord + " — ", "")}
+                          </>
+                        ) : (
+                          r.line
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p
+            style={{
+              fontSize: "0.95rem",
+              fontStyle: "italic",
+              textAlign: "center",
+              color: "hsla(40, 18%, 68%, 0.85)",
+              marginTop: "3rem",
+              lineHeight: 1.7,
+            }}
+            data-testid="luxury-five-rooms-coda"
+          >
+            This is not a course. It is not a programme to complete.
+            <br />
+            It is a place to return to.
+            <br />
+            <span style={{ display: "inline-block", marginTop: "0.5rem", fontSize: "0.85rem", color: "hsla(40, 18%, 58%, 0.7)" }}>
+              Two rooms (Sara and Kaelen) ask you to read a short threshold before entering.
+            </span>
           </p>
         </div>
       </section>
@@ -327,7 +457,7 @@ export default function LuxurySanctuaryLanding() {
                 <h3 className="offering-title">One session.<br />One quiet hour.</h3>
               </div>
               <div className="offering-body">
-                <p className="offering-description">No commitment. Just curiosity. Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.</p>
+                <p className="offering-description">No commitment. Just curiosity. Enter one room, stay as long as you need, leave when you&apos;re ready. This is simply a beginning.</p>
                 <ul className="offering-includes">
                   <li>Access to one room of your choosing</li>
                   <li>A guided session at your pace</li>
