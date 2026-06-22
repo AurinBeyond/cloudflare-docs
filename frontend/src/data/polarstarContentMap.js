@@ -135,7 +135,7 @@ const DISCOVERY_ACTIVITIES = [
   {
     id: "morning-mindful-start",
     slug: "morning-mindful-start",
-    title: "Morning Mindful Start",
+    title: "Morning Slow Start",
     blurb: "Breathe, smile, and get ready.",
     lucideIcon: Sun,
     type: "breathe",

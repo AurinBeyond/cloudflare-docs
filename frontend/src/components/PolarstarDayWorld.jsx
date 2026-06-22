@@ -46,7 +46,7 @@ const AGE_ZONES = [
     route: "/kids-universe/polarstar/discovery",
     className: "ps-day-age-discovery",
     items: [
-      { icon: Sun,      label: "Morning\nMindful\nStart", route: "/kids-universe/polarstar/discovery/morning-mindful-start" },
+      { icon: Sun,      label: "Morning\nSlow\nStart", route: "/kids-universe/polarstar/discovery/morning-mindful-start" },
       { icon: BookOpen, label: "Story\nTime",             route: "/kids-universe/polarstar/discovery/story-time" },
       { icon: Leaf,     label: "Play &\nMove",            route: "/kids-universe/polarstar/discovery/play-move" },
       { icon: Palette,  label: "Create",                  route: "/kids-universe/polarstar/discovery/drawing-palette" },

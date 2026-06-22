@@ -65,7 +65,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-sm">
-              A quiet digital home for self-mastery, reflection, and gentle
+              A quiet digital home for reflection, attention, and slow
               learning. The published face of <strong className="text-[hsl(var(--aurin-text))]">prulesoul.site</strong>.
               Made to move slowly, on purpose.
             </p>

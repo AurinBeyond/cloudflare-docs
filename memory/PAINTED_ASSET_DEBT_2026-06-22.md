@@ -44,6 +44,22 @@ Banana, NOT to mask them in CSS.
 - Why it's a problem: instructional voice in a space that should feel like a story.
 - Recommended new version: omit the line entirely; the four world-cards do the work.
 
+### Wider Circle World 3 (Every Child Is Our Child) · invitation painting
+- Asset: `WorldEveryChildIsOurChildInvitation.jsx` painted long-form invitation.
+- Baked text contains: *"Every child thrives when they belong to more than one caring adult."*
+- Why it's a problem: the word **thrives** is one of the core wellness keywords. The rest of the painted invitation is on-tone, only this single line carries the keyword.
+- Recommended new version when we regenerate: *"Every child grows steadier when they belong to more than one caring adult."*
+
+### Body World · Stone 13 main title "Growth & Transformation"
+- Asset: painted Stone 13 image (`toeyztpw_…png`).
+- Baked stone title: **"Growth & Transformation"** — "transformation" is core wellness vocabulary.
+- Recommended new title when we regenerate: *"Growth & Becoming"* (matches the Sara Forest "Growth & Development — Growth is not a race. It is a journey of becoming." alt-text already on-brand).
+
+### Body World · Stone 11 sub-stone 6 "From Survival to Thriving"
+- Asset: painted Stone 11 sub-stone image (`bw1xcf7q_…png`).
+- Baked sub-stone title: **"From Survival to Thriving"** — "thriving" is core wellness vocabulary.
+- Recommended new title when we regenerate: *"From Survival to Living"* (the new hint already reads "Loosen what survival has tightened. Make room to live again.").
+
 ---
 
 ## How we will resolve these (when capacity returns)

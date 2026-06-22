@@ -256,7 +256,7 @@ export const BODY_WORLD_STONES = [
       { n: 5, slug: "body-wisdom",              title: "Body Wisdom",               hint: "What is my body trying to teach me?" },
       { n: 6, slug: "cooperation-not-control",  title: "Cooperation Instead of Control", hint: "Can we work together?", legacyAdultPattern: "pattern-pull" },
       { n: 7, slug: "repairing-the-relationship", title: "Repairing the Relationship", hint: "How do I heal what's been hurt?" },
-      { n: 8, slug: "living-as-partners",       title: "Living as Partners",        hint: "How do we thrive together?" },
+      { n: 8, slug: "living-as-partners",       title: "Living as Partners",        hint: "How do we live together well?" },
     ],
     subStoneSlots: OCT_SLOTS,
   },
@@ -266,7 +266,7 @@ export const BODY_WORLD_STONES = [
     title: "Body Engineering",
     question: "How do I work WITH my body?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/j9502ba4_ChatGPT%20Image%2012.%20juni%202026%2C%2023_50_05.png", // Stone 7 Body Engineering
-    aboutThisWorld: "Your body is the most sophisticated system you'll ever operate. This world gives you the practical tools, rituals and routines that let it run at its best.",
+    aboutThisWorld: "Your body is the most complex system you live inside. This world gathers the small, repeatable practices that let it move through its days a little kinder to itself.",
     kaelenQuote: "Care for the instrument and the music will follow.",
     subStones: [
       { n: 1, slug: "movement-foundations",    title: "Movement Foundations",    hint: "The body in motion" },
@@ -275,8 +275,8 @@ export const BODY_WORLD_STONES = [
       { n: 4, slug: "daily-rituals",           title: "Daily Rituals & Routines",hint: "Small acts repeated become identity" },
       { n: 5, slug: "alignment-and-posture",   title: "Alignment & Posture",     hint: "Structure before strength" },
       { n: 6, slug: "body-care-maintenance",   title: "Body Care & Maintenance", hint: "The maintenance you don't skip" },
-      { n: 7, slug: "performance-optimisation",title: "Performance & Optimisation", hint: "The next level of yourself" },
-      { n: 8, slug: "track-and-refine",        title: "Track & Refine",          hint: "What gets measured grows" },
+      { n: 7, slug: "performance-optimisation",title: "Performance & Optimisation", hint: "Asking more of the body without breaking more of it" },
+      { n: 8, slug: "track-and-refine",        title: "Track & Refine",          hint: "Notice what is true, not what should be true" },
     ],
     subStoneSlots: OCT_SLOTS,
   },
@@ -287,7 +287,7 @@ export const BODY_WORLD_STONES = [
     question: "How do my relationships affect my body and nervous system?",
     image: "https://customer-assets.emergentagent.com/job_aurin-hub/artifacts/g3bn25wk_ChatGPT%20Image%2013.%20juni%202026%2C%2016_41_15.png",
     aspectRatio: "1402 / 1122", // landscape painting — matches image dimensions exactly
-    aboutThisWorld: "Every relationship leaves a trace in your body. This world helps you understand how connection, conflict, boundaries and support shape your nervous system — and how to build relationships that help you thrive.",
+    aboutThisWorld: "Every relationship leaves a trace in your body. This world helps you understand how connection, conflict, boundaries and support shape your nervous system — and how to build relationships that steady the body, not strain it.",
     kaelenQuote: "Your nervous system learns from every relationship. Some teach fear. Some teach safety.",
     subStones: [
       { n: 1, slug: "safe-connections",        title: "Safe Connections",        hint: "Who helps my body relax?" },
@@ -361,7 +361,7 @@ export const BODY_WORLD_STONES = [
       { n: 3, slug: "body-keeps-the-score",   title: "The Body Keeps the Score", hint: "Unprocessed stress lives on in the body." },
       { n: 4, slug: "regulation-tools",       title: "Regulation Tools",         hint: "Breath, movement, sound, touch, nature. Simple tools, profound shifts.", legacyAudio: { src: "/audio/body-architecture-week3-pause.mp3", title: "The Radical Pause", credit: "Body Architecture · Week 3" }, legacyQuiz: { href: "/body-world/v1#body-room-questionnaire", title: "Honesty Quiz", subtitle: "A guided body-region check-in" } },
       { n: 5, slug: "vagus-nerve-safety",     title: "Vagus Nerve & Safety",     hint: "Connection signals safety. Safety creates healing." },
-      { n: 6, slug: "survival-to-thriving",   title: "From Survival to Thriving", hint: "Heal your system. Expand your capacity for life." },
+      { n: 6, slug: "survival-to-thriving",   title: "From Survival to Thriving", hint: "Loosen what survival has tightened. Make room to live again." },
       { n: 7, slug: "integration",            title: "Integration",              hint: "Awareness becomes choice. Choice becomes freedom." },
     ],
     subStoneSlots: STONE_11_SLOTS, // vision-calibrated 2026-02-13 to painted asset
