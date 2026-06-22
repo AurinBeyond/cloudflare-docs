@@ -590,6 +590,624 @@ LENSES: Dict[str, dict] = {
             },
         },
     },
+
+    # -----------------------------------------------------------------
+    # 4) SCANDINAVIAN FREE PLAY  (HIDDEN · Nordic friluftsliv · lagom · hygge)
+    # Sara reads silently from this lens when the family feels indoor-bound,
+    # over-managed, or out of touch with weather and slow time.
+    # -----------------------------------------------------------------
+    "scandinavian": {
+        "id": "scandinavian",
+        "name": "Scandinavian Free Play",
+        "subtitle": "friluftsliv · lagom · hygge — slow, outdoor, enough",
+        "plain": "letting weather, time, and unstructured space be the teacher",
+        "visible": False,
+        "scope": (
+            "Best when the home has become a sequence of supervised "
+            "activities, when weather is treated as an obstacle, or "
+            "when the parent is exhausted from over-providing. The "
+            "Scandinavian register trusts boredom, mud, low light, "
+            "and ordinary days as forms of nourishment."
+        ),
+        "attribution": (
+            "Drawing on Nordic family culture — friluftsliv (open-air "
+            "living), lagom (just enough, never too much), hygge "
+            "(small cosy belonging), and the Scandinavian trust in "
+            "self-directed outdoor play in any weather. Used as "
+            "quiet permission, never as a school of parenting."
+        ),
+        "prompt_anchor": (
+            "Active lens for this reply: SCANDINAVIAN FREE PLAY (hidden). "
+            "Speak as if from a kitchen window watching a child play "
+            "outside in light rain. Offer one quiet permission — to "
+            "go outside, to do less, to leave the schedule alone, to "
+            "let boredom soften into a discovery. You MAY name one "
+            "Nordic word (friluftsliv, lagom, hygge) at most once, "
+            "always followed by its plain meaning. Never lecture. "
+            "Never moralise about screens or modern life."
+        ),
+        "situations": {
+            "bedtime": {
+                "insight": (
+                    "A child who has been outside in fresh air falls "
+                    "asleep with a heavier, kinder body. The day's "
+                    "movement does more than any sleep-routine app."
+                ),
+                "practice": (
+                    "before tomorrow's bedtime, give the child fifteen "
+                    "unsupervised minutes outdoors — in any weather. "
+                    "No instructions. No play prompts. Just outside."
+                ),
+                "permission": "you do not have to organise the evening. weather can do part of the work.",
+            },
+            "mealtime": {
+                "insight": (
+                    "Lagom — just enough — quietly asks: is this plate, "
+                    "this drink, this portion the right size for this "
+                    "child, this evening? Not too much, not too little. "
+                    "Just lagom."
+                ),
+                "practice": (
+                    "tonight, serve smaller portions and let the child "
+                    "ask for more if they want it. Trust their belly "
+                    "to know when lagom has been reached."
+                ),
+                "permission": "you do not have to fill the plate. the child knows the size of their own hunger.",
+            },
+            "big_emotions": {
+                "insight": (
+                    "The Scandinavian instinct in a storm is to move "
+                    "the body to a window or a door. Outside air, "
+                    "lower light, or simply a different room often "
+                    "regulates faster than any conversation."
+                ),
+                "practice": (
+                    "next storm, open a window or step onto the "
+                    "balcony together. Don't speak about the feeling "
+                    "yet. Let the cool air do the first half of the work."
+                ),
+                "permission": "fresh air is allowed to be a co-regulator.",
+            },
+            "screen_time": {
+                "insight": (
+                    "Nordic children do not have less screen time "
+                    "because of rules. They have less screen time "
+                    "because outside is consistently more interesting. "
+                    "The competition is the open door, not the lecture."
+                ),
+                "practice": (
+                    "for one week, put outdoor shoes by the door at "
+                    "child-height. Do not mention screens. See whether "
+                    "the door becomes louder than the iPad on its own."
+                ),
+                "permission": "you do not have to police the screen. you only have to make the door easier.",
+            },
+            "sibling": {
+                "insight": (
+                    "Two siblings indoors will argue. The same two "
+                    "siblings in a forest, on a beach, or in a wide "
+                    "park will, more often than not, find a parallel "
+                    "game. Space dissolves what supervision sharpens."
+                ),
+                "practice": (
+                    "next sibling friction, do not mediate first. "
+                    "Move them both outside if at all possible. Wait "
+                    "ten minutes before saying anything."
+                ),
+                "permission": "you do not have to be the referee. the outdoors arbitrates differently than you do.",
+            },
+            "separation": {
+                "insight": (
+                    "Hygge — the small cosy belonging — softens the "
+                    "edges of separation. A familiar small object, a "
+                    "candle lit at home that they know is burning for "
+                    "them, a hygge cue carried in the pocket."
+                ),
+                "practice": (
+                    "give the child a small smooth stone or wooden "
+                    "bead from home. Tell them it knows the way back. "
+                    "No further instructions."
+                ),
+                "permission": "small objects can carry whole homes inside them.",
+            },
+            "school_stress": {
+                "insight": (
+                    "When school becomes heavy, the Scandinavian "
+                    "answer is rarely more study. It is more outside. "
+                    "Friluftsliv — open-air living — restores what "
+                    "indoor pressure has compressed."
+                ),
+                "practice": (
+                    "for one weekend, ban homework and bring the "
+                    "child outdoors for three short walks. No phones. "
+                    "No talking-about-school. Just walking."
+                ),
+                "permission": "the brain rests outside in ways it cannot rest at a desk.",
+            },
+            "connection": {
+                "insight": (
+                    "Hygge connection is not an event. It is a low "
+                    "lamp, a thick blanket, a slow drink, two people "
+                    "sharing the same warm light without needing to "
+                    "speak. Smallness is the medicine."
+                ),
+                "practice": (
+                    "tonight, light one small lamp and turn off the "
+                    "rest. Sit beside the child for ten minutes. Do "
+                    "not narrate the moment. Let it be small."
+                ),
+                "permission": "you do not have to fill the silence. the lamp is already saying enough.",
+            },
+        },
+    },
+
+    # -----------------------------------------------------------------
+    # 5) FRENCH CADRE  (HIDDEN · le cadre · gentle frame · "non veut dire non")
+    # Sara reads silently from this lens when the home has become
+    # negotiation-heavy, when the parent has lost the calm "no", or
+    # when the child seems to be testing where the edges are.
+    # -----------------------------------------------------------------
+    "french_cadre": {
+        "id": "french_cadre",
+        "name": "French Cadre",
+        "subtitle": "le cadre — the calm frame · grown-up time · simple no",
+        "plain": "the home has a frame, and the frame is held quietly",
+        "visible": False,
+        "scope": (
+            "Best when the home has become a constant negotiation, "
+            "when the parent feels worn down by endless 'whys', or "
+            "when adults have lost their own evenings to the children's "
+            "demands. The French cadre offers a steady, low-volume "
+            "frame: clear, calm, repeated."
+        ),
+        "attribution": (
+            "Drawing on French family culture — le cadre (the frame), "
+            "the practice of separate adult-and-child times, the "
+            "simple 'non veut dire non' (no means no, said once, "
+            "without argument), and the cultural permission for "
+            "parents to remain adults. Used as quiet ballast, never "
+            "as a discipline programme."
+        ),
+        "prompt_anchor": (
+            "Active lens for this reply: FRENCH CADRE (hidden). Speak "
+            "in the calm, low-volume register of a parent who knows "
+            "the frame and does not raise their voice to hold it. "
+            "You MAY mention 'le cadre' at most once, followed by its "
+            "plain meaning ('the frame'). Offer one small structural "
+            "permission — the parent is allowed an adult evening, a "
+            "quiet 'no', a moment off-duty. Never moralise about "
+            "modern parenting. Never advise harshness."
+        ),
+        "situations": {
+            "bedtime": {
+                "insight": (
+                    "In a French home, bedtime is often non-negotiable "
+                    "not because the parent is strict, but because the "
+                    "frame is calm. The 'no more' is said once, "
+                    "quietly, and held."
+                ),
+                "practice": (
+                    "tonight, say bedtime in one short sentence. Do "
+                    "not negotiate. If the child argues, repeat the "
+                    "same sentence in the same tone. Do not escalate."
+                ),
+                "permission": "you are allowed to repeat the same calm sentence three times instead of three different ones.",
+            },
+            "mealtime": {
+                "insight": (
+                    "Le cadre at the table is a small art: the meal "
+                    "is the meal, the food is the food, and the child "
+                    "joins it as a small family member — not as a "
+                    "diner with a menu."
+                ),
+                "practice": (
+                    "next dinner, offer one meal. No alternatives. "
+                    "Sit together for a defined time. The child may "
+                    "eat or not eat — but the meal itself is held."
+                ),
+                "permission": "you are not a short-order cook. the table is allowed to be one shape.",
+            },
+            "big_emotions": {
+                "insight": (
+                    "Le cadre does not panic in a storm. It does not "
+                    "join the storm either. It says, simply and once: "
+                    "'I see you are very upset. I am here. I am not "
+                    "leaving.' Then it stays steady."
+                ),
+                "practice": (
+                    "next storm, lower your voice instead of raising "
+                    "it. Speak in shorter sentences. Stay physically "
+                    "in the room. Do not bargain."
+                ),
+                "permission": "you are allowed to be calmer than the situation seems to demand.",
+            },
+            "screen_time": {
+                "insight": (
+                    "In French homes, screens are often simply 'not "
+                    "now' — said the same way three times, without "
+                    "explanation. The reason is not litigated. The "
+                    "frame is the reason."
+                ),
+                "practice": (
+                    "next screen request, say 'not now' in a calm, "
+                    "neutral voice. If asked why, say 'because it is "
+                    "not the time for it'. Do not justify further."
+                ),
+                "permission": "you do not owe a five-paragraph explanation for every limit.",
+            },
+            "sibling": {
+                "insight": (
+                    "Le cadre treats sibling conflict as the children's "
+                    "work, with the adult quietly nearby. The frame "
+                    "trusts that children can repair if the adult does "
+                    "not solve."
+                ),
+                "practice": (
+                    "next conflict, step nearby but do not arbitrate. "
+                    "Say once: 'you two will find a way. I am here if "
+                    "you need me.' Then let them work it."
+                ),
+                "permission": "you do not have to know who started it. you only have to remain present.",
+            },
+            "separation": {
+                "insight": (
+                    "The French goodbye is brief and warm. A long "
+                    "farewell reads to the child as 'something is "
+                    "wrong'. A short, certain one reads as 'this is "
+                    "normal, and I will return'."
+                ),
+                "practice": (
+                    "next drop-off, say goodbye in three short steps: "
+                    "kiss, sentence, leave. Do not linger. Do not "
+                    "explain."
+                ),
+                "permission": "a brief goodbye is a gift, not a coldness.",
+            },
+            "school_stress": {
+                "insight": (
+                    "Le cadre asks the child to do their school work "
+                    "because it is the child's job — not because the "
+                    "parent is anxious about it. The parent stays "
+                    "warm; the work stays the child's."
+                ),
+                "practice": (
+                    "for one week, do not ask 'have you done your "
+                    "homework?'. Ask instead 'how was today?' and let "
+                    "the homework be in the child's hands."
+                ),
+                "permission": "the homework is not your homework.",
+            },
+            "connection": {
+                "insight": (
+                    "Le cadre protects adult time. Connection with the "
+                    "child is deeper when the parent has also been a "
+                    "person that day. A small evening of one's own "
+                    "feeds the next morning's warmth."
+                ),
+                "practice": (
+                    "after the child's bedtime tonight, claim thirty "
+                    "minutes that are not for the child, the house, "
+                    "or the phone. A book, a walk, a slow tea. The "
+                    "house can wait."
+                ),
+                "permission": "you are allowed to be an adult in your own home in the evening.",
+            },
+        },
+    },
+
+    # -----------------------------------------------------------------
+    # 6) REGGIO EMILIA  (HIDDEN · the competent child · 100 languages)
+    # Sara reads silently from this lens when the parent is doing too
+    # much FOR the child, when a child's questions are being closed
+    # down, or when the home has lost its sense of the child as a
+    # serious thinker.
+    # -----------------------------------------------------------------
+    "reggio_emilia": {
+        "id": "reggio_emilia",
+        "name": "Reggio Emilia",
+        "subtitle": "the competent child · the hundred languages",
+        "plain": "the child is a researcher of the world, not a beginner",
+        "visible": False,
+        "scope": (
+            "Best when the parent is doing too much for the child, "
+            "when the child's strange questions are being answered "
+            "too quickly, or when the home treats the child as a "
+            "small empty cup to be filled. Reggio reverses the lens: "
+            "the child arrives as a full, competent researcher."
+        ),
+        "attribution": (
+            "Drawing on the Reggio Emilia approach (post-war "
+            "northern Italy) — Loris Malaguzzi's principle of the "
+            "'hundred languages' (drawing, building, asking, "
+            "imagining, dancing, singing) and the cultural insistence "
+            "that the child is a competent person from the start. "
+            "Used as a quiet reframing, never as a curriculum."
+        ),
+        "prompt_anchor": (
+            "Active lens for this reply: REGGIO EMILIA (hidden). "
+            "Speak as if the child were already a serious researcher "
+            "of life — not 'someone who will one day be'. Offer one "
+            "small reframe that hands a question, a tool, or a choice "
+            "back to the child instead of taking it on yourself. You "
+            "MAY refer to the 'hundred languages' (drawing, building, "
+            "asking, singing) at most once. Never imply the child is "
+            "lacking. Never prescribe."
+        ),
+        "situations": {
+            "bedtime": {
+                "insight": (
+                    "A child who has been given small authorship over "
+                    "the day falls asleep with less protest. Reggio "
+                    "asks: which two or three decisions could the "
+                    "child have made today that they did not?"
+                ),
+                "practice": (
+                    "tonight, let the child choose the order of the "
+                    "bedtime steps. Bath first or story first? Their "
+                    "answer is fine either way."
+                ),
+                "permission": "the child can be an author of small things.",
+            },
+            "mealtime": {
+                "insight": (
+                    "In Reggio kitchens, children participate as "
+                    "researchers, not eaters. They wash, they pour, "
+                    "they ask 'why does that change colour?'. The "
+                    "meal is a small studio."
+                ),
+                "practice": (
+                    "for one meal this week, give the child one real "
+                    "task at the counter — washing a leaf, tearing "
+                    "bread, mixing a sauce. Let them be a co-cook, "
+                    "not an assistant."
+                ),
+                "permission": "the child is allowed to make the food, not just eat it.",
+            },
+            "big_emotions": {
+                "insight": (
+                    "Reggio honours the hundred languages — and "
+                    "sometimes the language of the moment is drawing, "
+                    "tearing paper, building something tall, or dancing "
+                    "the feeling out. Words are not the only release."
+                ),
+                "practice": (
+                    "next storm, offer paper and crayons or a stack "
+                    "of cushions to climb. Let the body or the hand "
+                    "speak before the mouth."
+                ),
+                "permission": "feelings are allowed to come out through the hands.",
+            },
+            "screen_time": {
+                "insight": (
+                    "Reggio would notice: a child glued to a screen "
+                    "is often a child whose curiosity has not been "
+                    "given a serious enough question. The screen wins "
+                    "by default when nothing else has been offered "
+                    "with respect."
+                ),
+                "practice": (
+                    "before the next screen, ask the child one real "
+                    "question they have not heard before — 'how do "
+                    "you think rain knows when to stop?'. Wait for "
+                    "their actual theory."
+                ),
+                "permission": "you are allowed to take the child's theories seriously.",
+            },
+            "sibling": {
+                "insight": (
+                    "When siblings fight in a Reggio room, the adult "
+                    "asks: what were they each trying to build that "
+                    "the other interrupted? Conflict is often two "
+                    "research projects colliding."
+                ),
+                "practice": (
+                    "next conflict, ask each child in turn: 'what "
+                    "were you trying to do?' Not 'who started it'. "
+                    "Listen to the work, not the wrong."
+                ),
+                "permission": "every conflict can be a research conversation in disguise.",
+            },
+            "separation": {
+                "insight": (
+                    "A Reggio goodbye trusts the child as the one in "
+                    "charge of their own crossing. The parent does "
+                    "not drag, does not coax, does not perform the "
+                    "leaving — they walk beside, and trust."
+                ),
+                "practice": (
+                    "next morning drop-off, ask 'how do you want to "
+                    "say goodbye today?' and follow their answer "
+                    "exactly. Even if it changes every day."
+                ),
+                "permission": "the child knows what kind of goodbye they need today.",
+            },
+            "school_stress": {
+                "insight": (
+                    "Reggio is not afraid of difficulty. It is afraid "
+                    "of difficulty without research. A hard subject "
+                    "is treated as a question, not a failure: 'what "
+                    "is your current theory about this?'"
+                ),
+                "practice": (
+                    "tonight, instead of explaining the hard subject, "
+                    "ask: 'what do you think is happening here?'. "
+                    "Listen to the theory. Build with it, do not "
+                    "correct it."
+                ),
+                "permission": "wrong theories are the beginning of right ones.",
+            },
+            "connection": {
+                "insight": (
+                    "Connection in Reggio is documentation — noticing "
+                    "the child's process so closely that the noticing "
+                    "itself becomes the love. The drawing on the "
+                    "fridge is not decoration. It is a witness statement."
+                ),
+                "practice": (
+                    "this week, save one piece of the child's work — "
+                    "a scrap, a sentence, a photo — and tell them you "
+                    "are keeping it because you saw what they were "
+                    "doing."
+                ),
+                "permission": "to be deeply noticed is one of the largest forms of love.",
+            },
+        },
+    },
+
+    # -----------------------------------------------------------------
+    # 7) WALDORF / STEINER RHYTHM  (HIDDEN · breath of the year · imagination · natural materials)
+    # Sara reads silently from this lens when the family has become
+    # over-stimulated, when imagination has been replaced by content,
+    # or when the home has lost its yearly rhythm.
+    # -----------------------------------------------------------------
+    "waldorf": {
+        "id": "waldorf",
+        "name": "Waldorf Rhythm",
+        "subtitle": "the breath of the year · imagination · natural materials",
+        "plain": "the year breathes, and the home breathes with it",
+        "visible": False,
+        "scope": (
+            "Best when the home feels over-stimulated, when the "
+            "child's imagination has been replaced by content, when "
+            "the year has flattened into a calendar without seasons. "
+            "Waldorf restores the breath of the year — natural light, "
+            "natural materials, slow imagination."
+        ),
+        "attribution": (
+            "Drawing softly on the rhythm-of-childhood ideas in the "
+            "Waldorf tradition (after Rudolf Steiner) — the breath "
+            "of the year, the festival of the seasons, the love of "
+            "wool, wood, beeswax, candlelight, and slow, image-rich "
+            "story. Used as a quiet seasonal cue, never as method."
+        ),
+        "prompt_anchor": (
+            "Active lens for this reply: WALDORF RHYTHM (hidden). "
+            "Speak in the warm register of a slow-seasonal home — "
+            "candlelight, natural materials, hand-told stories, the "
+            "weather of the year. Offer one small image-rich "
+            "permission (a candle lit at supper, a stone collected "
+            "on a walk, a story told without a book). You MAY mention "
+            "'the breath of the year' once. Never moralise about "
+            "screens or plastic. Never prescribe a Waldorf school."
+        ),
+        "situations": {
+            "bedtime": {
+                "insight": (
+                    "Waldorf evenings prefer image to instruction. A "
+                    "small spoken story carries a child to sleep more "
+                    "gently than any screen-based goodnight ever will."
+                ),
+                "practice": (
+                    "tonight, tell a one-minute story from your own "
+                    "memory — no book, no app. Begin with 'once, when "
+                    "I was small…'. End on a soft image."
+                ),
+                "permission": "your own voice, however ordinary, is more nourishing than any narrator.",
+            },
+            "mealtime": {
+                "insight": (
+                    "Waldorf trusts that a meal lit by one candle "
+                    "shifts the body of the whole table — children "
+                    "and adults — toward slower eating and warmer "
+                    "talk. The light is not decoration; it is a signal."
+                ),
+                "practice": (
+                    "tonight, light one candle on the table. Eat by "
+                    "its light. Do not name what you are doing."
+                ),
+                "permission": "the candle does the work. you do not have to.",
+            },
+            "big_emotions": {
+                "insight": (
+                    "Waldorf reads the breath of the year inside a "
+                    "small child's storm: every feeling has a season, "
+                    "and the storm passes the way weather passes — "
+                    "not by being argued with, but by being weathered."
+                ),
+                "practice": (
+                    "next storm, wrap the child in a wool blanket if "
+                    "they will accept it. The weight and warmth often "
+                    "settle the body when words cannot."
+                ),
+                "permission": "natural materials know things synthetic ones do not.",
+            },
+            "screen_time": {
+                "insight": (
+                    "Waldorf would not argue with the screen. It "
+                    "would offer something the screen cannot: a "
+                    "lump of beeswax, a bundle of yarn, a piece of "
+                    "wood, the open hand. Imagination expands when "
+                    "the input is small."
+                ),
+                "practice": (
+                    "place one quiet hand-thing on the table tonight "
+                    "— wool, clay, wood, a smooth stone. Do not "
+                    "introduce it. Let the child find it."
+                ),
+                "permission": "the most powerful materials are usually the simplest.",
+            },
+            "sibling": {
+                "insight": (
+                    "In a Waldorf home, sibling friction is often "
+                    "absorbed by a shared seasonal task — gathering "
+                    "leaves, kneading bread, polishing a stone. The "
+                    "shared rhythm dissolves the rivalry."
+                ),
+                "practice": (
+                    "next sibling friction, give them a single "
+                    "seasonal task together — sweeping the doorstep, "
+                    "watering the plants, folding the wool blankets. "
+                    "Walk away while they do it."
+                ),
+                "permission": "siblings often reconcile through work they did not ask for.",
+            },
+            "separation": {
+                "insight": (
+                    "Waldorf separations carry a small natural object "
+                    "between adult and child — a shared stone, a "
+                    "knotted ribbon, a piece of beeswax. The object "
+                    "carries the connection across the day."
+                ),
+                "practice": (
+                    "before the next separation, find together one "
+                    "small natural thing (a leaf, a stone, an acorn). "
+                    "Each carries half of it in a pocket all day."
+                ),
+                "permission": "natural objects can carry love that words cannot.",
+            },
+            "school_stress": {
+                "insight": (
+                    "Waldorf trusts that a tired learning-brain is "
+                    "restored less by more study and more by rhythm "
+                    "— a walk in the same direction at the same hour, "
+                    "a candle lit at the same moment, a story told "
+                    "in the same chair."
+                ),
+                "practice": (
+                    "for one week, take a short walk at the same time "
+                    "every evening with the child. No phone. No "
+                    "school-talk. Just the walk."
+                ),
+                "permission": "the same walk every day is more nourishing than seven different ones.",
+            },
+            "connection": {
+                "insight": (
+                    "Waldorf connection is the breath of the year — "
+                    "small repeated rituals at the same point of the "
+                    "season. The first candle of autumn. The first "
+                    "warm day of spring. A story told only at "
+                    "midwinter. The child grows a calendar inside "
+                    "them, and the family lives inside it."
+                ),
+                "practice": (
+                    "choose one seasonal ritual to keep this year. "
+                    "Whatever it is, do it the same way next year, "
+                    "and the next. Time will become a home."
+                ),
+                "permission": "you are allowed to keep small things sacred just because you keep them.",
+            },
+        },
+    },
 }
 
 
@@ -599,9 +1217,14 @@ LENSES: Dict[str, dict] = {
 
 def list_lenses() -> List[dict]:
     """Sanitized list of lens metadata + situation maps for the
-    frontend. Intuitive carries an empty `situations` dict by design."""
+    frontend. Returns ONLY the visible lenses (intuitive +
+    shitsuke + montessori + positive_coding). Hidden lenses are
+    reachable via get_lens() for Sara's silent reading, but never
+    rendered as menu items in the UI."""
     out: List[dict] = []
     for lens_id, lens in LENSES.items():
+        if lens.get("visible", True) is False:
+            continue
         out.append({
             "id": lens["id"],
             "name": lens["name"],

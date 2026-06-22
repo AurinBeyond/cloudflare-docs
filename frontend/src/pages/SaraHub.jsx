@@ -35,6 +35,7 @@
  * to LEAF_THEMES + LEAF_ZONES when the 15th leaf arrives.
  */
 import { Link, useSearchParams } from "react-router-dom";
+import SaraSpyglassSearch from "@/components/SaraSpyglassSearch";
 
 /* §SARA-HUB-LOCK 2026-06-17 (v2) — Founder-approved hub asset. The
  * earlier asset (qted5bys_image.png) was missing leaf #11. This
@@ -71,6 +72,26 @@ const LEAF_THEMES = [
   { n: 14, slug: "generations-heritage",       label: "Generations & Heritage" },
   { n: 15, slug: "home-memories-roots",        label: "Home, Memories & Roots" },
 ];
+
+/* §LEAF-TAGLINES 2026-06-21 — One quiet sentence per painted leaf,
+ * surfaced as a Sara-voice hover tagline. Anti-wellness · anti-sell.
+ * The wanderer reads only when they pause. */
+const LEAF_TAGLINES = {
+  "my-child":                  "Who is this small person, really?",
+  "our-family":                "The everyday seams of being a family.",
+  "emotions-safety":           "All weather is welcome at this table.",
+  "boundaries-responsibility": "The clearing where small feet find their footing.",
+  "growth-development":        "Children grow in waves, not lines.",
+  "relationships-cooperation": "The slow art of being together.",
+  "challenging-situations":    "When the road bends sharply.",
+  "wisdom-garden":             "The long, slow knowing.",
+  "weekly-digest":             "One small thought to carry through the week.",
+  "stories-real-life":         "Other families have walked here too.",
+  "tools-exercises":           "Small practices, never methods.",
+  "parenting-journey":         "The parent grows as the child grows.",
+  "generations-heritage":      "The line that runs through us.",
+  "home-memories-roots":       "The places that remember us.",
+};
 
 /* §LEAF-ZONES — Painted vine-leaf hotspots. Coordinates measured
  * against the founder hub asset (native 1536×1024, served at the
@@ -131,6 +152,7 @@ export default function SaraHub() {
     return {
       id: `leaf-${theme.slug}`,
       label: `${theme.n}. ${theme.label}`,
+      tagline: LEAF_TAGLINES[theme.slug] || "",
       route: `/parents-room/category/${theme.slug}`,
       top: s.top,
       left: s.left,
@@ -189,6 +211,34 @@ export default function SaraHub() {
                 }}
               >
                 {z.id}
+              </span>
+            )}
+
+            {/* §LEAF-HOVER-TAGLINE 2026-06-21 — Sara-voice tagline that
+                appears beneath the leaf on hover. CSS-only. Pointer-events
+                are disabled so the tagline never intercepts the click. */}
+            {!debug && z.tagline && (
+              <span
+                className="absolute pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  top: "calc(100% + 4px)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  fontFamily: '"Cormorant Garamond", "EB Garamond", Georgia, serif',
+                  fontSize: "0.78rem",
+                  fontStyle: "italic",
+                  whiteSpace: "nowrap",
+                  padding: "0.35rem 0.75rem",
+                  background: "rgba(20, 14, 8, 0.92)",
+                  color: "#e8d9b8",
+                  border: "1px solid rgba(196, 164, 107, 0.4)",
+                  borderRadius: "999px",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.45)",
+                  zIndex: 10,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                {z.tagline}
               </span>
             )}
           </Link>
@@ -254,6 +304,12 @@ export default function SaraHub() {
             50%      { transform: scale(1.05); }
           }
         `}</style>
+
+        {/* §SARA-SPYGLASS 2026-06-21 — small painted search affordance
+            in the top-right of the hub. Lives inside the painted
+            container so it floats over the painting without affecting
+            page layout. */}
+        <SaraSpyglassSearch />
       </div>
     </div>
   );

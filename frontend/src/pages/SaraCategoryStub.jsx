@@ -1,22 +1,24 @@
 /**
  * SaraCategoryStub.jsx — § SARA CATEGORY STUB 2026-06-17
+ *                       § SARA TEASER 2026-06-21 (refined)
  *
  * Placeholder destination for the 15 painted stone-leaves on the
- * Sara hub (/parents-room). Each leaf route lands here until the
- * dedicated category interiors are designed (visuals coming from
- * the founder).
+ * Sara hub (/parents-room) AND for sub-nest routes inside each
+ * painted world. Now reads from `saraForestTeasers.js` so the
+ * visitor lands on a Sara-voice teaser instead of a generic "soft
+ * 404". When no teaser exists for the slug, the original quiet
+ * 404 fallback is shown — softened in tone (§SARA-NEST-READY-LOCK).
  *
- * Visual: the same warm sunset-garden palette as the hub. A single
- * line names the category, a soft note acknowledges the work in
- * progress, and one cream CTA returns the visitor to the painted
- * hub. No lens menu, no situation grid — Sara's identity stays
- * intact: lenses behind, heart in front.
+ * Visual: warm sunset-garden palette. A single line names the
+ * category, a Sara-voice teaser paragraph sets the mood, and one
+ * cream CTA returns the visitor to the painted hub. No lens menu,
+ * no situation grid — Sara's identity stays intact.
  *
- * §IDENTITY-LOCK 2026-06-17 — anti-wellness tone. The line uses
- * "a quiet corner of Sara's garden" — not "feature", not "module",
- * not "coming soon".
+ * §IDENTITY-LOCK 2026-06-17 — anti-wellness tone.
+ * §SARA-ROOM-PHILOSOPHY-LOCK — "Sara waits quietly in the harbour."
  */
 import { Link, useParams } from "react-router-dom";
+import { getForestTeaser } from "@/data/saraForestTeasers";
 
 const CATEGORY_LABELS = {
   "my-child":                  "My Child",
@@ -35,44 +37,22 @@ const CATEGORY_LABELS = {
   "home-memories-roots":       "Home, Memories & Roots",
 };
 
-/* §SUB-THEME-LABELS — Sub-theme labels for painted nest hotspots
- * inside category interiors (e.g. /parents-room/category/my-child/
- * temperament). Each painted Sara world adds its own sub-keys here
- * as new founder assets arrive. */
-const SUB_THEME_LABELS = {
-  /* §MY-CHILD nests */
-  "temperament":           "Temperament",
-  "strengths-gifts":       "Strengths & Gifts",
-  "needs":                 "Needs",
-  "feelings":              "Feelings",
-  "learning-style":        "Learning Style",
-  "development-stages":    "Development Stages",
-  /* §EMOTIONS-SAFETY nests */
-  "safety-trust":          "Safety & Trust",
-  "fear":                  "Fear",
-  "anger":                 "Anger",
-  "sadness":               "Sadness",
-  "regulation-recovery":   "Regulation & Recovery",
-  /* §OUR-FAMILY nests */
-  "connection":            "Connection",
-  "communication":         "Communication",
-  "family-traditions":     "Family Traditions",
-  "daily-life":            "Daily Life",
-  "conflict-repair":       "Conflict & Repair",
-  "belonging":             "Belonging",
-};
-
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
 export default function SaraCategoryStub() {
   const { slug, sub } = useParams();
   const categoryLabel = CATEGORY_LABELS[slug] || "A corner of Sara's garden";
-  const subLabel = sub ? SUB_THEME_LABELS[sub] : null;
-  const title = subLabel || categoryLabel;
-  /* Show the parent category as kicker when a sub-theme is open. */
-  const kicker = subLabel
+
+  /* Resolve a Sara-voice teaser if one exists for this world+sub. */
+  const teaser = sub ? getForestTeaser(slug, sub) : null;
+
+  const title = teaser?.title || categoryLabel;
+  const kicker = teaser
     ? `${categoryLabel} · a corner of Sara's garden`
-    : "A quiet corner of Sara's garden";
+    : sub
+      ? `${categoryLabel} · a corner of Sara's garden`
+      : "A quiet corner of Sara's garden";
+
   /* Back-link points to the parent painted world when in a sub-stub,
    * otherwise back to the Sara hub. */
   const backRoute = sub ? `/parents-room/category/${slug}` : "/parents-room";
@@ -81,7 +61,7 @@ export default function SaraCategoryStub() {
   return (
     <div
       data-testid="sara-category-stub"
-      className="relative min-h-screen w-full flex items-center justify-center px-6"
+      className="relative min-h-screen w-full flex items-center justify-center px-6 py-16"
       style={{
         background:
           "radial-gradient(ellipse at center, #2a2118 0%, #1a1410 60%, #0d0a07 100%)",
@@ -106,22 +86,33 @@ export default function SaraCategoryStub() {
           {title}
         </h1>
 
-        <p
-          className="text-base md:text-lg leading-relaxed"
-          style={{ color: "#cdc4b3" }}
-          data-testid="sara-category-stub-body"
-        >
-          This part of the garden is being tended. The seeds are in,
-          the soil is warm — the stories, the wisdom and the small
-          rituals that belong here are on the way.
-        </p>
+        {teaser ? (
+          <p
+            className="text-lg md:text-xl leading-relaxed"
+            style={{ color: "#e0d6c2" }}
+            data-testid="sara-category-stub-teaser"
+          >
+            {teaser.line}
+          </p>
+        ) : (
+          <p
+            className="text-base md:text-lg leading-relaxed"
+            style={{ color: "#cdc4b3" }}
+            data-testid="sara-category-stub-body"
+          >
+            This part of the garden has not been painted yet. The seeds are
+            in the soil, the light is warm — when the colour has settled,
+            Sara will be here.
+          </p>
+        )}
 
         <p
           className="text-sm md:text-base italic"
           style={{ color: "#a09584" }}
+          data-testid="sara-category-stub-permission"
         >
-          In the meantime, the centre of the room is open. Sara is
-          there.
+          In the meantime, Sara waits quietly in the harbour. You are welcome
+          to walk in.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
@@ -136,7 +127,7 @@ export default function SaraCategoryStub() {
               letterSpacing: "0.08em",
             }}
           >
-            Chat with Sara
+            Speak with Sara
           </Link>
           <Link
             to={backRoute}

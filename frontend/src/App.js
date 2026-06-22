@@ -81,6 +81,7 @@ import SaraParentingJourney from "@/pages/SaraParentingJourney";
 import SaraGenerationsHeritage from "@/pages/SaraGenerationsHeritage";
 import SaraHomeMemoriesRoots from "@/pages/SaraHomeMemoriesRoots";
 import WiderCircleHub from "@/pages/WiderCircleHub";
+import WiderCircleNest from "@/pages/WiderCircleNest";
 import WorldWhatCannotBeReplaced from "@/pages/WorldWhatCannotBeReplaced";
 import WorldOneHeartHoldsTheHouse from "@/pages/WorldOneHeartHoldsTheHouse";
 import WorldEveryChildIsOurChild from "@/pages/WorldEveryChildIsOurChild";
@@ -594,7 +595,7 @@ function AppRouter() {
           path="/parents-room/wider-circle/what-cannot-be-replaced/:sub"
           element={
             <WandererGate scope="private">
-              <SaraCategoryStub />
+              <WiderCircleNest world="what-cannot-be-replaced" />
             </WandererGate>
           }
         />
@@ -613,7 +614,7 @@ function AppRouter() {
           path="/parents-room/wider-circle/when-one-heart-holds-the-house/:sub"
           element={
             <WandererGate scope="private">
-              <SaraCategoryStub />
+              <WiderCircleNest world="when-one-heart-holds-the-house" />
             </WandererGate>
           }
         />
@@ -641,7 +642,7 @@ function AppRouter() {
           path="/parents-room/wider-circle/every-child-is-our-child/:sub"
           element={
             <WandererGate scope="private">
-              <SaraCategoryStub />
+              <WiderCircleNest world="every-child-is-our-child" />
             </WandererGate>
           }
         />
@@ -661,7 +662,7 @@ function AppRouter() {
           path="/parents-room/wider-circle/voices-around-the-child/:sub"
           element={
             <WandererGate scope="private">
-              <SaraCategoryStub />
+              <WiderCircleNest world="voices-around-the-child" />
             </WandererGate>
           }
         />
