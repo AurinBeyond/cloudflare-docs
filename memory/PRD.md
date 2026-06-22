@@ -881,3 +881,47 @@ highest visual and conceptual overlap risk. Cross-nest audit at the
 bottom of W1 already names the differentiation axes
 (motion · gaze · body). Founder verdict required before locking W1
 and starting W2.
+
+
+---
+
+## §WIDER-CIRCLE-NESTS-LIVE 2026-06-22 (Iteration 86 complete)
+
+### What shipped
+All 24 Wider Circle nest interiors are now wired to React pages that
+read from a single source of truth (`/app/frontend/src/data/widerCircleNests.js`)
+and render through one component (`/app/frontend/src/pages/WiderCircleNest.jsx`).
+
+- World 1 — What Cannot Be Replaced — 6 nests (time, listening, attention, presence, trust, connection)
+- World 2 — When One Heart Holds the House — 6 nests (time, listening, attention, presence, trust, connection)
+- World 3 — Every Child Is Our Child — 6 nests (seeing, speaking, belonging, including, trusting, guiding)
+- World 4 — Voices Around the Child — 6 nests (pressure, fear, belonging, comparison, good-voices, ask-yourself)
+- /every-child-is-our-child/invitation retained — still mounts `WorldEveryChildIsOurChildInvitation`.
+
+Each nest shows: painted image · kicker (world label) · title · completion-vs-truth caption · 3 Sara-voice paragraphs · 3 reflection prompts · symbol line · "Sara waits quietly in the harbour" permission line · wooden Back-sign to world hub.
+
+All routes still wanderer-gated (`scope="private"`). All testids in place: `wider-circle-nest-<world>-<nest>`, `-title`, `-kicker`, `-completion`, `-body`, `-prompt-1/2/3`, `-symbol`, `-sara-permission`, `-back`, `-image`. Invalid slugs render `wider-circle-nest-missing` soft-NotFound.
+
+### What also shipped
+- 🔍 **Sara Spy-glass Search** — small painted pill top-right of Sara Hub. Opens overlay (testid `sara-spyglass-trigger` → `sara-spyglass-overlay` + `sara-spyglass-input`). Real-time substring search across all 14 forest worlds + 84 sub-nests. Escape closes. Empty state copy when no match.
+- 🪶 **Hover taglines** on all 14 Sara Hub painted leaves (testid hover-state, anti-wellness one-line copy per leaf, e.g. "Who is this small person, really?").
+- 🌿 **Sara-voice teasers** for all 84 Sara Forest sub-nests via `/app/frontend/src/data/saraForestTeasers.js`. SaraCategoryStub now renders a Sara-voice teaser line if available; falls back to a softened "this part of the garden has not been painted yet" stub.
+- 🔧 **4 hidden backend lenses** added to `/app/backend/parents_lenses.py` — Scandinavian Free Play (friluftsliv / lagom / hygge), French Cadre (le cadre / non veut dire non), Reggio Emilia (the competent child / hundred languages), Waldorf Rhythm (breath of the year / natural materials). Each carries 8 situations × insight + practice + permission. `list_lenses()` now filters by `visible` flag — the API surface still returns only the 4 originally-visible lenses (intuitive, shitsuke, montessori, positive_coding). `get_lens()` resolves hidden lenses for Sara's silent reading.
+
+### Iteration 86 testing
+- Report: `/app/test_reports/iteration_86.json` — 100% backend (5/5), 100% frontend.
+- Pytest scaffold: `/app/backend/tests/test_iter86_wider_circle_lenses.py`.
+- Critical reviews: data file healthy at current size; debounce optional if search corpus grows; hidden-lens filter is clean.
+
+### Saved as future idea (not built)
+- `/app/memory/INVISIBLE_BRAIN_REMOTE_IDEA_2026-06-21.md` — founder voice-noted concept about the hidden "brain remote" that presses BUY for sugar / consumer impulses. Reframed strictly anti-diet, anti-shame, anti-wellness. Possible placement: Kaelen (Body World), Life Lab, or a new quiet "The Things That Press Us" room — to be co-decided with founder when bandwidth returns.
+
+### Still open / next priorities
+- **P1**: Founder review of the 24 painted nest images (alt versions w1_1_time_v2/v3 etc. exist — confirm which to lock).
+- **P1**: Founder verdict on World 1 cross-nest distinctness (Time / Attention / Presence trio).
+- **P2**: Connect "Sara is listening" bridge into the now-live nest interiors (currently the only Sara entry-point from a nest is the permission line at the bottom).
+- **P2**: World preview-card auto-generation (PDF templates) after each world is founder-locked.
+- **P2**: USD/EUR currency toggle in header.
+- **P3**: Refactor legacy lint debt (AgeGate.jsx, CadenceEngine.jsx).
+- **P3**: Subtle ambient motion across Wider Circle (CSS-only) — pending founder verdict on tonal fit.
+- **Backlog**: Co-develop the "Invisible Brain Remote" concept with founder.
