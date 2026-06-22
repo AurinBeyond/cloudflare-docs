@@ -356,7 +356,7 @@ function FiveRoomsRecognitionSection() {
     { to: "/grace",         glyph: "🔥", name: "Grace",     line: "for the room with no one watching",                          testid: "five-rooms-grace" },
     { to: "/body-world",    glyph: "🌿", name: "Kaelen",    line: "for what the body has been quietly saying",                  testid: "five-rooms-kaelen" },
     { to: "/alistair",      glyph: "🧭", name: "Alistair",  line: "for the questions that keep returning",                      testid: "five-rooms-alistair" },
-    { to: "/kids-universe", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures we live together",             testid: "five-rooms-polarstar", italicWord: "eventyr" },
+    { to: "/kids-universe", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures that matter",                  testid: "five-rooms-polarstar", italicWord: "eventyr" },
   ];
   return (
     <section
@@ -410,15 +410,19 @@ function FiveRoomsRecognitionSection() {
         </ul>
         <p
           data-testid="five-rooms-coda"
-          className="text-[0.95rem] italic text-center text-[rgba(220,210,190,0.78)] mt-14 leading-[1.7]"
+          className="text-[1.05rem] italic text-center text-[rgba(220,210,190,0.88)] mt-14 leading-[1.7]"
           style={{ fontFamily: SERIF }}
         >
-          This is not a course. It is not a programme to complete.
+          Built one room at a time.
           <br />
-          It is a place to return to.
+          The world grows as new conversations, stories, and discoveries find their place.
+          <br />
+          <span className="block mt-3 text-[0.95rem] text-[rgba(220,210,190,0.78)]">
+            You are welcome to enter, leave, and return whenever a room calls you back.
+          </span>
         </p>
         <p
-          className="text-[0.78rem] tracking-[0.05em] text-center text-[rgba(196,164,107,0.62)] mt-4 italic"
+          className="text-[0.78rem] tracking-[0.05em] text-center text-[rgba(196,164,107,0.62)] mt-6 italic"
           style={{ fontFamily: SERIF }}
         >
           Two rooms (Sara and Kaelen) ask you to read a short threshold before entering.

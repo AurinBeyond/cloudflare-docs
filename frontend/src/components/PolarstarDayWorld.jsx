@@ -148,7 +148,7 @@ export default function PolarstarDayWorld({ navigate }) {
           PREVIEW WORLD · The First Lanterns Are Lit
         </div>
         <h1>POLARSTAR KIDS</h1>
-        <p>Polarstar protects wonder. <em>Audio adventures the family lives together</em> — screen-down, ears-open.</p>
+        <p>Polarstar protects wonder. <em>Adventures that matter — lived together</em>. Screen-down, ears-open.</p>
         <p
           data-testid="polarstar-audio-companion-banner-day"
           style={{
