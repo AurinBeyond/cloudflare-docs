@@ -925,3 +925,31 @@ All routes still wanderer-gated (`scope="private"`). All testids in place: `wide
 - **P3**: Refactor legacy lint debt (AgeGate.jsx, CadenceEngine.jsx).
 - **P3**: Subtle ambient motion across Wider Circle (CSS-only) — pending founder verdict on tonal fit.
 - **Backlog**: Co-develop the "Invisible Brain Remote" concept with founder.
+
+
+---
+
+## §DEPLOY-READY 2026-06-22 (Iteration 86 final)
+
+### Final code-side polish before deploy
+- W1 Time nest: `"sweetheart"` → `"little one"` (less US-flavoured for a European-watercolour brand)
+- All 24 Wider Circle nest `symbol` lines: emojis stripped to honour the painted-watercolour aesthetic
+- `SaraCategoryStub.jsx`: added a quiet hand-drawn SVG vinjett above the kicker + simplified the previous double-pill CTA to one cream "Speak with Sara" pill plus a small italic text-link return.
+
+### Pre-deploy CORS hardening
+- `backend/.env` CORS_ORIGINS narrowed from `"*"` → explicit allowlist
+  (`https://prulesoul.site,https://www.prulesoul.site,https://aurin-hub.preview.emergentagent.com`).
+- Verified OPTIONS preflight: allowed origin echoed back, disallowed origin returns 400. Credentials-mode now valid.
+
+### Painted-asset debt (deferred, NOT a deploy blocker)
+Recorded in `/app/memory/PAINTED_ASSET_DEBT_2026-06-22.md`. Five visual flaws live inside founder-painted hub/world assets. Resolution path is Nano Banana regeneration, not CSS masking.
+
+### Deploy verdict
+- Deployment agent static audit: **PASS** (CORS WARN resolved)
+- 6-point smoke test on preview ingress: **6 / 6 ✅** (Sara Hub · Wider Circle Hub · W1 Time nest · Spyglass Search · Sara chat · Wanderer gate)
+- All `/api/*` routes responding 200 from preview ingress
+
+**🟢 Production deploy: GO.**
+
+### Founder downloadables
+- `/app/frontend/public/downloads/eesti_markmik.zip` — Estonian review notebook (10 files, ~10 KB) for offline founder use during the 24-nest review pass.
