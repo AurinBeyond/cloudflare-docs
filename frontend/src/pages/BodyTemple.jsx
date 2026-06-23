@@ -12,9 +12,8 @@
  *
  * STATUS:
  *   - Page render replaced with "Under Redesign" notice.
- *   - Original component preserved in `_BodyTempleLegacy.jsx`
- *     (502 lines, full 28-day curriculum + day modal + Anna note +
- *     Stripe unlock CTA). Restored from git history.
+ *   - Legacy 502-line implementation removed 2026-02 cleanup
+ *     (HighPerformers + _BodyTempleLegacy + LuxurySanctuaryLanding).
  *   - Backend `body_temple_curriculum.py` + Stripe unlock flow
  *     (`/clarity-release`) + `/api/body-temple/*` endpoints all
  *     untouched and ready to wire when redesign is complete.
@@ -22,7 +21,6 @@
  * DO NOT:
  *   - delete the curriculum file
  *   - delete the Stripe unlock flow
- *   - delete `_BodyTempleLegacy.jsx`
  *   - link to /body-temple from inside Body World
  *   - merge Body Temple into Alistair Laboratory or any other room
  */

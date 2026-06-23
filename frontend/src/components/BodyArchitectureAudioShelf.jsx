@@ -8,7 +8,8 @@
  *
  * Static MP3 playback, zero per-listen cost, zero token burn.
  * No auth gate — Week 1 is the founder's "first taste" for the
- * world. Future iteration may gate Weeks 2-4 behind the $39 unlock.
+ * world. Future iteration may gate Weeks 2-4 behind a paid unlock
+ * (price TBD after Faas 3 pricing decision).
  *
  * 100% English UI.
  */

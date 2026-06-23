@@ -15,7 +15,6 @@ import KidsColoringStudio from "@/pages/KidsColoringStudio";
 import KidsHub from "@/pages/KidsHub";
 import StoryGiftForm from "@/pages/StoryGiftForm";
 import StoryGiftRead from "@/pages/StoryGiftRead";
-import HighPerformers from "@/pages/HighPerformers";
 import KidsStarsView from "@/pages/KidsStarsView";
 import KidsDaily from "@/pages/KidsDaily";
 import KidsActivities from "@/pages/KidsActivities";
@@ -36,7 +35,6 @@ import WanderersAgreement from "@/pages/WanderersAgreement";
 import AuthCallback from "@/pages/AuthCallback";
 import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
-import LuxurySanctuaryLanding from "@/pages/LuxurySanctuaryLanding";
 import SanctuaryPreview from "@/pages/SanctuaryPreview";
 import WhatThisIs from "@/pages/WhatThisIs";
 import BundleDisclosure from "@/pages/BundleDisclosure";
@@ -237,8 +235,10 @@ function AppRouter() {
         <Route path="/aurins-room/stories/:storySlug" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/aurins-room/gift" element={<Navigate to="/kids-universe/polarstar" replace />} />
         <Route path="/aurins-room/gift/:slug" element={<Navigate to="/kids-universe/polarstar" replace />} />
-        {/* §HIGH-PERFORMERS 2026-02-10 — LinkedIn-targeted B2B landing */}
-        <Route path="/high-performers" element={<HighPerformers />} />
+        {/* §LEGACY-CLEANUP 2026-02 — /high-performers route retired.
+            "Coach" tone conflicted with anti-wellness positioning;
+            page now removed, redirect to home keeps any inbound links. */}
+        <Route path="/high-performers" element={<Navigate to="/" replace />} />
         <Route path="/parent-portal/stars" element={<ParentStars />} />
         <Route path="/parent-portal/digest" element={<ParentDigest />} />
         {/* §URL-RENAME 2026-02-12 — legacy /parent-portal/wellness
@@ -797,16 +797,10 @@ function AppRouter() {
         <Route path="/admin/content" element={<AdminContent />} />
         <Route path="/admin/parents-compass" element={<AdminParentsCompass />} />
       </Route>
-      {/* §2026-05-17 — /luxury preview route lives OUTSIDE the
-          standard Layout wrapper. It is a full-bleed sanctuary
-          landing experience with its own navigation and footer.
-          Founder Q1=b: do NOT replace the current `/` route. */}
-      {/* §2026-02-12 — /luxury legacy route retired. The v1 pricing
-          table (€45 / €120 / €380) is inconsistent with the locked
-          MEMBERSHIP_ARCHITECTURE_v2.3.1 hierarchy. Redirect preserves
-          any inbound links during deploy; the LuxurySanctuaryLanding
-          component is kept in the codebase for reference and may be
-          archived in a future cleanup sprint. */}
+      {/* §LEGACY-CLEANUP 2026-02 — /luxury route retired entirely.
+          LuxurySanctuaryLanding component removed; v1 pricing table
+          (€45/€120/€380) deleted with it. Redirect preserves any
+          inbound links during deploy. */}
       <Route path="/luxury" element={<Navigate to="/" replace />} />
       {/* §SPRINT-1+2 2026-02 — `/start-here` is the single quiet door
           new visitors land in after clicking the Sprint-0 primary CTA.

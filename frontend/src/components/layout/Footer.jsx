@@ -16,7 +16,6 @@ const COLUMNS = [
       { to: "/bookstore", label: "Bookstore" },
       { to: "/library", label: "Library" },
       { to: "/kids-universe/polarstar", label: "Polarstar Kids" },
-      { to: "/high-performers", label: "For Leaders" },
       { to: "/about", label: "The Origin" },
       { to: "/reach-out", label: "Reach Out" },
     ],

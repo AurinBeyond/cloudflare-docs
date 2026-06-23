@@ -249,7 +249,7 @@ export default function BodyRoom() {
                 <p className="text-[13.5px] mt-2 leading-relaxed max-w-[52ch]" style={{color: "#5a4a26"}}>
                   A 28-day walk through the four ancient keys —
                   the breath, the armor, the radical pause, and
-                  coming home. Yours forever after one $39 unlock.
+                  coming home. Yours forever after one quiet unlock.
                 </p>
                 <p className="text-[13px] mt-3 inline-flex items-center gap-1.5" style={{color: "#3d2e15"}}>
                   Walk the temple <ArrowRight size={13} />

@@ -142,8 +142,7 @@ export default function UserPortal() {
                    style={{ color: "#5a4a26" }}>
                   Four ancient keys — breathing, touch, rest, presence —
                   walked across twenty-eight quiet days. Read Day 1
-                  before you decide anything. $39 once, yours forever
-                  if you continue.
+                  before you decide anything. Yours forever if you continue.
                 </p>
                 <p className="text-[13px] mt-3 inline-flex items-center gap-1.5"
                    style={{ color: "#3d2e15" }}>
