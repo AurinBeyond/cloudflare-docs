@@ -16494,6 +16494,7 @@ async def _polar_cohort_seed():
 _FOUNDER_DOCS_WHITELIST = {
     "architecture": "PRODUCT_ARCHITECTURE_INVENTORY_2026-02.md",
     "costs": "COST_BREAKDOWN_2026-02.md",
+    "library-audit": "LIBRARY_BOOKSTORE_AUDIT_2026-02.md",
 }
 
 
