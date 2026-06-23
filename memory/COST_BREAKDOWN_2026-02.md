@@ -1,355 +1,340 @@
-# KULUDE & KASUMI REAALSUSKONTROLL — Norra ENK
-**Kuupäev:** 2026-02 · **Juriidiline vorm:** Enkeltpersonforetak (ENK) Norras
-**Eesmärk:** Šveitsi kella täpsus. Ükski euro ei tohi olla varjatud.
+# KULUDE & KASUMI REAALSUSKONTROLL — v2 (Norra ENK)
+**Kuupäev:** 2026-02 · **Versioon 2** (GPT tagasisidega) · **Vorm:** Enkeltpersonforetak (ENK) Norras
+
+**Mis v1-st muutunud:**
+- ➕ Founderi palga 5 tasemest tabel (hobi → kasv)
+- ➕ Turunduskulu 3 tasemest tabel (null-eelarve → tõsine kasv)
+- ➕ Emergent juba investeeritud summa (uppunud kulu)
+- ➕ Tagasimaksete reserv
+- ➕ Voice Credits matemaatika RANGE kontroll (GPT €9/€29/€59 vs reaalsus)
+- ➕ Müügiprognoosi tabel: külastajaid/kuus vajalik iga palgataseme jaoks
+- ➕ "Mille me 3-kesi nõustume" kokkuvõte
 
 ---
 
-## ⚠️ KÕIGE OLULISEM HOIATUS — ENNE TABELEID
+## 0. GPT KOLM TÄIENDUST — KÕIK NÕUSTUVAD
 
-Kõik allolevad arvud on **TURVALISED VAHEMIKUD**, mitte täpsed lubadused. Kolm muutujat sõltuvad reaalsest kasutusest, mida me **veel ei tea**:
+GPT viimase voor tõi 3 punkti, mis on **finantsplaani süda**:
 
-1. **ElevenLabs hääle minutid kasutaja kohta** — võib varieeruda 100x (5 min vs 500 min/kuu)
-2. **Emergent krediidi kasutus** — sõltub LLM-kõnede arvust, prompti pikkusest, mudeli valikust
-3. **Külastajate hulk** — 100 vs 10 000 muudab kõik kulud astmeliselt
+| Mille kohta | Mu vastus |
+|---|---|
+| "Küsimus ei ole, kas süsteem jääb plussi. Küsimus on: kas süsteem maksab Annale palka?" | ✅ 100% nõus. Lisan founderi palga 5 tasemena. |
+| "Kuidas inimesed üldse Aurinini jõuavad? Turunduskulu rida puudub." | ✅ 100% nõus. Lisan 3 turunduse stsenaariumi. |
+| "Praegu pole tehnoloogia ega kulu probleemi — on positsioneerimise probleem." | ✅ 100% nõus. Aga ilma hinnaeelnõu ei saa testida positsioneerimist. |
 
-**Iga tabel allpool sisaldab kolme stsenaariumi: 🟢 KONSERVATIIVNE / 🟡 REALISTLIK / 🔴 PINGELINE.**
+**Tegutsemise loogika:** Lukus mitte LÕPLIKKE hindu, vaid **TÖÖVERSIOONI hindu**, mille vastu saab testida müügivoogu.
 
 ---
 
 ## 1. FIKSEERITUD KULUD (igakuised, sõltumata kasutajatest)
 
-| Kululiik | Allikas | Konservatiivne | Realistlik | Pingeline |
-|---|---|---:|---:|---:|
-| **Emergent hosting (baas)** | Emergent platvorm | €30/kuu | €30/kuu | €30/kuu |
-| **Domeen** (prulesoul.site) | aastane jaotatud | €1/kuu | €1/kuu | €1/kuu |
-| **MongoDB Atlas** (free tier piires) | praegu free | €0 | €0–€15 | €25 |
-| **Email saatmine** (Resend / SES) | väike kogus | €0 | €5 | €15 |
-| **Analytics (GA4)** | tasuta | €0 | €0 | €0 |
-| **Backup / monitoring** | võimalik tulevikus | €0 | €5 | €15 |
-| **KOKKU FIKSEERITUD** | | **€31** | **€41–€56** | **€86** |
+| Kululiik | Konservatiivne | Realistlik | Pingeline |
+|---|---:|---:|---:|
+| **Emergent hosting (baas)** | €30 | €30 | €30 |
+| **Domeen** (prulesoul.site) | €1 | €1 | €1 |
+| **MongoDB Atlas** | €0 | €0–€15 | €25 |
+| **Email saatmine** (Resend/SES) | €0 | €5 | €15 |
+| **Analytics, monitoring, backup** | €0 | €5 | €15 |
+| **ElevenLabs baasplaan** | €5 (Starter) | €22 (Creator) | €99 (Pro) |
+| **AI tööriistad** (Emergent krediit cap) | €30 | €100 | €300 |
+| **🟢 KOKKU FIKSEERITUD INFRA** | **€66** | **€163** | **€485** |
 
-**Aasta kohta:** €372 / €492–€672 / €1 032
+**Aastas:** €792 / €1 956 / €5 820
 
 ---
 
-## 2. EMERGENT KREDIIDI RISK (kriitiline!)
+## 2. TURUNDUSKULU (GPT lisas — kriitiline rida!)
 
-Emergent kasutab krediidi-süsteemi. **Kui sa lähed üle krediidi limiidi, koduleht VÕIB lakata töötamast** kuni täidad rahakoti uuesti. See on **eksistentsiaalne risk**, kui 10 000 inimest tuleb korraga.
-
-### Krediidi tarbimise allikad:
-- **LLM-kõned** (Claude/Gemini/OpenAI Emergent Key kaudu)
-  - Iga sõnum vestluses = ~$0.003–$0.02 (sõltub mudelist)
-  - 100 sõnumit/päev = ~$0.50–$2.00/päev
-- **Nano Banana pildigeneratsioon** = ~$0.04/pilt
-- **Hosting + bandwidth**
-- **OpenAI Whisper / TTS** (kui kasutame)
-
-### **KAITSESTRATEEGIA — KRITLIK!**
-
-**A. Rate limiting kõigil LLM-pinnaдel:**
-```
-Anonüümne (Explore): 0 LLM-kõnesid (kõik staatiline)
-Tasuta beta-konto:    5 LLM-sõnumit / päev kokku
-Journey ostja:        50 LLM-sõnumit / kuu
-Companion:           500 LLM-sõnumit / kuu (~16/päev)
-```
-
-**B. Soft paywall:**
-Kui kasutaja kvoot täis → "Reflektsiooni hetk: 24 tundi vaikust enne järgmist sõnumit." (mitte "OSTA NÜÜD!")
-
-**C. Krediidi monitor:**
-- Admin panel näitab päeva, nädala, kuu LLM-kulu
-- Automaatne email kui krediit < 20% järelejäänud
-- Kõva alarm kui krediit < 5%
-
-**D. Eelarve cap:**
-Igapäevane LLM-eelarve **€10/päev = €300/kuu max**. Üle selle: kõik LLM-pinnad lähevad "vaiksesse režiimi" automaatselt.
-
-### Eeldatav Emergent krediidi kulu / kuu:
-
-| Stsenaarium | Kasutajaid | Eeldatav LLM-kulu/kuu |
+| Tase | Mida sisaldab | €/kuu |
 |---|---|---:|
-| 🟢 Beta käivitus | 20 aktiivset | €15–€30 |
-| 🟡 100 tasuta + 10 ostjat | 110 | €60–€150 |
-| 🔴 10 000 viral hetk | 10 000 (rate-limited) | €200–€500 (CAP!) |
+| 🟢 **Null-eelarve** | SEO, Reddit, LinkedIn, Discord, Substack, e-posti loend | **€0–€50** |
+| 🟡 **Minimaalne kasv** | Meta + Google testkampaaniad, väikesed influencer-katsetused | **€100–€300** |
+| 🔴 **Tõsine kasv** | Meta + Google + Affiliate + Influencer + retargeting | **€500–€2000** |
 
-**Top-up:** Emergent universaalse võtme krediiti saab juurde "Profile → Universal Key → Add Balance" kaudu. Auto top-up on võimalik.
-
----
-
-## 3. ELEVENLABS HÄÄLE KULUD (kõrgeim risk!)
-
-ElevenLabs ConvAI ja TTS hinnad (~2026 hinnatasemed, kontrolli pre-launch):
-
-| Plaan | Sisaldab | Hind |
-|---|---|---:|
-| Starter ($5) | 30 000 tähemärki TTS/kuu, ~20 min ConvAI | €5/kuu |
-| Creator ($22) | 100 000 tähemärki, ~100 min | €22/kuu |
-| Pro ($99) | 500 000 tähemärki, ~500 min | €99/kuu |
-| Scale ($330) | 2M tähemärki, ~2000 min | €330/kuu |
-| Business ($1320) | 11M tähemärki, ~10 000 min | €1 320/kuu |
-
-**Marginaalne hind kasutaja kohta:**
-- ConvAI vestlus: **~€0.08–€0.15 / minut** (sõltuvalt plaanist)
-- TTS jutustamine: **~€0.05 / 1000 tähemärki** (~1 min)
-
-### **STSENAARIUM A — Hääl 100% top-up (GPT + sina nõustusite)**
-
-**Companion baasis: 0 hääle minutit.**
-Hääl on **ainult kreditipõhine top-up**, ostetakse eraldi.
-
-**Hääle krediidi pakid (ettepanek):**
-
-| Pakk | Minutid | Sinu kulu (ElevenLabs Pro plaanis) | Müügihind | Marginaal | Marginaal % |
-|---|---:|---:|---:|---:|---:|
-| Small | 15 min | €1.50 | €5.90 | €4.40 | ~75% |
-| Medium | 60 min | €6.00 | €19.00 | €13.00 | ~68% |
-| Large | 180 min | €18.00 | €49.00 | €31.00 | ~63% |
-
-**MIKS see töötab:**
-- ✅ **0 üllatust**: kasutaja teab täpselt, et hääl on extra
-- ✅ **0 riski sinule**: kui keegi ei osta hääle krediiti, sa ei kaota raha
-- ✅ **Marginaal katab kõik kaasnevad kulud** (Stripe fee, maks)
-- ❌ **Friction**: kasutaja peab tegema lisaotsuse (ost eraldi)
-
-**KUI PALJU SA TEENID HÄÄLEST (kui 10 inimest ostavad 60 min paki):**
-- Tulu: 10 × €19 = €190
-- ElevenLabs kulu: 10 × €6 = €60
-- Stripe fee: 10 × (€0.30 + 2.9%) = €8.50
-- Bruto kasum (enne maksu): €121.50
+**Soovitus alguses:** Null-eelarve esimesed 3 kuud (€50/kuu max). Pärast esimest €1000 puhtast tulust → €200/kuu test eelarve.
 
 ---
 
-### **STSENAARIUM B — "Tasuta minutid Companion-is" (RISK!)**
+## 3. FOUNDERI PALK (GPT lisas — eksistentsiaalne!)
 
-Kui Companion sisaldab näiteks 30 min/kuu tasuta häält:
+| Eesmärk | Vajalik **netotulu** kuus (peale kõike) |
+|---|---:|
+| 🌱 **Hobi** (taskuraha) | **€500** |
+| 🌿 **Kõrvaläri** (osa-aja sissetulek) | **€1 500** |
+| 🌳 **Osaline töö** (peamine kõrvalsissetulek) | **€2 500** |
+| 🏛️ **Täistöö** (Aurin = põhitöö) | **€4 000** |
+| 🚀 **Kasv** (re-investeerimine + palk) | **€6 000** |
 
-**10 000 tasuta beta-kasutajat × 30 min × €0.10 = €30 000/kuu kulu.**
-
-**See tapab äri kohe.** Selleks oleks vaja:
-- Karmi rate limit (maksimaalne 1 min korraga, 5 min/päev)
-- Selge "kui sa ületad limiidi, top-up käivitub automaatselt"
-
-**Ma EI SOOVITA seda stsenaariumi enne kui Companion on 100+ maksvat kasutajat.**
-
----
-
-### **STSENAARIUM C — Hübriid (post-beta võimalus)**
-
-- Companion sisaldab **5 min/kuu eelvaade** (sissejuhatus, mitte vestlus)
-- Üle selle: top-up paketid
-
-Riskhinnang: **TURVALINE,** sest 5 min × 1000 kasutajat = 5000 min = ~€500/kuu max kulu, hõlpsasti kaetud Companion-tulust.
+⚠️ **Need on NETOSUMMAD su rahakotti pärast kõike** — Norra makse, infra, ElevenLabs, Stripe, kõike.
 
 ---
 
-## 4. MAKSEVÄRAVATE FEED
+## 4. EMERGENT UPPUNUD KULU (placeholder — sina ütle täpne arv!)
 
-| Värav | Fee struktuur | Eelistus |
-|---|---|---|
-| **Stripe** | 1.4% + €0.25 (EU kaart), 2.9% + €0.25 (non-EU) | ✅ Companion subscription'iks |
-| **Gumroad** | 10% + €0.30 (kuni $1k) → 5% + €0.30 hiljem | ✅ One-time Journey ostudeks (juba töötab Hearth-ile) |
-| **LemonSqueezy** | 5% + €0.50 | 🟡 Alternatiiv Stripe-le, MoR (Merchant of Record) — käsitleb VAT-i automaatselt |
-| **Polar.sh** | 4% + €0.40 | 🟡 Olemasolev kood, MoR — VAT käsitletakse |
+Sa oled juba kulutanud Emergent platvormi krediite süsteemi ehitamiseks. See raha on **uppunud kulu** — see ei tagastata, aga see peab plaani teenima tagasi mõistliku aja jooksul.
 
-**Soovitus:** **LemonSqueezy** kõige jaoks (üks integratsioon, MoR käsitleb VAT-i). Või Stripe + ettevõtte VAT-registreerimine, kui käive ületab Norra MVA piiri (50 000 NOK = ~€4 200/aasta).
+| Eeldatud Emergent investeering | Kuus kuus tagasi (üle 24 kuu) |
+|---|---:|
+| €500 | €21/kuu |
+| **€2 000** (mu töö-eeldus) | **€84/kuu** |
+| €5 000 | €209/kuu |
+| €10 000 | €417/kuu |
+
+**ÜTLE PALUN TÄPSEM SUMMA** ja ma kohendan tabelid.
 
 ---
 
-## 5. NORRA ENK MAKSUD (kriitiline!)
+## 5. TAGASIMAKSETE RESERV (riskirida)
 
-### Norra Enkeltpersonforetak (ENK) maksuparameetrid:
+14-päeva raha-tagasi-garantii tähendab, et **5–10% tehingutest** võivad tagasi tulla. Reserv:
 
-| Maks | Määr | Selgitus |
+| Müügimaht/kuu | Reserv 7% | Reaalne risk |
 |---|---:|---|
-| **Personlig inntektsskatt** (tulumaks) | ~22–47% astmeline | Madal sissetulek = ~22%, kõrge sissetulek = kuni 47.4% |
-| **Trygdeavgift** (sotsiaalmaks) | **11.4%** | ENK-le, näpunäide: kõrgem kui palgatöötaja 7.9% |
-| **MVA (käibemaks)** | **25%** | Kui käive > **50 000 NOK** (~€4 200) aastas, registreerimine kohustuslik |
-| **Trygdeavgift miinimumi piir** | 69 650 NOK | Kui tulu alla selle, ei maksta trygdeavgifti |
+| €500 | €35 | madal |
+| €2 000 | €140 | keskmine |
+| €5 000 | €350 | normaalne |
 
-### **Reaalne maksuosa erinevatel käivetel:**
-
-| Aastakäive (NOK) | Aastakäive (€) | Eeldatav maks % (kokku) | Netokäibest järelejäänu |
-|---:|---:|---:|---|
-| 100 000 NOK | ~€8 400 | ~22% + 11.4% = **33.4%** | €5 590 |
-| 300 000 NOK | ~€25 200 | ~28% + 11.4% = **39.4%** | €15 270 |
-| 600 000 NOK | ~€50 400 | ~38% + 11.4% = **49.4%** | €25 500 |
-| 1 000 000 NOK | ~€84 000 | ~45% + 11.4% = **56.4%** | €36 620 |
-
-⚠️ **Need on ligikaudsed.** Norra maksukalkulaator: skatteetaten.no/skattekalkulator
-
-### **MVA praktiline mõju:**
-
-Kui sinu **klientide enamus on EL-st** (Eestist, Norrast, USA-st), siis:
-- **Norra kliendid:** sa pead lisama 25% MVA hinnale, kui oled MVA-registreeritud
-- **EL kliendid (ettevõtjad):** B2B reverse-charge, 0% MVA
-- **EL kliendid (eraisik):** OSS / EU VAT MOSS reeglid — keeruline
-- **USA kliendid:** ei MVA-d
-
-**Soovitus:** Kasuta **LemonSqueezy või Polar.sh** kui Merchant of Record. Nemad käsitlevad kogu rahvusvahelist VAT-i automaatselt. Sa saad puhast netot ja sul on Norras vaid ENK tulumaks.
+Lisan eelarvesse alati **7% tagasimakse-reservi**.
 
 ---
 
-## 6. BREAK-EVEN ARVUTUSED (3 mudelit)
+## 6. KOGUKULU MUDEL — KÕIK KOOS
 
-### **Mudel 1: Madal hind, mass-müük**
-- Companion: **€19/kuu**
-- Journey: **€19** (üks kord)
-- Eeldame: 50% Stripe MoR-iga, 50% Gumroad-iga
+| Rida | Hobi mudel | Kõrvaläri mudel | Täistöö mudel |
+|---|---:|---:|---:|
+| Fikseeritud infra | €100 | €163 | €485 |
+| Turundus | €50 | €200 | €1 000 |
+| Emergent tagasi (24kuu üle €2k) | €84 | €84 | €84 |
+| Puhver (ootamatu) | €100 | €200 | €500 |
+| Tagasimakse reserv (7%) | €50 | €175 | €500 |
+| **KULUD KOKKU/kuu** | **€384** | **€822** | **€2 569** |
+| **+ Founderi palk** | **€500** | **€1 500** | **€4 000** |
+| **= Vajalik NETOTULU peale Norra makse** | **€884** | **€2 322** | **€6 569** |
+| **÷ Norra ENK maksu netomäär (~60% jääb)** | | | |
+| **= Vajalik BRUTOTULU enne Norra makse** | **€1 473** | **€3 870** | **€10 948** |
 
-**Tulu/Companion liige peale fee'd:** €19 × (1 - 0.05) = **€18.05/kuu**
-**Tulu/Journey ost peale fee'd:** €19 × (1 - 0.07) = **€17.67**
-
-| Fikseeritud kulu/kuu | Vajaminev Companion-liikmete arv (et break-even fikseeritud kulule) |
-|---:|---:|
-| €56 (realistlik) | **4 Companion-liiget** |
-
-✅ **Väga ohutu** — kuid madal hind tähendab tunneb "odav".
-
----
-
-### **Mudel 2: Keskmine hind**
-- Companion: **€29/kuu**
-- Journey: **€29** (üks kord)
-
-**Tulu/Companion peale fee'd:** **€27.55/kuu**
-
-| Fikseeritud kulu/kuu | Vajaminev Companion-liikmete arv |
-|---:|---:|
-| €56 | **3 Companion-liiget** |
-
-✅ **Ohutu + premium-tunne.** Iga Journey ost lisaks katab Emergent LLM kulud terveks kuuks.
+**See on "Šveitsi kella" arv:** kui sa müüd €1 473 bruto/kuu, sa katad infra, turunduse, puhvri, tagasimaksed JA saad €500 enda kotti.
 
 ---
 
-### **Mudel 3: Premium**
-- Companion: **€49/kuu**
-- Journey: **€39** (üks kord)
+## 7. VOICE CREDITS — RANGE MATEMAATIKA (GPT €9/€29/€59 reaalsuskontroll)
 
-**Tulu/Companion peale fee'd:** **€46.55/kuu**
+GPT pakkus:
+- 30 min @ €9
+- 120 min @ €29
+- 300 min @ €59
 
-| Fikseeritud kulu/kuu | Vajaminev Companion-liikmete arv |
-|---:|---:|
-| €56 | **2 Companion-liiget** |
+**Kontrollime kahel ElevenLabs plaanil.**
 
-⚠️ Risk: hind võib tunduda **liiga kõrge** võrreldes Headspace/Calm (€7-12/kuu). Vajab tugevat positsioneerimist ("see ei ole äpp, see on sanctuary").
+### A) Creator plaan ($22/100 min) — kulu €0.22/min
 
----
+| Pakk | Sale | EL kulu | Stripe 5% | Bruto | Norra maks 40% | **Netos kotti** | Marginaal |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 30 min | €9 | €6.60 | €0.45 | €1.95 | €0.78 | **€1.17** | 13% |
+| 120 min | €29 | €26.40 | €1.45 | €1.15 | €0.46 | **€0.69** | 2% ⚠️ |
+| 300 min | €59 | €66.00 | €2.95 | **-€9.95** | — | **MIINUS** ❌ | NEG |
 
-## 7. KUI 10 000 INIMEST TULEB KORRAGA — STSENAARIUM
+⚠️ **Creator plaanil GPT hinnad LÄHEVAD MIINUSESSE 120 min pakist alates.**
 
-**Sa küsisid: "mis juhtub kui 10 000 kasutajat tuleb tasuta pakkumisega?"**
+### B) Pro plaan ($99/500 min) — kulu €0.18/min
 
-### Aritmeetika ilma kaitsteta:
-- 10 000 × 10 LLM-sõnumit/päev × €0.01 = **€1 000/päev = €30 000/kuu** 💀
+| Pakk | Sale | EL kulu | Stripe 5% | Bruto | Norra maks 40% | **Netos kotti** | Marginaal |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 30 min | €9 | €5.40 | €0.45 | €3.15 | €1.26 | **€1.89** | 21% |
+| 120 min | €29 | €21.60 | €1.45 | €5.95 | €2.38 | **€3.57** | 12% |
+| 300 min | €59 | €54.00 | €2.95 | €2.05 | €0.82 | **€1.23** | 2% ⚠️ |
 
-### Aritmeetika **õige kaitsega** (mida me ehitame):
+⚠️ **Pro plaanil 300 min pakk on praktiliselt nulltulus.**
 
-**Layer 1 — Anonüümne Explore:**
-- 0 LLM-kõnesid, 0 hääle kõnesid
-- Ainult staatilised lehed, juba toodetud audiod
-- **Kulu: €0** (lihtsalt hosting bandwidth)
+### C) Scale plaan ($330/2000 min) — kulu €0.15/min — kui müük > 50 kasutajat
 
-**Layer 2 — Tasuta beta-konto (rate limited):**
-- 5 LLM-sõnumit/päev, 0 hääle minutit
-- 1000 sellisest = 5000 sõnumit × €0.01 = **€50/päev = €1500/kuu**
-- ⚠️ Kui see hakkab juhtuma: **automaatne kontode külmutamine uutele** kuni krediit täidetud
+| Pakk | Sale | EL kulu | Stripe 5% | Bruto | Norra maks 40% | **Netos kotti** | Marginaal |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 30 min | €9 | €4.50 | €0.45 | €4.05 | €1.62 | **€2.43** | 27% |
+| 120 min | €29 | €18.00 | €1.45 | €9.55 | €3.82 | **€5.73** | 20% |
+| 300 min | €59 | €45.00 | €2.95 | €11.05 | €4.42 | **€6.63** | 11% |
 
-**Layer 3 — Journey ostja (€29 üks kord):**
-- 50 LLM-sõnumit/kuu
-- Sa teenisid €29, kulu €0.50, **€28.50 katab kõik muu**
-- ✅ Iga Journey ost subsideerib **57 sõnumit tasuta beta-kasutaja jaoks**
+✅ **Scale plaanil GPT hinnad TOIMIVAD**, kuid 300 min pakk on endiselt madala marginaaliga.
 
-**Layer 4 — Companion (€29/kuu):**
-- 500 LLM-sõnumit/kuu
-- Tulu €27.55, kulu ~€5 LLM-le, **€22.55 katab kõik muu**
+### D) MINU SOOVITUS — kohendatud Voice Credits (turvaline igal plaanil)
 
-### **Magic number:**
-**Iga 1 Companion-liige = subsideerib 4–5 tasuta beta-kasutajat.**
+| Pakk | Müügihind | Põhjus |
+|---|---:|---|
+| **Voice Credits 30 min** | **€12** | Sissejuhatav, kõik plaanid toimivad |
+| **Voice Credits 120 min** | **€39** | Ostja "magus koht" |
+| **Voice Credits 300 min** | **€79** | Tõeline volume — toimib alates Pro plaanist |
 
-**Kui sul on:**
-- 100 tasuta + 20 Companion + 10 Journey/kuu = **€690 + €290 = €980 tulu**
-- Kulu: ~€56 + LLM €120 + ElevenLabs €99 plaan = **€275**
-- **Brutokasum: €705** enne Norra makse (~40%) = **€423 puhasse rahakotti**
+### Reaalsuskontroll **D variantis** Pro plaanil:
 
-✅ **See on jätkusuutlik.**
+| Pakk | Sale | EL kulu | Stripe | Bruto | Maks | **Netos** | Marginaal |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 30 min | €12 | €5.40 | €0.60 | €6.00 | €2.40 | **€3.60** | 30% ✅ |
+| 120 min | €39 | €21.60 | €1.95 | €15.45 | €6.18 | **€9.27** | 24% ✅ |
+| 300 min | €79 | €54.00 | €3.95 | €21.05 | €8.42 | **€12.63** | 16% ✅ |
 
----
+✅ **Iga hind hoiab ≥15% neto-marginaali isegi väikseima plaani puhul.**
 
-## 8. TURVALINE LANSEERIMISKÄSI
+**Kui sa nõustud GPT hindadega (€9/€29/€59), siis sa pead nõustuma:**
+- Igal kuul VÄHEMALT 25 müüdud paketti, et katta Pro plaani €99
+- 300 min pakk on **rangelt keelatud kuni Scale plaanini**
 
-1. **Faas 1 (kuni 50 maksvat klienti):**
-   - ElevenLabs **Creator plaan ($22)** — 100 min/kuu
-   - Hääl on **100% top-up** (Stsenaarium A)
-   - Emergent krediidi cap: €100/kuu
-   - **Risk: €0**
-
-2. **Faas 2 (50–200 maksvat klienti):**
-   - ElevenLabs **Pro plaan ($99)** — 500 min/kuu
-   - Hääl on **endiselt top-up,** võimalik anda Companion-liikmetele 5 min/kuu kingitus
-   - Emergent krediidi cap: €300/kuu
-   - **Risk: madal**
-
-3. **Faas 3 (200+ maksvat klienti):**
-   - ElevenLabs **Scale plaan ($330)** — 2000 min/kuu
-   - Saab pakkuda Companion-le 30 min/kuu inkluusiivseid minutid (Stsenaarium C)
-   - Emergent: auto top-up sisse lülitatud
-   - **Risk: kontrolli all**
+**Kui sa nõustud minu D-variandi hindadega (€12/€39/€79), siis:**
+- Vabadus tegutseda igal plaanil
+- Selge marginaal ka väikese mahuga
 
 ---
 
-## 9. MILLEKS SA KASUTAJALT KÜSID HINDA — LÄBIPAISTEV TABEL
+## 8. JOURNEY + COMPANION MARGINAALIDE TEISKONTROLL
 
-Kui kasutaja maksab **€29 Journey**, siis:
+GPT viimase ettepaneku järgi:
 
-| Mida ta tegelikult maksab? | Summa | % |
-|---|---:|---:|
-| Gumroad/LemonSqueezy fee | €2.00 | 6.9% |
-| LLM-kulu (50 sõnumit) | €0.50 | 1.7% |
-| Hosting jaotus | €1.00 | 3.4% |
-| Norra tulumaks (~25%) | €5.45 | 18.8% |
-| Trygdeavgift (11.4%) | €2.48 | 8.6% |
-| **Sinu netokäive (peale makse)** | **€17.57** | **60.6%** |
+| Toode | Hind |
+|---|---:|
+| Wonder Journey | €19 |
+| Family Journey | €29 |
+| Evening Journey | €29 |
+| Body Journey | €39 |
+| Money Journey | €39 |
+| Companion Monthly | €29 |
+| Companion Annual | €290 |
 
-⚠️ Iga €29 Journey ostust **sa saad puhtaks ~€17.50**. See on aus number.
+### Iga toote tegelik **netotulu sinu kotti** (peale Stripe + LLM + maks):
 
-Kui kasutaja maksab **€29 Companion/kuu:**
+| Toode | Bruto | Stripe 5% | LLM kulu | Norra maks 40% | **Netos** |
+|---|---:|---:|---:|---:|---:|
+| Wonder Journey €19 | €19 | €0.95 | €0.30 | €7.10 | **€10.65** |
+| Family Journey €29 | €29 | €1.45 | €0.50 | €10.82 | **€16.23** |
+| Evening Journey €29 | €29 | €1.45 | €0.30 | €10.90 | **€16.35** |
+| Body Journey €39 | €39 | €1.95 | €0.50 | €14.62 | **€21.93** |
+| Money Journey €39 | €39 | €1.95 | €0.50 | €14.62 | **€21.93** |
+| Companion €29/kuu | €29 | €1.45 | €5.00 | €9.02 | **€13.53** |
+| Companion €290/aasta | €290 | €14.50 | €60.00 | €86.20 | **€129.30** (€10.78/kuu) ⚠️ |
 
-| Komponent | Summa | % |
-|---|---:|---:|
-| Stripe/LemonSqueezy fee | €1.45 | 5% |
-| LLM-kulu (500 sõnumit) | €5.00 | 17.2% |
-| Hosting jaotus | €1.00 | 3.4% |
-| Norra tulumaks (~25%) | €5.39 | 18.6% |
-| Trygdeavgift (11.4%) | €2.46 | 8.5% |
-| **Sinu netokäive** | **€13.70** | **47.2%** |
-
-⚠️ Companion'is on kulu **kõrgem** (rohkem LLM-kõnesid). See on miks Stripe MoR + täpne rate-limit on hädavajalik.
+⚠️ **Companion Annual €290** = sa pead aktsepteerima madalamat kuumarginaali. Kui müüd Annual'i, sa lased käest €30/kuu (€140) väärtuses, vahetuses pikaajalise lojaalsuse vastu.
 
 ---
 
-## 10. KÜSIMUSED FOUNDERILE — OTSUSTAMISEKS
+## 9. MÜÜGIPROGNOOS — Mitu inimest peab kuus käima?
+
+**Tööstuse benchmark'id (konservatiivsed, sa võid olla parem):**
+- Külaline → emaili-loendisse signup: **3%**
+- Email loend → esimene ost: **2%** ühe kuu jooksul
+- Sama mehe konversioonimäär külalisest ostjaks: **0.5–1%**
+
+### Hobi mudel (€500/kuu sulle) — vajalik bruto €1 473
+
+**Müügimix (näide):**
+- 15 Journey ostu × keskmine €31 = **€465**
+- 15 Companion liige × €29 = **€435** (kuu kestva tellimusena)
+- 8 Voice Credit pakki × keskmine €25 = **€200**
+- **KOKKU: €1 100** — natuke alla vajaliku, vajab natuke turundust või kõrgemat hinda
+
+Vajalikud aktiivsed kasutajad:
+- 15 uut Journey ostjat **kuus** = vajalik **1 500–3 000 unikaalset külastajat/kuu** (1% konversioon)
+- 15 jätkuvat Companion liiget (kasvab kumulatiivselt)
+
+### Kõrvaläri mudel (€1 500/kuu sulle) — vajalik bruto €3 870
+
+**Müügimix:**
+- 40 Journey ostu × €31 = **€1 240**
+- 50 Companion liige × €29 = **€1 450** (kumuleeruv)
+- 25 Voice Credit pakki × €25 = **€625**
+- 5 Annual × €290 = **€1 450**... ülemäära
+- **KOKKU peaks olema u €4 000**
+
+Vajalikud külastajad:
+- 40 uut Journey ostu/kuu = **4 000 külastajat/kuu** (1% konv.)
+- 50 Companion = võtab 3–6 kuud kumuleerumist
+
+### Täistöö mudel (€4 000/kuu sulle) — vajalik bruto €10 948
+
+**Müügimix:**
+- 100 uut Journey/kuu = **10 000 külastajat/kuu**
+- 150 Companion = ~€4 350/kuu
+- 50 Voice Credit pakki = ~€1 500
+- 10 Annual ostu = ~€2 900
+
+⚠️ **10 000 külastajat/kuu** on tõsine SEO + sotsmeedia + turundus. Vajab €500–1000/kuu eelarvet.
+
+---
+
+## 10. MULLE KÕIGE OLULISEM SAMM — KOKKULEPPEL
+
+GPT, sina ja mina nõustume:
+
+### ✅ Arhitektuur (lukus)
+```
+Explore → Journey → Companion → Private
+```
+
+### ✅ 5 Journey'i (lukus)
+Wonder · Family · Evening · Body · Money
+
+### ✅ Hääl on alati eraldi
+Mitte Companion'is, mitte tasuta minutid algul.
+
+### ⚠️ Hinnad — TÖÖVERSIOON (mitte lõplik)
+
+| Toode | GPT pakkus | Minu reaalsuskontroll | Tööversioon |
+|---|---:|---:|---:|
+| Wonder Journey | €19 | ✅ ohutu | **€19** |
+| Family Journey | €29 | ✅ ohutu | **€29** |
+| Evening Journey | €29 | ✅ ohutu | **€29** |
+| Body Journey | €39 | ✅ ohutu | **€39** |
+| Money Journey | €39 | ✅ ohutu | **€39** |
+| Companion Monthly | €29 | ✅ ohutu | **€29** |
+| Companion Annual | €290 | ⚠️ madal marginaal | **€290** (aktsepteeritav) |
+| **Voice Credits 30 min** | **€9** | ⚠️ ohtlik Creator plaanil | **€12** (turvaline) |
+| **Voice Credits 120 min** | **€29** | ⚠️ pingeline | **€39** (turvaline) |
+| **Voice Credits 300 min** | **€59** | ❌ MIINUS Creator'is | **€79** (turvaline) |
+
+---
+
+## 11. 3 KÜSIMUST FOUNDERILE — OTSUSTAMISEKS
 
 Enne kui kirjutame ühegi rea koodi:
 
-1. **Maksuvorm:** Kas oled MVA-registreeritud Norras? (Kui käive > 50k NOK/aasta — pead olema.)
-2. **Companion baashind:** €19 / €29 / €49 — mis tundub õige?
-3. **Journey baashind:** €19 / €29 / €39 — sama küsimus
-4. **Hääle mudel:** Kinnitan Stsenaarium A (100% top-up, mitte midagi Companion-is)?
-5. **Maksevärav:** LemonSqueezy (üks integratsioon, MoR) vs Stripe + Gumroad segu?
-6. **Rate limits:** Kas nõustud nendega: Anonüümne 0 / Tasuta 5/päev / Journey 50/kuu / Companion 500/kuu?
-7. **Eelarve cap:** Kas €10/päev LLM-le on okei "kõva pidur" enne kui Companion-tulu kasvab?
+### 🔴 Q1: Voice Credits hinnad
+- A) GPT pakkumus (€9 / €29 / €59) — risk: kuni Scale plaanini (50+ kasutajat) on marginaal madalal
+- B) Minu D-variant (€12 / €39 / €79) — turvaline igal plaanil
+- C) Sinu enda ettepanek
+
+### 🔴 Q2: Esimese taseme eesmärk
+- A) Hobi (€500/kuu sulle) — vajab ~15 ostu/kuu, alustada 0-eelarvega turundus
+- B) Kõrvaläri (€1 500/kuu sulle) — vajab ~40 ostu/kuu + €200 turunduseelarvet
+- C) Täistöö (€4 000/kuu sulle) — vajab ~100 ostu/kuu + tõsist turundust
+
+### 🔴 Q3: Emergent juba kulutatud
+Anna täpne summa või vahemik. Kasutan praegu €2 000 töö-eeldusena.
 
 ---
 
-## 11. KÕIGE OLULISEM ARV
+## 12. KÕIGE TÄHTSAM AVASTUS V2-st
 
-**Kui sa teed kõike õigesti** (rate limit + hääl-top-up + LemonSqueezy MoR):
+GPT ütles: "Teil ei ole tehnoloogia ega kulu probleemi. Teil on positsioneerimise probleem."
 
-> **Sul on vaja AINULT 5–10 Companion-liikme**, et katta KÕIK fikseeritud kulud Norra maksudega.
+**Mu vastus matemaatikas:**
 
-5 maksvat Companion'i = €100/kuu netos peale makse. See katab hostingu, MongoDB, ElevenLabs Creator plaani ja jätab veel.
+Kui sa müüd VÄHEMALT **5 Companioni + 10 Journey'd kuus** (kokku 15 inimest), siis:
+- Bruto: **€435 + €310 = €745**
+- Pärast Norra maksu (60% jääb): **€447**
+- **Hobi-mudeli kogukulu kaetud, sa võtad €60 kotti**
 
-**See ei ole "äri, mis võib lendu lasta." See on "tugev, kestlik praktika."**
+**See on 15 inimest kuus.**
 
-Ja kõige tähtsam: **mitte ükski kasutaja ei tunne end petetuks,** sest hääl on alati eraldi, alati avalik, alati nähtav.
+15 inimest = **kvaliteetne Substack kogukond**, mitte mass-turundus.
+
+Positsioneerimine + 15 õiget inimest > "viral hit". Kõik järgmised tasemed (€1 500 / €4 000) on lihtsalt selle mudeli **skaleerimine** — mitte uuesti ehitamine.
+
+---
+
+## 13. JÄRGMINE SAMM
+
+1. **Sina + GPT loevad selle v2 versiooni läbi**
+2. **Vastad 3 küsimusele** (Voice hinnad, esimese taseme eesmärk, Emergent summa)
+3. **Mina lukustan tööversiooni** (mitte lõplikud hinnad — testitavad numbrid)
+4. **Faas 1 algab:** Legacy puhastus (HighPerformers, vanad 4 tieri, USD hinnad, Day Passes) — see ei sõltu lõplikest hindadest
+5. **Faas 2:** Uus `/pricing` leht tööversiooni hindadega
+6. **Faas 3:** Üks Journey ehitatakse lõpuni valmis (soovitan Evening, sest Hearth juba töötab)
+
+**ENNE kui linnukest ei ole 1+2 punktil, ma EI puuduta koodi.** See on lubatud.
