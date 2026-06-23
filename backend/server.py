@@ -16487,6 +16487,33 @@ async def _polar_cohort_seed():
 
 
 # =============================================================
+# §FOUNDER-DOCS 2026-02 — Public read-only endpoint to share
+# internal planning docs as raw markdown links (for founder ↔ GPT
+# review loop). Whitelist only; never expose arbitrary memory files.
+# =============================================================
+_FOUNDER_DOCS_WHITELIST = {
+    "architecture": "PRODUCT_ARCHITECTURE_INVENTORY_2026-02.md",
+    "costs": "COST_BREAKDOWN_2026-02.md",
+}
+
+
+@api_router.get("/founder-docs/{slug}", include_in_schema=False)
+async def founder_docs_read(slug: str):
+    filename = _FOUNDER_DOCS_WHITELIST.get(slug)
+    if not filename:
+        raise HTTPException(status_code=404, detail="not_found")
+    path = Path("/app/memory") / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="file_missing")
+    text = path.read_text(encoding="utf-8")
+    return Response(
+        content=text,
+        media_type="text/markdown; charset=utf-8",
+        headers={"Cache-Control": "no-cache"},
+    )
+
+
+# =============================================================
 # App wiring
 # =============================================================
 app.include_router(api_router)
