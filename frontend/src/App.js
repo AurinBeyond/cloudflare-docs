@@ -105,7 +105,6 @@ import AlistairLabDashboard from "@/pages/alistair/LabDashboard";
 import AlistairLabArticle from "@/pages/alistair/LabArticle";
 import AlistairTopicDetail from "@/pages/alistair/TopicDetail";
 import CourseDetail from "@/pages/CourseDetail";
-import Catalogue from "@/pages/Catalogue";
 import Faq from "@/pages/Faq";
 import AdminObservation from "@/pages/AdminObservation";
 import AdminEmailHealth from "@/pages/AdminEmailHealth";
@@ -180,6 +179,10 @@ function AppRouter() {
         <Route path="/library/kids/draw" element={<KidsColoringStudio />} />
         <Route path="/library/:slug" element={<LibraryEntry />} />
         <Route path="/learning" element={<Learning />} />
+        {/* §LEGACY-CLEANUP 2026-02 — /catalogue retired.
+            Replaced by GPT Variant A (Library = free, Bookstore = paid).
+            Redirect preserves any inbound SEO links. */}
+        <Route path="/catalogue" element={<Navigate to="/library" replace />} />
         {/* §POLARSTAR HIERARCHY LOCK 2026-02-13 (iter 85f) —
            Variant A FULL CLEANUP. POLARSTAR KIDS is the only public
            kids surface. Every legacy /kids-universe/* route — and
@@ -782,7 +785,9 @@ function AppRouter() {
             </WandererGate>
           }
         />
-        <Route path="/catalogue" element={<Catalogue />} />
+        {/* §LEGACY-CLEANUP 2026-02 — /catalogue route consolidated.
+            See line 186 redirect to /library. Old standalone Catalogue
+            page removed (GPT Variant A: Library=free / Bookstore=paid). */}
         <Route path="/faq" element={<Faq />} />
         <Route path="/admin/observation" element={<AdminObservation />} />
         <Route path="/admin/email-health" element={<AdminEmailHealth />} />

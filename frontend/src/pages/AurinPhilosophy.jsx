@@ -82,7 +82,7 @@ export default function AurinPhilosophy() {
             />
             <Pillar
               n="03"
-              title="Transformation over information"
+              title="Experience over information"
               body="Knowing more is not the same as moving differently. A real shift happens through experience, not through reading."
             />
           </div>

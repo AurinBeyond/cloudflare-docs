@@ -24,7 +24,6 @@ const COLUMNS = [
     title: "Trust",
     links: [
       { to: "/about", label: "About" },
-      { to: "/catalogue", label: "Catalogue" },
       { to: "/faq", label: "FAQ" },
       { to: "/wanderers-agreement", label: "Wanderer's Agreement" },
       { to: "/legal", label: "Legal · Responsibility" },

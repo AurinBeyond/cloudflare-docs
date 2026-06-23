@@ -16495,6 +16495,7 @@ _FOUNDER_DOCS_WHITELIST = {
     "architecture": "PRODUCT_ARCHITECTURE_INVENTORY_2026-02.md",
     "costs": "COST_BREAKDOWN_2026-02.md",
     "library-audit": "LIBRARY_BOOKSTORE_AUDIT_2026-02.md",
+    "night-report": "NIGHT_REPORT_FAAS1_2026-02.md",
 }
 
 
