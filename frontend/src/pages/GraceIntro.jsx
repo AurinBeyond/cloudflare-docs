@@ -47,8 +47,8 @@ const GRACE_IN_CHAIR_SRC = "/style_samples/grace_in_chair_v1.png";
 // When the seated-Grace painting lands, change PAINTING_SRC to
 // GRACE_IN_CHAIR_SRC. The layout already anticipates a vertical
 // composition with Grace centred.
-const PAINTING_SRC = ROOM_ATMOSPHERE_SRC;
-const GRACE_IS_IN_THE_CHAIR = false;
+const PAINTING_SRC = GRACE_IN_CHAIR_SRC;
+const GRACE_IS_IN_THE_CHAIR = true;
 
 /* ------------ Palette ------------ */
 const PAPER = "#F2E9D2";

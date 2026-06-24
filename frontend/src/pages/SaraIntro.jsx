@@ -20,8 +20,8 @@ import { Trees, Anchor, Feather, Leaf, Eye } from "lucide-react";
 
 const PAINTING_SRC = "/style_samples/wider_circle_world_sample_v1.png";
 const SARA_WITH_TREE_SRC = "/style_samples/sara_with_tree_v1.png";
-const PAINTING_USED = PAINTING_SRC;
-const SARA_IS_IN_THE_PAINTING = false;
+const PAINTING_USED = SARA_WITH_TREE_SRC;
+const SARA_IS_IN_THE_PAINTING = true;
 
 const PAPER = "#F2E9D2";
 const INK = "#3D2E1F";
