@@ -106,6 +106,7 @@ import AlistairLabArticle from "@/pages/alistair/LabArticle";
 import AlistairTopicDetail from "@/pages/alistair/TopicDetail";
 import CourseDetail from "@/pages/CourseDetail";
 import GraceIntro from "@/pages/GraceIntro";
+import SaraIntro from "@/pages/SaraIntro";
 import Faq from "@/pages/Faq";
 import AdminObservation from "@/pages/AdminObservation";
 import AdminEmailHealth from "@/pages/AdminEmailHealth";
@@ -285,6 +286,9 @@ function AppRouter() {
             "Külaline ei satu lihtsalt ruumi. Teda võetakse vastu."
             Sits between landing/Wanderer Gate and /grace/room. */}
         <Route path="/grace/intro" element={<GraceIntro />} />
+        {/* §HOST-INTRO 2026-02 — Sara host introduction page.
+            Leads into the parents' room (Sara Forest 14 worlds). */}
+        <Route path="/sara/intro" element={<SaraIntro />} />
         {/* §GRACE-SUB-SURFACES 2026-02 — Public warm Grace sub-pages:
             Speak / Write / Evening Reflection / My Messages. Each is
             an Intuvio-style "soft door" — informational, not a chat.
