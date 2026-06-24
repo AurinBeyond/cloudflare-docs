@@ -38,6 +38,7 @@ import TheBeginningStep from "@/pages/TheBeginningStep";
 import SanctuaryPreview from "@/pages/SanctuaryPreview";
 import WhatThisIs from "@/pages/WhatThisIs";
 import BundleDisclosure from "@/pages/BundleDisclosure";
+import Pricing from "@/pages/Pricing";
 import TestMic from "@/pages/TestMic";
 import AurinPhilosophy from "@/pages/AurinPhilosophy";
 import Blog from "@/pages/Blog";
@@ -266,12 +267,13 @@ function AppRouter() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/private-room" element={<Navigate to="/grace/room" replace />} />
-        {/* §AUDIT 2026-05-21 — `/pricing` was referenced from 3 places
-            (RoomConvaiChat blocked-card, ConvaiPresenceTracker, AurinsRoomChat)
-            but the route was NEVER registered → users hit a blank black
-            page when topping up credits. Redirect to /grace/room
-            where the real Wanderer Passes + LemonSqueezy checkout live. */}
-        <Route path="/pricing" element={<Navigate to="/grace/room" replace />} />
+        {/* §PHASE-3 2026-06-25 — `/pricing` now renders the new
+            Access Ladder page (Explore · Day Pass · Journey ·
+            Companion · Private + Voice Access separate). Previously
+            this route redirected to /grace/room as an emergency stub
+            (May 2026 audit) — now it serves the canonical 5-package
+            architecture that replaces the 39 legacy SKUs. */}
+        <Route path="/pricing" element={<Pricing />} />
         {/* §GRACE-CLEANUP 2026-02 — `/aurin` is NOT a Grace surface.
             Founder directive: any old /aurin link belongs to the
             kids universe, never to the adult Grace room. */}

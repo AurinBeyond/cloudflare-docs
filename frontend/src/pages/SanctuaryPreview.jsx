@@ -1019,237 +1019,98 @@ function OpenWorldSection() {
   );
 }
 
-// §WAYS TO BE HERE — Mike's exact prose-pricing copy (EUR).
-// Architectural distinction: Platform Access (rooms, reading, text-to-text)
-// is SEPARATE from Live Voice Sessions (high-cost ElevenLabs runtime).
-// Each tier includes a BASELINE voice allotment; further voice = fuel (next section).
+// §PHASE-3 2026-06-25 — Mike's prose-pricing (€45 First Step · €120
+// Steady Presence · €380 Your Own Room) RETIRED. The 39-SKU chaos has
+// been replaced by the Access Ladder on /pricing (Explore · Day Pass ·
+// Journey · Companion · Private + Voice Access held separately). This
+// section now points visitors there instead of carrying duplicate
+// price cards. Archive of old copy lives in
+// /app/memory/archive/sanctuary_ways_2026_06.md (not yet written —
+// can be regenerated from git history if ever needed).
 function WaysToBeHereSection() {
-  const tiers = [
-    {
-      key: "first-step",
-      name: "A First Step",
-      tagline: "One session. One quiet hour. No commitment.",
-      lede: "Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.",
-      includes: [
-        "Access to one room of your choosing for this session",
-        "A guided live voice session at your pace",
-        "No subscription, no follow-up pressure",
-      ],
-      price: "€45",
-      cadence: "one session",
-      cta: "Join the quiet list",
-    },
-    {
-      key: "steady-presence",
-      name: "A Steady Presence",
-      tagline: "All rooms. Monthly companionship. Return as often as you need.",
-      lede: "Move freely between all rooms, with a monthly voice session included. You are welcome here, always.",
-      includes: [
-        "Access to all four rooms — reading, reflection, text-to-text chat",
-        "One private live voice session per month",
-        "Priority access to new spaces",
-        "The quiet community thread",
-      ],
-      price: "€120",
-      cadence: "per month",
-      cta: "Join the quiet list",
-      featured: true,
-    },
-    {
-      key: "your-own-room",
-      name: "Your Own Room",
-      tagline: "A space held only for you.",
-      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full access to everything, and a private channel — your own corner of this work.",
-      includes: [
-        "Full access to all rooms — reading, reflection, text-to-text chat",
-        "Weekly private live voice sessions — four sessions per month",
-        "Priority presence and response",
-        "Early access to future sanctuaries",
-        "Direct channel for quiet requests",
-      ],
-      price: "€380",
-      cadence: "per month",
-      cta: "Join the quiet list",
-    },
-  ];
-
   return (
     <section
       id="ways"
       data-testid="sanctuary-ways"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-40"
     >
-      <div className="max-w-[1220px] mx-auto px-6 sm:px-10">
+      <div className="max-w-[860px] mx-auto px-6 sm:px-10 text-center">
         <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7">
             — Ways to be here
           </p>
           <h2
-            className="text-center text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] font-light max-w-[820px] mx-auto tracking-[-0.012em]"
+            className="text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] font-light tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             There is no wrong way<br />
             <span className="italic text-[#d4b67d]">to arrive.</span>
           </h2>
           <p
-            className="mt-9 text-center text-[16px] leading-[1.85] text-[#a59f93] max-w-[640px] mx-auto italic font-light"
+            className="mt-9 text-[16px] leading-[1.85] text-[#a59f93] italic font-light"
             style={{ fontFamily: SERIF }}
           >
-            Each path holds space for you differently. Begin wherever feels true.
+            Walk in for free. Stay a single quiet evening. Settle into one room.
+            Or hold the whole house — adults and children — under one warm roof.
           </p>
+          <p className="mt-6 text-[14px] leading-[1.85] text-[#bcb4a3] font-light max-w-[600px] mx-auto">
+            Five clear doors, one honest meter for voice. The full ladder
+            lives on a single page — written for the felt room, not a
+            feature list.
+          </p>
+          <div className="mt-12">
+            <Link
+              to="/pricing"
+              data-testid="sanctuary-ways-pricing-cta"
+              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] hover:bg-[#d4b67d] px-12 py-5 transition-colors duration-700"
+            >
+              <span>See the five ways</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </RevealBlock>
-
-        <div className="mt-24 grid md:grid-cols-3 gap-7 lg:gap-9 items-stretch">
-          {tiers.map((t, i) => (
-            <RevealBlock key={t.key} delay={i * 120}>
-              <div
-                data-testid={`ways-${t.key}`}
-                className={`relative h-full flex flex-col p-10 sm:p-12 border ${
-                  t.featured
-                    ? "border-[rgba(196,164,107,0.6)] bg-[rgba(28,24,18,0.72)]"
-                    : "border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)]"
-                }`}
-              >
-                {t.featured ? (
-                  <span
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] px-4 py-1"
-                  >
-                    Most chosen
-                  </span>
-                ) : null}
-
-                <h3
-                  className="text-[30px] sm:text-[34px] leading-[1.14] text-[#f0eadd] font-light mb-4"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {t.name}
-                </h3>
-                <p
-                  className="text-[14.5px] italic text-[#a59f93] leading-[1.7] mb-6"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {t.tagline}
-                </p>
-                <p className="text-[14.5px] leading-[1.82] text-[#bcb4a3] font-light mb-8">
-                  {t.lede}
-                </p>
-
-                <ul className="space-y-3.5 mb-10">
-                  {t.includes.map((line, j) => (
-                    <li
-                      key={j}
-                      className="flex items-start gap-3 text-[13.5px] leading-[1.7] text-[#bcb4a3] font-light"
-                    >
-                      <span className="text-[#c4a46b] mt-[6px] text-[8px]">◆</span>
-                      <span>{line}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-auto pt-7 border-t border-[rgba(196,164,107,0.14)]">
-                  <div className="flex items-baseline gap-2 mb-7">
-                    <span
-                      className="text-[44px] leading-none text-[#f0eadd] font-light"
-                      style={{ fontFamily: SERIF }}
-                    >
-                      {t.price}
-                    </span>
-                    <span className="text-[12px] tracking-[0.16em] italic text-[#7a7468]" style={{ fontFamily: SERIF }}>
-                      / {t.cadence}
-                    </span>
-                  </div>
-                  <Link
-                    to="/portal"
-                    data-testid={`ways-cta-${t.key}`}
-                    className={`block text-center text-[11.5px] tracking-[0.32em] uppercase py-4 border transition-colors duration-700 ${
-                      t.featured
-                        ? "text-[#0b0a08] bg-[#c4a46b] border-[#c4a46b] hover:bg-[#d4b67d] hover:border-[#d4b67d]"
-                        : "text-[#c4a46b] border-[rgba(196,164,107,0.55)] hover:text-[#0b0a08] hover:bg-[#c4a46b]"
-                    }`}
-                  >
-                    {t.cta}
-                  </Link>
-                </div>
-              </div>
-            </RevealBlock>
-          ))}
-        </div>
       </div>
     </section>
   );
 }
 
-// §THE VOICE METER — Tesla/fuel symbolism (Founder directive).
-// Platform membership = the car. Voice minutes = separate, governed fuel.
-// Surfaces top-up structure quietly so visitors understand the runtime model
-// without it dominating the page.
+// §PHASE-3 2026-06-25 — The old VoiceMeterSection (€25/€39/€99
+// presence top-ups) has been folded into /pricing (Voice Access
+// section). This stub is intentionally tiny and routes onward so
+// visitors who scroll past Ways still see the voice-is-separate
+// promise without duplicate pricing cards.
 function VoiceMeterSection() {
-  const topups = [
-    { mins: "30 minutes of presence", price: "€25", note: "a short return" },
-    { mins: "60 minutes of presence", price: "€39", note: "a full hour, when you need more" },
-    { mins: "180 minutes of presence", price: "€99", note: "a season's worth of presence" },
-  ];
-
   return (
     <section
       id="voice-meter"
       data-testid="sanctuary-voice-meter"
-      className="relative w-full bg-[#0b0a08] py-32"
+      className="relative w-full bg-[#0b0a08] py-24 border-t border-[rgba(196,164,107,0.08)]"
     >
-      <div className="max-w-[1080px] mx-auto px-6 sm:px-10">
+      <div className="max-w-[760px] mx-auto px-6 sm:px-10 text-center">
         <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-6">
             — The Voice Meter
           </p>
-          <h2
-            className="text-center text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
-            style={{ fontFamily: SERIF }}
-          >
-            This place stays open.<br />
-            <span className="italic text-[#d4b67d]">Voice runs on its own quiet meter.</span>
-          </h2>
-          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
-            Each path above includes a baseline of live voice presence.
-            When you choose to extend, time is added gently — never
-            auto-renewed, never running quietly in the background.
-            Premium presence is always governed.
-          </p>
-        </RevealBlock>
-
-        <div className="mt-20 grid sm:grid-cols-3 gap-5">
-          {topups.map((t, i) => (
-            <RevealBlock key={t.mins} delay={i * 100}>
-              <div
-                data-testid={`voice-topup-${t.price.replace("€", "")}`}
-                className="border border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)] p-8 text-center hover:border-[rgba(196,164,107,0.5)] transition-colors duration-700"
-              >
-                <p
-                  className="text-[28px] leading-none text-[#f0eadd] font-light mb-3"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {t.price}
-                </p>
-                <p className="text-[11px] tracking-[0.28em] uppercase text-[#c4a46b] mb-5">
-                  + {t.mins}
-                </p>
-                <p
-                  className="text-[13px] italic text-[#a59f93] font-light"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {t.note}
-                </p>
-              </div>
-            </RevealBlock>
-          ))}
-        </div>
-
-        <RevealBlock delay={420}>
           <p
-            className="mt-16 text-center text-[14px] italic text-[#7a7468] max-w-[560px] mx-auto leading-[1.85] font-light"
+            className="text-[20px] sm:text-[26px] leading-[1.5] text-[#f0eadd] font-light italic"
             style={{ fontFamily: SERIF }}
           >
-            We hold the room. You hold the meter. Nothing is ever
-            on by accident.
+            Writing is always free.<br />
+            <span className="text-[#d4b67d]">Voice runs on its own quiet meter.</span>
+          </p>
+          <p className="mt-7 text-[14px] leading-[1.85] text-[#a59f93] font-light max-w-[560px] mx-auto">
+            We hold the room. You hold the meter. Nothing is ever on by accident.
+          </p>
+          <p
+            className="mt-8 text-[11px] tracking-[0.32em] uppercase"
+          >
+            <Link
+              to="/pricing"
+              data-testid="sanctuary-voice-meter-pricing-link"
+              className="text-[#c4a46b] hover:text-[#d4b67d] transition-colors duration-500"
+            >
+              See voice access →
+            </Link>
           </p>
         </RevealBlock>
       </div>

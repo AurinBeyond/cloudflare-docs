@@ -64,7 +64,11 @@ const BUNDLES = [
     prices: [
       { sku: "sanctuary.compass.month",   label: "Monthly",   amount: "€329"   },
       { sku: "sanctuary.compass.quarter", label: "Quarterly", amount: "€889"   },
-      { sku: "sanctuary.compass.year",    label: "Annual",    amount: "€3,290" },
+      // §PHASE-3 2026-06-25 — €3290 annual SKU retired (Anna lock).
+      // The annual tier was disproportionate to actual willingness-to-pay
+      // surfaced during the SKU audit. Removed entirely; if an annual
+      // Family/Companion price re-emerges from the Substack soft-launch,
+      // it will land on the new /pricing Access Ladder instead.
     ],
   },
 ];
@@ -142,6 +146,33 @@ export default function BundleDisclosure() {
       style={{ background: PALETTE.bg, color: PALETTE.ink }}
     >
       <div className="max-w-5xl mx-auto">
+        {/* §PHASE-3 2026-06-25 — Legacy ladder banner. The canonical
+            5-package Access Ladder now lives on /pricing. This page
+            remains reachable for live Stripe checkout sessions tied
+            to the old SKUs while the migration completes. */}
+        <div
+          data-testid="bundle-disclosure-legacy-banner"
+          className="mb-12 px-5 py-4 border text-center"
+          style={{
+            borderColor: PALETTE.edge,
+            background: "hsla(36, 14%, 14%, 0.55)",
+          }}
+        >
+          <p className="text-[12px] tracking-[0.18em] uppercase" style={{ color: PALETTE.muted }}>
+            This is the legacy ladder. The new five-package Access Ladder
+            now lives on{" "}
+            <a
+              href="/pricing"
+              data-testid="bundle-disclosure-pricing-link"
+              className="underline decoration-dotted underline-offset-4"
+              style={{ color: PALETTE.ink }}
+            >
+              /pricing
+            </a>
+            .
+          </p>
+        </div>
+
         <header className="text-center mb-14">
           <p
             className="text-[12px] uppercase tracking-[0.28em] mb-3"
@@ -222,9 +253,9 @@ export default function BundleDisclosure() {
           ))}
         </section>
 
-        {/* Sovereign anchor */}
+        {/* Private (formerly Sovereign Circle) */}
         <section
-          data-testid="bundles-sovereign"
+          data-testid="bundles-private"
           className="border-t pt-9 mb-20 text-center"
           style={{ borderColor: PALETTE.edge }}
         >
@@ -232,7 +263,7 @@ export default function BundleDisclosure() {
             className="text-[11px] tracking-[0.28em] uppercase mb-3"
             style={{ color: PALETTE.muted }}
           >
-            Tier V · Sovereign Circle
+            Tier V · Private
           </p>
           <h2 className="aurin-display italic text-2xl mb-4">
             By application. Quarterly engagement from <span className="not-italic">€1,890</span>.
@@ -247,7 +278,7 @@ export default function BundleDisclosure() {
           )}
           <a
             href="/sovereign-circle/apply"
-            data-testid="sovereign-apply-cta"
+            data-testid="private-apply-cta"
             className="inline-block px-6 py-3 text-[12.5px] tracking-[0.22em] uppercase border transition-all duration-500"
             style={{ borderColor: PALETTE.edge, color: PALETTE.ink }}
           >
