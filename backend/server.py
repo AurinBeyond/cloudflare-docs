@@ -16499,6 +16499,7 @@ _FOUNDER_DOCS_WHITELIST = {
     "session-end": "SESSION_2026-06-24_HOST_INTROS_COMPLETE.md",
     "inventory-proposal": "FAAS3_INVENTORY_PROPOSAL_2026-06-25.md",
     "inventory": "PRODUCT_INVENTORY_TABLE_2026-06-25.md",
+    "pricing-locked": "PRICING_DECISION_LOCKED_2026-06-24.md",
 }
 
 
