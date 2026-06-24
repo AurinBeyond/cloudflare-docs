@@ -105,6 +105,7 @@ import AlistairLabDashboard from "@/pages/alistair/LabDashboard";
 import AlistairLabArticle from "@/pages/alistair/LabArticle";
 import AlistairTopicDetail from "@/pages/alistair/TopicDetail";
 import CourseDetail from "@/pages/CourseDetail";
+import GraceIntro from "@/pages/GraceIntro";
 import Faq from "@/pages/Faq";
 import AdminObservation from "@/pages/AdminObservation";
 import AdminEmailHealth from "@/pages/AdminEmailHealth";
@@ -280,6 +281,10 @@ function AppRouter() {
             WandererGate here — the gate fires at /grace/room where
             the actual chat / voice / passes live. */}
         <Route path="/grace" element={<Grace />} />
+        {/* §HOST-INTRO 2026-02 — Grace host introduction page.
+            "Külaline ei satu lihtsalt ruumi. Teda võetakse vastu."
+            Sits between landing/Wanderer Gate and /grace/room. */}
+        <Route path="/grace/intro" element={<GraceIntro />} />
         {/* §GRACE-SUB-SURFACES 2026-02 — Public warm Grace sub-pages:
             Speak / Write / Evening Reflection / My Messages. Each is
             an Intuvio-style "soft door" — informational, not a chat.
