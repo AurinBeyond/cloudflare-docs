@@ -3,6 +3,36 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-25 — Phase 3 Pricing Chaos Cleanup (Anna lock + GPT synthesis)
+
+### Added
+- **NEW `/pricing` page** (`/app/frontend/src/pages/Pricing.jsx`) — the canonical Access Ladder replacing 39 legacy SKUs:
+  - I · **Explore** (Free, always)
+  - II · **Day Pass** (24h, one room, from €19 — TBD)
+  - III · **Journey** (one room, Monthly · Annual — TBD, featured "Most chosen")
+  - IV · **Companion** (all 5 rooms incl. Polarstar Kids, Monthly · Annual — TBD)
+  - V · **Private** (by application, quarterly)
+  - **Voice Access** — explicit SEPARATE section (cost-transparency lock)
+  - **Honest-note** section explaining prices are TBD pending Substack soft-launch
+
+### Removed (Phase 3 cleanup)
+- **Mike Ways** on `/sanctuary-preview`: €45 First Step · €120 Steady Presence · €380 Your Own Room — replaced with single CTA → `/pricing`
+- **Legacy Voice Meter topups** on `/sanctuary-preview`: €25 / €39 / €99 — replaced with short prose pointer → `/pricing`
+- **€3,290 Family Compass annual SKU** on `/membership` — out of WTP range per audit
+
+### Renamed
+- "Sovereign Circle" → **"Private"** on `/membership` (heading + `data-testid` rename: `sovereign-apply-cta` → `private-apply-cta`)
+
+### Locked
+- **Voice is SEPARATE** from room access (cost-transparency, per Anna+GPT). Bundling would expose the 80/20 cost-tail.
+- **Prices remain TBD** on `/pricing` — final numbers after Substack soft-launch reveals WTP + return-rate.
+
+### Tests
+- 100% pass (44/44 checks) — `/app/test_reports/iteration_87.json`
+
+---
+
+
 ## 2026-02 — Launch Pause Mode (active site-wide)
 
 Founder mandate: *"Ükski külastaja ei saa enne lõplikku PSP/valuuta

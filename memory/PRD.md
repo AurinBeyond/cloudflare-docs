@@ -3,6 +3,38 @@
 ## Brand philosophy
 - "Screen-Down, Ears-Open"
 - Strictly anti-wellness — no coach / therapy / guru tone
+
+---
+
+## §PHASE-3 STATUS 2026-06-25 — Pricing Chaos Cleanup (LIVE)
+
+The 39-SKU legacy chaos has been replaced by the **Access Ladder** on `/pricing`:
+
+| Tier | Name | Pricing | Cycles |
+|---|---|---|---|
+| I | **Explore** | Free, always | — |
+| II | **Day Pass** | From €19 (TBD) | One-time, 24h |
+| III | **Journey** (one room) | TBD | Monthly · Annual |
+| IV | **Companion** (all rooms) | TBD | Monthly · Annual |
+| V | **Private** | By application | Quarterly |
+| — | **Voice Access** | Per-minute (TBD) | SEPARATE top-up |
+
+**Decisions locked**:
+- Voice is held SEPARATELY (not bundled into Journey/Companion) — cost-transparency lock
+- Billing cycles simplified to Monthly · Annual (1/3/6/12 → 2)
+- Prices intentionally TBD until Substack soft-launch reveals real WTP
+
+**Still pending** (P1):
+- Voice Access per-minute pricing (after ElevenLabs cost calc on real usage)
+- Journey vs Companion final EUR
+- Day Pass exact figure (€15–€30 range)
+- Substack soft-launch tracking infra (20–30 user test of `/grace/intro`, `/sara/intro`)
+- Reconnect `/parents-room/chat` voice fn to new Voice Access pricing
+
+**Painted Asset Debt** (P2):
+- 4 Wider Circle worlds still have placeholder "world being painted" images (delayed — needs exact coord mapping for 6 interactive nest symbols)
+
+
 - 100% English UI; conversations with founder are in Estonian
 
 

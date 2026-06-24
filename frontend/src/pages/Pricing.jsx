@@ -390,7 +390,8 @@ export default function Pricing() {
             style={{ fontFamily: SERIF, color: CREAM }}
             data-testid="pricing-hero-title"
           >
-            There is no wrong way<br />
+            There is no wrong way{" "}
+            <br />
             <span className="italic" style={{ color: BRASS_BRIGHT }}>to arrive.</span>
           </h1>
           <p
