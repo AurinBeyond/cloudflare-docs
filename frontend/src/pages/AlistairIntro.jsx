@@ -17,6 +17,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Compass, Map, BookMarked, Lightbulb, Key, Leaf } from "lucide-react";
+import IntakeQuestion from "../components/IntakeQuestion";
 
 const PAINTING_SRC = "/style_samples/alistair_in_lab_v1.png";
 const HOST_PORTRAIT_SRC = "/style_samples/alistair_in_lab_v1.png";
@@ -310,6 +311,7 @@ export default function AlistairIntro() {
           </div>
         </div>
       </div>
+      <IntakeQuestion path="/alistair/intro" />
     </div>
   );
 }

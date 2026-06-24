@@ -29,6 +29,7 @@ import PortalMagicVerify from "@/pages/PortalMagicVerify";
 import Guest from "@/pages/Guest";
 import AdminContent from "@/pages/AdminContent";
 import AdminParentsCompass from "@/pages/AdminParentsCompass";
+import AdminInsights from "@/pages/AdminInsights";
 import About from "@/pages/About";
 import Legal from "@/pages/Legal";
 import WanderersAgreement from "@/pages/WanderersAgreement";
@@ -120,6 +121,7 @@ import SixNights from "@/pages/SixNights";
 import Cabinet from "@/pages/Cabinet";
 import WhispersPortal from "@/pages/WhispersPortal";
 import WhispersTracker from "@/components/WhispersTracker";
+import PageviewTracker from "@/components/PageviewTracker";
 import AdminPreviewAssets from "@/pages/AdminPreviewAssets";
 import AdminScheduler from "@/pages/AdminScheduler";
 import AdminOutbound from "@/pages/AdminOutbound";
@@ -819,6 +821,7 @@ function AppRouter() {
         <Route path="/admin/outbound" element={<AdminOutbound />} />
         <Route path="/admin/content" element={<AdminContent />} />
         <Route path="/admin/parents-compass" element={<AdminParentsCompass />} />
+        <Route path="/admin/insights" element={<AdminInsights />} />
       </Route>
       {/* §LEGACY-CLEANUP 2026-02 — /luxury route retired entirely.
           LuxurySanctuaryLanding component removed; v1 pricing table
@@ -880,6 +883,7 @@ function App() {
         <BrowserRouter>
           <AuthProvider>
             <WhispersTracker />
+            <PageviewTracker />
             <AdminBadge />
             <AppRouter />
           </AuthProvider>

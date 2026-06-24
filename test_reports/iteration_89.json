@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 89 — Substack soft-launch insights surface tested end-to-end. Backend insights endpoints (POST /event, POST /intake, GET /summary) and frontend (IntakeQuestion on /grace/intro, PageviewTracker on route changes, /admin/insights dashboard) all functioning correctly. 12/12 backend pytest tests pass. Frontend flow validated with Playwright: intake form renders with all 6 options, submit transitions to thanks panel, localStorage flag prevents re-display on /sara/intro, /admin/insights shows all 7 cards with live data and refresh works. Zero console errors. One non-blocking security observation: /admin/insights route is NOT behind an auth guard — it sits inside <Layout /> only and was reachable anonymously during testing.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_insights_iter89.py",
+    "/app/test_reports/pytest/iter89_insights.xml"
+  ],
+  "action_items": [
+    "SECURITY (advisory): /admin/insights is publicly reachable — the route is mounted inside <Layout /> only (App.js line 824), not wrapped by any AdminRoute / auth guard. The summary endpoint /api/insights/summary is also unauthenticated, exposing unique_sessions count, intake distribution, and recent free-text notes. For soft-launch this may be acceptable, but if Anna wants the dashboard private, add an admin guard around the route and a backend auth check on /api/insights/summary.",
+    "OPTIONAL: PageviewTracker's `last.current` ref guard prevents re-firing on identical pathname, which is correct, but means a hard refresh on the same page does not double-fire (good). No action needed unless dedup behavior needs tweaking."
+  ],
+  "critical_code_review_comments": [
+    "insights.py is clean, async, uses Pydantic validation, excludes _id from recent_intake_notes via projection — good.",
+    "track.js correctly uses sendBeacon with fetch keepalive fallback; no third-party trackers introduced (brand lock preserved).",
+    "IntakeQuestion: localStorage write happens only after `setDone(true)` via useEffect — survives the 4-second delay before form hides. Correct behavior.",
+    "AdminInsights uses process.env.REACT_APP_BACKEND_URL — env-driven, good. No hardcoded URLs anywhere in new code."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_insights_iter89.py (created)"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12)",
+    "frontend": "100% (all required testids + flow validated)"
+  },
+  "seed_data_creation": "Test pytest run created several TEST_-prefixed sessions and intake docs in MongoDB collections insights_events and insights_intake. They are visible in the live /admin/insights dashboard (currently 7 sessions / 9 intake / 129% conversion — inflated by test data; can be cleaned up with a one-time db.insights_events.delete_many({session_id:/^TEST_/}) and db.insights_intake.delete_many({session_id:/^TEST_/}).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All insights surface endpoints + UI are working. If revisiting, clear localStorage key 'aurin.intake.answered.v1' and sessionStorage key 'aurin.session.v1' before visiting any /<host>/intro so the IntakeQuestion appears fresh. The /admin/insights route is currently public — confirm with main agent whether that's intentional before locking it down.",
+  "rca of the issue": "No bug to RCA. /admin/insights public-access is a configuration choice in App.js — solvable by wrapping the route in an AdminRoute guard component (pattern used elsewhere if it exists)."
+}

@@ -17,6 +17,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Star, Moon, Sparkles, Footprints, BookHeart, Leaf } from "lucide-react";
+import IntakeQuestion from "../components/IntakeQuestion";
 
 const PAINTING_SRC = "/style_samples/room_polarstar_sample_v1.png";
 const HOST_PORTRAIT_SRC = "/style_samples/room_polarstar_sample_v1.png";  // same — reuse atmosphere until portrait commissioned
@@ -310,6 +311,7 @@ export default function PolarstarIntro() {
           </div>
         </div>
       </div>
+      <IntakeQuestion path="/polarstar/intro" />
     </div>
   );
 }

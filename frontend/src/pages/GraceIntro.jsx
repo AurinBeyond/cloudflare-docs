@@ -39,6 +39,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Leaf, BookOpen, Headphones, PenLine, Moon } from "lucide-react";
+import IntakeQuestion from "../components/IntakeQuestion";
 
 /* ------------ Source images ------------ */
 const ROOM_ATMOSPHERE_SRC = "/style_samples/room_grace_sample_v2.png";
@@ -357,6 +358,7 @@ export default function GraceIntro() {
           </div>
         </div>
       </div>
+      <IntakeQuestion path="/grace/intro" />
     </div>
   );
 }

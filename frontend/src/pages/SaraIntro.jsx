@@ -17,6 +17,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Trees, Anchor, Feather, Leaf, Eye } from "lucide-react";
+import IntakeQuestion from "../components/IntakeQuestion";
 
 const PAINTING_SRC = "/style_samples/wider_circle_world_sample_v1.png";
 const SARA_WITH_TREE_SRC = "/style_samples/sara_with_tree_v1.png";
@@ -313,6 +314,7 @@ export default function SaraIntro() {
           </div>
         </div>
       </div>
+      <IntakeQuestion path="/sara/intro" />
     </div>
   );
 }

@@ -17,6 +17,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Waves, Droplets, Mountain, Wind, Heart, Leaf } from "lucide-react";
+import IntakeQuestion from "../components/IntakeQuestion";
 
 const PAINTING_SRC = "/style_samples/kaelen_at_river_v1.png";
 const HOST_PORTRAIT_SRC = "/style_samples/kaelen_at_river_v1.png";
@@ -310,6 +311,7 @@ export default function KaelenIntro() {
           </div>
         </div>
       </div>
+      <IntakeQuestion path="/kaelen/intro" />
     </div>
   );
 }

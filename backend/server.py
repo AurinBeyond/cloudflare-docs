@@ -16557,6 +16557,12 @@ app.include_router(_hearth_funnel_router(db), prefix="/api")
 from publer_analytics import build_router as _publer_analytics_router  # noqa: E402
 app.include_router(_publer_analytics_router(), prefix="/api")
 
+# §INSIGHTS 2026-06-25 — privacy-first server-side visitor analytics
+# + the Substack soft-launch first-question intake form. No third-party
+# trackers — luxury silence brand lock. See insights.py.
+from insights import build_router as _insights_router  # noqa: E402
+app.include_router(_insights_router(db), prefix="/api")
+
 
 @app.on_event("startup")
 async def on_startup():
