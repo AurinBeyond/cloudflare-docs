@@ -3,6 +3,49 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-25 — Substack soft-launch readiness (Insights surface)
+
+Built the privacy-first analytics + first-question intake form so the next two weeks of real visitor traffic actually teaches us something. No third-party trackers (no GA4, no Meta) — luxury silence brand lock.
+
+### Added — Backend
+- `/app/backend/insights.py` (NEW) — 3 endpoints:
+  - `POST /api/insights/event` (anonymous, accepts pageview / cta_click / intro_complete / intake_shown)
+  - `POST /api/insights/intake` (anonymous, validates one of 6 fixed answer options)
+  - `GET /api/insights/summary` (**ADMIN_TOKEN required** via `X-Admin-Token` header or `?token=`)
+- MongoDB collections: `insights_events`, `insights_intake`
+
+### Added — Frontend
+- `/app/frontend/src/lib/track.js` (NEW) — `getSessionId()` with 12h TTL rotation, `track()`, `trackPageview()`, `submitIntake()`. Uses `sendBeacon` with `fetch keepalive` fallback. No PII collected; only coarse mobile/desktop hint.
+- `/app/frontend/src/components/PageviewTracker.jsx` (NEW) — mounted once inside `<BrowserRouter>`, beacons every route change.
+- `/app/frontend/src/components/IntakeQuestion.jsx` (NEW) — the 1-question form ("What brought you here today?") with 6 fixed sentence options + optional 400-char free-text note. Brand-aligned (brass/cream/serif). Hides itself permanently after first answer via `localStorage["aurin.intake.answered.v1"]`.
+- Mounted `<IntakeQuestion>` at the bottom of **all 5 Host Intro pages**: GraceIntro, SaraIntro, KaelenIntro, AlistairIntro, PolarstarIntro.
+- `/app/frontend/src/pages/AdminInsights.jsx` (NEW) — read-only dashboard at `/admin/insights`. 7 cards (sessions count, intake total, conversion %, intake distribution, host-intro engagement, top paths, recent free-text notes). Gated behind `useAdmin()` — renders a polite "Private" screen if no token is in localStorage.
+
+### Six fixed intake answers
+- `i_need_a_quieter_evening` — "I need a quieter evening."
+- `family_life_feels_complicated` — "Family life feels complicated."
+- `i_need_clarity_about_something` — "I need clarity about something."
+- `i_feel_disconnected_from_myself` — "I feel disconnected from myself."
+- `looking_for_something_for_my_child` — "I am looking for something for my child."
+- `just_curious` — "I am just curious."
+
+### Locked
+- **All visitor data lives in our own Mongo** — no Google, no Meta, no Mixpanel.
+- **`/api/insights/summary` and `/admin/insights` are token-gated** with the existing `ADMIN_TOKEN` env + `X-Admin-Token` header convention.
+- **No IP, no fingerprint** collected — session_id is a client-rotated random 16-char base36, dropped from sessionStorage every 12h.
+
+### Tests
+- Backend pytest: 12/12 pass — `/app/backend/tests/test_insights_iter89.py`
+- Frontend Playwright: all required testids + flow validated — `/app/test_reports/iteration_89.json`
+- Post-fix admin gate: `curl -i /api/insights/summary` returns **401** without token, **200** with token. Confirmed manually.
+
+### Database state at session close
+- `insights_events`: **0 docs** (clean slate)
+- `insights_intake`: **0 docs** (clean slate)
+
+---
+
+
 ## 2026-06-25 — Selguse-pass (Clarity Pass)
 
 Anna direktiiv: "Ei mingit checkouti enne, kui maja sees on selge ja külalisele väärtuslik." Ei puudutanud ühtegi hinda. Lisatud selgust, eemaldatud segadust, iga "TBD" punkt asendatud väärtustega.

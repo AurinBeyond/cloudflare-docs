@@ -11,17 +11,18 @@ Two surfaces:
 
 1. POST /api/insights/event       — generic pageview / interaction beacon
 2. POST /api/insights/intake      — answer to "What brought you here today?"
-3. GET  /api/insights/summary     — admin-side aggregation view
+3. GET  /api/insights/summary     — admin-only aggregation view (ADMIN_TOKEN required)
 
 Schema is deliberately tiny: session_id (anonymous, client-rotated),
 timestamp, path, event_type, optional metadata. No IP, no fingerprint,
 no user-agent parsing beyond a coarse mobile/desktop hint.
 """
 
+import os
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
 ALLOWED_EVENT_TYPES = {
@@ -95,7 +96,7 @@ def build_router(db):
         return None
 
     @router.get("/summary")
-    async def summary() -> Dict[str, Any]:
+    async def summary(request: Request) -> Dict[str, Any]:
         """
         Aggregate view for the admin dashboard. Returns:
           - total unique sessions
@@ -103,7 +104,20 @@ def build_router(db):
           - per-host-intro completion count
           - intake answers distribution
           - last 50 raw intake notes (for qualitative reading)
+
+        Authentication: ADMIN_TOKEN required via `X-Admin-Token`
+        header or `?token=` query parameter. Same convention as the
+        rest of /api/admin/* routes — keeps the dashboard private.
         """
+        admin_token = os.environ.get("ADMIN_TOKEN")
+        sent = (
+            request.headers.get("X-Admin-Token")
+            or request.headers.get("x-admin-token")
+            or request.query_params.get("token")
+            or ""
+        ).strip()
+        if not admin_token or sent != admin_token:
+            raise HTTPException(status_code=401, detail="Admin token required.")
         events = db.insights_events
         intake = db.insights_intake
 

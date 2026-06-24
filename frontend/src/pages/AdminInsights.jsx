@@ -15,6 +15,7 @@
  * matches the rest of the Aurin admin pages.
  */
 import React, { useEffect, useState } from "react";
+import { useAdmin } from "../hooks/useAdmin";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -90,16 +91,24 @@ function Bar({ label, count, max, testid }) {
 }
 
 export default function AdminInsights() {
+  const { isAdmin, token } = useAdmin();
   const [data, setData] = useState(null);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(true);
 
   async function load() {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setErr(null);
     try {
       const url = `${process.env.REACT_APP_BACKEND_URL}/api/insights/summary`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        headers: { "X-Admin-Token": token },
+      });
+      if (res.status === 401) throw new Error("Admin token rejected");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setData(await res.json());
     } catch (e) {
@@ -110,7 +119,40 @@ export default function AdminInsights() {
 
   useEffect(() => {
     load();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  if (!isAdmin) {
+    return (
+      <div
+        data-testid="admin-insights-locked"
+        className="min-h-screen w-full flex items-center justify-center p-10"
+        style={{ background: BG, color: SOFT, fontFamily: SERIF }}
+      >
+        <div className="max-w-[520px] text-center">
+          <p
+            className="text-[11px] tracking-[0.42em] uppercase mb-6"
+            style={{ color: BRASS }}
+          >
+            — Private
+          </p>
+          <p
+            className="text-[22px] italic leading-[1.6]"
+            style={{ color: CREAM }}
+          >
+            This dashboard is held for Anna only.
+          </p>
+          <p
+            className="mt-6 text-[13px]"
+            style={{ color: GREY }}
+          >
+            Append <code style={{ color: BRASS }}>?token=YOUR_ADMIN_TOKEN</code> to
+            the URL once. After that, this browser remembers.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
