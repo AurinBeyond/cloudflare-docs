@@ -1,220 +1,366 @@
 /**
- * GraceIntro.jsx — Host introduction page (v4).
+ * GraceIntro.jsx — Host introduction page (v5 — founder mockup match).
  *
- * §HOST-INTRO 2026-02 — founder feedback (2026-06-24 morning):
- *   - v1: framed image + text beside it → "too sterile"
- *   - v2: same, contrast fixed
- *   - v3: full-bleed painting, text scrolled below → "lost the text"
- *   - v4 (this one): painting + text TOGETHER on first screen,
- *     painting large but without a hard frame, text breathing right
- *     next to it. Magazine spread feel, not a scroll-to-discover page.
+ * §HOST-INTRO 2026-02 (founder mockup 2026-06-24 09:00)
+ *
+ * Founder shipped a precise visual reference: vertical painting on
+ * the left, decorative serif text panel on the right with botanical
+ * dividers, icon-led offering list, sage pill-shaped CTA, and a
+ * handwritten "Grace" signature at the bottom.
+ *
+ * This component reproduces that mockup faithfully using only code
+ * (no new AI image cost). The painting is the existing empty-chair
+ * watercolour, cropped to portrait aspect. When the Grace-in-chair
+ * portrait lands, swap PAINTING_SRC — geometry is preserved.
  *
  * COMPOSITION
- *   Hero:    [ painting ~60% ]  [ welcome text ~40% ]
- *            both visible above the fold
- *   Below:   "Here you may" list · closing · CTA · signature
+ *   ┌─────────────┬───────────────────────────┐
+ *   │  PAINTING   │  KEEPER OF THE EVENING…   │
+ *   │  (vertical) │       Grace               │
+ *   │             │   ~ flourish ~            │
+ *   │             │  Hello. My name is Grace. │
+ *   │             │  intro lines              │
+ *   │             │   HERE, YOU MAY           │
+ *   │             │  🌿 Sit in stillness      │
+ *   │             │  📖 Read or learn         │
+ *   │             │  🎧 Listen                │
+ *   │             │  ✏️ Write                 │
+ *   │             │  🌙 Be                    │
+ *   │             │   ~ flourish ~            │
+ *   │             │  Take what you need…      │
+ *   │             │  [ ENTER GRACE'S ROOM ]   │
+ *   │             │  — Grace —                │
+ *   └─────────────┴───────────────────────────┘
  *
- * WHEN GRACE-IN-CHAIR PORTRAIT LANDS
- *   The painting becomes one integrated scene (Grace seated in the
- *   sage armchair with rain on the window). Same layout, richer
- *   meaning. Budget pending.
+ * VOICE LOCK (refined per mockup)
+ *   - Each offering: short verb-phrase title + one supporting line
+ *   - Anti-wellness, anti-judgment, anti-sell
  */
 import React from "react";
 import { Link } from "react-router-dom";
+import { Leaf, BookOpen, Headphones, PenLine, Moon } from "lucide-react";
 
+/* ------------ Source images ------------ */
 const ROOM_ATMOSPHERE_SRC = "/style_samples/room_grace_sample_v2.png";
 const GRACE_IN_CHAIR_SRC = "/style_samples/grace_in_chair_v1.png";
 
-// Until the seated-Grace painting lands, the empty-chair scene holds
-// the layout. Both files share an identical aspect ratio so the swap
-// is one-line when the new file appears.
-const HERO_IMG = ROOM_ATMOSPHERE_SRC;
+// When the seated-Grace painting lands, change PAINTING_SRC to
+// GRACE_IN_CHAIR_SRC. The layout already anticipates a vertical
+// composition with Grace centred.
+const PAINTING_SRC = ROOM_ATMOSPHERE_SRC;
 const GRACE_IS_IN_THE_CHAIR = false;
 
-const PAPER = "#F4ECD8";
+/* ------------ Palette ------------ */
+const PAPER = "#F2E9D2";
 const INK = "#3D2E1F";
-const INK_DEEP = "#2A1F12";
+const INK_DEEP = "#241809";
 const INK_SOFT = "#5A4530";
 const INK_MUTE = "#8A7560";
 const SAGE = "#7A8B6F";
+const SAGE_DEEP = "#5A6E48";
+const RULE = "#C9B999";
 
-const ROOM_OFFERINGS = [
-  "Sit with what felt too heavy to name",
-  "Read short pieces written for tired evenings",
-  "Listen to small audios when reading is too much",
-  "Write to me when the inside of you needs witnessing",
-  "Or simply be — without doing anything at all",
+/* ------------ Painting soft-edge mask ------------ */
+const SOFT_MASK =
+  "radial-gradient(ellipse 88% 92% at 50% 50%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%)";
+
+/* ------------ Offerings (founder mockup copy) ------------ */
+const OFFERINGS = [
+  {
+    icon: Leaf,
+    title: "Sit in stillness",
+    line: "Let the day settle and your breath deepen.",
+  },
+  {
+    icon: BookOpen,
+    title: "Read or learn",
+    line: "Find wisdom in words that quiet the mind.",
+  },
+  {
+    icon: Headphones,
+    title: "Listen",
+    line: "To stories, guidance and gentle presence.",
+  },
+  {
+    icon: PenLine,
+    title: "Write",
+    line: "Pour your thoughts out onto the page.",
+  },
+  {
+    icon: Moon,
+    title: "Be",
+    line: "Exactly as you are, for as long as you need.",
+  },
 ];
 
-const SOFT_MASK =
-  "radial-gradient(ellipse 92% 94% at 50% 50%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%)";
+/* ------------ Reusable inline flourish (botanical rule) ------------ */
+function Flourish({ color = RULE }) {
+  return (
+    <div
+      className="flex items-center justify-center gap-3 my-4"
+      aria-hidden="true"
+    >
+      <span style={{ height: 1, width: 60, background: color, opacity: 0.55 }} />
+      <Leaf size={14} style={{ color, opacity: 0.7 }} />
+      <span style={{ height: 1, width: 60, background: color, opacity: 0.55 }} />
+    </div>
+  );
+}
 
+/* ------------ Page ------------ */
 export default function GraceIntro() {
   return (
     <div
       data-testid="grace-intro-page"
-      style={{ backgroundColor: PAPER, color: INK, minHeight: "100vh" }}
+      style={{
+        backgroundColor: PAPER,
+        color: INK,
+        minHeight: "100vh",
+        backgroundImage:
+          "radial-gradient(ellipse at center, rgba(255,255,255,0.25) 0%, rgba(0,0,0,0) 70%)",
+      }}
     >
-      {/* HERO — painting + welcoming text together, side by side */}
-      <section
-        className="mx-auto max-w-7xl px-6 sm:px-10 pt-10 sm:pt-14 pb-12
-                   grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-8 lg:gap-12
-                   items-center"
-        data-testid="grace-intro-hero"
+      <div
+        className="mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-16
+                   px-6 sm:px-10 lg:px-16 py-10 lg:py-16"
+        style={{ maxWidth: 1400 }}
       >
-        {/* LEFT — painting, large, no frame, soft fade edges */}
-        <div className="relative" data-testid="grace-intro-painting-wrapper">
-          <img
-            src={HERO_IMG}
-            alt={
-              GRACE_IS_IN_THE_CHAIR
-                ? "A watercolour painting of Grace seated in a deep sage-green velvet armchair beside a wooden window, evening rain on the glass, a warm brass lantern and a steaming teacup on a small wooden side table, embers glowing softly in a fireplace behind her, a cream wool blanket draped across her lap."
-                : "A watercolour painting of Grace's evening room — a deep sage-green velvet armchair beside a wooden window with rain on the glass, a soft cream blanket draped over the arm, a small wooden side table with a warm brass lantern and a teacup with thin steam rising, a fireplace with embers glowing softly."
-            }
-            className="block w-full h-auto select-none"
-            draggable={false}
-            loading="eager"
-            data-testid="grace-intro-painting"
+        {/* ============== LEFT — VERTICAL PAINTING ============== */}
+        <div
+          className="relative"
+          data-testid="grace-intro-painting-wrapper"
+        >
+          <div
+            className="relative overflow-hidden mx-auto"
             style={{
-              WebkitMaskImage: SOFT_MASK,
-              maskImage: SOFT_MASK,
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
+              aspectRatio: "3 / 4",
+              maxWidth: 560,
+              width: "100%",
             }}
-          />
+          >
+            <img
+              src={PAINTING_SRC}
+              alt={
+                GRACE_IS_IN_THE_CHAIR
+                  ? "Watercolour painting of Grace — a woman seated in a deep sage-green velvet armchair beside a wooden window, holding a steaming teacup. Evening rain falls against the glass. A warm brass lantern, a glass teapot of amber tea, and a wool blanket draped across her lap. A fireplace glows behind her. Books and worn slippers rest on the wooden floor."
+                  : "Watercolour painting of Grace's evening room — a deep sage-green velvet armchair beside a wooden window with rain on the glass, a warm brass lantern on a small wooden side table, a teacup with thin steam, a fireplace glowing softly, books and worn slippers on the floor."
+              }
+              draggable={false}
+              loading="eager"
+              data-testid="grace-intro-painting"
+              className="absolute inset-0 w-full h-full select-none"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center 35%",
+                WebkitMaskImage: SOFT_MASK,
+                maskImage: SOFT_MASK,
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+              }}
+            />
+          </div>
         </div>
 
-        {/* RIGHT — welcome voice, sits next to the painting */}
-        <div className="space-y-6 lg:pl-2">
-          <div>
+        {/* ============== RIGHT — TEXT PANEL ============== */}
+        <div
+          className="relative flex flex-col"
+          style={{ paddingTop: "1.5rem" }}
+          data-testid="grace-intro-panel"
+        >
+          {/* botanical side rails — small decorative accents */}
+          <div
+            aria-hidden="true"
+            className="hidden lg:block absolute left-0 top-8 bottom-8"
+            style={{ width: 1, background: RULE, opacity: 0.35 }}
+          />
+          <div
+            aria-hidden="true"
+            className="hidden lg:block absolute right-0 top-8 bottom-8"
+            style={{ width: 1, background: RULE, opacity: 0.35 }}
+          />
+
+          <div className="lg:px-8">
+            {/* Eyebrow */}
             <div
-              className="text-[0.7rem] uppercase tracking-[0.3em] mb-3"
-              style={{ color: SAGE }}
+              className="text-center text-[0.7rem] tracking-[0.3em] uppercase mb-4"
+              style={{ color: INK_MUTE }}
               data-testid="grace-intro-eyebrow"
             >
               Keeper of the evening room
             </div>
+
+            {/* Name */}
             <h1
-              className="aurin-serif tracking-tight"
+              className="aurin-serif text-center tracking-tight"
               style={{
                 color: INK_DEEP,
-                fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
-                lineHeight: 1.02,
+                fontSize: "clamp(3rem, 6vw, 5rem)",
+                lineHeight: 1,
+                margin: 0,
               }}
               data-testid="grace-intro-name"
             >
               Grace
             </h1>
-          </div>
 
-          <p
-            className="aurin-serif-italic"
-            style={{
-              color: INK_SOFT,
-              fontSize: "clamp(1.25rem, 1.8vw, 1.6rem)",
-              lineHeight: 1.4,
-            }}
-            data-testid="grace-intro-greeting"
-          >
-            &ldquo;Hello. My name is Grace.&rdquo;
-          </p>
+            <Flourish />
 
-          <div
-            className="space-y-4"
-            style={{
-              color: INK,
-              fontSize: "clamp(0.95rem, 1.05vw, 1.0625rem)",
-              lineHeight: 1.7,
-            }}
-          >
-            <p>
-              I live here, in this calm room where evening light settles
-              and the world quiets enough for you to hear yourself again.
+            {/* Greeting */}
+            <p
+              className="aurin-serif-italic text-center"
+              style={{
+                color: INK_SOFT,
+                fontSize: "clamp(1.2rem, 1.7vw, 1.5rem)",
+                lineHeight: 1.4,
+                marginTop: "0.75rem",
+              }}
+              data-testid="grace-intro-greeting"
+            >
+              Hello. My name is Grace.
             </p>
-            <p>
-              I am not here to fix you. I am not here to teach you.
-              I am here to keep you company while you find your own breath.
+
+            {/* Intro */}
+            <p
+              className="text-center mt-4"
+              style={{
+                color: INK,
+                fontSize: "clamp(0.98rem, 1.1vw, 1.1rem)",
+                lineHeight: 1.7,
+                maxWidth: 480,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+              data-testid="grace-intro-body"
+            >
+              I live in this calm room, where evening light and quiet
+              presence help you slow down and breathe.
             </p>
+
+            {/* HERE, YOU MAY heading */}
+            <div
+              className="flex items-center justify-center gap-3 mt-10 mb-6"
+              aria-hidden="false"
+            >
+              <span style={{ height: 1, width: 36, background: RULE, opacity: 0.6 }} />
+              <span
+                className="text-[0.72rem] tracking-[0.3em] uppercase"
+                style={{ color: SAGE_DEEP }}
+                data-testid="grace-intro-offerings-heading"
+              >
+                Here, you may
+              </span>
+              <span style={{ height: 1, width: 36, background: RULE, opacity: 0.6 }} />
+            </div>
+
+            {/* Offerings list */}
+            <ul
+              className="space-y-5 max-w-md mx-auto"
+              data-testid="grace-intro-offerings"
+            >
+              {OFFERINGS.map(({ icon: Icon, title, line }, i) => (
+                <li
+                  key={title}
+                  className="flex items-start gap-4"
+                  data-testid={`grace-intro-offering-${i + 1}`}
+                >
+                  <Icon
+                    size={26}
+                    strokeWidth={1.5}
+                    style={{ color: SAGE_DEEP, flexShrink: 0, marginTop: 2 }}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <div
+                      className="aurin-serif"
+                      style={{
+                        color: INK_DEEP,
+                        fontSize: "1.15rem",
+                        lineHeight: 1.2,
+                        marginBottom: 2,
+                      }}
+                    >
+                      {title}
+                    </div>
+                    <div
+                      style={{
+                        color: INK_SOFT,
+                        fontSize: "0.92rem",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {line}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <Flourish />
+
+            {/* Closing */}
+            <p
+              className="aurin-serif-italic text-center mt-2"
+              style={{
+                color: INK_SOFT,
+                fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)",
+                lineHeight: 1.55,
+              }}
+              data-testid="grace-intro-closing-line"
+            >
+              Take what you need. Leave what does not fit.
+              <br />
+              You are welcome to stay awhile.
+            </p>
+
+            {/* CTA — sage pill */}
+            <div className="flex justify-center mt-8">
+              <Link
+                to="/grace/room"
+                data-testid="grace-intro-enter-button"
+                className="inline-block transition-colors duration-300"
+                style={{
+                  backgroundColor: SAGE_DEEP,
+                  color: PAPER,
+                  borderRadius: 9999,
+                  padding: "0.95rem 2.4rem",
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.3em",
+                  textTransform: "uppercase",
+                  boxShadow: "0 6px 16px -8px rgba(0,0,0,0.35)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = INK_DEEP;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = SAGE_DEEP;
+                }}
+              >
+                Enter Grace&rsquo;s room
+              </Link>
+            </div>
+
+            {/* Signature */}
+            <div
+              className="flex items-center justify-center gap-3 mt-10"
+              aria-hidden="false"
+            >
+              <span style={{ height: 1, width: 70, background: RULE, opacity: 0.5 }} />
+              <span
+                className="aurin-serif-italic"
+                style={{
+                  color: INK_SOFT,
+                  fontSize: "1.4rem",
+                  letterSpacing: "0.02em",
+                }}
+                data-testid="grace-intro-signature"
+              >
+                Grace
+              </span>
+              <span style={{ height: 1, width: 70, background: RULE, opacity: 0.5 }} />
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* HERE YOU MAY — soft list (below the fold) */}
-      <section
-        className="mx-auto max-w-2xl px-6 sm:px-10 pb-14 text-center"
-        data-testid="grace-intro-offerings"
-      >
-        <div
-          className="text-[0.7rem] uppercase tracking-[0.3em] mb-8"
-          style={{ color: SAGE }}
-        >
-          Here, you may
-        </div>
-        <ul
-          className="space-y-3"
-          style={{
-            color: INK,
-            fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
-            lineHeight: 1.6,
-          }}
-        >
-          {ROOM_OFFERINGS.map((line, i) => (
-            <li key={i} data-testid={`grace-intro-offering-${i + 1}`}>
-              {line}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* CLOSING + CTA */}
-      <section
-        className="mx-auto max-w-2xl px-6 sm:px-10 pb-28 text-center"
-        data-testid="grace-intro-closing"
-      >
-        <p
-          className="aurin-serif-italic mb-12"
-          style={{
-            color: INK_SOFT,
-            fontSize: "clamp(1.2rem, 1.8vw, 1.5rem)",
-            lineHeight: 1.5,
-          }}
-          data-testid="grace-intro-closing-line"
-        >
-          &ldquo;Take what you need. Leave what does not fit.
-          <br />
-          You are welcome to stay awhile.&rdquo;
-        </p>
-
-        <Link
-          to="/grace/room"
-          data-testid="grace-intro-enter-button"
-          className="inline-block px-10 py-4 text-[0.75rem] uppercase tracking-[0.3em]
-                     transition-colors duration-300"
-          style={{
-            border: `1px solid ${INK}`,
-            color: INK,
-            backgroundColor: "transparent",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = INK;
-            e.currentTarget.style.color = PAPER;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent";
-            e.currentTarget.style.color = INK;
-          }}
-        >
-          Enter Grace&rsquo;s room
-        </Link>
-
-        <p
-          className="mt-10 text-[0.7rem] uppercase tracking-[0.3em]"
-          style={{ color: INK_MUTE }}
-          data-testid="grace-intro-signature"
-        >
-          — Grace
-        </p>
-      </section>
+      </div>
     </div>
   );
 }
