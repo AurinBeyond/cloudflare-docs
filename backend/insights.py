@@ -51,6 +51,11 @@ class EventIn(BaseModel):
     path: str = Field(..., min_length=1, max_length=200)
     device: Optional[str] = Field(default=None, max_length=20)
     referrer: Optional[str] = Field(default=None, max_length=300)
+    # §SOURCE-TAG 2026-06-25 — passive channel attribution
+    # (?source=substack | ?source=threads | etc.) captured client-side
+    # on first landing, replayed on every beacon for the session.
+    # No UX impact — analytics only.
+    source: Optional[str] = Field(default=None, max_length=40)
     meta: Optional[Dict[str, Any]] = None
 
 
@@ -75,6 +80,7 @@ def build_router(db):
             "path": body.path,
             "device": body.device,
             "referrer": (body.referrer or "")[:300],
+            "source": (body.source or "").strip().lower()[:40] or None,
             "meta": body.meta or {},
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -162,6 +168,30 @@ def build_router(db):
 
         total_intake = await intake.count_documents({})
 
+        # §SOURCE-TAG 2026-06-25 — per-channel attribution. Counts
+        # UNIQUE sessions per source, not raw events, so a visitor who
+        # came in via Substack and clicked 12 things still counts as
+        # one Substack arrival. Sessions without a tag are surfaced
+        # as "untagged" so Anna can see how much organic / direct
+        # traffic she's seeing.
+        source_pipeline = [
+            {"$group": {
+                "_id": {"source": "$source", "session_id": "$session_id"},
+            }},
+            {"$group": {
+                "_id": "$_id.source",
+                "sessions": {"$sum": 1},
+            }},
+            {"$sort": {"sessions": -1}},
+        ]
+        source_rows = [
+            {
+                "source": (row["_id"] or "untagged"),
+                "sessions": row["sessions"],
+            }
+            async for row in events.aggregate(source_pipeline)
+        ]
+
         return {
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "unique_sessions": unique_sessions,
@@ -169,6 +199,7 @@ def build_router(db):
             "top_paths": top_paths,
             "intro_engagement": intro_counts,
             "intake_distribution": intake_dist,
+            "source_distribution": source_rows,
             "recent_intake_notes": last_notes,
             "allowed_intake_answers": INTAKE_OPTIONS,
         }

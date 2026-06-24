@@ -119,8 +119,7 @@ export default function AdminInsights() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isAdmin) {
     return (
@@ -181,6 +180,7 @@ export default function AdminInsights() {
   const maxPath = Math.max(...(data.top_paths || []).map((p) => p.count), 1);
   const maxIntro = Math.max(...(data.intro_engagement || []).map((p) => p.views), 1);
   const maxAnswer = Math.max(...(data.intake_distribution || []).map((a) => a.count), 1);
+  const maxSource = Math.max(...(data.source_distribution || []).map((s) => s.sessions), 1);
 
   return (
     <div
@@ -351,6 +351,33 @@ export default function AdminInsights() {
                   count={p.count}
                   max={maxPath}
                   testid={`admin-insights-path-${p.path.replace(/[^a-z0-9]/gi, "_")}`}
+                />
+              ))
+            )}
+          </Card>
+
+          <Card
+            kicker="vii · Sources"
+            title="Where they came from"
+            testid="admin-insights-sources"
+          >
+            {(data.source_distribution || []).length === 0 ? (
+              <p
+                className="text-[14px] italic"
+                style={{ fontFamily: SERIF, color: MUTED }}
+              >
+                No tagged visits yet. Send links with{" "}
+                <code style={{ color: BRASS }}>?source=substack</code>{" "}
+                (or threads, linkedin, email, etc.) to see channels here.
+              </p>
+            ) : (
+              (data.source_distribution || []).map((s) => (
+                <Bar
+                  key={s.source}
+                  label={s.source}
+                  count={s.sessions}
+                  max={maxSource}
+                  testid={`admin-insights-source-${s.source}`}
                 />
               ))
             )}

@@ -14,7 +14,9 @@
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 const SESSION_KEY = "aurin.session.v1";
+const SOURCE_KEY = "aurin.source.v1";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+const ALLOWED_SOURCES = /^[a-z0-9_-]{1,40}$/i;
 
 function makeId() {
   // 16 base36 chars from crypto.getRandomValues — enough entropy,
@@ -22,6 +24,39 @@ function makeId() {
   const arr = new Uint8Array(10);
   (window.crypto || window.msCrypto).getRandomValues(arr);
   return Array.from(arr).map((b) => b.toString(36).padStart(2, "0")).join("").slice(0, 16);
+}
+
+/**
+ * Capture the `?source=<tag>` URL param the first time a visitor lands,
+ * then stash it in sessionStorage so every subsequent beacon in this
+ * browsing session carries the same channel tag.
+ *
+ * Passive analytics only — never alters UI, routing, or content. This
+ * is purely so the admin dashboard can answer "which channel sent
+ * these 27 people?" without third-party trackers.
+ *
+ * Supports either `?source=` or `?utm_source=` (latter for habit).
+ */
+export function getSource() {
+  try {
+    const stored = sessionStorage.getItem(SOURCE_KEY);
+    if (stored) return stored;
+  } catch {
+    /* noop */
+  }
+
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search || "");
+  const raw =
+    (params.get("source") || params.get("utm_source") || "").trim().toLowerCase();
+  if (!raw || !ALLOWED_SOURCES.test(raw)) return null;
+
+  try {
+    sessionStorage.setItem(SOURCE_KEY, raw);
+  } catch {
+    /* private mode — beacon still fires */
+  }
+  return raw;
 }
 
 export function getSessionId() {
@@ -81,6 +116,7 @@ export function track(event_type, path, meta = {}) {
     path: path || (typeof window !== "undefined" ? window.location.pathname : "/"),
     device: device(),
     referrer: typeof document !== "undefined" ? document.referrer || null : null,
+    source: getSource(),
     meta,
   });
 }

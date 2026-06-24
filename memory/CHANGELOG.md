@@ -3,6 +3,33 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-25 (continued) — Source-tag passive analytics
+
+Added `?source=` URL param capture so Anna can answer "which channel sent these 27 people?" on the admin dashboard. Strictly passive — no UX changes, no new visitor-facing element. GPT condition honoured.
+
+### Added
+- `/app/frontend/src/lib/track.js` — `getSource()` reads `?source=` or `?utm_source=` (latter for habit) on first landing, validates against `/^[a-z0-9_-]{1,40}$/i`, stashes in `sessionStorage["aurin.source.v1"]`, replays on every beacon for that session.
+- `/app/backend/insights.py` `EventIn` model — new optional `source` field (max 40 chars). Stored on `insights_events` docs.
+- `/app/backend/insights.py` `/summary` endpoint — new `source_distribution` field: unique sessions per source tag (e.g. `[{source: "substack", sessions: 27}, {source: "untagged", sessions: 9}]`).
+- `/app/frontend/src/pages/AdminInsights.jsx` — one extra card "vii · Sources / Where they came from" with horizontal bar visualization.
+
+### Recommended source tags
+- `?source=substack` — Substack newsletter
+- `?source=email` — personal/close-circle email
+- `?source=threads` — Threads / Instagram
+- `?source=linkedin` — LinkedIn
+- `?source=podcast` — podcast mentions
+- `?source=referral` — word-of-mouth (anything else)
+
+Untagged visits (direct, organic, missing param) surface as `untagged` so the gap is visible.
+
+### Tested
+- POST `/api/insights/event` with `source` field → 204
+- GET `/api/insights/summary` returns `source_distribution` array
+- Frontend smoke test: visiting `/grace/intro?source=substack` → sessionStorage captures it → next beacon includes it → backend aggregates correctly
+- `events_count=0`, `intake_count=0` at session close (clean slate for live launch)
+
+
 ## 2026-06-25 — Substack soft-launch readiness (Insights surface)
 
 Built the privacy-first analytics + first-question intake form so the next two weeks of real visitor traffic actually teaches us something. No third-party trackers (no GA4, no Meta) — luxury silence brand lock.
