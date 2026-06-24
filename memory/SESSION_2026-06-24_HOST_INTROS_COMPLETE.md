@@ -24,22 +24,56 @@
 
 ## 🟡 OOTEL — JÄRGMINE SESSIOON
 
-### Faas 3 — Pricing klaarus (founder kinnitusega)
-**KRIITILINE:** Hinnaklassid jäävad alles, **AINULT €3290 tier kustutatakse**.
-- [ ] **Hinnakaose AUDIT esimesena** (tabel: asukoht / hind / staatus) — mitte kustutamine pimesi
-- [ ] Kustuta: ainult **€3290 tier** (BundleDisclosure quartal-pakk)
-- [ ] Säilita: €89 Quiet Entry, €229 Inner Compass, €329 Sanctuary Compass, €25/€49/€89 Day Passes, €25/€39/€99 Voice paketid, €45/€120/€380 Mike "Ways" — KUNI Anna otsustab vastupidiselt
-- [ ] Uus `/pricing` leht: struktuur Explore → Journeys → Companion → Voice → Private (HINDU EI LUKKU, lisame pärast struktuuri kinnitamist)
-- [ ] Iga sektsiooni all: kellele · mida saab · miks olemas
+### Faas 3 — Pricing klaarus (GPT raamistik, founder kinnitusega)
 
-### Ostuteekonna küsimus (GPT lisas)
-- "Kui inimene tuleb Aurinisse esimest korda, milline on kõige loogilisem esimene ost?"
-- See vastus määrab hilisema hinnastuse — küsi see välja Substack-testist enne hindade lukustamist.
+**KRIITILINE KORREKTSIOON:** Anna ütles "kaos 1000% korda". Mu eelmine plaan säilitas 4 paralleelset hinnaloogikat = vastuolus. GPT tabas. Parandatud:
 
-### Substack soft-launch test (GPT + AH soovitus)
-- Saada 20-30 lähimale: `/grace/intro` + `/sara/intro`
-- Mõõda: kuhu klikitakse rohkem, milline maailm kõnetab, milliseid küsimusi küsitakse
-- TASUTA TURU-UURING enne pricing-otsuseid
+**ÕIGE JÄRJEKORD (homme):**
+
+#### Samm 1 — Pricing Audit (tabel)
+Kõik praegu eksisteerivad tooted ühes tabelis:
+
+| Toode | Hind | Asukoht | Milleks |
+|---|---|---|---|
+| Quiet Entry | €89 | BundleDisclosure | ? |
+| Inner Compass | €229 | BundleDisclosure | ? |
+| Sanctuary Compass | €329 | BundleDisclosure | ? |
+| Sanctuary Annual | €3290 | BundleDisclosure | KUSTUTA |
+| Day Pass | €25/49/89 | ? | ? |
+| Voice top-up | €25/39/99 | SanctuaryPreview | ? |
+| Mike "Ways" | €45/120/380 | SanctuaryPreview | ? |
+| Hearth | €19 | Gumroad LIVE | KEEP |
+| Family Bundle | €25 | Gumroad LIVE | KEEP |
+| Alistair Bundle | €39 | Gumroad | KEEP |
+| Polarstar PDF | €9 | Gumroad | KEEP |
+| Body Temple | TBD | ? | ? |
+| Journey (uus) | TBD | mudel | TBD |
+| Companion (uus) | TBD | mudel | TBD |
+
+#### Samm 2 — Product Decision (iga rea juurde)
+- 🟢 KEEP
+- 🟡 MERGE (kuhu)
+- 🔵 RENAME (mis nimega)
+- 🔴 DELETE
+
+#### Samm 3 — Uus `/pricing` STRUKTUUR
+- Explore → Journey → Companion → Voice → Private
+- AINULT KINNITATUD tooted kuvatakse hinnaga
+- KÕIK ÜLEJÄÄNUD märgitud: **UNDER REVIEW**
+
+#### Samm 4 — Hinnad ALLES PÄRAST struktuuri
+- Tööversioon (mitte lukus)
+- Substack-testi tagasiside ootus
+
+**KEELATUD vahereeglid:**
+- ❌ Säilita vanad nimed (Quiet Entry, Inner Compass, Ways) uuel /pricing lehel — need on VANA MAAILM
+- ❌ Lisa hindu uuel /pricing lehel enne struktuuri kinnitamist
+- ❌ Kustuta SKU-sid ilma auditita (€3290 erand — Anna otsus)
+
+### KÕIGE OLULISEM HOMNE KÜSIMUS (GPT framing)
+**"Näita mulle kõik Aurini praegused müüdavad tooted ühes tabelis koos staatusega KEEP / MERGE / DELETE."**
+
+Kui see tabel on olemas, on Faas 3 pooleldi tehtud.
 
 ### Iteratsioon V2 (kui müük näitab vajadust)
 - Sara intro: terastada "What is happening between us?" suunale
