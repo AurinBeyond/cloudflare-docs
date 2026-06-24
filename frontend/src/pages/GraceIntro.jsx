@@ -82,12 +82,17 @@ export default function GraceIntro() {
             loading="eager"
             data-testid="grace-intro-painting"
             style={{
-              // Soft fade-to-paper edges (mask) so the painting
-              // dissolves into the cream rather than sitting in a box.
+              // Soft fade-to-paper edges so the painting dissolves
+              // into the cream rather than sitting in a rectangle.
+              // Explicit `at 50% 50%` keeps the mask centred across
+              // every browser (older Safari interpreted the missing
+              // position as top-left and hid the entire image).
               WebkitMaskImage:
-                "radial-gradient(ellipse 90% 92% at 50% 50%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 90% 92% at 50% 50%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
               maskImage:
-                "radial-gradient(ellipse 90% 92% at 50% 50%, #000 60%, transparent 100%)",
+                "radial-gradient(ellipse 90% 92% at 50% 50%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
             }}
           />
         </div>
