@@ -3,6 +3,28 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-25 (continued) — CRITICAL FIX: Free-access window expired
+
+User-found blocker: visitors clicking "Enter Grace's Room" from the Host Intro could pass the Wanderer Gate but then **hit paywall blocks inside the room** ($15/$30/$50 session passes). Soft-launch would have failed at the most important step — actually entering the room.
+
+### Root cause
+`backend/.env` had `FREE_ACCESS_UNTIL=2026-05-20`, which expired **5 weeks before today (2026-06-25)**. The backend's `_free_access_active()` returned `False`, which re-activated the paywall hooks in `ClarityRelease.jsx` (and likely Sara/Kaelen/Alistair rooms too).
+
+### Fix
+- `backend/.env` → `FREE_ACCESS_UNTIL=2026-08-31` (gives Substack 2 months runway: launch + 14-day observation + buffer)
+- Backend restarted
+- Verified `GET /api/aurin/free-access` now returns `{"active": true, "until": "2026-08-31"}`
+- Verified visiting `/grace/room`, ticking the 5 Wanderer Gate consents, clicking "I enter consciously" → lands in the full Hearth experience with "Start a Conversation" button, sidebar (Speak/Write/Evening/Messages/Library), keeper card. **No paywall in sight.**
+
+### Now in effect (the right combination for listen-mode)
+| Flag | Value | Effect |
+|---|---|---|
+| `LAUNCH_PAUSE` (frontend) | `true` | Every buy CTA renders as "Coming soon" pill — **nothing can be purchased** |
+| `FREE_ACCESS_UNTIL` (backend) | `2026-08-31` | Free-access window ACTIVE — visitors get **full room access without paying** |
+
+Together: visitor walks in, uses everything, can't accidentally buy anything. The exact listen-mode posture Anna + GPT wanted.
+
+
 ## 2026-06-25 (continued) — Source-tag passive analytics
 
 Added `?source=` URL param capture so Anna can answer "which channel sent these 27 people?" on the admin dashboard. Strictly passive — no UX changes, no new visitor-facing element. GPT condition honoured.
