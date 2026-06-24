@@ -64,9 +64,9 @@ const TIERS = [
       "Nothing renews — the door closes at sunrise",
     ],
     priceLine: "From €19",
-    priceNote: "One-time · 24 hours · pricing being finalised",
-    cta: "See day passes",
-    href: "/portal",
+    priceNote: "Day Passes open this spring — until then, the Library is yours, free",
+    cta: "Read the Library now",
+    href: "/library",
     testid: "pricing-day-pass",
   },
   {
@@ -82,9 +82,9 @@ const TIERS = [
       "First read of any new letter the keeper writes",
     ],
     priceLine: "Monthly · Annual",
-    priceNote: "Pricing being finalised — Substack soft-launch first",
-    cta: "Be told when Journeys open",
-    href: "/portal",
+    priceNote: "Doors open this spring — meet Grace, Sara, Kaelen, Alistair and Polarstar first",
+    cta: "Meet the keepers",
+    href: "/grace/intro",
     testid: "pricing-journey",
     featured: true,
   },
@@ -102,9 +102,9 @@ const TIERS = [
       "Priority response from the keepers",
     ],
     priceLine: "Monthly · Annual",
-    priceNote: "Pricing being finalised — Substack soft-launch first",
-    cta: "Be told when Companion opens",
-    href: "/portal",
+    priceNote: "Doors open this spring — read what's already inside while we finish the rooms",
+    cta: "Read what's already inside",
+    href: "/library",
     testid: "pricing-companion",
   },
   {
@@ -250,42 +250,49 @@ function VoiceMeter() {
             style={{ color: MUTED }}
             data-testid="pricing-voice-explainer"
           >
-            Voice presence with a keeper carries a real cost each minute it runs.
-            To keep every door honest — and the rooms quiet — voice lives outside
-            the membership. You top up the moments you want to speak aloud,
-            transparently, and the platform never spends them in the background.
+            Voice is when Grace, Sara, Kaelen or Alistair speaks back —
+            not a message, a presence. To keep every door honest — and
+            the rooms quiet — voice lives outside the membership. You
+            choose the moments you want spoken aloud; the platform
+            never spends them in the background.
           </p>
         </div>
 
         <div className="mt-14 grid sm:grid-cols-3 gap-5 max-w-[920px] mx-auto">
           {[
-            { label: "A short return", mins: "30 minutes", note: "for one quiet evening" },
-            { label: "A full hour", mins: "60 minutes", note: "when more is being asked of you" },
-            { label: "A season", mins: "180 minutes", note: "spread across the months you need" },
+            { label: "I · A short return", title: "One quiet evening", note: "a conversation with the keeper, then back to silence", aside: "~30 minutes" },
+            { label: "II · A full hour", title: "When more is being asked of you", note: "for the longer thing that needs to be spoken aloud", aside: "~60 minutes" },
+            { label: "III · A season", title: "Across the months", note: "for those who keep returning, in their own rhythm", aside: "~180 minutes" },
           ].map((v, i) => (
             <div
-              key={v.mins}
+              key={v.label}
               data-testid={`pricing-voice-tier-${i}`}
-              className="border bg-[rgba(18,16,13,0.62)] p-7 text-center"
+              className="border bg-[rgba(18,16,13,0.62)] p-8 text-center"
               style={{ borderColor: EDGE }}
             >
               <p
-                className="text-[22px] leading-none font-light mb-3"
-                style={{ fontFamily: SERIF, color: CREAM }}
-              >
-                {v.mins}
-              </p>
-              <p
-                className="text-[10.5px] tracking-[0.32em] uppercase mb-4"
+                className="text-[10.5px] tracking-[0.34em] uppercase mb-5"
                 style={{ color: BRASS }}
               >
                 {v.label}
               </p>
               <p
-                className="text-[13px] italic font-light"
+                className="text-[20px] sm:text-[22px] leading-[1.25] font-light mb-4"
+                style={{ fontFamily: SERIF, color: CREAM }}
+              >
+                {v.title}
+              </p>
+              <p
+                className="text-[13px] italic font-light leading-[1.7] mb-5"
                 style={{ fontFamily: SERIF, color: MUTED }}
               >
                 {v.note}
+              </p>
+              <p
+                className="text-[10.5px] tracking-[0.28em] uppercase"
+                style={{ color: GREY }}
+              >
+                {v.aside}
               </p>
             </div>
           ))}
@@ -304,7 +311,7 @@ function VoiceMeter() {
           style={{ color: GREY }}
           data-testid="pricing-voice-tbd"
         >
-          Per-minute pricing being finalised
+          Voice access opens after the rooms settle — until then, the keepers write back
         </p>
       </div>
     </section>

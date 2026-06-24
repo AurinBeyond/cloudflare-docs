@@ -351,12 +351,16 @@ function HeroSection({ onWalkTruthFirst }) {
 // lock, eventyr lock (Polarstar carries the Norwegian word italics).
 // §VOICE-LIVING-PLACE-LOCK · §RECOGNITION-NOT-PITCH-LOCK.
 function FiveRoomsRecognitionSection() {
+  // §SELGUS-PASS 2026-06-25 — Each card now leads to the Host Intro
+  // (threshold page) rather than the raw room. This makes the trust-
+  // building intro pages DISCOVERABLE from the homepage — they were
+  // built last week but had no front-door link until now.
   const rooms = [
-    { to: "/parents-room",  glyph: "⛵", name: "Sara",      line: "for the spaces between people you love",                    testid: "five-rooms-sara" },
-    { to: "/grace",         glyph: "🔥", name: "Grace",     line: "for the room with no one watching",                          testid: "five-rooms-grace" },
-    { to: "/body-world",    glyph: "🌿", name: "Kaelen",    line: "for what the body has been quietly saying",                  testid: "five-rooms-kaelen" },
-    { to: "/alistair",      glyph: "🧭", name: "Alistair",  line: "for the questions that keep returning",                      testid: "five-rooms-alistair" },
-    { to: "/kids-universe", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures that matter",                  testid: "five-rooms-polarstar", italicWord: "eventyr" },
+    { to: "/sara/intro",      glyph: "⛵", name: "Sara",      line: "for the spaces between people you love",                    testid: "five-rooms-sara" },
+    { to: "/grace/intro",     glyph: "🔥", name: "Grace",     line: "for the room with no one watching",                          testid: "five-rooms-grace" },
+    { to: "/kaelen/intro",    glyph: "🌿", name: "Kaelen",    line: "for what the body has been quietly saying",                  testid: "five-rooms-kaelen" },
+    { to: "/alistair/intro",  glyph: "🧭", name: "Alistair",  line: "for the questions that keep returning",                      testid: "five-rooms-alistair" },
+    { to: "/polarstar/intro", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures that matter",                  testid: "five-rooms-polarstar", italicWord: "eventyr" },
   ];
   return (
     <section
@@ -381,7 +385,7 @@ function FiveRoomsRecognitionSection() {
                   <span className="text-[1.5rem] leading-none opacity-80" aria-hidden="true">
                     {r.glyph}
                   </span>
-                  <div>
+                  <div className="flex-1">
                     <p
                       className="m-0 text-[1.55rem] sm:text-[1.7rem] tracking-[0.005em] text-[#f0eadd] leading-tight"
                       style={{ fontFamily: SERIF }}
@@ -401,6 +405,12 @@ function FiveRoomsRecognitionSection() {
                       ) : (
                         r.line
                       )}
+                    </p>
+                    <p
+                      className="m-0 mt-3 text-[10.5px] tracking-[0.32em] uppercase text-[#c4a46b]"
+                      data-testid={`${r.testid}-meet-hint`}
+                    >
+                      Meet {r.name} →
                     </p>
                   </div>
                 </div>
@@ -534,7 +544,12 @@ function SprintZeroLayersSection() {
         </div>
       </RevealBlock>
 
-      {/* ── Layer 4 — Three CTAs (Start Here = primary) ─────────────── */}
+      {/* ── Layer 4 — Two clear CTAs (Selguse-pass 2026-06-25)
+          Reduced from three CTAs to two: a single primary doorway
+          ("Walk into Grace's room" via her Host Intro) and one safe
+          read-only alternative ("Read for free in the Library").
+          The previous "See the Five Rooms" was redundant — the
+          FiveRoomsRecognitionSection above already does that job. */}
       <RevealBlock delay={200}>
         <div
           data-testid="hero-ctas"
@@ -542,25 +557,18 @@ function SprintZeroLayersSection() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 sm:gap-6">
             <Link
-              to="/start-here"
+              to="/grace/intro"
               data-testid="hero-cta-start-here"
               className="inline-flex items-center justify-center text-[12px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] hover:bg-[#d4b67d] border border-[#c4a46b] hover:border-[#d4b67d] px-12 sm:px-14 py-5 font-medium transition-all duration-500 hover:-translate-y-px"
             >
-              Start Here
+              Walk into Grace&apos;s room
             </Link>
-            <a
-              href="#worlds"
-              data-testid="hero-cta-see-rooms"
-              className="inline-flex items-center justify-center text-[11.5px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.45)] hover:border-[#c4a46b] hover:text-[#d4b67d] px-10 sm:px-12 py-5 transition-colors duration-500"
-            >
-              See the Five Rooms
-            </a>
             <Link
-              to="/bookstore"
+              to="/library"
               data-testid="hero-cta-browse-books"
               className="inline-flex items-center justify-center text-[11.5px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.45)] hover:border-[#c4a46b] hover:text-[#d4b67d] px-10 sm:px-12 py-5 transition-colors duration-500"
             >
-              Browse Books
+              Read for free in the Library
             </Link>
           </div>
         </div>
@@ -1373,7 +1381,12 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <QuietNoteSection />
           <TwoWorldsSection />
           <RoomsSection />
-          <TwoPathsSection />
+          {/* §SELGUS-PASS 2026-06-25 — TwoPathsSection removed from
+              render order: it duplicated TwoWorldsSection's emotional
+              vs practical framing two scrolls earlier. The component
+              is kept defined below for now in case copy is salvaged
+              into another section, but it no longer appears on the
+              homepage. */}
           <OpenWorldSection />
           <WaysToBeHereSection />
           <VoiceMeterSection />
