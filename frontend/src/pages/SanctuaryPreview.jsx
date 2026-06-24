@@ -1219,109 +1219,11 @@ function ClosingSection() {
   );
 }
 
-// §TWO PATHS 2026-05-19 — Founder directive: a calm conceptual gate
-// between the rooms and the actual pricing cards below. Frames the
-// two doors (free writing vs. credit-/subscription-based voice)
-// WITHOUT repeating the prices — those live in WaysToBeHereSection
-// just below. Premium-minimalist: no duplication.
-function TwoPathsSection() {
-  const paths = [
-    {
-      key: "credits",
-      kicker: "Path I",
-      name: "The Wanderer's Credits",
-      tagline: "Pay only for what you use. No subscription.",
-      detail: "A single hour to begin, with flexible additions of presence when you wish to return. Credits never expire.",
-    },
-    {
-      key: "subscription",
-      kicker: "Path II",
-      name: "The Aurin Subscription",
-      tagline: "Monthly companionship. Move freely between all rooms.",
-      detail: "A steady presence each month, or your own dedicated room held in quiet for you.",
-      featured: true,
-    },
-  ];
-  return (
-    <section
-      id="two-paths"
-      data-testid="sanctuary-two-paths"
-      className="relative w-full bg-[#0b0a08] py-28 border-t border-[rgba(196,164,107,0.08)]"
-    >
-      <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
-        <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-6 text-center">
-            — Two Paths
-          </p>
-          <h2
-            className="text-center text-[28px] sm:text-[36px] lg:text-[42px] leading-[1.18] text-[#f0eadd] font-light max-w-[760px] mx-auto"
-            style={{ fontFamily: SERIF }}
-          >
-            Writing is always free.<br />
-            <span className="italic text-[#bcb4a3]">Voice opens through one of two doors.</span>
-          </h2>
-          <p
-            className="mt-7 text-center text-[14px] leading-[1.85] italic text-[#a59f93] max-w-[560px] mx-auto font-light"
-            style={{ fontFamily: SERIF }}
-          >
-            Choose the rhythm that fits your life — a single hour, or a quiet monthly presence.
-          </p>
-        </RevealBlock>
-        <div className="mt-20 grid md:grid-cols-2 gap-7 lg:gap-12">
-          {paths.map((p, i) => (
-            <RevealBlock key={p.key} delay={i * 120}>
-              <div
-                data-testid={`two-paths-${p.key}`}
-                className={`h-full p-10 sm:p-12 border ${
-                  p.featured
-                    ? "border-[rgba(196,164,107,0.55)] bg-[rgba(28,24,18,0.6)]"
-                    : "border-[rgba(196,164,107,0.22)] bg-[rgba(18,16,13,0.55)]"
-                }`}
-              >
-                <p className="text-[10px] tracking-[0.42em] uppercase text-[#c4a46b] mb-5">
-                  {p.kicker}
-                </p>
-                <h3
-                  className="text-[26px] sm:text-[30px] leading-[1.16] text-[#f0eadd] font-light mb-3"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {p.name}
-                </h3>
-                <p
-                  className="text-[13.5px] italic leading-[1.7] text-[#a59f93] mb-5 font-light"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {p.tagline}
-                </p>
-                <p
-                  className="text-[14px] leading-[1.85] text-[#bcb4a3] font-light"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {p.detail}
-                </p>
-              </div>
-            </RevealBlock>
-          ))}
-        </div>
-        <RevealBlock delay={240}>
-          <div className="mt-16 flex flex-col items-center gap-4">
-            <a
-              href="#ways"
-              data-testid="two-paths-view-packages"
-              className="inline-flex items-center gap-3 px-7 py-3 border border-[rgba(196,164,107,0.45)] text-[#f0eadd] text-[11px] tracking-[0.42em] uppercase hover:bg-[rgba(196,164,107,0.08)] hover:border-[rgba(196,164,107,0.7)] transition-colors duration-500"
-            >
-              <span>View Packages</span>
-              <span className="text-[#c4a46b]" aria-hidden="true">↓</span>
-            </a>
-            <p className="text-[11px] tracking-[0.28em] uppercase text-[#7a7468]">
-              Reading, reflection, and text conversation remain free.
-            </p>
-          </div>
-        </RevealBlock>
-      </div>
-    </section>
-  );
-}
+// §SELGUS-PASS 2026-06-25 — TwoPathsSection was retired from the
+// homepage render flow (duplicated TwoWorldsSection's framing) and
+// the function definition has been removed as well to keep the file
+// from growing. Original copy can be recovered from git history if
+// it needs to be salvaged into another section.
 
 function SanctuaryFooter() {
   return (
@@ -1381,12 +1283,9 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <QuietNoteSection />
           <TwoWorldsSection />
           <RoomsSection />
-          {/* §SELGUS-PASS 2026-06-25 — TwoPathsSection removed from
-              render order: it duplicated TwoWorldsSection's emotional
-              vs practical framing two scrolls earlier. The component
-              is kept defined below for now in case copy is salvaged
-              into another section, but it no longer appears on the
-              homepage. */}
+          {/* TwoPathsSection retired — see §SELGUS-PASS comment above
+              SanctuaryFooter. The dead code has been removed; this
+              comment intentionally preserves the section-order log. */}
           <OpenWorldSection />
           <WaysToBeHereSection />
           <VoiceMeterSection />

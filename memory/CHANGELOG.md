@@ -3,6 +3,41 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-25 — Selguse-pass (Clarity Pass)
+
+Anna direktiiv: "Ei mingit checkouti enne, kui maja sees on selge ja külalisele väärtuslik." Ei puudutanud ühtegi hinda. Lisatud selgust, eemaldatud segadust, iga "TBD" punkt asendatud väärtustega.
+
+### Samm 1 — Avalehe lihtsustamine (`/sanctuary-preview`)
+- Sprint Zero CTA-d 3 → 2 (eemaldatud 'See the Five Rooms' — redundantne, FiveRoomsRecognitionSection juba pakub seda)
+- Primary CTA: "Start Here" → **"Walk into Grace's room"** (`/start-here` → `/grace/intro`)
+- Secondary CTA: "Browse Books" → **"Read for free in the Library"** (`/bookstore` → `/library`)
+- `TwoPathsSection` eemaldatud render-flowst (dubleeris TwoWorldsSection'i sõnumit)
+- `TwoPathsSection` funktsiooni definitsioon ka eemaldatud failist (~100 rida surnud koodi) — fail 1407 → 1305 rida
+
+### Samm 2 — Host Intro lehed nähtavaks
+- `FiveRoomsRecognitionSection` iga ruumi link suunab nüüd `/[room]/intro` lehele (mitte otse ruumi). Lävepakud on lõpuks avastatavad avalehelt.
+- Iga kaardi alla lisatud nähtav **"Meet [Name] →"** vihje (`data-testid="five-rooms-<name>-meet-hint"`)
+
+### Samm 3 — TBD → Anticipation (`/pricing`)
+- **Day Pass** CTA: "See day passes" → **"Read the Library now"** (`/portal` → `/library`); priceNote: "Day Passes open this spring — until then, the Library is yours, free"
+- **Journey** CTA: "Be told when Journeys open" → **"Meet the keepers"** (`/portal` → `/grace/intro`); priceNote: "Doors open this spring — meet Grace, Sara, Kaelen, Alistair and Polarstar first"
+- **Companion** CTA: "Be told when Companion opens" → **"Read what's already inside"** (`/portal` → `/library`); priceNote: "Doors open this spring — read what's already inside while we finish the rooms"
+
+### Samm 4 — Voice = võimalus, mitte minutid
+- 3 voice-tasandi pealkirjad: "30 minutes / 60 minutes / 180 minutes" → **"One quiet evening" / "When more is being asked of you" / "Across the months"**
+- Minutid (~30/~60/~180) liigutatud väikese kõrvalmärkusena alla, mitte enam pealkirjadena
+- Voice explainer ümber: "Voice presence with a keeper carries a real cost each minute it runs..." → **"Voice is when Grace, Sara, Kaelen or Alistair speaks back — not a message, a presence."**
+- TBD-rida ümber: "Per-minute pricing being finalised" → **"Voice access opens after the rooms settle — until then, the keepers write back"**
+
+### Põhimõte
+Iga "ei saa veel osta" punkt pakub konkreetset alternatiivset väärtust — Library, Host Intro, Bookstore. Külalise frustratsioon → anticipatsioon.
+
+### Tests
+- 100% pass (16/16) — `/app/test_reports/iteration_88.json`
+
+---
+
+
 ## 2026-06-25 — Phase 3 Pricing Chaos Cleanup (Anna lock + GPT synthesis)
 
 ### Added
