@@ -107,6 +107,9 @@ import AlistairTopicDetail from "@/pages/alistair/TopicDetail";
 import CourseDetail from "@/pages/CourseDetail";
 import GraceIntro from "@/pages/GraceIntro";
 import SaraIntro from "@/pages/SaraIntro";
+import AlistairIntro from "@/pages/AlistairIntro";
+import KaelenIntro from "@/pages/KaelenIntro";
+import PolarstarIntro from "@/pages/PolarstarIntro";
 import Faq from "@/pages/Faq";
 import AdminObservation from "@/pages/AdminObservation";
 import AdminEmailHealth from "@/pages/AdminEmailHealth";
@@ -289,6 +292,10 @@ function AppRouter() {
         {/* §HOST-INTRO 2026-02 — Sara host introduction page.
             Leads into the parents' room (Sara Forest 14 worlds). */}
         <Route path="/sara/intro" element={<SaraIntro />} />
+        {/* §HOST-INTRO 2026-02 — 3 more host introduction pages. */}
+        <Route path="/alistair/intro" element={<AlistairIntro />} />
+        <Route path="/kaelen/intro" element={<KaelenIntro />} />
+        <Route path="/polarstar/intro" element={<PolarstarIntro />} />
         {/* §GRACE-SUB-SURFACES 2026-02 — Public warm Grace sub-pages:
             Speak / Write / Evening Reflection / My Messages. Each is
             an Intuvio-style "soft door" — informational, not a chat.
