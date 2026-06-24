@@ -24,13 +24,22 @@
 
 ## 🟡 OOTEL — JÄRGMINE SESSIOON
 
-### Faas 3 — Pricing klaarus
-- [ ] `BundleDisclosure.jsx` vanad 4 tieri (€89/€229/€329/€3290) kustutatud
-- [ ] Day Passes (€25/€49/€89) kustutatud
-- [ ] Vanad voice paketid (€25/€39/€99) kustutatud
-- [ ] `SanctuaryPreview.jsx` Mike'i "Ways" sektsioon (€45/€120/€380) eemaldatud
-- [ ] Uus `/pricing` leht: struktuur Explore → Journeys → Companion → Voice → Private (HINDU EI LUKKU)
-- [ ] Kõigi hindade audit — kaardistus paberil enne kustutamist
+### Faas 3 — Pricing klaarus (founder kinnitusega)
+**KRIITILINE:** Hinnaklassid jäävad alles, **AINULT €3290 tier kustutatakse**.
+- [ ] **Hinnakaose AUDIT esimesena** (tabel: asukoht / hind / staatus) — mitte kustutamine pimesi
+- [ ] Kustuta: ainult **€3290 tier** (BundleDisclosure quartal-pakk)
+- [ ] Säilita: €89 Quiet Entry, €229 Inner Compass, €329 Sanctuary Compass, €25/€49/€89 Day Passes, €25/€39/€99 Voice paketid, €45/€120/€380 Mike "Ways" — KUNI Anna otsustab vastupidiselt
+- [ ] Uus `/pricing` leht: struktuur Explore → Journeys → Companion → Voice → Private (HINDU EI LUKKU, lisame pärast struktuuri kinnitamist)
+- [ ] Iga sektsiooni all: kellele · mida saab · miks olemas
+
+### Ostuteekonna küsimus (GPT lisas)
+- "Kui inimene tuleb Aurinisse esimest korda, milline on kõige loogilisem esimene ost?"
+- See vastus määrab hilisema hinnastuse — küsi see välja Substack-testist enne hindade lukustamist.
+
+### Substack soft-launch test (GPT + AH soovitus)
+- Saada 20-30 lähimale: `/grace/intro` + `/sara/intro`
+- Mõõda: kuhu klikitakse rohkem, milline maailm kõnetab, milliseid küsimusi küsitakse
+- TASUTA TURU-UURING enne pricing-otsuseid
 
 ### Iteratsioon V2 (kui müük näitab vajadust)
 - Sara intro: terastada "What is happening between us?" suunale
