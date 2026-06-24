@@ -42,7 +42,7 @@ import { Leaf, BookOpen, Headphones, PenLine, Moon } from "lucide-react";
 
 /* ------------ Source images ------------ */
 const ROOM_ATMOSPHERE_SRC = "/style_samples/room_grace_sample_v2.png";
-const GRACE_IN_CHAIR_SRC = "/style_samples/grace_in_chair_v1.png";
+const GRACE_IN_CHAIR_SRC = "/style_samples/grace_in_chair_v2.png";
 
 // When the seated-Grace painting lands, change PAINTING_SRC to
 // GRACE_IN_CHAIR_SRC. The layout already anticipates a vertical
