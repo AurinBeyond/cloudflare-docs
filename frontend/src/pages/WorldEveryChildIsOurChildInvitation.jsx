@@ -43,7 +43,7 @@ export default function WorldEveryChildIsOurChildInvitation() {
       >
         <img
           src={ANCHOR_IMAGE}
-          alt="Every Child Is Our Child — Long-form invitation. A watercolour shore with a small lighthouse, a steady cottage, a wooden dock, a moored rowboat. The painting carries the full invitation: No single person can be everything to a child. Communities were never meant to be optional. Every child thrives when they belong to more than one caring adult. When a child feels held by many, they become braver, kinder, more resilient. Parenting is not a solo expedition. We do not need perfect people. We need many safe ones. A pinned note reads: You do not have to be the whole shore. Just be one steady rock where a child can catch their breath and keep going."
+          alt="Every Child Is Our Child — Long-form invitation. A watercolour shore with a small lighthouse, a steady cottage, a wooden dock, a moored rowboat. The painting carries the full invitation: No single person can be everything to a child. Communities were never meant to be optional. Every child grows steadier when they belong to more than one caring adult. When a child feels held by many, they become braver, kinder, more grounded. Parenting is not a solo expedition. We do not need perfect people. We need many safe ones. A pinned note reads: You do not have to be the whole shore. Just be one steady rock where a child can catch their breath and keep going."
           className="absolute inset-0 w-full h-full object-contain select-none"
           draggable={false}
           loading="eager"
