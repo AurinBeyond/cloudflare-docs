@@ -16496,6 +16496,8 @@ _FOUNDER_DOCS_WHITELIST = {
     "costs": "COST_BREAKDOWN_2026-02.md",
     "library-audit": "LIBRARY_BOOKSTORE_AUDIT_2026-02.md",
     "night-report": "NIGHT_REPORT_FAAS1_2026-02.md",
+    "session-end": "SESSION_2026-06-24_HOST_INTROS_COMPLETE.md",
+    "inventory-proposal": "FAAS3_INVENTORY_PROPOSAL_2026-06-25.md",
 }
 
 
