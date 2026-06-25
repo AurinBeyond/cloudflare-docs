@@ -3,6 +3,52 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-06-26 — Pricing v2 LOCKED (Anna kinnitus, ei läinud GPT-le)
+
+Lukustasin lõpliku 5-tasandilise hinnamudeli pärast pikka ajalugu (39 SKU → 5 selget pulka). Anna kinnitas täielikult agendi ettepaneku, GPT-le ei saadetud ("ei hakka isegi gpt-le saatma et ta ei hakkaks jälle eksitama").
+
+### Lukustatud arhitektuur
+```
+🆓 EXPLORE              free, always
+🚪 DAY PASS             €19 (soft-launch) / €25 (regular)
+🌿 JOURNEY              €29/mo (1 tuba) · cycles 1/3/6/12
+🏡 COMPANION            €49/mo (kõik 5 tuba) · cycles 1/3/6/12
+🪔 COMPANION + LANTERN  €69/mo (premium · Anna kohaloluse lähedus)
+
+🎙 VOICE TOP-UPS        €11 / €24 / €49 / €109
+```
+
+### Kõige olulisem muudatus — Private → Lantern
+Vana **Private** (€1,890/kvartal 1-1 Annaga) on **eemaldatud**. Anna eelistab jääda vaikseks kohaloluks, mitte müüa oma aega. Selle asemel **The Lantern**:
+- Igakuine pikem "Letter from Anna" — kirjutus + tema enda hääl loetuna ette
+- 2-4× kuus toored häälemärkmed (irregular, intiimne)
+- Anna lugemise riiul (raamatud + marginaal-mõtted)
+- "Behind the lanterns" — Aurini aeglane ehitus
+- Üks vaikne vastus kuus (võimalus, mitte lubadus)
+
+Lantern ei ole 1-1. See on **Patreon-stiil luksuse-vaikus vormis**. Anna ei lepi kohtumisi, ei luba graafikut.
+
+### Files
+- `/app/memory/PRICING_LOCKED_2026-06-25_v2.md` (NEW) — autoritatiivne hinnamudeli allikas
+- `/app/frontend/src/pages/Pricing.jsx` (REWRITTEN) — täielik uus 5-tasandiline leht koos:
+  - Soft-launch ankrustamine (`€29` ja `€35 regular price` strikethrough)
+  - Billing cycle tabelid Journey + Companion (4 rida igaüks)
+  - "MOST POPULAR" badge Journey'l + "BEST VALUE" Companion'il
+  - 4 voice top-up'i (€11/€24/€49/€109)
+  - "Why voice is held separately" caring-language section
+  - "An honest note" section (door is quiet a few more days)
+  - Accessibility Phase 1: semantic HTML, aria-labels, role="status" badges, role="table" cycle tabelid
+
+### Maksed
+- **EI puudutatud** — Anna ootab 24h uue maksesüsteemi otsust
+- Kõik CTA-d viivad olemasolevatele TASUTA lehtedele (`/library`, `/grace/intro`)
+- `LAUNCH_PAUSE = true` jääb aktiivseks
+- `FREE_ACCESS_UNTIL = 2026-08-31` (eelmine fix) → külalised pääsevad tubadesse
+
+### Tests
+- 15/15 PASS — `/app/test_reports/iteration_90.json`
+
+
 ## 2026-06-25 (continued) — CRITICAL FIX: Free-access window expired
 
 User-found blocker: visitors clicking "Enter Grace's Room" from the Host Intro could pass the Wanderer Gate but then **hit paywall blocks inside the room** ($15/$30/$50 session passes). Soft-launch would have failed at the most important step — actually entering the room.

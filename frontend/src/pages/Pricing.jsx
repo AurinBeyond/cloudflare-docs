@@ -58,7 +58,7 @@ const TIERS = [
       "Bookstore preview (first chapter free)",
       "Polarstar Kids — one sample story",
     ],
-    price: { primary: "Free, always", normal: null, billing: null },
+    price: { primary: "Free, always", normal: null, billing: "No account, no commitment, no name required" },
     cta: { label: "Walk in", href: "/library", aria: "Enter the free Library" },
     testid: "pricing-explore",
   },
