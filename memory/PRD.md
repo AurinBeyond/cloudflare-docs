@@ -76,6 +76,14 @@ Empty sections do not render. "Coming soon" is not displayed on
 public pages. A feature ships only when it adds quiet life to the
 house; otherwise it waits.
 
+### 6. EXPERIENCE LOCK
+This page is discovered. It is never promoted. Visitors who arrive
+on `/from-anna` (and any future "quiet" surface) should feel they
+have found something, not that they have been sent through another
+marketing funnel. No large CTAs, no banners, no sales blocks, no
+"Subscribe" or "Join the list" prompts inside these surfaces. Every
+future addition must preserve that feeling.
+
 ---
 
 

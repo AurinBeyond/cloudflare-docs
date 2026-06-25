@@ -12,6 +12,9 @@
  *   5. HOUSE DESIGN PRINCIPLE — every new feature should make the
  *      house feel more lived in, not more complicated. Empty sections
  *      do not render; "Coming soon" is never displayed here.
+ *   6. EXPERIENCE LOCK — this page is discovered, never promoted. No
+ *      large CTAs, no banners, no sales blocks. A visitor must feel
+ *      they have found something, not been sent through a funnel.
  *
  * Discovery rule (preserve the mystery):
  *   This page is reached only via a small footer link "A letter from
@@ -250,14 +253,15 @@ export default function FromAnna() {
       >
         <p
           data-testid="from-anna-eyebrow"
-          className="text-[11px] tracking-[0.5em] uppercase"
-          style={{ color: INK_FAINT }}
+          aria-hidden="true"
+          className="text-[10px] tracking-[0.5em] uppercase"
+          style={{ color: INK_FAINT, opacity: 0.55 }}
         >
-          — {FROM_ANNA_META.pageEyebrow}
+          —
         </p>
         <h1
           data-testid="from-anna-title"
-          className="mt-6 text-[44px] sm:text-[56px] lg:text-[64px] leading-[1.05] font-light italic"
+          className="mt-6 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.1] font-light italic max-w-[760px] mx-auto px-6"
           style={{ fontFamily: HAND, color: INK }}
         >
           {FROM_ANNA_META.pageTitle}

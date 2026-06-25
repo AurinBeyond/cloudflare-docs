@@ -33,6 +33,14 @@
  * │    — not more complicated. If a section has no content yet,    │
  * │    it does not render. We never display "Coming soon" or       │
  * │    placeholders on this page.                                  │
+ * │                                                                 │
+ * │ 6. EXPERIENCE LOCK                                              │
+ * │    This page is discovered. It is never promoted. Visitors who │
+ * │    arrive here should feel they have found something, not that │
+ * │    they have been sent through another marketing funnel. No    │
+ * │    large CTAs, no banners, no sales blocks, no "Subscribe" or  │
+ * │    "Join the list" prompts. Every future addition must         │
+ * │    preserve that feeling.                                      │
  * └─────────────────────────────────────────────────────────────────┘
  *
  * Section render rule:
@@ -178,7 +186,11 @@ export const FROM_ANNA_SECTIONS = [
 
 export const FROM_ANNA_META = {
   pageEyebrow: "A letter from upstairs",
-  pageTitle: "From Anna",
+  // The visible page title intentionally repeats the eyebrow rather
+  // than announcing "From Anna". The file is still called fromAnna —
+  // the discovery line a visitor reads is the quieter one.
+  // (§EXPERIENCE LOCK — see file header.)
+  pageTitle: "A letter from upstairs",
   pageSubtitle: "A few quiet pages from the study above the rooms.",
   signature: "— Anna",
 };
