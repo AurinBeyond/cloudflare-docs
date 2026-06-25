@@ -1,0 +1,45 @@
+{
+  "summary": "Frontend-only verification of LOCKED Pricing v2 (/pricing). All 15 review criteria verified via DOM inspection + visual screenshot + live click navigation. Every data-testid is present, every verbatim price string appears, all badges render with role='status', both cycle tables (Journey/Companion) render with the locked rows + save tags, the Lantern card carries all 5 specified features, all 5 tier CTAs route to free pages only (/library or /grace/intro — none to /portal or any checkout), the voice explainer + 4 voice top-ups + honest note all render, accessibility attributes (<main>, <article aria-labelledby>, role=table) are correct, and the smoke click on 'Walk into Grace\\u2019s room' navigates successfully to /grace/intro.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Pricing tiers grid", "issues": ["Explore card looks visually empty in the lower half — the price+CTA block sinks to the bottom (mt-auto) leaving a large brass-coloured void above 'Free, always'. Cosmetic only; spacing is intentional for grid stretch but reads slightly awkward beside the dense Day Pass / Journey neighbours. Consider a quiet divider or a brand line to balance the column."]}
+    ]
+  },
+  "verified_criteria": {
+    "1_page_renders_with_hero": "PASS — <main data-testid='pricing-page'> mounts; hero h1 text == 'There is no wrong way to arrive.'",
+    "2_five_tier_cards_in_order": "PASS — pricing-explore → pricing-day-pass → pricing-journey → pricing-companion → pricing-lantern all present in correct DOM order",
+    "3_journey_badge_MOST_POPULAR": "PASS — data-testid='pricing-journey-badge' visible, text 'MOST POPULAR', role='status'",
+    "4_companion_badge_BEST_VALUE": "PASS — data-testid='pricing-companion-badge' visible, text 'BEST VALUE', role='status'",
+    "5_day_pass_anchor_pricing": "PASS — primary €19 visible AND strikethrough €25 with 'regular price' label rendered (line-through style + text)",
+    "6_day_pass_voice_line": "PASS — feature list contains '10 minutes of voice included'",
+    "7_journey_cycle_table": "PASS — data-testid='pricing-journey-cycles' role='table' with all 4 rows: Monthly €29, Quarterly €79, 6 months €149, Annual €279 + '−20% · 2 months free' tag",
+    "8_companion_cycle_table": "PASS — data-testid='pricing-companion-cycles' role='table' with all 4 rows: Monthly €49, Quarterly €129, 6 months €249, Annual €459 + '−22% · 2.5 months free' tag",
+    "9_lantern_card": "PASS — €69, billing 'per month', kicker 'V · The Lantern', tagline 'All rooms — and the presence that keeps them lit.', all 5 specified Lantern features (monthly Letter from Anna, voice notes, reading shelf, Behind the lanterns, one quiet message back) present",
+    "10_cta_destinations_no_portal_no_checkout": "PASS — explore→/library, day-pass→/grace/intro, journey→/grace/intro, companion→/library, lantern→/grace/intro. None route to /portal or any checkout path.",
+    "11_voice_explainer_section": "PASS — data-testid='pricing-voice-explainer-section' renders with headline 'Some choose to read. Some choose to be spoken to.' and closing line 'This is not a restriction. This is care.'",
+    "12_voice_topups": "PASS — 4 cards: voice-30 €11, voice-90 €24 (featured), voice-200 €49, voice-500 €109. The 90-min card carries the brighter featured background (rgba(28,24,18,0.72)).",
+    "13_honest_note": "PASS — data-testid='pricing-honest-note' with heading 'The doors are quiet for a few more days.' and CTA pricing-honest-cta label 'Walk into Grace\\u2019s room → /grace/intro'",
+    "14_accessibility": "PASS — <main data-testid='pricing-page'>; every tier is <article> with aria-labelledby='<testid>-name' pointing to an existing <h3 id>; all CTAs have aria-label; badges role='status'; cycle tables role='table'",
+    "15_smoke_navigation": "PASS — Clicking the honest CTA navigated to /grace/intro successfully (Playwright wait_for_url matched within timeout)"
+  },
+  "test_report_links": ["/app/.screenshots/pricing_v2.jpg"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Pricing.jsx is ~670 lines — still readable but approaching the 700-line guideline; consider splitting TierCard / VoiceTopups / HonestNote into /components/pricing/* if more tiers/sections are added.",
+    "PriceLine renders 'regular price' label even when price.normal is undefined — currently guarded correctly, no bug.",
+    "The HTML entity in lantern feature list \\\"Behind the lanterns\\\" uses straight quotes — fine in UI; matches spec.",
+    "SOFT_LAUNCH is a module-level constant — when Anna flips it off it requires a redeploy; if a remote toggle is desired later, expose via env or feature-flag endpoint.",
+    "Cosmetic: Explore tier card visual height differs from neighbours because it has no cycles table; spacing reads slightly empty (see design_issues)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "skipped (frontend-only request)", "frontend": "100% (15/15 review criteria + smoke nav)"},
+  "test_credentials": "n/a — public page, no auth",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Pricing v2 is locked and rendering exactly as specified in PRICING_LOCKED_2026-06-25_v2.md. CTAs intentionally route to free pages because Anna deferred the payment provider for 24h — do NOT regress these to /portal until Anna confirms the new provider. SOFT_LAUNCH=true in Pricing.jsx controls the soft-launch prices vs regular prices in the cycle tables. The lambda-based assertion harness used in this iteration produced false-negative 'object bool can't be used in await' errors for pre-computed booleans — diagnostic 'got <value>' strings still confirm every expected value matched; future agents should use direct `assert` on already-resolved values instead of wrapping them in lambdas.",
+  "rca of the issue": "n/a — no app bugs found."
+}
