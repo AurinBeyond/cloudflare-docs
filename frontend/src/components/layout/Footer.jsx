@@ -107,6 +107,20 @@ export default function Footer() {
           No social-media pixels. No tracking cookies. No public feed. Your
           journey through this work stays yours — that is part of the design.
         </div>
+        {/* §FROM-ANNA 2026-06-26 — The only discreet door to the
+            upstairs study. Intentionally small, unaccompanied by a
+            column heading, and placed below the privacy line so the
+            curious eye can find it without it being announced. */}
+        <div className="mb-8">
+          <Link
+            to="/from-anna"
+            data-testid="footer-from-anna-link"
+            aria-label="A letter from upstairs — read what Anna has written"
+            className="text-[12px] italic tracking-wide text-[hsl(var(--aurin-text-muted))] hover:text-[hsl(var(--aurin-sage))] transition-colors"
+          >
+            A letter from upstairs
+          </Link>
+        </div>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[hsl(var(--aurin-text-muted))]">
           <div data-testid="footer-copy">
             © {new Date().getFullYear()} prulesoul.site · Matrix Aurin. Quiet by design.

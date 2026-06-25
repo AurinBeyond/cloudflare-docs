@@ -1,4 +1,83 @@
+## §FROM-ANNA-SHIPPED 2026-06-26 (The Upstairs Light, structure-only)
+
+### What shipped
+- `/app/frontend/src/data/fromAnna.js` — single source of truth for the
+  upstairs study. Contains the 3 canonical texts (Foundation-locked,
+  never paraphrased) + the book entry + hidden image/voice slots.
+- `/app/frontend/src/pages/FromAnna.jsx` — paper-and-ink page rendered
+  ONLY for sections whose content exists. Image and voice sections are
+  invisible until real assets are provided. Distinct cream/sepia
+  aesthetic separates the upstairs study from the brass-and-dark rooms.
+- Route registered in `App.js` at `/from-anna`. On mount the page
+  flips `<meta name="robots">` to `noindex, nofollow` and restores the
+  previous value on unmount, so search engines do not surface the
+  upstairs door.
+- Discreet "A letter from upstairs" footer link added on BOTH footers:
+  Layout `Footer.jsx` (Library, Bookstore, room interiors) and
+  `SanctuaryPreview` footer (home `/`). Italic, lowercase, set on its
+  own line below the privacy hairline — easy to find for a curious eye,
+  not announced to a hurried one.
+
+### Deliberately NOT included (per founder, 2026-06-26)
+- No "One Quiet Message" form.
+- No payment integration.
+- No Lantern dashboard.
+- No founder voice audio (deferred to a later session).
+- No placeholder sections — empty content = hidden section.
+
+### Brand Locks added
+The five Aurin Brand Locks (Foundation · Founder Voice · Keeper
+Independence · Presence Authenticity · House Design) are documented
+at the top of this PRD and at the top of `fromAnna.js` / `FromAnna.jsx`.
+
+---
+
 # PRD — Aurin Hub / Matrix Aurin / Polarstar Kids (Sanctuary v3.0)
+
+## §AURIN-BRAND-LOCKS 2026-06-26 (Founder, permanent — read before editing anything)
+
+These five locks govern every future change. They exist to prevent
+agents (and humans) from drifting Aurin's identity over time. Any work
+that breaks one of these locks is reverted, no exceptions.
+
+### 1. FOUNDATION LOCK
+The canonical Aurin texts — including the three texts on `/from-anna`
+(*Why this house exists*, *Why one voice was never enough*, *Who I am
+in this house*) and the book display copy beside them — are CANONICAL.
+They must never be paraphrased, shortened, rewritten, simplified, or
+"improved" by any agent or editor. New material may be added over
+time; existing canonical material is locked.
+
+### 2. FOUNDER VOICE LOCK
+Anna's audio (whenever it appears — `/from-anna`, the Lantern tier,
+seasonal letters) must sound unmistakably human, intimate, and
+natural. Never commercial, never polished into smoothness. The site
+makes NO scheduled cadence promise about Anna's voice — "from time
+to time" is the only honest contract we hold.
+
+### 3. KEEPER INDEPENDENCE LOCK
+The five keepers — Grace, Sara, Kaelen, Alistair, Polarstar — are
+independent voices. They are never merged into Anna, never written
+as her alter-egos, and never spoken of as masks she wears. Anna is
+the founder upstairs; the keepers are the people who live in the
+rooms. The line stays clean.
+
+### 4. PRESENCE AUTHENTICITY LOCK
+Every element of the site must increase trust — never draw attention
+to the technology behind the house. No "AI", "model", "generated",
+"powered by", or platform language is used in any user-facing copy.
+Voices feel like people, rooms feel like rooms, letters feel like
+letters.
+
+### 5. HOUSE DESIGN PRINCIPLE
+> *Every new feature should make the house feel more lived in —
+> not more complicated.*
+Empty sections do not render. "Coming soon" is not displayed on
+public pages. A feature ships only when it adds quiet life to the
+house; otherwise it waits.
+
+---
+
 
 ## Brand philosophy
 - "Screen-Down, Ears-Open"

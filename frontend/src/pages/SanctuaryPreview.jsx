@@ -1248,6 +1248,20 @@ function SanctuaryFooter() {
           No social-media pixels. No tracking cookies.
         </p>
       </div>
+      {/* §FROM-ANNA 2026-06-26 — Discreet door to the upstairs study.
+          Lowercase, italic, set on its own line so a curious eye can
+          find it without it being announced. */}
+      <div className="max-w-[1220px] mx-auto px-6 sm:px-10 mt-8 text-center md:text-left">
+        <Link
+          to="/from-anna"
+          data-testid="sanctuary-footer-from-anna"
+          aria-label="A letter from upstairs — read what Anna has written"
+          className="text-[12px] italic text-[#7a7468] hover:text-[#bcb4a3] transition-colors duration-500"
+          style={{ fontFamily: SERIF }}
+        >
+          A letter from upstairs
+        </Link>
+      </div>
     </footer>
   );
 }

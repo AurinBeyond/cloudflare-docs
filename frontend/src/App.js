@@ -148,6 +148,7 @@ import SevenQuietNights from "@/pages/SevenQuietNights";
 import TheHearthProtocol from "@/pages/TheHearthProtocol";
 import FamilyBundle from "@/pages/FamilyBundle";
 import StartHere from "@/pages/StartHere";
+import FromAnna from "@/pages/FromAnna";
 import { useEffect } from "react";
 import { initAnalytics } from "@/lib/analytics";
 
@@ -822,6 +823,12 @@ function AppRouter() {
         <Route path="/admin/content" element={<AdminContent />} />
         <Route path="/admin/parents-compass" element={<AdminParentsCompass />} />
         <Route path="/admin/insights" element={<AdminInsights />} />
+        {/* §FROM-ANNA 2026-06-26 — The Upstairs Light. Reached only via
+            the discreet "A letter from upstairs" footer link. The page
+            itself flips robots → noindex on mount so search engines do
+            not surface it. See /app/frontend/src/data/fromAnna.js for
+            the five brand locks that govern this room. */}
+        <Route path="/from-anna" element={<FromAnna />} />
       </Route>
       {/* §LEGACY-CLEANUP 2026-02 — /luxury route retired entirely.
           LuxurySanctuaryLanding component removed; v1 pricing table
