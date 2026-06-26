@@ -50,7 +50,7 @@ illustrations harvested from Canva templates. Live on Gumroad.
 - Names the enemy (ChatGPT bedtime stories, app subscriptions) without ranting.
 - Concrete details (5 stories, 24 pages, €9, no account) — HN rewards specificity.
 - Ends with a question to the community, not a CTA. Comments become conversation, not testimonials.
-- Does NOT mention "Matrix Aurin" or "Polarstar Kids" or "Compass" or "Sanctuary". Brand vocabulary stays off HN. Brand vocabulary belongs on the site, after the click.
+- Does NOT mention "Matrix Aurin" or "Polarstar Kids" or "Compass" or "House". Brand vocabulary stays off HN. Brand vocabulary belongs on the site, after the click.
 
 ---
 
@@ -227,7 +227,7 @@ These are draft replies. Adapt tone in the moment.
 
 - ❌ Do not edit the post 5 minutes after publishing to "fix a typo".
   Edits reset the bump algorithm. Re-read 3 times before submitting.
-- ❌ Do not mention "Polarstar", "Matrix Aurin", "Compass", "Sanctuary"
+- ❌ Do not mention "Polarstar", "Matrix Aurin", "Compass", "House"
   in the HN post. Save brand vocabulary for after the click.
 - ❌ Do not include the FastSpring/PSP backstory. HN does not care
   about your payment processor drama. It dilutes the post.

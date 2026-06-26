@@ -2,7 +2,7 @@
 
 **Status:** DRAFT v2.0 · Pricing locked for founder review · 2026-02-12
 **Supersedes:** `BUNDLE_STRATEGY_DRAFT.md`, `BUNDLE_STRATEGY_v1.1.md`
-**Naming source:** GPT renaming proposal accepted (Cadence Access · Quantum Compass · Sanctuary Compass · Sovereign Circle).
+**Naming source:** GPT renaming proposal accepted (Cadence Access · Quantum Compass · House Compass · Sovereign Circle).
 **Currency:** EUR throughout.
 **Billing periods supported:** 1-day ticket · 1 month · 1 quarter · 1 year.
 
@@ -40,7 +40,7 @@ gross margin** at the *fully-burned* usage ceiling — no exceptions.
 |:---:|---|---:|---:|:---:|:---:|---|
 | I   | **Cadence Access**      | ~15 min /cycle  | —              | demo only | — | quiet entry, reading-first |
 | II  | **Quantum Compass**     | ~60 min /cycle  | —              | demo only | ✓ | the system's heart |
-| III | **Sanctuary Compass**   | ~90 min /cycle  | ~60 min /cycle | full      | ✓ | family retention layer |
+| III | **House Compass**   | ~90 min /cycle  | ~60 min /cycle | full      | ✓ | family retention layer |
 | IV  | **Sovereign Circle**    | fair-use cap (hidden) | fair-use cap (hidden) | full + bespoke | ✓ | by interview only |
 
 ### 2.2 Pricing across all billing periods (final draft)
@@ -49,7 +49,7 @@ gross margin** at the *fully-burned* usage ceiling — no exceptions.
 |---------------------|-------------:|---------:|-----------------:|---------------:|
 | I · Cadence Access  | **€19**      | **€69**  | **€189** (≈ 9% off) | **€690** (≈ 17% off, 2 cycles gifted) |
 | II · Quantum Compass| **€39**      | **€169** | **€459** (≈ 10% off) | **€1,690** (≈ 17% off, 2 cycles gifted) |
-| III · Sanctuary Compass | —        | **€239** | **€649** (≈ 10% off) | **€2,390** (≈ 17% off, 2 cycles gifted) |
+| III · House Compass | —        | **€239** | **€649** (≈ 10% off) | **€2,390** (≈ 17% off, 2 cycles gifted) |
 | IV · Sovereign Circle | —          | —        | **from €4,500**  | **from €16,000** (3 quarters paid forward, 1 gifted) |
 
 **Why no day-ticket for Gates III + IV:**
@@ -129,9 +129,9 @@ Album.
 
 ---
 
-### 3.3 Gate III · Sanctuary Compass — €239 / month
+### 3.3 Gate III · House Compass — €239 / month
 
-**Positioning:** *"Emotional sanctuary. One operating system for the
+**Positioning:** *"Emotional house. One operating system for the
 family. Adult and child bandwidth held in separate vaults."*
 
 **Includes:**
@@ -177,7 +177,7 @@ improves by ~6 percentage points.
 interview only. A status anchor for the architecture above it."*
 
 **Includes:**
-- Everything in Sanctuary Compass.
+- Everything in House Compass.
 - Privately provisioned `Subsystem Wing` — isolated tenant, sealed
   data perimeter.
 - Bespoke curator tuning (all four curators adapted to family / firm).

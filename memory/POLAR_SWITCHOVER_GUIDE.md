@@ -34,7 +34,7 @@ explicitly flip the switch. The two providers can co-exist.
 2. Create 3 sandbox products mirroring the SKU registry:
    - `Body Temple Lifetime` — $39 one-time
    - `Voice Top-up · 60 minutes` — $39 one-time
-   - `Eternal Sanctuary · Monthly` — $89/month recurring
+   - `Eternal House · Monthly` — $89/month recurring
 3. Copy each product's UUID
 
 ### Step 2 — Sandbox configuration

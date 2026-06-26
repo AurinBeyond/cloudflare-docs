@@ -3,13 +3,13 @@
   "results": [
     {
       "status": "success",
-      "path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-sanctuary-entrance-luxury.png",
-      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-sanctuary-entrance-luxury.png",
-      "url": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-sanctuary-entrance-luxury.png",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-house-entrance-luxury.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-house-entrance-luxury.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-house-entrance-luxury.png",
       "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
-      "description": "Dark luxury sanctuary entrance with golden light streaming through an elegant archway, deep black marble floors with gold veining, atmospheric fog, premium minimalist aesthetic, cinematic mood lighting",
+      "description": "Dark luxury house entrance with golden light streaming through an elegant archway, deep black marble floors with gold veining, atmospheric fog, premium minimalist aesthetic, cinematic mood lighting",
       "style": "photorealistic",
-      "filename": "hero-sanctuary-entrance-luxury.jpg"
+      "filename": "hero-house-entrance-luxury.jpg"
     },
     {
       "status": "success",
@@ -33,13 +33,13 @@
     },
     {
       "status": "success",
-      "path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-sanctuary-deep-presence.png",
-      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-sanctuary-deep-presence.png",
-      "url": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-sanctuary-deep-presence.png",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-house-deep-presence.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-house-deep-presence.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-house-deep-presence.png",
       "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
-      "description": "Deep immersive voice sanctuary with dark purple and midnight blue tones, abstract sound waves visualized as golden light threads, meditation space, profound stillness and presence, ethereal atmosphere",
+      "description": "Deep immersive voice house with dark purple and midnight blue tones, abstract sound waves visualized as golden light threads, meditation space, profound stillness and presence, ethereal atmosphere",
       "style": "photorealistic",
-      "filename": "voice-sanctuary-deep-presence.jpg"
+      "filename": "voice-house-deep-presence.jpg"
     }
   ],
   "success_count": 4,

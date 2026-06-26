@@ -1,15 +1,15 @@
-# Aurin Pet Sanctuary — Icebox Concept
+# Aurin Pet House — Icebox Concept
 ## Archived 2026-05-19 · Resurface on 2026-06-19
 
 > Status: **SHELVED — DO NOT IMPLEMENT YET**
 > Founder directive: revisit this in exactly 1 month after main production launch stabilizes.
-> Production focus until 2026-06-19: Matrix Aurin core sanctuary, mic test, Sara deploy, LemonSqueezy live, demo video.
+> Production focus until 2026-06-19: Matrix Aurin core house, mic test, Sara deploy, LemonSqueezy live, demo video.
 
 ---
 
 ## Concept Blueprint (verbatim founder capture)
 
-**Project:** Aurin Pet Sanctuary (High-End Animal Psychosomatics)
+**Project:** Aurin Pet House (High-End Animal Psychosomatics)
 
 **Target Audience:** Ultra-high-net-worth pet owners.
 
@@ -66,7 +66,7 @@ This file is the reminder. The Aurin Hub agent's handoff summary
 includes a recurring task:
 
 > **Date to resurface: 2026-06-19** —
-> Read `/app/memory/backlog_pet_sanctuary.md`, then surface the
+> Read `/app/memory/backlog_pet_house.md`, then surface the
 > concept back to the founder with current production status as
 > context, and ask whether to begin discovery.
 
@@ -85,4 +85,4 @@ that picks up the work should check the date and remind them.
 - Not mentioned to the Atoms team
 - Not mentioned to Mike
 
-The sanctuary builds itself first.
+The house builds itself first.

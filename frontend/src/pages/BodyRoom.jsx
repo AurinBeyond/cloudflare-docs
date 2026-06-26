@@ -133,7 +133,7 @@ export default function BodyRoom() {
   };
 
   return (
-    <div data-testid="page-body-room" className="sanctuary-room relative">
+    <div data-testid="page-body-room" className="house-room relative">
       <PageHeader
         tone="default"
         eyebrow="The Body Room"
@@ -235,15 +235,15 @@ export default function BodyRoom() {
           <Link
             to="/body-temple"
             data-testid="body-room-temple-cta"
-            className="sanctuary-wood block p-6 md:p-7 no-underline"
+            className="house-wood block p-6 md:p-7 no-underline"
           >
             <div className="flex items-start gap-4 relative z-[1]">
-              <Sprout size={28} className="sanctuary-wood-icon" />
+              <Sprout size={28} className="house-wood-icon" />
               <div className="flex-1">
                 <p className="text-[11px] uppercase tracking-[0.18em]" style={{color: "#7a5a26"}}>
                   Premium · 4 weeks
                 </p>
-                <p className="sanctuary-wood-title text-[30px] md:text-[34px] mt-0.5">
+                <p className="house-wood-title text-[30px] md:text-[34px] mt-0.5">
                   The Body Architecture
                 </p>
                 <p className="text-[13.5px] mt-2 leading-relaxed max-w-[52ch]" style={{color: "#5a4a26"}}>

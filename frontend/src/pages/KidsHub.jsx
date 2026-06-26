@@ -86,7 +86,7 @@ export default function KidsHub() {
 
           §KIDS-SPATIAL-v2 2026-02-09 LATE — Artist agent additions
           (approved ideas 1 + 2 from /app/design_guidelines.json):
-            • Sanctuary Vignette — inset shadow + bottom radial
+            • House Vignette — inset shadow + bottom radial
               floor to transform the viewport from a webpage into
               a "room"
           Idea 2 (Guiding Thread) is rendered as a separate SVG
@@ -162,7 +162,7 @@ export default function KidsHub() {
         <header className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="relative inline-flex items-center justify-center mb-5">
             <div
-              className="sanctuary-aura rounded-full overflow-hidden flex items-center justify-center"
+              className="house-aura rounded-full overflow-hidden flex items-center justify-center"
               style={{
                 width: 172,
                 height: 172,
@@ -465,7 +465,7 @@ export default function KidsHub() {
         >
           <Link
             to="/body-temple?utm_source=kids_hub"
-            data-testid="kids-hub-parent-sanctuary-link"
+            data-testid="kids-hub-parent-house-link"
             className="group block"
             style={{ color: palette.textMuted }}
           >

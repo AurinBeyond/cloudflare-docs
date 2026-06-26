@@ -68,7 +68,7 @@ export default function AlistairModeSelector() {
                 {active && (
                     <button type="button" onClick={() => pick(active)}
                             data-testid="alistair-mode-clear"
-                            className="text-[11.5px] uppercase tracking-[0.16em] sanctuary-muted hover:text-[hsl(var(--aurin-text))] inline-flex items-center gap-1.5">
+                            className="text-[11.5px] uppercase tracking-[0.16em] house-muted hover:text-[hsl(var(--aurin-text))] inline-flex items-center gap-1.5">
                         <X size={11} /> Clear
                     </button>
                 )}
@@ -101,7 +101,7 @@ export default function AlistairModeSelector() {
                                        style={{color: isActive ? "hsl(var(--aurin-amber))" : "hsl(var(--aurin-text))"}}>
                                         {m.title}
                                     </p>
-                                    <p className="text-[11.5px] mt-0.5 sanctuary-muted">
+                                    <p className="text-[11.5px] mt-0.5 house-muted">
                                         {m.subtitle}
                                     </p>
                                 </div>
@@ -121,7 +121,7 @@ export default function AlistairModeSelector() {
                     <p className="aurin-serif-italic text-[14px] leading-relaxed text-[hsl(var(--aurin-text))/0.92]">
                         &ldquo;{activeFrame.first_message}&rdquo;
                     </p>
-                    <p className="text-[12px] mt-2.5 sanctuary-muted">
+                    <p className="text-[12px] mt-2.5 house-muted">
                         {activeFrame.blurb}
                     </p>
                 </div>

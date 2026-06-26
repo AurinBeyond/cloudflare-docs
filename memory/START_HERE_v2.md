@@ -20,7 +20,7 @@ then opens the room.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│ NAV (existing SanctuaryNav, untouched)                       │
+│ NAV (existing HouseNav, untouched)                       │
 └──────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────┐
@@ -188,7 +188,7 @@ Ghost link back: `[ Back to Matrix Aurin ]` → `/`
 
 ---
 
-## Design tokens (must match SanctuaryPreview)
+## Design tokens (must match HousePreview)
 
 - Background: `#0b0a08`
 - Ivory text: `#f0eadd`
@@ -198,7 +198,7 @@ Ghost link back: `[ Back to Matrix Aurin ]` → `/`
 - Serif: `"Cormorant Garamond", "EB Garamond", Georgia, serif`
 - Eyebrow tracking: `0.42em` uppercase, 11px
 - Body serif size: 17-22px depending on level
-- Spacing: very generous — match SanctuaryPreview rhythm
+- Spacing: very generous — match HousePreview rhythm
 - Card border: `1px solid rgba(196,164,107,0.32)` (matches "world" cards
   in `TwoWorldsSection`)
 - Brass corner accent (top-left), like the Inner/Outer cards on the homepage

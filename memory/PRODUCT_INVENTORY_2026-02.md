@@ -58,7 +58,7 @@ Chip in page header reads **"· Payments soon"** — but the buy buttons DO open
 
 ## Table D — Tier-pricing block on the homepage ("Ways to be here")
 
-Section: `SanctuaryPreview.jsx` lines ~921–1078. CTAs all point to `/portal` (not a PSP).
+Section: `HousePreview.jsx` lines ~921–1078. CTAs all point to `/portal` (not a PSP).
 
 | # | Tier | Price | Currency | Cadence | CTA destination |
 |---|---|---|---|---|---|
@@ -72,7 +72,7 @@ Section: `SanctuaryPreview.jsx` lines ~921–1078. CTAs all point to `/portal` (
 
 ## Table E — Voice top-ups ("The Voice Meter" block on homepage)
 
-Section: `SanctuaryPreview.jsx` lines ~1081–1145. Info-only cards, no buy buttons in the current UI.
+Section: `HousePreview.jsx` lines ~1081–1145. Info-only cards, no buy buttons in the current UI.
 
 | # | Item | Price | Currency | Buyable today? |
 |---|---|---|---|---|

@@ -43,7 +43,7 @@ tab add the two keys exactly as shown (these tell our webhook what to grant).
 |---|---|---|---|---|---|---|
 | 11 | Clarity Release — 30 minutes | **$15** | One-time | `pass_tier` | `30min` | `pass-30m` |
 | 12 | Clarity Release — 60 minutes | **$30** | One-time | `pass_tier` | `60min` | `pass-60m` |
-| 13 | **Sanctuary Monthly** ⭐ | **$45 / month** | **Subscription** | `pass_tier` | `season_30days` | `pass-monthly` |
+| 13 | **House Monthly** ⭐ | **$45 / month** | **Subscription** | `pass_tier` | `season_30days` | `pass-monthly` |
 
 ### D. The Beginning — Companion (one-time, NEW)
 
@@ -51,11 +51,11 @@ tab add the two keys exactly as shown (these tell our webhook what to grant).
 |---|---|---|---|---|---|
 | 14 | The Beginning — Companion edition | **$20** | `experience` | `the-beginning-companion` | `exp-tb-comp` |
 
-### E. Lifetime Sanctuary (one-time, marketing pillar)
+### E. Lifetime House (one-time, marketing pillar)
 
 | # | Product Name | Price | Custom Data → key | Custom Data → value | SKU |
 |---|---|---|---|---|---|
-| 15 | Lifetime Sanctuary | **$249** | `bundle` | `lifetime-all` | `lifetime` |
+| 15 | Lifetime House | **$249** | `bundle` | `lifetime-all` | `lifetime` |
 
 ### F. Coloring packs (Body Room kids) — when generated
 
@@ -91,7 +91,7 @@ After saving the webhook, send 1 test event from LemonSqueezy. Confirm
 
 - **$5 books** → low-friction entry, especially for kids. Parents will buy
   3 at once. Anchors all higher prices.
-- **$45/month Sanctuary Monthly** → replaces the $70 season pass. Lower
+- **$45/month House Monthly** → replaces the $70 season pass. Lower
   per-month price, recurring revenue, beats LemonSqueezy's flat fee on
   small one-time charges.
 - **$249 Lifetime** → "anchor of devotion". Visible price tells everyone

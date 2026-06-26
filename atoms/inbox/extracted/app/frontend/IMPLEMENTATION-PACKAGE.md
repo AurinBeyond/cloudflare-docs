@@ -35,7 +35,7 @@ The page follows a strict vertical flow with extreme whitespace between sections
 | 0 | Page Veil | `<div>` | `page-veil` | Cinematic 2s fade-in entrance overlay |
 | 1 | Navigation | `<nav>` | `nav` | Fixed top bar — brand + 3 links + CTA |
 | 2 | Hero | `<section>` | `hero` | Full-viewport visual anchor with headline |
-| 3 | Sanctuary Principles | `<section>` | `sanctuary` | Three-column grid: Privacy, Presence, Silence |
+| 3 | House Principles | `<section>` | `house` | Three-column grid: Privacy, Presence, Silence |
 | 4 | The Four Doors | `<section>` | `doors` | 2×2 grid of room entry points |
 | 5 | Offerings / Pricing | `<section>` | `offerings` | Three-tier pricing cards |
 | 6 | Threshold / Entry | `<section>` | `threshold` | Emotional invitation + final CTA |
@@ -55,7 +55,7 @@ The page follows a strict vertical flow with extreme whitespace between sections
 
 ### Navigation
 - Brand: `Matrix Aurin`
-- Links: `Sanctuary` | `Rooms` | `Offerings`
+- Links: `House` | `Rooms` | `Offerings`
 - CTA: `Enter`
 
 ### Hero Section
@@ -64,7 +64,7 @@ The page follows a strict vertical flow with extreme whitespace between sections
 - Subtext: `You do not have to perform here.`
 - CTA: `Step inside`
 
-### Sanctuary Principles
+### House Principles
 
 **Section whisper:** `What this place holds`
 
@@ -168,7 +168,7 @@ Three tiers displayed in a horizontal grid (stacks vertically on mobile). The mi
 |-------|-------|
 | Label | Your Own Room |
 | Title | A space held only for you. |
-| Description | For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary. |
+| Description | For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this house. |
 | Includes | • Unlimited access to all rooms |
 | | • Weekly private AI voice sessions |
 | | • Priority presence and response |
@@ -290,7 +290,7 @@ All design tokens are defined as CSS custom properties on `:root`. These can be 
 ```css
 /* ===================================
    MATRIX AURIN — Silent Luxury Homepage
-   Premium sanctuary with human warmth
+   Premium house with human warmth
    =================================== */
 
 :root {
@@ -1327,7 +1327,7 @@ The full `<body>` content below is React-compatible (no `class` → `className` 
             <a href="https://prulesoul.site" class="nav-brand-text">Matrix Aurin</a>
         </div>
         <div class="nav-links">
-            <a href="#sanctuary" class="nav-link">Sanctuary</a>
+            <a href="#house" class="nav-link">House</a>
             <a href="#doors" class="nav-link">Rooms</a>
             <a href="#offerings" class="nav-link">Offerings</a>
             <a href="#threshold" class="nav-cta">Enter</a>
@@ -1352,8 +1352,8 @@ The full `<body>` content below is React-compatible (no `class` → `className` 
         </div>
     </section>
 
-    <!-- Sanctuary Principles -->
-    <section class="principles" id="sanctuary">
+    <!-- House Principles -->
+    <section class="principles" id="house">
         <div class="principles-inner">
             <p class="section-whisper">What this place holds</p>
             <div class="principles-grid">
@@ -1470,7 +1470,7 @@ The full `<body>` content below is React-compatible (no `class` → `className` 
                         <h3 class="offering-title">A space held<br>only for you.</h3>
                     </div>
                     <div class="offering-body">
-                        <p class="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary.</p>
+                        <p class="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this house.</p>
                         <ul class="offering-includes">
                             <li>Unlimited access to all rooms</li>
                             <li>Weekly private AI voice sessions</li>

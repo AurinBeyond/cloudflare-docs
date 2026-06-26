@@ -94,7 +94,7 @@ A small gift, no strings 🌿
 
 Hi [Name],
 
-I'm Anna. I built a quiet sanctuary on the internet for people
+I'm Anna. I built a quiet house on the internet for people
 who don't want to be sold to. Five small rooms — one of them for
 children. No algorithms, no infinite scroll, no marketing
 gimmicks. It's at prulesoul.site.

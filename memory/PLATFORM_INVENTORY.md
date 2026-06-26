@@ -12,7 +12,7 @@ product status — so the founder never again has to repeat
 
 ---
 
-## THE 5 PUBLIC ROOMS (live, on `/` SanctuaryPreview)
+## THE 5 PUBLIC ROOMS (live, on `/` HousePreview)
 
 These are the 5 doors the visitor sees on the homepage right now.
 
@@ -79,7 +79,7 @@ Where the platform serves the parent-and-child pair:
 5. **Blog** (`/blog`, `/blog/:slug`)
 
 ### Group G — Visitors not yet committed
-1. **Sanctuary Preview** (`/`) — homepage
+1. **House Preview** (`/`) — homepage
 2. **What This Is** (`/what-this-is`)
 3. **About** (`/about`)
 4. **FAQ** (`/faq`)

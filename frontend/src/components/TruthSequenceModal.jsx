@@ -136,7 +136,7 @@ export default function TruthSequenceModal({ open, onClose, onComplete }) {
   }, [open, stepIdx]);
 
   // Allow ESC to close (only on non-final steps — final has its own
-  // explicit CTA into the sanctuary).
+  // explicit CTA into the house).
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => {

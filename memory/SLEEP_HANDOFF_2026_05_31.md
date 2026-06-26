@@ -1,4 +1,4 @@
-# 🌟 Sanctuary State Snapshot — Sleep Mode
+# 🌟 House State Snapshot — Sleep Mode
 **Created:** 2026-05-31 ~23:00 UTC (Anna offline ~20h)
 **Resume marker:** When Anna says "I'm back", load this file first.
 

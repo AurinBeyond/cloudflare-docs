@@ -307,6 +307,6 @@ Add the 6 × 20-second pauses inside the Inheritance Inventory + the
    sound) — that one detail will make the entire protocol feel
    yours, not the agent's.
 6. Return revised version → agent lays it out as A5 PDF with the
-   adult sanctuary palette.
+   adult house palette.
 
 The structure is fixed. The voice is yours.

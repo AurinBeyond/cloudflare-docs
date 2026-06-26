@@ -18,7 +18,7 @@ Legend:
 
 | ID | Item | Status | Notes |
 |---|---|---|---|
-| 1.1 | Hero "Less Noise. More Meaning." (4-layer, outcome-first) | ✅ | Live in `SanctuaryPreview.jsx` |
+| 1.1 | Hero "Less Noise. More Meaning." (4-layer, outcome-first) | ✅ | Live in `HousePreview.jsx` |
 | 1.2 | Transformation table (4 if-then rows) | ✅ | Sprint 0 |
 | 1.3 | Audience trio (people / parents / families) | ✅ | Sprint 0 |
 | 1.4 | 3 hero CTAs (`Start Here`, `See the Five Rooms`, `Browse Books`) | ✅ | Sprint 0 |
@@ -58,7 +58,7 @@ Legend:
 | 3.4 | Aurin — `/aurin` chat & story world | ✅ | Long-running |
 | 3.5 | Alistair — `/alistair-bundle` €39 sales page | 🟡 | Sales page live, copy locked. **No letter content authored yet.** |
 | 3.6 | **Alistair "21 letters · 24h cadence-lock"** promise backing | ⛔ | Promised 7+7+7 letters across 3 sequences; codebase has 0 letter files. Refund-risk if sold today. |
-| 3.7 | "Sanctuary" word cleanup across 24+ files (Sprint 6) | ⚪ | Plain-English / quiet-room terminology |
+| 3.7 | "House" word cleanup across 24+ files (Sprint 6) | ⚪ | Plain-English / quiet-room terminology |
 
 ---
 
@@ -163,7 +163,7 @@ Legend:
 
 ## SECTION 10 — Future / Backlog (P2 / P3)
 
-- "Sanctuary" word cleanup across 24+ files (P2)
+- "House" word cleanup across 24+ files (P2)
 - `/about` Anna page polish + video snippet (P2)
 - Social Media Sprint via Publer — 7 posts (P3)
 - Dynamic Course Curator (P3)
@@ -190,7 +190,7 @@ Legend:
 | 11.12 | Smoke-test verified on 7 surfaces | ✅ |
 | 11.13 | RoomIntroCard (10-sec selguse kaart) component | ✅ |
 | 11.14 | RoomIntroCard mounted in 5 rooms (Grace, Kaelan, Sara, Alistair, Aurin) | ✅ |
-| 11.15 | Grace + Alistair hero copy cleanup (sanctuary / high-bandwidth removed) | ✅ |
+| 11.15 | Grace + Alistair hero copy cleanup (house / high-bandwidth removed) | ✅ |
 | 11.16 | RoomShell mockup layout (sidebar + hero + right panel + curator) — Alistair (The Life Laboratory) | ✅ |
 | 11.17 | RoomShell mockup layout — Grace (The Hearth) + Atomsi spec + hero image + Notes Left By The Fire | ✅ |
 | 11.18 | Replace Atomsi mockup-image with a clean Nano-Banana cinematic fireplace background (no embedded UI text) | ⚪ next — required because current image contains Estonian UI snippets baked into it |

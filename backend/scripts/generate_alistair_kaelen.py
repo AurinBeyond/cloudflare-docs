@@ -76,7 +76,7 @@ async def gen(slug, prompt):
     chat = LlmChat(
         api_key=api_key,
         session_id=f"{slug}-{uuid.uuid4().hex[:6]}",
-        system_message="Classical oil-painting watercolour-edge artist for the Aurin sanctuary.",
+        system_message="Classical oil-painting watercolour-edge artist for the Aurin house.",
     )
     chat.with_model("gemini", "gemini-3.1-flash-image-preview")
     chat.with_params(modalities=["image", "text"])

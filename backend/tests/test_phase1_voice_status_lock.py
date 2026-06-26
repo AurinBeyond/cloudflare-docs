@@ -109,7 +109,7 @@ def test_no_banned_state_labels_in_frontend():
                 + "\n".join(f"    {rel}:{ln}  →  {content}" for rel, ln, content in filtered)
             )
     assert not failures, (
-        "Phase 1 Sanctuary lock violated — banned voice-status state "
+        "Phase 1 House lock violated — banned voice-status state "
         "labels found in frontend source. Route them through "
         "<VoiceStatusRow> instead, which centralises permitted phrasing."
         + "".join(failures)

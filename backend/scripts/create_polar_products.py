@@ -56,10 +56,10 @@ CATALOGUE = [
     {"sku": "inner.compass.month",     "name": "Inner Compass · Monthly",     "amount":  22900, "interval": "month",   "interval_count": 1,  "bundle": "inner_compass",     "tier": "III", "cycle": "monthly"},
     {"sku": "inner.compass.quarter",   "name": "Inner Compass · Quarterly",   "amount":  61900, "interval": "month",   "interval_count": 3,  "bundle": "inner_compass",     "tier": "III", "cycle": "quarterly"},
     {"sku": "inner.compass.year",      "name": "Inner Compass · Annual",      "amount": 229000, "interval": "year",    "interval_count": 1,  "bundle": "inner_compass",     "tier": "III", "cycle": "annual"},
-    # Sanctuary Compass
-    {"sku": "sanctuary.compass.month",   "name": "Sanctuary Compass · Monthly",   "amount":  32900, "interval": "month", "interval_count": 1, "bundle": "sanctuary_compass", "tier": "IV",  "cycle": "monthly"},
-    {"sku": "sanctuary.compass.quarter", "name": "Sanctuary Compass · Quarterly", "amount":  88900, "interval": "month", "interval_count": 3, "bundle": "sanctuary_compass", "tier": "IV",  "cycle": "quarterly"},
-    {"sku": "sanctuary.compass.year",    "name": "Sanctuary Compass · Annual",    "amount": 329000, "interval": "year",  "interval_count": 1, "bundle": "sanctuary_compass", "tier": "IV",  "cycle": "annual"},
+    # House Compass
+    {"sku": "sanctuary.compass.month",   "name": "House Compass · Monthly",   "amount":  32900, "interval": "month", "interval_count": 1, "bundle": "house_compass", "tier": "IV",  "cycle": "monthly"},
+    {"sku": "sanctuary.compass.quarter", "name": "House Compass · Quarterly", "amount":  88900, "interval": "month", "interval_count": 3, "bundle": "house_compass", "tier": "IV",  "cycle": "quarterly"},
+    {"sku": "sanctuary.compass.year",    "name": "House Compass · Annual",    "amount": 329000, "interval": "year",  "interval_count": 1, "bundle": "house_compass", "tier": "IV",  "cycle": "annual"},
 
     # ─── SOVEREIGN CIRCLE (application-gated) ──────────────
     {"sku": "sovereign.standard.quarter",  "name": "Sovereign Circle · Standard · Quarterly", "amount":  189000, "interval": "month", "interval_count": 3, "bundle": "sovereign_standard", "tier": "V-S", "cycle": "quarterly"},
@@ -97,14 +97,14 @@ def _build_description(row: dict) -> str:
     # toward parent-guided activities, storytelling, calm audio,
     # creative family experiences, and educational prompts.
     descriptions = {
-        "quiet_entry":       "A reading sanctuary for adults. All four cardinal rooms in read mode, the daily cadence stream of curator letters, and access to the full archive of essays and audio meditations.",
+        "quiet_entry":       "A reading house for adults. All four cardinal rooms in read mode, the daily cadence stream of curator letters, and access to the full archive of essays and audio meditations.",
         "aurin_storyteller": "Parent-guided bedtime storytelling and creative family experiences. Calm audio stories, drawing prompts, and guided imagination exercises for one child profile under a verified parent account. Storytelling and educational prompts only.",
         "inner_compass":     "The platform's heart. Live curator dialogue for adults, memory continuity across sessions, and the full essay and audio archive.",
-        "sanctuary_compass": "A family operating system. The adult sanctuary plus parent-guided bedtime storytelling and creative activities for up to three child profiles. Two separate wallets keep adult dialogue and child storytelling independent.",
+        "house_compass": "A family operating system. The adult house plus parent-guided bedtime storytelling and creative activities for up to three child profiles. Two separate wallets keep adult dialogue and child storytelling independent.",
         "sovereign_standard": "A privately provisioned tenant. One curator tuned to the member's context. Higher fair-use ceilings, priority routing, earlier access to new rooms. By application.",
         "sovereign_bespoke":  "All four curators tuned. The deepest privilege tier. Up to five child profiles for parent-guided bedtime storytelling within one family. By application.",
         "day_kids":      "A quiet bedtime passage. One calm audio story plus one parent-guided check-in. Twenty-four hours of access. No subscription. Storytelling only.",
-        "day_quiet":     "Twenty-four hours of reading-sanctuary access for adults. Thirty minutes of curator audio session. No subscription.",
+        "day_quiet":     "Twenty-four hours of reading-house access for adults. Thirty minutes of curator audio session. No subscription.",
         "day_deep":      "Twenty-four hours of full Compass access for adults. Sixty minutes of curator audio session. No subscription.",
         "topup_adult":   "Prepaid curator audio session package for adults. Extends the current Compass cycle with additional dialogue minutes.",
         "topup_kids":    "Prepaid bedtime storytelling minutes for the parent-guided child layer. Applies to the storytelling wallet only.",

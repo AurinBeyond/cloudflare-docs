@@ -11,7 +11,7 @@ not in the product. Update when language drifts.
 
 ## The three Tony-rules of writing for Matrix Aurin
 
-1. **Verbs over nouns.** *Sanctuary, threshold, room, presence* push the
+1. **Verbs over nouns.** *House, threshold, room, presence* push the
    brain into theory. *Notice, choose, return, rest* push the body into
    motion.
 2. **Contrast, not assertion.** *Welcome back to yourself* works because
@@ -32,7 +32,7 @@ Voice & Tone section).
 |-----------------|--------|-----|
 | escape, awaken | notice, choose, return | Avoids "leave reality" framing. PSP-neutral. Tony-direct. |
 | program, system, control | habit, story, pattern | Removes conspiracy register, keeps the meaning. |
-| sanctuary (as primary noun) | quiet room, the room | "Sanctuary" can stay as ambience. As the *noun describing what you sell*, it is too vague. |
+| house (as primary noun) | quiet room, the room | "House" can stay as ambience. As the *noun describing what you sell*, it is too vague. |
 | presence is the product | a room where you do not perform | Verb-first. Concrete. |
 | threshold, beyond, wanderer (as primary nouns) | step inside, walk through, the visitor | Keep as flavour, do not lead with them. |
 | architecture (of the mind) | the patterns running quietly | Strips IT jargon. |

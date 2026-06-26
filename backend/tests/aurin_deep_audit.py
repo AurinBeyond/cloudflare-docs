@@ -186,7 +186,7 @@ def audit_catalogue_alignment():
         "bundle-lonely-heart", "bundle-business-clarity", "bundle-igapaevane",
         "bundle-perekond-hybrid", "bundle-family-magic", "bundle-perekond-premium",
         "bundle-perekond-full-el", "bundle-vip-unlimited",
-        "bundle-sanctuary-season", "bundle-couples-sanctuary",
+        "bundle-house-season", "bundle-couples-house",
         "lux-annual", "lux-lifetime",
         # Existing live subscription products that live in dashboard already.
         "sub-clarity-season", "clarity-season-30d",
@@ -502,10 +502,10 @@ async def audit_data_flow():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# LAYER 3 — Agent logic & sanctuary-tone consistency
-# Anna's brief: agents follow sanctuary standards; mappings match env.
+# LAYER 3 — Agent logic & house-tone consistency
+# Anna's brief: agents follow house standards; mappings match env.
 # ─────────────────────────────────────────────────────────────────────────────
-def audit_agents_sanctuary():
+def audit_agents_house():
     server_py = (BACKEND / "server.py").read_text()
 
     # 3.1 — The AGENT_BY_ROOM mapping in server.py must reference exactly
@@ -526,7 +526,7 @@ def audit_agents_sanctuary():
                 f"Room '{room}' is NOT mapped to {env_var} in server.py.",
                 patch="Restore mapping in AGENT_BY_ROOM dict around line 8113.")
 
-    # 3.2 — Forbidden sanctuary terms must NOT appear in any product
+    # 3.2 — Forbidden house terms must NOT appear in any product
     # description in the bulk-script catalogue.
     FORBIDDEN = ["therapy.", "treatment", "cure", "diagnose", "medication",
                  "psychiatr", "psycholog"]  # 'therapy.' only flags positive, 'not therapy' is fine
@@ -537,9 +537,9 @@ def audit_agents_sanctuary():
         clean = desc.replace("not therapy", "").replace("not medical advice", "")
         for term in FORBIDDEN:
             if term in clean:
-                red("agents:sanctuary-violation",
+                red("agents:house-violation",
                     f"`{p['product']}` description contains forbidden term: '{term}'",
-                    patch=f"Remove '{term}' or rephrase. Sanctuary rules: educational, not medical/clinical.",
+                    patch=f"Remove '{term}' or rephrase. House rules: educational, not medical/clinical.",
                     evidence=desc[:240])
                 break
     if all(
@@ -548,7 +548,7 @@ def audit_agents_sanctuary():
                 for t in FORBIDDEN)
         for p in bulk
     ):
-        green("agents:sanctuary",
+        green("agents:house",
               "All bulk-script descriptions free of forbidden clinical terms.")
 
     # 3.3 — Fair-use clause on unlimited-text products
@@ -683,8 +683,8 @@ async def main():
     await audit_routes()
     print("─── Layer 2: Process & webhook data-flow ───")
     await audit_data_flow()
-    print("─── Layer 3: Agent logic & sanctuary tone ───")
-    audit_agents_sanctuary()
+    print("─── Layer 3: Agent logic & house tone ───")
+    audit_agents_house()
     print("─── Live cross-reference ───")
     await audit_fastspring_live()
 

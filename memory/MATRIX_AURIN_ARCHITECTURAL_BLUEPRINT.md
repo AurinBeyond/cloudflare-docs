@@ -43,7 +43,7 @@ the architecture is shifted to a **Hybrid Ritualistic Model**:
 - **Voice:** ElevenLabs Daniel · `onwK4e9ZLuTAKqWW03F9`
 - **ConvAI agent:** `agent_6401krjff71xf1pss69kqe1wtxs8`
 - **Aura & UI:** Granite gray, dark oak, hearth-amber accents. Stark,
-  grounded, unyielding sanctuary.
+  grounded, unyielding house.
 
 ### ⏳ Temporal Lock — 28-Day Override (linear 7-day weeks)
 The course is hard-locked to a linear 28-day cycle. Each week opens

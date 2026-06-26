@@ -13,7 +13,7 @@
  * STATUS:
  *   - Page render replaced with "Under Redesign" notice.
  *   - Legacy 502-line implementation removed 2026-02 cleanup
- *     (HighPerformers + _BodyTempleLegacy + LuxurySanctuaryLanding).
+ *     (HighPerformers + _BodyTempleLegacy + LuxuryHouseLanding).
  *   - Backend `body_temple_curriculum.py` + Stripe unlock flow
  *     (`/clarity-release`) + `/api/body-temple/*` endpoints all
  *     untouched and ready to wire when redesign is complete.

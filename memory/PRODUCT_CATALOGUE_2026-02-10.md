@@ -178,7 +178,7 @@ Based on 5% conversion of organic-only traffic:
 | Subscriptions | **2%** | Beta Season Pass only |
 
 **Average Order Value target**: $36–$42
-**Refund expectation**: ≤4% (conservative; product is "soft" sanctuary, low buyer's remorse)
+**Refund expectation**: ≤4% (conservative; product is "soft" house, low buyer's remorse)
 **Chargeback expectation**: <0.5% (digital, refundable, no surprise billing)
 
 ---

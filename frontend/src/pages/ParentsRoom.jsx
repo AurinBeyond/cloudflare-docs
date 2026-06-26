@@ -36,7 +36,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 // Sara now runs solely through ConvaiPresenceTracker (ConvAI WebSocket).
 // The file ParentsRoomChat.jsx is preserved in the repo for rollback.
 import RoomConvaiChat from "@/components/RoomConvaiChat"; // eslint-disable-line no-unused-vars
-import AurinsPromise from "@/components/sanctuary/AurinsPromise";
+import AurinsPromise from "@/components/house/AurinsPromise";
 // §AUDIT-SCALE 2026-05-20 — Parents' Room joins Clarity in tracking
 // presence_seconds so Sara's voice sessions decrement credits.
 import ConvaiPresenceTracker from "@/components/ConvaiPresenceTracker";
@@ -144,7 +144,7 @@ export default function ParentsRoom() {
   const activeLensObj = lenses.find((l) => l.id === activeLens) || lenses.find((l) => l.id === DEFAULT_LENS);
 
   return (
-    <div data-testid="page-parents-room" className="sanctuary-room relative">
+    <div data-testid="page-parents-room" className="house-room relative">
       <PageHeader
         eyebrow="Parents' Room · The Quiet Weaver"
         title="Three lenses, one calm room for parents."

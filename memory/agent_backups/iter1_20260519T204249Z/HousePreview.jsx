@@ -1,5 +1,5 @@
 /**
- * SanctuaryPreview — Founder review route (2026-05-18 v2)
+ * HousePreview — Founder review route (2026-05-18 v2)
  *
  * Full-bleed polished landing experience.
  *
@@ -29,27 +29,12 @@
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import AurinsPromise from "@/components/sanctuary/AurinsPromise";
-import HeroCompass from "@/components/sanctuary/HeroCompass";
-import TruthSequenceModal from "@/components/TruthSequenceModal";
 
-const HERO = "/sanctuary/hero-mask.webp";
-const HERO_FALLBACK = "/sanctuary/hero-mask.jpg";
-const ATMOSPHERE = "/sanctuary/atmosphere.png";
-const GROUNDED = "/sanctuary/grounded-presence.png";
-const WINGS = "/sanctuary/sanctuary-wings.png";
-const WARMTH = "/sanctuary/warmth-trust.png";
-// §AURIN 2026-05-22 — fifth room hero image. Re-uses the existing
-// AurinBeyond brand hero so we do not introduce a parallel art style.
-const AURIN_HERO = "/assets/brand/aurinbeyond-hero.png";
-// §FOUNDER 2026-05-22 — message-style room imagery. Founder request:
-// rooms should carry an emotional message-image (humans in scene),
-// not abstract atmosphere alone. Parents' Room uses the new asset
-// below. The Grace mirror asset upload had a URL/content mismatch in
-// the artifact store (URL served door72_grace instead of the mirror
-// the founder wanted) — kept on hold pending a fresh upload.
-//   parents-message.png    — parent and child looking up at sunset
-const PARENTS_MESSAGE = "/assets/sanctuary/parents-message.png";
+const HERO = "/house/hero-mask.png";
+const ATMOSPHERE = "/house/atmosphere.png";
+const GROUNDED = "/house/grounded-presence.png";
+const WINGS = "/house/house-wings.png";
+const WARMTH = "/house/warmth-trust.png";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -87,7 +72,7 @@ function useReveal() {
 function useHidePlatformBadge() {
   useEffect(() => {
     const style = document.createElement("style");
-    style.setAttribute("data-sanctuary-clean", "true");
+    style.setAttribute("data-house-clean", "true");
     style.textContent = `
       /* Common Emergent preview badge patterns */
       [class*="emergent" i][class*="badge" i],
@@ -153,16 +138,16 @@ function RevealBlock({ children, delay = 0, className = "" }) {
   );
 }
 
-function SanctuaryNav({ production = false }) {
+function HouseNav({ production = false }) {
   return (
     <nav
-      data-testid="sanctuary-nav"
+      data-testid="house-nav"
       className={`fixed ${production ? "top-0" : "top-[28px]"} left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]`}
     >
       <div className="max-w-[1320px] mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
         <Link
-          to="/sanctuary-preview"
-          data-testid="sanctuary-logo"
+          to="/house-preview"
+          data-testid="house-logo"
           className="text-[13px] tracking-[0.42em] uppercase text-[#e8e1d5] font-light"
           style={{ fontFamily: SERIF, letterSpacing: "0.42em" }}
         >
@@ -170,7 +155,6 @@ function SanctuaryNav({ production = false }) {
         </Link>
         <div className="hidden md:flex items-center gap-9 text-[11.5px] tracking-[0.24em] uppercase text-[#a59f93]">
           <a href="#worlds" className="hover:text-[#e8e1d5] transition-colors duration-500">Worlds</a>
-          <a href="#hero-compass" className="hover:text-[#e8e1d5] transition-colors duration-500">Compass</a>
           <a href="#rooms" className="hover:text-[#e8e1d5] transition-colors duration-500">Rooms</a>
           <a href="#open-world" className="hover:text-[#e8e1d5] transition-colors duration-500">Open World</a>
           <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways to be here</a>
@@ -178,7 +162,7 @@ function SanctuaryNav({ production = false }) {
         </div>
         <Link
           to="/portal"
-          data-testid="sanctuary-portal-btn"
+          data-testid="house-portal-btn"
           className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-7 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500"
         >
           Enter
@@ -194,14 +178,14 @@ function SanctuaryNav({ production = false }) {
 // the mask now lives as a calm 1/3 atmospheric accent on the right
 // while the wordmark + opening line breathe on the left. Elegance
 // through restraint, not visual force.
-function HeroSection({ onWalkTruthFirst }) {
+function HeroSection() {
   const { ref, visible } = useReveal();
   const imgRef = useRef(null);
   useHeroParallax(imgRef);
   return (
     <section
       ref={ref}
-      data-testid="sanctuary-hero"
+      data-testid="house-hero"
       className="relative w-full overflow-hidden bg-[#0b0a08] min-h-screen flex items-center"
     >
       {/* §QUIET HERO — Mask is now anchored to the right ~38% on
@@ -238,24 +222,18 @@ function HeroSection({ onWalkTruthFirst }) {
               filter: "blur(3px)",
             }}
           />
-          <picture className="block absolute inset-0 w-full h-full">
-            <source srcSet={HERO} type="image/webp" />
-            <img
-              src={HERO_FALLBACK}
-              alt=""
-              aria-hidden="true"
-              fetchPriority="high"
-              loading="eager"
-              decoding="async"
-              data-testid="hero-mask-image"
-              className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
-                visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
-              }`}
-              style={{
-                filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
-              }}
-            />
-          </picture>
+          <img
+            src={HERO}
+            alt=""
+            aria-hidden="true"
+            data-testid="hero-mask-image"
+            className={`relative w-full h-full object-cover transition-all duration-[2400ms] ease-out ${
+              visible ? "opacity-100 scale-100" : "opacity-0 scale-[1.04]"
+            }`}
+            style={{
+              filter: "contrast(1.14) saturate(1.10) brightness(1.10)",
+            }}
+          />
           {/* Face contour spotlight — anchored on the RIGHT-CENTER of
               the figure (the unmasked face: eye + cheek + smile).
               Founder cue 2026-05-19 late: "ava see näo osa mis on
@@ -304,321 +282,51 @@ function HeroSection({ onWalkTruthFirst }) {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* §SPRINT-0 2026-02 — "Less Noise. More Meaning." 4-layer hero.
-              Layer 1 is the brand statement (what this is + who it's for).
-              Layers 2, 3, 4 live just below the hero in <SprintZeroLayersSection />.
-              Previous "Welcome back to yourself" archived to /app/memory/archive/hero_2026_06.md */}
-          {/* §HERO 2026-02 Founder fix: the italic gold line previously
-              sat as the third line of the h1 and, at desktop widths,
-              ran into the painted face on the right. Moved BELOW the
-              compass line into its own paragraph anchored against the
-              dark left column so the gold typography reads clearly on
-              the deep canvas instead of being lost on the portrait. */}
+          <p
+            data-testid="hero-eyebrow"
+            className="text-[10.5px] tracking-[0.44em] uppercase text-[#c4a46b] mb-9 font-light"
+          >
+            — Matrix Aurin · Pure Soul Life
+          </p>
           <h1
             data-testid="hero-title"
-            className="font-light text-[28px] sm:text-[42px] lg:text-[54px] leading-[1.15] text-[#f0eadd] tracking-[-0.012em] max-w-[560px]"
+            className="font-light text-[38px] sm:text-[56px] lg:text-[72px] leading-[1.06] text-[#f0eadd] tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            A living place<br />
-            to read, listen, and reflect.
+            Welcome back<br />
+            <span className="italic text-[#d4b67d]">to yourself.</span>
           </h1>
           <p
-            data-testid="hero-compass-line"
-            className="mt-9 text-[15.5px] sm:text-[17.5px] tracking-[0.02em] text-[#bcb4a3] font-light italic max-w-[520px] leading-[1.7]"
+            data-testid="hero-subtitle"
+            className="mt-10 text-[15px] sm:text-[17px] tracking-[0.04em] text-[#bcb4a3] italic font-light max-w-[520px]"
             style={{ fontFamily: SERIF }}
           >
-            Five rooms for people, parents, and families.<br />
-            A space for conversation, reflection, and discovery.
+            You do not have to perform here.
           </p>
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7">
+            <Link
+              to="/portal"
+              data-testid="hero-cta-step-inside"
+              className="inline-flex items-center justify-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
+            >
+              Step Inside
+            </Link>
+            <a
+              href="#worlds"
+              data-testid="hero-cta-walk"
+              className="text-[11px] tracking-[0.28em] uppercase text-[#a59f93] hover:text-[#e8e1d5] transition-colors duration-500 underline-offset-[8px] hover:underline self-start sm:self-auto"
+            >
+              Walk through first
+            </a>
+          </div>
           <p
-            data-testid="hero-reconnect-line"
-            className="mt-8 italic text-[22px] sm:text-[28px] lg:text-[32px] leading-[1.3] text-[#d4b67d] max-w-[520px] tracking-[-0.005em]"
+            data-testid="hero-season"
+            className="mt-20 sm:mt-24 text-[12px] tracking-[0.18em] italic text-[#7a7468] font-light"
             style={{ fontFamily: SERIF }}
           >
-            And reconnect with what matters most.
+            The doors are open this season.
           </p>
         </div>
-      </div>
-    </section>
-  );
-}
-
-
-// §FIVE-ROOMS-RECOGNITION 2026-06-22 — Positive-recognition row that
-// sits between the hero and the deeper RoomsSection. Each line names
-// the experience, not the feature, so a fresh visitor scans the five
-// doors in under three seconds and chooses where to walk. Anti-wellness
-// lock, eventyr lock (Polarstar carries the Norwegian word italics).
-// §VOICE-LIVING-PLACE-LOCK · §RECOGNITION-NOT-PITCH-LOCK.
-function FiveRoomsRecognitionSection() {
-  // §SELGUS-PASS 2026-06-25 — Each card now leads to the Host Intro
-  // (threshold page) rather than the raw room. This makes the trust-
-  // building intro pages DISCOVERABLE from the homepage — they were
-  // built last week but had no front-door link until now.
-  const rooms = [
-    { to: "/sara/intro",      glyph: "⛵", name: "Sara",      line: "for the spaces between people you love",                    testid: "five-rooms-sara" },
-    { to: "/grace/intro",     glyph: "🔥", name: "Grace",     line: "for the room with no one watching",                          testid: "five-rooms-grace" },
-    { to: "/kaelen/intro",    glyph: "🌿", name: "Kaelen",    line: "for what the body has been quietly saying",                  testid: "five-rooms-kaelen" },
-    { to: "/alistair/intro",  glyph: "🧭", name: "Alistair",  line: "for the questions that keep returning",                      testid: "five-rooms-alistair" },
-    { to: "/polarstar/intro", glyph: "⭐", name: "Polarstar",  line: "wonder, childhood, adventures that matter",                  testid: "five-rooms-polarstar", italicWord: "eventyr" },
-  ];
-  return (
-    <section
-      id="five-rooms-recognition"
-      data-testid="five-rooms-recognition"
-      className="relative w-full bg-[#0b0a08] py-24 sm:py-32"
-    >
-      <div className="max-w-[780px] mx-auto px-6 sm:px-10" style={{ fontFamily: SERIF }}>
-        <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] text-center mb-12">
-          Five rooms · choose a door
-        </p>
-        <ul className="list-none p-0 m-0">
-          {rooms.map((r) => (
-            <li key={r.testid} className="border-t border-[rgba(196,164,107,0.15)] last:border-b">
-              <a
-                href={r.to}
-                data-testid={r.testid}
-                className="block py-6 px-2 transition-all duration-300 hover:bg-[rgba(196,164,107,0.04)] hover:pl-6"
-                style={{ color: "#f0eadd", textDecoration: "none" }}
-              >
-                <div className="flex items-baseline gap-4">
-                  <span className="text-[1.5rem] leading-none opacity-80" aria-hidden="true">
-                    {r.glyph}
-                  </span>
-                  <div className="flex-1">
-                    <p
-                      className="m-0 text-[1.55rem] sm:text-[1.7rem] tracking-[0.005em] text-[#f0eadd] leading-tight"
-                      style={{ fontFamily: SERIF }}
-                    >
-                      {r.name}
-                    </p>
-                    <p
-                      className="m-0 mt-1 text-[0.95rem] sm:text-[1.05rem] italic text-[rgba(220,210,190,0.85)] leading-relaxed"
-                      style={{ fontFamily: SERIF }}
-                    >
-                      {r.italicWord ? (
-                        <>
-                          <em style={{ fontStyle: "italic", color: "#d4b67d" }}>{r.italicWord}</em>
-                          {" — "}
-                          {r.line}
-                        </>
-                      ) : (
-                        r.line
-                      )}
-                    </p>
-                    <p
-                      className="m-0 mt-3 text-[10.5px] tracking-[0.32em] uppercase text-[#c4a46b]"
-                      data-testid={`${r.testid}-meet-hint`}
-                    >
-                      Meet {r.name} →
-                    </p>
-                  </div>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <p
-          data-testid="five-rooms-coda"
-          className="text-[1.05rem] italic text-center text-[rgba(220,210,190,0.88)] mt-14 leading-[1.7]"
-          style={{ fontFamily: SERIF }}
-        >
-          Built one room at a time.
-          <br />
-          The world grows as new conversations, stories, and discoveries find their place.
-          <br />
-          <span className="block mt-3 text-[0.95rem] text-[rgba(220,210,190,0.78)]">
-            You are welcome to enter, leave, and return whenever a room calls you back.
-          </span>
-        </p>
-        <p
-          className="text-[0.78rem] tracking-[0.05em] text-center text-[rgba(196,164,107,0.62)] mt-6 italic"
-          style={{ fontFamily: SERIF }}
-        >
-          Two rooms (Sara and Kaelen) ask you to read a short threshold before entering.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// §SPRINT-0 2026-02 — "Less Noise. More Meaning." 4-layer hero (Layers 2, 3, 4).
-// Sits directly under HeroSection. Layer 1 (brand statement) lives in HeroSection.
-// Locked after a 5-day brainstorm (Anna + GPT + Norwegian AI + agent).
-// Strict rules: no SaaS words, no "digital", no "reflective tools", no "wellness".
-// "Start Here" is the primary CTA. "See the Five Rooms" + "Browse Books" are secondary.
-function SprintZeroLayersSection() {
-  const transformationRows = [
-    { from: "too many thoughts", to: "one thought clearer" },
-    { from: "tension your body has carried", to: "one quieter breath" },
-    { from: "a hard conversation at home", to: "one new way to begin it" },
-    { from: "an evening that disappeared", to: "one shared moment back" },
-  ];
-  const audience = [
-    "For people who want a little more clarity.",
-    "For parents who want a little more patience.",
-    "For families who want a little more time together.",
-  ];
-  return (
-    <section
-      data-testid="sprint-zero-layers"
-      className="relative w-full bg-[#0b0a08]"
-    >
-      {/* Quiet vertical hairline above the transformation table */}
-      <div
-        aria-hidden="true"
-        className="mx-auto h-16 w-px bg-gradient-to-b from-transparent to-[rgba(196,164,107,0.28)]"
-      />
-
-      {/* ── Layer 2 — Transformation table ─────────────────────────── */}
-      <RevealBlock>
-        <div
-          data-testid="hero-transformation"
-          className="max-w-[880px] mx-auto px-6 sm:px-10 pt-20 sm:pt-28 pb-16 sm:pb-24"
-        >
-          <div className="hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-6 pb-6 mb-12 border-b border-[rgba(196,164,107,0.14)]">
-            <span
-              className="text-right text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] font-light"
-              style={{ fontFamily: SERIF }}
-            >
-              If you came here with…
-            </span>
-            <span aria-hidden="true" className="block w-px h-4 bg-[rgba(196,164,107,0.35)]" />
-            <span
-              className="text-left text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] font-light"
-              style={{ fontFamily: SERIF }}
-            >
-              you may leave with…
-            </span>
-          </div>
-
-          <ul className="flex flex-col gap-9 sm:gap-10 list-none p-0 m-0">
-            {transformationRows.map((row, i) => (
-              <li
-                key={i}
-                data-testid={`hero-transformation-row-${i}`}
-                className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-6 text-center sm:text-left"
-              >
-                <span
-                  className="text-[18px] sm:text-[22px] lg:text-[24px] italic text-[#8e887d] leading-[1.4] sm:text-right"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {row.from}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="text-[#c4a46b] opacity-60 text-[16px] sm:text-[14px] inline-block sm:inline rotate-90 sm:rotate-0"
-                >
-                  →
-                </span>
-                <span
-                  className="text-[19px] sm:text-[23px] lg:text-[26px] text-[#f0eadd] leading-[1.4] sm:text-left tracking-[0.005em]"
-                  style={{ fontFamily: SERIF }}
-                >
-                  {row.to}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </RevealBlock>
-
-      {/* ── Layer 3 — Audience trio (self-recognition) ──────────────── */}
-      <RevealBlock delay={120}>
-        <div
-          data-testid="hero-audience"
-          className="max-w-[720px] mx-auto px-6 sm:px-10 py-16 sm:py-24 text-center"
-        >
-          <div className="flex flex-col gap-4 sm:gap-5">
-            {audience.map((line, i) => (
-              <p
-                key={i}
-                data-testid={`hero-audience-line-${i}`}
-                className="text-[17px] sm:text-[20px] lg:text-[22px] text-[#d9d3c5] font-light leading-[1.55] tracking-[0.005em]"
-                style={{ fontFamily: SERIF }}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
-      </RevealBlock>
-
-      {/* ── Layer 4 — Two clear CTAs (Selguse-pass 2026-06-25)
-          Reduced from three CTAs to two: a single primary doorway
-          ("Walk into Grace's room" via her Host Intro) and one safe
-          read-only alternative ("Read for free in the Library").
-          The previous "See the Five Rooms" was redundant — the
-          FiveRoomsRecognitionSection above already does that job. */}
-      <RevealBlock delay={200}>
-        <div
-          data-testid="hero-ctas"
-          className="max-w-[980px] mx-auto px-6 sm:px-10 pt-4 pb-28 sm:pb-36"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 sm:gap-6">
-            <Link
-              to="/grace/intro"
-              data-testid="hero-cta-start-here"
-              className="inline-flex items-center justify-center text-[12px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] hover:bg-[#d4b67d] border border-[#c4a46b] hover:border-[#d4b67d] px-12 sm:px-14 py-5 font-medium transition-all duration-500 hover:-translate-y-px"
-            >
-              Walk into Grace&apos;s room
-            </Link>
-            <Link
-              to="/library"
-              data-testid="hero-cta-browse-books"
-              className="inline-flex items-center justify-center text-[11.5px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.45)] hover:border-[#c4a46b] hover:text-[#d4b67d] px-10 sm:px-12 py-5 transition-colors duration-500"
-            >
-              Read for free in the Library
-            </Link>
-          </div>
-        </div>
-      </RevealBlock>
-    </section>
-  );
-}
-
-
-// §BRAND-CLARITY 2026-02-11 — A Quiet Note. Sits between the hero
-// and the deeper worlds. Tells a first-time visitor in 8 seconds:
-// what this is, what it is not, and who holds it. Brand voice,
-// no marketing punch, no new visual system.
-function QuietNoteSection() {
-  return (
-    <section
-      data-testid="sanctuary-quiet-note"
-      className="relative w-full bg-[#0b0a08] py-24 sm:py-32"
-    >
-      <div className="max-w-[760px] mx-auto px-6 sm:px-10 text-center">
-        <p
-          className="text-[11px] tracking-[0.42em] uppercase mb-8"
-          style={{ color: BRASS, fontFamily: SERIF }}
-        >
-          ✦ A quiet note
-        </p>
-        <p
-          className="text-[20px] sm:text-[24px] leading-[1.7] font-light italic"
-          style={{ color: "#e8e1d5", fontFamily: SERIF, letterSpacing: "0.005em" }}
-          data-testid="sanctuary-quiet-note-text"
-        >
-          This is not therapy. Not a chatbot. Not another place that
-          wants more of you. It is a room where presence is the product,
-          and you do not have to perform.
-        </p>
-        <p
-          className="mt-10 text-[28px]"
-          style={{ color: "#d9c79b", fontFamily: '"Caveat", cursive' }}
-        >
-          — Anna &amp; Aurin
-        </p>
-        <p className="mt-10 text-[10.5px] tracking-[0.32em] uppercase text-[#7a7468]">
-          <Link
-            to="/what-this-is"
-            className="hover:text-[#bcb4a3] transition-colors duration-500 underline decoration-dotted underline-offset-[6px]"
-            data-testid="sanctuary-quiet-note-link"
-          >
-            What this is, in plain language →
-          </Link>
-        </p>
       </div>
     </section>
   );
@@ -628,7 +336,7 @@ function TwoWorldsSection() {
   return (
     <section
       id="worlds"
-      data-testid="sanctuary-worlds"
+      data-testid="house-worlds"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
       {/* §POLISH 2026-05-19 — Soft warm radial behind the heading.
@@ -646,14 +354,14 @@ function TwoWorldsSection() {
       <div className="relative z-10 max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
-            — Two Worlds, One Place
+            — Two Worlds, One House
           </p>
           <h2
             className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[860px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             A space where reflection and structure<br />
-            <span className="italic text-[#d4b67d]">quietly bring you back to what matters most.</span>
+            <span className="italic text-[#d4b67d]">quietly bring you back to yourself.</span>
           </h2>
         </RevealBlock>
 
@@ -671,7 +379,7 @@ function TwoWorldsSection() {
                 className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
                 style={{ fontFamily: SERIF }}
               >
-                The Room <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
+                The House <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
                 A quiet inner space for the moments when life asks too much.
@@ -679,7 +387,7 @@ function TwoWorldsSection() {
                 hurry, without scoring, without storage of who you have been.
               </p>
               <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
-                Journeys · Reflection · Honest atmosphere
+                Journeys · Reflection · House atmosphere
               </div>
             </div>
           </RevealBlock>
@@ -699,10 +407,9 @@ function TwoWorldsSection() {
                 The Rooms <span className="italic text-[#bcb4a3]">— guided structure &amp; practice</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
-                Five distinct rooms, each with its own atmosphere and its own
+                Four distinct rooms, each with its own atmosphere and its own
                 guide. Move through what the moment asks of you — clarity,
-                the body, parenthood, a quiet course of study, or a gentle
-                room for the children.
+                the body, parenthood, or a quiet course of study.
               </p>
               <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
                 Rooms · Learning paths · Guided progression
@@ -720,22 +427,18 @@ function RoomsSection() {
     () => [
       {
         n: "I",
-        name: "Grace",
-        sub: "S · 180° · Grace · The Private Room",
-        body: "A confidential channel for the cognitive load you cannot yet say aloud. Read by Grace, never by the room.",
-        intro: "S · 180°. Grace curates the southern cardinal — the room where the thought consuming your bandwidth is brought, named, and released. She does not advise, she extracts. Three channels are open: writing, voice, and a live dialogue. If the voice line falters, write — Grace will answer aloud. Bring what is still circulating in your head at 2am; you can leave it here.",
-        creditNote: "Writing is free. Voice opens with 5 credits or more.",
+        name: "Clarity Release",
+        sub: "The Private Room",
+        body: "A confidential space for what cannot be said aloud yet. The room keeps no score.",
         img: GROUNDED,
         href: "/clarity-release",
         testid: "room-enter-clarity",
       },
       {
         n: "II",
-        name: "Body World",
-        sub: "N · 360° · Kaelan · The Listening Room",
-        body: "Where the body is read first. The architecture remembers what the mind has rehearsed away.",
-        intro: "N · 360°. Kaelan curates the northern cardinal — the room that asks the body before it asks the mind. Slow attention to the structural load you have been carrying without naming. Three channels are open: writing, voice, and a live dialogue. If the line breaks, write — Kaelan will answer aloud. This is hardware-level work, not commentary.",
-        creditNote: "Writing is free. Voice opens with 5 credits or more.",
+        name: "Body Room",
+        sub: "The Listening Room",
+        body: "Where the body is asked first. Slow attention to what carries underneath the words.",
         img: WINGS,
         href: "/body-room",
         testid: "room-enter-body",
@@ -743,41 +446,20 @@ function RoomsSection() {
       {
         n: "III",
         name: "Parents' Room",
-        sub: "E · 90° · Sara · The Hearth Room",
-        body: "For the ones holding the operating system of a home. Architectural read, never pedagogical advice.",
-        intro: "E · 90°. Sara curates the eastern cardinal — the room for the parent who is decoding what was inherited, what was outsourced, and what the home now requires of them as Anchor OS. Three channels are open: writing, voice, and a live dialogue. If the line breaks, write — Sara will answer aloud. A sub-cluster opens inside on The Subsystem (the adolescent neurological window). No therapy. No pedagogy.",
-        creditNote: "Writing is free. Voice opens with 5 credits or more.",
-        img: PARENTS_MESSAGE,
+        sub: "The Hearth Room",
+        body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
+        img: WARMTH,
         href: "/parents-room",
         testid: "room-enter-parents",
       },
       {
         n: "IV",
         name: "Course Room",
-        sub: "W · 270° · Alistair · The Study Room",
-        body: "A protocol library, not a course shelf. Transmissions land on a 24-hour cadence-lock.",
-        intro: "W · 270°. Alistair curates the western cardinal — the room where the sovereign operator re-architects their own runtime through short, precise transmissions on an unbendable cadence-lock. One per 24 hours. No binge. Three channels are open: writing, voice, and a live dialogue. If the line breaks, write — Alistair will answer aloud. The Broken Clockwork (28-day Sara protocol) lives here.",
-        creditNote: "Writing is free. Voice opens with 5 credits or more.",
+        sub: "The Study Room",
+        body: "Structured study and gentle progression. Books, practices, and a measured rhythm.",
         img: ATMOSPHERE,
         href: "/course-room",
         testid: "room-enter-courses",
-      },
-      {
-        // §AURIN 2026-05-22 — Fifth room. Aurin is the children's
-        // companion. Surfaced at the same level as the other four
-        // rooms (founder directive: "if the heading says Rooms, all
-        // five must be there"). Kept last so adult visitors meet the
-        // primary four rooms first, then discover Aurin as a softer
-        // extension for younger hearts.
-        n: "V",
-        name: "Aurin's Room",
-        sub: "A Room for Children",
-        body: "A gentle companion who listens, plays, and remembers that childhood deserves to feel safe. Three age tracks — chosen by the parent or the child.",
-        intro: "A warm presence for the little ones. Aurin is here to listen, imagine, and dream alongside the child. Three small rooms wait inside — for Little Dreamers (3–5), Explorers (6–8), and Dreamweavers (9–12) — so the words always fit the age. Aurin is a companion, never a teacher or a parent. If a heavier feeling arises, Aurin will gently invite the child to share it with a trusted grown-up.",
-        creditNote: "Writing is free. Voice opens with 5 credits or more.",
-        img: AURIN_HERO,
-        href: "/aurins-room",
-        testid: "room-enter-aurin",
       },
     ],
     [],
@@ -786,13 +468,13 @@ function RoomsSection() {
   return (
     <section
       id="rooms"
-      data-testid="sanctuary-rooms"
+      data-testid="house-rooms"
       className="relative w-full bg-[#0b0a08] py-32"
     >
       <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7">
-            — Five Doors
+            — Four Doors
           </p>
           <h2
             className="text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] tracking-[-0.012em]"
@@ -835,26 +517,6 @@ function RoomsSection() {
                   <p className="text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
                     {r.body}
                   </p>
-                  {/* §INTRO 2026-05-19 — Founder directive: a soft,
-                      non-technical introduction that names the room's
-                      keeper and the three ways to converse. Stays
-                      brand-aligned (no "AI", "bot", "model"). */}
-                  <p
-                    className="mt-6 text-[14px] leading-[1.8] italic font-light text-[#bcb4a3] max-w-[520px]"
-                    style={{ fontFamily: SERIF }}
-                    data-testid={`room-intro-${r.n.toLowerCase()}`}
-                  >
-                    {r.intro}
-                  </p>
-                  {/* §CREDIT-HINT 2026-05-19 — discrete, brass-accent
-                      line so the wanderer knows text is free and
-                      voice begins at the credit threshold. */}
-                  <p
-                    className="mt-4 text-[11px] tracking-[0.28em] uppercase text-[#c4a46b]/80"
-                    data-testid={`room-credit-${r.n.toLowerCase()}`}
-                  >
-                    {r.creditNote}
-                  </p>
                   {/* §ENTER 2026-05-19 — Founder directive: every room
                       description gets a single, calm ENTER affordance
                       that takes the wanderer directly to the room's
@@ -885,7 +547,7 @@ function RoomsSection() {
               style={{ fontFamily: SERIF }}
             >
               Kids Universe — angel stories, gentle coloring, and the
-              softest version of this place, held for the little ones.
+              softest version of the house, held for the little ones.
             </p>
           </div>
         </RevealBlock>
@@ -907,39 +569,31 @@ function OpenWorldSection() {
       body: "Reflections, journal entries, slow reads — open to anyone who wanders in.",
       badge: "Free to enter",
       tone: "free",
-      href: "/library",
-      testid: "openworld-enter-library",
     },
     {
       title: "The Bookstore",
       body: "A small collection of original books and angel stories. Each title is its own quiet object.",
       badge: "From €9 · once",
       tone: "paid",
-      href: "/bookstore",
-      testid: "openworld-enter-bookstore",
     },
     {
       title: "The Courses",
       body: "Self-paced studies — The Body Knows First, Beyond the Matrix, and others — read at your own rhythm.",
       badge: "From €19 · once",
       tone: "paid",
-      href: "/course-room",
-      testid: "openworld-enter-courses",
     },
     {
       title: "Kids Universe",
-      body: "Angel stories, coloring pages, and the gentlest version of this place for the youngest visitors.",
+      body: "Angel stories, coloring pages, and the gentlest version of the house for the youngest visitors.",
       badge: "Free to enter",
       tone: "free",
-      href: "/kids-universe",
-      testid: "openworld-enter-kids",
     },
   ];
 
   return (
     <section
       id="open-world"
-      data-testid="sanctuary-openworld"
+      data-testid="house-openworld"
       className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
       <div className="absolute inset-0 opacity-[0.10]">
@@ -1005,19 +659,6 @@ function OpenWorldSection() {
                 <p className="text-[14px] leading-[1.82] text-[#bcb4a3] font-light">
                   {l.body}
                 </p>
-                {/* §FOUNDER 2026-05-22 — Each OpenWorld card carries a
-                    discreet brass-accent Enter link. Routes go directly
-                    to the FREE / preview surface (no auth gate, no
-                    /pricing redirect). Visual: small inline text link,
-                    not a heavy button — preserves sanctuary tone. */}
-                <Link
-                  to={l.href}
-                  data-testid={l.testid}
-                  className="mt-7 inline-flex items-center gap-2 text-[11px] tracking-[0.38em] uppercase text-[#c4a46b] hover:text-[#e0c585] transition-colors duration-500"
-                >
-                  <span>Enter</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
               </div>
             </RevealBlock>
           ))}
@@ -1027,98 +668,237 @@ function OpenWorldSection() {
   );
 }
 
-// §PHASE-3 2026-06-25 — Mike's prose-pricing (€45 First Step · €120
-// Steady Presence · €380 Your Own Room) RETIRED. The 39-SKU chaos has
-// been replaced by the Access Ladder on /pricing (Explore · Day Pass ·
-// Journey · Companion · Private + Voice Access held separately). This
-// section now points visitors there instead of carrying duplicate
-// price cards. Archive of old copy lives in
-// /app/memory/archive/sanctuary_ways_2026_06.md (not yet written —
-// can be regenerated from git history if ever needed).
+// §WAYS TO BE HERE — Mike's exact prose-pricing copy (EUR).
+// Architectural distinction: Platform Access (rooms, reading, text-to-text)
+// is SEPARATE from Live Voice Sessions (high-cost ElevenLabs runtime).
+// Each tier includes a BASELINE voice allotment; further voice = fuel (next section).
 function WaysToBeHereSection() {
+  const tiers = [
+    {
+      key: "first-step",
+      name: "A First Step",
+      tagline: "One session. One quiet hour. No commitment.",
+      lede: "Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning.",
+      includes: [
+        "Access to one room of your choosing for this session",
+        "A guided live AI voice session at your pace",
+        "No subscription, no follow-up pressure",
+      ],
+      price: "€45",
+      cadence: "one session",
+      cta: "Begin quietly",
+    },
+    {
+      key: "steady-presence",
+      name: "A Steady Presence",
+      tagline: "All rooms. Monthly companionship. Return as often as you need.",
+      lede: "Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always.",
+      includes: [
+        "Unlimited access to all four rooms — reading, reflection, text-to-text chat",
+        "One private live AI voice session per month",
+        "Priority access to new spaces",
+        "The quiet community thread",
+      ],
+      price: "€120",
+      cadence: "per month",
+      cta: "Step in",
+      featured: true,
+    },
+    {
+      key: "your-own-room",
+      name: "Your Own Room",
+      tagline: "A space held only for you.",
+      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full house access, and a private channel — your own corner of this house.",
+      includes: [
+        "Full access to all rooms — reading, reflection, text-to-text chat",
+        "Weekly private live AI voice sessions — four sessions per month",
+        "Priority presence and response",
+        "Early access to future sanctuaries",
+        "Direct channel for quiet requests",
+      ],
+      price: "€380",
+      cadence: "per month",
+      cta: "Enter gently",
+    },
+  ];
+
   return (
     <section
       id="ways"
-      data-testid="sanctuary-ways"
+      data-testid="house-ways"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-40"
     >
-      <div className="max-w-[860px] mx-auto px-6 sm:px-10 text-center">
+      <div className="max-w-[1220px] mx-auto px-6 sm:px-10">
         <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7">
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
             — Ways to be here
           </p>
           <h2
-            className="text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] font-light tracking-[-0.012em]"
+            className="text-center text-[34px] sm:text-[48px] lg:text-[56px] leading-[1.1] text-[#f0eadd] font-light max-w-[820px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
             There is no wrong way<br />
             <span className="italic text-[#d4b67d]">to arrive.</span>
           </h2>
           <p
-            className="mt-9 text-[16px] leading-[1.85] text-[#a59f93] italic font-light"
+            className="mt-9 text-center text-[16px] leading-[1.85] text-[#a59f93] max-w-[640px] mx-auto italic font-light"
             style={{ fontFamily: SERIF }}
           >
-            Walk in for free. Stay a single quiet evening. Settle into one room.
-            Or hold the whole house — adults and children — under one warm roof.
+            Each path holds space for you differently. Begin wherever feels true.
           </p>
-          <p className="mt-6 text-[14px] leading-[1.85] text-[#bcb4a3] font-light max-w-[600px] mx-auto">
-            Five clear doors, one honest meter for voice. The full ladder
-            lives on a single page — written for the felt room, not a
-            feature list.
-          </p>
-          <div className="mt-12">
-            <Link
-              to="/pricing"
-              data-testid="sanctuary-ways-pricing-cta"
-              className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] hover:bg-[#d4b67d] px-12 py-5 transition-colors duration-700"
-            >
-              <span>See the five ways</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
         </RevealBlock>
+
+        <div className="mt-24 grid md:grid-cols-3 gap-7 lg:gap-9 items-stretch">
+          {tiers.map((t, i) => (
+            <RevealBlock key={t.key} delay={i * 120}>
+              <div
+                data-testid={`ways-${t.key}`}
+                className={`relative h-full flex flex-col p-10 sm:p-12 border ${
+                  t.featured
+                    ? "border-[rgba(196,164,107,0.6)] bg-[rgba(28,24,18,0.72)]"
+                    : "border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)]"
+                }`}
+              >
+                {t.featured ? (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.36em] uppercase text-[#0b0a08] bg-[#c4a46b] px-4 py-1"
+                  >
+                    Most chosen
+                  </span>
+                ) : null}
+
+                <h3
+                  className="text-[30px] sm:text-[34px] leading-[1.14] text-[#f0eadd] font-light mb-4"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.name}
+                </h3>
+                <p
+                  className="text-[14.5px] italic text-[#a59f93] leading-[1.7] mb-6"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.tagline}
+                </p>
+                <p className="text-[14.5px] leading-[1.82] text-[#bcb4a3] font-light mb-8">
+                  {t.lede}
+                </p>
+
+                <ul className="space-y-3.5 mb-10">
+                  {t.includes.map((line, j) => (
+                    <li
+                      key={j}
+                      className="flex items-start gap-3 text-[13.5px] leading-[1.7] text-[#bcb4a3] font-light"
+                    >
+                      <span className="text-[#c4a46b] mt-[6px] text-[8px]">◆</span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-auto pt-7 border-t border-[rgba(196,164,107,0.14)]">
+                  <div className="flex items-baseline gap-2 mb-7">
+                    <span
+                      className="text-[44px] leading-none text-[#f0eadd] font-light"
+                      style={{ fontFamily: SERIF }}
+                    >
+                      {t.price}
+                    </span>
+                    <span className="text-[12px] tracking-[0.16em] italic text-[#7a7468]" style={{ fontFamily: SERIF }}>
+                      / {t.cadence}
+                    </span>
+                  </div>
+                  <Link
+                    to="/portal"
+                    data-testid={`ways-cta-${t.key}`}
+                    className={`block text-center text-[11.5px] tracking-[0.32em] uppercase py-4 border transition-colors duration-700 ${
+                      t.featured
+                        ? "text-[#0b0a08] bg-[#c4a46b] border-[#c4a46b] hover:bg-[#d4b67d] hover:border-[#d4b67d]"
+                        : "text-[#c4a46b] border-[rgba(196,164,107,0.55)] hover:text-[#0b0a08] hover:bg-[#c4a46b]"
+                    }`}
+                  >
+                    {t.cta}
+                  </Link>
+                </div>
+              </div>
+            </RevealBlock>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// §PHASE-3 2026-06-25 — The old VoiceMeterSection (€25/€39/€99
-// presence top-ups) has been folded into /pricing (Voice Access
-// section). This stub is intentionally tiny and routes onward so
-// visitors who scroll past Ways still see the voice-is-separate
-// promise without duplicate pricing cards.
+// §THE VOICE METER — Tesla/fuel symbolism (Founder directive).
+// Platform membership = the car. Voice minutes = separate, governed fuel.
+// Surfaces top-up structure quietly so visitors understand the runtime model
+// without it dominating the page.
 function VoiceMeterSection() {
+  const topups = [
+    { mins: "30 minutes", price: "€25", note: "a short return" },
+    { mins: "60 minutes", price: "€39", note: "a full hour, when you need more" },
+    { mins: "180 minutes", price: "€99", note: "a season's worth of presence" },
+  ];
+
   return (
     <section
       id="voice-meter"
-      data-testid="sanctuary-voice-meter"
-      className="relative w-full bg-[#0b0a08] py-24 border-t border-[rgba(196,164,107,0.08)]"
+      data-testid="house-voice-meter"
+      className="relative w-full bg-[#0b0a08] py-32"
     >
-      <div className="max-w-[760px] mx-auto px-6 sm:px-10 text-center">
+      <div className="max-w-[1080px] mx-auto px-6 sm:px-10">
         <RevealBlock>
-          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-6">
+          <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
             — The Voice Meter
           </p>
-          <p
-            className="text-[20px] sm:text-[26px] leading-[1.5] text-[#f0eadd] font-light italic"
+          <h2
+            className="text-center text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            Writing is always free.<br />
-            <span className="text-[#d4b67d]">Voice runs on its own quiet meter.</span>
+            Your house stays open.<br />
+            <span className="italic text-[#d4b67d]">Voice runs on its own quiet meter.</span>
+          </h2>
+          <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
+            Each path above includes a baseline of live voice presence.
+            When you need more, voice is added gently — measured by the
+            minute, never auto-renewed, never running quietly in the
+            background. Premium presence is always governed.
           </p>
-          <p className="mt-7 text-[14px] leading-[1.85] text-[#a59f93] font-light max-w-[560px] mx-auto">
-            We hold the room. You hold the meter. Nothing is ever on by accident.
-          </p>
+        </RevealBlock>
+
+        <div className="mt-20 grid sm:grid-cols-3 gap-5">
+          {topups.map((t, i) => (
+            <RevealBlock key={t.mins} delay={i * 100}>
+              <div
+                data-testid={`voice-topup-${t.price.replace("€", "")}`}
+                className="border border-[rgba(196,164,107,0.28)] bg-[rgba(18,16,13,0.62)] p-8 text-center hover:border-[rgba(196,164,107,0.5)] transition-colors duration-700"
+              >
+                <p
+                  className="text-[28px] leading-none text-[#f0eadd] font-light mb-3"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.price}
+                </p>
+                <p className="text-[11px] tracking-[0.28em] uppercase text-[#c4a46b] mb-5">
+                  + {t.mins}
+                </p>
+                <p
+                  className="text-[13px] italic text-[#a59f93] font-light"
+                  style={{ fontFamily: SERIF }}
+                >
+                  {t.note}
+                </p>
+              </div>
+            </RevealBlock>
+          ))}
+        </div>
+
+        <RevealBlock delay={420}>
           <p
-            className="mt-8 text-[11px] tracking-[0.32em] uppercase"
+            className="mt-16 text-center text-[14px] italic text-[#7a7468] max-w-[560px] mx-auto leading-[1.85] font-light"
+            style={{ fontFamily: SERIF }}
           >
-            <Link
-              to="/pricing"
-              data-testid="sanctuary-voice-meter-pricing-link"
-              className="text-[#c4a46b] hover:text-[#d4b67d] transition-colors duration-500"
-            >
-              See voice access →
-            </Link>
+            We hold the house. You hold the meter. Nothing is ever
+            on by accident.
           </p>
         </RevealBlock>
       </div>
@@ -1130,7 +910,7 @@ function PhilosophySection() {
   return (
     <section
       id="philosophy"
-      data-testid="sanctuary-philosophy"
+      data-testid="house-philosophy"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
       <div className="absolute inset-0 opacity-[0.28]">
@@ -1165,7 +945,7 @@ function ClosingSection() {
   return (
     <section
       id="origin"
-      data-testid="sanctuary-closing"
+      data-testid="house-closing"
       className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
       <div
@@ -1192,7 +972,7 @@ function ClosingSection() {
             <span className="italic text-[#d4b67d]">a door is already open.</span>
           </h2>
           <p className="mt-9 text-[15px] sm:text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[560px] mx-auto font-light">
-            No urgency. No invitation required this season. The room
+            No urgency. No invitation required this season. The house
             keeps its own quiet hours, and the inner pages remember nothing
             of who has visited.
           </p>
@@ -1210,7 +990,7 @@ function ClosingSection() {
               data-testid="closing-cta"
               className="inline-flex items-center gap-3 text-[12px] tracking-[0.36em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-10 sm:px-12 py-4 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-700"
             >
-              Continue Reading
+              Step Inside
             </Link>
           </div>
         </RevealBlock>
@@ -1219,84 +999,10 @@ function ClosingSection() {
   );
 }
 
-// §SELGUS-PASS 2026-06-25 — TwoPathsSection was retired from the
-// homepage render flow (duplicated TwoWorldsSection's framing) and
-// the function definition has been removed as well to keep the file
-// from growing. Original copy can be recovered from git history if
-// it needs to be salvaged into another section.
-
-// §LIVING-HOUSE-NOTE 2026-06-26 — A single quiet reflection at the
-// end of the home page. Re-frames any room still being built as a
-// principle (we open rooms only when they are ready to be lived in),
-// not as a "Coming soon" apology. Lives ONLY here. Not repeated on
-// other pages, never used as a banner. Brand-lock binding:
-// House Design Principle ("more lived in, not more complicated").
-function LivingHouseNote() {
-  return (
-    <section
-      id="living-house-note"
-      data-testid="aurin-living-house-note"
-      className="relative w-full bg-[#0b0a08] py-24 border-t border-[rgba(196,164,107,0.08)]"
-    >
-      <div className="max-w-[680px] mx-auto px-6 sm:px-10 text-center">
-        <RevealBlock>
-          <p
-            data-testid="living-house-note-principle"
-            className="text-[14.5px] sm:text-[15px] leading-[1.85] text-[#a59f93] font-light italic"
-            style={{ fontFamily: SERIF }}
-          >
-            Not everything in Aurin is open yet. That is intentional.
-            <br className="hidden sm:block" />
-            We open rooms only when they are ready to be lived in.
-          </p>
-
-          <div
-            aria-hidden="true"
-            className="mx-auto my-10"
-            style={{
-              width: 48,
-              height: 1,
-              background: "rgba(196,164,107,0.28)",
-            }}
-          />
-
-          <p
-            data-testid="living-house-note-metaphor"
-            className="text-[15.5px] sm:text-[17px] leading-[1.9] text-[#d4cdbc] font-light italic"
-            style={{ fontFamily: SERIF }}
-          >
-            Aurin is built the way a small city is built —
-            <br className="hidden sm:block" />
-            slowly, room by room.
-          </p>
-
-          <p
-            className="mt-7 text-[14.5px] sm:text-[15px] leading-[1.95] text-[#a59f93] font-light"
-            style={{ fontFamily: SERIF }}
-          >
-            When a room is ready, its door opens. Guests arrive.
-            People settle in. Meanwhile, somewhere in the house,
-            another room is still being drawn.
-          </p>
-
-          <p
-            className="mt-6 text-[14.5px] sm:text-[15px] leading-[1.95] text-[#a59f93] font-light italic"
-            style={{ fontFamily: SERIF }}
-          >
-            Some rooms begin with a question.
-            <br className="hidden sm:block" />
-            Others begin with a life quietly lived.
-          </p>
-        </RevealBlock>
-      </div>
-    </section>
-  );
-}
-
-function SanctuaryFooter() {
+function HouseFooter() {
   return (
     <footer
-      data-testid="sanctuary-footer"
+      data-testid="house-footer"
       className="relative w-full bg-[#0b0a08] border-t border-[rgba(196,164,107,0.08)] py-16"
     >
       <div className="max-w-[1220px] mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
@@ -1307,7 +1013,6 @@ function SanctuaryFooter() {
           Pure Soul Life — Matrix Aurin
         </p>
         <div className="flex flex-wrap items-center gap-8 text-[11px] tracking-[0.24em] uppercase text-[#7a7468]">
-          <Link to="/what-this-is" className="hover:text-[#bcb4a3] transition-colors duration-500" data-testid="sanctuary-footer-what-this-is">What this is</Link>
           <Link to="/about" className="hover:text-[#bcb4a3] transition-colors duration-500">About</Link>
           <Link to="/aurin-philosophy" className="hover:text-[#bcb4a3] transition-colors duration-500">Philosophy</Link>
           <Link to="/legal" className="hover:text-[#bcb4a3] transition-colors duration-500">Privacy</Link>
@@ -1316,73 +1021,40 @@ function SanctuaryFooter() {
           No social-media pixels. No tracking cookies.
         </p>
       </div>
-      {/* §FROM-ANNA 2026-06-26 — Discreet door to the upstairs study.
-          Lowercase, italic, set on its own line so a curious eye can
-          find it without it being announced. */}
-      <div className="max-w-[1220px] mx-auto px-6 sm:px-10 mt-8 text-center md:text-left">
-        <Link
-          to="/from-anna"
-          data-testid="sanctuary-footer-from-anna"
-          aria-label="A letter from upstairs — read what Anna has written"
-          className="text-[12px] italic text-[#7a7468] hover:text-[#bcb4a3] transition-colors duration-500"
-          style={{ fontFamily: SERIF }}
-        >
-          A letter from upstairs
-        </Link>
-      </div>
     </footer>
   );
 }
 
-export default function SanctuaryPreview({ production = false } = {}) {
+export default function HousePreview({ production = false } = {}) {
   useHidePlatformBadge();
-  const [truthOpen, setTruthOpen] = useState(false);
-  const openTruth = () => setTruthOpen(true);
-  const closeTruth = () => setTruthOpen(false);
-  // After completing the sequence, the modal CTA itself routes to /portal.
-  const completeTruth = () => setTruthOpen(false);
   return (
     <div
-      data-testid={production ? "sanctuary-home-root" : "sanctuary-preview-root"}
+      data-testid={production ? "house-home-root" : "house-preview-root"}
       className="min-h-screen w-full bg-[#0b0a08] text-[#e8e1d5] antialiased"
       style={{ fontFamily: 'system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif' }}
     >
       {production ? null : (
         <div
-          data-testid="sanctuary-preview-ribbon"
+          data-testid="house-preview-ribbon"
           className="fixed top-0 left-0 right-0 z-[60] bg-[#c4a46b] text-[#0b0a08] text-[10px] tracking-[0.32em] uppercase text-center py-1.5"
         >
-          Preview · /sanctuary-preview · production unchanged
+          Preview · /house-preview · production unchanged
         </div>
       )}
       <div className={production ? "" : "pt-[28px]"}>
-        <SanctuaryNav production={production} />
+        <HouseNav production={production} />
         <main>
-          <HeroSection onWalkTruthFirst={openTruth} />
-          <FiveRoomsRecognitionSection />
-          <SprintZeroLayersSection />
-          <HeroCompass />
-          <QuietNoteSection />
+          <HeroSection />
           <TwoWorldsSection />
           <RoomsSection />
-          {/* TwoPathsSection retired — see §SELGUS-PASS comment above
-              SanctuaryFooter. The dead code has been removed; this
-              comment intentionally preserves the section-order log. */}
           <OpenWorldSection />
           <WaysToBeHereSection />
           <VoiceMeterSection />
           <PhilosophySection />
           <ClosingSection />
-          <AurinsPromise tone="dark" showEarlyAccess={true} />
-          <LivingHouseNote />
         </main>
-        <SanctuaryFooter />
+        <HouseFooter />
       </div>
-      <TruthSequenceModal
-        open={truthOpen}
-        onClose={closeTruth}
-        onComplete={completeTruth}
-      />
     </div>
   );
 }

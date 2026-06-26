@@ -14,7 +14,7 @@ to this document first.
 
 If the code-language (brackets, system-call terminology, error-codes)
 becomes the dominant voice instead of the accent voice, Matrix Aurin
-collapses from "elite biomechanical sanctuary" into "crypto-bro
+collapses from "elite biomechanical house" into "crypto-bro
 SaaS pitch deck". The aesthetic value of the technical register comes
 **from its rarity inside the serif-italic field**, not from saturation.
 

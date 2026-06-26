@@ -2,7 +2,7 @@
 """
 §GRACE-LIGHT-BG 2026-02 — Generate the warm-light Grace Room hero
 background via Gemini Nano Banana. Founder's brief (Anna, Estonian
-session): "warm welcoming sanctuary, light not dark, daylight not
+session): "warm welcoming house, light not dark, daylight not
 evening, cream + wood + plants + fireplace still visible, no UI, no
 people, no text".
 
@@ -24,7 +24,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_FILE = OUT_DIR / "grace-light-bg.png"
 
 PROMPT = (
-    "Photorealistic warm sunlit luxury sanctuary living room interior, "
+    "Photorealistic warm sunlit luxury house living room interior, "
     "wide cinematic 16:9 composition. Soft golden afternoon sunlight "
     "pouring through a tall arched window with sheer linen curtains. "
     "Peaceful lakeside village with green hills visible through the "

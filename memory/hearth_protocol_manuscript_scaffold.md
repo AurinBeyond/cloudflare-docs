@@ -1,6 +1,6 @@
 # The Hearth Protocol — manuscript scaffold v0
 **Target length:** 12 A5 pages
-**Voice:** Anna · adult sanctuary register · quiet, late evening
+**Voice:** Anna · adult house register · quiet, late evening
 **Audience:** the parent **alone**, after the children are asleep
 **NOT** parent-and-child, NOT pedagogy, NOT advice
 

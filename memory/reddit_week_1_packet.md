@@ -189,7 +189,7 @@ shape of an evening.
   unforgeable
 - "It's not impressive" = self-aware, anti-performance
 - "Always being able to come back to this exact same shape" =
-  resonates with sanctuary brand without naming it
+  resonates with house brand without naming it
 
 ---
 

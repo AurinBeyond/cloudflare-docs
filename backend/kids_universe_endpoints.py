@@ -108,7 +108,7 @@ async def _ensure_premium(user) -> None:
     if not is_prem:
         raise HTTPException(
             status_code=402,
-            detail="This stone is held in quiet until the Sanctuary opens.",
+            detail="This stone is held in quiet until the House opens.",
         )
 
 
@@ -482,7 +482,7 @@ There is no rush. The star waits as long as it needs to. When the day comes — 
 Open the Star Chamber →
 </a>
 </td></tr>
-<tr><td style="border-top:1px solid rgba(196,164,107,0.1);padding-top:20px;text-align:center;"><p style="margin:0;font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;color:#5a554c;font-family:Georgia,serif;">Matrix Aurin · A sanctuary, not a service.</p></td></tr>
+<tr><td style="border-top:1px solid rgba(196,164,107,0.1);padding-top:20px;text-align:center;"><p style="margin:0;font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;color:#5a554c;font-family:Georgia,serif;">Matrix Aurin · A house, not a service.</p></td></tr>
 </table></td></tr></table></body></html>"""
 
 
@@ -499,5 +499,5 @@ def _build_reminder_text(commit: dict, name: Optional[str]) -> str:
         "reading aloud — return to the chamber together and mark it done. "
         "A new star will appear.\n\n"
         "Open the Star Chamber: https://prulesoul.site/parent-portal/stars\n\n"
-        "Matrix Aurin · A sanctuary, not a service."
+        "Matrix Aurin · A house, not a service."
     )

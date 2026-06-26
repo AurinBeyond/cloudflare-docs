@@ -16,7 +16,7 @@
  *     visitor reach their own next step
  *   - furtherReading   — 3 free reading paths
  *
- * Vocabulary rule (founder, 2026-02): the words "sanctuary, holy,
+ * Vocabulary rule (founder, 2026-02): the words "house, holy,
  * sacred, pühadus" are not used in this card. We say "quiet, small,
  * room, library, evening, presence" instead.
  */

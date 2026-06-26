@@ -2,7 +2,7 @@
  * AurinsPromise.jsx — §BRAND-CLARITY 2026-02-11
  *
  * Universal trust anchor + early access note. Imported on:
- *   - SanctuaryPreview (home)
+ *   - HousePreview (home)
  *   - BodyTemple
  *   - ClarityRelease
  *   - ParentsRoom
@@ -13,7 +13,7 @@
  *
  * Both signed "— Anna & Aurin" to match the brand voice. No new
  * fonts, no new colours, no images. Designed to nest inside both
- * the dark sanctuary backdrop (#0b0a08) and the cream Body Temple
+ * the dark house backdrop (#0b0a08) and the cream Body Temple
  * surface — accepts an optional `tone` prop: "dark" | "cream".
  */
 

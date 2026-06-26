@@ -55,7 +55,7 @@ export default function PostSessionMoodReflect({ room = "", sessionId = "" }) {
                     <p className="text-[14.5px] leading-relaxed text-[hsl(var(--aurin-text))]">
                         {result.aurin_line}
                     </p>
-                    <p className="text-[11.5px] mt-2 sanctuary-muted italic">
+                    <p className="text-[11.5px] mt-2 house-muted italic">
                         Your words have been forgotten — only a single soft
                         mood-signal stays, so Aurin can meet you better next time.
                     </p>
@@ -75,7 +75,7 @@ export default function PostSessionMoodReflect({ room = "", sessionId = "" }) {
                     <p className="text-[14px] text-[hsl(var(--aurin-text))]">
                         How did that feel, in one or two sentences?
                     </p>
-                    <p className="text-[11.5px] sanctuary-muted mt-0.5 italic">
+                    <p className="text-[11.5px] house-muted mt-0.5 italic">
                         Optional. Only a mood-signal is kept; your words are forgotten.
                     </p>
                 </div>
@@ -99,14 +99,14 @@ export default function PostSessionMoodReflect({ room = "", sessionId = "" }) {
                 style={{ fontFamily: "Fraunces, serif" }}
             />
             <div className="flex items-center justify-between mt-3 gap-2">
-                <p className="text-[11.5px] sanctuary-muted italic">
+                <p className="text-[11.5px] house-muted italic">
                     Your text is forgotten the moment we read it.
                 </p>
                 <div className="flex items-center gap-2">
                     <button type="button"
                             onClick={() => { setOpen(false); setText(""); }}
                             data-testid="post-session-mood-cancel"
-                            className="text-[12.5px] uppercase tracking-[0.16em] sanctuary-muted hover:text-[hsl(var(--aurin-text))]">
+                            className="text-[12.5px] uppercase tracking-[0.16em] house-muted hover:text-[hsl(var(--aurin-text))]">
                         Skip
                     </button>
                     <button type="button"

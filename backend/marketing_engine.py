@@ -19,7 +19,7 @@ Phase 2 (when Anna provides X / LinkedIn / Instagram API keys)
 will swap the email-helper for direct posting via the playbook
 already returned by integration_playbook_expert_v2.
 
-Tone: sanctuary. Never urgent. Never FOMO. Each post mirrors a
+Tone: house. Never urgent. Never FOMO. Each post mirrors a
 real product moment, lets the reader pause, and offers one quiet
 link to read more.
 """
@@ -29,7 +29,7 @@ from typing import Dict, List, Any, Optional
 
 
 # ── Brand voice constants ────────────────────────────────────────
-BRAND_HASHTAGS = "#Sanctuary #QuietMornings #Aurin"
+BRAND_HASHTAGS = "#House #QuietMornings #Aurin"
 BRAND_BASE = "https://prulesoul.site"
 
 
@@ -58,7 +58,7 @@ CONTENT_CALENDAR: List[Dict[str, Any]] = [
         "day": 1, "theme": "Body Temple 28 — Day 1 free",
         **_post(
             x="Day 1 of Body Temple 28 is free. Four old keys. Twenty-eight quiet days. Begin with breath — no measuring, no rush.",
-            linkedin="Most adults skip the first touch they could give themselves. Body Temple 28 is a four-week sanctuary built around four ancient keys — breathing, touch, rest, presence. Day 1 is free. No measuring. No rush.",
+            linkedin="Most adults skip the first touch they could give themselves. Body Temple 28 is a four-week house built around four ancient keys — breathing, touch, rest, presence. Day 1 is free. No measuring. No rush.",
             instagram="Day 1 is free.\n\nBefore you fix anything, just listen to the first breath of the morning. That is the entire practice.",
             product="body-temple",
             link_path="/body-temple",
@@ -190,7 +190,7 @@ CONTENT_CALENDAR: List[Dict[str, Any]] = [
         "day": 14, "theme": "Closing the week — what stayed",
         **_post(
             x="Two weeks of small mornings. Body Temple. Aurin. Anna's letters. What stayed with you most?",
-            linkedin="Two weeks of small mornings inside the sanctuary. Body Temple's four keys, Aurin's quiet rooms, Anna's Friday letters. If just one thing stayed with you, that's enough.",
+            linkedin="Two weeks of small mornings inside the house. Body Temple's four keys, Aurin's quiet rooms, Anna's Friday letters. If just one thing stayed with you, that's enough.",
             instagram="Two weeks. One thing stayed.\n\nWhich one?",
             product="brand",
             link_path="",
@@ -231,7 +231,7 @@ CONTENT_CALENDAR: List[Dict[str, Any]] = [
     {
         "day": 18, "theme": "Grey Rocking — surviving toxic rooms",
         **_post(
-            x="When you can't leave the room yet, Grace helps you stay small, stay still, and keep your inner sanctuary intact.",
+            x="When you can't leave the room yet, Grace helps you stay small, stay still, and keep your inner house intact.",
             linkedin="Sometimes you can't yet leave the room — a family dinner, a workplace meeting, an inherited situation. Grace's Grey Rocking mode helps you remain yourself inside it without giving anything away.",
             instagram="When leaving isn't an option yet.\n\nGrey Rocking is a way to stay small, stay still, and keep your inner room intact.",
             product="grace",

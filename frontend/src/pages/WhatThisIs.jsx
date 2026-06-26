@@ -9,14 +9,14 @@
  *   - press / B2B partners
  *   - the curious customer who reads the small print
  *
- * Uses the existing dark sanctuary palette. No new visual system.
+ * Uses the existing dark house palette. No new visual system.
  * No images. Pure typography on the brand backdrop.
  */
 
 import React from "react";
 import { Link } from "react-router-dom";
-import AurinsPromise from "@/components/sanctuary/AurinsPromise";
-import KidsDayPassRow from "@/components/sanctuary/KidsDayPassRow";
+import AurinsPromise from "@/components/house/AurinsPromise";
+import KidsDayPassRow from "@/components/house/KidsDayPassRow";
 
 const SERIF = '"Cormorant Garamond", "Playfair Display", Georgia, serif';
 const SCRIPT = '"Caveat", "Caveat Brush", cursive';

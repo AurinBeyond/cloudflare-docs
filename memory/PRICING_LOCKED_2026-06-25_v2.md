@@ -134,7 +134,7 @@ mitte ootavad "performance'i".
 - **Private 1-1** (€1,890/kvartal) — eemaldatud täielikult. Anna eelistab vaikust kohalolu.
 - **Voice Day Pass** (60 min eraldi) — marginaal liiga tihe. Asemel Day Pass + Voice top-up.
 - **Mike Ways** (€45/€120/€380) — juba eemaldatud Faas 3 puhastuses.
-- **Sanctuary Compass annual** (€3,290) — juba eemaldatud.
+- **House Compass annual** (€3,290) — juba eemaldatud.
 - **Kõik vana 30 SKU pärandit** — peidetud LAUNCH_PAUSE alla, järgmise sessiooniga koristame.
 
 ---

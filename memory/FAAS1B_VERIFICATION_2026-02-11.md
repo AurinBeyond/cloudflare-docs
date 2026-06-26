@@ -257,7 +257,7 @@ To activate Faas 1B in real sandbox testing, Anna needs to:
 3. In Polar dashboard, create 3 sandbox products:
    - `Body Temple Lifetime` — one_time, $39
    - `Voice Top-up · 60 minutes` — one_time, $39
-   - `Eternal Sanctuary · Monthly` — recurring, $89/month
+   - `Eternal House · Monthly` — recurring, $89/month
 4. Note each product's UUID
 5. Generate 2 OATs (Sandbox + Production) — keep both
 6. Create 2 webhook endpoints:

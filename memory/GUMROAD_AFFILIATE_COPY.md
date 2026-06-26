@@ -206,7 +206,7 @@ The wrong affiliates kill the brand contrast.
 
 These are NOT guarantees. They are baseline expectations based on
 digital product affiliate norms at 35% commission, €9-39 price point,
-sanctuary/minimalism niche.
+house/minimalism niche.
 
 **Month 1 (after launch + 50 organic sales):**
 - 5-12 affiliates sign up via Substack essay
@@ -226,7 +226,7 @@ sanctuary/minimalism niche.
 - ~€2k-7k/month affiliate gross
 - Founder's net: ~€1300-4550/month from this single channel
 
-The reason these numbers are conservative: sanctuary brands grow
+The reason these numbers are conservative: house brands grow
 slowly on purpose. We are not trying to win an affiliate leaderboard.
 We are building a quiet, sustainable income stream that does not
 require Anna to be online 14 hours a day.
@@ -239,4 +239,4 @@ require Anna to be online 14 hours a day.
   single highest-ROI channel founder can activate this week:
   zero recurring cost, leverages existing Gumroad infrastructure,
   pays out only on conversion. Tone deliberately calibrated to
-  attract sanctuary-aligned writers, not commission-hunters.
+  attract house-aligned writers, not commission-hunters.

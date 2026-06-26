@@ -3,7 +3,7 @@
 The Hearth Protocol — PDF Generator
 ====================================
 
-Anna's 12-page A5 manuscript, laid out in the adult sanctuary
+Anna's 12-page A5 manuscript, laid out in the adult house
 palette (deep blue + warm cream + lantern amber).
 
 Outputs:
@@ -20,7 +20,7 @@ from fpdf import FPDF
 OUT_DIR = Path("/app/frontend/public/assets/pdfs")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# Adult sanctuary palette (deep blue + cream + amber).
+# Adult house palette (deep blue + cream + amber).
 INK_BG      = (15, 20, 24)       # deep navy
 INK_CREAM   = (240, 232, 214)
 INK_AMBER   = (214, 165, 96)

@@ -73,7 +73,7 @@ async def main():
         session_id=f"grace-v2-{uuid.uuid4().hex[:6]}",
         system_message=(
             "You are an art director generating Sara-Visual-System-Lock "
-            "watercolour paintings for the Aurin sanctuary. Painterly "
+            "watercolour paintings for the Aurin house. Painterly "
             "only. Warm, calm, worn, timeless. No text. No faces."
         ),
     )

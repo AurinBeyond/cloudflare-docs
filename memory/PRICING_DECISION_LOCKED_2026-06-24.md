@@ -31,8 +31,8 @@ Anna kinnitas: alustame 20%-ga.
 ## ⏭️ Järgmine sessioon (homme värske kontekstiga)
 
 ### Koodi muudatused (järjekorras):
-1. ✅ DELETE: Mike Ways (€45/€120/€380) SanctuaryPreview'ist
-2. ✅ DELETE: €3290 Sanctuary Compass annual SKU BundleDisclosure'ist
+1. ✅ DELETE: Mike Ways (€45/€120/€380) HousePreview'ist
+2. ✅ DELETE: €3290 House Compass annual SKU BundleDisclosure'ist
 3. ✅ MERGE: 12 membership SKU → 8 SKU (Journey × 4 + Companion × 4)
 4. ✅ MERGE: 11 voice SKU → 1 Voice Access süsteem (€0.22/min baashind)
 5. ✅ MERGE: 3 Day Passes → 1 üldine Day Pass (esmalt PEIDA, mitte kustuta)

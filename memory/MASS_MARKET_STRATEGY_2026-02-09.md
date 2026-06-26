@@ -98,7 +98,7 @@ Subject: A small gift, no strings
 
 Hi [Name] —
 
-I'm Anna. I've spent the last 18 months building a quiet sanctuary
+I'm Anna. I've spent the last 18 months building a quiet house
 on the internet for people who don't want to be sold to. Five small
 rooms, one of them for children. The whole thing is voice + text,
 no algorithms, no infinite scroll. It's at prulesoul.site.

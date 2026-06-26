@@ -1,7 +1,7 @@
 # Project Context
 
 ## Project Overview
-Matrix Aurin Sanctuary - A functional product ecosystem with 5 interconnected wings supporting both luxury premium and open discovery experiences.
+Matrix Aurin House - A functional product ecosystem with 5 interconnected wings supporting both luxury premium and open discovery experiences.
 
 ## Key Decisions
 | Date | Decision | By | Rationale |
@@ -21,7 +21,7 @@ Matrix Aurin Sanctuary - A functional product ecosystem with 5 interconnected wi
 - LOCKED BENCHMARK: /luxury atmosphere is the North Star for all design decisions
 - Human-Level Resonance: Platform must feel warm, deeply intuitive, humanly present
 - Luxury of Slowness: Smooth organic CSS transitions (500-700ms), gentle micro-interactions
-- Wing transitions must feel like walking through interconnected rooms of a physical sanctuary
+- Wing transitions must feel like walking through interconnected rooms of a physical house
 - Typography & Copy: Dignity, warmth, high trust. No loud marketing buzzwords.
 - Breathing space: Give elements room to breathe. Intentional, calming pacing.
-- Even free-tier sections must feel like they belong to the same high-end sanctuary ecosystem
+- Even free-tier sections must feel like they belong to the same high-end house ecosystem

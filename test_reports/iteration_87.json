@@ -1,5 +1,5 @@
 {
-  "summary": "Phase 3 Pricing Chaos Cleanup verified end-to-end on three surfaces (/pricing, /sanctuary-preview, /membership). All 13 review-request items pass. New 5-tier Access Ladder renders correctly with proper test-ids, Voice Access is decoupled into a separate section with TBD per-minute pricing, honest-note and Bookstore CTA are wired, and every legacy artefact called out in the spec is gone.",
+  "summary": "Phase 3 Pricing Chaos Cleanup verified end-to-end on three surfaces (/pricing, /house-preview, /membership). All 13 review-request items pass. New 5-tier Access Ladder renders correctly with proper test-ids, Voice Access is decoupled into a separate section with TBD per-minute pricing, honest-note and Bookstore CTA are wired, and every legacy artefact called out in the spec is gone.",
   "backend_issues": {"critical": [], "minor": []},
   "frontend_issues": {
     "ui_bugs": [],
@@ -24,12 +24,12 @@
         "No anti-wellness vocabulary ('transformation', 'thrives', 'wellness') present"
       ]
     },
-    "/sanctuary-preview": {
+    "/house-preview": {
       "status": "PASS (14/14 checks)",
       "verified": [
-        "data-testid='sanctuary-ways-pricing-cta' present and routes to /pricing ('See the five ways →')",
-        "data-testid='sanctuary-voice-meter' present",
-        "data-testid='sanctuary-voice-meter-pricing-link' present and routes to /pricing",
+        "data-testid='house-ways-pricing-cta' present and routes to /pricing ('See the five ways →')",
+        "data-testid='house-voice-meter' present",
+        "data-testid='house-voice-meter-pricing-link' present and routes to /pricing",
         "Legacy Mike Ways pricing strings GONE: €45, First Step, €120, Steady Presence, €380, Your Own Room",
         "Legacy Voice topup prices GONE: €25, €39, €99"
       ]

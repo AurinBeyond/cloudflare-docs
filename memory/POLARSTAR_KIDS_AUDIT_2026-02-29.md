@@ -21,7 +21,7 @@ before any cleanup is attempted.
 ## 1. Surface map (every clickable route)
 
 ```
-/                                       — Sanctuary Preview (adult)
+/                                       — House Preview (adult)
 /kids-universe                          → 302 redirect → /kids-universe/polarstar
 /kids-universe/polarstar                — Painted world hero, 3 age tabs (day/night modes)
 /kids-universe/polarstar/discovery      — Discovery World (ages 4-6) shell + activity grid
@@ -150,7 +150,7 @@ portrait. **No story has its own painting.**
 - `aurin/aurin-companion.png` — single portrait used as fallback for all 5 stories
 - Sub-directories under `/public/assets/`: about/, audio/, aurin/,
   blog/, books/, brand/, coloring/, illustrations/, kids/, lottie/,
-  origin/, pdfs/, portraits/, sanctuary/, videos/.
+  origin/, pdfs/, portraits/, house/, videos/.
 
 **The `illustrations/` directory exists but no story file references
 it.** Worth a separate audit pass to map what's there vs what's
@@ -261,7 +261,7 @@ Sprint C (later, after first real Gumroad sale)
 ## 10. What this audit deliberately did NOT check
 
 - Backend MongoDB collections referenced by Polarstar (only frontend route surface and content data).
-- Sanctuary/adult surface — separate audit.
+- House/adult surface — separate audit.
 - A/B test analytics on which activities convert most clicks.
 - Mobile vs desktop visual regressions.
 - Accessibility (screen-reader / keyboard navigation).

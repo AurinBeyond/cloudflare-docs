@@ -2,7 +2,7 @@
 
 > Voice rule: lowercase subjects when possible, scene before CTA,
 > 200–400 words, one specific small offer, end with a question.
-> Sender: `Anna (Aurin) <sanctuary@prulesoul.site>`.
+> Sender: `Anna (Aurin) <house@prulesoul.site>`.
 > Reply-to: `contact.puresoul@proton.me`.
 
 ---
@@ -146,7 +146,7 @@ Anna
    the opening
 3. **`{unsubscribe_url}`** — Resend injects automatically when you
    send via "Audiences" feature
-4. **Sender** must be `sanctuary@prulesoul.site` (already in env)
+4. **Sender** must be `house@prulesoul.site` (already in env)
 5. **Schedule** for early morning (08:00–09:30 user local) or
    Sunday evening — when slow content is most read
 6. **Test send first** to your own address; check the unfurl
@@ -165,7 +165,7 @@ curl -X POST https://api.resend.com/emails \
   -H "Authorization: Bearer $RESEND_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "from": "Anna (Aurin) <sanctuary@prulesoul.site>",
+    "from": "Anna (Aurin) <house@prulesoul.site>",
     "to": ["recipient@example.com"],
     "reply_to": "contact.puresoul@proton.me",
     "subject": "the doors are open, quietly.",

@@ -3,7 +3,7 @@
  *
  * Founder Blueprint pinned "Did the wanderer feel calmer than when
  * they arrived?" as the single most important quality metric for
- * the Clarity Release sanctuary. This component is the gentle,
+ * the Clarity Release house. This component is the gentle,
  * non-intrusive surface that asks that question once per session
  * and records an anonymous vote.
  *

@@ -13,7 +13,7 @@
 
 External AI reviewers flagged prulesoul.site as "anonymous/suspicious/ARG-like" because:
 - No identifiable human author visible
-- Only abstract sanctuary language
+- Only abstract house language
 - No "About" link in main nav
 - Trust signal of a real founder is missing
 

@@ -19,7 +19,7 @@ This rule overrides any conflicting instruction in
 - **Audience:** parents, grandparents, teachers, homeschoolers, screen-free families.
 - **Platforms (allowed):** Pinterest, Instagram (parenting), Facebook parenting groups, parenting Reddits (`r/Parenting`, `r/ScienceBasedParenting`, `r/ScreenTimeFree`, `r/homeschool`, `r/AttachmentParenting`), children's book communities, mom blogs.
 - **Topics (allowed):** bedtime stories, imagination, reading together, screen-free evenings, family bonding, the read-aloud ritual, illustrations.
-- **Topics (forbidden):** productivity, cognitive debt, matrix, sanctuary, builders, ADHD, founders, knowledge work, focus protocols.
+- **Topics (forbidden):** productivity, cognitive debt, matrix, house, builders, ADHD, founders, knowledge work, focus protocols.
 
 ### 🌿 WORLD 2 — MATRIX AURIN (Adults)
 - **Voice:** quiet reflective adult → other reflective adults.
@@ -33,7 +33,7 @@ This rule overrides any conflicting instruction in
 - **Audience:** knowledge workers, founders, ADHD-curious adults, deep-work practitioners.
 - **Platforms (allowed):** Hacker News, Product Hunt, `r/productivity`, `r/getdisciplined`, `r/deepwork`, `r/ADHD` (carefully), Indie Hackers, LinkedIn (builder essays only).
 - **Topics (allowed):** focus, overwhelm, information overload, attention management, deep work without burnout, "I deleted X and built Y."
-- **Topics (forbidden):** angels, bedtime stories, parenting (unless framed as builder/parent overlap and clearly tagged), kids' content, sanctuary metaphors.
+- **Topics (forbidden):** angels, bedtime stories, parenting (unless framed as builder/parent overlap and clearly tagged), kids' content, house metaphors.
 
 ### 📖 WORLD 4 — AUTHOR ANNA / AURIN (the founder channel)
 - **Voice:** the person behind everything.
@@ -137,7 +137,7 @@ month 2. Real rhythm:
 | World | Title | Best date window |
 |-------|-------|------------------|
 | ⚡ Clarity Release | *Show HN: I built a daytime focus protocol because every productivity app made me anxious* | Week 2 (this is HN's natural audience) |
-| 🌿 Matrix Aurin | *Show HN: A private, non-therapy sanctuary to offload cognitive debt* | Week 6 |
+| 🌿 Matrix Aurin | *Show HN: A private, non-therapy house to offload cognitive debt* | Week 6 |
 | 🌟 Polarstar Kids | *Show HN: I built a screen-free bedtime story platform for my daughter (€9 PDF, no app)* | Week 10 — **lowest priority on HN; Polarstar's real audience is on Pinterest/Reddit/parenting blogs, not HN** |
 | 📖 Author Anna | (no Show HN — would feel self-aggrandising) | — |
 

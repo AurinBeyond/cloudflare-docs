@@ -6,7 +6,7 @@
 > et see mitte mingil juhul ei paistaks välja AI-lik."*
 
 This is curated from the actual brand DNA of Matrix Aurin (Body Temple 28,
-Kids Universe, Sanctuary tone, $39 unlock), the explicit anti-FOMO posture,
+Kids Universe, House tone, $39 unlock), the explicit anti-FOMO posture,
 and the founder's Estonian + global Anglophone reach.
 
 ---
@@ -111,10 +111,10 @@ font, bedtime ritual graphics (NO infographics). Each pin → /aurins-room/stori
 
 | Channel | Why not |
 |---|---|
-| TikTok | Tone mismatch. Cannot do FOMO/algorithm chase without breaking sanctuary brand. |
+| TikTok | Tone mismatch. Cannot do FOMO/algorithm chase without breaking house brand. |
 | Facebook ads | Audience too broad; CPM > LTV with $39 product. |
 | LinkedIn | Wrong context — work-brain, not bedtime brain. |
-| Twitter/X | Tone-toxic for sanctuary brand. Anna's posts will be misread. |
+| Twitter/X | Tone-toxic for house brand. Anna's posts will be misread. |
 | Reddit promo posts | Will get banned in <2 hours. Only comment-level value-drop. |
 | AI-generated influencer DMs | Detectable within one sentence. Brand-killer. |
 

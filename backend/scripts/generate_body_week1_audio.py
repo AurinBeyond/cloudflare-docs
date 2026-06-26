@@ -32,7 +32,7 @@ OUTPUT = Path("/app/frontend/public/audio/body-architecture-week1-breath.mp3")
 # §SCRIPT-LOCKED 2026-05-28 — Approved language register:
 #   - Anti-wellness: no therapy / heal / cure / mindful / treatment
 #   - Architecture vocabulary: structure, the room, the floor, the breath
-#   - Reichian / Maté nods folded into sanctuary tone (never named in audio)
+#   - Reichian / Maté nods folded into house tone (never named in audio)
 #   - ~700-750 words at storyteller pacing ≈ 4-5 min spoken
 SCRIPT = """
 [deliberate pause]

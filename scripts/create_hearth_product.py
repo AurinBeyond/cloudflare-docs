@@ -63,7 +63,7 @@ HEARTH_DESCRIPTION_HTML = (
     "<p><strong>Format:</strong> PDF (A5, 12 pages) + 1-page worksheet + "
     "2 MP3 audios. Instant download after checkout. No app, no login.</p>"
     "<p><strong>Refund:</strong> 14-day no-questions refund.</p>"
-    "<p>Part of Matrix Aurin — a calm, parent-managed sanctuary. More "
+    "<p>Part of Matrix Aurin — a calm, parent-managed house. More "
     "rooms are in the slow making.</p>"
     "<p><em>Not therapy. Not medical care. A protocol for the 20 minutes "
     "after the house has gone quiet.</em></p>"

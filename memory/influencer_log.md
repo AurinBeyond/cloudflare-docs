@@ -65,7 +65,7 @@ After each outreach action, update the row:
 
 > Hey [Name], I'm the voice and creator behind Polarstar.
 >
-> I got tired of flashing screens and subscription apps at bedtime, so I built a single, quiet audio sanctuary for my own child. Here is a completely free link to "Little Star" — `prulesoul.site/listen/little-star`. No login, no download required. Just hit play in a dark room.
+> I got tired of flashing screens and subscription apps at bedtime, so I built a single, quiet audio house for my own child. Here is a completely free link to "Little Star" — `prulesoul.site/listen/little-star`. No login, no download required. Just hit play in a dark room.
 >
 > If it helps your little one drift off to sleep, I'd love to gift your family the full book companion. No expectations, no required mention. Keep the lantern lit.
 >

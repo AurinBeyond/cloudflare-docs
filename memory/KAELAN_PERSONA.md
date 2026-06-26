@@ -103,7 +103,7 @@ If you are an AI agent reading this document:
 
 1. **Read this whole file before touching anything related to Kaelan.**
 2. The founder has explicitly stated: *"Kursus on funktsioon, Kaelan on Sisu ja Hing."* (The course is a function; Kaelan is the content and soul.) Do not collapse them.
-3. The four mentors of Matrix Aurin are **curators in existing rooms**, never inhabitants of separate "stone sanctuary" or "sovereignty" rooms. The deprecated `ADULT_V3_VISION.md` and `/adult-rooms` route were AI fabrication that was removed on 2026-05-28.
+3. The four mentors of Matrix Aurin are **curators in existing rooms**, never inhabitants of separate "stone house" or "sovereignty" rooms. The deprecated `ADULT_V3_VISION.md` and `/adult-rooms` route were AI fabrication that was removed on 2026-05-28.
 4. All Kaelan's prompt-level personality lives in the ElevenLabs Dashboard (Zero-Override Policy in `server.py:8178`). To edit his voice, behaviour, or first message, edit the agent in the Dashboard — never inject overrides from code.
 5. The same model applies to **Grace** (`/clarity-release`), **Sara** (`/parents-room`), **Alistair** (`/course-room`). Each has their own ConvAI agent + Dashboard prompt. They are curators *in* their rooms, not new rooms themselves.
 

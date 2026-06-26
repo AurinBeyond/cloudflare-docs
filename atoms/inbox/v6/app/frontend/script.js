@@ -69,7 +69,7 @@ window.addEventListener('scroll', handleHeroParallax, { passive: true });
 // ===================================
 
 const revealElements = document.querySelectorAll(
-    '.principle, .door, .doors-headline, .doors-subtext, .threshold-headline, .threshold-text, .threshold-cta, .section-whisper, .offering-card, .offerings-headline, .offerings-subtext, .offerings-note, .sanctuary-wings-inner'
+    '.principle, .door, .doors-headline, .doors-subtext, .threshold-headline, .threshold-text, .threshold-cta, .section-whisper, .offering-card, .offerings-headline, .offerings-subtext, .offerings-note, .house-wings-inner'
 );
 
 const revealObserver = new IntersectionObserver(

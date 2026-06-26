@@ -5,7 +5,7 @@
  * Used by <RoomShell /> to render the mockup layout: left sidebar +
  * centre hero + right panel + curator card.
  *
- * Vocabulary rule: no "sanctuary, holy, sacred, therapy, course,
+ * Vocabulary rule: no "house, holy, sacred, therapy, course,
  * module, lesson, certificate". Stay in plain English, founder's voice.
  */
 

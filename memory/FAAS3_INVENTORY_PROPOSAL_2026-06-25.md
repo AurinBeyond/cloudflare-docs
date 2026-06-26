@@ -12,7 +12,7 @@
 
 **Frontend lehed:**
 - `BundleDisclosure.jsx` (membership tieri)
-- `SanctuaryPreview.jsx` (Mike's "Ways", Voice top-up)
+- `HousePreview.jsx` (Mike's "Ways", Voice top-up)
 - `Bookstore.jsx` + `BookDetail.jsx` (LemonSqueezy raamatud)
 - `Catalogue.jsx` (kuigi route redirektitud, fail sisaldab veel hindu)
 - `MembershipTiers.jsx` (frontend komponent, joonistab tabelilt)
@@ -57,17 +57,17 @@ Tabel formaadis (GPT raamistik):
 |---|---|---|---|---|
 | Quiet Entry | €89/kuu | BundleDisclosure | Sissepääsu-tier | ☐ KEEP ☐ MERGE ☐ RENAME ☐ DELETE |
 | Inner Compass | €229/kuu | BundleDisclosure | Sügav membership | ☐ KEEP ☐ MERGE ☐ RENAME ☐ DELETE |
-| Sanctuary Compass | €329/kuu | BundleDisclosure | Tipp-membership | ☐ KEEP ☐ MERGE ☐ RENAME ☐ DELETE |
-| Sanctuary Annual | €3290/aasta | BundleDisclosure | Aasta-pakk | ✅ DELETE (Anna otsustanud) |
+| House Compass | €329/kuu | BundleDisclosure | Tipp-membership | ☐ KEEP ☐ MERGE ☐ RENAME ☐ DELETE |
+| House Annual | €3290/aasta | BundleDisclosure | Aasta-pakk | ✅ DELETE (Anna otsustanud) |
 | Day Pass · Light | €25 | ? | Päeva-ligipääs | ☐ ☐ ☐ ☐ |
 | Day Pass · Plus | €49 | ? | ? | ☐ ☐ ☐ ☐ |
 | Day Pass · Deep | €89 | ? | ? | ☐ ☐ ☐ ☐ |
-| Voice · Small | €25 | SanctuaryPreview | Häälekrediit | ☐ ☐ ☐ ☐ |
-| Voice · Medium | €39 | SanctuaryPreview | ? | ☐ ☐ ☐ ☐ |
-| Voice · Large | €99 | SanctuaryPreview | ? | ☐ ☐ ☐ ☐ |
-| Mike Ways · A | €45 | SanctuaryPreview | "Ways to be here" | ☐ ☐ ☐ ☐ |
-| Mike Ways · B | €120 | SanctuaryPreview | ? | ☐ ☐ ☐ ☐ |
-| Mike Ways · C | €380 | SanctuaryPreview | ? | ☐ ☐ ☐ ☐ |
+| Voice · Small | €25 | HousePreview | Häälekrediit | ☐ ☐ ☐ ☐ |
+| Voice · Medium | €39 | HousePreview | ? | ☐ ☐ ☐ ☐ |
+| Voice · Large | €99 | HousePreview | ? | ☐ ☐ ☐ ☐ |
+| Mike Ways · A | €45 | HousePreview | "Ways to be here" | ☐ ☐ ☐ ☐ |
+| Mike Ways · B | €120 | HousePreview | ? | ☐ ☐ ☐ ☐ |
+| Mike Ways · C | €380 | HousePreview | ? | ☐ ☐ ☐ ☐ |
 | Hearth Protocol | €19 | Gumroad LIVE | Õhtujutud vanematele | ✅ KEEP (live tulu allikas) |
 | Family Bundle | €25 | Gumroad LIVE | Hearth + Polarstar | ✅ KEEP |
 | Alistair Bundle | €39 | Gumroad | 3 raha-laboriumi | ✅ KEEP |

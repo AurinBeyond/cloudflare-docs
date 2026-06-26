@@ -7,7 +7,7 @@ Applies to:
 * LP Layer
 
 IMPORTANT:
-A technical communication mismatch happened during the previous alignment phase, which caused partial role confusion and mixed assumptions between sanctuary-world direction and landing-page execution.
+A technical communication mismatch happened during the previous alignment phase, which caused partial role confusion and mixed assumptions between house-world direction and landing-page execution.
 
 This directive officially corrects and locks the proper structure moving forward.
 
@@ -20,7 +20,7 @@ We are NOT currently building a temporary landing page or isolated funnel.
 We are refining and harmonizing:
 THE ACTUAL PRODUCT ECOSYSTEM.
 
-This is now a sanctuary-world product architecture project, not a typical SaaS landing page project.
+This is now a house-world product architecture project, not a typical SaaS landing page project.
 
 The current direction is approved.
 
@@ -30,14 +30,14 @@ ROLE STRUCTURE (LOCKED)
 
 Atoms:
 
-* sanctuary/world direction
+* house/world direction
 * luxury atmosphere
 * UX cohesion
 * emotional architecture
 * typography direction
 * navigation feeling
 * copy refinement
-* sanctuary continuity
+* house continuity
 * world cohesion
 
 NOT:
@@ -149,11 +149,11 @@ Kids Universe
 Quiet Store
 = curated value
 
-Voice Sanctuary
+Voice House
 = deep presence
 
 These must feel like:
-different wings of the same sanctuary.
+different wings of the same house.
 
 NOT:
 separate disconnected websites or random products.
@@ -176,6 +176,6 @@ Priority order:
 The system should now evolve:
 calmly,
 layer by layer,
-without destabilizing the living sanctuary.
+without destabilizing the living house.
 
 Please internally realign workflows and responsibilities accordingly so the previous communication mismatch is fully corrected moving forward.

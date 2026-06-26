@@ -126,7 +126,7 @@
 | Margin | **85%** ✅✅ |
 
 ### 5.6 👨‍👩‍👧 Family Magic Bundle
-*"Üks ost. Terve perekonna sanctuary."*
+*"Üks ost. Terve perekonna house."*
 | | |
 |---|---|
 | Name | `Family Magic Bundle` |
@@ -158,7 +158,7 @@
 ### 5.9 👑 VIP Unlimited 30-Day (Anna raised €490 → €590)
 | | |
 |---|---|
-| Name | `VIP Unlimited — 30 Days of Sanctuary` |
+| Name | `VIP Unlimited — 30 Days of House` |
 | SKU | `bundle-vip-unlimited` |
 | Type | One-time (30-day window) |
 | Price | **€590.00 EUR** |
@@ -170,24 +170,24 @@
 
 ## ✨ SECTION 6 — MID-TIER PREMIUM (NEW per Anna's request)
 
-### 6.1 🌿 Sanctuary Season (3-month commitment)
+### 6.1 🌿 House Season (3-month commitment)
 *"A full quarter. Slow, named, kept."*
 | | |
 |---|---|
-| Name | `Sanctuary Season — 3 Months Inside` |
-| SKU | `bundle-sanctuary-season` |
+| Name | `House Season — 3 Months Inside` |
+| SKU | `bundle-house-season` |
 | Type | One-time (3-month window) |
 | Price | **€890.00 EUR** |
 | Includes | 180 min voice over 3 months + all books + all courses access for 3 months + Body Temple 28 (lifetime) + 3 personalized Anneli stories (1/month) + 3 monthly Anna letters |
 | Cost basis | €57 |
 | Margin | **87.6%** ✅✅ |
 
-### 6.2 💑 Couples Sanctuary (6 months, 2 adults)
+### 6.2 💑 Couples House (6 months, 2 adults)
 *"Two doors, one quiet circle. For couples who choose to land softer — together."*
 | | |
 |---|---|
-| Name | `Couples Sanctuary — 6 Months for Two` |
-| SKU | `bundle-couples-sanctuary` |
+| Name | `Couples House — 6 Months for Two` |
+| SKU | `bundle-couples-house` |
 | Type | One-time (6-month window) |
 | Price | **€1,190.00 EUR** |
 | Includes | 2 separate accounts + 360 min voice total (60/month, shareable) + Eternal Thread memory both accounts + all content 6 months + 6 monthly Anneli stories + Body Temple 28 (both) + monthly couples reflection prompts |
@@ -199,7 +199,7 @@
 ## 🏛️ SECTION 7 — LUX TIER
 
 ### 7.1 ✨ LUX Annual Privilege
-*"A year inside the sanctuary. Held, named, remembered."*
+*"A year inside the house. Held, named, remembered."*
 | | |
 |---|---|
 | Name | `LUX Annual Privilege` |
@@ -310,10 +310,10 @@
 | Webhook URL | `https://prulesoul.site/api/fastspring/webhook` *(wire later)* |
 | Currency display | USD primary, EUR/GBP auto-converted |
 | EU VAT collection | **ON** (FastSpring as merchant of record) |
-| Default refund window | **14 days** (30 days for LUX Annual, LUX Lifetime, Couples Sanctuary, Sanctuary Season) |
-| Disclaimer on every product | "Not therapy, not medical advice. Educational sanctuary content." |
+| Default refund window | **14 days** (30 days for LUX Annual, LUX Lifetime, Couples House, House Season) |
+| Disclaimer on every product | "Not therapy, not medical advice. Educational house content." |
 | Business entity | Norwegian sole proprietorship |
-| Fair-use boilerplate (for unlimited-text products) | "Generous fair-use limit ~200-300 conversations per month, soft cap to keep the sanctuary peaceful." |
+| Fair-use boilerplate (for unlimited-text products) | "Generous fair-use limit ~200-300 conversations per month, soft cap to keep the house peaceful." |
 
 ---
 
@@ -347,8 +347,8 @@
 **🥇 ENTER FIRST — hero products & anchors:**
 1. **LUX Lifetime €2,990** ⭐ (THE anchor — makes everything below feel reasonable)
 2. **LUX Annual €1,490** (auto-renew, the recurring premium)
-3. **Couples Sanctuary €1,190** (NEW mid-tier)
-4. **Sanctuary Season €890** (NEW mid-tier)
+3. **Couples House €1,190** (NEW mid-tier)
+4. **House Season €890** (NEW mid-tier)
 5. **VIP Unlimited €590** (raised from €490)
 6. **Family Magic Bundle €299** (cross-sell hero)
 7. **Body Temple 28 $39** (most-bought single)
@@ -374,7 +374,7 @@
 ## ⚠️ SECTION 14 — MARGIN RISK CONTROLS
 
 ### Hard rules baked into product descriptions:
-1. **All "unlimited text" products** → include "Fair use ~200-300 conversations/month, soft cap to keep the sanctuary peaceful."
+1. **All "unlimited text" products** → include "Fair use ~200-300 conversations/month, soft cap to keep the house peaceful."
 2. **All voice products** → "Unused minutes refundable within 14 days."
 3. **LUX Annual** → "30-day full refund window. After first month, prorated."
 4. **LUX Lifetime** → "30-day full refund window. After first use, no refund."

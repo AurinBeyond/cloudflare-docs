@@ -1,8 +1,8 @@
-Additional architectural clarification to fully stabilize the sanctuary structure moving forward:
+Additional architectural clarification to fully stabilize the house structure moving forward:
 
-The separation between the Landing Layer and the Sanctuary Product Ecosystem is intentional and strategically important.
+The separation between the Landing Layer and the House Product Ecosystem is intentional and strategically important.
 
-This structure exists to protect the long-term stability of the sanctuary world.
+This structure exists to protect the long-term stability of the house world.
 
 IMPORTANT:
 
@@ -10,7 +10,7 @@ https://pure-soul-life.emergent.host
 = flexible Landing / Entrance Layer
 
 https://prulesoul.site
-= stable Sanctuary Product Ecosystem
+= stable House Product Ecosystem
 
 The Landing Layer is intentionally allowed to evolve more dynamically:
 
@@ -26,7 +26,7 @@ Because of this, the Landing Layer may change over time.
 
 HOWEVER:
 
-The Sanctuary Product Ecosystem is different.
+The House Product Ecosystem is different.
 
 The product world is meant to become:
 
@@ -39,7 +39,7 @@ The product world is meant to become:
 This is why the systems are intentionally separated.
 
 If something experimental changes or breaks on the Landing Layer,
-it must NOT destabilize or mutate the actual sanctuary ecosystem.
+it must NOT destabilize or mutate the actual house ecosystem.
 
 This separation protects:
 
@@ -47,17 +47,17 @@ This separation protects:
 * emotional continuity
 * customer trust
 * system stability
-* sanctuary identity
+* house identity
 
 Very important:
-The sanctuary ecosystem is NOT meant to become a constantly-changing marketing funnel.
+The house ecosystem is NOT meant to become a constantly-changing marketing funnel.
 
 It should gradually mature into:
-a stable digital sanctuary world.
+a stable digital house world.
 
 The Landing Layer attracts and introduces.
 
-The Product Sanctuary World holds and deepens the experience.
+The Product House World holds and deepens the experience.
 
 This distinction is now officially locked.
 
@@ -65,16 +65,16 @@ This distinction is now officially locked.
 THE TWO EMOTIONAL WORLDS
 ────────────────────────
 
-Inside the Sanctuary Product Ecosystem, BOTH emotional layers must coexist harmoniously:
+Inside the House Product Ecosystem, BOTH emotional layers must coexist harmoniously:
 
 | Emotional Layer          | Purpose                                                              |
 | ------------------------ | -------------------------------------------------------------------- |
-| Curated Luxury Sanctuary | dignity, slowness, depth, refinement, emotional grounding            |
-| Open Discovery Sanctuary | breathing room, exploration, warmth, imagination, emotional openness |
+| Curated Luxury House | dignity, slowness, depth, refinement, emotional grounding            |
+| Open Discovery House | breathing room, exploration, warmth, imagination, emotional openness |
 
 The goal is NOT to choose one over the other.
 
-The sanctuary should feel:
+The house should feel:
 refined and valuable,
 while still emotionally human, welcoming, and alive.
 

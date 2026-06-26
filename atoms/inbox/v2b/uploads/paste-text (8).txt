@@ -7,7 +7,7 @@ This message is shared across:
 * Aurin Hub (AH)
 
 Purpose:
-Ensure clear long-term operational separation, prevent role overlap, reduce chaos, and stabilize Matrix Aurin as a premium sanctuary platform.
+Ensure clear long-term operational separation, prevent role overlap, reduce chaos, and stabilize Matrix Aurin as a premium house platform.
 
 ==================================================
 CORE PRINCIPLE
@@ -104,4 +104,4 @@ NON-NEGOTIABLE RULES
 * No production mutation without founder approval
 
 Current priority:
-Finalize Matrix Aurin into a stable luxury sanctuary experience and transition from rebuilding into growth and marketing.
+Finalize Matrix Aurin into a stable luxury house experience and transition from rebuilding into growth and marketing.

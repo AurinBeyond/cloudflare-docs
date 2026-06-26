@@ -135,7 +135,7 @@ When Anna provides the draft, run it through these **8 hard checks**. If ANY che
 | "Game-changer"                          | Sells transformation, not slowness              |
 | "Limited time only"                     | Manufactured urgency                            |
 | "Studies show"                          | Clinical credibility; we use lived credibility  |
-| "You owe it to yourself"                | Guilt-leverage; opposite of sanctuary           |
+| "You owe it to yourself"                | Guilt-leverage; opposite of house           |
 | "Click below to start your journey"     | Generic SaaS CTA; flat tone                     |
 | "Special offer for the first 100"       | FOMO; we operate in cycles, not flash sales     |
 | "Reclaim your peace"                    | Aggressive; peace isn't reclaimed, it's noticed |

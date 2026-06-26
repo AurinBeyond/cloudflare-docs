@@ -27,9 +27,9 @@ Space them ≥4 weeks apart so they read as separate launches, not a campaign.
 - **Best time:** Tuesday 10:00 UTC (06:00 EST), known HN peak window.
 - **Draft location:** `/app/memory/show_hn_draft.md` (refine before posting)
 
-### Shot 2 — Matrix Aurin / Adult Sanctuary (Week 6)
+### Shot 2 — Matrix Aurin / Adult House (Week 6)
 
-- **Title:** `Show HN: A private, non-therapy sanctuary to offload cognitive debt`
+- **Title:** `Show HN: A private, non-therapy house to offload cognitive debt`
 - **Hook:** the OS metaphor. Mind as RAM, intrusive loops as zombie processes.
 - **Anchors:** (a) no AI training on your data, (b) no analytics cookies,
   (c) not therapy — explicitly. (d) Built by one person, hostable in one
@@ -120,7 +120,7 @@ Each essay is ~600–900 words. Each essay ends with one quiet line:
 | 3 | The Architecture of Paternal Guilt | Matrix Aurin (Sara room) | Week 4 | Idea |
 | 4 | Why Your Brain's RAM Is Always Full | Matrix Aurin | Week 5 | Idea |
 | 5 | Read-Aloud Is the Last Honest Tech | Polarstar | Week 6 | Idea |
-| 6 | I Built a Sanctuary in One Pod | Matrix Aurin | Week 7 | Idea |
+| 6 | I Built a House in One Pod | Matrix Aurin | Week 7 | Idea |
 | 7 | The Founder Mode of a Quiet Hour | Clarity | Week 8 | Idea |
 | 8 | What 7 Quiet Nights Taught Me About My Daughter | Polarstar | Week 9 | Idea |
 | 9 | Productivity Apps Are Anxiety With UI | Clarity | Week 10 | Idea |

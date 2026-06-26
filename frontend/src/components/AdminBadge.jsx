@@ -12,10 +12,10 @@ export default function AdminBadge() {
   const location = useLocation();
   if (!isAdmin) return null;
 
-  // §Phase 0 — Sanctuary mode. Even the founder's admin badge must
+  // §Phase 0 — House mode. Even the founder's admin badge must
   // not overlap the mentor surfaces. The badge is a development
   // affordance; inside the wanderer's room it is visual noise.
-  const isSanctuary = (
+  const isHouse = (
     location.pathname.startsWith("/clarity-release") ||
     location.pathname.startsWith("/body-room") ||
     location.pathname.startsWith("/parents-room") ||
@@ -24,7 +24,7 @@ export default function AdminBadge() {
     location.pathname.startsWith("/portal/guest") ||
     location.pathname.startsWith("/guest")
   );
-  if (isSanctuary) return null;
+  if (isHouse) return null;
 
   const handleExit = () => {
     try {

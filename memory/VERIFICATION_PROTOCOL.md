@@ -143,7 +143,7 @@ päris ostja. Mitte "tehniline log", vaid **päris kogemus**:
 
 - ✅ Üks selge **tegutsemise nupp** (CTA), mis päriselt töötab
 - ✅ Lõplik design (sage-on-black, õige tüpograafia)
-- ✅ Õige sender (`sanctuary@prulesoul.site` või muu kokkulepitud)
+- ✅ Õige sender (`house@prulesoul.site` või muu kokkulepitud)
 - ✅ Reply-to õige (`contact.puresoul@proton.me` või muu)
 - ✅ Unsubscribe-link (kui on uudiskiri)
 

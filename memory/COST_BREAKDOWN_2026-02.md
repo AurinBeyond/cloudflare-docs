@@ -257,7 +257,7 @@ Kustutame KOHE pärast su "GO" sõna:
 | `BundleDisclosure.jsx` 4-tier struktuur | €89/€229/€329/€779 — kõik asendatakse |
 | Day Passes (€25/€49/€89) | Kontseptsioon kustutatakse |
 | Top-up minutes (€49/€159/€399) | Asendub Voice Access (€15/€49/€99) |
-| Mike's "Ways" (€45/€120/€380) SanctuaryPreview'is | Asendub uue 4-kasti struktuuriga |
+| Mike's "Ways" (€45/€120/€380) HousePreview'is | Asendub uue 4-kasti struktuuriga |
 | Kõik $39 USD viited (HighPerformers, Body Temple) | Teisendame €-le |
 
 ---

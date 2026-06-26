@@ -11,7 +11,7 @@ import { ArrowRight, Lock, Shield, Brain, EyeOff } from "lucide-react";
 import { track } from "@/lib/telemetry";
 
 /**
- * /clarity-release/threshold — the Sanctuary Level entry guard.
+ * /clarity-release/threshold — the House Level entry guard.
  *
  * Three quiet declarations + one identity choice + one solemn agreement.
  * Once consent_v2 is stamped on the user, future visits skip this gate
@@ -308,7 +308,7 @@ function DeclarationCard({
 }
 
 function LightOrb({ testid, label, sublabel, selected, onSelect, variant }) {
-  // §Phase 0 Sanctuary (2026-02-14) — founder directive: stick-figure
+  // §Phase 0 House (2026-02-14) — founder directive: stick-figure
   // silhouettes are REPLACED by real human portraits. The wanderer
   // chooses between two real faces, not abstractions. Images are
   // served via the same `/api/clarity/guide-face/<gender>` route the

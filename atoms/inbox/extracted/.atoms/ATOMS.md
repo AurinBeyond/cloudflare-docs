@@ -1,7 +1,7 @@
 # Project Context
 
 ## Project Overview
-Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
+Matrix Aurin premium house homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
 
 ## Key Decisions
 | Date | Decision | By | Rationale |
@@ -44,7 +44,7 @@ Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesi
 - No autonomous system mutations or speculative optimization
 
 ### Brand Principles
-- Quiet luxury, sanctuary atmosphere, emotional safety
+- Quiet luxury, house atmosphere, emotional safety
 - Sincerity, calm authority, human authenticity
 - Slow premium pacing, elegant restraint, cinematic stillness
 - No aggressive marketing, guru behavior, fake urgency, spam energy
@@ -86,4 +86,4 @@ Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesi
 - No role overlap
 - No backend/frontend authority confusion
 - No production mutation without founder approval
-- Current priority: Finalize into stable luxury sanctuary, transition from rebuilding into growth/marketing
+- Current priority: Finalize into stable luxury house, transition from rebuilding into growth/marketing

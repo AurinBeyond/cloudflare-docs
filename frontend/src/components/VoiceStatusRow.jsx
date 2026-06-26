@@ -1,5 +1,5 @@
 /**
- * VoiceStatusRow.jsx — single source of truth for the sanctuary
+ * VoiceStatusRow.jsx — single source of truth for the house
  * voice-status line.
  *
  * §Phase 1 follow-up (2026-02-14). Iter 69 / 70 / 71 each had to
@@ -13,7 +13,7 @@
  *
  * This component is now the ONLY place where voice-status copy
  * lives. The phrasing has been audited against the founder's
- * Phase 0 Sanctuary lock: technical state must be FELT, not READ.
+ * Phase 0 House lock: technical state must be FELT, not READ.
  * The only strings we render are:
  *
  *   "Microphone paused."  — operationally meaningful (the wanderer
@@ -76,7 +76,7 @@ export default function VoiceStatusRow({
   }`;
 
   // Founder lock — only these labels are permitted. Anything else
-  // is sanctuary-broken vocabulary and must NEVER reach the wanderer.
+  // is house-broken vocabulary and must NEVER reach the wanderer.
   const label = voice.muted
     ? "Microphone paused."
     : voice.transcribing

@@ -4,7 +4,7 @@
  * §HEARTH-AUDIO iter 86q 2026-05-31
  *
  * Second Hearth evening story. Same anatomy as ListenSockOnStairs:
- * deep blue sanctuary, lantern-amber accents, collapsible Read along.
+ * deep blue house, lantern-amber accents, collapsible Read along.
  *
  * Adds: a quiet "Story 2 of 5" caption beneath the title so visitors
  * sense the wider shelf without any marketing tone.

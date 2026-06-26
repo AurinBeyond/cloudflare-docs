@@ -5,7 +5,7 @@ At this stage, the core architectural direction is sufficiently established.
 The priority is no longer large-scale redesign or new conceptual expansion.
 
 The current focus is:
-sanctuary ecosystem refinement,
+house ecosystem refinement,
 emotional cohesion,
 content harmonization,
 and product-world maturation.
@@ -14,14 +14,14 @@ and product-world maturation.
 ACTIVE REFINEMENT AREAS
 ────────────────────────
 
-Please focus on refining and harmonizing the following sanctuary ecosystem layers:
+Please focus on refining and harmonizing the following house ecosystem layers:
 
-* overall sanctuary product-world flow
+* overall house product-world flow
 * discoverability and ecosystem navigation
-* emotional pacing between sanctuary worlds
+* emotional pacing between house worlds
 * room descriptions and presentation
 * product presentation structure
-* sanctuary wording consistency
+* house wording consistency
 * luxury warmth and emotional coherence
 * premium positioning without aggressive SaaS energy
 
@@ -34,12 +34,12 @@ Please specifically review and refine:
 * Parents Room
 * Body Room
 * Course Room
-* Voice Sanctuary
+* Voice House
 * Kids Universe
 * Library experience
 
 The goal is:
-make all sanctuary rooms feel like part of the same emotionally coherent sanctuary world.
+make all house rooms feel like part of the same emotionally coherent house world.
 
 Some sections may still carry:
 
@@ -51,7 +51,7 @@ Some sections may still carry:
 * emotionally disconnected structure
 
 These should now gradually evolve into:
-a unified sanctuary atmosphere.
+a unified house atmosphere.
 
 ────────────────────────
 VOICE SANCTUARY
@@ -81,7 +81,7 @@ Please review:
 
 * wording tone
 * emotional safety
-* sanctuary pacing
+* house pacing
 * clarity of purpose
 * emotional sophistication
 * premium calmness
@@ -103,10 +103,10 @@ Please review:
 * learning pathways
 * emotional pacing
 * presentation style
-* sanctuary integration
+* house integration
 
 The goal is:
-courses should feel like sanctuary journeys —
+courses should feel like house journeys —
 not generic online courses.
 
 ────────────────────────
@@ -125,7 +125,7 @@ Please continue exploring:
 * family pathways
 * emotional growth tools
 
-This is considered a major future sanctuary wing.
+This is considered a major future house wing.
 
 ────────────────────────
 FINAL PRIORITY
@@ -137,7 +137,7 @@ refinement,
 cohesion,
 clarity,
 stability,
-premium sanctuary atmosphere,
+premium house atmosphere,
 and monetization readiness.
 
 NOT:

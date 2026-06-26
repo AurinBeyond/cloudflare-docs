@@ -1,7 +1,7 @@
 # Project Context
 
 ## Project Overview
-Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
+Matrix Aurin premium house homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
 
 ## Key Decisions
 | Date | Decision | By | Rationale |

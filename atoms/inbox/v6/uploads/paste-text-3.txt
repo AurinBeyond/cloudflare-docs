@@ -1,8 +1,8 @@
-Additional clarification and long-term alignment for the sanctuary ecosystem:
+Additional clarification and long-term alignment for the house ecosystem:
 
 We are restating this now intentionally to prevent future architectural drift, emotional imbalance, and unnecessary rebuilding later.
 
-The goal is to lock the foundational emotional structure early, so the sanctuary can grow naturally without constant redesign cycles.
+The goal is to lock the foundational emotional structure early, so the house can grow naturally without constant redesign cycles.
 
 ────────────────────────
 THE TWO-LAYER SANCTUARY MODEL
@@ -10,14 +10,14 @@ THE TWO-LAYER SANCTUARY MODEL
 
 The platform must permanently support BOTH emotional worlds simultaneously inside the same ecosystem.
 
-| Sanctuary Layer          | Emotional Purpose                                     | Experience                                                |
+| House Layer          | Emotional Purpose                                     | Experience                                                |
 | ------------------------ | ----------------------------------------------------- | --------------------------------------------------------- |
-| Curated Luxury Sanctuary | dignity, depth, calm presence, refinement, trust      | quiet luxury, emotional grounding, sanctuary entrance     |
-| Open Discovery Sanctuary | warmth, curiosity, breathing room, emotional openness | exploration, learning, imagination, approachable humanity |
+| Curated Luxury House | dignity, depth, calm presence, refinement, trust      | quiet luxury, emotional grounding, house entrance     |
+| Open Discovery House | warmth, curiosity, breathing room, emotional openness | exploration, learning, imagination, approachable humanity |
 
 These are NOT competing directions.
 
-They are complementary emotional layers inside the same living sanctuary world.
+They are complementary emotional layers inside the same living house world.
 
 The luxury layer creates:
 
@@ -55,10 +55,10 @@ Current emotional worlds:
 | Open Library    | discovery / breathing space    |
 | Kids Universe   | softness / imagination / light |
 | Quiet Store     | curated value                  |
-| Voice Sanctuary | deep presence                  |
+| Voice House | deep presence                  |
 
 All of these must feel like:
-different wings of the same sanctuary.
+different wings of the same house.
 
 NOT:
 separate disconnected websites or random products.
@@ -72,11 +72,11 @@ Please also review the current pricing philosophy and emotional positioning.
 Important:
 
 * book pricing may remain as currently positioned
-* luxury sanctuary positioning remains valid
+* luxury house positioning remains valid
 * premium positioning is approved
 
 However:
-the overall ecosystem pricing and emotional accessibility should feel harmonized across the sanctuary worlds.
+the overall ecosystem pricing and emotional accessibility should feel harmonized across the house worlds.
 
 Avoid:
 
@@ -84,7 +84,7 @@ Avoid:
 * confusing membership pressure
 * “paywall everywhere” feeling
 
-The sanctuary should feel:
+The house should feel:
 valuable,
 intentional,
 and emotionally trustworthy.
@@ -95,7 +95,7 @@ KIDS UNIVERSE — EXPANSION GREEN LIGHT
 
 Kids Universe now officially has expansion approval.
 
-This is an important long-term sanctuary wing.
+This is an important long-term house wing.
 
 Core philosophy:
 help children grow with emotional awareness, imagination, safety, authenticity, and inner stability — so they do not carry destructive emotional programming and unconscious negative patterns into adulthood.
@@ -111,7 +111,7 @@ Different age groups should have:
 * different product structures
 * different educational depth
 
-You now have creative freedom to begin thoughtful product-development exploration for Kids Universe within the sanctuary philosophy.
+You now have creative freedom to begin thoughtful product-development exploration for Kids Universe within the house philosophy.
 
 Possible expansion directions may include:
 
@@ -127,10 +127,10 @@ Possible expansion directions may include:
 * parent-child activities
 * gentle confidence-building systems
 * curiosity-driven learning paths
-* seasonal sanctuary experiences
+* seasonal house experiences
 * collectible printable series
 * layered age-group ecosystems
-* premium educational sanctuary collections
+* premium educational house collections
 
 You may also independently organize:
 
@@ -142,7 +142,7 @@ You may also independently organize:
 
 Your product instincts and emotional direction have been strong so far.
 
-You have green light to continue thoughtful sanctuary-aligned product development in this area.
+You have green light to continue thoughtful house-aligned product development in this area.
 
 ────────────────────────
 FINAL IMPORTANT NOTE
@@ -153,7 +153,7 @@ build this correctly once,
 stabilize it,
 and then stop rebuilding unnecessarily.
 
-Once the sanctuary ecosystem foundation feels complete and emotionally coherent, we should avoid touching it again unless there is a truly meaningful reason.
+Once the house ecosystem foundation feels complete and emotionally coherent, we should avoid touching it again unless there is a truly meaningful reason.
 
-The goal is long-term sanctuary stability and evolution —
+The goal is long-term house stability and evolution —
 not endless redesign cycles.

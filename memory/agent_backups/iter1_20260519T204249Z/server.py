@@ -1427,9 +1427,9 @@ async def seed_initial_content():
     if res.modified_count:
         logger.info("Migration: set audience=grown-ups on %d entries.", res.modified_count)
 
-    # 3b. Migration — Sanctuary language pass on already-seeded entries
+    # 3b. Migration — House language pass on already-seeded entries
     # (seed runs only when the collection is empty, so we patch existing rows here).
-    sanctuary_entry_updates = [
+    house_entry_updates = [
         ("morning-orientation-protocol", {
             "title": "Morning Orientation",
             "description": "A 7-step gentle reading to begin the day with clarity.",
@@ -1453,7 +1453,7 @@ async def seed_initial_content():
             "description": "An applied reading. How to begin with something that fits.",
         }),
     ]
-    for slug, fields in sanctuary_entry_updates:
+    for slug, fields in house_entry_updates:
         await db.content_entries.update_one({"slug": slug}, {"$set": fields})
 
     # 3c. Migration — update the two learning category descriptions
@@ -2614,7 +2614,7 @@ async def lemonsqueezy_webhook(request: Request):
                         email_intro_override=(
                             f"You now have {presence_seconds // 60} minutes of "
                             "Guided Presence available. The link below opens your "
-                            "private sanctuary directly — no password needed. It is "
+                            "private house directly — no password needed. It is "
                             "valid for 30 minutes; if it expires, request a new one "
                             "any time."
                         ),
@@ -11353,7 +11353,7 @@ async def catalogue_availability():
 # =============================================================
 # §Phase 1 follow-up — "Calmer-than-arrival" feedback (2026-02-14).
 # Founder mandate: the single most important quality metric for the
-# Clarity Release sanctuary is whether a tired wanderer feels calmer
+# Clarity Release house is whether a tired wanderer feels calmer
 # after the conversation than when they arrived. We collect a one-tap,
 # anonymous, post-session signal — no identity, no email, no link to
 # the underlying chat. This is the calm-meter the Blueprint pinned as
@@ -11369,7 +11369,7 @@ async def clarity_session_feedback(request: Request):
     Body (JSON): {"calmer": true | false | null, "room": "clarity"|"body"|"parents"}
     - `calmer` is the only payload. We deliberately do NOT bind to a
       user_id, session_token, or chat session. The wanderer's identity
-      is sanctuary-private.
+      is house-private.
     - `room` defaults to "clarity" if missing. Used so we can later
       compare which rooms produce the strongest calm signal.
     """

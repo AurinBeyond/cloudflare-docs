@@ -96,7 +96,7 @@ _LAYER_1: List[Tuple[re.Pattern, str]] = [
     (re.compile(r"\binterventions?\b", re.IGNORECASE), "practices"),
     (re.compile(r"\bprotocols?\b", re.IGNORECASE), "practices"),
     (re.compile(r"\bdysfunctions?\b", re.IGNORECASE), "imbalance"),
-    # ---- §Phase 0 Sanctuary lock (2026-02-13). The mentor must never
+    # ---- §Phase 0 House lock (2026-02-13). The mentor must never
     # tell a wanderer they are in the wrong room, offer them an exit,
     # break the spell with AI-assistant language, or argue.
     (re.compile(r"\b(?:you(?:'re|\s+are)|that(?:'s|\s+is))\s+in\s+the\s+wrong\s+room\b", re.IGNORECASE),
@@ -164,7 +164,7 @@ _SAFE_FALLBACK = (
 
 
 def _strip_numbered_list_leakage(text: str) -> str:
-    """§Phase 0 Sanctuary fix (2026-02-14) — strip number-token leakage.
+    """§Phase 0 House fix (2026-02-14) — strip number-token leakage.
 
     Claude occasionally streams sequences like ``"5. 6. 7. 8. 9. 10. Hello."``
     when it has been asked not to use numbered lists but slips into one

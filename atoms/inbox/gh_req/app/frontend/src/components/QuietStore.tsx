@@ -22,7 +22,7 @@ const products = [
     features: ["All ritual collections", "Monthly new content", "Seasonal specials", "Community access"],
   },
   {
-    title: "Voice Sanctuary Membership",
+    title: "Voice House Membership",
     description: "Unlimited access to all voice-guided deep presence sessions",
     price: "$12.99/mo",
     originalPrice: "",
@@ -42,7 +42,7 @@ const products = [
 const giftCards = [
   { amount: "$25", label: "A Gentle Gift" },
   { amount: "$50", label: "A Thoughtful Offering" },
-  { amount: "$100", label: "A Sanctuary Experience" },
+  { amount: "$100", label: "A House Experience" },
 ];
 
 export default function QuietStore({ onNavigate }: QuietStoreProps) {
@@ -104,7 +104,7 @@ export default function QuietStore({ onNavigate }: QuietStoreProps) {
 
       {/* Gift Cards */}
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="font-luxury text-2xl font-bold text-center mb-2">Gift the Sanctuary</h2>
+        <h2 className="font-luxury text-2xl font-bold text-center mb-2">Gift the House</h2>
         <p className="text-[#f5f0e8]/50 text-center mb-8 text-sm">Share the gift of stillness with someone you love</p>
         
         <div className="grid grid-cols-3 gap-4">
@@ -130,7 +130,7 @@ export default function QuietStore({ onNavigate }: QuietStoreProps) {
             ))}
           </div>
           <p className="text-[#f5f0e8]/70 text-sm italic mb-4 max-w-md mx-auto">
-            "This sanctuary has transformed my daily practice. The quality and care in every piece is extraordinary."
+            "This house has transformed my daily practice. The quality and care in every piece is extraordinary."
           </p>
           <p className="text-[#f5f0e8]/40 text-xs">— A grateful member</p>
           

@@ -1,7 +1,7 @@
-Important Sanctuary Voice Architecture Clarification
-— implementation and positioning guidance for the Product Sanctuary Ecosystem.
+Important House Voice Architecture Clarification
+— implementation and positioning guidance for the Product House Ecosystem.
 
-After reviewing the pricing/runtime structure and the long-term sanctuary direction, we are now aligned on a critical architectural distinction that should guide all future Voice Sanctuary presentation and product design decisions.
+After reviewing the pricing/runtime structure and the long-term house direction, we are now aligned on a critical architectural distinction that should guide all future Voice House presentation and product design decisions.
 
 ────────────────────────
 CRITICAL BREAKTHROUGH
@@ -9,12 +9,12 @@ CRITICAL BREAKTHROUGH
 
 The platform is NOT one business model.
 
-It is actually TWO connected systems inside the same sanctuary ecosystem:
+It is actually TWO connected systems inside the same house ecosystem:
 
 | Layer                       | Role                             |
 | --------------------------- | -------------------------------- |
-| Digital Sanctuary Ecosystem | high-margin content world        |
-| Voice Sanctuary Runtime     | premium realtime sanctuary layer |
+| Digital House Ecosystem | high-margin content world        |
+| Voice House Runtime     | premium realtime house layer |
 
 This distinction is now officially locked.
 
@@ -67,7 +67,7 @@ WITHOUT implying:
 VOICE POSITIONING LANGUAGE
 ────────────────────────
 
-Please actively refine and improve the wording, presentation language, and emotional framing of the Voice Sanctuary layer.
+Please actively refine and improve the wording, presentation language, and emotional framing of the Voice House layer.
 
 Avoid wording like:
 
@@ -82,15 +82,15 @@ Prefer positioning language closer to:
 
 | Avoid                 | Preferred Direction           |
 | --------------------- | ----------------------------- |
-| AI Therapist          | Voice Sanctuary Guide         |
+| AI Therapist          | Voice House Guide         |
 | AI Psychologist       | Reflective Presence Guide     |
-| Therapy Session       | Sanctuary Session             |
+| Therapy Session       | House Session             |
 | Emotional Treatment   | Guided Reflection             |
-| AI Companion          | Continuous Sanctuary Presence |
+| AI Companion          | Continuous House Presence |
 | Mental Health Support | Emotional Clarity Space       |
 
 The goal:
-premium sanctuary positioning
+premium house positioning
 without legal or emotional-risk language.
 
 ────────────────────────
@@ -99,7 +99,7 @@ CORE RUNTIME LOGIC
 
 The correct mental model is:
 
-“People enter the sanctuary ecosystem,
+“People enter the house ecosystem,
 and premium realtime voice is a governed premium runtime layer.”
 
 A good analogy:
@@ -122,7 +122,7 @@ correct and production-aligned SaaS thinking.
 VOICE SANCTUARY STRUCTURE
 ────────────────────────
 
-Voice Sanctuary should now evolve toward:
+Voice House should now evolve toward:
 
 * session-based realtime experiences
 * emotionally framed sessions
@@ -159,7 +159,7 @@ emotional clarity,
 presence,
 reflection,
 continuity,
-and sanctuary atmosphere.
+and house atmosphere.
 
 ────────────────────────
 MEMBERSHIP DIRECTION
@@ -172,16 +172,16 @@ Current structure feels strong:
 * Divine
 
 However:
-Divine should remain a prestige sanctuary layer —
+Divine should remain a prestige house layer —
 not a “huge unlimited AI package”.
 
 The feeling should be:
 
-* concierge sanctuary presence
+* concierge house presence
 * continuity
 * deeper access
 * priority atmosphere
-* premium sanctuary relationship
+* premium house relationship
 
 NOT:
 “10 hours of AI”.
@@ -191,7 +191,7 @@ IMPORTANT IMPLEMENTATION DIRECTION
 ────────────────────────
 
 This guidance applies not only to Grace,
-but to ALL sanctuary rooms and direct-call experiences across the ecosystem.
+but to ALL house rooms and direct-call experiences across the ecosystem.
 
 The entire realtime layer should feel:
 cohesive,

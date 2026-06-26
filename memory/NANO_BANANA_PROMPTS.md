@@ -12,7 +12,7 @@
 ```
 THE HEARTH — GRACE ROOM
 
-Cinematic premium digital sanctuary.
+Cinematic premium digital house.
 
 Late evening atmosphere.
 

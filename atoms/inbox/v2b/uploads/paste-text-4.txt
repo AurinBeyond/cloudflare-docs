@@ -47,7 +47,7 @@ Prefer:
 * startup-realistic solutions
 
 The goal is:
-Build a premium luxury sanctuary brand with intelligent resource discipline — not burn credits trying to simulate a giant corporation before the business is fully established.
+Build a premium luxury house brand with intelligent resource discipline — not burn credits trying to simulate a giant corporation before the business is fully established.
 
 Every technical or marketing proposal should consider:
 

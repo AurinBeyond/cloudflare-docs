@@ -73,7 +73,7 @@ without claiming medical efficacy.
 ```
 self-regulation              somatic intelligence         felt sense
 nervous system               breath                       breathing-space
-quiet room                   sanctuary                    presence
+quiet room                   house                    presence
 companion                    pause                        rhythm
 attention                    inner weather                inner light
 quiet                        soft                         steady
@@ -118,7 +118,7 @@ Avoid: "performance optimization" (sounds biohack), "mental hacks",
 **LINKEDIN / B2B-FRIENDLY positioning** (Marketing Agent's idea — approved):
 - *"A 28-day decision-recovery practice for leaders who carry teams home with them."*
 - *"For executives whose calendar has eaten their sleep — a quiet, paced reading practice. $39."*
-- *"Sanctuary for people who can't book another retreat."*
+- *"House for people who can't book another retreat."*
 
 ### The Private Room (Voice rooms) — How to position
 **APPROVED**:
@@ -133,7 +133,7 @@ Avoid: "performance optimization" (sounds biohack), "mental hacks",
 - ❌ "Reduce anxiety"  →  *"settle the alarm"*
 
 ### What Aurin IS (always safe to say)
-- A sanctuary product for parents and high-achievers
+- A house product for parents and high-achievers
 - A reading + voice companion practice
 - A non-religious, non-clinical, non-magical quiet space
 - A daily ritual aid
@@ -254,7 +254,7 @@ sound AI-written. From `MARKETING_SWEETSPOTS_2026-02-10.md`:
 
 > *"prulesoul.site (Matrix Aurin) is a software product that provides
 > reading material, voice-based reflective conversation, and a
-> personalised storytelling tool, offered as a sanctuary-toned daily
+> personalised storytelling tool, offered as a house-toned daily
 > companion. The product does not provide medical advice, therapy,
 > counselling, diagnosis, treatment, or psychological intervention.
 > All content is non-clinical and non-prescriptive. Voice conversations

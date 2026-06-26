@@ -4,7 +4,7 @@ import LuxuryLanding from "@/components/LuxuryLanding";
 import OpenLibrary from "@/components/OpenLibrary";
 import KidsUniverse from "@/components/KidsUniverse";
 import QuietStore from "@/components/QuietStore";
-import VoiceSanctuary from "@/components/VoiceSanctuary";
+import VoiceHouse from "@/components/VoiceHouse";
 
 type Wing = "luxury" | "library" | "kids" | "store" | "voice";
 
@@ -13,7 +13,7 @@ const wings = [
   { id: "library" as Wing, label: "Open Library", icon: BookOpen, premium: false },
   { id: "kids" as Wing, label: "Kids Universe", icon: Sparkles, premium: false },
   { id: "store" as Wing, label: "Quiet Store", icon: ShoppingBag, premium: true },
-  { id: "voice" as Wing, label: "Voice Sanctuary", icon: Mic, premium: true },
+  { id: "voice" as Wing, label: "Voice House", icon: Mic, premium: true },
 ];
 
 export default function Index() {
@@ -41,7 +41,7 @@ export default function Index() {
       case "store":
         return <QuietStore onNavigate={navigateToWing} />;
       case "voice":
-        return <VoiceSanctuary onNavigate={navigateToWing} />;
+        return <VoiceHouse onNavigate={navigateToWing} />;
       default:
         return <LuxuryLanding onNavigate={navigateToWing} />;
     }
@@ -89,7 +89,7 @@ export default function Index() {
                   <button
                     key={wing.id}
                     onClick={() => navigateToWing(wing.id)}
-                    className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-500 sanctuary-btn ${
+                    className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-500 house-btn ${
                       isActive
                         ? isPremiumWing
                           ? "bg-[#d4af37]/12 text-[#d4af37]"
@@ -124,7 +124,7 @@ export default function Index() {
         </div>
       </nav>
 
-      {/* Wing Content — Sanctuary Room Transition */}
+      {/* Wing Content — House Room Transition */}
       <main className="flex-1">
         <div 
           key={activeWing} 
@@ -147,7 +147,7 @@ export default function Index() {
       }`}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <p className="font-luxury text-sm">© 2026 Matrix Aurin Sanctuary</p>
+            <p className="font-luxury text-sm">© 2026 Matrix Aurin House</p>
             <p className="text-xs opacity-60">A space for depth, dignity, and calm presence.</p>
           </div>
           <div className="flex gap-8 text-sm">

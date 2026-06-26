@@ -40,8 +40,8 @@ _None._
 - [catalogue:bundle-deferred] `bundle-perekond-premium` correctly deferred to FastSpring dashboard (bundle).
 - [catalogue:bundle-deferred] `bundle-perekond-full-el` correctly deferred to FastSpring dashboard (bundle).
 - [catalogue:bundle-deferred] `bundle-vip-unlimited` correctly deferred to FastSpring dashboard (bundle).
-- [catalogue:bundle-deferred] `bundle-sanctuary-season` correctly deferred to FastSpring dashboard (bundle).
-- [catalogue:bundle-deferred] `bundle-couples-sanctuary` correctly deferred to FastSpring dashboard (bundle).
+- [catalogue:bundle-deferred] `bundle-house-season` correctly deferred to FastSpring dashboard (bundle).
+- [catalogue:bundle-deferred] `bundle-couples-house` correctly deferred to FastSpring dashboard (bundle).
 - [catalogue:bundle-deferred] `lux-annual` correctly deferred to FastSpring dashboard (bundle).
 - [catalogue:bundle-deferred] `lux-lifetime` correctly deferred to FastSpring dashboard (bundle).
 - [catalogue:bundle-deferred] `clarity-season-30d` correctly deferred to FastSpring dashboard (bundle).
@@ -126,7 +126,7 @@ _None._
 - [agents:room-map] Room 'parents' is mapped to ELEVENLABS_CONVAI_AGENT_SARA.
 - [agents:room-map] Room 'courses' is mapped to ELEVENLABS_CONVAI_AGENT_ALISTAIR.
 - [agents:room-map] Room 'aurin' is mapped to ELEVENLABS_CONVAI_AGENT_AURIN.
-- [agents:sanctuary] All bulk-script descriptions free of forbidden clinical terms.
+- [agents:house] All bulk-script descriptions free of forbidden clinical terms.
 - [agents:fair-use] `sub-text-basic` carries the fair-use clause.
 - [agents:fair-use] `sub-text-voice-15` carries the fair-use clause.
 - [agents:fair-use] `sub-text-premium` carries the fair-use clause.

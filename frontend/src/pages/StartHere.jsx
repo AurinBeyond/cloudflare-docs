@@ -240,7 +240,7 @@ export default function StartHere() {
       }}
     >
       {/* Minimal local nav — brand wordmark + quiet back link.
-          Intentionally simpler than SanctuaryNav so this page stays a
+          Intentionally simpler than HouseNav so this page stays a
           "quiet door" with no other paths to wander down. */}
       <header
         className="w-full px-6 sm:px-10 pt-8 pb-2 flex items-center justify-between"

@@ -1,5 +1,5 @@
 """
-test_phase0_numbered_list_strip.py — §Phase 0 Sanctuary regression (2026-02-14).
+test_phase0_numbered_list_strip.py — §Phase 0 House regression (2026-02-14).
 
 Founder directive: numbered-list token leakage like
 ``"5. 6. 7. 8. 9. ... Hello."`` MUST never reach the wanderer.

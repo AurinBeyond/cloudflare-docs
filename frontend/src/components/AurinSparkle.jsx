@@ -9,7 +9,7 @@
  *   variant="celebrate"   → "well done" burst, plays once (star earned)
  *   variant="unlock"      → mystery reward open, plays once (tier hit)
  *
- * The JSON files are hand-authored in the Sanctuary palette (warm
+ * The JSON files are hand-authored in the House palette (warm
  * peach-gold) so no third-party CDN is in the runtime path. Loaded
  * lazily on the client only.
  */

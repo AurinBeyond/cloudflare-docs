@@ -87,7 +87,7 @@ async def main():
         session_id=f"grace-oil-{uuid.uuid4().hex[:6]}",
         system_message=(
             "Classical oil-painting portrait artist for the Aurin "
-            "sanctuary. Vermeer + Rembrandt warmth + irregular "
+            "house. Vermeer + Rembrandt warmth + irregular "
             "watercolour-wash borders. NO digital illustration look. "
             "NO cartoon. NO modern brightness. Painterly only."
         ),

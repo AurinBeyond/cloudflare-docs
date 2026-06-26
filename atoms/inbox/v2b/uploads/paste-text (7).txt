@@ -88,9 +88,9 @@ The purpose is:
 * reduce implementation mistakes
 * reduce credit waste
 * stabilize the production workflow
-* allow Atoms to evolve the luxury sanctuary frontend safely
+* allow Atoms to evolve the luxury house frontend safely
 
-Once the homepage/product presentation system is finalized according to the approved luxury sanctuary direction, it should become mostly stable and no longer require constant rebuilding.
+Once the homepage/product presentation system is finalized according to the approved luxury house direction, it should become mostly stable and no longer require constant rebuilding.
 
 After stabilization, focus shifts toward:
 

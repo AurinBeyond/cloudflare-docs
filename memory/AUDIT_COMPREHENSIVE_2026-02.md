@@ -143,7 +143,7 @@ This is reversible if you later prefer LemonSqueezy. It just stops the silent du
 
 ## What I am NOT recommending
 
-- Sprint 6 (the "sanctuary" word cleanup) right now. It's editorial polish and does not affect a single sale. After STEP 1-4 are done, this becomes the next sprint.
+- Sprint 6 (the "house" word cleanup) right now. It's editorial polish and does not affect a single sale. After STEP 1-4 are done, this becomes the next sprint.
 - Touching the Hearth Protocol — it is the strongest product on the site. Don't disturb it.
 - Touching the homepage hero — it just landed and is converting.
 

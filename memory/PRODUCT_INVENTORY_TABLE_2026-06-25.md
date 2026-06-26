@@ -25,9 +25,9 @@
 | 7 | Inner Compass | Monthly | €229 | ☐ K ☐ M→ ☐ D |
 | 8 | Inner Compass | Quarterly | €619 | ☐ K ☐ M→ ☐ D |
 | 9 | Inner Compass | Annual | €2,290 | ☐ K ☐ M→ ☐ D |
-| 10 | Sanctuary Compass | Monthly | €329 | ☐ K ☐ M→ ☐ D |
-| 11 | Sanctuary Compass | Quarterly | €889 | ☐ K ☐ M→ ☐ D |
-| 12 | Sanctuary Compass | Annual | €3,290 | ✅ **DELETE** |
+| 10 | House Compass | Monthly | €329 | ☐ K ☐ M→ ☐ D |
+| 11 | House Compass | Quarterly | €889 | ☐ K ☐ M→ ☐ D |
+| 12 | House Compass | Annual | €3,290 | ✅ **DELETE** |
 
 ### B) Day Passes (BundleDisclosure)
 
@@ -53,7 +53,7 @@
 | 20 | Storytelling · 60 min | €79 | 60 päeva | ☐ K ☐ M→ ☐ D |
 | 21 | Storytelling · 150 min | €169 | 90 päeva | ☐ K ☐ M→ ☐ D |
 
-**Süsteem C3: SanctuaryPreview "presence"**
+**Süsteem C3: HousePreview "presence"**
 | # | Toode | Hind | Tekst | Otsus |
 |---|---|---|---|---|
 | 22 | 30 min of presence | €25 | "a short return" | ☐ K ☐ M→ ☐ D |
@@ -66,7 +66,7 @@
 | 25 | UMB Starter | €12 | 20 min | ☐ K ☐ M→ ☐ D |
 | 26 | Voice slider (custom) | €0.60/min | 10-300 min | ☐ K ☐ M→ ☐ D |
 
-### D) Mike "Ways" — SanctuaryPreview legacy
+### D) Mike "Ways" — HousePreview legacy
 
 | # | Toode | Hind | Otsus |
 |---|---|---|---|

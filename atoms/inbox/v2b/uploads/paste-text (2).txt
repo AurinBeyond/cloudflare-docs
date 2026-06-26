@@ -50,7 +50,7 @@ Atoms should only prepare:
 
 The homepage should feel like:
 
-* a quiet sanctuary
+* a quiet house
 * emotionally intelligent
 * premium but human
 * calm and slow

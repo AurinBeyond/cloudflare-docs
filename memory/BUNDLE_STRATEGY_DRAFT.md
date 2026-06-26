@@ -31,7 +31,7 @@
 
 1. **No-Roll-Over is too aggressive for HNW.** A founder paying €189/mo
    reading "your minutes burn at month-end" sounds like a telco scam,
-   not an architectural sanctuary. Replace with **Roll-Forward One Cycle**
+   not an architectural house. Replace with **Roll-Forward One Cycle**
    (minutes carry into the next billing cycle, then expire). Still
    protects margin, still discourages hoarding, but reads as honourable.
 

@@ -46,7 +46,7 @@ State variables in `KidsUniverseJourney.jsx`:
 | Exploration | 7-10 | Crystal cave | `from-blue-500 via-indigo-400 to-blue-700` | deep blue, crystal pillars, mystery |
 | Creation | 11-13 | Cosmic studio | `from-purple-500 via-fuchsia-400 to-purple-700` | violet space, blueprints, building |
 
-All zones share the same warm background `#0b0a08` and luxury `#c4a46b` Honey-Gold accent for consistency with the adult `/what-this-is` and Sanctuary palette.
+All zones share the same warm background `#0b0a08` and luxury `#c4a46b` Honey-Gold accent for consistency with the adult `/what-this-is` and House palette.
 
 ---
 
@@ -229,7 +229,7 @@ All voice-related endpoints **MUST** go through `runtime_governance.py` checkpoi
 ✅ Angel Stars lifecycle: `/api/angel-stars/*` — repurpose or alias for kids
 ✅ Resend email: `governance_alerts.py` patterns — copy for parent reminders
 ✅ Body Temple progress tracking: similar `body_temple_progress` schema → reuse pattern for `kids_progress`
-✅ Sanctuary palette + Cormorant Garamond typography: already in `tailwind.config.js`
+✅ House palette + Cormorant Garamond typography: already in `tailwind.config.js`
 
 ---
 
@@ -255,7 +255,7 @@ All voice-related endpoints **MUST** go through `runtime_governance.py` checkpoi
 ## 10. Adult pages v3.0 vision (separate, but Anna asked for it)
 
 This is a separate plan document and BLOCKED on Polar approval per Anna's earlier decision. When unblocked, will create `/app/memory/ADULT_V3_VISION.md` with:
-- 4 character rooms (Grace / Kaelan / Sara / Alistair) using `SanctuaryChatRoom.jsx` mudel
+- 4 character rooms (Grace / Kaelan / Sara / Alistair) using `HouseChatRoom.jsx` mudel
 - Luxury static portrait LEFT + voice waveform RIGHT
 - Subtle Honey-Gold glow on microphone, glassmorphic chat bubbles
 - Cormorant Garamond throughout
@@ -289,7 +289,7 @@ NOT building this until Anna says GO.
 - `/kids-universe` — 3 age tabs (DISCOVERY · EXPLORATION · CREATION), Parent Sign In, "Open the Full Journey ✦" CTA
 - `/kids-universe/{zone}` — 4 stones on curved neon path: `✨ Day 1 · The Beginning` (open demo), `🧩 Day 2 · My Day` 🔒, `⭐ Day 3 · Aurin's Star` 🔒, `📸 Day 4 · Secret Album` 🔒
 - Free demo Storytelling Sanctum: text-only Aurin greeting, "Listen to Today's Tale ✦" → unlock modal
-- Unlock modal: "Discover the Parent Sanctuary →" or "I already have an account — Sign in"
+- Unlock modal: "Discover the Parent House →" or "I already have an account — Sign in"
 
 ### PREMIUM TIER
 - Map view: all 4 stones unlocked, 1 reveals per 24h, 28-day rotating cycle (Tale → Reflection → Star → Album)
@@ -298,6 +298,6 @@ NOT building this until Anna says GO.
 - Aurin's Star Chamber (P4): 6 promise cards (hike/fishing/cabin/book/foraging/painting), "Give Aurin My Promise" → 48h Resend reminder
 - Secret Album (P5): "Confirm Parent Password" gate → "Choose Adventure Photo" → caption → "Save to Our Family Vault" (KMS encrypted)
 - Family Album FAB (P6): always bottom-right on premium, opens drawer with Green/Blue/Purple Vaults
-- Parent Sanctuary `/parent-dashboard` (P7): Active Promises, "Mark as Fulfilled", emotion whispers, next stone timer, Account & Billing
-- Topbar (P8): Matrix Aurin logo, parent avatar dropdown (Account · Parent Sanctuary · Sign Out)
+- Parent House `/parent-dashboard` (P7): Active Promises, "Mark as Fulfilled", emotion whispers, next stone timer, Account & Billing
+- Topbar (P8): Matrix Aurin logo, parent avatar dropdown (Account · Parent House · Sign Out)
 

@@ -1,6 +1,6 @@
 /* ===================================
    MATRIX AURIN — Silent Luxury Homepage
-   Premium sanctuary with human warmth
+   Premium house with human warmth
    =================================== */
 
 :root {
@@ -662,12 +662,12 @@ body {
    SANCTUARY WINGS — whisper of what's growing
    =================================== */
 
-.sanctuary-wings {
+.house-wings {
     padding: var(--space-2xl) 48px var(--space-3xl);
     text-align: center;
 }
 
-.sanctuary-wings-inner {
+.house-wings-inner {
     max-width: 500px;
     margin: 0 auto;
 }
@@ -988,7 +988,7 @@ body {
         padding: var(--space-2xl) 24px;
     }
 
-    .sanctuary-wings {
+    .house-wings {
         padding: var(--space-xl) 24px var(--space-2xl);
     }
 

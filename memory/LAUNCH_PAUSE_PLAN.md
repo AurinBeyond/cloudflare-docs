@@ -9,7 +9,7 @@
 3. Every active checkout link is converted to **"Coming soon"** OR **"Notify me / Join the waitlist"**.
 4. Original Gumroad / LemonSqueezy URLs stay in the codebase, just hidden behind the pause flag, so a single line reverses everything later.
 
-> **PRICE CORRECTION:** Seven Quiet Nights / Polarstar Bedtime Stories PDF is **€9** (not €7 as my earlier inventory said by mistake). Confirmed from `SevenQuietNights.jsx:231`, `SanctuaryPreview.jsx:807`, `FamilyBundle.jsx:247`. Inventory file now corrected.
+> **PRICE CORRECTION:** Seven Quiet Nights / Polarstar Bedtime Stories PDF is **€9** (not €7 as my earlier inventory said by mistake). Confirmed from `SevenQuietNights.jsx:231`, `HousePreview.jsx:807`, `FamilyBundle.jsx:247`. Inventory file now corrected.
 
 ---
 
@@ -41,7 +41,7 @@ Cross-checked by grep of `gumroad.com/l/`, `buildLemonCheckoutUrl(`, `data-testi
 
 | # | File · line | Tier | Today's behaviour | After pause |
 |---|---|---|---|---|
-| 11 | `SanctuaryPreview.jsx:1060–1070` "A First Step · €45" | links to `/portal` | already cold (no PSP) | rename CTA: **"Join the quiet list"** (no price change yet) |
+| 11 | `HousePreview.jsx:1060–1070` "A First Step · €45" | links to `/portal` | already cold (no PSP) | rename CTA: **"Join the quiet list"** (no price change yet) |
 | 12 | same · €120 "A Steady Presence" | `/portal` | cold | **"Join the quiet list"** |
 | 13 | same · €380 "Your Own Room" | `/portal` | cold | **"Join the quiet list"** |
 
@@ -49,9 +49,9 @@ Cross-checked by grep of `gumroad.com/l/`, `buildLemonCheckoutUrl(`, `data-testi
 
 | # | File | Item | Today | After pause |
 |---|---|---|---|---|
-| 14 | `SanctuaryPreview.jsx:1118–1140` | 3 top-up cards (€25 / €39 / €99) | no CTA — info cards only | **NO CHANGE** |
+| 14 | `HousePreview.jsx:1118–1140` | 3 top-up cards (€25 / €39 / €99) | no CTA — info cards only | **NO CHANGE** |
 
-### A.5 — "Ways to be here" links on `SanctuaryPreview.jsx` 2nd CTA row
+### A.5 — "Ways to be here" links on `HousePreview.jsx` 2nd CTA row
 
 Already point to `/portal` — no purchase happens. **NO CHANGE.**
 

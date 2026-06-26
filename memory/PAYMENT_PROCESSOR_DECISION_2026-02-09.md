@@ -3,8 +3,8 @@
 
 ## TL;DR
 - **LemonSqueezy** = current integration. **Weeks of silence on approval** is a real red flag, not normal.
-- **FastSpring** = my recommended fallback / parallel application. Best fit for AI sanctuary brand + $500 ticket + Norwegian payout.
-- **Digistore24** = REJECTED for brand reasons (make-money-online marketplace vibe contaminates the sanctuary positioning).
+- **FastSpring** = my recommended fallback / parallel application. Best fit for AI house brand + $500 ticket + Norwegian payout.
+- **Digistore24** = REJECTED for brand reasons (make-money-online marketplace vibe contaminates the house positioning).
 
 ## Step 1 — Last-shot escalation letter to LemonSqueezy (send today)
 

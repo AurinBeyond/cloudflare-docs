@@ -1,4 +1,4 @@
-# Show HN Draft #2 — Matrix Aurin Sanctuary (broader than Polarstar)
+# Show HN Draft #2 — Matrix Aurin House (broader than Polarstar)
 
 **Purpose:** Drive targeted organic traffic to `prulesoul.site` from
 high-signal, burnout-aware, anti-AI-slop tech adults on Hacker News.
@@ -17,11 +17,11 @@ a tired adult at 11pm, not a founder pitching at a demo day.
 
 ## Title (recommended)
 
-**Show HN: A screen-down audio sanctuary for people who are done with the wellness industry**
+**Show HN: A screen-down audio house for people who are done with the wellness industry**
 
 ## Alternate titles (keep in pocket)
 
-- Show HN: I built a non-extractive web sanctuary instead of buying another meditation app
+- Show HN: I built a non-extractive web house instead of buying another meditation app
 - Show HN: Audio stories on a 24-hour cadence-lock for tired adults
 - Show HN: A small website that does the opposite of the wellness industry
 
@@ -52,7 +52,7 @@ a tired adult at 11pm, not a founder pitching at a demo day.
 - **Concrete specifics:** "React + FastAPI + MongoDB", "€0/month infra", "no analytics", "no premium tier". HN rewards specificity.
 - **Stack disclosure is the ticket** — HN audience clicks through partly to read the architecture, not the brand. The brand vocabulary stays off the post and lives ONLY on the site (after the click).
 - **Closes with a question to the community**, not a CTA. Comments become conversation, not testimonials.
-- **Does NOT name** "Matrix Aurin", "Polarstar", "Sanctuary", "Compass", "The Hearth", "Alistair". The brand vocabulary is what makes the destination compelling AFTER the click, and what would make the HN post insufferable BEFORE the click.
+- **Does NOT name** "Matrix Aurin", "Polarstar", "House", "Compass", "The Hearth", "Alistair". The brand vocabulary is what makes the destination compelling AFTER the click, and what would make the HN post insufferable BEFORE the click.
 
 ---
 
@@ -119,7 +119,7 @@ the front page or dies on `/new`.
 
 - ❌ Do not edit the post 5 minutes after publishing to "fix a typo".
   Edits reset the bump algorithm.
-- ❌ Do not mention "Matrix Aurin", "Polarstar", "Compass", "Sanctuary",
+- ❌ Do not mention "Matrix Aurin", "Polarstar", "Compass", "House",
   "Hearth", "Alistair" in the HN post. Save brand vocabulary for after
   the click.
 - ❌ Do not run a Twitter/LinkedIn announcement on the same day. If HN
@@ -143,7 +143,7 @@ HN treats the post as worth its attention.
 
 ## When to use which Show HN draft
 
-- **This draft (#2 — Sanctuary-wide):** Post when at least Polarstar +
+- **This draft (#2 — House-wide):** Post when at least Polarstar +
   Hearth + Alistair Bundle are all LIVE in production. The post pitches
   the broader architecture, so the visitor must find more than one
   product after the click. Recommended: after the Sprint 4 deploy

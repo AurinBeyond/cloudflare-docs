@@ -13,10 +13,10 @@ Kopeeri ja kleebi neile see viimane emotsionaalne ja raudne täpsustus sinna Ato
 **Please embed this core philosophical rule directly into the CSS, animations, and copywriting. This is the soul of Matrix Aurin:**
 
 1. **Human-Level Feeling (Inimese tasemel tunnetus):** This platform must NOT feel like a sterile, mechanical SaaS interface or a corporate e-commerce site. It must feel warm, deeply intuitive, and humanly present. Design the pacing to be intentional and calming—give the elements room to breathe.
-2. **The Luxury of Slowness & Presence:** Use smooth, organic CSS transitions. Micro-interactions should feel gentle, not abrupt. When switching between the 5 wings (e.g., from the Dark Luxury Landing to the Warm Light Kids Universe), the visual shift must feel like walking through interconnected rooms of a physical sanctuary, not a jarring page snap.
+2. **The Luxury of Slowness & Presence:** Use smooth, organic CSS transitions. Micro-interactions should feel gentle, not abrupt. When switching between the 5 wings (e.g., from the Dark Luxury Landing to the Warm Light Kids Universe), the visual shift must feel like walking through interconnected rooms of a physical house, not a jarring page snap.
 3. **Typography & Copy Tone:** The language on the cards, product bundles, and categories must carry dignity, warmth, and high trust. Avoid loud marketing buzzwords. Keep it elegant, clear, and emotionally grounded.
 
-**Keep this atmosphere at the absolute center of your autonomous implementation. Let's make the v2 codebase carry the true, living energy of the Matrix Aurin Sanctuary!**
+**Keep this atmosphere at the absolute center of your autonomous implementation. Let's make the v2 codebase carry the true, living energy of the Matrix Aurin House!**
 
 ---
 

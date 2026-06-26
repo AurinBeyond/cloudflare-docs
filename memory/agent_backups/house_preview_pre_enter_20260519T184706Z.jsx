@@ -1,5 +1,5 @@
 /**
- * SanctuaryPreview — Founder review route (2026-05-18 v2)
+ * HousePreview — Founder review route (2026-05-18 v2)
  *
  * Full-bleed polished landing experience.
  *
@@ -30,11 +30,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-const HERO = "/sanctuary/hero-mask.png";
-const ATMOSPHERE = "/sanctuary/atmosphere.png";
-const GROUNDED = "/sanctuary/grounded-presence.png";
-const WINGS = "/sanctuary/sanctuary-wings.png";
-const WARMTH = "/sanctuary/warmth-trust.png";
+const HERO = "/house/hero-mask.png";
+const ATMOSPHERE = "/house/atmosphere.png";
+const GROUNDED = "/house/grounded-presence.png";
+const WINGS = "/house/house-wings.png";
+const WARMTH = "/house/warmth-trust.png";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -72,7 +72,7 @@ function useReveal() {
 function useHidePlatformBadge() {
   useEffect(() => {
     const style = document.createElement("style");
-    style.setAttribute("data-sanctuary-clean", "true");
+    style.setAttribute("data-house-clean", "true");
     style.textContent = `
       /* Common Emergent preview badge patterns */
       [class*="emergent" i][class*="badge" i],
@@ -138,16 +138,16 @@ function RevealBlock({ children, delay = 0, className = "" }) {
   );
 }
 
-function SanctuaryNav({ production = false }) {
+function HouseNav({ production = false }) {
   return (
     <nav
-      data-testid="sanctuary-nav"
+      data-testid="house-nav"
       className={`fixed ${production ? "top-0" : "top-[28px]"} left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]`}
     >
       <div className="max-w-[1320px] mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
         <Link
-          to="/sanctuary-preview"
-          data-testid="sanctuary-logo"
+          to="/house-preview"
+          data-testid="house-logo"
           className="text-[13px] tracking-[0.42em] uppercase text-[#e8e1d5] font-light"
           style={{ fontFamily: SERIF, letterSpacing: "0.42em" }}
         >
@@ -162,7 +162,7 @@ function SanctuaryNav({ production = false }) {
         </div>
         <Link
           to="/portal"
-          data-testid="sanctuary-portal-btn"
+          data-testid="house-portal-btn"
           className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-7 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500"
         >
           Enter
@@ -185,7 +185,7 @@ function HeroSection() {
   return (
     <section
       ref={ref}
-      data-testid="sanctuary-hero"
+      data-testid="house-hero"
       className="relative w-full overflow-hidden bg-[#0b0a08] min-h-screen flex items-center"
     >
       {/* §QUIET HERO — Mask is now anchored to the right ~38% on
@@ -336,7 +336,7 @@ function TwoWorldsSection() {
   return (
     <section
       id="worlds"
-      data-testid="sanctuary-worlds"
+      data-testid="house-worlds"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
       {/* §POLISH 2026-05-19 — Soft warm radial behind the heading.
@@ -354,7 +354,7 @@ function TwoWorldsSection() {
       <div className="relative z-10 max-w-[1180px] mx-auto px-6 sm:px-10">
         <RevealBlock>
           <p className="text-[11px] tracking-[0.42em] uppercase text-[#c4a46b] mb-7 text-center">
-            — Two Worlds, One Sanctuary
+            — Two Worlds, One House
           </p>
           <h2
             className="text-center font-light text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.12] text-[#f0eadd] max-w-[860px] mx-auto tracking-[-0.012em]"
@@ -379,7 +379,7 @@ function TwoWorldsSection() {
                 className="text-[26px] sm:text-[30px] leading-[1.2] text-[#f0eadd] font-light mb-6"
                 style={{ fontFamily: SERIF }}
               >
-                The Sanctuary <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
+                The House <span className="italic text-[#bcb4a3]">— reflection &amp; emotional clarity</span>
               </h3>
               <p className="text-[15.5px] leading-[1.85] text-[#bcb4a3] font-light">
                 A quiet inner space for the moments when life asks too much.
@@ -387,7 +387,7 @@ function TwoWorldsSection() {
                 hurry, without scoring, without storage of who you have been.
               </p>
               <div className="mt-10 pt-7 border-t border-[rgba(196,164,107,0.12)] text-[11.5px] tracking-[0.2em] uppercase text-[#7a7468]">
-                Journeys · Reflection · Sanctuary atmosphere
+                Journeys · Reflection · House atmosphere
               </div>
             </div>
           </RevealBlock>
@@ -431,8 +431,6 @@ function RoomsSection() {
         sub: "The Private Room",
         body: "A confidential space for what cannot be said aloud yet. The room keeps no score.",
         img: GROUNDED,
-        href: "/clarity-release",
-        testid: "room-enter-clarity",
       },
       {
         n: "II",
@@ -440,8 +438,6 @@ function RoomsSection() {
         sub: "The Listening Room",
         body: "Where the body is asked first. Slow attention to what carries underneath the words.",
         img: WINGS,
-        href: "/body-room",
-        testid: "room-enter-body",
       },
       {
         n: "III",
@@ -449,8 +445,6 @@ function RoomsSection() {
         sub: "The Hearth Room",
         body: "For the ones holding others. A quiet hour for the part of you that rarely rests.",
         img: WARMTH,
-        href: "/parents-room",
-        testid: "room-enter-parents",
       },
       {
         n: "IV",
@@ -458,8 +452,6 @@ function RoomsSection() {
         sub: "The Study Room",
         body: "Structured study and gentle progression. Books, practices, and a measured rhythm.",
         img: ATMOSPHERE,
-        href: "/course-room",
-        testid: "room-enter-courses",
       },
     ],
     [],
@@ -468,7 +460,7 @@ function RoomsSection() {
   return (
     <section
       id="rooms"
-      data-testid="sanctuary-rooms"
+      data-testid="house-rooms"
       className="relative w-full bg-[#0b0a08] py-32"
     >
       <div className="max-w-[1180px] mx-auto px-6 sm:px-10">
@@ -517,19 +509,6 @@ function RoomsSection() {
                   <p className="text-[16px] leading-[1.85] text-[#bcb4a3] max-w-[480px] font-light">
                     {r.body}
                   </p>
-                  {/* §ENTER 2026-05-19 — Founder directive: every room
-                      description gets a single, calm ENTER affordance
-                      that takes the wanderer directly to the room's
-                      session entry (WandererGate-protected). No doors,
-                      no extra ceremony — one click, one room. */}
-                  <Link
-                    to={r.href}
-                    data-testid={r.testid}
-                    className="inline-flex items-center gap-3 mt-9 px-7 py-3 border border-[rgba(196,164,107,0.45)] text-[#f0eadd] text-[11px] tracking-[0.42em] uppercase hover:bg-[rgba(196,164,107,0.08)] hover:border-[rgba(196,164,107,0.7)] transition-colors duration-500"
-                  >
-                    <span>Enter</span>
-                    <span className="text-[#c4a46b]" aria-hidden="true">→</span>
-                  </Link>
                 </div>
               </div>
             </RevealBlock>
@@ -547,7 +526,7 @@ function RoomsSection() {
               style={{ fontFamily: SERIF }}
             >
               Kids Universe — angel stories, gentle coloring, and the
-              softest version of the sanctuary, held for the little ones.
+              softest version of the house, held for the little ones.
             </p>
           </div>
         </RevealBlock>
@@ -584,7 +563,7 @@ function OpenWorldSection() {
     },
     {
       title: "Kids Universe",
-      body: "Angel stories, coloring pages, and the gentlest version of the sanctuary for the youngest visitors.",
+      body: "Angel stories, coloring pages, and the gentlest version of the house for the youngest visitors.",
       badge: "Free to enter",
       tone: "free",
     },
@@ -593,7 +572,7 @@ function OpenWorldSection() {
   return (
     <section
       id="open-world"
-      data-testid="sanctuary-openworld"
+      data-testid="house-openworld"
       className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
       <div className="absolute inset-0 opacity-[0.10]">
@@ -708,7 +687,7 @@ function WaysToBeHereSection() {
       key: "your-own-room",
       name: "Your Own Room",
       tagline: "A space held only for you.",
-      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full sanctuary access, and a private channel — your own corner of this sanctuary.",
+      lede: "For those ready for sustained, intimate work. Weekly voice sessions, full house access, and a private channel — your own corner of this house.",
       includes: [
         "Full access to all rooms — reading, reflection, text-to-text chat",
         "Weekly private live AI voice sessions — four sessions per month",
@@ -725,7 +704,7 @@ function WaysToBeHereSection() {
   return (
     <section
       id="ways"
-      data-testid="sanctuary-ways"
+      data-testid="house-ways"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-40"
     >
       <div className="max-w-[1220px] mx-auto px-6 sm:px-10">
@@ -842,7 +821,7 @@ function VoiceMeterSection() {
   return (
     <section
       id="voice-meter"
-      data-testid="sanctuary-voice-meter"
+      data-testid="house-voice-meter"
       className="relative w-full bg-[#0b0a08] py-32"
     >
       <div className="max-w-[1080px] mx-auto px-6 sm:px-10">
@@ -854,7 +833,7 @@ function VoiceMeterSection() {
             className="text-center text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] text-[#f0eadd] font-light max-w-[760px] mx-auto tracking-[-0.012em]"
             style={{ fontFamily: SERIF }}
           >
-            Your sanctuary stays open.<br />
+            Your house stays open.<br />
             <span className="italic text-[#d4b67d]">Voice runs on its own quiet meter.</span>
           </h2>
           <p className="mt-9 text-center text-[15.5px] leading-[1.85] text-[#a59f93] max-w-[660px] mx-auto font-light">
@@ -897,7 +876,7 @@ function VoiceMeterSection() {
             className="mt-16 text-center text-[14px] italic text-[#7a7468] max-w-[560px] mx-auto leading-[1.85] font-light"
             style={{ fontFamily: SERIF }}
           >
-            We hold the sanctuary. You hold the meter. Nothing is ever
+            We hold the house. You hold the meter. Nothing is ever
             on by accident.
           </p>
         </RevealBlock>
@@ -910,7 +889,7 @@ function PhilosophySection() {
   return (
     <section
       id="philosophy"
-      data-testid="sanctuary-philosophy"
+      data-testid="house-philosophy"
       className="relative w-full bg-[#0b0a08] py-32 sm:py-44 overflow-hidden"
     >
       <div className="absolute inset-0 opacity-[0.28]">
@@ -945,7 +924,7 @@ function ClosingSection() {
   return (
     <section
       id="origin"
-      data-testid="sanctuary-closing"
+      data-testid="house-closing"
       className="relative w-full bg-[#0b0a08] py-32 overflow-hidden"
     >
       <div
@@ -972,7 +951,7 @@ function ClosingSection() {
             <span className="italic text-[#d4b67d]">a door is already open.</span>
           </h2>
           <p className="mt-9 text-[15px] sm:text-[15.5px] leading-[1.85] text-[#bcb4a3] max-w-[560px] mx-auto font-light">
-            No urgency. No invitation required this season. The sanctuary
+            No urgency. No invitation required this season. The house
             keeps its own quiet hours, and the inner pages remember nothing
             of who has visited.
           </p>
@@ -999,10 +978,10 @@ function ClosingSection() {
   );
 }
 
-function SanctuaryFooter() {
+function HouseFooter() {
   return (
     <footer
-      data-testid="sanctuary-footer"
+      data-testid="house-footer"
       className="relative w-full bg-[#0b0a08] border-t border-[rgba(196,164,107,0.08)] py-16"
     >
       <div className="max-w-[1220px] mx-auto px-6 sm:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
@@ -1025,24 +1004,24 @@ function SanctuaryFooter() {
   );
 }
 
-export default function SanctuaryPreview({ production = false } = {}) {
+export default function HousePreview({ production = false } = {}) {
   useHidePlatformBadge();
   return (
     <div
-      data-testid={production ? "sanctuary-home-root" : "sanctuary-preview-root"}
+      data-testid={production ? "house-home-root" : "house-preview-root"}
       className="min-h-screen w-full bg-[#0b0a08] text-[#e8e1d5] antialiased"
       style={{ fontFamily: 'system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif' }}
     >
       {production ? null : (
         <div
-          data-testid="sanctuary-preview-ribbon"
+          data-testid="house-preview-ribbon"
           className="fixed top-0 left-0 right-0 z-[60] bg-[#c4a46b] text-[#0b0a08] text-[10px] tracking-[0.32em] uppercase text-center py-1.5"
         >
-          Preview · /sanctuary-preview · production unchanged
+          Preview · /house-preview · production unchanged
         </div>
       )}
       <div className={production ? "" : "pt-[28px]"}>
-        <SanctuaryNav production={production} />
+        <HouseNav production={production} />
         <main>
           <HeroSection />
           <TwoWorldsSection />
@@ -1053,7 +1032,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <PhilosophySection />
           <ClosingSection />
         </main>
-        <SanctuaryFooter />
+        <HouseFooter />
       </div>
     </div>
   );

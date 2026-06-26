@@ -25,7 +25,7 @@ OUT_DIR = Path("/app/frontend/public/style_samples")
 PROMPT = (
     "Hand-painted watercolour portrait of a middle-aged woman, "
     "painted in the same Sara-Visual-System-Lock style as the "
-    "rest of the Aurin sanctuary: visible paper grain, soft "
+    "rest of the Aurin house: visible paper grain, soft "
     "natural light, gentle imperfection, warm/calm/worn/timeless. "
     "Palette: warm cream, old parchment, ochre, amber, golden "
     "sunset, muted orange, deep sea blue, dusty sage green, warm "
@@ -76,7 +76,7 @@ async def main():
         session_id=f"grace-portrait-{uuid.uuid4().hex[:6]}",
         system_message=(
             "You are a watercolour portrait painter for the Aurin "
-            "sanctuary. Painterly only. Warm, calm, worn, timeless. "
+            "house. Painterly only. Warm, calm, worn, timeless. "
             "No photographic realism. No glamour. No text."
         ),
     )

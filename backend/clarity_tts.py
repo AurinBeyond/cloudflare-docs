@@ -29,7 +29,7 @@ Env overrides
 
 If `CLARITY_VOICE_PROVIDER=elevenlabs` but no key is set, or if
 ElevenLabs fails at request time, the synthesiser silently falls
-back to OpenAI so the sanctuary never breaks.
+back to OpenAI so the house never breaks.
 """
 from __future__ import annotations
 
@@ -106,7 +106,7 @@ def voice_provider() -> str:
     """Return the active TTS provider after validating the env.
 
     `CLARITY_VOICE_PROVIDER=elevenlabs` requires `ELEVENLABS_API_KEY`
-    to be set; otherwise we silently keep OpenAI so the sanctuary
+    to be set; otherwise we silently keep OpenAI so the house
     never breaks during a misconfigured rollout.
     """
     chosen = (os.getenv("CLARITY_VOICE_PROVIDER") or "openai").strip().lower()

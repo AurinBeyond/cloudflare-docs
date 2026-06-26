@@ -889,16 +889,16 @@
 
 /* ──────────────────────────────────────────────────────────────────
    §SANCTUARY ROOM THEME — 2026-05-19
-   Adds when a page wrapper has `.sanctuary-room` (or its parent
-   has it). Re-keys the Aurin palette to match the new /sanctuary
+   Adds when a page wrapper has `.house-room` (or its parent
+   has it). Re-keys the Aurin palette to match the new /house
    landing on `/`: deep #0b0a08 canvas, brass #c4a46b accents,
    Cormorant Garamond on headings. Does NOT touch the ConvAI
    mic/transcript module — that lives in its own DOM subtree with
    its own internal styling that we leave alone.
-   Apply: <div className="sanctuary-room">…room content…</div>
+   Apply: <div className="house-room">…room content…</div>
    ────────────────────────────────────────────────────────────── */
 
-.sanctuary-room {
+.house-room {
     /* deep canvas */
     --aurin-bg: 38 12% 5%;            /* near #0b0a08 */
     --aurin-surface: 38 10% 7%;
@@ -913,31 +913,31 @@
     --aurin-sand: 36 50% 67%;         /* near #d4b67d */
 }
 
-.sanctuary-room {
+.house-room {
     background-color: hsl(var(--aurin-bg));
     color: hsl(var(--aurin-text));
 }
 
-/* Headings inside a sanctuary room — Cormorant Garamond serif,
+/* Headings inside a house room — Cormorant Garamond serif,
    light weight, italic accent for emphasized phrases. */
-.sanctuary-room h1,
-.sanctuary-room h2,
-.sanctuary-room h3,
-.sanctuary-room .aurin-section-title {
+.house-room h1,
+.house-room h2,
+.house-room h3,
+.house-room .aurin-section-title {
     font-family: "Cormorant Garamond", "EB Garamond", Georgia, serif;
     font-weight: 300;
     letter-spacing: -0.012em;
 }
 
-.sanctuary-room em,
-.sanctuary-room .sanctuary-accent {
+.house-room em,
+.house-room .house-accent {
     font-style: italic;
     color: hsl(var(--aurin-sand));
 }
 
 /* Eyebrow / section meta — the brass micro-caps signature line we
-   use across the sanctuary landing. */
-.sanctuary-room .sanctuary-eyebrow {
+   use across the house landing. */
+.house-room .house-eyebrow {
     color: hsl(var(--aurin-sage));
     font-size: 11px;
     letter-spacing: 0.42em;
@@ -946,24 +946,24 @@
 }
 
 /* Bordered CTAs adopt the brass-pill style automatically. */
-.sanctuary-room .aurin-btn-secondary {
+.house-room .aurin-btn-secondary {
     border-color: hsl(var(--aurin-sage) / 0.55);
     color: hsl(var(--aurin-sage));
     background: transparent;
 }
 
-.sanctuary-room .aurin-btn-secondary:hover {
+.house-room .aurin-btn-secondary:hover {
     background: hsl(var(--aurin-sage));
     color: hsl(var(--aurin-bg));
 }
 
 /* Strip out any inline preview/SaaS banners the founder doesn't
-   want surfacing inside a sanctuary room — Emergent badge,
+   want surfacing inside a house room — Emergent badge,
    "Made with…" pills, free-launch banners are hidden the same way
    the landing route hides them. */
-.sanctuary-room [class*="emergent" i][class*="badge" i],
-.sanctuary-room a[href*="emergent.sh" i],
-.sanctuary-room a[href*="emergentagent.com" i][target="_blank"] {
+.house-room [class*="emergent" i][class*="badge" i],
+.house-room a[href*="emergent.sh" i],
+.house-room a[href*="emergentagent.com" i][target="_blank"] {
     display: none !important;
 }
 
@@ -972,12 +972,12 @@
 /* =========================================================
  * §SANCTUARY-VISUAL 2026-02-09 — Body Temple + Kids Hub.
  * Founder's mood-board (warm wooden panels, Caveat handwriting,
- * golden Aurin aura). Opt-in via .sanctuary-wood / .sanctuary-aura
+ * golden Aurin aura). Opt-in via .house-wood / .house-aura
  * so existing pages stay untouched.
  * ========================================================= */
 
-.font-sanctuary-hand,
-.sanctuary-hand {
+.font-house-hand,
+.house-hand {
     font-family: "Caveat", "Fraunces", cursive;
     font-weight: 500;
     letter-spacing: 0.005em;
@@ -988,7 +988,7 @@
    should feel "carved" rather than "rendered". §SANCTUARY-VISUAL
    v2 (Anna 2026-02-09 PM) — brighter / "klar" feel: stronger
    top highlight, hint of golden sheen, no longer matte. */
-.sanctuary-wood {
+.house-wood {
     position: relative;
     background:
         linear-gradient(180deg,
@@ -1008,7 +1008,7 @@
     overflow: hidden;
 }
 
-.sanctuary-wood::before {
+.house-wood::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -1025,7 +1025,7 @@
 }
 
 /* Top sheen — the "klar / not matte" effect Anna asked for. */
-.sanctuary-wood::after {
+.house-wood::after {
     content: "";
     position: absolute;
     top: 0;
@@ -1039,7 +1039,7 @@
         rgba(255, 248, 220, 0.0) 100%);
 }
 
-.sanctuary-wood:hover {
+.house-wood:hover {
     transform: translateY(-2px);
     box-shadow:
         0 2px 0 rgba(255, 255, 255, 0.95) inset,
@@ -1049,12 +1049,12 @@
         0 0 30px -8px rgba(255, 200, 120, 0.4);
 }
 
-.sanctuary-wood .sanctuary-wood-icon {
+.house-wood .house-wood-icon {
     color: #6a4b1f;
     flex-shrink: 0;
 }
 
-.sanctuary-wood .sanctuary-wood-title {
+.house-wood .house-wood-title {
     font-family: "Caveat", cursive;
     font-weight: 600;
     color: #3d2e15;
@@ -1062,8 +1062,8 @@
 }
 
 /* Golden aura — soft radial halo. Use on Aurin's portrait or
-   any avatar inside the sanctuary frame. */
-.sanctuary-aura {
+   any avatar inside the house frame. */
+.house-aura {
     position: relative;
 
 /* §KIDS-SPATIAL 2026-02-09 — Card stagger to create the
@@ -1096,7 +1096,7 @@
     isolation: isolate;
 }
 
-.sanctuary-aura::before {
+.house-aura::before {
     content: "";
     position: absolute;
     inset: -18%;
@@ -1109,10 +1109,10 @@
     filter: blur(8px);
     z-index: -1;
     pointer-events: none;
-    animation: sanctuaryAuraPulse 6s ease-in-out infinite;
+    animation: houseAuraPulse 6s ease-in-out infinite;
 }
 
-@keyframes sanctuaryAuraPulse {
+@keyframes houseAuraPulse {
     0%, 100% { opacity: 0.85; transform: scale(1); }
     50%      { opacity: 1;    transform: scale(1.04); }
 }
@@ -1120,7 +1120,7 @@
 /* Cream cream-bg variant for body-temple page (warmer than the
    rooms' default near-black). Activated by a body-class so the
    whole page reads like the founder's mood-board photos. */
-.sanctuary-cream {
+.house-cream {
     background:
         radial-gradient(120% 80% at 10% 0%, rgba(255, 230, 195, 0.55), transparent 60%),
         radial-gradient(120% 80% at 90% 100%, rgba(232, 200, 155, 0.45), transparent 55%),
@@ -1129,19 +1129,19 @@
     min-height: 100vh;
 }
 
-.sanctuary-cream h1,
-.sanctuary-cream h2,
-.sanctuary-cream h3 {
+.house-cream h1,
+.house-cream h2,
+.house-cream h3 {
     color: #2c1f0a;
 }
 
-.sanctuary-cream .sanctuary-muted {
+.house-cream .house-muted {
     color: #6a5836;
 }
 
 /* Soft glow bubble for the meditating-child mockup style — a
    tall amber arc used as a "sacred space" frame. */
-.sanctuary-bubble {
+.house-bubble {
     background: radial-gradient(
         ellipse at center,
         rgba(255, 218, 158, 0.55) 0%,

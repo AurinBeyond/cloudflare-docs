@@ -1,7 +1,7 @@
 # Project Context
 
 ## Project Overview
-Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
+Matrix Aurin premium house homepage — a luxury-minimal landing page redesign for prulesoul.site featuring atmospheric visuals, editorial minimalism, and warm human presence.
 
 ## Key Decisions
 | Date | Decision | By | Rationale |
@@ -43,11 +43,11 @@ Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesi
 - Production deployment systems, server-side business logic
 - No autonomous system mutations or speculative optimization
 
-### Brand Principles — Aurin Sanctuary Principle (Permanent)
-**What we ARE building:** A curated sanctuary
+### Brand Principles — Aurin House Principle (Permanent)
+**What we ARE building:** A curated house
 **Emotional core:** Peace, slowness, deep attention, sincerity, authenticity, privacy, dignity, permission to be yourself
 **Luxury means:** Rarity of presence, emotional safety, silence, spaciousness, refinement, human warmth without pressure
-**Experience feels like:** Entering a quiet private sanctuary, a hidden boutique hotel, a protected space outside digital noise
+**Experience feels like:** Entering a quiet private house, a hidden boutique hotel, a protected space outside digital noise
 
 **Implementation principles:**
 1. Atmosphere over explanation — don't overexplain features/tech, let experience communicate quality
@@ -78,14 +78,14 @@ Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesi
 - Preserve stable foundation (not everything at once)
 - Gradual integration (not destructive replacement)
 
-### Sanctuary Ecosystem — Emotional Worlds (Wings of One Sanctuary)
+### House Ecosystem — Emotional Worlds (Wings of One House)
 | World | Emotional Layer |
 |-------|----------------|
 | Luxury Landing | Dignity, slowness, entrance |
 | Open Library | Discovery, breathing space |
 | Kids Universe | Softness, imagination, light |
 | Quiet Store | Curated value |
-| Voice Sanctuary | Deep presence |
+| Voice House | Deep presence |
 
 **Cohesion requirements:** Consistent typography, emotional pacing, coherent navigation, shared atmosphere, layered discovery. User slowly discovers deeper worlds naturally.
 
@@ -133,4 +133,4 @@ Matrix Aurin premium sanctuary homepage — a luxury-minimal landing page redesi
 - No role overlap
 - No backend/frontend authority confusion
 - No production mutation without founder approval
-- Current priority: Finalize into stable luxury sanctuary, transition from rebuilding into growth/marketing
+- Current priority: Finalize into stable luxury house, transition from rebuilding into growth/marketing

@@ -1,10 +1,10 @@
 # Substack Essay #2 — Matrix Aurin Notes
-**World:** 🌿 Matrix Aurin (adult sanctuary)
+**World:** 🌿 Matrix Aurin (adult house)
 **Door:** the reader who is sick of wellness culture but still wakes up at 2am
 **Status:** Draft v1 — strategic distribution lead piece
 **Target length:** 700-900 words (currently ~820)
 **Recommended publish slot:** Week 1 of distribution sprint
-**Pairs with:** Show HN post `Show HN: A screen-down sanctuary for people who are done with the wellness industry`
+**Pairs with:** Show HN post `Show HN: A screen-down house for people who are done with the wellness industry`
 
 ---
 

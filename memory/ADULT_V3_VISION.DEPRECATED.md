@@ -2,7 +2,7 @@
 **This document was AI fabrication that ran parallel to the real Matrix Aurin architecture.**
 The "Architecture of Sovereignty" / 4-day stone cycle / `/adult-rooms` route described
 below was **never the real plan**. The four characters (Grace, Kaelan, Sara, Alistair)
-are NOT mentors in separate "stone sanctuary" rooms — they are **curators inside the
+are NOT mentors in separate "stone house" rooms — they are **curators inside the
 four real, already-existing rooms**:
 
 | Character | Real room (live in production) | Route |
@@ -42,7 +42,7 @@ To prevent any drift during build:
 
 ## 1. What this IS
 
-A private mentor sanctuary for people who refuse to be played by:
+A private mentor house for people who refuse to be played by:
 - Reactive emotional weather
 - Performance-fatigue programming ("you must always optimize")
 - Relational drama and social-media manipulation
@@ -78,9 +78,9 @@ Each room dismantles one specific piece of "the Matrix" — one externally-insta
 | **What Kaelan teaches** | We do not govern the storm. We govern the mind inside the storm. When life delivers the unexpected, *arguing inwardly* is energy wastage. Receive the moment as a clear observer, then take the next solid step. |
 | **Voice tone** | Low, measured, almost stone — a slow male voice that creates pauses and space. Like a Roman general or a long-time mountain guide. Few words. No filler. |
 | **Aurin–Kaelan relationship** | Kaelan is the unmoved center. He gives you the spine to stand still inside chaos. |
-| **External positioning (public marketing)** | *"Crisis Management & Mental Tactics Sanctuary"* — for founders, parents, leaders who refuse to be pulled by external events, news, or emotional noise. |
+| **External positioning (public marketing)** | *"Crisis Management & Mental Tactics House"* — for founders, parents, leaders who refuse to be pulled by external events, news, or emotional noise. |
 | **Public-facing pitch** | *"When the storm rises, the captain does not fight the wind — they govern the ship. Kaelan is a private mentorship for those who refuse to be tossed by news cycles, social drama, or daily disruption. Learn to see situations as they actually are — without filters, without bias, without reactivity."* |
-| **Stones (4-day cycle) — REFINED 2026-02-27** | **Day 1: Clear Seeing** — strip the emotional label from the event; see only structure · **Day 2: The Filter** — practical guide to letting noise (media / others' fear / opinions) pass through without entering the sanctuary · **Day 3: Actionable Stillness** — locate what YOU actually govern, and act there only · **Day 4: Sovereignty Vault & Sparks** — close the loop with one real-world screen-down practice (2-hour digital isolation walk, hand-written strategy map, conversation in person with one trusted person) |
+| **Stones (4-day cycle) — REFINED 2026-02-27** | **Day 1: Clear Seeing** — strip the emotional label from the event; see only structure · **Day 2: The Filter** — practical guide to letting noise (media / others' fear / opinions) pass through without entering the house · **Day 3: Actionable Stillness** — locate what YOU actually govern, and act there only · **Day 4: Sovereignty Vault & Sparks** — close the loop with one real-world screen-down practice (2-hour digital isolation walk, hand-written strategy map, conversation in person with one trusted person) |
 | **Why FIRST build** | Kaelan's tone is the hardest to fake. If we ship Kaelan and the voice + copy hold their weight, we have proof that Matrix Aurin can produce a tone no wellness app can imitate. Grace, Sara and Alistair become easier afterwards because the architecture and tone-discipline are already proven. |
 
 ### 2.3 🌹 Sara — *The Freedom of Boundaries*
@@ -90,7 +90,7 @@ Each room dismantles one specific piece of "the Matrix" — one externally-insta
 | **Background** | `#1c1116` → `#27181f` |
 | **Accent** | `#d68fa3` (muted rose) |
 | **Matrix code we break** | Relational drama, social-media manipulation, carrying other people's fear as if it were your own. |
-| **What Sara teaches** | Most of what people do, they do from their own fear — not against you. When you release others from the duty to be perfect, you release yourself. See others clearly; keep your sanctuary clean. |
+| **What Sara teaches** | Most of what people do, they do from their own fear — not against you. When you release others from the duty to be perfect, you release yourself. See others clearly; keep your house clean. |
 | **Voice tone** | Warm but firm. The voice of a wise older sister or a respected family elder. No sweetness, no people-pleasing. |
 | **Aurin–Sara relationship** | Sara is the keeper of the threshold. She teaches whom to let in, whom to let go of, and how to do both without violence. |
 | **Stones (4-day cycle)** | Day 1: *The Door That Closes Gently* · Day 2: *Carrying What Isn't Yours* · Day 3: *The Boundary as a Gift* · Day 4: *Clean Goodbyes* |
@@ -207,14 +207,14 @@ The launch line that should never be diluted:
 This is the precise inverse of every meditation app on the App Store. It is also the precise alignment with the Kids Universe ethos ("screen-down, ears open, world begins when the tale ends"). The adult product extends the same architecture upward: *quiet inside, while the world tries to be loud.*
 
 ### Kaelan-specific launch positioning (locked 2026-02-27)
-For Kaelan (the first room to ship), we do NOT use the word "Matrix" or "Matrix code" in any public-facing copy. The strategic frame is **luxury Crisis Management & Mental Tactics Sanctuary**:
+For Kaelan (the first room to ship), we do NOT use the word "Matrix" or "Matrix code" in any public-facing copy. The strategic frame is **luxury Crisis Management & Mental Tactics House**:
 
 > *"When the storm rises, the captain does not fight the wind — they govern the ship.*
 > *Kaelan is a private mentorship for those who refuse to be tossed by news cycles, social drama, or daily disruption.*
 > *Learn to see situations as they actually are — without filters, without bias, without reactivity."*
 
 ### Why this matters for the kids' product too
-The parent who walks Kaelan's path becomes the parent who can hold the sanctuary for their child. The Adult Rooms and the Kids Universe are not two products — they are one architecture across two generations of the same family.
+The parent who walks Kaelan's path becomes the parent who can hold the house for their child. The Adult Rooms and the Kids Universe are not two products — they are one architecture across two generations of the same family.
 
 ---
 
@@ -237,8 +237,8 @@ Until then, this document is the **architectural contract** between Anna and the
 6. Each character gets a dedicated ConvAI agent in ElevenLabs (Anna provisions, agent wires)
 7. Premium gating: `body_temple_unlock` minimum entry, or a dedicated future `adult_room_unlock`
 8. **Kaelan ships FIRST** — clearest tone = strongest proof point
-9. Public marketing for Kaelan = "Crisis Management & Mental Tactics Sanctuary" — NEVER use "Matrix code" externally; that vocabulary is internal/architectural only
+9. Public marketing for Kaelan = "Crisis Management & Mental Tactics House" — NEVER use "Matrix code" externally; that vocabulary is internal/architectural only
 10. Kaelan stone cycle (refined): Clear Seeing · The Filter · Actionable Stillness · Sovereignty Vault & Sparks
 11. NO build until Polar approval + Anna's explicit greenlight
 
-🪨 *The mentor sanctuary waits patiently. The architecture is already drawn.*
+🪨 *The mentor house waits patiently. The architecture is already drawn.*

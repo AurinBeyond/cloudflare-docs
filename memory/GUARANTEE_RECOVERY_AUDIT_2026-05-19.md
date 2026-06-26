@@ -43,12 +43,12 @@ Codebase grep `/Silence Room\|silence_room\|SilenceRoom\|silence-room/` → **no
 ## 2 · SANCTUARY ROOM SYSTEM
 
 ### 2a · Route map (`/app/frontend/src/App.js`)
-Verified routes — only ones relevant to sanctuary rooms shown:
+Verified routes — only ones relevant to house rooms shown:
 
 | Route | Component | Status |
 |---|---|---|
-| `/` | `<SanctuaryPreview production />` | live (merged 2026-05-19 line 178) |
-| `/sanctuary-preview` | `<SanctuaryPreview />` | preview-only review path, still mounted (App.js:165) |
+| `/` | `<HousePreview production />` | live (merged 2026-05-19 line 178) |
+| `/house-preview` | `<HousePreview />` | preview-only review path, still mounted (App.js:165) |
 | `/clarity-release` | (Grace's room) | route exists |
 | `/clarity-release/threshold` | `<ClarityThreshold />` | route exists (App.js:106) |
 | `/private-room` | redirect → `/clarity-release` | route exists (App.js:95) |
@@ -116,7 +116,7 @@ No staged or unstaged source-code modifications outstanding in preview.
 ### 3c · What exists ONLY in preview
 - `/test-mic` diagnostic route (App.js:170, this session's addition)
 - Voice-to-voice deafness hot-fix in `RoomConvaiChat.jsx` (useRawConversation + AudioContext audit)
-- Hero face image opening (SanctuaryPreview.jsx)
+- Hero face image opening (HousePreview.jsx)
 - 4-tier financial split + admin preview endpoint
 - Audio Path Verified dev indicator
 
@@ -198,7 +198,7 @@ Scope-limited per founder directive — no deep audit, no redesign.
 
 | Item | Status |
 |---|---|
-| Hero face clipping | Was fixed earlier this session (yellow-curve directive, photo zone 32%→44%, feather 42%→22%, `SanctuaryPreview.jsx`) |
+| Hero face clipping | Was fixed earlier this session (yellow-curve directive, photo zone 32%→44%, feather 42%→22%, `HousePreview.jsx`) |
 | Portrait/landscape transitions | Not re-audited this session |
 | CTA overflow on mobile | Not re-audited |
 | Scroll snap / scaling | Not re-audited |
@@ -209,14 +209,14 @@ Recommendation in audit terms: status unknown for items not touched this session
 
 ## 7 · CTA & FLOW
 
-`SanctuaryPreview.jsx` `data-testid` enumeration (production homepage):
-- `sanctuary-nav`, `sanctuary-logo`, `sanctuary-portal-btn`
-- `sanctuary-hero`, `hero-mask-image`, `hero-eyebrow`, `hero-title`, `hero-subtitle`
+`HousePreview.jsx` `data-testid` enumeration (production homepage):
+- `house-nav`, `house-logo`, `house-portal-btn`
+- `house-hero`, `hero-mask-image`, `hero-eyebrow`, `hero-title`, `hero-subtitle`
 - `hero-cta-step-inside`, `hero-cta-walk`
 
 These IDs indicate the primary entry CTAs are present and properly wired for test automation. No dead routes detected in the route table for primary flows.
 
-**Routes NOT shown but worth verifying separately** (out of grep range): `/body-room`, `/parents-room`, `/course-room` direct entries — they were verified earlier session as part of sanctuary-room theme wrapping, but a fresh visual smoke-test is needed after Grace/Kaelan/Alistair prompts are restored.
+**Routes NOT shown but worth verifying separately** (out of grep range): `/body-room`, `/parents-room`, `/course-room` direct entries — they were verified earlier session as part of house-room theme wrapping, but a fresh visual smoke-test is needed after Grace/Kaelan/Alistair prompts are restored.
 
 **Locked rooms / paywall flow**: `session_cap` module is imported at `server.py:5082` for clarity (Grace) room only. Other 3 rooms remain uncapped per founder Phase-1 directive.
 
@@ -257,7 +257,7 @@ This is a documented gap, not damage. No analytics was ever installed.
 | `/test-mic` diagnostic | EXISTS in preview only | LOW | use after restore for voice-ingest debugging |
 | Voice-to-voice deafness | ROOT CAUSE NOT YET CONFIRMED | MEDIUM | post-restore: incognito + magic link + `/test-mic` snapshot |
 | Analytics | NOT INSTALLED | INFORMATIONAL | future decision, not warranty work |
-| Production deploy gap | Sanctuary v6 + financial engine + test-mic exist only in preview | LOW (founder-controlled) | founder decides deploy timing |
+| Production deploy gap | House v6 + financial engine + test-mic exist only in preview | LOW (founder-controlled) | founder decides deploy timing |
 
 ---
 

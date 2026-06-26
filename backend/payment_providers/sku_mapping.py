@@ -42,7 +42,7 @@ SKU_REGISTRY = {
         "body_temple_unlock": False,
     },
     "eternal_monthly": {
-        "name": "Eternal Sanctuary · Monthly",
+        "name": "Eternal House · Monthly",
         "type": "recurring",
         "price_usd": 89.00,
         "voice_seconds_granted_per_cycle": 300 * 60,  # 300 min/month

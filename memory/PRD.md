@@ -14,7 +14,7 @@
   upstairs door.
 - Discreet "A letter from upstairs" footer link added on BOTH footers:
   Layout `Footer.jsx` (Library, Bookstore, room interiors) and
-  `SanctuaryPreview` footer (home `/`). Italic, lowercase, set on its
+  `HousePreview` footer (home `/`). Italic, lowercase, set on its
   own line below the privacy hairline — easy to find for a curious eye,
   not announced to a hurried one.
 
@@ -32,7 +32,7 @@ at the top of this PRD and at the top of `fromAnna.js` / `FromAnna.jsx`.
 
 ---
 
-# PRD — Aurin Hub / Matrix Aurin / Polarstar Kids (Sanctuary v3.0)
+# PRD — Aurin Hub / Matrix Aurin / Polarstar Kids (House v3.0)
 
 ## §AURIN-BRAND-LOCKS 2026-06-26 (Founder, permanent — read before editing anything)
 
@@ -135,7 +135,7 @@ The Grace Room is now consistently labelled **Grace** across all UI.
 ### Cleaned 2026-06-21
 - `StudentCabinet.jsx` — label + h3 → Grace
 - `HeroCompass.jsx` — `room: "Grace"`
-- `SanctuaryPreview.jsx` — `name: "Grace"`
+- `HousePreview.jsx` — `name: "Grace"`
 - `BetaTestGroup.jsx` — `title="Grace"`
 - `ClarityRelease.jsx` aria-label → "Grace — your guide"
 - `Guest.jsx` — removed legacy male "Clarity" guide persona (Grace is the single guide)
@@ -679,7 +679,7 @@ If the answer is unclear, the visual is not finished —
 **Subtitle:** *Every choice reaches further than we think.*
 
 **Rationale:**
-- Sara Forest answers *"What's going on between us?"* — warm sanctuary, family-inward
+- Sara Forest answers *"What's going on between us?"* — warm house, family-inward
 - The Circle We Create answers *"What's going on around us?"* — philosophical, outward, value-facing
 - Different temperature, different breath. Same Sara universe.
 - Architecturally cleaner: no hub repaint, no calibration risk, future-extensible (5th, 6th world could be added later without breaking anything)
@@ -1082,9 +1082,9 @@ Recorded in `/app/memory/PAINTED_ASSET_DEBT_2026-06-22.md`. Five visual flaws li
 - New `/app/frontend/src/data/wandererRoomIntros.js` — single source of truth for 4 room intros (Sara, Kaelen, Grace, Alistair). Each carries threshold + inhabitant + arrivalLine + 3 visitor-voice recognitions.
 - `WandererGate.jsx` — accepts `room` prop. When set, renders the positive-recognition intro ABOVE the medical/legal threshold. Visitor sees who lives in the room and three quiet recognitions BEFORE the 5 boxes. Maintains the legal copy intact.
 - App.js — 38 `<WandererGate scope="private">` instances now pass `room="sara" | "kaelen" | "grace" | "alistair"`. Six remaining (Aurin's Room, Cabinet booking) stay generic intentionally.
-- `SanctuaryPreview.jsx` — hero copy rewritten to positive identity ("A living place to read, listen, and reflect."). New `FiveRoomsRecognitionSection` injected between hero and SprintZeroLayersSection: 5 clickable rows (Sara, Grace, Kaelen, Alistair, Polarstar with *eventyr* in italics), each one Sara-voice recognition line. Coda "This is not a course. It is not a programme to complete. It is a place to return to." + small line "Two rooms (Sara and Kaelen) ask you to read a short threshold before entering."
+- `HousePreview.jsx` — hero copy rewritten to positive identity ("A living place to read, listen, and reflect."). New `FiveRoomsRecognitionSection` injected between hero and SprintZeroLayersSection: 5 clickable rows (Sara, Grace, Kaelen, Alistair, Polarstar with *eventyr* in italics), each one Sara-voice recognition line. Coda "This is not a course. It is not a programme to complete. It is a place to return to." + small line "Two rooms (Sara and Kaelen) ask you to read a short threshold before entering."
 - `Polarstar.jsx` + `PolarstarDayWorld.jsx` — tagline reframed from "Not another app to babysit" (negation) to "Polarstar protects wonder. *Audio adventures the family lives together* — screen-down, ears-open." (positive recognition).
-- `LuxurySanctuaryLanding.jsx` (legacy /luxury route) — kept hero copy update + 5-row directory for consistency, though it's a legacy route.
+- `LuxuryHouseLanding.jsx` (legacy /luxury route) — kept hero copy update + 5-row directory for consistency, though it's a legacy route.
 
 ### Verified via screenshot
 - Landing renders the 5-row recognition with Polarstar eventyr italics in gold.

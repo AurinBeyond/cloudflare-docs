@@ -21,9 +21,9 @@
 | inner.compass.month          | dad525f4-a63c-4646-a136-3706c6aa5b36 |  €229 |
 | inner.compass.quarter        | f065c395-ac41-4e30-a8a0-b97d4e78131f |  €619 |
 | inner.compass.year           | 193b554c-643c-457a-b727-34ae6ab1f226 | €2,290 |
-| sanctuary.compass.month      | ef09715e-1654-4f6f-afb4-87578da3cbd8 |  €329 |
-| sanctuary.compass.quarter    | 3675828e-c40d-4967-af35-3eef2f1157f1 |  €889 |
-| sanctuary.compass.year       | b35e6300-8ace-42ba-a0f0-ce50f3928f15 | €3,290 |
+| house.compass.month      | ef09715e-1654-4f6f-afb4-87578da3cbd8 |  €329 |
+| house.compass.quarter    | 3675828e-c40d-4967-af35-3eef2f1157f1 |  €889 |
+| house.compass.year       | b35e6300-8ace-42ba-a0f0-ce50f3928f15 | €3,290 |
 | sovereign.standard.quarter   | a73fdba9-4231-414f-b8e2-11115e43e548 | €1,890 |
 | sovereign.standard.year      | 3c4f78c2-6171-4c18-ae17-a246159f5bef | €6,800 |
 | sovereign.bespoke.quarter    | 00439402-d539-4111-bca1-70059b5e8a3e | €3,490 |

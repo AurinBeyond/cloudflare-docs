@@ -487,7 +487,7 @@ POSTS = [
         ),
     },
 
-    # Day 20 (Sun) — LinkedIn — sanctuary architecture
+    # Day 20 (Sun) — LinkedIn — house architecture
     {
         "channel": "linkedin",
         "tag": "publer_w3_d20_li_architecture",

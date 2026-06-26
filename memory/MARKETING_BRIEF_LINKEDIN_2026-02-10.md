@@ -88,7 +88,7 @@ neatly on the spectrum: rational → professional → human.
 >
 > #LeadershipDevelopment #OperationalQuiet #SomaticIntelligence
 
-### Post 3 · Human (Sanctuary line, B2B-safe)
+### Post 3 · Human (House line, B2B-safe)
 
 > **At 03:14 on a Monday, what's the calmest thought you can still find?**
 >
@@ -104,7 +104,7 @@ neatly on the spectrum: rational → professional → human.
 >
 > *— Anna, founder*
 >
-> #ExecutivePresence #SomaticIntelligence #Sanctuary
+> #ExecutivePresence #SomaticIntelligence #House
 
 ---
 
@@ -143,7 +143,7 @@ neatly on the spectrum: rational → professional → human.
 >
 > Hi [Name],
 >
-> I run a small product called Aurin. It is not a wellness app. It is a sanctuary-toned reading practice for adults who have already tried the louder solutions.
+> I run a small product called Aurin. It is not a wellness app. It is a house-toned reading practice for adults who have already tried the louder solutions.
 >
 > The core experience is **Body Temple 28** — twenty-eight short readings, two minutes each, one a day. Read at 06:40 before the inbox, or 22:50 before the room goes quiet. No streak to keep. No technique to perfect.
 >

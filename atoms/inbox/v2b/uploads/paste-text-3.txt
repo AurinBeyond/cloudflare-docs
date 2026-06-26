@@ -6,7 +6,7 @@ Establish a controlled semi-automatic workflow between Atoms and the Emergent pr
 The goal is:
 
 * stable frontend evolution
-* luxury sanctuary refinement
+* luxury house refinement
 * reduced manual copy-paste work
 * reduced communication chaos
 * reduced credit waste
@@ -84,7 +84,7 @@ ATOMS — ALLOWED RESPONSIBILITIES
 Atoms is responsible for:
 
 * premium frontend refinement
-* luxury sanctuary atmosphere
+* luxury house atmosphere
 * homepage UX
 * copywriting
 * typography
@@ -129,7 +129,7 @@ Atoms may optimize:
 * emotional trust
 * premium perceived value
 * quiet luxury branding
-* sanctuary atmosphere
+* house atmosphere
 * funnel clarity
 * premium positioning
 
@@ -193,7 +193,7 @@ BRAND PRINCIPLES
 All frontend and marketing work must remain aligned with:
 
 * quiet luxury
-* sanctuary atmosphere
+* house atmosphere
 * emotional safety
 * sincerity
 * calm authority

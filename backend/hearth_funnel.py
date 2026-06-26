@@ -62,7 +62,7 @@ def _letter_subject(n: int) -> str:
 
 def _letter_html(n: int, unsubscribe_url: str) -> str:
     """Render a quiet, plain-text-style HTML email. No images, no
-    fancy CSS, no logo header. Single column. Sanctuary brand voice."""
+    fancy CSS, no logo header. Single column. House brand voice."""
 
     common_footer = f"""
         <p style="margin-top:36px;font-family:Georgia,serif;font-size:13px;color:#8a7a5a;line-height:1.7;font-style:italic;">

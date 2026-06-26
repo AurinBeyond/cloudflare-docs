@@ -16,7 +16,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import RoomIntroCard from "@/components/RoomIntroCard";
 import { Sprout, BookHeart, Stars, ArrowRight, BookOpen } from "lucide-react";
 import { AURIN_AGE_GROUPS } from "@/lib/aurinPrompts";
-import KidsDayPassRow from "@/components/sanctuary/KidsDayPassRow";
+import KidsDayPassRow from "@/components/house/KidsDayPassRow";
 
 const GROUP_ICON = {
   "little-dreamers": Sprout,

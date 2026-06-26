@@ -74,7 +74,7 @@ export default function CourseRoom() {
   }, []);
 
   return (
-    <div data-testid="course-room-page" className="sanctuary-room relative">
+    <div data-testid="course-room-page" className="house-room relative">
       {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout for Alistair. */}
       <RoomShell room={ALISTAIR_ROOM}>
         {/* §ROOM-INTRO 2026-02 — five-line "selguse kaart" for Alistair. */}

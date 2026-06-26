@@ -60,7 +60,7 @@ async def main():
         api_key=api_key,
         session_id=f"sara-tree-{uuid.uuid4().hex[:6]}",
         system_message=(
-            "Watercolour painter for the Aurin sanctuary. Painterly only. "
+            "Watercolour painter for the Aurin house. Painterly only. "
             "Warm, calm, worn, timeless. No glamour. No text."
         ),
     )

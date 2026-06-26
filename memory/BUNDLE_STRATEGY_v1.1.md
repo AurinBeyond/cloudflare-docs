@@ -17,7 +17,7 @@ The platform is composed of TWO operating layers:
 
 | Layer | Who it speaks to | Voice engine                | COGS profile |
 |-------|------------------|-----------------------------|--------------|
-| Adult Sanctuary | Founder / Parent | ConvAI (Sara / Kaelan / Grace / Alistair) | High variance — protected by `compass.voice` minutes |
+| Adult House | Founder / Parent | ConvAI (Sara / Kaelan / Grace / Alistair) | High variance — protected by `compass.voice` minutes |
 | Kids Universe   | Child (via parent account) | Aurin storyteller (ElevenLabs, narrative) | Medium variance — protected by `aurin.voice` minutes |
 
 Voice minutes are **never fungible across layers.** Adult-voice

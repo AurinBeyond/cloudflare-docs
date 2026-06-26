@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RealtimeCompanion from "@/components/RealtimeCompanion";
 import PageHeader from "@/components/layout/PageHeader";
 import EmergencyExit from "@/components/EmergencyExit";
-// HumanSilhouette removed §Phase 0 Sanctuary 2026-02-14 — real
+// HumanSilhouette removed §Phase 0 House 2026-02-14 — real
 // portrait selector now lives in ClarityThreshold.
 import MemoryPackageSelect from "@/components/MemoryPackageSelect";
 import ChatUsageHint from "@/components/ChatUsageHint";
@@ -66,7 +66,7 @@ import { GRACE_ROOM } from "@/data/roomConfigs";
 /**
  * Clarity Release — formerly "Private Room".
  *
- * A private, encrypted-at-rest sanctuary. The flow:
+ * A private, encrypted-at-rest house. The flow:
  *   not signed in   → soft sign-in gate
  *   signed in       → welcome + Beta notice + 3 tier cards + intro letter
  *   continues       → confirmation panel → chat
@@ -447,7 +447,7 @@ export default function ClarityRelease() {
   };
 
   return (
-    <div data-testid="page-clarity-release" className="sanctuary-room relative">
+    <div data-testid="page-clarity-release" className="house-room relative">
       {/* §ROOM-SHELL 2026-02 — mockup-driven hero layout (sidebar +
           centre hero + right "How it works" panel + curator card).
           Wraps the existing room body as children below. */}

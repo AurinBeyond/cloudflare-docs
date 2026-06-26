@@ -362,7 +362,7 @@ is executable. Marketing strategy alone cannot ship purchases.
    one person" referral).
 8. **Founder press kit** — `/press` route with the kit, downloadable.
 9. **Substack RSS pull** — when Anna publishes, the home page
-   `SanctuaryPreview` shows the most recent letter title and link
+   `HousePreview` shows the most recent letter title and link
    in a quiet line.
 
 ### P2 (block Plan A)

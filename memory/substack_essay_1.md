@@ -1,5 +1,5 @@
 # Substack Essay #1 — Matrix Aurin Notes
-**World:** 🌿 Matrix Aurin (adult sanctuary)
+**World:** 🌿 Matrix Aurin (adult house)
 **Door:** the reflective adult lying awake at 2am with too many open loops
 **Status:** Draft v1 — ready for Anna's review and final voice pass
 **Target length:** 600–900 words (currently ~720)
@@ -81,7 +81,7 @@ is quiet. The colours are dark. The voice, when there is one, is mine,
 unhurried, and slightly too soft to be a product.
 
 It is not a service.
-It is a sanctuary.
+It is a house.
 
 The difference matters.
 
@@ -140,7 +140,7 @@ ones you want. No bundle, no overlap, no "premium tier."*
 - Pauses: full second after each em-dash; two seconds between paragraphs.
 - Tone: confiding, not lecturing. Imagine talking to one friend at 11pm,
   not addressing an audience.
-- The line **"It is not a service. / It is a sanctuary."** is the
+- The line **"It is not a service. / It is a house."** is the
   emotional centre — slow down further here.
 - The final line **"They will close because you let them."** — almost
   whispered.
@@ -155,7 +155,7 @@ Suggested next titles (do not write yet; let this one breathe a week):
   who feel they are present-but-absent)
 - *Why Your Brain's RAM Is Always Full* (deeper dive into the OS
   metaphor, with concrete protocol)
-- *I Built a Sanctuary in One Pod* (Anna's making-of, partial cross
+- *I Built a House in One Pod* (Anna's making-of, partial cross
   with Author Anna section)
 - *What 11pm Knows That 11am Doesn't*
 

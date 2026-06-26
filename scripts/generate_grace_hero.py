@@ -13,7 +13,7 @@ load_dotenv("/app/backend/.env")
 
 PROMPT = """THE HEARTH — GRACE ROOM
 
-Cinematic premium digital sanctuary.
+Cinematic premium digital house.
 Late evening atmosphere.
 A large old window with rain running down the glass.
 Warm fireplace glowing softly.

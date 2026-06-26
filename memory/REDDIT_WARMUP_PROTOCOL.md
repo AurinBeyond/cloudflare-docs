@@ -1,10 +1,10 @@
 # Reddit Warm-up Protocol — `u/EntryWinter8073`
-## Pure Soul Sanctuary brand · 30-day account hardening
+## Pure Soul House brand · 30-day account hardening
 **Drafted:** 2026-05-31
 **Premise:** Reddit is not a megaphone. It is a town hall. We arrive
 as a stranger, sit at the back, listen for two weeks, then start
 speaking — softly, on-topic, without links — until the room
-recognises us. Only then can we mention the sanctuary, and even then,
+recognises us. Only then can we mention the house, and even then,
 incidentally.
 
 ---
@@ -107,7 +107,7 @@ move on. Hostile thread engagement DESTROYS karma fast.
 - Lowercase title (signals "regular tired parent")
 - Personal moment, no advice
 - ENDS WITH A QUESTION → forces engagement
-- NO LINK. The sanctuary is not mentioned.
+- NO LINK. The house is not mentioned.
 - Brand themes (sock on stairs, hallway light) are SUBLIMINAL — anyone who later finds prulesoul.site/listen/hearth and recognises the story will feel like THEY discovered the connection. That feeling is brand magic.
 
 **Where to post:**
@@ -131,7 +131,7 @@ the heads up, won't happen again" and don't post in that sub for
 **Day 26 — FIRST LINK MENTION**
 
 You make ONE comment on someone else's post, where they're
-describing the EXACT problem the sanctuary solves. Example: someone
+describing the EXACT problem the house solves. Example: someone
 in r/insomnia writes "i can't stop my brain at 3am". You reply:
 
 > "what works for me lately is just having one slow audio thing to
@@ -203,7 +203,7 @@ Substack essay tone here. Specifically:
 | Three-clause sentences | choppier, shorter, dropped articles |
 | 700-word arc | 60-200 words max per comment |
 
-**The brand voice on prulesoul.site stays sanctuary. The brand
+**The brand voice on prulesoul.site stays house. The brand
 voice on Reddit is "tired person typing on phone." Both are real.
 Both come from the same human. Pick the register that suits the
 room.**

@@ -8,7 +8,7 @@
 ## ✅ TEHTUD ÖÖSEL
 
 ### 1. Faas 1 — Legacy cleanup (LÕPLIK)
-- 🗑️ Kustutatud: `HighPerformers.jsx`, `_BodyTempleLegacy.jsx`, `LuxurySanctuaryLanding.jsx`
+- 🗑️ Kustutatud: `HighPerformers.jsx`, `_BodyTempleLegacy.jsx`, `LuxuryHouseLanding.jsx`
 - 🗑️ Eemaldatud `Catalogue` import App.js-st (kasutamatu pärast redirect'i)
 - ✂️ App.js: `/high-performers` → `/`, `/luxury` → `/`, `/catalogue` → `/library`, `/course-room/library` → `/alistair/library`
 - ✂️ Navigation.jsx: "For Leaders" link maas
@@ -54,7 +54,7 @@
 ### Body World Stones 11 + 13 ("Growth & Transformation" / "From Survival to Thriving")
 - **Risk:** Kivi-galerii pildid samuti baked-text. Säilitan ootel.
 
-### `SanctuaryPreview.jsx` "Ways" + "Voice top-up" sektsioonid
+### `HousePreview.jsx` "Ways" + "Voice top-up" sektsioonid
 - Need on Faas 3 pricing-lehe ehitamise osa. Ei puudutanud öösel.
 
 ---
@@ -78,7 +78,7 @@ GPT seda kinnitas brilliantselt. Soovid sa et ma teen **proovi** ühe ruumi (nt 
 
 | | |
 |---|---|
-| Faile kustutatud | 3 (HighPerformers, _BodyTempleLegacy, LuxurySanctuaryLanding) |
+| Faile kustutatud | 3 (HighPerformers, _BodyTempleLegacy, LuxuryHouseLanding) |
 | Route'e konsolideeritud | 4 (/high-performers, /luxury, /catalogue, /course-room/library) |
 | Nav-linke maas | 2 (For Leaders, Catalogue) |
 | USD viited eemaldatud | 3 ($39 → wording asendus, hindu EI lukku) |

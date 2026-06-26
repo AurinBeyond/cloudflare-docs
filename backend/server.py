@@ -1538,9 +1538,9 @@ async def seed_initial_content():
     if res.modified_count:
         logger.info("Migration: set audience=grown-ups on %d entries.", res.modified_count)
 
-    # 3b. Migration — Sanctuary language pass on already-seeded entries
+    # 3b. Migration — House language pass on already-seeded entries
     # (seed runs only when the collection is empty, so we patch existing rows here).
-    sanctuary_entry_updates = [
+    house_entry_updates = [
         ("morning-orientation-protocol", {
             "title": "Morning Orientation",
             "description": "A 7-step gentle reading to begin the day with clarity.",
@@ -1564,7 +1564,7 @@ async def seed_initial_content():
             "description": "An applied reading. How to begin with something that fits.",
         }),
     ]
-    for slug, fields in sanctuary_entry_updates:
+    for slug, fields in house_entry_updates:
         await db.content_entries.update_one({"slug": slug}, {"$set": fields})
 
     # 3c. Migration — update the two learning category descriptions
@@ -2609,7 +2609,7 @@ def _public_activity(a: Dict[str, Any], premium_user: bool = False) -> Dict[str,
         "module": a["module"],
         "age_slugs": a["age_slugs"],
         "title": a["title"],
-        "body": a["body"] if not locked else "Inside the 60-hour Sanctuary package. A small premium activity from the Clarity Curriculum.",
+        "body": a["body"] if not locked else "Inside the 60-hour House package. A small premium activity from the Clarity Curriculum.",
         "instructions": a["instructions"] if not locked else [],
         "duration_min": a["duration_min"],
         "with_parent": a["with_parent"],
@@ -2697,7 +2697,7 @@ async def kids_curriculum_complete(inp: KidsActivityCompleteInput, request: Requ
     if not activity or slug not in activity["age_slugs"]:
         raise HTTPException(status_code=400, detail="Unknown activity for this age.")
     if activity.get("is_premium") and not await _user_has_premium(user.user_id):
-        raise HTTPException(status_code=402, detail="This activity is part of the 60h Sanctuary package.")
+        raise HTTPException(status_code=402, detail="This activity is part of the 60h House package.")
 
     await _get_or_create_stars_doc(user.user_id, slug)
     now_iso = datetime.now(timezone.utc).isoformat()
@@ -3734,7 +3734,7 @@ async def body_temple_complete(inp: BodyTempleCompleteInput, request: Request):
 # the ElevenLabs agent — it stores a session-scoped "mode_hint"
 # the Grace prompt can read and which the UI surfaces as a
 # gentle pre-session frame ("Today we sit with: Boundaries").
-# Three modes, all sanctuary-tone (zero clinical language):
+# Three modes, all house-tone (zero clinical language):
 #   • boundaries     — saying no without guilt
 #   • energy         — who took / who gave today
 #   • grey_rocking   — surviving toxic rooms without leaving
@@ -3771,7 +3771,7 @@ GRACE_MODES = {
         "key": "grey_rocking",
         "title": "Grey Rocking",
         "subtitle": "Quiet in loud rooms.",
-        "blurb": "When you can't leave the room yet — Grace helps you stay small, stay still, and keep your inner sanctuary intact.",
+        "blurb": "When you can't leave the room yet — Grace helps you stay small, stay still, and keep your inner house intact.",
         "first_message": (
             "I see you. You're in a room you can't leave right now — "
             "and you need to stay yourself inside it. Let's practise "
@@ -5587,7 +5587,7 @@ async def lemonsqueezy_webhook(request: Request):
                         email_intro_override=(
                             f"You now have {presence_seconds // 60} minutes of "
                             "Guided Presence available. The link below opens your "
-                            "private sanctuary directly — no password needed. It is "
+                            "private house directly — no password needed. It is "
                             "valid for 30 minutes; if it expires, request a new one "
                             "any time."
                         ),
@@ -8471,7 +8471,7 @@ async def clarity_convai_signed_url(inp: ConvAISignedUrlInput, request: Request)
                         "soft_close": True,
                         "retry_after_sec": 60,
                         "message": (
-                            "The sanctuary is briefly resting. "
+                            "The house is briefly resting. "
                             "Please try again in a moment."
                         ),
                     },
@@ -11106,8 +11106,8 @@ async def course_enroll(slug: str, request: Request):
     return {"status": "enrolled", "started_at": doc["started_at"]}
 
 
-@api_router.get("/sanctuary/sovereign-counter")
-async def sanctuary_sovereign_counter():
+@api_router.get("/house/sovereign-counter")
+async def house_sovereign_counter():
     """Anonymous, low-cost live metric strip for the landing page.
 
     §SOVEREIGN-COUNTER 2026-02-11 — Founder directive. Eliminates the
@@ -16234,7 +16234,7 @@ async def catalogue_availability():
 # =============================================================
 # §Phase 1 follow-up — "Calmer-than-arrival" feedback (2026-02-14).
 # Founder mandate: the single most important quality metric for the
-# Clarity Release sanctuary is whether a tired wanderer feels calmer
+# Clarity Release house is whether a tired wanderer feels calmer
 # after the conversation than when they arrived. We collect a one-tap,
 # anonymous, post-session signal — no identity, no email, no link to
 # the underlying chat. This is the calm-meter the Blueprint pinned as
@@ -16250,7 +16250,7 @@ async def clarity_session_feedback(request: Request):
     Body (JSON): {"calmer": true | false | null, "room": "clarity"|"body"|"parents"}
     - `calmer` is the only payload. We deliberately do NOT bind to a
       user_id, session_token, or chat session. The wanderer's identity
-      is sanctuary-private.
+      is house-private.
     - `room` defaults to "clarity" if missing. Used so we can later
       compare which rooms produce the strongest calm signal.
     """

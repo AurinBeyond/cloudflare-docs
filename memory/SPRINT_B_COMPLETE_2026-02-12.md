@@ -39,7 +39,7 @@
 3. ✅ Daily cap blocks (30 min adult / 20 min kids)
 4. ✅ Wallet firewall (adult cannot drain kids and vice versa)
 5. ✅ Webhook dedupe (replay → `{ok: true, duplicate: true}`)
-6. ✅ Sanctuary Compass grants BOTH wallets in one transaction
+6. ✅ House Compass grants BOTH wallets in one transaction
 7. ✅ Sovereign cohort seat decrement is atomic + `cohort: "founding"` is stamped on the grant only when seats remain
 8. ✅ Unknown SKU codes are ignored gracefully (no crash, no garbage grants)
 

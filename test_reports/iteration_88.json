@@ -1,5 +1,5 @@
 {
-  "summary": "Frontend-only Clarity Pass verification on /sanctuary-preview and /pricing. All 16 requested test cases pass on content. Initial assertion failures were false negatives from CSS uppercase rendering (tracking-uppercase) — verified via raw text reads and 3 successful click-through navigations.",
+  "summary": "Frontend-only Clarity Pass verification on /house-preview and /pricing. All 16 requested test cases pass on content. Initial assertion failures were false negatives from CSS uppercase rendering (tracking-uppercase) — verified via raw text reads and 3 successful click-through navigations.",
   "backend_issues": {"critical": [], "minor": []},
   "frontend_issues": {
     "ui_bugs": [],
@@ -7,13 +7,13 @@
     "design_issues": []
   },
   "test_results": {
-    "sanctuary_preview": {
+    "house_preview": {
       "sprint_zero_two_ctas_only": "PASS (hero-cta-start-here=1, hero-cta-browse-books=1, hero-cta-see-rooms=0)",
       "primary_cta_walk_into_grace": "PASS (text='Walk into Grace's room', href=/grace/intro)",
       "secondary_cta_read_library": "PASS (text='Read for free in the Library', href=/library)",
       "five_rooms_recognition_meet_hints": "PASS (all 5: sara/grace/kaelen/alistair/polarstar each with meet-hint testid showing 'Meet <Name> →')",
       "five_rooms_links_to_intro_pages": "PASS (all 5 point to /<name>/intro)",
-      "two_paths_section_removed": "PASS (sanctuary-two-paths count=0)"
+      "two_paths_section_removed": "PASS (house-two-paths count=0)"
     },
     "pricing": {
       "five_tiers_render": "PASS (explore/day-pass/journey/companion/private all present)",
@@ -25,7 +25,7 @@
       "voice_explainer_value_language": "PASS (opens 'Voice is when Grace, Sara, Kaelen or Alistair speaks back — not a message, a presence.')"
     },
     "click_throughs": {
-      "sanctuary_to_grace_intro": "PASS (Walk into Grace's room → /grace/intro loaded)",
+      "house_to_grace_intro": "PASS (Walk into Grace's room → /grace/intro loaded)",
       "pricing_journey_to_grace_intro": "PASS (Meet the keepers → /grace/intro loaded)",
       "pricing_day_pass_to_library": "PASS (Read the Library now → /library loaded)"
     }
@@ -33,8 +33,8 @@
   "test_report_links": [],
   "action_items": [],
   "critical_code_review_comments": [
-    "SanctuaryPreview.jsx still defines TwoPathsSection function (~lines 1227-1324) even though it is removed from the render flow — comment on line 1384 acknowledges this; consider removing the dead code in a follow-up cleanup pass to keep the 1400+ line file from growing further.",
-    "SanctuaryPreview.jsx is ~1400 lines — file size review item per code review guidelines (>700 lines). Splitting into per-section components would aid maintainability, but not blocking."
+    "HousePreview.jsx still defines TwoPathsSection function (~lines 1227-1324) even though it is removed from the render flow — comment on line 1384 acknowledges this; consider removing the dead code in a follow-up cleanup pass to keep the 1400+ line file from growing further.",
+    "HousePreview.jsx is ~1400 lines — file size review item per code review guidelines (>700 lines). Splitting into per-section components would aid maintainability, but not blocking."
   ],
   "updated_files": [],
   "success_rate": {"backend": "n/a (skipped per request)", "frontend": "100% (16/16 checks pass)"},

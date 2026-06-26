@@ -3,7 +3,7 @@
 ## ✅ TÄNA TEHTUD (kõik testitud, kõik kättesaadavad)
 
 ### Legacy puhastus (Faas 1)
-- Kustutatud: `HighPerformers.jsx`, `_BodyTempleLegacy.jsx`, `LuxurySanctuaryLanding.jsx`
+- Kustutatud: `HighPerformers.jsx`, `_BodyTempleLegacy.jsx`, `LuxuryHouseLanding.jsx`
 - Route'id konsolideeritud: `/high-performers` → `/`, `/luxury` → `/`, `/catalogue` → `/library`, `/course-room/library` → `/alistair/library`
 - Eemaldatud Navigation/Footer: "For Leaders", "Catalogue" lingid
 - USD viited eemaldatud (BodyRoom, UserPortal, BodyArchitectureAudioShelf)
@@ -37,11 +37,11 @@ Kõik praegu eksisteerivad tooted ühes tabelis:
 |---|---|---|---|
 | Quiet Entry | €89 | BundleDisclosure | ? |
 | Inner Compass | €229 | BundleDisclosure | ? |
-| Sanctuary Compass | €329 | BundleDisclosure | ? |
-| Sanctuary Annual | €3290 | BundleDisclosure | KUSTUTA |
+| House Compass | €329 | BundleDisclosure | ? |
+| House Annual | €3290 | BundleDisclosure | KUSTUTA |
 | Day Pass | €25/49/89 | ? | ? |
-| Voice top-up | €25/39/99 | SanctuaryPreview | ? |
-| Mike "Ways" | €45/120/380 | SanctuaryPreview | ? |
+| Voice top-up | €25/39/99 | HousePreview | ? |
+| Mike "Ways" | €45/120/380 | HousePreview | ? |
 | Hearth | €19 | Gumroad LIVE | KEEP |
 | Family Bundle | €25 | Gumroad LIVE | KEEP |
 | Alistair Bundle | €39 | Gumroad | KEEP |

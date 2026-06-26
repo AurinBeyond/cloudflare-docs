@@ -19,7 +19,7 @@ Strict rule: keep system stable, nothing gets displaced.
 ## 🟡 FINDINGS — pending founder approval before changes
 
 ### 1. OpenWorld cards have NO "Enter" CTAs (matches founder's screenshot feedback)
-`SanctuaryPreview.jsx` (homepage) — the four cards "The Library / Bookstore / Courses / Kids Universe" are pure text with a top badge. No clickable button. Visitors must guess that the *whole card* might be clickable (it isn't).
+`HousePreview.jsx` (homepage) — the four cards "The Library / Bookstore / Courses / Kids Universe" are pure text with a top badge. No clickable button. Visitors must guess that the *whole card* might be clickable (it isn't).
 
 **Suggested action (P1, tomorrow):**
 - Each card gets a quiet "Enter →" link at the bottom, routing to:
@@ -27,7 +27,7 @@ Strict rule: keep system stable, nothing gets displaced.
   - The Bookstore → `/bookstore`
   - The Courses → `/course-room`
   - Kids Universe → `/kids-universe`
-- Visual: small text link, same brass colour, no big button (preserves "luxury sanctuary" aesthetic).
+- Visual: small text link, same brass colour, no big button (preserves "luxury house" aesthetic).
 
 ### 2. Static agent portraits inside chat surface (founder request)
 Currently `RoomConvaiChat.jsx` shows a textual room header only. Founder wants each speaking agent (Grace, Kaelan, Sara, Alistair, Aurin) to have a **static portrait** shown in the chat surface to build trust.

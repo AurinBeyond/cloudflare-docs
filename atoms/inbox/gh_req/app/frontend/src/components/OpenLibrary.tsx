@@ -26,29 +26,29 @@ export default function OpenLibrary({ onNavigate }: OpenLibraryProps) {
           <img
             src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyyggnyaagoq/open-library-warm-discovery.png"
             alt="Open Library"
-            className="w-full h-full object-cover opacity-15 animate-sanctuary-breathe"
+            className="w-full h-full object-cover opacity-15 animate-house-breathe"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#faf8f5]/70 to-[#faf8f5]" />
         </div>
         
         <div className="relative max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
-          <div className="animate-sanctuary-enter">
+          <div className="animate-house-enter">
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2d5016]/6 border border-[#2d5016]/15 mb-8">
               <Leaf className="w-4 h-4 text-[#2d5016]" />
               <span className="text-[#2d5016] text-sm font-medium tracking-wide">Open Discovery · Free Access</span>
             </div>
           </div>
           
-          <h1 className="font-luxury text-3xl md:text-5xl lg:text-6xl font-bold mb-5 animate-sanctuary-slide" style={{ animationDelay: "0.15s", opacity: 0 }}>
+          <h1 className="font-luxury text-3xl md:text-5xl lg:text-6xl font-bold mb-5 animate-house-slide" style={{ animationDelay: "0.15s", opacity: 0 }}>
             Breathe. Discover. Grow.
           </h1>
-          <p className="text-[#1a1a2e]/55 text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed animate-sanctuary-slide" style={{ animationDelay: "0.3s", opacity: 0 }}>
+          <p className="text-[#1a1a2e]/55 text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed animate-house-slide" style={{ animationDelay: "0.3s", opacity: 0 }}>
             A curated library of free resources to begin your journey. 
             No barriers, no pressure — just warmth and wisdom.
           </p>
 
           {/* Search — Gentle, Inviting */}
-          <div className="max-w-lg mx-auto relative animate-sanctuary-slide" style={{ animationDelay: "0.45s", opacity: 0 }}>
+          <div className="max-w-lg mx-auto relative animate-house-slide" style={{ animationDelay: "0.45s", opacity: 0 }}>
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1a1a2e]/25" />
             <input
               type="text"
@@ -85,7 +85,7 @@ export default function OpenLibrary({ onNavigate }: OpenLibraryProps) {
           {categories.map((cat, i) => (
             <button
               key={cat}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-400 sanctuary-btn ${
+              className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-400 house-btn ${
                 i === 0
                   ? "bg-[#2d5016] text-white shadow-sm"
                   : "bg-[#f0e6d3]/40 text-[#1a1a2e]/60 hover:bg-[#f0e6d3]/80 hover:text-[#1a1a2e]"
@@ -101,7 +101,7 @@ export default function OpenLibrary({ onNavigate }: OpenLibraryProps) {
           {freeResources.map((resource, i) => (
             <div
               key={i}
-              className="group p-7 rounded-xl bg-white border border-[#f0e6d3]/80 hover:border-[#2d5016]/20 sanctuary-card cursor-pointer"
+              className="group p-7 rounded-xl bg-white border border-[#f0e6d3]/80 hover:border-[#2d5016]/20 house-card cursor-pointer"
             >
               <div className="flex items-start justify-between mb-4">
                 <span className="text-xs px-3 py-1.5 rounded-full bg-[#2d5016]/6 text-[#2d5016] font-medium">
@@ -141,7 +141,7 @@ export default function OpenLibrary({ onNavigate }: OpenLibraryProps) {
           </p>
           <button 
             onClick={() => onNavigate("luxury")}
-            className="px-7 py-3.5 bg-[#d4af37] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#e8c547] transition-all duration-500 inline-flex items-center gap-2 sanctuary-btn"
+            className="px-7 py-3.5 bg-[#d4af37] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#e8c547] transition-all duration-500 inline-flex items-center gap-2 house-btn"
           >
             Explore Premium <ArrowRight className="w-4 h-4" />
           </button>

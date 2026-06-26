@@ -68,7 +68,7 @@ async def main():
         session_id=f"grace-in-chair-{uuid.uuid4().hex[:6]}",
         system_message=(
             "You are a watercolour painter producing Sara-Visual-"
-            "System-Lock paintings for the Aurin sanctuary. Painterly "
+            "System-Lock paintings for the Aurin house. Painterly "
             "only. Warm, calm, worn, timeless. No text. No glamour."
         ),
     )

@@ -67,7 +67,7 @@ Founder calls this the **single most differentiated feature** of the product.
 ## 2 · PARENTS' ROOM (Sara) — Selling Points
 
 ### What it actually is
-A voice room built specifically for parents. **Sara** is the AI presence. She is **not** another life coach. She is what the founder calls a "sanctuary listener" — held by Socratic questioning, never advice-shaped.
+A voice room built specifically for parents. **Sara** is the AI presence. She is **not** another life coach. She is what the founder calls a "house listener" — held by Socratic questioning, never advice-shaped.
 
 ### Sara's exact tonal contract
 - Never says: "you should…", "have you tried…", "experts recommend…"
@@ -130,7 +130,7 @@ Use whichever one matches your influencer's existing audience tone:
 **Best for**: gentle-parenting influencers, sensory-parents, divorce/blended-family voices.
 
 ### Hook B · "The room nobody talks to"
-> "There's a sanctuary room here that's built only for things parents can't say in front of their child, their partner, or the group chat. Sara doesn't fix it. She just lets you say it."
+> "There's a house room here that's built only for things parents can't say in front of their child, their partner, or the group chat. Sara doesn't fix it. She just lets you say it."
 
 **Best for**: mental-load, ADHD-parent, peri-menopause, and "I'm not okay" content creators.
 

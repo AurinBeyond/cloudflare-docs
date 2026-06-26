@@ -7,7 +7,7 @@ accountant pass. Lock condition: ≥70% gross margin worst-case on every
 public surface, ≤70% USD/EUR FX risk absorbed, zero positioning
 exposure to "wellness / therapy / mental-health" PSP categories.
 **Naming:** GPT v1.1 terminology accepted (Quiet Entry · Aurin
-Storyteller · Inner Compass · Sanctuary Compass · Sovereign Circle).
+Storyteller · Inner Compass · House Compass · Sovereign Circle).
 
 > Members buy access to architecture, continuity, atmosphere, and
 > private space. They never buy AI minutes. Minutes are fuel; metered,
@@ -49,7 +49,7 @@ important architectural addition in v2.2.
 - Kids Universe — all 3 zones (Discovery · Exploration · Creation).
 - Aurin storyteller voice (calming, screen-down narrative engine).
 - ~60 Aurin-voice minutes per cycle, Roll-Forward One Cycle.
-- 1 child profile (Sanctuary Compass extends this to 3).
+- 1 child profile (House Compass extends this to 3).
 - Emotion check-in (`puzzle_room`) — voice or written.
 - Star-reward commitments (screen-free real-world ledger).
 - Private Album (KMS-encrypted, password-reconfirm gated) — 1 child.
@@ -83,7 +83,7 @@ child-data perimeter cleanly isolated from adult-context spend.
   not feel they "settled for the cheap option" — they made a different
   choice.
 - **€10 below Quiet Entry (€89)** because Storyteller carries less
-  total content surface than the adult sanctuary. Pricing tells the
+  total content surface than the adult house. Pricing tells the
   truth of the relative bundle.
 - **Family Compass upgrade ratio 4.2×** is steep, but the jump
   represents the entire adult vertical + 3 child profiles + adult
@@ -91,11 +91,11 @@ child-data perimeter cleanly isolated from adult-context spend.
 
 ### 2.5 Upgrade economics → Family Compass
 A parent who outgrows Aurin Storyteller (e.g. wants ConvAI for
-themselves, or has a second/third child) upgrades to Sanctuary
+themselves, or has a second/third child) upgrades to House
 Compass for **€250/mo delta**. Marginal COGS uplift: ~€43. Marginal
 contribution per upgrader: **€207/cycle**. This is the single
 highest-leverage upgrade vector in the architecture — even more so
-than the v2.1 Compass → Sanctuary path, because the parent has
+than the v2.1 Compass → House path, because the parent has
 already validated child usage before deciding.
 
 ---
@@ -109,7 +109,7 @@ already validated child usage before deciding.
 | Quiet Entry         | 15 / 0   min        |   5.25     | 3.96  |  2.00  |  0.50  |  11.71     |  89.00  | 86.8%  |
 | Aurin Storyteller   |  0 / 60  min        |  10.80     | 3.56  |  3.00  |  0.50  |  17.86     |  79.00  | 77.4%  |
 | Inner Compass       | 60 / 0   min        |  21.00     | 9.56  |  2.00  |  0.50  |  33.06     | 229.00  | 85.6%  |
-| Sanctuary Compass   | 90 / 60  min        |  42.30     | 13.56 |  4.00  |  1.00  |  60.86     | 329.00  | 81.5%  |
+| House Compass   | 90 / 60  min        |  42.30     | 13.56 |  4.00  |  1.00  |  60.86     | 329.00  | 81.5%  |
 | Sovereign Standard  | 450 / 300 min (fair-use ceiling) | 211.50 | 140.40 | 30.00 | — | 381.90 | 3,500 / qtr | 89.1% |
 | Sovereign Bespoke   | 600 / 400 min (fair-use ceiling) | 282.00 | 220.40 | 50.00 | — | 552.40 | 5,500 / qtr | 89.9% |
 
@@ -128,7 +128,7 @@ of the matched bundle if upgrade happens within 7 days of purchase.
 
 ## 4. Full content map across all surfaces
 
-| Element | Kids·Day | Day·Quiet | Day·Deep | Quiet Entry | Aurin Storyt. | Inner Compass | Sanctuary | Sovereign Std | Sovereign Besp. |
+| Element | Kids·Day | Day·Quiet | Day·Deep | Quiet Entry | Aurin Storyt. | Inner Compass | House | Sovereign Std | Sovereign Besp. |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 4 cardinal adult rooms (Body · Parents · Clarity · Course) | preview | partial | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ |
 | 24h cadence transmissions | preview | preview | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ |
@@ -180,7 +180,7 @@ validity reads as telco-style on the heaviest pack (€399/300 min);
 HNW positioning recovers slower from that than the platform recovers
 from carrying ~60 days extra balance-sheet liability.
 
-### Adult voice (Inner Compass + Sanctuary Compass holders)
+### Adult voice (Inner Compass + House Compass holders)
 
 | SKU                    | Min | Price | €/min | Validity | Margin |
 |------------------------|----:|------:|------:|---------:|-------:|
@@ -188,7 +188,7 @@ from carrying ~60 days extra balance-sheet liability.
 | `topup.compass.120`    | 120 | €159  | 1.33  | 60 days  | 69.3% |
 | `topup.compass.300`    | 300 | €399  | 1.33  | 90 days  | 69.8% |
 
-### Child voice (Aurin Storyteller + Sanctuary Compass holders)
+### Child voice (Aurin Storyteller + House Compass holders)
 
 | SKU                    | Min | Price | €/min | Validity | Margin |
 |------------------------|----:|------:|------:|---------:|-------:|
@@ -217,9 +217,9 @@ aurin.storyteller.year       €790
 inner.compass.month          €229
 inner.compass.quarter        €619
 inner.compass.year           €2,290
-sanctuary.compass.month      €329
-sanctuary.compass.quarter    €889
-sanctuary.compass.year       €3,290
+house.compass.month      €329
+house.compass.quarter    €889
+house.compass.year       €3,290
 
 ─ Sovereign (4 SKUs · interview-gated)
 sovereign.standard.quarter   from €3,500
@@ -283,7 +283,7 @@ topup.daypass.30             €40
 9. GA4 events: `gate.disclosed`, `bundle.viewed`, `daypass.viewed`,
    `daypass.purchased`, `checkout.started`, `checkout.completed`,
    `voice.exhausted`, `topup.viewed`, `topup.purchased`,
-   `daypass.upgraded_to_bundle`, `storyteller.upgraded_to_sanctuary`.
+   `daypass.upgraded_to_bundle`, `storyteller.upgraded_to_house`.
 10. Smoke-test full purchase → allocation → transmission loop on
     test Polar org with founder's own card.
 11. Git tag release: `v3.2-membership-locked`.

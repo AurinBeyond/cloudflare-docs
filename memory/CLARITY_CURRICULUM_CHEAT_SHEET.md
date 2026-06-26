@@ -46,7 +46,7 @@ Legacy slugs `3-5`/`6-8`/`9-12` still alias to canonical.
 
 ---
 
-## The free vs premium split (€500 / 60h Sanctuary package)
+## The free vs premium split (€500 / 60h House package)
 
 **FREE (open to everyone — marketing fuel):**
 - ✅ Full Daily Reflection ritual (mood check-in + auto 1★/day)

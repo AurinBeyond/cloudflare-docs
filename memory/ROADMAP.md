@@ -40,7 +40,7 @@ toetavad)
 
 ## 🎨 Faas 5 — Täielik visuaalne ühtlustamine (P3)
 
-Praegu (Faas 1) rakendatakse uus sanctuary aesthetic (puidust paneelid,
+Praegu (Faas 1) rakendatakse uus house aesthetic (puidust paneelid,
 Caveat font, kuldne aura) ainult **Body Temple lehel + Body Room
 sissepääsu kaardil** kui PoC. Hiljem laiendada:
 

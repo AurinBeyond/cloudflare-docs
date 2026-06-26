@@ -132,7 +132,7 @@ No PDF, no protocol, no chat. Just the voice + ambient.
 - `r/simpleliving` — same
 
 ### Hacker News (Show HN Shot #2 — Matrix Aurin, Week 6 of plan)
-- *"Show HN: A private, non-therapy sanctuary to offload cognitive debt"*
+- *"Show HN: A private, non-therapy house to offload cognitive debt"*
 - Free audio preview is the killer hook for HN's anti-app sensibilities
 
 ### Dev.to / Hashnode (per GPT list)

@@ -29,7 +29,7 @@
 
 | Toode | Praegune URL | Olemus | Otsus |
 |---|---|---|---|
-| **Sanctuary Landing** | `/` (SanctuaryPreview) | 5 toa kataloog + Wanderer Gate | ✅ JÄÄB — peamine sissepääs |
+| **House Landing** | `/` (HousePreview) | 5 toa kataloog + Wanderer Gate | ✅ JÄÄB — peamine sissepääs |
 | **Library Hub** | `/library` | Lugemissaal (3 sektsiooni) | ✅ JÄÄB |
 | **Library — Adults** | `/library/adults` | Tasuta artiklid | ✅ JÄÄB |
 | **Library — Kids** | `/library/kids` | Tasuta lastelood | ✅ JÄÄB |
@@ -99,8 +99,8 @@ GPT soovitus: ärge tehke "Family" ainsaks sissepääsuks. Olen nõus. Viis võr
 | **Quiet Entry** | €89/kuu, €239/kvartal, €890/aasta | BundleDisclosure | 🔴 LEGACY |
 | **Aurin Storyteller** | €79/kuu, €209/kvartal, €790/aasta | BundleDisclosure | 🔴 LEGACY |
 | **Inner Compass** | €229/kuu, €619/kvartal, €2,290/aasta | BundleDisclosure | 🔴 LEGACY |
-| **Sanctuary Compass** | €329/kuu, €889/kvartal, €3,290/aasta | BundleDisclosure | 🔴 LEGACY |
-| **Sanctuary Preview "Ways"** | €45 / €120 / €380 (Mike's prose) | SanctuaryPreview | 🔴 LEGACY |
+| **House Compass** | €329/kuu, €889/kvartal, €3,290/aasta | BundleDisclosure | 🔴 LEGACY |
+| **House Preview "Ways"** | €45 / €120 / €380 (Mike's prose) | HousePreview | 🔴 LEGACY |
 | **Day Passes** | €25 / €49 / €89 | BundleDisclosure | 🔴 LEGACY |
 
 **Kõik need 4 + 3 + 3 tasandit on uue arhitektuuri all KUSTUTATAVAD.** Asendatakse ÜHE Companion-membershipiga.
@@ -123,7 +123,7 @@ GPT soovitus: ärge tehke "Family" ainsaks sissepääsuks. Olen nõus. Viis võr
 | Praegune toode | Hind | URL | Otsus |
 |---|---|---|---|
 | **Cabinet / Booking** | by application | `/cabinet/booking` | ✅ JÄÄB — Private |
-| **Sanctuary "Your Own Room"** | €380 (Mike) | SanctuaryPreview | 🔴 LEGACY (sõnastus ja hind muudetakse) |
+| **House "Your Own Room"** | €380 (Mike) | HousePreview | 🔴 LEGACY (sõnastus ja hind muudetakse) |
 | **"By application. €1,890 quarterly"** | €1,890/kv | BundleDisclosure | 🔴 LEGACY (kontseptsioon säilib, hind võib muutuda) |
 
 **Uus Private (ettepanek, post-beta):**
@@ -142,11 +142,11 @@ Hinnad jäävad **lukku KUNI** Companion-mudel on toiminud 3+ kuud.
 |---|---|---|
 | `/app/frontend/src/pages/HighPerformers.jsx` | **KUSTUTA** | "Coach", "performance" toon — vastuolus anti-wellness filosoofiaga |
 | `/app/frontend/src/pages/_BodyTempleLegacy.jsx` | **KUSTUTA** | Juba `_`-prefiksiga legacy |
-| `/app/frontend/src/pages/BundleDisclosure.jsx` | **REWRITE** | Sisaldab 4 vana Sanctuary tieri (€89–€3,290), Day Passes, Top-up'id — pole uue arhitektuuriga kooskõlas |
-| `/app/frontend/src/pages/LuxurySanctuaryLanding.jsx` | **KUSTUTA** (kontrolli kasutust) | Juba route'iga `/luxury → /` suunatud, fail jääb |
+| `/app/frontend/src/pages/BundleDisclosure.jsx` | **REWRITE** | Sisaldab 4 vana House tieri (€89–€3,290), Day Passes, Top-up'id — pole uue arhitektuuriga kooskõlas |
+| `/app/frontend/src/pages/LuxuryHouseLanding.jsx` | **KUSTUTA** (kontrolli kasutust) | Juba route'iga `/luxury → /` suunatud, fail jääb |
 | `BodyTemple.jsx` $39 USD viited | **TEISENDA** €-ks ja sulanda Body Journey'sse | USD/EUR segadus |
-| `SanctuaryPreview.jsx` "Ways" sektsioon (€45/€120/€380) | **REWRITE** | Asenda 5 Journey + Companion struktuuriga |
-| `SanctuaryPreview.jsx` "Voice top-up" sektsioon (€25/€39/€99 presence) | **REWRITE** | Selge ElevenLabs hääle krediit, mitte "presence minutes" segadus |
+| `HousePreview.jsx` "Ways" sektsioon (€45/€120/€380) | **REWRITE** | Asenda 5 Journey + Companion struktuuriga |
+| `HousePreview.jsx` "Voice top-up" sektsioon (€25/€39/€99 presence) | **REWRITE** | Selge ElevenLabs hääle krediit, mitte "presence minutes" segadus |
 | Route `/pricing → /grace/room` | **EHITA UUS LEHT** | Tegelik `/pricing` leht peab eksisteerima |
 | Route `/membership` (BundleDisclosure) | **REWRITE** | Sama leht uue struktuuriga |
 
@@ -157,7 +157,7 @@ Hinnad jäävad **lukku KUNI** Companion-mudel on toiminud 3+ kuud.
 | "Quiet Entry" | (eemaldatud) | Tieri ei ole enam |
 | "Aurin Storyteller" | osa **Wonder Journey**'st | Polarstar = Wonder |
 | "Inner Compass" | osa **Companion**'ist | Sulanda |
-| "Sanctuary Compass" | osa **Companion**'ist | Sulanda |
+| "House Compass" | osa **Companion**'ist | Sulanda |
 | "Body Temple 28" | **Body Journey** | Sama sisu, uus pakend |
 | "The Hearth Protocol" (€19) | **Evening Journey** baas | Hind võib tõusta €29-le |
 | "Alistair Bundle" (€39) | **Money Journey** | Hind võib langeda €29-le |
@@ -208,7 +208,7 @@ Enne kui kirjutame ühegi rea koodi:
 
 ## 6. KOODI MUUTMISE JÄRJEKORD (kui arhitektuur on lukus)
 
-1. **Faas 1 — Legacy puhastus** (1 päev): Kustuta HighPerformers, _BodyTempleLegacy, eemalda Sanctuary Preview vanad "Ways" + "Voice top-up" sektsioonid, eemalda BundleDisclosure 4-tier struktuur.
+1. **Faas 1 — Legacy puhastus** (1 päev): Kustuta HighPerformers, _BodyTempleLegacy, eemalda House Preview vanad "Ways" + "Voice top-up" sektsioonid, eemalda BundleDisclosure 4-tier struktuur.
 2. **Faas 2 — Uus `/pricing` leht** (1 päev): Ehita lihtne pricing leht uue 4-kasti loogikaga, ilma reaalsete maksenuppudeta veel.
 3. **Faas 3 — Üks Journey full-build** (3–5 päeva): Vali 1 (soovituslikult Evening, sest Hearth juba töötab) ja ehita see täielikult valmis maandumislehe + Gumroad/Stripe checkoutiga.
 4. **Faas 4 — Companion ehitus** (5–7 päeva): Backend membership-ledger, Stripe subscription, ligipääsu kontroll, hääle krediidi top-up'id eraldi.

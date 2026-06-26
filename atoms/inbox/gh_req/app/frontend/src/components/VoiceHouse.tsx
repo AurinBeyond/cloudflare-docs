@@ -1,7 +1,7 @@
 import { Mic, Play, Pause, Clock, Lock, ArrowRight, Volume2 } from "lucide-react";
 import { useState } from "react";
 
-interface VoiceSanctuaryProps {
+interface VoiceHouseProps {
   onNavigate: (wing: "luxury" | "library" | "kids" | "store" | "voice") => void;
 }
 
@@ -16,7 +16,7 @@ const voiceSessions = [
   { title: "Presence Practice", duration: "12 min", guide: "James Holloway", premium: true, category: "Awareness" },
 ];
 
-export default function VoiceSanctuary({ onNavigate }: VoiceSanctuaryProps) {
+export default function VoiceHouse({ onNavigate }: VoiceHouseProps) {
   const [playing, setPlaying] = useState<number | null>(null);
 
   return (
@@ -25,8 +25,8 @@ export default function VoiceSanctuary({ onNavigate }: VoiceSanctuaryProps) {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-sanctuary-deep-presence.png"
-            alt="Voice Sanctuary"
+            src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygfgiaagqa/voice-house-deep-presence.png"
+            alt="Voice House"
             className="w-full h-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/70 to-[#0a0a0a]" />
@@ -35,7 +35,7 @@ export default function VoiceSanctuary({ onNavigate }: VoiceSanctuaryProps) {
         <div className="relative max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/20 mb-6">
             <Mic className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-[#d4af37] text-sm font-medium">Voice Sanctuary · Deep Presence</span>
+            <span className="text-[#d4af37] text-sm font-medium">Voice House · Deep Presence</span>
           </div>
           
           <h1 className="font-luxury text-3xl md:text-5xl font-bold mb-4">

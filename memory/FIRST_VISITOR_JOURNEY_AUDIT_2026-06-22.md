@@ -81,14 +81,14 @@ Each row links into that room. **First-fold = 5 recognitions in 3 seconds each.*
 
 ### I4 · Wanderer Gate's 5 boxes — order is medical-first, room-feeling last
 **Current order:** (1) educational not medical, (2) no specific outcomes, (3) not under psychiatric care, (4) full responsibility, (5) no redistribution.
-**Issue:** Reads like a legal page from a clinic. The threshold says "this is a sanctuary" but the boxes say "this is a liability document". Tone mismatch.
+**Issue:** Reads like a legal page from a clinic. The threshold says "this is a house" but the boxes say "this is a liability document". Tone mismatch.
 **Recommendation:** Keep all 5 boxes (legally important) but **reorder** so the lighter "no redistribution" comes second, and the heavier medical-exclusion comes nearer the bottom. The first box could even be a softer one:
 > *"I understand I am entering a quiet space, not a course or a clinic."*
 > Same meaning, different doorway feeling.
 
 ### I5 · Global navigation bar dominates Sara/Wider Circle pages
 **Current:** Header has 13 nav items + Enter Portal button, visible on every Sara/Wider Circle page. Painted hubs would breathe more without it.
-**Recommendation:** On Sara/Sanctuary routes (`/parents-room/*`, `/grace`, `/body-world`, `/alistair`, `/polarstar`), make the header **auto-hide on scroll** and reappear when scrolling up. CSS-only. One day of work after beta if testers confirm it bothers them.
+**Recommendation:** On Sara/House routes (`/parents-room/*`, `/grace`, `/body-world`, `/alistair`, `/polarstar`), make the header **auto-hide on scroll** and reappear when scrolling up. CSS-only. One day of work after beta if testers confirm it bothers them.
 
 ---
 

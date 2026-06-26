@@ -14,7 +14,7 @@ This proposal answers three questions:
 ## Part 1 — The honest positioning problem
 
 External AI reviewers and many first-time visitors don't understand what this site IS. They see:
-- A beautiful sanctuary
+- A beautiful house
 - 5 mysterious rooms with named guides
 - No clear "what do I get here"
 - No identifiable human author
@@ -154,7 +154,7 @@ Example tone:
 
 Effect:
 - Social proof without LinkedIn-style polish
-- Matches sanctuary tone
+- Matches house tone
 - Real reader voice = trust signal
 
 **Risk:** Anna needs to source one real quote. Don't fake.
@@ -181,7 +181,7 @@ Effect:
 
 ## Part 4 — Channel strategy (HOW to find first 100 wanderers)
 
-### Channels that fit (sanctuary brand)
+### Channels that fit (house brand)
 
 🟢 **Quiet substack-style newsletter**
 - Anna writes one letter every other week
@@ -199,8 +199,8 @@ Effect:
 - One pinned video. Don't try for content velocity.
 
 🟢 **Pinterest**
-- Sanctuary aesthetics travel well here
-- Pin sanctuary excerpts + room invitations
+- House aesthetics travel well here
+- Pin house excerpts + room invitations
 - Builds passive search traffic
 
 ### Channels that DON'T fit (do not waste time)

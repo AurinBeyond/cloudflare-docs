@@ -62,5 +62,5 @@ Each of these will be its own page in the next sprint, built on the same v2 dark
 
 ## Rule
 
-- This doctrine is **internal**. The user-facing copy on the lab pages must remain English, calm, sanctuary-toned, never "lecture-style". The code/words conceptual chain shows up *through atmosphere* (the floating paper scraps on Old Stories, the golden code lines on the cross-lab intro), not as a literal explanation.
+- This doctrine is **internal**. The user-facing copy on the lab pages must remain English, calm, house-toned, never "lecture-style". The code/words conceptual chain shows up *through atmosphere* (the floating paper scraps on Old Stories, the golden code lines on the cross-lab intro), not as a literal explanation.
 - Founder language law still applies: **English only on every visible surface.**

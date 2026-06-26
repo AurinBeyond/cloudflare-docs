@@ -9,7 +9,7 @@
  * "you also deserve a quiet room", with a dotted link to Body Temple 28.
  * The parent can dismiss it once and it never returns.
  *
- * Sanctuary tone. No urgency. No FOMO. Caveat handwriting on the title.
+ * House tone. No urgency. No FOMO. Caveat handwriting on the title.
  */
 
 import { useEffect, useState } from "react";

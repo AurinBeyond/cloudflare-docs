@@ -4,7 +4,7 @@
  * §HEARTH-AUDIO iter 86p 2026-05-31
  *
  * First Hearth evening story. Adult-facing surface — deep blue night
- * sanctuary, lantern-amber accents, warm cream typography. Anti-marketing:
+ * house, lantern-amber accents, warm cream typography. Anti-marketing:
  * no pop-ups, no urgency, no "Buy now" buttons. Only a soft italic
  * "Keep the lantern lit →" line back to /the-hearth.
  *

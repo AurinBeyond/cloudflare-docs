@@ -162,7 +162,7 @@ export default function AdminFinance() {
   const overallOk = ratio >= 3.0 ? true : ratio >= 1.5 ? null : false;
 
   return (
-    <div className="min-h-screen sanctuary-cream" data-testid="admin-finance-page">
+    <div className="min-h-screen house-cream" data-testid="admin-finance-page">
       <PageHeader title="Finance & Runtime Governance" subtitle="Real-time vendor protection" />
 
       <div className="max-w-6xl mx-auto px-6 pb-16">

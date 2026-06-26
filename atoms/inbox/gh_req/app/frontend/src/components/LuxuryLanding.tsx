@@ -27,8 +27,8 @@ const curatedCollections = [
     icon: Heart,
   },
   {
-    title: "Sanctuary Essentials",
-    description: "Foundation practices for building your personal sanctuary space. Begin here, return often.",
+    title: "House Essentials",
+    description: "Foundation practices for building your personal house space. Begin here, return often.",
     items: 32,
     tier: "Premium",
     icon: Gem,
@@ -37,7 +37,7 @@ const curatedCollections = [
 
 const testimonials = [
   {
-    text: "This sanctuary has become my daily anchor. The quality and intentionality behind every piece is extraordinary.",
+    text: "This house has become my daily anchor. The quality and intentionality behind every piece is extraordinary.",
     author: "A grateful member",
     role: "Practicing for 8 months",
   },
@@ -55,49 +55,49 @@ export default function LuxuryLanding({ onNavigate }: LuxuryLandingProps) {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-sanctuary-entrance-luxury.png"
-            alt="Sanctuary Entrance"
-            className="w-full h-full object-cover opacity-35 animate-sanctuary-breathe"
+            src="https://mgx-backend-cdn.metadl.com/generate/images/1238580/2026-05-18/oyygceiaagnq/hero-house-entrance-luxury.png"
+            alt="House Entrance"
+            className="w-full h-full object-cover opacity-35 animate-house-breathe"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/50 via-[#0a0a0a]/30 to-[#0a0a0a]" />
         </div>
         
         <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-36 text-center">
-          <div className="animate-sanctuary-enter">
+          <div className="animate-house-enter">
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#d4af37]/8 border border-[#d4af37]/15 mb-10">
               <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse-gold" />
-              <span className="text-[#d4af37] text-sm font-medium tracking-wider uppercase">Curated Luxury Sanctuary</span>
+              <span className="text-[#d4af37] text-sm font-medium tracking-wider uppercase">Curated Luxury House</span>
             </div>
           </div>
           
-          <h1 className="font-luxury text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-8 animate-sanctuary-slide" style={{ animationDelay: "0.15s", opacity: 0 }}>
+          <h1 className="font-luxury text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-8 animate-house-slide" style={{ animationDelay: "0.15s", opacity: 0 }}>
             Where Stillness
             <span className="block text-[#d4af37] mt-2">Becomes Strength</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-[#f5f0e8]/60 max-w-2xl mx-auto mb-12 leading-relaxed animate-sanctuary-slide" style={{ animationDelay: "0.3s", opacity: 0 }}>
-            Enter a sanctuary built for depth, dignity, and calm presence. 
+          <p className="text-lg md:text-xl text-[#f5f0e8]/60 max-w-2xl mx-auto mb-12 leading-relaxed animate-house-slide" style={{ animationDelay: "0.3s", opacity: 0 }}>
+            Enter a house built for depth, dignity, and calm presence. 
             Every collection is hand-curated to honor your journey inward.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-sanctuary-slide" style={{ animationDelay: "0.45s", opacity: 0 }}>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-house-slide" style={{ animationDelay: "0.45s", opacity: 0 }}>
             <button 
               onClick={() => onNavigate("store")}
-              className="px-9 py-4 bg-[#d4af37] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#e8c547] transition-all duration-500 flex items-center gap-2 sanctuary-btn animate-glow-pulse"
+              className="px-9 py-4 bg-[#d4af37] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#e8c547] transition-all duration-500 flex items-center gap-2 house-btn animate-glow-pulse"
             >
               Explore Collections <ArrowRight className="w-4 h-4" />
             </button>
             <button 
               onClick={() => onNavigate("library")}
-              className="px-9 py-4 border border-[#f5f0e8]/15 text-[#f5f0e8] rounded-xl font-medium hover:bg-[#f5f0e8]/[0.03] hover:border-[#f5f0e8]/25 transition-all duration-500 sanctuary-btn"
+              className="px-9 py-4 border border-[#f5f0e8]/15 text-[#f5f0e8] rounded-xl font-medium hover:bg-[#f5f0e8]/[0.03] hover:border-[#f5f0e8]/25 transition-all duration-500 house-btn"
             >
               Free Discovery →
             </button>
           </div>
         </div>
 
-        {/* Decorative sanctuary divider */}
-        <div className="sanctuary-divider max-w-xs mx-auto" />
+        {/* Decorative house divider */}
+        <div className="house-divider max-w-xs mx-auto" />
       </section>
 
       {/* Philosophy Strip */}
@@ -121,7 +121,7 @@ export default function LuxuryLanding({ onNavigate }: LuxuryLandingProps) {
         </div>
       </section>
 
-      <div className="sanctuary-divider max-w-md mx-auto" />
+      <div className="house-divider max-w-md mx-auto" />
 
       {/* Curated Collections */}
       <section className="max-w-6xl mx-auto px-6 py-20">
@@ -132,7 +132,7 @@ export default function LuxuryLanding({ onNavigate }: LuxuryLandingProps) {
           </div>
           <button 
             onClick={() => onNavigate("store")}
-            className="text-[#d4af37] text-sm font-medium hover:underline flex items-center gap-1.5 transition-all duration-300 sanctuary-btn"
+            className="text-[#d4af37] text-sm font-medium hover:underline flex items-center gap-1.5 transition-all duration-300 house-btn"
           >
             View All <ArrowRight className="w-3.5 h-3.5" />
           </button>
@@ -188,11 +188,11 @@ export default function LuxuryLanding({ onNavigate }: LuxuryLandingProps) {
         </div>
       </section>
 
-      <div className="sanctuary-divider max-w-md mx-auto" />
+      <div className="house-divider max-w-md mx-auto" />
 
       {/* Wing Discovery — Interconnected Rooms */}
       <section className="max-w-6xl mx-auto px-6 py-20 pb-28">
-        <h2 className="font-luxury text-2xl md:text-3xl font-bold text-center mb-4">Discover the Sanctuary</h2>
+        <h2 className="font-luxury text-2xl md:text-3xl font-bold text-center mb-4">Discover the House</h2>
         <p className="text-[#f5f0e8]/40 text-center mb-14 max-w-md mx-auto">Each wing offers a unique experience within the same living ecosystem</p>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 stagger-children">
@@ -200,7 +200,7 @@ export default function LuxuryLanding({ onNavigate }: LuxuryLandingProps) {
             { label: "Open Library", desc: "Free Discovery", wing: "library" as const, free: true },
             { label: "Kids Universe", desc: "Imagination & Light", wing: "kids" as const, free: false },
             { label: "Quiet Store", desc: "Curated Value", wing: "store" as const, free: false },
-            { label: "Voice Sanctuary", desc: "Deep Presence", wing: "voice" as const, free: false },
+            { label: "Voice House", desc: "Deep Presence", wing: "voice" as const, free: false },
           ].map((item, i) => (
             <button
               key={i}

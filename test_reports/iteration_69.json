@@ -1,5 +1,5 @@
 {
-  "summary": "Iteration 69 — §Phase 0 Sanctuary cleanup verified end-to-end. Numbered-list leakage strip (Layer 0), technical-state-label removal, and new Gemini guide portraits all pass. 8/8 phase0 pytest pass, regression on Layer 1/2 clinical filter intact, frontend ClarityThreshold guide selector renders real <img> portraits, no console errors.",
+  "summary": "Iteration 69 — §Phase 0 House cleanup verified end-to-end. Numbered-list leakage strip (Layer 0), technical-state-label removal, and new Gemini guide portraits all pass. 8/8 phase0 pytest pass, regression on Layer 1/2 clinical filter intact, frontend ClarityThreshold guide selector renders real <img> portraits, no console errors.",
   "backend_issues": {
     "critical": [],
     "minor": []

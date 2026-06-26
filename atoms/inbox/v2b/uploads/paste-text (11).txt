@@ -34,7 +34,7 @@ Protected core:
 * production infrastructure
 
 From now on:
-new development should happen as layered sanctuary expansion.
+new development should happen as layered house expansion.
 
 Meaning:
 
@@ -46,7 +46,7 @@ Meaning:
 * library discovery
 * Kids Universe integration
 * Quiet Store refinement
-* sanctuary continuity
+* house continuity
 
 WITHOUT:
 
@@ -58,7 +58,7 @@ WITHOUT:
 * unnecessary migrations
 
 Desired structure:
-One coherent sanctuary ecosystem
+One coherent house ecosystem
 with multiple emotional layers.
 
 The platform should evolve through:
@@ -77,4 +77,4 @@ Priority now:
 * growth
 
 The goal is:
-continuous evolution without breaking the living sanctuary.
+continuous evolution without breaking the living house.

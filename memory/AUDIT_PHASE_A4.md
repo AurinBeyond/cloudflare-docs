@@ -158,7 +158,7 @@ All 8 are `published: true`. Most have `cover_image_url` pointing at `/api/books
 
 - Alistair Bundle 21-letter library status (founder paused this until A.4 was done).
 - `/about` Anna page polish.
-- "Sanctuary" word audit across 24+ files (Sprint 6).
+- "House" word audit across 24+ files (Sprint 6).
 - FAQ / trust-proof component near Gumroad buttons.
 
 ---

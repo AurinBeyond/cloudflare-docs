@@ -6,10 +6,10 @@ Usage:
   cd /app/backend && python -m scripts.generate_doors
 
 Output:
-  /app/frontend/public/sanctuary/doors/door72_grace.png
-  /app/frontend/public/sanctuary/doors/door44_kaelan.png
-  /app/frontend/public/sanctuary/doors/door108_sara.png
-  /app/frontend/public/sanctuary/doors/door12_alistair.png
+  /app/frontend/public/house/doors/door72_grace.png
+  /app/frontend/public/house/doors/door44_kaelan.png
+  /app/frontend/public/house/doors/door108_sara.png
+  /app/frontend/public/house/doors/door12_alistair.png
 
 Founder approved variant C (2026-05-19). Standalone script — does NOT
 touch backend runtime / supervisor / API surface.
@@ -27,7 +27,7 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BACKEND_DIR / ".env")
 
-OUT_DIR = Path("/app/frontend/public/sanctuary/doors")
+OUT_DIR = Path("/app/frontend/public/house/doors")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Shared style anchor — keeps all 4 doors visually consistent.

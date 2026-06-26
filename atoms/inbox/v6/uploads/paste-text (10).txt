@@ -42,7 +42,7 @@ This is normal during internal collaboration.
 
 HOWEVER:
 
-Public-facing sanctuary experiences must NEVER mix languages accidentally.
+Public-facing house experiences must NEVER mix languages accidentally.
 
 Meaning:
 
@@ -71,7 +71,7 @@ and as properly separated language ecosystems —
 NOT through accidental mixed-language development.
 
 So for now:
-the entire sanctuary experience should feel linguistically unified and emotionally seamless in English.
+the entire house experience should feel linguistically unified and emotionally seamless in English.
 
 ────────────────────────
 IMPORTANT EXECUTION NOTE
@@ -79,7 +79,7 @@ IMPORTANT EXECUTION NOTE
 
 At this stage, the goal is no longer more philosophical clarification.
 
-The vision, emotional architecture, world structure, sanctuary direction, pricing philosophy, and protected-core boundaries are already sufficiently established.
+The vision, emotional architecture, world structure, house direction, pricing philosophy, and protected-core boundaries are already sufficiently established.
 
 Now the priority is:
 execution,

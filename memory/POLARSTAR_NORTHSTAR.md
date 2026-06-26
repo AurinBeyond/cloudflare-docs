@@ -60,7 +60,7 @@ Switching mode does not require any backend; CSS variables flip.
 - 1 hero, 3 age cards, ~6 activity tiles, 1 "Tomorrow's Adventure",
   1 Aurin guide card, 1 Story Stars card, 1 Family Moment card
 - All icons via `lucide-react` (no emoji in UI)
-- Serif typography matching Sanctuary
+- Serif typography matching House
 
 ### Phase 2 — Backend wiring (later)
 - `kids_polarstar_enrollments` collection (mirrors body_temple)
@@ -79,7 +79,7 @@ Switching mode does not require any backend; CSS variables flip.
 
 - ❌ Polar SKU descriptions
 - ❌ Pricing model
-- ❌ `/` landing (Sanctuary)
+- ❌ `/` landing (House)
 - ❌ Body Room, Clarity Release, Course Room, Parents' Room (adult side)
 - ❌ Existing `/kids-universe`, `/aurins-room`, `/kids-universe/journey`
   (they keep working — Polarstar is a parallel sandbox until proven)

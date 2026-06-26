@@ -12,7 +12,7 @@ ilmus väike vaikne joon **"For the grown-up reading this — Body Temple 28 →
 Caveat käekiri, sage-toonid, üks dot-alajoon. **Ei** häiri lapse vaadet.
 
 - Fail: `frontend/src/pages/KidsHub.jsx` (lisatud `<aside>` blokk lapse footer alla)
-- Test-id: `kids-hub-parent-cross-sell` + `kids-hub-parent-sanctuary-link`
+- Test-id: `kids-hub-parent-cross-sell` + `kids-hub-parent-house-link`
 - UTM tag: `?utm_source=kids_hub` → logitakse `referral_hits`-i
 - 📸 Screenshot: `/tmp/kids_hub_bottom.png` (vt allpool)
 

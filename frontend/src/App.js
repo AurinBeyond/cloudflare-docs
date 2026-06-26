@@ -36,7 +36,7 @@ import WanderersAgreement from "@/pages/WanderersAgreement";
 import AuthCallback from "@/pages/AuthCallback";
 import TheBeginning from "@/pages/TheBeginning";
 import TheBeginningStep from "@/pages/TheBeginningStep";
-import SanctuaryPreview from "@/pages/SanctuaryPreview";
+import HousePreview from "@/pages/HousePreview";
 import WhatThisIs from "@/pages/WhatThisIs";
 import BundleDisclosure from "@/pages/BundleDisclosure";
 import Pricing from "@/pages/Pricing";
@@ -171,7 +171,7 @@ function AppRouter() {
     <Routes>
       <Route element={<Layout />}>
         {/* §2026-05-19 — Home was moved OUT of Layout (below) so the
-            new Sanctuary landing can own its full-bleed nav + footer
+            new House landing can own its full-bleed nav + footer
             without doubling. The previous classic Home now lives at
             /home-legacy for instant rollback safety. */}
         <Route path="/home-legacy" element={<Home />} />
@@ -831,7 +831,7 @@ function AppRouter() {
         <Route path="/from-anna" element={<FromAnna />} />
       </Route>
       {/* §LEGACY-CLEANUP 2026-02 — /luxury route retired entirely.
-          LuxurySanctuaryLanding component removed; v1 pricing table
+          LuxuryHouseLanding component removed; v1 pricing table
           (€45/€120/€380) deleted with it. Redirect preserves any
           inbound links during deploy. */}
       <Route path="/luxury" element={<Navigate to="/" replace />} />
@@ -843,11 +843,11 @@ function AppRouter() {
           quiet room. Lives OUTSIDE Layout so the global nav does not
           double up. */}
       <Route path="/start-here" element={<StartHere />} />
-      {/* §2026-05-18 — /sanctuary-preview is a founder-review-only
+      {/* §2026-05-18 — /house-preview is a founder-review-only
           route. Full-bleed polished landing, Atoms audit applied,
           locked pricing structure visible as atmospheric "Thresholds".
           Production / Home.jsx remains untouched. */}
-      <Route path="/sanctuary-preview" element={<SanctuaryPreview />} />
+      <Route path="/house-preview" element={<HousePreview />} />
       <Route path="/what-this-is" element={<WhatThisIs />} />
       {/* §SPRINT-C 2026-02-12 — Post-gate bundle disclosure page.
           Surfaces the full v2.3.1 membership architecture with
@@ -862,13 +862,13 @@ function AppRouter() {
           upstream WebSocket. Login required (uses signed-url like
           the production rooms). */}
       <Route path="/test-mic" element={<TestMic />} />
-      {/* §2026-05-19 — Production Sanctuary landing. The /sanctuary-preview
+      {/* §2026-05-19 — Production House landing. The /house-preview
           component is mounted with `production` so the preview ribbon
           is hidden, the nav docks to the very top, and visitors arrive
           on the polished V6 / Mike experience the moment they land on
-          the domain. Rollback path: change `<SanctuaryPreview production />`
+          the domain. Rollback path: change `<HousePreview production />`
           to `<Home />` (still imported above) — instant revert.       */}
-      <Route path="/" element={<SanctuaryPreview production />} />
+      <Route path="/" element={<HousePreview production />} />
       {/* §AUDIT-77 2026-02-09 — Soft 404 catch-all + /origin redirect
           (nav label "Origin" historically points to /about; bare URL
           /origin would silently return blank without this). */}

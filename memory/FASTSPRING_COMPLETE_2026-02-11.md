@@ -159,7 +159,7 @@ These are the high-value, premium-perception packages. **One transaction grants 
 ### 6.6 📦 VIP Piiramatu — unlimited tier
 | | |
 |---|---|
-| **Name** | VIP Unlimited — Priority Sanctuary Access |
+| **Name** | VIP Unlimited — Priority House Access |
 | **SKU** | `bundle-vip-unlimited` |
 | **Price** | **€490.00 EUR** |
 | **Includes** | All 5 rooms, 300 min voice, unlimited text, priority access |
@@ -280,7 +280,7 @@ These are the high-value, premium-perception packages. **One transaction grants 
 | Currency display | USD primary, EUR/GBP auto |
 | EU VAT collection | **ON** (FastSpring as merchant of record) |
 | Default refund window | **14 days** (30 for annual) |
-| Disclaimer line on every product | "Not therapy, not medical advice. Educational sanctuary content." |
+| Disclaimer line on every product | "Not therapy, not medical advice. Educational house content." |
 | Business type | Norwegian sole proprietorship |
 | Product category | Digital educational / wellness reading + voice reflection |
 
@@ -291,7 +291,7 @@ These are the high-value, premium-perception packages. **One transaction grants 
 | Question | Answer |
 |---|---|
 | What do you sell? | Digital educational reading material + AI-conversational reflection rooms |
-| Software/SaaS? | **No.** Educational sanctuary content + voice service. |
+| Software/SaaS? | **No.** Educational house content + voice service. |
 | Where registered? | Norway sole proprietorship |
 | EU customers? | Yes — FastSpring is merchant of record |
 | Monthly volume year 1? | $3,000 – $10,000 USD |

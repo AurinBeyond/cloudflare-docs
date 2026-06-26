@@ -2,7 +2,7 @@
  * ParentStars.jsx — /parent-portal/stars
  *
  * §KIDS-HUBS 2026-02-09 — Adult-facing companion to KidsStarsView.
- * Lives in the Aurin sanctuary (dark/sage) palette — NOT the bright
+ * Lives in the Aurin house (dark/sage) palette — NOT the bright
  * cream of the child hubs. The parent gets a calm, quiet list of
  * pending star requests across all their child profiles, approves
  * or rejects them, and sees a small summary per child.

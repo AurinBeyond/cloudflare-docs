@@ -19,7 +19,7 @@ behind colour masks where painted assets cannot be re-rendered.
 - Removed `Welcome / Welcome back` greeting entirely (incl. `useState`
   first-visit logic).
 - Replaced hero H1 with founder-approved 3-second recognition line
-  (Tony Robbins × Sanctuary register):
+  (Tony Robbins × House register):
   ```
   You stopped performing.
   That's why you're here.

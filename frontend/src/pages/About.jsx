@@ -83,7 +83,7 @@ export default function About() {
                 Step inside <ArrowRight size={14} />
               </Link>
               <Link
-                to="/sanctuary-preview"
+                to="/house-preview"
                 data-testid="about-cta-rooms"
                 className="aurin-btn aurin-btn-ghost"
               >

@@ -1,17 +1,17 @@
 # Requirements & Progress
 
 ## Requirements Overview
-Redesign the Matrix Aurin (prulesoul.site) landing page as a premium "silent luxury" sanctuary homepage. Preserve core philosophical text while restructuring visual presentation with extreme minimalism, atmospheric imagery, and editorial restraint.
+Redesign the Matrix Aurin (prulesoul.site) landing page as a premium "silent luxury" house homepage. Preserve core philosophical text while restructuring visual presentation with extreme minimalism, atmospheric imagery, and editorial restraint.
 
 ## User Stories
 - As a visitor, I immediately feel emotional slowdown and calm upon arriving
-- As a visitor, I understand this is a private, premium sanctuary without being told explicitly
+- As a visitor, I understand this is a private, premium house without being told explicitly
 - As a visitor, I see the "removing the mask" visual and feel the core philosophy without explanation
 
 ## Task Breakdown
 - [x] Generate hero image (person removing digital mask, cinematic/premium)
 - [x] Build hero section with atmospheric visual anchor and minimal headline
-- [x] Build sanctuary principles section (Privacy, Presence, Silence)
+- [x] Build house principles section (Privacy, Presence, Silence)
 - [x] Build four doors section (enigmatic entry points)
 - [x] Add pricing/offerings section with 3 premium tiers
 - [x] Build soft threshold / entry experience section

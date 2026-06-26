@@ -145,7 +145,7 @@ Built the privacy-first analytics + first-question intake form so the next two w
 
 Anna direktiiv: "Ei mingit checkouti enne, kui maja sees on selge ja külalisele väärtuslik." Ei puudutanud ühtegi hinda. Lisatud selgust, eemaldatud segadust, iga "TBD" punkt asendatud väärtustega.
 
-### Samm 1 — Avalehe lihtsustamine (`/sanctuary-preview`)
+### Samm 1 — Avalehe lihtsustamine (`/house-preview`)
 - Sprint Zero CTA-d 3 → 2 (eemaldatud 'See the Five Rooms' — redundantne, FiveRoomsRecognitionSection juba pakub seda)
 - Primary CTA: "Start Here" → **"Walk into Grace's room"** (`/start-here` → `/grace/intro`)
 - Secondary CTA: "Browse Books" → **"Read for free in the Library"** (`/bookstore` → `/library`)
@@ -189,8 +189,8 @@ Iga "ei saa veel osta" punkt pakub konkreetset alternatiivset väärtust — Lib
   - **Honest-note** section explaining prices are TBD pending Substack soft-launch
 
 ### Removed (Phase 3 cleanup)
-- **Mike Ways** on `/sanctuary-preview`: €45 First Step · €120 Steady Presence · €380 Your Own Room — replaced with single CTA → `/pricing`
-- **Legacy Voice Meter topups** on `/sanctuary-preview`: €25 / €39 / €99 — replaced with short prose pointer → `/pricing`
+- **Mike Ways** on `/house-preview`: €45 First Step · €120 Steady Presence · €380 Your Own Room — replaced with single CTA → `/pricing`
+- **Legacy Voice Meter topups** on `/house-preview`: €25 / €39 / €99 — replaced with short prose pointer → `/pricing`
 - **€3,290 Family Compass annual SKU** on `/membership` — out of WTP range per audit
 
 ### Renamed
@@ -230,7 +230,7 @@ toodet mida ei ole olemas."*
   - `ClarityRelease.jsx` — 3 tier LemonSqueezy buys → "Doors open soon" (beta-grant branch + waitlist branch preserved)
   - `CourseDetail.jsx` — per-course buy → "Notify me when this opens" (enroll / sign-in branches preserved)
   - `BodyTemple.jsx` — hero unlock CTA → "Coming soon — Day 1 still free to read"; modal unlock → "Coming soon" (Day 1 free preview unchanged)
-  - `SanctuaryPreview.jsx` — three "Ways to be here" CTAs renamed from "Begin quietly / Step in / Enter gently" to a single "Join the quiet list" (no PSP wiring existed here, only label tightening)
+  - `HousePreview.jsx` — three "Ways to be here" CTAs renamed from "Begin quietly / Step in / Enter gently" to a single "Join the quiet list" (no PSP wiring existed here, only label tightening)
 
 ### Untouched (intentionally)
 - Polarstar Kids universe (entire surface free, no PSP).
@@ -280,7 +280,7 @@ to Intuvio-style inbound flow "Problem → Understanding → Trust → Interest 
   - `/aurins-room` (Aurin)
 
 ### Vocabulary rule observed
-- No "sanctuary, holy, sacred, pühadus" anywhere in this new copy.
+- No "house, holy, sacred, pühadus" anywhere in this new copy.
 - Uses "quiet, small, room, library, evening, presence" instead.
 
 ### Verified live (smoke-test 2026-02)
@@ -310,10 +310,10 @@ the production homepage hero was rewritten to pass the 5-second test for
 new visitors. The page now sells the **outcome** before the architecture.
 
 ### What changed
-- **Real production file:** `SanctuaryPreview.jsx` (`/` route), not
-  `LuxurySanctuaryLanding.jsx` as the previous handoff suggested. The
+- **Real production file:** `HousePreview.jsx` (`/` route), not
+  `LuxuryHouseLanding.jsx` as the previous handoff suggested. The
   `/luxury` route was retired on 2026-02-12 and redirects to `/`.
-- **HeroSection (`SanctuaryPreview.jsx`)** — Layer 1 only. The right-anchored
+- **HeroSection (`HousePreview.jsx`)** — Layer 1 only. The right-anchored
   mask visual + parallax + brass spotlight are preserved verbatim. Only the
   left-side text block was rewritten.
   - **Old headline:** *Welcome back / to yourself.*
@@ -342,10 +342,10 @@ new visitors. The page now sells the **outcome** before the architecture.
     - 🟢 `[Start Here]` → `/start-here` (filled brass, primary)
     - ⚪ `[See the Five Rooms]` → `#worlds` (outline, secondary)
     - ⚪ `[Browse Books]` → `/bookstore` (outline, secondary)
-- **`LuxurySanctuaryLanding.jsx`** (dead `/luxury` route, kept for reference)
+- **`LuxuryHouseLanding.jsx`** (dead `/luxury` route, kept for reference)
   also received the 4-layer treatment in a single section so the file
   documents the intended pattern. Pure CSS extension in
-  `styles/luxury-sanctuary.css` (`.transformation`, `.audience`, `.hero-ctas`).
+  `styles/luxury-house.css` (`.transformation`, `.audience`, `.hero-ctas`).
 
 ### Strict rules honoured (per Founder lock)
 - ❌ No "digital place" — Norwegian AI suggestion rejected.
@@ -611,7 +611,7 @@ interest list.
 
 ### Frontend · "Walk truth first" interactive modal
 - New component: `frontend/src/components/TruthSequenceModal.jsx`
-- Mounted into `SanctuaryPreview.jsx` (production `/` and preview routes)
+- Mounted into `HousePreview.jsx` (production `/` and preview routes)
 - Both hero CTAs (`hero-cta-step-inside` + `hero-cta-walk`) now open the
   modal instead of routing directly to `/portal` or scrolling to `#worlds`
 - 5-step anti-dopamine sequence:
@@ -660,7 +660,7 @@ interest list.
 
 ### Files touched
 - `frontend/src/components/TruthSequenceModal.jsx` (created)
-- `frontend/src/pages/SanctuaryPreview.jsx` (hero CTAs + modal mount)
+- `frontend/src/pages/HousePreview.jsx` (hero CTAs + modal mount)
 - `backend/services/chrono_lock.py` (created)
 - `backend/server.py` (body-temple endpoints + grace/mode + clarity
   integration-lock endpoints + Mongo indexes)
@@ -672,9 +672,9 @@ interest list.
 
 ## 2026-02-11 — Hero-Compass + "Somatic" Sweep
 
-### P0 · Hero-Compass SVG (Variant A) on Sanctuary homepage
-- New component: `frontend/src/components/sanctuary/HeroCompass.jsx`
-- Mounted into `SanctuaryPreview.jsx` directly after the Hero,
+### P0 · Hero-Compass SVG (Variant A) on House homepage
+- New component: `frontend/src/components/house/HeroCompass.jsx`
+- Mounted into `HousePreview.jsx` directly after the Hero,
   before the Quiet Note section
 - Custom-coded SVG (600×600 viewBox) — no external icon libs
 - Cardinal mapping (founder lock):
@@ -694,7 +694,7 @@ interest list.
     - `compass-course-room`
 - Backend verified: `curl POST /api/waitlist/join` returns
   `{status: joined, email_sent: true}`
-- Nav anchor "Compass" added to `SanctuaryNav`
+- Nav anchor "Compass" added to `HouseNav`
 
 ### P1 · "Somatic" terminology sweep
 - `frontend/src/components/BodyRoomChat.jsx` — removed all 4
@@ -710,8 +710,8 @@ interest list.
 - No new MP3s generated this session — waiting for founder green light
 
 ### Files touched
-- CREATE: `frontend/src/components/sanctuary/HeroCompass.jsx`
-- EDIT:   `frontend/src/pages/SanctuaryPreview.jsx` (import + mount + nav anchor)
+- CREATE: `frontend/src/components/house/HeroCompass.jsx`
+- EDIT:   `frontend/src/pages/HousePreview.jsx` (import + mount + nav anchor)
 - EDIT:   `frontend/src/components/BodyRoomChat.jsx` (4 string cleanups)
 
 ## 2026-02-11 (PM) — Course Room Audit + Sonic Layer + Sara Memory
@@ -739,7 +739,7 @@ File: `frontend/src/pages/CourseRoom.jsx` — copy/structure rewrite ONLY
   "S · Clarity Release" using compass headings instead of soft prose
 
 ### P1 · Compass sonic layer (Founder approved enhancement)
-File: `frontend/src/components/sanctuary/HeroCompass.jsx`
+File: `frontend/src/components/house/HeroCompass.jsx`
 - Web Audio API engine — zero asset weight, no external files
 - Two-layer ambient: detuned sine drone (E2 + A2) through lowpass +
   slow LFO breathing modulation, plus a triangle-wave mechanical tick
@@ -841,7 +841,7 @@ Two new sections appended under Sara:
 ## 2026-02-11 (LATE-PM) — Broken Clockwork + Authorial Overlay
 
 ### P0 · Sara wedge "Broken Clockwork" UX upgrade
-File: `frontend/src/components/sanctuary/HeroCompass.jsx`
+File: `frontend/src/components/house/HeroCompass.jsx`
 When the user hovers the East cardinal (Sara · 90° · Parents' Room):
 
 1. **Visual:** the outer rotating tick-ring stops its slow ~3°/s
@@ -999,7 +999,7 @@ Backend verified:
 - Lint: clean ✓
 
 ### P0 · The Sovereign Code manifest on landing page
-File: `frontend/src/components/sanctuary/HeroCompass.jsx` — new
+File: `frontend/src/components/house/HeroCompass.jsx` — new
 internal `SovereignCode` component rendered between the Compass
 headline/subhead and the SVG dial.
 
@@ -1037,7 +1037,7 @@ Verifications:
 
 ### Files touched
 - EDIT: `backend/server.py` SEED_COURSES (one new dict, 7 letters)
-- EDIT: `frontend/src/components/sanctuary/HeroCompass.jsx`
+- EDIT: `frontend/src/components/house/HeroCompass.jsx`
   (one new internal `SovereignCode` component + render hook)
 
 ### Still on hold (next sprint, awaiting founder direction)
@@ -1079,14 +1079,14 @@ Cross-link injected into Parents' Room (`ParentsRoom.jsx`) below the
 intact).
 
 ### P0 · The Wanderer Sovereign Counter
-**Backend:** `server.py` new endpoint `GET /api/sanctuary/sovereign-counter`
+**Backend:** `server.py` new endpoint `GET /api/house/sovereign-counter`
 - Anonymous live telemetry, no individual data
 - Returns `sovereigns_under_cadence_lock`, `transmissions_this_hour`,
   `waitlist_total`, `rooms_under_load`
 - Computes transmissions by scanning enrollments × letter days
   whose unlock_at falls inside the last hour
 
-**Frontend:** `frontend/src/components/sanctuary/SovereignCounter.jsx` (NEW)
+**Frontend:** `frontend/src/components/house/SovereignCounter.jsx` (NEW)
 - Three-cell strip beneath the Sovereign Code manifest on `/`
 - Quietly refreshes every 60 seconds, silently disappears if the
   endpoint errors (manifest above carries the philosophical weight)
@@ -1129,7 +1129,7 @@ When founder approves, the channel will be implemented with:
 
 ### Verifications
 - Lint: ✓ SubsystemWing.jsx, SovereignCounter.jsx, server.py
-- `/api/sanctuary/sovereign-counter` → 200 OK, returns valid JSON ✓
+- `/api/house/sovereign-counter` → 200 OK, returns valid JSON ✓
 - `/parents-room/subsystem` renders 7 diagnostics + header ✓
 - Sovereign Counter strip live on landing showing `0 · 0 · 2` ✓
 - Compass cardinal geometry untouched (4-cardinal N/E/S/W) ✓
@@ -1139,7 +1139,7 @@ When founder approves, the channel will be implemented with:
 
 ### Audit finding
 The "tasuta visitkaardid" (free room intro cards) DID exist in
-`SanctuaryPreview.jsx → RoomsSection` (live on `/`), but the copy
+`HousePreview.jsx → RoomsSection` (live on `/`), but the copy
 was written in the pre-v3.0 wellness register — "Your place for
 clarity and quiet. Grace is here to listen" — which violates the
 freshly-locked BRAND_VOICE_LOCK.md.
@@ -1149,7 +1149,7 @@ would have introduced new components, new routes, and deploy-risk
 on the eve of the GitHub push. Surgical move taken instead.
 
 ### What was changed (copy-edit only, no new routes)
-File: `frontend/src/pages/SanctuaryPreview.jsx → RoomsSection`
+File: `frontend/src/pages/HousePreview.jsx → RoomsSection`
 
 All four cardinal room cards now carry:
 - **Cardinal-coded sub-heading**: `S · 180° · Grace · The Private Room`
@@ -1194,7 +1194,7 @@ Backup tarball: 1.2 MB · expanded folder: 2.8 MB.
   no-ops if env var absent.
 - `frontend/src/App.js` — `useEffect(() => initAnalytics(), [])` on
   mount. One-time, idempotent under React StrictMode.
-- `frontend/src/components/sanctuary/HeroCompass.jsx` — emits
+- `frontend/src/components/house/HeroCompass.jsx` — emits
   `compass_arm_click` event with `{cardinal, degrees, curator, slug}`
   payload on every cardinal click (including keyboard activation).
 

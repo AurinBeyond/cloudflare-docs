@@ -1,6 +1,6 @@
 /**
  * HeroCompass — The interactive SVG navigation Compass on the
- * Sanctuary homepage (production `/`).
+ * House homepage (production `/`).
  *
  * §COMPASS 2026-02-11 — Founder directive (Variant A):
  *   Replace the traditional "four cards in a row" room menu with a
@@ -18,7 +18,7 @@
  *
  *   Visual lineage:
  *     - Brass / bronze line work on the existing graniidist
- *       (#0b0a08) sanctuary canvas.
+ *       (#0b0a08) house canvas.
  *     - Cardinal degree numbers (360, 90, 180, 270) preserved as
  *       navigational "codes" per founder directive.
  *     - No therapy / wellness language. Strictly Body Architecture
@@ -26,7 +26,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { WaitlistInline } from "@/components/MembershipTiers";
-import SovereignCounter from "@/components/sanctuary/SovereignCounter";
+import SovereignCounter from "@/components/house/SovereignCounter";
 import { trackEvent } from "@/lib/analytics";
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -326,7 +326,7 @@ export default function HeroCompass() {
   return (
     <section
       id="hero-compass"
-      data-testid="sanctuary-hero-compass"
+      data-testid="house-hero-compass"
       ref={containerRef}
       className="relative w-full bg-[#0b0a08] py-28 sm:py-36 overflow-hidden"
     >

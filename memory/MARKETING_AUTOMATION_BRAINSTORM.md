@@ -1,14 +1,14 @@
 # Marketing Automation — Brainstorm & Reality Check
 **Created:** 2026-05-31 ~23:30 UTC (Anna asleep, deploy running)
 **Purpose:** lay out every realistic automation option for Anna's
-sanctuary brand so she can pick on return. Brutally honest pricing,
+house brand so she can pick on return. Brutally honest pricing,
 real limits, "AI hype" cleared out.
 
 ---
 
 ## 🎯 The actual problem we are solving
 
-Anna's sanctuary needs to **be visible across 5-7 channels every day**
+Anna's house needs to **be visible across 5-7 channels every day**
 without Anna spending more than 15 min/day on social media or
 exhausting Emergent credits.
 
@@ -83,7 +83,7 @@ generously.
 #### C1. **Brandwatch** ⚠️ (the link Anna sent)
 - **What:** Enterprise social media management for brands like Coca-Cola.
 - **Cost:** **€800-€3000+/month** (they don't publish pricing — that always means expensive). Their "request demo" page is a Salesforce-routed sales call.
-- **Reality check:** Brandwatch is for Fortune 500 PR teams who need to track 50,000 mentions/day and run six-figure campaigns. **It is not for a one-person sanctuary brand.**
+- **Reality check:** Brandwatch is for Fortune 500 PR teams who need to track 50,000 mentions/day and run six-figure campaigns. **It is not for a one-person house brand.**
 - **The honest math:** Anna's first 6 months goal is ~€500/mo revenue. Brandwatch's monthly fee would be more than her revenue. ❌
 - **Verdict:** ❌ HARD NO. The Google ad you clicked is keyword-spam — Brandwatch buys "social media management platform" hoping to catch small businesses who don't know enterprise pricing exists.
 
@@ -94,7 +94,7 @@ generously.
 - **Verdict:** ❌ overpriced for what Buffer/Publer do at $0-$12.
 
 #### C4. **Sprinklr / Khoros / Emplifi**
-- **Verdict:** ❌ enterprise. Anna's brand is sanctuary, not Fortune 500.
+- **Verdict:** ❌ enterprise. Anna's brand is house, not Fortune 500.
 
 ---
 
@@ -182,7 +182,7 @@ Triggered by **Gumroad monthly revenue ≥ €1500**:
 ### Idea 4 — **YouTube Dark Screen Audio** (massive untapped channel)
 - Convert each Hearth MP3 → 30-min "Dark Screen" YouTube video (single still image + audio + slow zoom).
 - Cost: €0 (ffmpeg + agent work).
-- YouTube search "audio stories for adults" / "bedtime stories for parents" — moderate competition, sanctuary niche has near-zero good content.
+- YouTube search "audio stories for adults" / "bedtime stories for parents" — moderate competition, house niche has near-zero good content.
 - ~1 month for first video to start appearing in search. ~6 months for compounding traffic.
 - **Verdict:** ✅ build in Month 2 when shelf is 5 stories deep.
 

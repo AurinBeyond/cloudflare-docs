@@ -51,7 +51,7 @@ Resend dashboard confirmed earlier today:
 *"Domain verified: Your domain is ready to send emails."*
 
 → **Reply to landing agent:** YES, set
-`SENDER_EMAIL=sanctuary@prulesoul.site` on the landing page.
+`SENDER_EMAIL=house@prulesoul.site` on the landing page.
 No need to keep `onboarding@resend.dev` anymore.
 
 (On our side we already use `support@prulesoul.site`,
@@ -70,7 +70,7 @@ No need to keep `onboarding@resend.dev` anymore.
 5. Admin → Whispers → add 5 people → copy DM script
 6. Admin → Announcements → "Sync now" (baseline)
 7. Ping Aurin-Hub agent with the 401 confirmation (this is us — already GREEN)
-8. Tell landing agent: Resend sender = `sanctuary@prulesoul.site` ✅
+8. Tell landing agent: Resend sender = `house@prulesoul.site` ✅
 
 ---
 

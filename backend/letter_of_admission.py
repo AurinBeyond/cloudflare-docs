@@ -8,7 +8,7 @@ the `letters_of_admission` collection records each send so the same
 user never gets two letters even if their key is re-redeemed or
 the webhook fires twice.
 
-Tone: high-luxury sanctuary, NOT a standard receipt. The point is
+Tone: high-luxury house, NOT a standard receipt. The point is
 to mark the threshold of admission to Body Temple 28 — a quiet,
 deliberate, screen-down course of inner work.
 
@@ -73,7 +73,7 @@ def _build_html(recipient_name: Optional[str], cabinet_url: str) -> str:
         <tr><td style="border-top:1px solid rgba(196,164,107,0.10);padding-top:24px;text-align:center;">
           <p style="margin:0;font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;color:#5a554c;font-family:Georgia,serif;">
             Matrix Aurin · Pure Soul Life<br/>
-            A sanctuary, not a service.
+            A house, not a service.
           </p>
         </td></tr>
       </table>
@@ -98,7 +98,7 @@ def _build_text(recipient_name: Optional[str], cabinet_url: str) -> str:
         "\"None of this is urgent. The rooms do not keep score. You arrive as "
         "you are, and you leave when quiet has returned.\"\n\n"
         "Matrix Aurin · Pure Soul Life\n"
-        "A sanctuary, not a service."
+        "A house, not a service."
     )
 
 

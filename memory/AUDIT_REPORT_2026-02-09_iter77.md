@@ -61,7 +61,7 @@
 **Fix:**
 - Added `<Route path="/origin" element={<Navigate to="/about" replace />} />`
 - Added `<Route path="*" element={<NotFound />} />` catch-all
-- New `NotFound.jsx` page in sanctuary tone — three soft re-entry doors (Home / Clarity / Kids) + link to reach-out for reporting broken links.
+- New `NotFound.jsx` page in house tone — three soft re-entry doors (Home / Clarity / Kids) + link to reach-out for reporting broken links.
 **Verified:** `/origin` now redirects to `/about` (200, full body content). `/this-is-not-a-real-page` renders the soft 404.
 
 ### ISSUE-2: Anna's letter dry-run truncated to 400 chars (MINOR — fixed)

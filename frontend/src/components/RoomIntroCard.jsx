@@ -13,7 +13,7 @@
  *
  * Founder mandate (2026-02, Estonian): the visitor must understand
  * within ten seconds where they are, what they get, and what they
- * are NOT being sold. No "sanctuary / holy / sacred" vocabulary.
+ * are NOT being sold. No "house / holy / sacred" vocabulary.
  *
  * Usage:
  *   import { getRoomIntro } from "@/data/roomIntros";

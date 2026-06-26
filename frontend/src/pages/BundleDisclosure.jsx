@@ -62,8 +62,8 @@ const BUNDLES = [
     role: "The full family architecture",
     body: "Inner Compass for the adult plus parent-guided bedtime storytelling, drawing prompts and creative family activities for up to three child profiles. Two separate wallets keep adult sessions and family storytelling firewalled.",
     prices: [
-      { sku: "sanctuary.compass.month",   label: "Monthly",   amount: "€329"   },
-      { sku: "sanctuary.compass.quarter", label: "Quarterly", amount: "€889"   },
+      { sku: "house.compass.month",   label: "Monthly",   amount: "€329"   },
+      { sku: "house.compass.quarter", label: "Quarterly", amount: "€889"   },
       // §PHASE-3 2026-06-25 — €3290 annual SKU retired (Anna lock).
       // The annual tier was disproportionate to actual willingness-to-pay
       // surfaced during the SKU audit. Removed entirely; if an annual

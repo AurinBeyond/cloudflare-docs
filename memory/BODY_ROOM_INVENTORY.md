@@ -28,7 +28,7 @@ Backend-id (juba olemas):
 | 1 | `body-room-intro` | Sissejuhatus | Pealkiri "Learning to speak" + sissejuhatava lõik kehast |
 | 2 | `body-room-kaelan-intro` | Kaelan'i eyebrow | "Your guide is Kaelan" tüüpi sild |
 | 3 | `body-room-kaelan` | **Kaelan'i intro audio kaart** | `kaelan-intro-card`, `kaelan-intro-audio`, `kaelan-intro-play` — kuula Kaelan'it |
-| 4 | `body-room-temple-entry` | Body Temple CTA | Suunab `/body-temple`-isse (sanctuary-wood-title stiil) |
+| 4 | `body-room-temple-entry` | Body Temple CTA | Suunab `/body-temple`-isse (house-wood-title stiil) |
 | 5 | `body-room-silhouette` | **Kehasilhuett 8 klikitava regiooniga** | crown · throat · heart · solar_plexus · belly · hips · hands · feet |
 | 6 | `body-room-mood-reflect` | Tuju-peegel | Kontemplatiivne reflectsiooni-kast |
 | 7 | `body-room-bridge` | Sild järgmise sektsiooni juurde | Üleminek |

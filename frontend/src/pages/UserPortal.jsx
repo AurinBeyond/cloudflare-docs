@@ -127,7 +127,7 @@ export default function UserPortal() {
           <Link
             to="/body-temple?utm_source=portal"
             data-testid="portal-body-temple-link"
-            className="sanctuary-wood block p-6 md:p-7 no-underline"
+            className="house-wood block p-6 md:p-7 no-underline"
           >
             <div className="flex items-start gap-4 relative z-[1]">
               <div className="flex-1">
@@ -135,7 +135,7 @@ export default function UserPortal() {
                    style={{ color: "#7a5a26" }}>
                   Body Temple 28 · Day 1 is free
                 </p>
-                <p className="sanctuary-wood-title text-[30px] md:text-[34px] mt-1">
+                <p className="house-wood-title text-[30px] md:text-[34px] mt-1">
                   A small thing for you.
                 </p>
                 <p className="text-[13.5px] mt-2 leading-relaxed max-w-[55ch]"

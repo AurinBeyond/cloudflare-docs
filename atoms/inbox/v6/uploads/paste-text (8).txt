@@ -12,7 +12,7 @@ Purpose:
 * first emotional contact
 * atmosphere
 * introduction
-* sanctuary invitation
+* house invitation
 * trust and curiosity
 * softer onboarding
 
@@ -21,11 +21,11 @@ This page CAN retain more landing-page qualities because it functions as the ent
 2.
 
 https://prulesoul.site
-= Actual Sanctuary Product Ecosystem
+= Actual House Product Ecosystem
 
 Purpose:
 
-* real sanctuary world
+* real house world
 * product ecosystem
 * discovery
 * rooms
@@ -54,7 +54,7 @@ PURE SOUL LIFE
 = emotional entrance / landing layer
 
 PRULESOUL
-= actual sanctuary product world
+= actual house product world
 
 This distinction is now extremely important and should remain architecturally clear moving forward.
 
@@ -64,4 +64,4 @@ while preserving the emotional atmosphere established by the landing layer.
 
 The goal:
 harmonize both worlds
-without turning the sanctuary product ecosystem into a funnel page.
+without turning the house product ecosystem into a funnel page.

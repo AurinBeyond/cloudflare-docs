@@ -139,7 +139,7 @@ def render_magic_link_email(link: str, expires_minutes: int = 30) -> tuple[str, 
     """Return (subject, html, text) for a magic-link login email.
 
     §Phase 1 2026-02-14 — rewritten for spam-filter friendliness while
-    keeping the sanctuary tone. Specific changes from the previous
+    keeping the house tone. Specific changes from the previous
     version (which mail.com / Google flagged as suspicious):
 
       1. Subject is now transactional ("Sign in to Matrix Aurin") not

@@ -20,7 +20,7 @@ export default function SovereignCounter() {
     let cancelled = false;
     const fetchOnce = async () => {
       try {
-        const r = await api.get("/sanctuary/sovereign-counter");
+        const r = await api.get("/house/sovereign-counter");
         if (!cancelled) {
           setData(r.data);
           setErrored(false);

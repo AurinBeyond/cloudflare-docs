@@ -14,7 +14,7 @@
 kaubaliku tooteni. Kõik 4 hääle-ruumi (Grace / Kaelan / Sara / Alistair)
 töötavad, kõik 3 vanusegruppi laste maailmas on terviklikud, kõik
 maksmise teed (LemonSqueezy) on katkematud, ning kogu uuendatud
-sanctuary visuaalne keel on rakendatud peamistele kasutaja-pindadele.
+house visuaalne keel on rakendatud peamistele kasutaja-pindadele.
 
 **Auditi koguskoor: 96 / 100.** Need 4 punkti mahaarvestust on
 kosmeetilised ja ei blokeeri lansseerimist (vt §6).
@@ -212,7 +212,7 @@ grace/alistair → `personas_api.py`). MITTE lansseerimise blokeerija.
 
 ### Ausad nõrgad kohad — pean tunnistama
 🟠 **Vana sisu vs uus aesthetic vahetab**: Kids Hub + Kids Activities +
-   Body Temple kasutavad uut sanctuary-wood + Caveat keelt. Aga
+   Body Temple kasutavad uut house-wood + Caveat keelt. Aga
    ülejäänud lehed (Library, Bookstore, Aurin's Room Chat, FAQ,
    Six Nights, Beginning) kasutavad endist disaini-keelt. **See
    pole vea** — see on **teadlik PoC** Anna'ga kokku lepitud, et

@@ -22,7 +22,7 @@ import {
 /**
  * /test-group — Beta test group landing.
  *
- * Soft, sanctuary-toned recruitment page. Goals:
+ * Soft, house-toned recruitment page. Goals:
  *   - Establish exclusivity (10 doors, that is all).
  *   - No card required. 14 quiet days of full access.
  *   - Convert via attention, not urgency.

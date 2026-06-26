@@ -1,7 +1,7 @@
 # Architecture Design
 
 ## System Overview
-Single-page React application with tab-based navigation between 5 sanctuary wings. No backend needed - pure frontend product showcase.
+Single-page React application with tab-based navigation between 5 house wings. No backend needed - pure frontend product showcase.
 
 ## Tech Stack
 - React + TypeScript
@@ -18,7 +18,7 @@ Single-page React application with tab-based navigation between 5 sanctuary wing
 | OpenLibrary | Free content directory | src/components/OpenLibrary.tsx |
 | KidsUniverse | Kids content zone | src/components/KidsUniverse.tsx |
 | QuietStore | Premium store portal | src/components/QuietStore.tsx |
-| VoiceSanctuary | Audio interaction portal | src/components/VoiceSanctuary.tsx |
+| VoiceHouse | Audio interaction portal | src/components/VoiceHouse.tsx |
 
 ## Tech Decisions
 | Decision | Choice | Rationale |
@@ -37,8 +37,8 @@ src/
 │   ├── OpenLibrary.tsx
 │   ├── KidsUniverse.tsx
 │   ├── QuietStore.tsx
-│   └── VoiceSanctuary.tsx
-└── index.css (global styles with sanctuary theme)
+│   └── VoiceHouse.tsx
+└── index.css (global styles with house theme)
 ```
 
 ## Implementation Guide

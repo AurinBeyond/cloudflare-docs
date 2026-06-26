@@ -93,7 +93,7 @@ async def main() -> None:
         session_id=f"style-sample-{uuid.uuid4().hex[:6]}",
         system_message=(
             "You are an art director generating Sara-Visual-System-Lock "
-            "watercolour paintings for the Aurin sanctuary. Painterly "
+            "watercolour paintings for the Aurin house. Painterly "
             "only. Warm, calm, worn, timeless. No text. No people's "
             "faces. No UI elements."
         ),

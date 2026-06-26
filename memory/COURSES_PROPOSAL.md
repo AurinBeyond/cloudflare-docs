@@ -3,7 +3,7 @@
 **Status:** NOT BUILT YET. Awaiting founder go-ahead per iteration.
 **Founder constraint:** No video courses. 30-second mp3 audio clips OK.
 **Founder preference:** Brand-aligned AI-generated courses are acceptable
-if quality is sanctuary-grade.
+if quality is house-grade.
 
 ---
 
@@ -12,7 +12,7 @@ if quality is sanctuary-grade.
 ### Format: "Quiet Letters"
 Each course is a series of **7 short letters** delivered over 7 days.
 
-- **Letter form:** A 250-word written reflection in Aurin sanctuary tone.
+- **Letter form:** A 250-word written reflection in Aurin house tone.
 - **Optional micro-audio:** A 30-60 second mp3 voiced softly (the founder
   could record these on a phone) at the START of each letter.
 - **End of each letter:** One single, hand-written prompt — never AI.
@@ -71,7 +71,7 @@ purchase exists. Uses the same gate pattern as the gated PDF download.
 1. Reading is private. Watching a video is not (others may see).
 2. 30-second audio clips are easy to record, easy to ship.
 3. No video editing means the founder ships in days, not months.
-4. Sanctuary tone is preserved — video tends to break it.
+4. House tone is preserved — video tends to break it.
 5. Lower bandwidth, works on any device, no autoplay traps.
 
 ---
@@ -79,6 +79,6 @@ purchase exists. Uses the same gate pattern as the gated PDF download.
 ## NOT recommended
 
 - ❌ AI-generated audio narration (loses founder voice and the brand).
-- ❌ Video lectures (breaks the sanctuary tone, expensive to produce).
+- ❌ Video lectures (breaks the house tone, expensive to produce).
 - ❌ Quizzes / progress badges (gamification breaks the slow-evening feel).
 - ❌ Buying entire course library at once before seeing if 1 sells.

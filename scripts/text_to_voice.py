@@ -70,7 +70,7 @@ WORLD_DIRS = {
 }
 
 # World → ElevenLabs voice settings
-# §DIRECTIVE 2026-05-31 — style locked to 0.00 for adult/sanctuary worlds
+# §DIRECTIVE 2026-05-31 — style locked to 0.00 for adult/house worlds
 # to enforce a completely flat, non-theatrical, grounding cadence.
 WORLD_SETTINGS = {
     # §DIRECTIVE 2026-05-31 (v3 — Anna's locked params for her cloned Adult voice ID JRsw5bVcIrltULIav9RK)

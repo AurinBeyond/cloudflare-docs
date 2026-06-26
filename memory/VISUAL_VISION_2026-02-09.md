@@ -1,4 +1,4 @@
-# Visual Vision — Sanctuary Design Language (Anna's mood-board)
+# Visual Vision — House Design Language (Anna's mood-board)
 
 **Saved**: 2026-02-09 EVE (iter 80)
 **Status**: Phase 1 applied (Body Temple + Kids Hub); broader rollout deferred to 2026-03-02
@@ -7,13 +7,13 @@
 
 ## Source mood-boards
 
-1. **Kids-hub mockup** — `frontend/public/sanctuary-visuals/kids-hub-wooden-modules.png`
+1. **Kids-hub mockup** — `frontend/public/house-visuals/kids-hub-wooden-modules.png`
    - Wooden buttons (Daily Reflection, Kindness Quest, Quiet Corner, Creative Spark)
    - Caveat handwriting font
    - Aurin avatar with golden aura (left)
    - Real child sitting next to the modules (right) — visual grounding
 
-2. **Body Temple mockup** — `frontend/public/sanctuary-visuals/body-temple-4keys.png`
+2. **Body Temple mockup** — `frontend/public/house-visuals/body-temple-4keys.png`
    - Four wooden buttons (Breathing, Touch, Rest, Presence) with line-icons
    - Aurin avatar (left), meditating child (right)
    - Soft golden bubble around the practising figure
@@ -42,7 +42,7 @@
 - ✅ Caveat handwriting on titles
 - ✅ Aurin avatar with golden aura halo
 - ✅ Wooden panels with sheen (NOT matte — "klar / semi klar")
-- ✅ Cream sanctuary background
+- ✅ Cream house background
 - ✅ Floating Action Button for Aurin during action screens
 - ✅ Themed week names that match audience tone (kids = "Discovering Breath"; adults = "Breathing & Vagal Tone")
 
@@ -59,7 +59,7 @@
 ## Phase 1 applied (iter 79 + 80)
 
 ### Body Temple 28 (`/body-temple`)
-- ✅ Cream sanctuary background
+- ✅ Cream house background
 - ✅ Wooden week cards (brightened with top sheen, "klar" not matte)
 - ✅ Caveat handwriting on "Body Temple 28" and week titles
 - ✅ Aurin avatar with golden aura
@@ -71,7 +71,7 @@
 ### Kids Hub (`/kids-universe/<age>/hub`)
 - ✅ HubCard repainted with white→palette gradient + top sheen
 - ✅ Caveat handwriting on all card titles
-- ✅ Aurin portrait wrapped in sanctuary-aura class
+- ✅ Aurin portrait wrapped in house-aura class
 - ✅ Per-age palette differentiation PRESERVED (peach/sage/lavender)
 - ✅ Navigation hrefs unchanged
 - ✅ Subtle hover glow
@@ -82,11 +82,11 @@
 
 ### CSS (`/app/frontend/src/index.css`)
 - New opt-in classes (no existing class modified):
-  - `.sanctuary-wood` — brightened gradient + top sheen ::after
-  - `.sanctuary-aura` — golden halo (radial gradient pulse)
-  - `.sanctuary-cream` — cream page background
-  - `.sanctuary-hand` / `.font-sanctuary-hand` — Caveat font
-  - `.sanctuary-bubble` — golden meditation-bubble (unused yet, reserved)
+  - `.house-wood` — brightened gradient + top sheen ::after
+  - `.house-aura` — golden halo (radial gradient pulse)
+  - `.house-cream` — cream page background
+  - `.house-hand` / `.font-house-hand` — Caveat font
+  - `.house-bubble` — golden meditation-bubble (unused yet, reserved)
 
 ---
 
@@ -106,7 +106,7 @@ Per Anna's directive (sales-focus next 3 weeks):
 
 ## Notes for future agents
 
-- Use `<img src="/sanctuary-visuals/<file>.png">` to pull the
+- Use `<img src="/house-visuals/<file>.png">` to pull the
   original mood-board assets when building new pages
 - Anna's brand guardrails (NEVER violate):
   - No medical / clinical / diagnostic language
@@ -114,4 +114,4 @@ Per Anna's directive (sales-focus next 3 weeks):
     bear)
   - No data-tracker / quantified-self UI (heart rate, HRV, etc.)
   - Socratic questioning, not directives
-  - Sanctuary tone: soft, slow, never urgent
+  - House tone: soft, slow, never urgent

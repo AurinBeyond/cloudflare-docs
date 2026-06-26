@@ -147,10 +147,10 @@ async def test_handle_event_dedupes_by_event_id(db):
 
 
 @pytest.mark.asyncio
-async def test_sanctuary_compass_grants_both_wallets(db):
+async def test_house_compass_grants_both_wallets(db):
     await billing_webhook.seed_cohort_seats(db)
     fake_event = {
-        "id": "evt_test_sanctuary",
+        "id": "evt_test_house",
         "type": "order.paid",
         "data": {
             "id": "ord_sanc",

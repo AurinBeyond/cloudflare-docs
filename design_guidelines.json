@@ -4,11 +4,11 @@
   "ideas": [
     {
       "id": 1,
-      "name": "The Sanctuary Vignette (Spatial Frame)",
+      "name": "The House Vignette (Spatial Frame)",
       "why_it_raises_wow": "It instantly transforms the viewport from a flat scrolling webpage into a 'room' by adding ambient grounding and edge-darkening, framing the content.",
       "css_technique": "Add a pointer-events-none fixed overlay with 'box-shadow: inset 0 0 120px rgba(...)' and a bottom-anchored 'radial-gradient' that creates a static 'floor' for the cards to float above.",
       "per_age_variation": "Little Dreamers: Warm peach/cream inset glow. Explorers: Soft sage/moss inset shadow. Dreamweavers: Ethereal lavender/mint edge blur.",
-      "brand_risk_check": "Low risk. If the inset shadow is too dark, it might feel claustrophobic; keep opacity under 10-15% to maintain the airy sanctuary tone."
+      "brand_risk_check": "Low risk. If the inset shadow is too dark, it might feel claustrophobic; keep opacity under 10-15% to maintain the airy house tone."
     },
     {
       "id": 2,

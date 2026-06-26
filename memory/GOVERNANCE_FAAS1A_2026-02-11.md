@@ -23,7 +23,7 @@ abstraction comes AFTER governance is bulletproof.
 2. **Mount point in `/api/clarity/convai/signed-url`** (server.py
    line ~8253): single try/except block after existing session_cap
    check. Returns HTTP 503 with `retry_after_sec=60` and a calm
-   sanctuary-tone message when any guard trips. Failures soft-warn
+   house-tone message when any guard trips. Failures soft-warn
    and proceed — realtime core never crashes.
 
 3. **`/api/admin/governance/status`** — read-only snapshot endpoint

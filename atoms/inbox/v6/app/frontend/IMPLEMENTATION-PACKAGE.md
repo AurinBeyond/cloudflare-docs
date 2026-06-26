@@ -1,6 +1,6 @@
 # Matrix Aurin — Complete Implementation Package
 
-**Project:** Matrix Aurin Premium Sanctuary Homepage  
+**Project:** Matrix Aurin Premium House Homepage  
 **Domain:** prulesoul.site  
 **Version:** Final (2026-05-17)  
 **Purpose:** Copy-ready handoff for Emergent/AH production agent
@@ -15,7 +15,7 @@ The page consists of the following sections in exact order:
 |---|---------|-------------|-----|---------|
 | 1 | Navigation | `<nav class="nav">` | `nav` | Fixed top nav with brand + links |
 | 2 | Hero | `<section class="hero">` | — | Full-viewport cinematic hero with image, headline, CTA |
-| 3 | Sanctuary Principles | `<section class="principles">` | `sanctuary` | Three-column principles grid (Privacy, Presence, Silence) |
+| 3 | House Principles | `<section class="principles">` | `house` | Three-column principles grid (Privacy, Presence, Silence) |
 | 4 | The Four Doors | `<section class="doors">` | `doors` | 2×2 grid of room entry points |
 | 5 | Offerings / Pricing | `<section class="offerings">` | `offerings` | Three pricing tiers in card layout |
 | 6 | Threshold / Entry | `<section class="threshold">` | `threshold` | Emotional invitation section with CTA |
@@ -23,7 +23,7 @@ The page consists of the following sections in exact order:
 
 ### Navigation Items
 - **Brand:** "Matrix Aurin" (links to https://prulesoul.site)
-- **Links:** Sanctuary (#sanctuary) · Rooms (#doors) · Offerings (#offerings)
+- **Links:** House (#house) · Rooms (#doors) · Offerings (#offerings)
 - **CTA:** "Enter" (#threshold)
 
 ### Hero Content
@@ -73,12 +73,12 @@ All text content extracted verbatim from the HTML, section by section.
 
 ### Page Meta
 - **Title:** `Matrix Aurin — The room that reads you`
-- **Description:** `A private sanctuary for those ready to meet themselves without performance. No tracking. No noise. Just presence.`
+- **Description:** `A private house for those ready to meet themselves without performance. No tracking. No noise. Just presence.`
 
 ### Navigation
 ```
 Matrix Aurin
-Sanctuary
+House
 Rooms
 Offerings
 Enter
@@ -96,7 +96,7 @@ You do not have to perform here.
 Step inside
 ```
 
-### Sanctuary Principles
+### House Principles
 ```
 What this place holds
 
@@ -181,7 +181,7 @@ Step in
 Your Own Room
 A space held
 only for you.
-For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary.
+For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this house.
 • Unlimited access to all rooms
 • Weekly private AI voice sessions
 • Priority presence and response
@@ -239,7 +239,7 @@ Est. 2026 · Quiet by design · Privacy
 | **Title** | One session. One quiet hour. | All rooms. Monthly companionship. | A space held only for you. |
 | **Price** | €45 | €120 | €380 |
 | **Period** | one session | per month | per month |
-| **Description** | No commitment. Just curiosity. Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning. | Return as often as you need. Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always. | For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary. |
+| **Description** | No commitment. Just curiosity. Enter one room, stay as long as you need, leave when you're ready. This is simply a beginning. | Return as often as you need. Move freely between all rooms, with a monthly voice session to ground your journey. You are welcome here, always. | For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this house. |
 | **Includes** | • Access to one room of your choosing | • Unlimited access to all four rooms | • Unlimited access to all rooms |
 | | • A guided session at your pace | • One private voice session per month | • Weekly private AI voice sessions |
 | | • No subscription, no follow-up pressure | • Priority access to new spaces | • Priority presence and response |
@@ -388,7 +388,7 @@ transition: all 0.4-0.5s ease;
 ```css
 /* ===================================
    MATRIX AURIN — Silent Luxury Homepage
-   Premium sanctuary with human warmth
+   Premium house with human warmth
    =================================== */
 
 :root {
@@ -1379,7 +1379,7 @@ body {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon_atoms.ico" type="image/x-icon">
     <title>Matrix Aurin — The room that reads you</title>
-    <meta name="description" content="A private sanctuary for those ready to meet themselves without performance. No tracking. No noise. Just presence.">
+    <meta name="description" content="A private house for those ready to meet themselves without performance. No tracking. No noise. Just presence.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
@@ -1393,7 +1393,7 @@ body {
             <a href="https://prulesoul.site" class="nav-brand-text">Matrix Aurin</a>
         </div>
         <div class="nav-links">
-            <a href="#sanctuary" class="nav-link">Sanctuary</a>
+            <a href="#house" class="nav-link">House</a>
             <a href="#doors" class="nav-link">Rooms</a>
             <a href="#offerings" class="nav-link">Offerings</a>
             <a href="#threshold" class="nav-cta">Enter</a>
@@ -1418,8 +1418,8 @@ body {
         </div>
     </section>
 
-    <!-- Sanctuary Principles -->
-    <section class="principles" id="sanctuary">
+    <!-- House Principles -->
+    <section class="principles" id="house">
         <div class="principles-inner">
             <p class="section-whisper">What this place holds</p>
             <div class="principles-grid">
@@ -1536,7 +1536,7 @@ body {
                         <h3 class="offering-title">A space held<br>only for you.</h3>
                     </div>
                     <div class="offering-body">
-                        <p class="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this sanctuary.</p>
+                        <p class="offering-description">For those ready for sustained, intimate work. Weekly voice sessions, unlimited room access, and a private channel — your own corner of this house.</p>
                         <ul class="offering-includes">
                             <li>Unlimited access to all rooms</li>
                             <li>Weekly private AI voice sessions</li>
@@ -1774,7 +1774,7 @@ All changes made from the initial build to the current final version:
 |---------------|-----------|-----------|
 | (Generic tier 1) | A First Step | Softer, invitational — removes transactional feel |
 | (Generic tier 2) | A Steady Presence | Emphasizes companionship over subscription |
-| (Generic tier 3) | Your Own Room | Personal, intimate — matches sanctuary metaphor |
+| (Generic tier 3) | Your Own Room | Personal, intimate — matches house metaphor |
 
 ### Four Doors — Emotional Subtitles Added
 Each door received an italic subtitle (`.door-subtitle`) to add emotional depth:
@@ -1789,7 +1789,7 @@ Each door received an italic subtitle (`.door-subtitle`) to add emotional depth:
 | Threshold section copy | Rewritten to be more personally inviting: "I want you to know — this is not a place you have to earn. It is a place you recognize. A place that has been waiting." |
 | Threshold secondary text | Added italic Cormorant Garamond passage about seeing clearly and choosing what stays |
 | Footer warmth line | Added "Built with care. Held with silence." (italic, Cormorant Garamond) |
-| Offering descriptions | Warmed language — "You are welcome here, always" / "This is simply a beginning" / "your own corner of this sanctuary" |
+| Offering descriptions | Warmed language — "You are welcome here, always" / "This is simply a beginning" / "your own corner of this house" |
 
 ### Spacing System
 Added CSS custom properties for consistent spacing throughout:

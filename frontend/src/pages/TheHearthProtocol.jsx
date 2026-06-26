@@ -4,7 +4,7 @@
  * §SPRINT-3 2026-05-31 — Parents' Room product launch page.
  * THIS LANDING PAGE IS FOR THE PARENT ALONE — NOT FOR THE PARENT-AND-
  * CHILD AUDIENCE. The visual palette is intentionally NOT children's
- * gouache. It is the adult sanctuary palette: deep blue, warm cream,
+ * gouache. It is the adult house palette: deep blue, warm cream,
  * lantern amber. Quiet, late evening.
  *
  * Status:
@@ -24,7 +24,7 @@ import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
-// Adult sanctuary palette (deep blue + cream + amber). NOT children's gouache.
+// Adult house palette (deep blue + cream + amber). NOT children's gouache.
 const COLORS = {
   bg: "#0f1418",         // near-black blue
   bgSoft: "#141a20",

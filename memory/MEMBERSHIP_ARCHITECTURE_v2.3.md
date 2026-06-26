@@ -46,7 +46,7 @@ no concierge-as-human-time.
 
   Inner Compass    €229 ─── 2.6×  (the heart of the platform)
 
-  Sanctuary Compass €329 ─── 1.4×  (family upgrade)
+  House Compass €329 ─── 1.4×  (family upgrade)
 
   Sovereign Standard €630 effective/mo ─── 1.9×  (premium private tier)
 
@@ -81,7 +81,7 @@ isolated data perimeter, not on the shared platform.
 ### 2.3 Sovereign Standard — €1,890 / quarter
 
 **What it includes:**
-- Everything in Sanctuary Compass.
+- Everything in House Compass.
 - **Privately provisioned `Subsystem Wing`** — isolated tenant +
   sealed data perimeter + dedicated DB shard + KMS-encrypted storage.
 - **One curator AI persona tuned to the member's family/firm context**
@@ -96,7 +96,7 @@ isolated data perimeter, not on the shared platform.
   ConvAI first.
 - **Earlier access** to new rooms and features (typically 4–6 weeks
   before public release).
-- **5 child profiles** (vs 3 in Sanctuary Compass).
+- **5 child profiles** (vs 3 in House Compass).
 - **No interview required.** Application form + automated approval
   for first-time Sovereign applicants. Founder reviews only for
   edge-cases (e.g. business / firm accounts).
@@ -165,7 +165,7 @@ time, not a margin compression.
 | Quiet Entry         |          €89 / mo   | 11.71 | 86.8%  |
 | Aurin Storyteller   |          €79 / mo   | 17.86 | 77.4%  |
 | Inner Compass       |         €229 / mo   | 33.06 | 85.6%  |
-| Sanctuary Compass   |         €329 / mo   | 60.86 | 81.5%  |
+| House Compass   |         €329 / mo   | 60.86 | 81.5%  |
 | Sovereign Standard  |       €1,890 / qtr  | 320.50 | 83.0%  |
 | Sovereign Bespoke   |       €3,490 / qtr  | 502.00 | 85.6%  |
 | Kids Day Pass       |         €25 / day   | 3.61  | 85.6%  |
@@ -179,7 +179,7 @@ and Sovereign surfaces clear 77%+.
 
 ## 5. Full content map (v2.3, founder-time removed)
 
-| Element | Kids·Day | Day·Quiet | Day·Deep | Quiet Entry | Aurin St. | Inner Compass | Sanctuary | Sovereign Std | Sovereign Besp. |
+| Element | Kids·Day | Day·Quiet | Day·Deep | Quiet Entry | Aurin St. | Inner Compass | House | Sovereign Std | Sovereign Besp. |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 4 cardinal adult rooms | preview | partial | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ |
 | 24h cadence transmissions | preview | preview | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ |
@@ -227,7 +227,7 @@ checkout is the reveal surface.
 
 ## 7. Top-up architecture (unchanged from v2.2)
 
-**Adult voice (Inner + Sanctuary holders):**
+**Adult voice (Inner + House holders):**
 
 | SKU                  | Min | Price | Validity | Margin |
 |----------------------|----:|------:|---------:|-------:|
@@ -235,7 +235,7 @@ checkout is the reveal surface.
 | `topup.compass.120`  | 120 | €159  | 60 days  | 69.3%  |
 | `topup.compass.300`  | 300 | €399  | 90 days  | 69.8%  |
 
-**Child voice (Aurin Storyteller + Sanctuary holders):**
+**Child voice (Aurin Storyteller + House holders):**
 
 | SKU                  | Min | Price | Validity | Margin |
 |----------------------|----:|------:|---------:|-------:|
@@ -264,9 +264,9 @@ aurin.storyteller.year       €790
 inner.compass.month          €229
 inner.compass.quarter        €619
 inner.compass.year           €2,290
-sanctuary.compass.month      €329
-sanctuary.compass.quarter    €889
-sanctuary.compass.year       €3,290
+house.compass.month      €329
+house.compass.quarter    €889
+house.compass.year       €3,290
 
 ─ Sovereign (4 SKUs · application-gated, not interview-gated)
 sovereign.standard.quarter   from €1,890

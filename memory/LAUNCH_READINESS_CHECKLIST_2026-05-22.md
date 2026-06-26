@@ -111,7 +111,7 @@ This list is **opinionated, prioritised, and honest**. Each item is marked:
 
 ### 14. 404 + error page kindness
 - Default React 404 / network-error screens are clinical
-- A short "calm" 404 ("This page is still being written. Return home →") matches sanctuary tone
+- A short "calm" 404 ("This page is still being written. Return home →") matches house tone
 - One file, ZERO risk
 
 ---

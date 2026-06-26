@@ -80,7 +80,7 @@ CATALOG = {
             ),
         },
         {
-            "name": "Sanctuary 60h Package",
+            "name": "House 60h Package",
             "price": "€500",
             "billing": "one-time",
             "voice_time": "60 hours (3,600 min) total",
@@ -154,7 +154,7 @@ CATALOG = {
         },
         {
             "name": "Genesis Volumes — Volume II",
-            "price": "Member-only (included in Steady Monthly / Own Room / Sanctuary 60h)",
+            "price": "Member-only (included in Steady Monthly / Own Room / House 60h)",
             "format": "Markdown / PDF",
             "description": (
                 "Patterns, practice, presence. Continues from Volume I. "
@@ -186,7 +186,7 @@ CATALOG = {
         },
         {
             "name": "Clarity Curriculum — Premium Pack",
-            "price": "Inside €500 Sanctuary 60h Package",
+            "price": "Inside €500 House 60h Package",
             "description": (
                 "Fifteen+ premium activities: Feelings Journal week, "
                 "Friendship Skills workbook, Confidence pages, Affirmation "
@@ -200,7 +200,7 @@ CATALOG = {
             "name": "Coloring Studio (68 pages)",
             "price": "Free",
             "description": (
-                "68 sanctuary-branded coloring pages, age-graded across "
+                "68 house-branded coloring pages, age-graded across "
                 "Little Dreamers (3-5), Explorers (6-8), Dreamweavers "
                 "(9-12). Downloadable as A4 PDFs."
             ),
@@ -272,7 +272,7 @@ def md_value(catalog):
         "",
         "All prices are **EUR** unless otherwise noted. Voice time is "
         "fungible across all rooms via the user's `presence_seconds_left` "
-        "balance. The 60h Sanctuary Package additionally unlocks the full "
+        "balance. The 60h House Package additionally unlocks the full "
         "Clarity Curriculum for the parent's family.",
         "",
         "---",
@@ -353,7 +353,7 @@ def build_pdf(catalog, path):
     story.append(Paragraph(
         "All prices in <b>EUR</b>. Voice time is fungible across every "
         "room via your account's <i>presence balance</i>. The €500 "
-        "Sanctuary 60h Package additionally unlocks the full Clarity "
+        "House 60h Package additionally unlocks the full Clarity "
         "Curriculum for the parent's family.",
         intro,
     ))

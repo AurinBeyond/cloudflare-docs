@@ -14,13 +14,13 @@
 | **Tier-3 banned phrases in user-facing copy** | ZERO found | `grep` audit across all `.jsx/.js` files |
 | **Public root `/`** | 200 OK · renders Welcome / mask hero | curl + screenshot |
 | **`/what-this-is`** | 200 OK · "Made for the ear" lang applied | curl |
-| **`/sanctuary-preview`** | 200 OK | curl |
+| **`/house-preview`** | 200 OK | curl |
 | **`/parent-portal/digest`** (new) | 200 OK · renders Weekly Digest header | curl + grep |
 | **`/parent-portal/wellness`** (legacy) | 200 OK · client-side `Navigate replace` redirects to `/digest` | curl + App.js verified |
 | **`/luxury`** (legacy v1 pricing) | 200 OK · client-side `Navigate replace` redirects to `/` (v1 prices retired) | App.js |
 | **`/kids-universe`** | 200 OK | curl |
 | **Backend `/api/`** | `{"service":"matrix-aurin","version":"0.2.0","status":"ok"}` | curl |
-| **`/api/sanctuary/sovereign-counter`** | 200 OK | curl |
+| **`/api/house/sovereign-counter`** | 200 OK | curl |
 | **`/api/courses/me/next-unlock`** | 401 (expected — auth-required) | curl |
 | **Supervisor processes** | backend / frontend / mongodb all RUNNING | `supervisorctl` |
 | **GA4 telemetry** | `G-7E9R7QLP0C` integrated in `analytics.js` | `.env` + smoke |
@@ -57,7 +57,7 @@ sprint. **None block today's deploy.**
 ### A. Legacy `/luxury` page — RESOLVED 2026-02-12
 
 The `/luxury` route now redirects to `/` via client-side `Navigate
-replace`. The `LuxurySanctuaryLanding.jsx` component remains in the
+replace`. The `LuxuryHouseLanding.jsx` component remains in the
 codebase (not imported by any active route except a soft historical
 reference) and can be removed in a future cleanup sprint. No v1
 prices are visible anywhere on the live site.

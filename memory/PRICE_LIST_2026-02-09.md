@@ -1,7 +1,7 @@
 # Matrix Aurin — Price List
 *Generated 2026-05-25 · For Anna · Payment processor on file: LemonSqueezy (currently pending review) + FastSpring (application opening)*
 
-All prices are **EUR** unless otherwise noted. Voice time is fungible across all rooms via the user's `presence_seconds_left` balance. The 60h Sanctuary Package additionally unlocks the full Clarity Curriculum for the parent's family.
+All prices are **EUR** unless otherwise noted. Voice time is fungible across all rooms via the user's `presence_seconds_left` balance. The 60h House Package additionally unlocks the full Clarity Curriculum for the parent's family.
 
 ---
 
@@ -25,7 +25,7 @@ Monthly rhythm — 60 fresh voice minutes each month, auto-renewing. Includes al
 
 Deeper monthly commitment — 240 voice minutes (~4 h) every month. Best for people building a sustained practice with Aurin. Includes everything in Steady Monthly plus priority access to upcoming material.
 
-### Sanctuary 60h Package — **€500**
+### House 60h Package — **€500**
 *Billing: one-time*  
 *Voice time: 60 hours (3,600 min) total*  
 
@@ -75,7 +75,7 @@ Slider on Clarity Release page. Visitor picks any amount 10-300 min, system snap
 
 Foundations of self-mastery. Slow, long-form reading on attention, structure, and the discipline of returning to one thing at a time. Open to everyone.
 
-### Genesis Volumes — Volume II — **Member-only (included in Steady Monthly / Own Room / Sanctuary 60h)**
+### Genesis Volumes — Volume II — **Member-only (included in Steady Monthly / Own Room / House 60h)**
 *Format: Markdown / PDF*  
 
 Patterns, practice, presence. Continues from Volume I. Reserved for signed-in members who hold an active pass.
@@ -92,13 +92,13 @@ Daily mood check-in with Aurin's emoji picker (sad / worried / okay / good / spa
 
 Twelve hand-curated starter activities (3 per module): Reflect (e.g. 'A jar for today's feeling', 'Three slow breaths'), Kitchen (no-bake recipes), Quest (kindness micro-acts), Create (coloring, tiny maze, pencil lines).
 
-### Clarity Curriculum — Premium Pack — **Inside €500 Sanctuary 60h Package**
+### Clarity Curriculum — Premium Pack — **Inside €500 House 60h Package**
 
 Fifteen+ premium activities: Feelings Journal week, Friendship Skills workbook, Confidence pages, Affirmation bookmark, Gratitude Journal, full Kitchen Lab recipes, 3D Paper House, Color-by-number, ABC pages, Summer Activity Book, Creative Writing Journal, Kindness Lessons, Daily Planner, Paper Pet, Montessori Focus pages.
 
 ### Coloring Studio (68 pages) — **Free**
 
-68 sanctuary-branded coloring pages, age-graded across Little Dreamers (3-5), Explorers (6-8), Dreamweavers (9-12). Downloadable as A4 PDFs.
+68 house-branded coloring pages, age-graded across Little Dreamers (3-5), Explorers (6-8), Dreamweavers (9-12). Downloadable as A4 PDFs.
 
 ### Angel Stars System — **Free (all ages)**
 

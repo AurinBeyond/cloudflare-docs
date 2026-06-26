@@ -36,7 +36,7 @@
 | **Price (USD)**                 | `59.00` |
 | **Tax category**                | `Digital goods bundle` |
 | **Short description**           | `Body Temple 28 + 60 minutes of voice companion + Kids Universe Premium. One purchase, three doors open.` |
-| **Long description**            | `For the parent who wants the whole sanctuary at once. Unlocks: (1) Body Temple 28 reading practice for the grown-up, (2) 60 minutes of any voice-companion room time, (3) Kids Universe Premium — bedtime stories and quiet activities for ages 3–12. Standalone value $104. Refundable within 14 days.` |
+| **Long description**            | `For the parent who wants the whole house at once. Unlocks: (1) Body Temple 28 reading practice for the grown-up, (2) 60 minutes of any voice-companion room time, (3) Kids Universe Premium — bedtime stories and quiet activities for ages 3–12. Standalone value $104. Refundable within 14 days.` |
 | **Bundle contents (entitlements)** | `body-temple-28`, `voice-topup-60`, `kids-premium` |
 | **Fulfillment**                 | Digital — webhook triggers 3 entitlements |
 | **Refund policy**               | 14 days |
@@ -99,7 +99,7 @@
 | Will you sell to EU customers? | Yes — FastSpring acts as merchant of record for EU VAT. |
 | Estimated monthly volume year 1? | $3,000–$10,000 USD. |
 | Average order value? | $36–$59. |
-| Expected refund rate? | ≤4% (sanctuary tone, low buyer's remorse). |
+| Expected refund rate? | ≤4% (house tone, low buyer's remorse). |
 | Chargeback rate? | <0.5%. |
 | Customer support email? | `contact.puresoul@proton.me` |
 | Brand website? | `https://prulesoul.site` |
@@ -115,7 +115,7 @@
 4. ☐ Set **default refund policy** to 14 days
 5. ☐ Add **`https://prulesoul.site`** as your storefront / returning URL
 6. ☐ Webhook URL: `https://prulesoul.site/api/fastspring/webhook` (we wire this in after you confirm the 5 products are live)
-7. ☐ Add the Matrix Aurin disclaimer to product descriptions: "Not therapy, not medical advice. Educational sanctuary content."
+7. ☐ Add the Matrix Aurin disclaimer to product descriptions: "Not therapy, not medical advice. Educational house content."
 
 ---
 

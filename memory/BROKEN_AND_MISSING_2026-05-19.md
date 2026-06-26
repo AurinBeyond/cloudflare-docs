@@ -18,7 +18,7 @@
 | Backend ENV (LemonSqueezy 9 variant ID, agendid, fin-split) | KOMPLEKTNE | `.env` inspection |
 | Backend `[FIN-SPLIT]` finantsmootor v2 | LIVE | dry-run kõik 4 toodet rohelised |
 | Admin financial preview endpoint | LIVE | `/api/admin/financial/preview` testitud |
-| V6 sanctuary hero design (cinematic mask) | LIVE (preview) | `SanctuaryPreview.jsx` |
+| V6 house hero design (cinematic mask) | LIVE (preview) | `HousePreview.jsx` |
 | Hero näo paljastus (yellow-curve fix) | LIVE (preview) | photo zone 44%, feather 22% |
 | `/test-mic` 6-link diagnostika | LIVE (preview) | `TestMic.jsx` |
 | Local backup discipline | NÜÜD PAIGAS | `/app/memory/agent_backups/` |
@@ -44,7 +44,7 @@
 **Mis on ainult preview's**:
 - Voice-to-voice deafness AudioContext hot-fix (`RoomConvaiChat.jsx`)
 - Hero face opening parandus
-- V6 sanctuary disain `/` route'il
+- V6 house disain `/` route'il
 - `/test-mic` diagnostika
 - 4-tier financial engine + admin preview endpoint
 - Audio Path Verified dev pill (`?dev=1`)
@@ -88,8 +88,8 @@
 **Status**: paigaldamata (zero GA/Clarity script frontend bundle's)
 **Risk level**: INFO — analytics on **uus paigaldus**, mitte regressioon. Sa otsustad millal soovid
 
-### 9. Aurin Pet Sanctuary (high-end animal psychosomatics)
-**Status**: kontseptsioon `/app/memory/backlog_pet_sanctuary.md`, meeldetuletus 2026-06-19
+### 9. Aurin Pet House (high-end animal psychosomatics)
+**Status**: kontseptsioon `/app/memory/backlog_pet_house.md`, meeldetuletus 2026-06-19
 **Risk level**: INFO
 
 ---

@@ -1,5 +1,5 @@
 {
-  "summary": "Iteration 80 visual polish round — all checks PASS. Body Temple stepping-stones (StonePath) render correctly inside all 4 week cards with exactly 28 day stones (data-testid='body-temple-day-1' through '-28'). One pulsing stone (.stone-pulse) anchors the current day. Locked stones (non-premium) display padlock icons. Clicking a stone opens the day modal. Authed premium flow (Bearer test_token_6489e6cf1440) shows the unlocked badge, opens FULL practice for day 5 (no unlock CTA), and mark-walked button flips the stone to a sage checkmark. Kids Hub regression: all 3 age groups (little-dreamers, explorers, dreamweavers) load, all 5 cards present with correct hrefs, palettes remain visually distinct (3 distinct bgGradients, 3 distinct card accents). Aurin portrait carries sanctuary-aura class on all 3 hubs. Launch email script dry-runs cleanly. Zero console errors.",
+  "summary": "Iteration 80 visual polish round — all checks PASS. Body Temple stepping-stones (StonePath) render correctly inside all 4 week cards with exactly 28 day stones (data-testid='body-temple-day-1' through '-28'). One pulsing stone (.stone-pulse) anchors the current day. Locked stones (non-premium) display padlock icons. Clicking a stone opens the day modal. Authed premium flow (Bearer test_token_6489e6cf1440) shows the unlocked badge, opens FULL practice for day 5 (no unlock CTA), and mark-walked button flips the stone to a sage checkmark. Kids Hub regression: all 3 age groups (little-dreamers, explorers, dreamweavers) load, all 5 cards present with correct hrefs, palettes remain visually distinct (3 distinct bgGradients, 3 distinct card accents). Aurin portrait carries house-aura class on all 3 hubs. Launch email script dry-runs cleanly. Zero console errors.",
   "backend_issues": {"critical": [], "minor": []},
   "frontend_issues": {
     "ui_bugs": [],
@@ -42,19 +42,19 @@
       "little-dreamers": {
         "all_5_cards_present": true,
         "card_hrefs_correct": true,
-        "aurin_portrait_sanctuary_aura": true,
+        "aurin_portrait_house_aura": true,
         "bg": "linear-gradient(rgb(255,247,238) 0%, rgb(252,233,213) 100%) — peach/cream"
       },
       "explorers": {
         "all_5_cards_present": true,
         "card_hrefs_correct": true,
-        "aurin_portrait_sanctuary_aura": true,
+        "aurin_portrait_house_aura": true,
         "bg": "linear-gradient(rgb(251,246,236) 0%, rgb(232,230,210) 100%) — sage/cream"
       },
       "dreamweavers": {
         "all_5_cards_present": true,
         "card_hrefs_correct": true,
-        "aurin_portrait_sanctuary_aura": true,
+        "aurin_portrait_house_aura": true,
         "bg": "linear-gradient(rgb(244,248,242) 0%, rgb(221,233,218) 100%) — mint/cream"
       },
       "palettes_distinct": "3 of 3 backgrounds distinct, 3 of 3 card accents distinct"

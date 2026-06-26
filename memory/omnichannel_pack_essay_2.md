@@ -406,7 +406,7 @@ A quiet alternative is at prulesoul.site (link in bio).
 After day 14: repeat the structure with essay #1 ("The Cognitive Cost
 of Unfinished Loops") for the next 14 days. Then write essay #3.
 
-This is how a sanctuary brand stays visible without abandoning its
+This is how a house brand stays visible without abandoning its
 voice.
 
 ---
@@ -432,5 +432,5 @@ subscription you cancelled.
 ## CHANGELOG
 - **2026-05-31 v1** — Generated from Substack Essay #2. 16 assets,
   6 channels, 14-day visible-everyday calendar. Designed to be used
-  in full BEFORE writing essay #3 — sanctuary brand multiplies what
+  in full BEFORE writing essay #3 — house brand multiplies what
   it already has rather than producing endlessly.

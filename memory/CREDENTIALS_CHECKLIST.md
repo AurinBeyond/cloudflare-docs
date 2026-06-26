@@ -79,7 +79,7 @@ daily — founder gets a list of what to paste where.
 
 ### 4. ConvertKit / MailerLite / Resend
 **Why:** email list ownership. The single most valuable asset a
-sanctuary brand can build. Substack subscribers ≠ email list (Substack
+house brand can build. Substack subscribers ≠ email list (Substack
 owns the relationship, not you).
 
 **Recommended:** ConvertKit free plan (up to 1,000 subscribers, then
@@ -88,7 +88,7 @@ $15/mo). MailerLite is also fine.
 **What founder does:**
 1. Sign up at https://convertkit.com (or mailerlite.com).
 2. Create a form, embed code, or hosted landing page.
-3. Send me the API key + a default tag for sanctuary subscribers.
+3. Send me the API key + a default tag for house subscribers.
 
 **What I do after:** wire the form into the existing `/the-hearth` and
 `/alistair-bundle` pages with a soft opt-in (NOT a popup, NOT a "claim
@@ -149,7 +149,7 @@ in `/app/memory/CONTENT_MASTER_LIBRARY.md`).
 ---
 
 ### 8. TikTok
-**Status:** intentionally skipped for the sanctuary brand. Tempo and
+**Status:** intentionally skipped for the house brand. Tempo and
 algorithm are anti-brand. Skip.
 
 ---

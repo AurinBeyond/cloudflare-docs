@@ -12,9 +12,9 @@
 | File | Role |
 |------|------|
 | `pages/BundleDisclosure.jsx` | `/membership` page · post-gate full architecture reveal |
-| `components/sanctuary/KidsDayPassRow.jsx` | Single public €25 row (sole pre-gate price) |
-| `components/sanctuary/SovereignAnchor.jsx` | Sovereign intro anchor + live Founding Cohort indicator |
-| `components/sanctuary/WalletStrip.jsx` | Dashboard wallet strip (adult + kids minutes) |
+| `components/house/KidsDayPassRow.jsx` | Single public €25 row (sole pre-gate price) |
+| `components/house/SovereignAnchor.jsx` | Sovereign intro anchor + live Founding Cohort indicator |
+| `components/house/WalletStrip.jsx` | Dashboard wallet strip (adult + kids minutes) |
 | `App.js` | `/membership` route added |
 | `pages/WhatThisIs.jsx` | KidsDayPassRow inserted under AurinsPromise |
 | `pages/AurinsRoom.jsx` | KidsDayPassRow inserted under story shelf |
@@ -52,7 +52,7 @@ test_spend_blocks_insufficient_balance          PASSED
 test_daily_cap_enforced                         PASSED
 test_adult_and_kids_wallets_firewalled          PASSED
 test_handle_event_dedupes_by_event_id           PASSED
-test_sanctuary_compass_grants_both_wallets      PASSED
+test_house_compass_grants_both_wallets      PASSED
 test_sovereign_cohort_decrements_atomic         PASSED
 test_unknown_sku_is_ignored_gracefully          PASSED
 test_spend_uses_oldest_grant_first              PASSED
