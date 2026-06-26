@@ -396,7 +396,7 @@ export default function HeroCompass() {
             viewBox="0 0 600 600"
             className="w-full h-full"
             role="img"
-            aria-label="Sanctuary navigation compass"
+            aria-label="Aurin navigation compass"
             data-testid="compass-svg"
           >
             <defs>

@@ -31,7 +31,7 @@ function formatRemaining(secs) {
 const TIER_LABEL = {
   "30min": "30-min Guided Presence",
   "60min": "60-min Extended Session",
-  "season_30days": "Eternal sanctuary",
+  "season_30days": "The long return",
   presence: "Guided Presence",
   free_access: "Free access",
   unlimited: "Unlimited",

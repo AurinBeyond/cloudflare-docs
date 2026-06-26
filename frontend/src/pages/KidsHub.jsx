@@ -455,7 +455,7 @@ export default function KidsHub() {
         </footer>
 
         {/* §SYNERGY-4 2026-02-10 — Cross-sell whisper for grown-ups.
-            A small, quiet doorway to Parental Sanctuary placed AFTER
+            A small, quiet doorway to the Parents' Room placed AFTER
             the child's footer so it never competes with the child's
             warm room. Adult tone, sage-muted, single line. */}
         <aside

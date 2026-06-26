@@ -324,7 +324,7 @@ function UnlockModal({ open, onClose }) {
         >
           This stone is held in quiet
           <br />
-          until the Sanctuary opens.
+          until the doors open.
         </h3>
         <p className="text-[15px] leading-[1.85] text-[#bcb4a3] font-light text-center mb-8">
           Each stone holds a small ritual — a tale, a reflection, a star, a
@@ -346,7 +346,7 @@ function UnlockModal({ open, onClose }) {
               boxShadow: "0 0 28px rgba(196,164,107,0.4)",
             }}
           >
-            Discover the Parent Sanctuary →
+            Discover the Parents’ Room →
           </button>
           <Link
             to="/portal"
@@ -591,9 +591,6 @@ export default function KidsUniverseJourney() {
           >
             Open the Full Journey ✦
           </Link>
-          <p className="mt-7 text-[11px] tracking-[0.32em] uppercase text-[#7a7468]">
-            Matrix Aurin · A sanctuary, not a service.
-          </p>
         </div>
       </footer>
 

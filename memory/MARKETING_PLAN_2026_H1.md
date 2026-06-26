@@ -202,7 +202,7 @@ tier-2 press placement realistic; tier-1 still requires luck.
 **What it requires (not what it costs — costs follow once below items occur):**
 
 1. One of the following ASYMMETRIC events occurs in March–May:
-   - A tier-1 outlet runs a feature ("the quiet anti-wellness sanctuary
+   - A tier-1 outlet runs a feature ("the quiet anti-wellness house
      a single mother built", "the house that refuses to be an app",
      "AI without an AI voice").
    - A globally-followed person (Krista Tippett, Maria Popova, Brené

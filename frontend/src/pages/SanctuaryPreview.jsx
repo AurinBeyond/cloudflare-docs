@@ -1225,6 +1225,74 @@ function ClosingSection() {
 // from growing. Original copy can be recovered from git history if
 // it needs to be salvaged into another section.
 
+// §LIVING-HOUSE-NOTE 2026-06-26 — A single quiet reflection at the
+// end of the home page. Re-frames any room still being built as a
+// principle (we open rooms only when they are ready to be lived in),
+// not as a "Coming soon" apology. Lives ONLY here. Not repeated on
+// other pages, never used as a banner. Brand-lock binding:
+// House Design Principle ("more lived in, not more complicated").
+function LivingHouseNote() {
+  return (
+    <section
+      id="living-house-note"
+      data-testid="sanctuary-living-house-note"
+      className="relative w-full bg-[#0b0a08] py-24 border-t border-[rgba(196,164,107,0.08)]"
+    >
+      <div className="max-w-[680px] mx-auto px-6 sm:px-10 text-center">
+        <RevealBlock>
+          <p
+            data-testid="living-house-note-principle"
+            className="text-[14.5px] sm:text-[15px] leading-[1.85] text-[#a59f93] font-light italic"
+            style={{ fontFamily: SERIF }}
+          >
+            Not everything in Aurin is open yet. That is intentional.
+            <br className="hidden sm:block" />
+            We open rooms only when they are ready to be lived in.
+          </p>
+
+          <div
+            aria-hidden="true"
+            className="mx-auto my-10"
+            style={{
+              width: 48,
+              height: 1,
+              background: "rgba(196,164,107,0.28)",
+            }}
+          />
+
+          <p
+            data-testid="living-house-note-metaphor"
+            className="text-[15.5px] sm:text-[17px] leading-[1.9] text-[#d4cdbc] font-light italic"
+            style={{ fontFamily: SERIF }}
+          >
+            Aurin is built the way a small city is built —
+            <br className="hidden sm:block" />
+            slowly, room by room.
+          </p>
+
+          <p
+            className="mt-7 text-[14.5px] sm:text-[15px] leading-[1.95] text-[#a59f93] font-light"
+            style={{ fontFamily: SERIF }}
+          >
+            When a room is ready, its door opens. Guests arrive.
+            People settle in. Meanwhile, somewhere in the house,
+            another room is still being drawn.
+          </p>
+
+          <p
+            className="mt-6 text-[14.5px] sm:text-[15px] leading-[1.95] text-[#a59f93] font-light italic"
+            style={{ fontFamily: SERIF }}
+          >
+            Some rooms begin with a question.
+            <br className="hidden sm:block" />
+            Others begin with a life quietly lived.
+          </p>
+        </RevealBlock>
+      </div>
+    </section>
+  );
+}
+
 function SanctuaryFooter() {
   return (
     <footer
@@ -1306,6 +1374,7 @@ export default function SanctuaryPreview({ production = false } = {}) {
           <PhilosophySection />
           <ClosingSection />
           <AurinsPromise tone="dark" showEarlyAccess={true} />
+          <LivingHouseNote />
         </main>
         <SanctuaryFooter />
       </div>
