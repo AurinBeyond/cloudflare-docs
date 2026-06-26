@@ -1,0 +1,69 @@
+{
+  "summary": "Iteration 91 — tested GDPR endpoints, Polar checkout, Polar webhook, plus frontend smoke (legal/pricing/kids-gate/account/keeper rooms). 9/9 status-code-level pytest checks passed (8 parametrised Polar-checkout integration tests skipped because Polar API returns 422). Found 2 critical backend bugs blocking real Polar checkout — one fixed (user.id → user.user_id), one outstanding (Polar API schema mismatch + guest-email rejected). Frontend: legal page, pricing consumer-rights, kids age gate, /account unauth redirect all PASS. RoomConvaiChat disclosure verified at source-level only — panel did not mount during anonymous room visits, so runtime render not confirmed. /account authenticated UI not verified due to navigation timeout (intermittent).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/billing/checkout/session",
+        "issue": "After fixing user.id→user.user_id, Polar /v1/checkouts/ now returns 422 with TWO problems: (a) guest emails 'guest-*@guest.aurin.local' rejected by Polar email validator ('aurin.local is a special-use/reserved name'). Either omit customer_email for guests or use a non-routable but valid domain (e.g. example.com / a real placeholder); (b) Polar expects a top-level 'product_id' field (singular) — current body only sends 'products': [pid]. checkout.py services/checkout.py line 59 needs to also send 'product_id': product_id (or switch entirely depending on Polar's current contract). End result: NO checkout can succeed today.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "POST /api/billing/checkout/session",
+        "issue": "Code referenced `user.id` but the User pydantic model has `user_id` (no id field). Every call returned 500/'polar_error' before reaching Polar. FIXED in this iteration (server.py line ~16372).",
+        "priority": "HIGH (FIXED)"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/billing/checkout/session",
+        "issue": "Errors bubble up as HTTP 502 'polar_error: <full Polar error>' — leaks Polar's internal validation message to the client. Consider logging the detail and returning a sanitised 502 'checkout_provider_error'."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Keeper room AI disclosure (K1)",
+        "issue": "Visiting /clarity-release (→/grace/room), /body-room (→/body-world), /parents-room, /course-room as a fresh guest did NOT mount [data-testid='convai-panel'], so [data-testid='convai-ai-disclosure'] could not be verified at runtime. Source inspection confirms the disclosure is correctly nested inside RoomConvaiChat just below the start-session button (line 970 of RoomConvaiChat.jsx) — it WILL render whenever convai-panel does. Main agent should verify by walking through the actual room-entry flow (consent + threshold + paywall) to ensure panel mounts.",
+        "affected_selectors": ["convai-panel","convai-ai-disclosure"]
+      },
+      {
+        "flow": "/account authenticated UI",
+        "issue": "Could not load /account with a guest session in Playwright — page.goto timed out at 20s on 'networkidle'. Likely a long-poll or slow first-paint. Backend export/delete endpoints work via direct API calls. data-testid coverage on the Account page therefore NOT verified at runtime."
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_gdpr_polar_iter91.py",
+    "/app/test_reports/pytest/iter91_gdpr_polar.xml"
+  ],
+  "action_items": [
+    "Update /app/backend/services/checkout.py to (a) skip customer_email for guest@guest.aurin.local or use a real-looking placeholder domain, and (b) include 'product_id': product_id in the Polar /checkouts/ body (current Polar API schema rejects 'products' array alone and requires the singular field).",
+    "After fixing checkout.py, re-run the 8 parametrised SKU tests (test_checkout_session_returns_polar_url) — they currently skip on 502.",
+    "Make the keeper-room flow self-mount the convai-panel for a fresh guest session, OR add a tiny 'preview' route that mounts RoomConvaiChat alone for QA. As-is, K1 disclosure cannot be verified without manual end-to-end interaction.",
+    "Investigate the /account page slow load (>20s) — likely a blocking fetch on mount.",
+    "(Optional, polish) Sanitise the polar_error bubbling: don't echo Polar's internal email-validation message verbatim to the client."
+  ],
+  "critical_code_review_comments": [
+    "server.py:16355 — billing_create_checkout used user.id but User has user_id (mismatch). Fixed.",
+    "services/checkout.py:59 — body uses {'products': [pid]} but Polar's current API also requires top-level 'product_id'. The integration was clearly never end-to-end smoke-tested against live Polar.",
+    "services/checkout.py:69 — customer_email passed unconditionally; guest sessions have synthetic @guest.aurin.local emails that Polar rejects. Need a guard.",
+    "server.py is now 17,275 lines — far beyond the 700-line guideline. Split GDPR + Polar + auth + room logic into routers."
+  ],
+  "updated_files": [
+    "/app/backend/server.py (line 16372: user.id → user.user_id)",
+    "/app/backend/tests/test_iteration_gdpr_polar_iter91.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% on status-code contracts (9/9 ran, 8 skipped on Polar 502). Real Polar checkout = 0% (broken).",
+    "frontend": "80% (Legal, Pricing consumer-rights, Kids age gate, /account unauth redirect, LAUNCH_PAUSE soft CTAs all verified. Convai disclosure verified at source-only; /account auth UI not loaded in time)."
+  },
+  "test_credentials": "Used /api/auth/guest with {guide_gender: 'female'} to mint throwaway sessions. Pre-existing session ccb7b5b6... from /app/memory/test_credentials.md not needed for this round.",
+  "seed_data_creation": "Created N guest users via /api/auth/guest during tests; one is deleted by test_delete_with_valid_confirm_deletes_and_invalidates; remaining are harmless throwaway rows in users/user_sessions.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "1) test_iteration_gdpr_polar_iter91.py is fully passing on the 401/400/200 contracts. The 8 SKU parametrised tests currently skip on 502 — once checkout.py is fixed to send product_id and to skip @guest.aurin.local emails, they should return real Polar URLs. 2) Convai disclosure runtime check needs a way to mount RoomConvaiChat without going through the full room-entry flow. 3) /account page load is slow — increase timeout to 30s + 'domcontentloaded' instead of 'networkidle'.",
+  "rca of the issue": "Polar checkout has been broken since at least the iteration that added the new SKU ladder: (a) the endpoint accessed a non-existent user.id attribute (fixed here); (b) the Polar API contract used in checkout.py expects 'product_id' (singular) at the top level and a real-looking customer_email — neither holds in the current code. Reproduce: POST /api/billing/checkout/session with a guest session and any new SKU → 502 'polar_error: Polar checkout creation failed: 422 …'. Mitigation already partially applied; remaining work outlined in action_items."
+}

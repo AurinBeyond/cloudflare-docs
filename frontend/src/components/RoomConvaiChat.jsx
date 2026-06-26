@@ -962,6 +962,18 @@ function ConvaiPanel({ room, onFallback, onStatusChange }) {
         )}
       </div>
 
+      {/* §K1 AI DISCLOSURE 2026-02-29 — Builder Contest compliance.
+          Quiet, single-line, non-modal. Visible on every keeper room
+          so a wanderer is never under any illusion about what is on
+          the other side of the conversation. Founder voice retained
+          (the keepers are Aurin's keepers, not generic chatbots). */}
+      <p
+        data-testid="convai-ai-disclosure"
+        className="aurin-mono text-[10.5px] tracking-[0.12em] text-[hsl(var(--aurin-text))/0.42] mb-4 leading-[1.55]"
+      >
+        You are speaking with one of Aurin&apos;s AI keepers.
+      </p>
+
       {/* §ACCESSIBILITY 2026-02-15 — Three-mode toggle. Founder
           directive: explicit communication-mode choice for wanderers
           with hearing or speech needs, for privacy, or simply for

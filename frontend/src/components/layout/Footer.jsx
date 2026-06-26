@@ -26,8 +26,10 @@ const COLUMNS = [
       { to: "/about", label: "About" },
       { to: "/faq", label: "FAQ" },
       { to: "/wanderers-agreement", label: "Wanderer's Agreement" },
-      { to: "/legal", label: "Legal · Responsibility" },
-      { to: "/legal#refund-policy", label: "Refund policy" },
+      { to: "/legal", label: "Legal · Privacy · Refunds" },
+      { to: "/legal#refunds", label: "Refund policy" },
+      { to: "/legal#privacy", label: "Privacy & GDPR" },
+      { to: "/legal#cookies", label: "Cookies" },
     ],
   },
   {
@@ -35,6 +37,7 @@ const COLUMNS = [
     links: [
       { to: "/portal", label: "User Portal" },
       { to: "/portal", label: "Sign In" },
+      { to: "/account", label: "Your data (GDPR)" },
     ],
   },
 ];

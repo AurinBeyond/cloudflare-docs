@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "@/components/layout/PageHeader";
+import KidsAgeGate from "@/components/KidsAgeGate";
 import {
   Sprout,
   Heart,
@@ -215,6 +216,8 @@ export default function KidsUniverse() {
 
   return (
     <div data-testid="page-kids" className="relative">
+      {/* §K4 BUILDER-CONTEST 2026-02-29 — Age gate (asks once per browser). */}
+      <KidsAgeGate />
       {/* §KIDS-UNIVERSE-V3 2026-02-10 — Floating Aurin companion in
           the corner, watching from above. Anna's directive: the page
           must feel inhabited, not a list. */}

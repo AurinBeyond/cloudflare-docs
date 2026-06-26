@@ -16369,7 +16369,7 @@ async def billing_create_checkout(request: _PolarRequest, body: Dict[str, Any]):
         resp = await asyncio.to_thread(
             _checkout_svc.create_checkout,
             sku_code=sku_code,
-            user_id=user.id,
+            user_id=user.user_id,
             customer_email=getattr(user, "email", None),
             success_url=success_url,
         )
@@ -16517,6 +16517,73 @@ async def founder_docs_read(slug: str):
         media_type="text/markdown; charset=utf-8",
         headers={"Cache-Control": "no-cache"},
     )
+
+
+# =============================================================
+# §GDPR 2026-02-29 — Right of access (Art. 15) and erasure (Art. 17).
+# Both endpoints require an authenticated session — anonymous callers
+# cannot export or delete data they don't own.
+# =============================================================
+from services import gdpr as _gdpr  # noqa: E402
+
+
+@api_router.get("/account/data-export")
+async def gdpr_data_export(request: Request):
+    user = await _resolve_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="not_authenticated")
+    payload = await _gdpr.export_user_data(
+        db, user_id=user.user_id, email=getattr(user, "email", None)
+    )
+    # Send as a downloadable attachment so a wanderer can keep the
+    # file on disk without copy-pasting JSON.
+    import json as _json
+    body = _json.dumps(payload, indent=2, default=str)
+    return Response(
+        content=body,
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f'attachment; filename="aurin-data-export-{user.user_id[:8]}.json"',
+            "Cache-Control": "no-store",
+        },
+    )
+
+
+class _AccountDeleteBody(BaseModel):
+    confirm: str
+
+
+@api_router.post("/account/delete")
+async def gdpr_account_delete(
+    request: Request,
+    response: Response,
+    body: _AccountDeleteBody,
+):
+    """Irreversibly removes every row tied to this user_id / email and
+    invalidates the active session. Caller must POST
+        {"confirm": "delete-my-account"}
+    to proceed — this is intentional so a stray DELETE on the route
+    cannot wipe the user accidentally.
+    """
+    user = await _resolve_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="not_authenticated")
+    if (body.confirm or "").strip().lower() != "delete-my-account":
+        raise HTTPException(
+            status_code=400,
+            detail="confirm_required:delete-my-account",
+        )
+    summary = await _gdpr.delete_user_data(
+        db, user_id=user.user_id, email=getattr(user, "email", None)
+    )
+    # Best-effort clear the session cookie (the row was deleted with
+    # the users sweep above).
+    try:
+        response.delete_cookie("session_token", path="/")
+        _set_session_cookie(response, "", delete=True)
+    except Exception:  # noqa: BLE001
+        pass
+    return summary
 
 
 # =============================================================

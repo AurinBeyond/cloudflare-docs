@@ -80,6 +80,19 @@ SKU_RULES: Dict[str, Dict[str, Any]] = {
     "topup.aurin.60":              {"adult": 0,   "kids": 60, "days": 60, "one_shot": True},
     "topup.aurin.150":             {"adult": 0,   "kids": 150,"days": 90, "one_shot": True},
     "topup.daypass.30":            {"adult": 30,  "kids": 0,  "days": 1, "one_shot": True},
+
+    # ── NEW ACCESS LADDER (2026-02-26) — see PRICING_LOCKED_2026-06-25_v2.md
+    # Day Pass: 24h, unlimited adult voice window (1440 = 24h)
+    "access.day.pass":             {"adult": 1440, "kids": 0,    "days": 1,   "one_shot": True},
+    # Recurring monthly bundles
+    "journey.month":               {"adult": 30,   "kids": 0,    "days": 35},
+    "companion.month":             {"adult": 60,   "kids": 60,   "days": 35},
+    "lantern.month":               {"adult": 60,   "kids": 60,   "days": 35, "lantern": True},
+    # Voice top-ups (one-shot, custom validity)
+    "voice.return.30":             {"adult": 30,   "kids": 0,    "days": 30,  "one_shot": True},
+    "voice.full.90":               {"adult": 90,   "kids": 0,    "days": 60,  "one_shot": True},
+    "voice.season.200":            {"adult": 200,  "kids": 0,    "days": 90,  "one_shot": True},
+    "voice.habit.500":             {"adult": 500,  "kids": 0,    "days": 180, "one_shot": True},
 }
 
 

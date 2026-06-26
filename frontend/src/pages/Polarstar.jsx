@@ -16,6 +16,7 @@ import { Sparkles } from "lucide-react";
 import PolarstarAtmosphere from "@/components/PolarstarAtmosphere";
 import PolarstarDayWorld from "@/components/PolarstarDayWorld";
 import PolarstarWaitlistModal from "@/components/PolarstarWaitlistModal";
+import KidsAgeGate from "@/components/KidsAgeGate";
 import "@/styles/polarstar.css";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
@@ -80,6 +81,8 @@ export default function Polarstar() {
         const isDay = mode === "day" || mode === "morning";
         return (
           <>
+            {/* §K4 BUILDER-CONTEST 2026-02-29 — Age gate (asks once per browser). */}
+            <KidsAgeGate />
             {isDay ? (
               <PolarstarDayWorld navigate={navigate} />
             ) : (

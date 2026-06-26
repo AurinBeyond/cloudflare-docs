@@ -32,6 +32,7 @@ import AdminParentsCompass from "@/pages/AdminParentsCompass";
 import AdminInsights from "@/pages/AdminInsights";
 import About from "@/pages/About";
 import Legal from "@/pages/Legal";
+import Account from "@/pages/Account";
 import WanderersAgreement from "@/pages/WanderersAgreement";
 import AuthCallback from "@/pages/AuthCallback";
 import TheBeginning from "@/pages/TheBeginning";
@@ -179,6 +180,7 @@ function AppRouter() {
         <Route path="/about" element={<About />} />
         <Route path="/wanderers-agreement" element={<WanderersAgreement />} />
         <Route path="/legal" element={<Legal />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/bookstore" element={<Bookstore />} />
         <Route path="/bookstore/:slug" element={<BookDetail />} />
         <Route path="/library" element={<LibraryHub />} />

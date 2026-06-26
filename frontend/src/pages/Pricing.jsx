@@ -26,6 +26,8 @@
  */
 import React from "react";
 import { Link } from "react-router-dom";
+import { LAUNCH_PAUSE } from "@/lib/launchPause";
+import { startPolarCheckout } from "@/lib/checkout";
 
 const SERIF = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const BRASS = "#c4a46b";
@@ -81,8 +83,10 @@ const TIERS = [
       billing: "one-time · 24 hours",
       ankur: "Substack launch price · regular price €25",
     },
+    sku: "access.day.pass",
     cta: {
       label: "Be first to know",
+      liveLabel: "Open the door for tonight",
       href: "/grace/intro",
       aria: "Read the keepers' intros until Day Pass purchase opens",
     },
@@ -114,8 +118,10 @@ const TIERS = [
       ],
     },
     badge: "MOST POPULAR",
+    sku: "journey.month",
     cta: {
       label: "Meet the keepers",
+      liveLabel: "Choose your room",
       href: "/grace/intro",
       aria: "Meet the keepers while Journey opens for subscriptions",
     },
@@ -149,8 +155,10 @@ const TIERS = [
       ],
     },
     badge: "BEST VALUE",
+    sku: "companion.month",
     cta: {
       label: "Read what's already inside",
+      liveLabel: "Open every room",
       href: "/library",
       aria: "Read the Library while Companion opens for subscriptions",
     },
@@ -178,22 +186,21 @@ const TIERS = [
     },
     cta: {
       label: "Meet Anna's keepers first",
+      liveLabel: "Light the Lantern",
       href: "/grace/intro",
       aria: "Meet the keepers while the Lantern is being prepared",
     },
+    sku: "lantern.month",
     testid: "pricing-lantern",
   },
 ];
 
-// ============================================================
-// VOICE TOP-UPS
-// ============================================================
-
+// — Voice top-up SKUs (mapped to the same Polar products) ————
 const VOICE_TOPUPS = [
-  { key: "small", label: "I · A short return", title: "30 minutes", price: "€11", note: "for one quiet evening", testid: "voice-30" },
-  { key: "popular", label: "II · A full hour and a half", title: "90 minutes", price: "€24", note: "when more is being asked of you", testid: "voice-90", featured: true },
-  { key: "season", label: "III · A season", title: "200 minutes", price: "€49", note: "spread across the months you keep returning", testid: "voice-200" },
-  { key: "deep", label: "IV · A long habit", title: "500 minutes", price: "€109", note: "for those who have made this their second home", testid: "voice-500" },
+  { key: "small", label: "I · A short return", title: "30 minutes", price: "€11", note: "for one quiet evening", testid: "voice-30", sku: "voice.return.30" },
+  { key: "popular", label: "II · A full hour and a half", title: "90 minutes", price: "€24", note: "when more is being asked of you", testid: "voice-90", featured: true, sku: "voice.full.90" },
+  { key: "season", label: "III · A season", title: "200 minutes", price: "€49", note: "spread across the months you keep returning", testid: "voice-200", sku: "voice.season.200" },
+  { key: "deep", label: "IV · A long habit", title: "500 minutes", price: "€109", note: "for those who have made this their second home", testid: "voice-500", sku: "voice.habit.500" },
 ];
 
 // ============================================================
@@ -288,6 +295,36 @@ function CycleTable({ cycles, testid }) {
 function TierCard({ t }) {
   const borderClr = t.featured ? EDGE_STRONG : EDGE;
   const bgClr = t.featured ? "rgba(28,24,18,0.72)" : "rgba(18,16,13,0.62)";
+  const [checking, setChecking] = React.useState(false);
+  const [err, setErr] = React.useState(null);
+
+  // §POLAR-CHECKOUT 2026-02-29 — Once Anna flips LAUNCH_PAUSE=false,
+  // the paid tiers (sku present) light up as live checkout buttons.
+  // The free Explore tier always routes to /library — no SKU needed.
+  const hasSku = Boolean(t.sku);
+  const isCheckoutLive = !LAUNCH_PAUSE && hasSku;
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    if (checking) return;
+    setErr(null);
+    setChecking(true);
+    try {
+      await startPolarCheckout(t.sku);
+    } catch (ex) {
+      const msg = String(ex && ex.message ? ex.message : ex);
+      // 401 = user is not signed in. Politely route them to sign-in
+      // first, preserving the intent.
+      if (msg.includes("checkout_401")) {
+        window.location.href = `/login?next=${encodeURIComponent("/pricing")}`;
+        return;
+      }
+      setErr("The door did not open. Please try again in a moment.");
+      setChecking(false);
+    }
+  };
+
+  const ctaLabel = isCheckoutLive && t.cta.liveLabel ? t.cta.liveLabel : t.cta.label;
   return (
     <article
       data-testid={t.testid}
@@ -363,6 +400,8 @@ function TierCard({ t }) {
           to={t.cta.href}
           data-testid={`${t.testid}-cta`}
           aria-label={t.cta.aria}
+          onClick={isCheckoutLive ? handleCheckout : undefined}
+          aria-busy={checking || undefined}
           className={`mt-6 block text-center text-[11.5px] tracking-[0.32em] uppercase py-4 border transition-colors duration-700 ${
             t.featured
               ? "bg-[#c4a46b] border-[#c4a46b] hover:bg-[#d4b67d] hover:border-[#d4b67d]"
@@ -376,8 +415,17 @@ function TierCard({ t }) {
             if (!t.featured) e.currentTarget.style.color = BRASS;
           }}
         >
-          {t.cta.label}
+          {checking ? "Opening the door…" : ctaLabel}
         </Link>
+        {err ? (
+          <p
+            data-testid={`${t.testid}-error`}
+            className="mt-3 text-[11.5px] text-center"
+            style={{ color: "#c08a6a", fontFamily: SERIF, fontStyle: "italic" }}
+          >
+            {err}
+          </p>
+        ) : null}
       </div>
     </article>
   );
@@ -436,6 +484,91 @@ function WhyVoiceIsSeparate() {
   );
 }
 
+function VoiceTopupTile({ v }) {
+  const [checking, setChecking] = React.useState(false);
+  const [err, setErr] = React.useState(null);
+
+  const isCheckoutLive = !LAUNCH_PAUSE && Boolean(v.sku);
+
+  const handleCheckout = async () => {
+    if (checking) return;
+    setErr(null);
+    setChecking(true);
+    try {
+      await startPolarCheckout(v.sku);
+    } catch (ex) {
+      const msg = String(ex && ex.message ? ex.message : ex);
+      if (msg.includes("checkout_401")) {
+        window.location.href = `/login?next=${encodeURIComponent("/pricing")}`;
+        return;
+      }
+      setErr("The door did not open. Please try again in a moment.");
+      setChecking(false);
+    }
+  };
+
+  return (
+    <div
+      data-testid={`pricing-voice-topup-${v.testid}`}
+      className={`border p-7 text-center ${
+        v.featured ? "bg-[rgba(28,24,18,0.72)]" : "bg-[rgba(18,16,13,0.62)]"
+      }`}
+      style={{ borderColor: v.featured ? EDGE_STRONG : EDGE }}
+    >
+      <p
+        className="text-[10px] tracking-[0.34em] uppercase mb-4"
+        style={{ color: BRASS }}
+      >
+        {v.label}
+      </p>
+      <p
+        className="text-[24px] leading-none font-light mb-3"
+        style={{ fontFamily: SERIF, color: CREAM }}
+      >
+        {v.title}
+      </p>
+      <p
+        className="text-[28px] leading-none font-light mb-5"
+        style={{ fontFamily: SERIF, color: BRASS_BRIGHT }}
+      >
+        {v.price}
+      </p>
+      <p
+        className="text-[12.5px] italic leading-[1.65] font-light mb-5"
+        style={{ fontFamily: SERIF, color: MUTED }}
+      >
+        {v.note}
+      </p>
+      {isCheckoutLive ? (
+        <button
+          type="button"
+          onClick={handleCheckout}
+          disabled={checking}
+          data-testid={`pricing-voice-topup-${v.testid}-cta`}
+          aria-label={`Buy ${v.title} voice top-up`}
+          className="mt-1 block w-full text-center text-[10.5px] tracking-[0.32em] uppercase py-3 border transition-colors duration-500 disabled:opacity-60"
+          style={{
+            color: v.featured ? BG : BRASS,
+            background: v.featured ? BRASS : "transparent",
+            borderColor: v.featured ? BRASS : "rgba(196,164,107,0.55)",
+          }}
+        >
+          {checking ? "Opening…" : "Add minutes"}
+        </button>
+      ) : null}
+      {err ? (
+        <p
+          data-testid={`pricing-voice-topup-${v.testid}-error`}
+          className="mt-3 text-[10.5px]"
+          style={{ color: "#c08a6a", fontFamily: SERIF, fontStyle: "italic" }}
+        >
+          {err}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function VoiceTopups() {
   return (
     <section
@@ -473,39 +606,7 @@ function VoiceTopups() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {VOICE_TOPUPS.map((v) => (
-            <div
-              key={v.key}
-              data-testid={`pricing-voice-topup-${v.testid}`}
-              className={`border p-7 text-center ${
-                v.featured ? "bg-[rgba(28,24,18,0.72)]" : "bg-[rgba(18,16,13,0.62)]"
-              }`}
-              style={{ borderColor: v.featured ? EDGE_STRONG : EDGE }}
-            >
-              <p
-                className="text-[10px] tracking-[0.34em] uppercase mb-4"
-                style={{ color: BRASS }}
-              >
-                {v.label}
-              </p>
-              <p
-                className="text-[24px] leading-none font-light mb-3"
-                style={{ fontFamily: SERIF, color: CREAM }}
-              >
-                {v.title}
-              </p>
-              <p
-                className="text-[28px] leading-none font-light mb-5"
-                style={{ fontFamily: SERIF, color: BRASS_BRIGHT }}
-              >
-                {v.price}
-              </p>
-              <p
-                className="text-[12.5px] italic leading-[1.65] font-light"
-                style={{ fontFamily: SERIF, color: MUTED }}
-              >
-                {v.note}
-              </p>
-            </div>
+            <VoiceTopupTile key={v.key} v={v} />
           ))}
         </div>
 
@@ -649,6 +750,83 @@ export default function Pricing() {
       <WhyVoiceIsSeparate />
       <VoiceTopups />
       <HonestNote />
+
+      {/* §EU-CONSUMER-RIGHTS 2026-02-29 — Required at point-of-sale
+          for digital-content purchases sold in the EU. Plain English,
+          links to the full Legal page. */}
+      <section
+        data-testid="pricing-consumer-rights"
+        className="w-full py-14 border-t"
+        style={{ background: BG, borderColor: "rgba(196,164,107,0.08)" }}
+      >
+        <div className="max-w-[820px] mx-auto px-6 sm:px-10">
+          <p
+            className="text-[11px] tracking-[0.42em] uppercase mb-5 text-center"
+            style={{ color: BRASS }}
+          >
+            — Your rights at checkout
+          </p>
+          <ul
+            className="space-y-3 text-[13px] leading-[1.8] font-light"
+            style={{ color: SOFT }}
+            data-testid="pricing-consumer-rights-list"
+          >
+            <li>
+              <strong style={{ color: CREAM }}>Polar Software Inc.</strong> is
+              our Merchant of Record. They handle the payment, issue your
+              invoice, and apply your country&apos;s VAT.
+            </li>
+            <li>
+              <strong style={{ color: CREAM }}>14-day EU withdrawal right</strong> —
+              digital content is delivered immediately, and by paying
+              you acknowledge delivery starts at once. Your withdrawal
+              right is preserved through our refund policy below.
+            </li>
+            <li>
+              <strong style={{ color: CREAM }}>Refund policy</strong> — Day Pass
+              fully refundable within 24h if unused. Subscriptions are
+              cancellable from your account; the paid month finishes
+              naturally. Voice top-ups fully refundable within 14 days
+              for any unused minutes.
+            </li>
+            <li>
+              <strong style={{ color: CREAM }}>Subscriptions auto-renew</strong> until
+              you cancel, at the price shown. We never charge a surprise
+              upgrade and we never run a meter while you sleep.
+            </li>
+          </ul>
+          <p
+            className="mt-7 text-[12.5px] text-center"
+            style={{ color: GREY }}
+          >
+            Full terms ·{" "}
+            <Link
+              to="/legal#refunds"
+              className="underline-offset-4 hover:underline"
+              style={{ color: BRASS }}
+              data-testid="pricing-consumer-rights-legal-link"
+            >
+              Refund & withdrawal policy
+            </Link>
+            {" "}·{" "}
+            <Link
+              to="/legal#privacy"
+              className="underline-offset-4 hover:underline"
+              style={{ color: BRASS }}
+            >
+              Privacy & GDPR
+            </Link>
+            {" "}·{" "}
+            <Link
+              to="/legal#terms"
+              className="underline-offset-4 hover:underline"
+              style={{ color: BRASS }}
+            >
+              Terms of service
+            </Link>
+          </p>
+        </div>
+      </section>
 
       {/* — FOOTER LINK ————————————————————————————————————— */}
       <div
