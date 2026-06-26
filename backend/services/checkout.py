@@ -66,7 +66,12 @@ def create_checkout(
         },
         "embed_origin": None,
     }
-    if customer_email:
+    # Only forward an email if it is a real, routable address. Polar's
+    # email validator rejects synthetic guest emails (e.g. RFC-6761
+    # reserved domains like `*.aurin.local`, `*.guest.local`, etc.),
+    # so we let Polar's checkout page collect a fresh one from the
+    # buyer in those cases.
+    if customer_email and _is_real_routable_email(customer_email):
         body["customer_email"] = customer_email
 
     client = PolarClient()
@@ -77,3 +82,28 @@ def create_checkout(
         return resp.json()
     finally:
         client.close()
+
+
+def _is_real_routable_email(email: str) -> bool:
+    """Quiet guard against synthetic / reserved domains that fail at
+    Polar's validator. Returns True only for emails whose domain is
+    plausibly routable. Conservative — we'd rather drop a real one
+    than hand Polar a fake."""
+    if not email or "@" not in email:
+        return False
+    local, _, domain = email.partition("@")
+    if not local or not domain:
+        return False
+    domain = domain.lower()
+    # RFC 6761 special-use + common throwaway patterns
+    reserved_suffixes = (
+        ".local", ".localhost", ".test", ".example", ".invalid", ".internal",
+    )
+    if any(domain == s.lstrip(".") or domain.endswith(s) for s in reserved_suffixes):
+        return False
+    # Guest stamps we mint server-side
+    if "guest." in domain or domain.startswith("guest."):
+        return False
+    if "." not in domain:
+        return False
+    return True

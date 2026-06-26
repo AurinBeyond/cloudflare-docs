@@ -1,3 +1,45 @@
+## §EU-COMPLIANCE-WAVE SHIPPED 2026-06-26 — Builder-Contest Ready
+
+### What shipped today
+- **K1 — AI Disclosure** in every keeper room (RoomConvaiChat.jsx, data-testid `convai-ai-disclosure`).
+- **K4 — Kids Age Gate** (components/KidsAgeGate.jsx) on `/kids-universe` and `/polarstar`.
+- **GDPR Art. 15 + Art. 17** endpoints + `/account` UI for data export and account deletion.
+- **`/legal` v2** — 10-section EU compliant single page (Operator · Products · ToS · Refund 14d · GDPR + processors + retention + legal-basis · Cookies · Accessibility · Kids · Disclaimers · Disputes).
+- **`/pricing` consumer-rights footer** at point-of-sale (Polar MoR + 14-day withdrawal + refund + auto-renewal).
+- **Polar checkout live for all 8 Access Ladder SKUs** — verified end-to-end with a guest session, real `polar.sh/checkout/...` URLs returned. CTAs activate when `LAUNCH_PAUSE=false`.
+- **Polar webhook secret rotated** to `polar_whs_w4Qw...vk` (Raw format, full event list).
+
+### Still requires human action
+1. **Rotate exposed Polar OAT** after first successful test purchase.
+2. **Flip `LAUNCH_PAUSE=false`** in `/app/frontend/src/lib/launchPause.js`.
+3. **Self-funded test purchase** (any tier) to confirm webhook fulfilment grants minutes via new SKU rules.
+4. **Confirm trader name + EE jurisdiction** on `/legal` matches your Polar profile.
+
+### Compliance audit re-run — current status
+
+✅ **Already compliant**
+- AI disclosure on every conversation surface (K1).
+- Lightweight parent-confirmation on kids surfaces (K4).
+- GDPR rights (access + erasure) exposed via UI and API.
+- Privacy policy lists all 6 processors with regions + DPAs + privacy links.
+- Cookie use is essential-only (no consent banner needed under ePrivacy).
+- Refund policy + 14-day withdrawal visible at point-of-sale and on /legal.
+- Accessibility statement (WCAG 2.1 AA aim) with known limitations declared.
+- Terms of Service, Disputes, Supervisory Authority info present.
+
+⚠️ **Remaining manual/legal tasks**
+- Anna to confirm trader legal name + jurisdiction matches Polar profile.
+- After Builder-Contest launch, schedule a 6-month legal re-review (the EU AI Act compliance for general-purpose AI applies from Aug 2026).
+- If Meta pixel / Google Ads ever added → add a consent banner.
+- Translate /legal to Estonian once EE audience grows (not legally required for English-language commerce, but good practice).
+
+❌ **External / blocking actions**
+- Rotate exposed Polar OAT (Anna in Polar dashboard).
+- Flip LAUNCH_PAUSE=false after a successful test purchase.
+
+---
+
+
 ## §FROM-ANNA-SHIPPED 2026-06-26 (The Upstairs Light, structure-only)
 
 ### What shipped

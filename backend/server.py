@@ -16377,7 +16377,8 @@ async def billing_create_checkout(request: _PolarRequest, body: Dict[str, Any]):
         raise HTTPException(status_code=404, detail=str(exc))
     except Exception as exc:  # noqa: BLE001
         logger.exception("Checkout creation failed")
-        raise HTTPException(status_code=502, detail=f"polar_error: {exc}")
+        # Don't leak Polar's internal validation message to the client.
+        raise HTTPException(status_code=502, detail="checkout_provider_error")
     return {"url": resp.get("url"), "id": resp.get("id"), "sku_code": sku_code}
 
 
@@ -16386,8 +16387,8 @@ async def billing_wallets(request: _PolarRequest):
     """Returns the user's adult + kids wallet balances. Frontend uses this
     to render the minute counters and decide whether to gate voice UI."""
     user = await _require_user(request)
-    adult = await _credit_ledger.get_wallet_balance(db, user.id, "adult")
-    kids = await _credit_ledger.get_wallet_balance(db, user.id, "kids")
+    adult = await _credit_ledger.get_wallet_balance(db, user.user_id, "adult")
+    kids = await _credit_ledger.get_wallet_balance(db, user.user_id, "kids")
     return {
         "adult": {
             "minutes_remaining": adult["minutes_remaining"],
@@ -16411,7 +16412,7 @@ async def voice_transmit(request: _PolarRequest, body: Dict[str, Any]):
         raise HTTPException(status_code=400, detail="minutes must be 1..10 per call")
     out = await _credit_ledger.spend(
         db,
-        user_id=user.id,
+        user_id=user.user_id,
         wallet="adult",
         minutes=minutes,
         reason="voice.transmit",
@@ -16433,7 +16434,7 @@ async def kids_fairytale_session(request: _PolarRequest, body: Dict[str, Any]):
         raise HTTPException(status_code=400, detail="minutes must be 1..15 per call")
     out = await _credit_ledger.spend(
         db,
-        user_id=user.id,
+        user_id=user.user_id,
         wallet="kids",
         minutes=minutes,
         reason="kids.fairytale",
