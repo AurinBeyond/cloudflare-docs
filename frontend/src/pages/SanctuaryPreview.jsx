@@ -1235,7 +1235,7 @@ function LivingHouseNote() {
   return (
     <section
       id="living-house-note"
-      data-testid="sanctuary-living-house-note"
+      data-testid="aurin-living-house-note"
       className="relative w-full bg-[#0b0a08] py-24 border-t border-[rgba(196,164,107,0.08)]"
     >
       <div className="max-w-[680px] mx-auto px-6 sm:px-10 text-center">
