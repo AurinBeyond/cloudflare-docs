@@ -28,6 +28,21 @@ export default function Account() {
   const [feedback, setFeedback] = useState(null);
   const [error, setError] = useState(null);
 
+  // §VOICE-DIGNITY 2026-06-26 — A guest session is *not* a real
+  // account in the eyes of the wanderer. We hide the synthetic
+  // email and internal user ID and offer a gentle "claim your room
+  // key" prompt instead. Real accounts (those with a non-guest
+  // email) get their actual identity rendered.
+  const rawEmail = (me?.email || "").toLowerCase();
+  const isGuest =
+    Boolean(me?.is_guest) ||
+    rawEmail.endsWith("@guest.aurin.local") ||
+    rawEmail.startsWith("guest-");
+
+  const displayIdentity = isGuest
+    ? null
+    : me?.name || me?.email || null;
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -118,7 +133,7 @@ export default function Account() {
         eyebrow="Your account"
         title="Your room key,"
         italicWord="and your rights."
-        description="Sign-in details, your subscription, and the EU GDPR rights you can exercise directly from this page."
+        description="This is where you can manage your membership and the information this house keeps about you."
       />
 
       <section className="aurin-section-sm">
@@ -128,32 +143,67 @@ export default function Account() {
             className="aurin-card p-7"
             data-testid="account-identity-card"
           >
-            <p className="aurin-eyebrow mb-3">Signed in</p>
-            <p
-              className="text-[20px] font-light mb-1"
-              style={{ fontFamily: SERIF }}
-            >
-              {me?.email || me?.name || "You"}
-            </p>
-            <p className="text-[13px] text-[hsl(var(--aurin-text-muted))]">
-              User ID · <span className="font-mono">{me?.user_id?.slice(0, 18)}…</span>
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                to="/pricing"
-                data-testid="account-pricing-link"
-                className="aurin-btn aurin-btn-ghost text-[12.5px]"
-              >
-                Manage subscription
-              </Link>
-              <Link
-                to="/legal"
-                data-testid="account-legal-link"
-                className="aurin-btn aurin-btn-ghost text-[12.5px]"
-              >
-                Read the legal page
-              </Link>
-            </div>
+            {isGuest ? (
+              <>
+                <p className="aurin-eyebrow mb-3">Visiting as a guest</p>
+                <p
+                  className="text-[20px] font-light mb-2"
+                  style={{ fontFamily: SERIF }}
+                  data-testid="account-identity-guest"
+                >
+                  No room key has been issued yet.
+                </p>
+                <p className="text-[13.5px] leading-[1.75] text-[hsl(var(--aurin-text))/0.72] mb-5 italic" style={{ fontFamily: SERIF }}>
+                  You can wander any room and read any letter without
+                  signing in. When you are ready to keep a room
+                  continuous across visits — or to buy access — open
+                  a quiet account with your email.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link
+                    to="/portal"
+                    data-testid="account-signin-link"
+                    className="aurin-btn aurin-btn-primary text-[12.5px]"
+                  >
+                    Open an account
+                  </Link>
+                  <Link
+                    to="/library"
+                    data-testid="account-library-link"
+                    className="aurin-btn aurin-btn-ghost text-[12.5px]"
+                  >
+                    Keep wandering
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="aurin-eyebrow mb-3">Signed in</p>
+                <p
+                  className="text-[20px] font-light mb-1"
+                  style={{ fontFamily: SERIF }}
+                  data-testid="account-identity-signed-in"
+                >
+                  {displayIdentity}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link
+                    to="/pricing"
+                    data-testid="account-pricing-link"
+                    className="aurin-btn aurin-btn-ghost text-[12.5px]"
+                  >
+                    Manage subscription
+                  </Link>
+                  <Link
+                    to="/legal"
+                    data-testid="account-legal-link"
+                    className="aurin-btn aurin-btn-ghost text-[12.5px]"
+                  >
+                    Read the legal page
+                  </Link>
+                </div>
+              </>
+            )}
           </article>
 
           {/* ── GDPR Art. 15 ──────────────────────────────────── */}

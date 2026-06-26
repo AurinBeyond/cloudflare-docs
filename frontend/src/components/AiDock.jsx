@@ -44,8 +44,8 @@ export default function AiDock() {
             <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[hsl(var(--aurin-sage))]" />
           </span>
           <span>The Guardian</span>
-          <span className="text-[10.5px] uppercase tracking-[0.2em] text-[hsl(var(--aurin-text-muted))] group-hover:text-[hsl(var(--aurin-sage))]/80">
-            · soon
+          <span className="text-[10.5px] italic text-[hsl(var(--aurin-text-muted))]/70 group-hover:text-[hsl(var(--aurin-sage))]/60">
+            · coming later
           </span>
         </button>
       )}

@@ -6,38 +6,30 @@ const COLUMNS = [
     title: "Explore",
     links: [
       { to: "/", label: "Home" },
-      { to: "/six-nights", label: "Six Nights" },
-      { to: "/the-beginning", label: "The Beginning" },
-      { to: "/grace", label: "Grace" },
-      { to: "/cabinet/booking", label: "Quiet hours" },
-      { to: "/body-world", label: "Body World" },
-      { to: "/parents-room", label: "Parents' Room" },
-      { to: "/aurin-philosophy", label: "Aurin Philosophy" },
-      { to: "/bookstore", label: "Bookstore" },
       { to: "/library", label: "Library" },
-      { to: "/kids-universe/polarstar", label: "Polarstar Kids" },
-      { to: "/about", label: "The Origin" },
-      { to: "/reach-out", label: "Reach Out" },
+      { to: "/bookstore", label: "Bookstore" },
+      { to: "/pricing", label: "Pricing" },
+      { to: "/about", label: "About" },
+      { to: "/reach-out", label: "Contact" },
     ],
   },
   {
     title: "Trust",
     links: [
-      { to: "/about", label: "About" },
-      { to: "/faq", label: "FAQ" },
       { to: "/wanderers-agreement", label: "Wanderer's Agreement" },
-      { to: "/legal", label: "Legal · Privacy · Refunds" },
-      { to: "/legal#refunds", label: "Refund policy" },
       { to: "/legal#privacy", label: "Privacy & GDPR" },
+      { to: "/legal#terms", label: "Terms of service" },
+      { to: "/legal#refunds", label: "Refund policy" },
       { to: "/legal#cookies", label: "Cookies" },
+      { to: "/legal#accessibility", label: "Accessibility" },
     ],
   },
   {
     title: "Account",
     links: [
-      { to: "/portal", label: "User Portal" },
       { to: "/portal", label: "Sign In" },
       { to: "/account", label: "Your data (GDPR)" },
+      { to: "/pricing", label: "Manage subscription" },
     ],
   },
 ];
@@ -65,10 +57,9 @@ export default function Footer() {
                 </span>
               </span>
             </div>
-            <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-sm">
-              A quiet digital home for reflection, attention, and slow
-              learning. The published face of <strong className="text-[hsl(var(--aurin-text))]">prulesoul.site</strong>.
-              Made to move slowly, on purpose.
+            <p className="text-[15px] leading-relaxed text-[hsl(var(--aurin-text-muted))] max-w-sm" style={{ fontStyle: "italic", fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+              The published face of <strong className="text-[hsl(var(--aurin-text))] not-italic">prulesoul.site</strong>.
+              A house with rooms — built to be read slowly, on purpose.
             </p>
             <div className="mt-6" data-testid="footer-social">
               <SocialLinks testidPrefix="footer-social" />

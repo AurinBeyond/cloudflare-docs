@@ -26,7 +26,7 @@ const OPERATOR = {
   email: "info@prulesoul.site",
   privacyEmail: "info@prulesoul.site",
   responseWindow: "within 5 working days",
-  lastUpdated: "2026-02-29",
+  lastUpdated: "2026-06-26",
   supervisoryAuthority: {
     name: "Estonian Data Protection Inspectorate (Andmekaitse Inspektsioon)",
     url: "https://www.aki.ee/en",
@@ -108,7 +108,7 @@ export default function Legal() {
         eyebrow="Legal · Privacy · Refunds"
         title="The small print,"
         italicWord="in plain English."
-        description={`The full legal foundation of prulesoul.site — terms, privacy, refunds, cookies, accessibility, and the rights you have under EU law. Last reviewed ${OPERATOR.lastUpdated}.`}
+        description={`Everything you need to know about how this house works, how your information is held, and the rights you keep when you become a member. Last reviewed ${OPERATOR.lastUpdated}.`}
       />
 
       <section className="aurin-section-sm">
