@@ -1245,9 +1245,9 @@ function LivingHouseNote() {
             className="text-[14.5px] sm:text-[15px] leading-[1.85] text-[#a59f93] font-light italic"
             style={{ fontFamily: SERIF }}
           >
-            Not everything in Aurin is open yet. That is intentional.
+            Like everything that is alive,
             <br className="hidden sm:block" />
-            We open rooms only when they are ready to be lived in.
+            Aurin grows in its own time.
           </p>
 
           <div
@@ -1265,18 +1265,17 @@ function LivingHouseNote() {
             className="text-[15.5px] sm:text-[17px] leading-[1.9] text-[#d4cdbc] font-light italic"
             style={{ fontFamily: SERIF }}
           >
-            Aurin is built the way a small city is built —
+            When a room is ready, the door opens.
             <br className="hidden sm:block" />
-            slowly, room by room.
+            Guests arrive. People settle in.
           </p>
 
           <p
             className="mt-7 text-[14.5px] sm:text-[15px] leading-[1.95] text-[#a59f93] font-light"
             style={{ fontFamily: SERIF }}
           >
-            When a room is ready, its door opens. Guests arrive.
-            People settle in. Meanwhile, somewhere in the house,
-            another room is still being drawn.
+            Meanwhile, somewhere in the house,
+            another room is still being made.
           </p>
 
           <p
