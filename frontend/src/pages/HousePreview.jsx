@@ -159,34 +159,46 @@ function HouseNav({ production = false }) {
       data-testid="house-nav"
       className={`fixed ${production ? "top-0" : "top-[28px]"} left-0 right-0 z-50 backdrop-blur-md bg-[rgba(10,9,8,0.42)] border-b border-[rgba(196,164,107,0.08)]`}
     >
-      <div className="max-w-[1320px] mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
-        <Link
-          to="/house-preview"
-          data-testid="house-logo"
-          className="text-[13px] tracking-[0.42em] uppercase text-[#e8e1d5] font-light"
-          style={{ fontFamily: SERIF, letterSpacing: "0.42em" }}
-        >
-          Matrix&nbsp;Aurin
-        </Link>
-        <div className="hidden md:flex items-center gap-9 text-[11.5px] tracking-[0.24em] uppercase text-[#a59f93]">
-          <a href="#worlds" className="hover:text-[#e8e1d5] transition-colors duration-500">Worlds</a>
-          <a href="#hero-compass" className="hover:text-[#e8e1d5] transition-colors duration-500">Compass</a>
-          <a href="#rooms" className="hover:text-[#e8e1d5] transition-colors duration-500">Rooms</a>
-          <a href="#open-world" className="hover:text-[#e8e1d5] transition-colors duration-500">Open World</a>
-          <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways to be here</a>
-          <a href="#philosophy" className="hover:text-[#e8e1d5] transition-colors duration-500">Philosophy</a>
+      {/* §TRUST-NAV 2026-06-26 — Two-row layout.
+          Row 1 (primary): poetic house language, untouched.
+          Row 2 (secondary): tiny, brass-toned commerce orientation
+          so a first-time visitor or compliance reviewer can find
+          Pricing / Library / Contact in under one second without
+          the primary nav having to carry SaaS labels. */}
+      <div className="max-w-[1320px] mx-auto px-6 sm:px-10">
+        {/* — Primary row — */}
+        <div className="h-[64px] flex items-center justify-between">
+          <Link
+            to="/house-preview"
+            data-testid="house-logo"
+            className="text-[13px] tracking-[0.42em] uppercase text-[#e8e1d5] font-light"
+            style={{ fontFamily: SERIF, letterSpacing: "0.42em" }}
+          >
+            Matrix&nbsp;Aurin
+          </Link>
+          <div className="hidden md:flex items-center gap-8 text-[11.5px] tracking-[0.24em] uppercase text-[#a59f93]">
+            <a href="#worlds" className="hover:text-[#e8e1d5] transition-colors duration-500">Worlds</a>
+            <a href="#hero-compass" className="hover:text-[#e8e1d5] transition-colors duration-500">Compass</a>
+            <a href="#rooms" className="hover:text-[#e8e1d5] transition-colors duration-500">Rooms</a>
+            <a href="#open-world" className="hover:text-[#e8e1d5] transition-colors duration-500">Open&nbsp;World</a>
+            <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways&nbsp;to&nbsp;be&nbsp;here</a>
+            <a href="#philosophy" className="hover:text-[#e8e1d5] transition-colors duration-500">Philosophy</a>
+          </div>
+          <Link
+            to="/about"
+            data-testid="house-portal-btn"
+            aria-label="Step inside — read what Aurin is, then sign in if you are returning"
+            className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-6 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500 whitespace-nowrap"
+          >
+            Step&nbsp;Inside
+          </Link>
         </div>
-        {/* §TRUST-SIGNALS 2026-06-26 — Secondary commerce row.
-            Brand-truthful: small, brass-toned, never competing with
-            the poetic primary nav. Lets a first-time visitor (or a
-            compliance reviewer) find pricing/about/library/contact
-            in under one second, without removing the house's
-            poetic top-level structure. */}
+        {/* — Secondary row · Trust signals (right-aligned, quiet) — */}
         <div
           data-testid="house-trust-row"
-          className="hidden md:flex items-center gap-5 text-[10px] tracking-[0.28em] uppercase text-[#7a7268]"
+          className="hidden md:flex items-center justify-end gap-5 pb-2 text-[10px] tracking-[0.32em] uppercase text-[#6f6760]"
         >
-          <Link to="/about" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-about">About</Link>
+          <Link to="/about" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-about">What&nbsp;This&nbsp;Is</Link>
           <span className="text-[#3a3530]">·</span>
           <Link to="/pricing" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-pricing">Pricing</Link>
           <span className="text-[#3a3530]">·</span>
@@ -194,14 +206,6 @@ function HouseNav({ production = false }) {
           <span className="text-[#3a3530]">·</span>
           <Link to="/reach-out" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-contact">Contact</Link>
         </div>
-        <Link
-          to="/about"
-          data-testid="house-portal-btn"
-          aria-label="Read about Aurin, then sign in if you are returning"
-          className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-7 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500"
-        >
-          Enter
-        </Link>
       </div>
     </nav>
   );
