@@ -177,7 +177,10 @@ function AppRouter() {
             /home-legacy for instant rollback safety. */}
         <Route path="/home-legacy" element={<Home />} />
         <Route path="/start" element={<Start />} />
-        <Route path="/about" element={<About />} />
+        {/* §TRUST-NAV-CONSISTENCY 2026-06-26 — /about moved OUT of
+            Layout. STEP INSIDE on the homepage routes here; we want
+            the visitor to keep the same HouseNav + trust row they
+            saw on the homepage. About.jsx now owns its top bar. */}
         <Route path="/wanderers-agreement" element={<WanderersAgreement />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/account" element={<Account />} />
@@ -850,6 +853,10 @@ function AppRouter() {
           locked pricing structure visible as atmospheric "Thresholds".
           Production / Home.jsx remains untouched. */}
       <Route path="/house-preview" element={<HousePreview />} />
+      {/* §TRUST-NAV-CONSISTENCY 2026-06-26 — /about lives outside
+          Layout so it can render the HouseNav (poetic primary +
+          trust secondary) identical to the homepage. */}
+      <Route path="/about" element={<About />} />
       <Route path="/what-this-is" element={<WhatThisIs />} />
       {/* §SPRINT-C 2026-02-12 — Post-gate bundle disclosure page.
           Surfaces the full v2.3.1 membership architecture with

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Pause, Heart, Leaf, Sparkles } from "lucide-react";
+import HouseNav from "@/components/layout/HouseNav";
 
 /**
  * About Anna — Founder of Pure Soul Life / Matrix Aurin.
@@ -35,10 +36,16 @@ export default function About() {
 
   return (
     <div data-testid="page-about-anna">
+      {/* §TRUST-NAV-CONSISTENCY 2026-06-26 — HouseNav rendered above
+          the hero so a visitor who arrived via STEP INSIDE on the
+          homepage continues to see the same poetic primary nav and
+          trust signal row. The 64+24px header height is reserved by
+          the section padding below. */}
+      <HouseNav production={true} />
       {/* ──────────────── HERO ──────────────── */}
       <section
         data-testid="about-hero"
-        className="relative overflow-hidden"
+        className="relative overflow-hidden pt-[96px]"
         style={{
           background:
             "radial-gradient(circle at 85% 15%, hsl(var(--aurin-sage) / 0.16), transparent 55%)",
@@ -90,6 +97,25 @@ export default function About() {
                 See the five rooms
               </Link>
             </div>
+            {/* §TRUST-NAV-CONSISTENCY 2026-06-26 — Change C.
+                A returning member who lands on /about now has a quiet
+                way back to their account. STEP INSIDE on the homepage
+                no longer routes to /portal, so this is the new
+                sign-in restoration. */}
+            <p
+              data-testid="about-signin-affordance"
+              className="mt-6 text-[13px] italic text-[hsl(var(--aurin-text-muted))]"
+            >
+              Already a member?{" "}
+              <Link
+                to="/portal"
+                data-testid="about-signin-link"
+                className="text-[hsl(var(--aurin-sage))] underline-offset-4 hover:underline"
+              >
+                Sign in to your room
+              </Link>
+              .
+            </p>
           </div>
 
           {/* Right — real portrait */}
