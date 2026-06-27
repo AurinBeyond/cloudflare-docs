@@ -1,7 +1,23 @@
 import { Link } from "react-router-dom";
 import SocialLinks from "@/components/SocialLinks";
 
+// §HOUSE-DIRECTORY 2026-06-27 — Because the top HouseNav stays
+// poetic (Worlds · Compass · Rooms · …) the Footer now carries the
+// quiet "phone directory" of the house: a Rooms column that lets
+// any visitor on any page reach a specific keeper without having
+// to scroll back to the entrance. Anti-funnel by design — present,
+// not pushy.
 const COLUMNS = [
+  {
+    title: "Rooms",
+    links: [
+      { to: "/grace", label: "Grace · Clarity" },
+      { to: "/body-world", label: "Body World · Kaelan" },
+      { to: "/parents-room", label: "Parents' Room · Sara" },
+      { to: "/alistair", label: "Alistair · Money" },
+      { to: "/kids-universe/polarstar", label: "Polarstar · Kids" },
+    ],
+  },
   {
     title: "Explore",
     links: [

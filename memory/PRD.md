@@ -1,3 +1,36 @@
+## §HOUSE-CONSISTENCY + A11Y SHIPPED 2026-06-27 — Pre-launch Polish
+
+### What shipped today
+- **House navigation unified across all 50+ pages**. Layout.jsx now uses `HouseNav` (not legacy `Navigation`). Single coherent maja-feel everywhere — visitor never accidentally "enters another building".
+- **Footer "Rooms" column added** with the 5 keepers (Grace · Body World · Parents' Room · Alistair · Polarstar). Preserves direct access to keeper rooms without using top-nav teleports (anti-mall by design).
+- **`/pricing` aria-required-children CRITICAL fixed**. Removed `role="table"` / `role="row"` from CycleTable; `aria-label` carries the semantic meaning. axe-core re-run confirms 0 critical violations on /pricing.
+- **HOUSE_EXPERIENCE_AUDIT_FRAMEWORK.md** ratified as the project's permanent design constitution. 6-axis rating (Temperature · World · Voice · Promise · Orientation · Trust), 4-level verdict (🟢🟡🟠🔴), Anti-Optimisation Clause.
+- **AUDIT_LAST_48H_2026-06-27.md** — factual stocktake of all work done in the 48-hour window.
+
+### Verified post-change (2026-06-27)
+- HouseNav + trust row present on `/`, `/about`, `/pricing`, `/library`, `/legal`. 
+- Footer Rooms column shows all 5 keepers on every Layout-wrapped page.
+- axe-core (wcag2aa): /about and /account = 0 violations. /pricing: 1 critical → 0 critical. Remaining issues are color-contrast (mild, design-system level).
+- Web Vitals measured: /about LCP = 2172ms (GOOD, not 4620ms — earlier was transient cold-cache). No image-compression needed; Anna's photo is 258KB / 87ms transfer.
+- ElevenLabs key sanity confirmed: backend loads `sk_6c4c0...f8a0` via load_dotenv — same key Anna will edit. The "mismatch" warning from /proc/environ probe was a false positive (uvicorn worker scope).
+- Deployment readiness: PASS (env vars, CORS, security headers, supervisor, no hardcoded secrets).
+
+### Still requires human action before launch
+1. **Anna: add `convai_write` permission** to ElevenLabs API key at https://elevenlabs.io/app/settings/api-keys. Currently the key has TTS only; ConvAI keeper chats return 401 missing_permissions.
+2. **Anna: one real ConvAI test** with Grace after permission is added, to confirm voice keeper flow works.
+3. **Anna: rotate exposed Polar OAT** after first successful test purchase.
+4. **Anna: flip `LAUNCH_PAUSE=false`** in /app/frontend/src/lib/launchPause.js once test purchase is confirmed.
+5. **Anna: confirm trader name + EE jurisdiction** on /legal matches Polar profile.
+
+### Known minor (NOT launch blockers)
+- Color-contrast serious warnings on /, /pricing, /library, /legal (brass-on-dark borderline). Design-system level decision, not a code fix.
+- `/account` redirects unauthenticated visitors to `/login` which 404s. Should redirect to `/portal` instead. Pre-existing, minor.
+- `/about` and `/` render outside Layout wrapper, so they don't have Footer. Intentional for hero/immersive pages.
+
+---
+
+
+
 ## §EU-COMPLIANCE-WAVE SHIPPED 2026-06-26 — Builder-Contest Ready
 
 ### What shipped today

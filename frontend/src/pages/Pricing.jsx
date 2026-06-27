@@ -251,18 +251,20 @@ function PriceLine({ price }) {
 function CycleTable({ cycles, testid }) {
   if (!cycles || !cycles.length) return null;
   return (
+    // §A11Y 2026-06-27 — Removed role="table" / role="row" because
+    // they require role="cell" descendants (which this 2-line price
+    // summary does not have). Visual hierarchy + aria-label already
+    // make this region understandable to screen readers.
     <div
       data-testid={`${testid}-cycles`}
       className="mt-5 border-t pt-4 space-y-2"
       style={{ borderColor: "rgba(196,164,107,0.14)" }}
-      role="table"
       aria-label="Billing cycle options"
     >
       {cycles.map((c) => (
         <div
           key={c.label}
           className="flex items-baseline justify-between gap-3"
-          role="row"
         >
           <span
             className="text-[12.5px] tracking-[0.16em] uppercase"
