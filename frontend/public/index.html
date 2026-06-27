@@ -34,6 +34,57 @@
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <title>Matrix Aurin · prulesoul — Less Noise. More Meaning.</title>
 
+        <!-- §TRUST-SIGNALS 2026-06-26 — JSON-LD Organization schema.
+             Solves three problems at once:
+               · Robin's "AI readiness" complaint (no structured data)
+               · Robin's "Contact details not detected" (auto-tools
+                 now have machine-readable contact info)
+               · Compliance crawlers reading the site can identify
+                 the operator, contact channel and business category
+                 without scrolling to footer. -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Matrix Aurin",
+          "alternateName": "prulesoul",
+          "url": "https://prulesoul.site/",
+          "logo": "https://prulesoul.site/og-cover.png",
+          "description": "A quiet digital reading house for adults — letters, audio essays, and four reflective rooms.",
+          "founder": {
+            "@type": "Person",
+            "name": "Anna"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "info@prulesoul.site",
+            "availableLanguage": ["en", "et"],
+            "areaServed": "EU"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "EE"
+          },
+          "sameAs": []
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Matrix Aurin · prulesoul",
+          "url": "https://prulesoul.site/",
+          "inLanguage": "en",
+          "publisher": { "@type": "Organization", "name": "Matrix Aurin" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://prulesoul.site/library?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+        </script>
+
         <!-- §SEO 2026-05-31 — Google Search Console verification.
              Anna verified prulesoul.site directly in Search Console
              (likely via DNS TXT or HTML file method, which does NOT

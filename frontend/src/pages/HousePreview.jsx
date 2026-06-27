@@ -176,9 +176,28 @@ function HouseNav({ production = false }) {
           <a href="#ways" className="hover:text-[#e8e1d5] transition-colors duration-500">Ways to be here</a>
           <a href="#philosophy" className="hover:text-[#e8e1d5] transition-colors duration-500">Philosophy</a>
         </div>
+        {/* §TRUST-SIGNALS 2026-06-26 — Secondary commerce row.
+            Brand-truthful: small, brass-toned, never competing with
+            the poetic primary nav. Lets a first-time visitor (or a
+            compliance reviewer) find pricing/about/library/contact
+            in under one second, without removing the house's
+            poetic top-level structure. */}
+        <div
+          data-testid="house-trust-row"
+          className="hidden md:flex items-center gap-5 text-[10px] tracking-[0.28em] uppercase text-[#7a7268]"
+        >
+          <Link to="/about" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-about">About</Link>
+          <span className="text-[#3a3530]">·</span>
+          <Link to="/pricing" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-pricing">Pricing</Link>
+          <span className="text-[#3a3530]">·</span>
+          <Link to="/library" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-library">Library</Link>
+          <span className="text-[#3a3530]">·</span>
+          <Link to="/reach-out" className="hover:text-[#c4a46b] transition-colors duration-500" data-testid="house-trust-contact">Contact</Link>
+        </div>
         <Link
-          to="/portal"
+          to="/about"
           data-testid="house-portal-btn"
+          aria-label="Read about Aurin, then sign in if you are returning"
           className="text-[11px] tracking-[0.32em] uppercase text-[#c4a46b] border border-[rgba(196,164,107,0.55)] px-7 py-2.5 hover:text-[#0b0a08] hover:bg-[#c4a46b] transition-colors duration-500"
         >
           Enter

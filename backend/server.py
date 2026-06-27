@@ -93,6 +93,37 @@ app.add_middleware(
 )
 
 
+# §TRUST-SIGNALS 2026-06-26 — Security headers middleware.
+# Robin's "server settings" check flagged these as missing. They are
+# trust-signals (visible in any browser dev-tools or curl -I) and
+# also genuine defence-in-depth against clickjacking, MIME-sniffing,
+# referer leaks and policy-driven feature abuse. None of them break
+# any existing functionality — they only add response headers.
+@app.middleware("http")
+async def _trust_signal_headers(request, call_next):
+    response = await call_next(request)
+    # Tell HTTPS-capable user-agents to never downgrade to plaintext.
+    # 1 year, include subdomains, eligible for HSTS preload list.
+    response.headers.setdefault(
+        "Strict-Transport-Security",
+        "max-age=31536000; includeSubDomains; preload",
+    )
+    # Disallow being framed by other origins — anti-clickjacking.
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    # Prevent MIME-sniffing.
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    # Send only origin on cross-origin navigations; full URL same-origin.
+    response.headers.setdefault(
+        "Referrer-Policy", "strict-origin-when-cross-origin"
+    )
+    # Quietly disable browser features we never use.
+    response.headers.setdefault(
+        "Permissions-Policy",
+        "camera=(), geolocation=(), payment=(), usb=(), magnetometer=(), microphone=(self), interest-cohort=()",
+    )
+    return response
+
+
 # §AUDIT-RATELIMIT 2026-05-20 — Per-IP token-bucket rate limit middleware.
 # Defends against accidental loops, scrapers, and DoS bursts. NOT a
 # substitute for Cloudflare / nginx-level WAF — this is the "first
