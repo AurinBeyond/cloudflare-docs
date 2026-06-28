@@ -1,7 +1,8 @@
 # HOUSE LANGUAGE CALIBRATION — Phase 1 Brief
-### Status: HELD until Phase 5 of launch roadmap
-### Activated: only after first 10 real users + their feedback are gathered
-### v1.0 · 2026-06-27
+### Status: HELD until launch is stable
+### Pass 5A activates immediately after stable deploy (no user data required)
+### Pass 5B activates after first 10–20 real visitors
+### v1.1 · 2026-06-27
 
 > *This is not copywriting. This is identity calibration.*
 > Drafted by GPT, refined by E1 with three discipline rules.
@@ -73,10 +74,29 @@ For every finding the document records:
 
 **No code change is made** before Anna reviews each finding individually. Anna may accept, reject, or rewrite the suggestion. The agent never overwrites Anna's voice unilaterally.
 
-### Rule C — Run only after first-10-users signal
-This calibration runs **after** the first 10 real visitors have used the live site and given feedback (either explicitly via contact form, or implicitly via session-replay heatmaps).
+### Rule C — Two-pass execution (5A internal, 5B user-informed)
+The calibration runs in **two separate passes**, not one.
 
-The reason: agent-inferred copy issues are guesses. First-user reactions are facts. Polishing in advance risks "fixing" lines that actually worked, while missing lines that actually confused.
+**Pass 5A — Internal House Language Calibration** (immediately post-launch)
+Scope: only language that *clearly* conflicts with the established House principles.
+- Negative openings (pattern 1.1)
+- Speaking on behalf of the visitor (pattern 1.2)
+- Abstract or ambiguous metaphors (pattern 1.3)
+- Inconsistent House vocabulary across pages (pattern 1.4)
+
+These are **brand-consistency issues**. They are detectable from the House principles alone and do not require user feedback. They can be addressed as soon as the deploy is stable.
+
+**Pass 5B — User-informed Calibration** (after first 10–20 real visitors)
+Scope: the subtler issues that only surface in real behaviour.
+- Keeper voice distinctness perceived by real users (pattern 1.5)
+- Invitation-vs-persuasion balance as felt by real visitors (pattern 1.6)
+- Any line that real users specifically asked about, hesitated on, or abandoned
+
+Pass 5B requires at least one of:
+- explicit feedback (email, contact form, social)
+- implicit signal (Clarity heatmap, session-replay showing confusion or abandonment)
+
+This split keeps the House language **internally consistent first**, while letting real users shape the second, deeper refinement.
 
 ---
 
@@ -108,18 +128,25 @@ Every finding follows this shape. Severity is ordered: critical → serious → 
 
 ---
 
-## 5 · When to activate
+## 5 · When to activate (two passes)
 
-Activate House Language Calibration Phase 1 when **all four** are true:
-
+### Pass 5A — Internal House Language Calibration
+Activate when **both** are true:
 1. Site is deployed to prulesoul.site
+2. Deploy is stable (no rollback in first 24h)
+
+No user data required. Patterns 1.1–1.4 are objectively detectable from the House principles.
+
+### Pass 5B — User-informed Calibration
+Activate when **all** are true:
+1. Pass 5A is complete and Anna has approved the changes
 2. ElevenLabs `convai_write` permission is added and one real Grace conversation has succeeded
 3. At least one real payment has been processed via Polar
-4. At least 10 real visitors have spent time on the site and produced at least one of:
+4. At least 10–20 real visitors have spent time on the site and produced at least one of:
    - explicit feedback (email, contact form, social)
    - implicit signal (Clarity heatmap, session-replay showing confusion or abandonment)
 
-If fewer than 10 users have arrived yet, **wait**. The premature calibration is more dangerous than the imperfect copy.
+If fewer than 10 users have arrived yet for Pass 5B, **wait**. Pass 5A is enough for the early days.
 
 ---
 
