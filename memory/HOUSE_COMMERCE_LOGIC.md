@@ -72,13 +72,21 @@ The visitor's right to use voice conversation, measured in minutes.
 - 200 minutes
 - 500 minutes
 
-Voice is **always** purchased separately from Access. It is never
-bundled inside an Access tier as a "feature". A Monthly Access
-member who wants to speak with Grace buys voice minutes the same
-way a Day Access visitor does.
+Voice is **always** a separate resource, **even when it is included
+in an access plan**. It is never collapsed into an Access tier as
+a "feature" of that tier. A Monthly Access member who wants to
+speak with Grace uses voice minutes the same way a Day Access
+visitor does — from a distinct, metered wallet.
 
-The reason: voice is metered. Access is unmetered. Two different
-units cannot live in the same product without confusion.
+This wording is deliberate. It preserves the principle (voice and
+access live in different units) while keeping future flexibility:
+a "Monthly Access + 30 included voice minutes" promotion remains
+possible, because the included minutes are still tracked as voice
+resource, not as an access feature.
+
+The reason: voice is metered, access is unmetered. Two different
+units cannot live in the same product without confusion — but they
+can coexist in one offer as long as the boundary is preserved.
 
 ### 2.3 The open question — Lantern
 Lantern (Anna's intimate content: a monthly letter, voice notes,
@@ -103,7 +111,10 @@ The paywall appears **at the moment of need**:
 - The visitor opens Grace's door without Access → an inline access
   card appears: *"Choose how long you'd like to stay."*
 - The visitor presses "Start voice conversation" without Voice
-  minutes → an inline voice card appears: *"Add Voice Time."*
+  minutes → an inline voice card appears: *"Add voice time when you need it."*
+
+> **The primary place where purchasing happens is at the moment of
+> need, not on the pricing page.**
 
 The pricing page exists, but it is a **reference**, not a funnel.
 Visitors should be able to buy without ever opening it.
@@ -214,6 +225,10 @@ honest commerce model is the first one any real customer ever sees.
 - **Logic author**: Anna (insight: *"kui inimene valib toa, automaatselt
   tuleb maksepakettide ettepanek"*)
 - **Drafted by**: E1 (2026-06-27) after Anna+GPT diagnosis
+- **Refactor name**: this work is called **Access Model Alignment**,
+  not "Pricing Refactor". The goal is not to change prices — it is
+  to bring backend, UI, and visitor understanding into one mental
+  model.
 - **Editorial authority**: Anna only
 - **Sister documents** (House Identity System):
   - `HOUSE_EXPERIENCE_AUDIT_FRAMEWORK.md` — the website experience
@@ -223,6 +238,25 @@ honest commerce model is the first one any real customer ever sees.
 
 Together these four documents define what Aurin **is** — across
 experience, words, image, and exchange.
+
+### 7.1 Discipline rule for all four documents
+
+> **If a new person cannot read and understand this document in one
+> hour, the document is too big.**
+
+This rule applies to every document in the House Identity System.
+The four documents must remain compact, practical, and decision-
+guiding. They are not encyclopedias. A reader who finishes any one
+of them should know how to make decisions in that dimension on
+the same day.
+
+If a document grows past the one-hour ceiling, content must be cut
+or split — not added. The principle exists to keep the documents
+**usable**, not exhaustive.
+
+No fifth or sixth constitution will be added before launch. The
+four pillars are the system. The next phase is application, not
+expansion.
 
 ---
 
