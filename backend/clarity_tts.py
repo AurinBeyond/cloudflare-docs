@@ -69,10 +69,20 @@ DEFAULT_SPEED = _read_speed()
 TTS_MAX_CHARS = 4000  # OpenAI cap is 4096, leave a small margin
 
 
-# -- ElevenLabs defaults (founder "Grace Voice Mix" spec 2026-02-14) -
+# -- ElevenLabs defaults (founder "Grace Voice Mix" spec 2026-02-14, ---
+# -- model migrated 2026-06-29 due to ElevenLabs deprecation notice) -
 # Custom Grace voice designed in ElevenLabs Voice Lab. Founder spec:
-#   Model: eleven_monolingual_v1  (English-only — no multilingual
-#                                  drift, no accent leakage)
+#   Model: eleven_multilingual_v2  (migrated 2026-06-29 — legacy
+#                                   eleven_monolingual_v1 sunset on
+#                                   2026-07-09. v2 is the official
+#                                   migration target; voice_id +
+#                                   VoiceSettings are preserved byte-
+#                                   for-byte. English is locked via
+#                                   the language_code="en" parameter
+#                                   passed at convert() time, so the
+#                                   founder mandate — zero accent
+#                                   leakage, zero language switching —
+#                                   continues to hold under v2.)
 #   Stability: 0.50               (founder bumped from 0.42 → 0.50)
 #   Similarity: 0.80
 #   Style: 0.00                   (founder bumped from 0.10 → 0.00:
@@ -83,7 +93,7 @@ ELEVENLABS_VOICE_FOR_GENDER = {
     "female": os.getenv("ELEVENLABS_VOICE_FEMALE", "21m00Tcm4Tlm"),  # Rachel until founder ships custom Grace voice_id
     "male": os.getenv("ELEVENLABS_VOICE_MALE", "pNInz6obpgDQGcFmaJgB"),  # Adam
 }
-ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_monolingual_v1")
+ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_multilingual_v2")
 
 
 def _read_float(env_name: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -185,9 +195,12 @@ def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
         explicit timeout the FastAPI worker would block indefinitely.
         20 s is a generous ceiling; if exceeded, the caller catches
         the exception and we fall back to OpenAI Shimmer.
-      • Model is pinned to eleven_monolingual_v1 by default
-        (English-only, no multilingual v2 drift). Founder mandate:
-        zero language switching, zero accent leakage.
+      • Model is pinned to eleven_multilingual_v2 by default
+        (migrated 2026-06-29 from eleven_monolingual_v1 due to
+        ElevenLabs deprecation on 2026-07-09). The founder mandate
+        — zero language switching, zero accent leakage — is now
+        enforced by the explicit language_code="en" parameter
+        passed at convert() time, which v2 honours.
       • language_code="en" is passed where the SDK supports it
         (newer monolingual variants honour this; older ignore it
         silently — both safe).
@@ -214,9 +227,10 @@ def _synthesize_elevenlabs_sync(clean: str, gender: VoiceGender) -> bytes:
         style=ELEVENLABS_STYLE,
         use_speaker_boost=ELEVENLABS_USE_SPEAKER_BOOST,
     )
-    # `language_code` is supported by eleven_turbo_v2 and the newer
-    # multilingual models; eleven_monolingual_v1 ignores it. Passing
-    # it everywhere is harmless and locks en-US wherever supported.
+    # `language_code` is supported by eleven_turbo_v2 and the
+    # eleven_multilingual_v2 family; the deprecated monolingual_v1
+    # ignored it. Passing it everywhere is harmless under v2 and
+    # locks en-US — the founder's "no language drift" mandate.
     convert_kwargs = dict(
         text=clean,
         voice_id=voice_id,
