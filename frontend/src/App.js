@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate, useParams } from "
 import { AuthProvider } from "@/contexts/AuthProvider";
 import Layout from "@/components/layout/Layout";
 import Home from "@/pages/Home";
+import Ops from "@/pages/Ops";
 import Library from "@/pages/Library";
 import LibraryEntry from "@/pages/LibraryEntry";
 import Learning from "@/pages/Learning";
@@ -878,6 +879,11 @@ function AppRouter() {
           the domain. Rollback path: change `<HousePreview production />`
           to `<Home />` (still imported above) — instant revert.       */}
       <Route path="/" element={<HousePreview production />} />
+      {/* §OPS-DASHBOARD 2026-06-29 — Admin-only House Operations
+          dashboard. Hidden URL; not linked from anywhere. Requires
+          ADMIN_TOKEN (entered once, persisted in localStorage).
+          Outside <Layout> so the public HouseNav does not appear. */}
+      <Route path="/ops" element={<Ops />} />
       {/* §AUDIT-77 2026-02-09 — Soft 404 catch-all + /origin redirect
           (nav label "Origin" historically points to /about; bare URL
           /origin would silently return blank without this). */}

@@ -13820,6 +13820,20 @@ async def health_check():
     return {"status": "ok", "service": "aurin-hub"}
 
 
+# §OPS-HEALTH 2026-06-29 — House Operations System, Phase A
+# Read-only deep health probes for every external service Aurin
+# depends on. Token-gated (admin only) — same X-Admin-Token pattern
+# used by the rest of the admin surface. Burns zero ConvAI minutes,
+# performs zero writes anywhere. See backend/services/ops_health.py.
+@api_router.get("/ops/status")
+async def ops_status(request: Request):
+    admin_token = os.environ.get("ADMIN_TOKEN")
+    sent = request.headers.get("X-Admin-Token") or request.query_params.get("token")
+    if not admin_token or sent != admin_token:
+        raise HTTPException(status_code=401, detail="Admin token required.")
+    return await _ops_health.collect_status()
+
+
 # =============================================================
 # Six Nights — public reflection journey (read-only, no auth)
 @api_router.get("/six-nights")
@@ -16359,6 +16373,11 @@ from services import billing_webhook as _billing_webhook  # noqa: E402
 from services import credit_ledger as _credit_ledger  # noqa: E402
 from services import checkout as _checkout_svc  # noqa: E402
 from services import day_pass_nudge as _day_pass_nudge  # noqa: E402
+from services import ops_health as _ops_health  # noqa: E402
+
+# §OPS-HEALTH 2026-06-29 — hand the db handle to the ops module so
+# it can run its read-only probes without importing server.py back.
+_ops_health.set_db_handle(db)
 
 
 @api_router.post("/billing/polar/webhook")
