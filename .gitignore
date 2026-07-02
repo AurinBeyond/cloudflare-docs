@@ -67,15 +67,49 @@ agenthub/agents/youtube/db
 *.deb
 *.dylib
 
+# Large media assets (served separately, not in git)
+frontend/public/assets/about/anna-trailer-60s.mp4
+frontend/build/assets/about/anna-trailer-60s.mp4
+.media-staging/you-are-not-who-you-became-trailer.mp4
+android-sdk/.media-staging/you-are-not-who-you-became-trailer.mp4
+
 # Build caches
 .cache/
+frontend/node_modules/.cache/
 
 # Memory / test credentials are local-only
 memory/test_credentials.md
 
-# Mobile development
-android-sdk/.media-staging/you-are-not-who-you-became-trailer.mp4
-.media-staging/you-are-not-who-you-became-trailer.mp4
+# §2026-02 Phase 7 — Private founder strategy docs are LOCAL-ONLY.
+# These describe internal keeper personas, clinical reframings, and
+# compliance strategy. They must never leave the machine (git remote,
+# public inspection, or shared with reviewers). Files stay locally
+# available in /app/memory/ but are excluded from every git push.
+memory/CURATORS_*.md
+memory/SARA_*.md
+memory/ALISTAIR_*.md
+memory/KAELAN_*.md
+memory/POLARSTAR_*.md
+memory/Sara_Character_*.md
+memory/Grace_Character_*.md
+memory/Kaelan_Character_*.md
+memory/Alistair_Character_*.md
+memory/SilenceRoom_Character_*.md
+memory/*_AUDIT_*.md
+memory/AURIN_COMPLIANCE_*.md
+memory/COMMERCE_PLATFORM_*.md
+memory/HOUSE_COMMERCE_LOGIC.md
+memory/HOUSE_LANGUAGE_*.md
+memory/HOUSE_EXPERIENCE_*.md
+memory/HOUSE_ROOM_INTRO_SAMPLES_*.md
+memory/AURIN_FILM_LANGUAGE.md
+memory/MEMBERSHIP_ARCHITECTURE_*.md
+memory/PAYMENT_PROCESSOR_*.md
+memory/FASTSPRING_*.md
+memory/POLAR_*.md
+memory/LEMONSQUEEZY_*.md
+memory/ELEVENLABS_MULTI_AGENT_HANDOFF.md
+memory/private/
 
 # §2026-02-14 + §2026-02-15 + §2026-05-16 — DO NOT re-add `.env` exclusions.
 # `.env` files (backend/.env, frontend/.env) MUST stay tracked so the
@@ -100,316 +134,4 @@ credentials.json
 *token.json*
 *credentials.json*
 .credentials
-
-# Frontend webpack cache packs (pure build artefacts, never secrets)
-frontend/node_modules/.cache/
-frontend/node_modules/.cache/default-development/4.pack
-frontend/node_modules/.cache/default-development/5.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/6.pack
-frontend/node_modules/.cache/default-development/8.pack
-frontend/node_modules/.cache/default-development/8.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/0.pack
-frontend/node_modules/.cache/default-development/3.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/2.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/10.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/7.pack
-frontend/node_modules/.cache/default-development/11.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/13.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/14.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/17.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/19.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
 frontend/node_modules/.cache/default-development/1.pack
-frontend/node_modules/.cache/default-development/1.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/9.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/node_modules/.cache/default-development/12.pack
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
--e 
-# Environment and credential files
-.env
-.env.*
-*.env
-credentials.json
-*.pem
-*.key
-.credentials
-frontend/public/assets/about/anna-trailer-60s.mp4
-frontend/node_modules/.cache/default-development/15.pack
-frontend/node_modules/.cache/default-development/16.pack
-frontend/node_modules/.cache/default-development/12.pack_
-frontend/node_modules/.cache/default-development/18.pack
-frontend/build/assets/about/anna-trailer-60s.mp4
-frontend/node_modules/.cache/default-development/7.pack_
-frontend/node_modules/.cache/default-development/21.pack
-frontend/node_modules/.cache/default-development/23.pack
-frontend/node_modules/.cache/default-development/24.pack
-frontend/node_modules/.cache/default-development/25.pack
-frontend/node_modules/.cache/default-development/9.pack_
