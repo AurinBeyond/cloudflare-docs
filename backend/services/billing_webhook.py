@@ -266,23 +266,18 @@ async def handle_event(db, event: Dict[str, Any]) -> Dict[str, Any]:
             logger.warning("refund event missing payment_id: %s", event.get("id"))
             return {"ok": False, "reason": "missing_payment_id"}
 
-        # Try to revoke wallet grants tied to that payment. The credit
-        # ledger stores source_payment_id on every grant.
-        revoked = 0
-        try:
-            revoked = await credit_ledger.expire_grants_by_payment(
-                db, source_payment_id=payment_id, reason="refunded"
-            )
-        except AttributeError:
-            # credit_ledger.expire_grants_by_payment not yet implemented.
-            # Log the refund so it can be reconciled manually; do not
-            # crash the webhook (would trigger provider retries).
-            logger.warning(
-                "refund received for %s but credit_ledger.expire_grants_by_payment "
-                "is not implemented — manual reconciliation required.",
+        # Reverse (expire) wallet grants tied to that payment.
+        # credit_ledger.expire_grants_by_payment records its own audit
+        # entries and returns the number of grants revoked.
+        revoked = await credit_ledger.expire_grants_by_payment(
+            db, source_payment_id=payment_id, reason="refunded"
+        )
+        if revoked == 0:
+            logger.info(
+                "refund for %s processed but no active grants remained "
+                "to revoke (already-spent or never-granted).",
                 payment_id,
             )
-            revoked = -1
 
         # Record the refund event for admin visibility.
         try:

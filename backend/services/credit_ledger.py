@@ -245,3 +245,76 @@ async def spend(
         }
     )
     return {"ok": True, "spent": int(minutes), "grants_used": grants_used}
+
+
+
+async def expire_grants_by_payment(
+    db,
+    *,
+    source_payment_id: str,
+    reason: str = "refunded",
+) -> int:
+    """§COMMERCE-CLEANUP 2026-02 — Reverse (expire, do not delete) all
+    grants tied to a given payment.
+
+    Called by the refund webhook. Sets `minutes_remaining = 0` and marks
+    the grant with an `expired_by` audit field so history is preserved.
+    Any minutes the user has already SPENT before the refund are kept
+    intact — we only zero out the *remaining* balance for that payment.
+
+    Args:
+        source_payment_id: the Polar/Creem order or subscription ID the
+            refund is for.
+        reason: audit tag; typically "refunded" but also usable for
+            "chargeback" or "manual_admin".
+
+    Returns:
+        Number of grants that were expired (0 if none matched).
+    """
+    if not source_payment_id:
+        return 0
+
+    now_iso = _iso(_now())
+
+    # Find grants tied to this payment that still have remaining minutes
+    cursor = db.user_credits.find(
+        {
+            "source_payment_id": source_payment_id,
+            "minutes_remaining": {"$gt": 0},
+        },
+        {"_id": 0},
+    )
+    grants = await cursor.to_list(length=None)
+
+    revoked = 0
+    for g in grants:
+        result = await db.user_credits.update_one(
+            {
+                "grant_id": g["grant_id"],
+                "minutes_remaining": {"$gt": 0},  # optimistic — no double-expire
+            },
+            {
+                "$set": {
+                    "minutes_remaining": 0,
+                    "expired_at": now_iso,
+                    "expired_by": reason,
+                },
+            },
+        )
+        if result.modified_count == 1:
+            revoked += 1
+            await db.audit_log.insert_one(
+                {
+                    "kind": "credit_revoked",
+                    "user_id": g.get("user_id"),
+                    "wallet": g.get("wallet"),
+                    "source_sku": g.get("source_sku"),
+                    "source_payment_id": source_payment_id,
+                    "minutes_forfeited": int(g.get("minutes_remaining") or 0),
+                    "reason": reason,
+                    "at": now_iso,
+                    "ref": g.get("grant_id"),
+                }
+            )
+
+    return revoked

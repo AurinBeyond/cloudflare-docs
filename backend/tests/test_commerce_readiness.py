@@ -153,6 +153,15 @@ class TestRefundAndDunning:
         assert "commerce_dunning" in source, \
             "handle_event must record to commerce_dunning collection"
 
+    def test_expire_grants_by_payment_exists(self):
+        """credit_ledger must expose expire_grants_by_payment for the
+        refund handler to call. Closing the refund loop, previously a
+        known gap."""
+        from services import credit_ledger
+        assert hasattr(credit_ledger, "expire_grants_by_payment"), \
+            "credit_ledger.expire_grants_by_payment is required for refund flow"
+        assert callable(credit_ledger.expire_grants_by_payment)
+
 
 # ─── 6. Wallet separation ────────────────────────────────────────
 
