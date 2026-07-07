@@ -82,7 +82,16 @@ def _book_payload(book: Dict[str, Any]) -> Dict[str, Any]:
     subtitle = book.get("subtitle") or ""
     description = subtitle or (book.get("description") or "")[:280] or title
 
-    return {
+    # §CREEM-SEED 2026-02 — Creem requires absolute image URLs.
+    # Relative /api/books/cover/... paths are rewritten to production
+    # domain. Anna can also upload the cover directly in Creem dashboard
+    # after creation, in which case this initial URL is a fallback.
+    cover = book.get("cover_image_url") or ""
+    if cover and cover.startswith("/"):
+        prod_base = os.environ.get("PROD_PUBLIC_URL", "https://prulesoul.site").rstrip("/")
+        cover = f"{prod_base}{cover}"
+
+    payload = {
         "name": title,
         "description": description,
         "price": price_cents,
@@ -90,8 +99,10 @@ def _book_payload(book: Dict[str, Any]) -> Dict[str, Any]:
         "billing_type": "onetime",
         "tax_mode": "inclusive",
         "tax_category": "ebooks",      # reduced VAT rate in many EU countries
-        "image_url": book.get("cover_image_url") or "",
     }
+    if cover:
+        payload["image_url"] = cover
+    return payload
 
 
 # ─── ID map (persisted) ───────────────────────────────────────────
