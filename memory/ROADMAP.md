@@ -3,6 +3,31 @@
 **Saved**: 2026-02-09
 **Resume date**: 2026-03-02 (≈ 3 nädalat hiljem, vastavalt Anna direktiivile)
 
+---
+
+## 🟢 P0 — Commerce launch (2026-02, in progress)
+
+**Waiting on Anna** (external actions, not agent work):
+- Register Creem.io account
+- Send pre-application support letter (draft in `AURIN_TEXT_DRAFTS_FOR_REVIEW.md`)
+- ElevenLabs API key `convai_write` scope enable (3-minute fix at elevenlabs.io)
+
+**Ready for agent** (when Creem replies "yes"):
+- Write `payment_providers/creem.py` (~150 lines against existing ABC)
+- Route `services/checkout.py` through `get_provider()` factory (atomic with Creem adapter)
+- Apply Faas 1 copy hygiene from `AURIN_TEXT_DRAFTS_FOR_REVIEW.md`:
+  - Home hero (Variant 2: "A reading library with quiet company")
+  - Category Statement 1A verbatim in meta description, About, ToS, MoR application
+  - 4 disclaimer wordings (footer, pre-conversation modal, ToS additions, refund page)
+- Anna executes `LAUNCH_READINESS_AUDIT_TEMPLATE.md` Section E (€1 test purchase + refund) before `LAUNCH_PAUSE=false`
+
+**Deferred but not forgotten (before real customer volume):**
+- Scheduled dunning-email dispatch job (reads `commerce_dunning` collection)
+- Rename `polar_sku_map.json` → `provider_sku_map.json` with per-provider sub-keys
+- 6 legacy test files that were pre-existing broken (not this session's fault): `test_angel_stars_iter75.py`, `test_hardlock.py`, `test_iter3_auth_sync_reach.py`, `test_iteration36.py`, `test_iteration37.py`, `test_iteration7.py`
+
+
+
 Anna otsus 2026-02-09: pärast Faas 1 lõpetamist (Body Temple 28 + Grace
 Boundaries Mode + visual unification) **peatame uue funktsionaalsuse
 arendamise** ja keskendume 3 nädalat **müügile ja juba olemasolevate

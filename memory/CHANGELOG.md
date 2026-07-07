@@ -3,6 +3,53 @@
 Append-only log of implemented features. PRD.md remains the static
 source of truth for problem statement and architecture.
 
+## 2026-02-07 — Commerce Readiness Cleanup (Pre-Creem)
+
+Anna decided (with GPT alignment) to pivot away from MoR-shopping and instead **prepare Aurin's architecture** for any future MoR before opening a new account. Creem.io identified as the most likely fit (AI-native MoR, indie hackers, 3.9% + $0.40, API-first, "Agent Onboarding" via SKILL.md). Norwegian ENK context locked in.
+
+### Guiding rule
+*"The goal is not Creem integration. The goal is no sixth payment-platform failure caused by Aurin's own commerce architecture."*
+
+### Delivered (all provider-neutral)
+- **Currency unified to EUR** — `Bookstore.jsx`, `BookDetail.jsx`, `server.py` bookstore fallback. Zero NOK references outside test files.
+- **Canonical SKU catalogue** — new `backend/commerce/product_catalogue.py` (8 live launch SKUs). `services/billing_webhook.py::SKU_RULES` now auto-derives from catalogue (impossible to drift).
+- **Checkout abstraction factory** — `payment_providers.get_provider()` reads `PAYMENT_PROVIDER` env. Supports `polar` (live), reserves `creem` (raises clear error until adapter ships).
+- **Webhook event normalisation** — new handlers for `refund.created`, `subscription.past_due`, `subscription.payment_failed`, `dispute.created`. Records to new collections `commerce_refunds`, `commerce_dunning`, `commerce_disputes`.
+- **Refund wallet rollback** — new `credit_ledger.expire_grants_by_payment(source_payment_id, reason)`. Called by refund webhook. Zeroes `minutes_remaining` on grants tied to refunded payment, preserves audit trail.
+- **Test matrix** — new `backend/tests/test_commerce_readiness.py` (15 tests). 3 legacy `test_stage3_4_sprint_b.py` tests updated to use current SKUs.
+
+### Test result
+`43 passed, 1 skipped` (Sovereign cohort test skipped — SKUs archived, cohort logic preserved in code).
+
+### Not done (deliberate — deferred)
+- No Creem-specific code written
+- No `.env` changes
+- No emails sent
+- Dunning-email dispatch job (not a launch blocker per GPT)
+- `services/checkout.py` still calls PolarClient directly (refactor ships atomically with Creem adapter PR)
+
+### New documents
+- `memory/AURIN_COMMERCE_READINESS_AUDIT_v1.md` — 8-checkpoint audit + Zero Employee audit
+- `memory/AURIN_COMMERCE_CLEANUP_REPORT.md` — this session's execution report
+- `memory/LAUNCH_READINESS_AUDIT_TEMPLATE.md` — 32-row checklist to run BEFORE first real customer, including the €1 test
+- `memory/AURIN_COMPLIANCE_ACTION_PLAN_v4_FINAL.md` — positioning + disclaimer strategy
+- `memory/AURIN_TEXT_DRAFTS_FOR_REVIEW.md` — Category Statement + Home hero + 4 disclaimers + Lemon Squeezy letter drafts (awaiting Anna's approval; not yet applied)
+
+### Also fixed this session
+- `.gitignore` cleaned (316 lines of `.env` duplicate exclusions + `-e` bash leakage removed; 446 → 136 lines). `.env` files re-added to git tracking (Save-to-GitHub path preserved).
+- 4 private strategy `.md` files un-tracked via `git rm --cached` (kept locally, excluded from future commits).
+
+### Next action items
+- 🟢 Anna registers Creem account · sends support letter (drafts ready in `AURIN_TEXT_DRAFTS_FOR_REVIEW.md`)
+- 🟡 When Creem confirms category fit → agent writes `payment_providers/creem.py` (~150 lines against existing ABC) + routes `services/checkout.py` through `get_provider()`
+- 🟡 Then agent applies Faas 1 copy hygiene (hero, footer, disclaimers, meta description — from v4 plan)
+- 🟡 Anna executes `LAUNCH_READINESS_AUDIT_TEMPLATE.md` Section E (€1 test) before disabling `LAUNCH_PAUSE`
+
+### Still blocked (external to this session)
+- ElevenLabs `convai_write` scope missing from Anna's API key → Grace/Sara/Alistair/Kaelan voice conversations return 401. 3-minute manual fix at elevenlabs.io (create new restricted key with Conversational AI access).
+
+
+
 ## 2026-06-26 — Pricing v2 LOCKED (Anna kinnitus, ei läinud GPT-le)
 
 Lukustasin lõpliku 5-tasandilise hinnamudeli pärast pikka ajalugu (39 SKU → 5 selget pulka). Anna kinnitas täielikult agendi ettepaneku, GPT-le ei saadetud ("ei hakka isegi gpt-le saatma et ta ei hakkaks jälle eksitama").
