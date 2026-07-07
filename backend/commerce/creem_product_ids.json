@@ -4,7 +4,78 @@
       "creem_id": "prod_7NTkhGyyBSskhJwSEAI2ew",
       "product_url": "https://creem.io/product/prod_7NTkhGyyBSskhJwSEAI2ew",
       "mode": "prod"
+    },
+    "access.day.pass": {
+      "creem_id": "prod_5jJH23Tnthi18JuJgVU7pO",
+      "product_url": "https://creem.io/product/prod_5jJH23Tnthi18JuJgVU7pO",
+      "mode": "prod"
+    },
+    "journey.month": {
+      "creem_id": "prod_6uZKemwelsKX0C6wnPc9qa",
+      "product_url": "https://creem.io/product/prod_6uZKemwelsKX0C6wnPc9qa",
+      "mode": "prod"
+    },
+    "companion.month": {
+      "creem_id": "prod_4omf7GqnoCV3Bk35PJ8D2h",
+      "product_url": "https://creem.io/product/prod_4omf7GqnoCV3Bk35PJ8D2h",
+      "mode": "prod"
+    },
+    "lantern.month": {
+      "creem_id": "prod_1a4JOc5tYygl2zs8naGrUf",
+      "product_url": "https://creem.io/product/prod_1a4JOc5tYygl2zs8naGrUf",
+      "mode": "prod"
+    },
+    "voice.full.90": {
+      "creem_id": "prod_4r4Hx0jsDdvzelyTWgayyY",
+      "product_url": "https://creem.io/product/prod_4r4Hx0jsDdvzelyTWgayyY",
+      "mode": "prod"
+    },
+    "voice.season.200": {
+      "creem_id": "prod_1HlHvwUJUxriOsrcHSzMsr",
+      "product_url": "https://creem.io/product/prod_1HlHvwUJUxriOsrcHSzMsr",
+      "mode": "prod"
+    },
+    "voice.habit.500": {
+      "creem_id": "prod_4vRMX3RZF6yAt3yFpfBE9J",
+      "product_url": "https://creem.io/product/prod_4vRMX3RZF6yAt3yFpfBE9J",
+      "mode": "prod"
     }
   },
-  "books": {}
+  "books": {
+    "you-dont-have-to-dance-to-anothers-tune": {
+      "creem_id": "prod_6FQSF3a1QozJFEKpeq55Gj",
+      "product_url": "https://creem.io/product/prod_6FQSF3a1QozJFEKpeq55Gj",
+      "mode": "prod"
+    },
+    "the-language-of-angels": {
+      "creem_id": "prod_1x9KmyAaYreTyEEKz9mXpP",
+      "product_url": "https://creem.io/product/prod_1x9KmyAaYreTyEEKz9mXpP",
+      "mode": "prod"
+    },
+    "beyond-the-matrix-ii": {
+      "creem_id": "prod_7WTqvWJizWoCcR1ajdYKWC",
+      "product_url": "https://creem.io/product/prod_7WTqvWJizWoCcR1ajdYKWC",
+      "mode": "prod"
+    },
+    "angels-tales": {
+      "creem_id": "prod_5i2ocvbr8UnvkHhTQPggjV",
+      "product_url": "https://creem.io/product/prod_5i2ocvbr8UnvkHhTQPggjV",
+      "mode": "prod"
+    },
+    "engels-friends-2": {
+      "creem_id": "prod_6Ywo0S041YZGjqtZ5xMFgN",
+      "product_url": "https://creem.io/product/prod_6Ywo0S041YZGjqtZ5xMFgN",
+      "mode": "prod"
+    },
+    "beyond-the-matrix-i": {
+      "creem_id": "prod_4T3ZuWDcGIDvTmzLXsGfzC",
+      "product_url": "https://creem.io/product/prod_4T3ZuWDcGIDvTmzLXsGfzC",
+      "mode": "prod"
+    },
+    "angels-story": {
+      "creem_id": "prod_7PpfUVG7AM9WnsqI4oC2IB",
+      "product_url": "https://creem.io/product/prod_7PpfUVG7AM9WnsqI4oC2IB",
+      "mode": "prod"
+    }
+  }
 }

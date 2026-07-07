@@ -20,25 +20,25 @@
 import PageHeader from "@/components/layout/PageHeader";
 
 const OPERATOR = {
-  brand: "Matrix Aurin · Prulesoul",
-  trader: "Anna — sole trader, operating as Matrix Aurin / Prulesoul",
-  jurisdiction: "European Union (Republic of Estonia)",
+  brand: "Aurin",
+  trader: "Anna — sole proprietor (Norwegian ENK), operating as Aurin",
+  jurisdiction: "European Economic Area (Kingdom of Norway)",
   email: "info@prulesoul.site",
   privacyEmail: "info@prulesoul.site",
   responseWindow: "within 5 working days",
-  lastUpdated: "2026-06-26",
+  lastUpdated: "2026-02-07",
   supervisoryAuthority: {
-    name: "Estonian Data Protection Inspectorate (Andmekaitse Inspektsioon)",
-    url: "https://www.aki.ee/en",
+    name: "Norwegian Data Protection Authority (Datatilsynet)",
+    url: "https://www.datatilsynet.no/en/",
   },
 };
 
 const PROCESSORS = [
   {
-    name: "Polar Software Inc. (Polar.sh)",
-    role: "Merchant of Record · subscription & one-shot payments",
-    region: "United States · GDPR DPA in place",
-    link: "https://polar.sh/legal/privacy",
+    name: "Creem.io",
+    role: "Merchant of Record · subscription & one-shot payments · VAT/MVA compliance",
+    region: "European Union · GDPR DPA in place",
+    link: "https://creem.io/legal/privacy",
   },
   {
     name: "ElevenLabs Inc.",
@@ -178,24 +178,24 @@ export default function Legal() {
                 </li>
               </ul>
               <p>
-                Payments are processed by <strong>Polar Software Inc.</strong>,
+                Payments are processed by <strong>Creem.io</strong>,
                 our Merchant of Record. Your card details never touch
-                this site. Polar issues the invoice and handles
-                applicable VAT for your country. You can read Polar&apos;s
+                this site. Creem issues the invoice and handles
+                applicable VAT/MVA for your country. You can read Creem&apos;s
                 terms at{" "}
                 <a
-                  href="https://polar.sh/legal/terms"
+                  href="https://creem.io/legal/terms"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[hsl(var(--aurin-sage))] underline-offset-4 hover:underline"
                 >
-                  polar.sh/legal/terms
+                  creem.io/legal/terms
                 </a>
                 .
               </p>
               <p>
                 Access activates within seconds of a successful payment
-                via a signed webhook from Polar. If activation ever
+                via a signed webhook from Creem. If activation ever
                 stalls, write to <MailLink /> and we will resolve it
                 manually within hours.
               </p>
@@ -232,9 +232,9 @@ export default function Legal() {
               </p>
               <h3 className="aurin-display text-xl mt-6 mb-2">Governing law</h3>
               <p>
-                These terms are governed by the law of the Republic of
-                Estonia and the EU consumer-rights framework. Nothing
-                in these terms limits a right you have as an EU consumer.
+                These terms are governed by the law of the Kingdom of
+                Norway and the EEA consumer-rights framework. Nothing
+                in these terms limits a right you have as an EU/EEA consumer.
               </p>
             </Section>
 
@@ -278,19 +278,19 @@ export default function Legal() {
               </p>
               <ul className="list-disc list-inside space-y-2 ml-2">
                 <li>
-                  <strong>Through Polar</strong> — your receipt email
-                  has a refund link. It is handled in Polar&apos;s system.
+                  <strong>Through Creem</strong> — your receipt email
+                  has a refund link. It is handled in Creem&apos;s system.
                 </li>
                 <li>
                   <strong>Directly to us</strong> — write to <MailLink />{" "}
                   from the email you used to buy. We refund through
-                  Polar and reply when it is done.
+                  Creem and reply when it is done.
                 </li>
               </ul>
               <p>
                 Refunds appear on your card within 5–10 working days
                 depending on your bank. If something stalls, write to
-                us — we chase Polar on your behalf.
+                us — we chase Creem on your behalf.
               </p>
             </Section>
 
@@ -385,11 +385,11 @@ export default function Legal() {
 
               <h3 className="aurin-display text-xl mt-6 mb-2">International transfers</h3>
               <p>
-                Some processors (Polar, ElevenLabs, Resend) are
-                established in the United States. Transfers to those
-                providers are covered by Standard Contractual Clauses
-                under GDPR Art. 46 and, where applicable, the
-                EU–US Data Privacy Framework.
+                Some processors (ElevenLabs, Resend) are established in
+                the United States. Transfers to those providers are
+                covered by Standard Contractual Clauses under GDPR
+                Art. 46 and, where applicable, the EU–US Data Privacy
+                Framework.
               </p>
 
               <h3 className="aurin-display text-xl mt-6 mb-2">Retention</h3>
@@ -400,8 +400,9 @@ export default function Legal() {
                   account deletion.
                 </li>
                 <li>
-                  <strong>Payment record</strong> — kept for 7 years
-                  as required by EU/EE accounting law.
+                  <strong>Payment record</strong> — kept for 5 years
+                  as required by Norwegian accounting law
+                  (Bokføringsloven §13).
                 </li>
                 <li>
                   <strong>Email list</strong> — kept until you
