@@ -35,6 +35,7 @@ from typing import Any, Dict, Optional
 
 from services import credit_ledger
 from services.polar_client import webhook_secret
+from commerce import product_catalogue
 
 try:
     from standardwebhooks import Webhook
@@ -46,54 +47,30 @@ except ImportError:  # pragma: no cover
 logger = logging.getLogger(__name__)
 
 
-# Validity / minutes mapping by sku_code.
-# Recurring bundles: minutes refresh each billing cycle via order.paid.
-# One-shot SKUs: minutes granted once with their own expiry.
-SKU_RULES: Dict[str, Dict[str, Any]] = {
-    # ── Recurring bundles ───────────────────────────────────
-    "quiet.entry.month":           {"adult": 15,  "kids": 0,  "days": 35},
-    "quiet.entry.quarter":         {"adult": 45,  "kids": 0,  "days": 100},
-    "quiet.entry.year":            {"adult": 180, "kids": 0,  "days": 370},
-    "aurin.storyteller.month":     {"adult": 0,   "kids": 60, "days": 35},
-    "aurin.storyteller.quarter":   {"adult": 0,   "kids": 180,"days": 100},
-    "aurin.storyteller.year":      {"adult": 0,   "kids": 720,"days": 370},
-    "inner.compass.month":         {"adult": 60,  "kids": 0,  "days": 35},
-    "inner.compass.quarter":       {"adult": 180, "kids": 0,  "days": 100},
-    "inner.compass.year":          {"adult": 720, "kids": 0,  "days": 370},
-    "sanctuary.compass.month":     {"adult": 90,  "kids": 60, "days": 35},
-    "sanctuary.compass.quarter":   {"adult": 270, "kids": 180,"days": 100},
-    "sanctuary.compass.year":      {"adult": 1080,"kids": 720,"days": 370},
-    # ── Sovereign (cohort-aware) ────────────────────────────
-    "sovereign.standard.quarter":  {"adult": 450, "kids": 300,"days": 100, "cohort": True},
-    "sovereign.standard.year":     {"adult": 1800,"kids": 1200,"days": 370,"cohort": True},
-    "sovereign.bespoke.quarter":   {"adult": 600, "kids": 400,"days": 100, "cohort": True},
-    "sovereign.bespoke.year":      {"adult": 2400,"kids": 1600,"days": 370,"cohort": True},
-    # ── Day passes (24h) ────────────────────────────────────
-    "access.day.kids":             {"adult": 0,   "kids": 10, "days": 1, "one_shot": True},
-    "access.day.quiet":            {"adult": 30,  "kids": 0,  "days": 1, "one_shot": True},
-    "access.day.deep":             {"adult": 60,  "kids": 0,  "days": 1, "one_shot": True},
-    # ── Top-ups (one-shot, custom validity) ─────────────────
-    "topup.compass.30":            {"adult": 30,  "kids": 0,  "days": 30, "one_shot": True},
-    "topup.compass.120":           {"adult": 120, "kids": 0,  "days": 60, "one_shot": True},
-    "topup.compass.300":           {"adult": 300, "kids": 0,  "days": 90, "one_shot": True},
-    "topup.aurin.20":              {"adult": 0,   "kids": 20, "days": 30, "one_shot": True},
-    "topup.aurin.60":              {"adult": 0,   "kids": 60, "days": 60, "one_shot": True},
-    "topup.aurin.150":             {"adult": 0,   "kids": 150,"days": 90, "one_shot": True},
-    "topup.daypass.30":            {"adult": 30,  "kids": 0,  "days": 1, "one_shot": True},
+# §COMMERCE-CLEANUP 2026-02 — SKU_RULES now derives from the canonical
+# product catalogue. Any legacy SKU not in the catalogue is treated as
+# unknown (webhook logs it and returns without granting).
+# The dict below is auto-populated at import time and kept in the exact
+# shape the existing _provision() function expects.
+def _build_sku_rules() -> Dict[str, Dict[str, Any]]:
+    rules: Dict[str, Dict[str, Any]] = {}
+    for sku, spec in product_catalogue.CATALOGUE.items():
+        entry: Dict[str, Any] = {
+            "adult": spec.adult_voice_minutes,
+            "kids": spec.kids_voice_minutes,
+            "days": spec.validity_days,
+        }
+        if spec.product_type == product_catalogue.ONE_SHOT:
+            entry["one_shot"] = True
+        if spec.lantern_included:
+            entry["lantern"] = True
+        if spec.cohort_flag:
+            entry["cohort"] = True
+        rules[sku] = entry
+    return rules
 
-    # ── NEW ACCESS LADDER (2026-02-26) — see PRICING_LOCKED_2026-06-25_v2.md
-    # Day Pass: 24h, unlimited adult voice window (1440 = 24h)
-    "access.day.pass":             {"adult": 1440, "kids": 0,    "days": 1,   "one_shot": True},
-    # Recurring monthly bundles
-    "journey.month":               {"adult": 30,   "kids": 0,    "days": 35},
-    "companion.month":             {"adult": 60,   "kids": 60,   "days": 35},
-    "lantern.month":               {"adult": 60,   "kids": 60,   "days": 35, "lantern": True},
-    # Voice top-ups (one-shot, custom validity)
-    "voice.return.30":             {"adult": 30,   "kids": 0,    "days": 30,  "one_shot": True},
-    "voice.full.90":               {"adult": 90,   "kids": 0,    "days": 60,  "one_shot": True},
-    "voice.season.200":            {"adult": 200,  "kids": 0,    "days": 90,  "one_shot": True},
-    "voice.habit.500":             {"adult": 500,  "kids": 0,    "days": 180, "one_shot": True},
-}
+
+SKU_RULES: Dict[str, Dict[str, Any]] = _build_sku_rules()
 
 
 def verify_signature(raw_body: bytes, headers: Dict[str, str]) -> Dict[str, Any]:
@@ -270,6 +247,96 @@ async def handle_event(db, event: Dict[str, Any]) -> Dict[str, Any]:
     if etype == "subscription.canceled":
         # Honour current period to its natural end. No revoke.
         return {"ok": True, "action": "noop_until_period_end"}
+
+    # §COMMERCE-CLEANUP 2026-02 — refund handler.
+    # Reverse the wallet grant when a refund is processed. We look up
+    # the original payment_id and expire (rather than delete) the
+    # associated grants so the audit trail is preserved.
+    if etype in {"refund.created", "refund.processed"}:
+        data = event.get("data") or {}
+        # Polar/Creem both expose the original order/payment id inside
+        # the refund payload — key varies by provider so try both.
+        payment_id = (
+            data.get("order_id")
+            or data.get("payment_id")
+            or (data.get("order") or {}).get("id")
+            or ""
+        )
+        if not payment_id:
+            logger.warning("refund event missing payment_id: %s", event.get("id"))
+            return {"ok": False, "reason": "missing_payment_id"}
+
+        # Try to revoke wallet grants tied to that payment. The credit
+        # ledger stores source_payment_id on every grant.
+        revoked = 0
+        try:
+            revoked = await credit_ledger.expire_grants_by_payment(
+                db, source_payment_id=payment_id, reason="refunded"
+            )
+        except AttributeError:
+            # credit_ledger.expire_grants_by_payment not yet implemented.
+            # Log the refund so it can be reconciled manually; do not
+            # crash the webhook (would trigger provider retries).
+            logger.warning(
+                "refund received for %s but credit_ledger.expire_grants_by_payment "
+                "is not implemented — manual reconciliation required.",
+                payment_id,
+            )
+            revoked = -1
+
+        # Record the refund event for admin visibility.
+        try:
+            await db.commerce_refunds.insert_one({
+                "event_id": event.get("id"),
+                "payment_id": payment_id,
+                "processed_at": datetime.now(timezone.utc).isoformat(),
+                "grants_revoked": revoked,
+                "raw": data,
+            })
+        except Exception as exc:  # pragma: no cover
+            logger.warning("commerce_refunds insert failed: %s", exc)
+
+        return {"ok": True, "action": "refund_processed",
+                "payment_id": payment_id, "grants_revoked": revoked}
+
+    # §COMMERCE-CLEANUP 2026-02 — past_due / expired-card handler.
+    # A subscription entered dunning. We record it and let the provider
+    # retry per its own dunning schedule. Access continues until the
+    # already-granted period naturally expires — no immediate revoke.
+    if etype in {"subscription.past_due", "subscription.payment_failed"}:
+        data = event.get("data") or {}
+        user_id = _user_id_from_event(event)
+        sub_id = data.get("id") or ""
+        try:
+            await db.commerce_dunning.insert_one({
+                "event_id": event.get("id"),
+                "subscription_id": sub_id,
+                "user_id": user_id,
+                "type": etype,
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
+                "raw": data,
+            })
+        except Exception as exc:  # pragma: no cover
+            logger.warning("commerce_dunning insert failed: %s", exc)
+
+        # Grace-period email dispatch happens in a separate scheduled
+        # job that reads commerce_dunning. Not sent here to keep the
+        # webhook synchronous and side-effect-minimal.
+        return {"ok": True, "action": "dunning_recorded", "type": etype}
+
+    if etype in {"dispute.created", "dispute.opened"}:
+        # Chargebacks — record only. No automated grant revoke; Anna
+        # decides case-by-case since disputes are often mistakes.
+        data = event.get("data") or {}
+        try:
+            await db.commerce_disputes.insert_one({
+                "event_id": event.get("id"),
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
+                "raw": data,
+            })
+        except Exception as exc:  # pragma: no cover
+            logger.warning("commerce_disputes insert failed: %s", exc)
+        return {"ok": True, "action": "dispute_recorded"}
 
     return {"ok": True, "ignored_type": etype}
 

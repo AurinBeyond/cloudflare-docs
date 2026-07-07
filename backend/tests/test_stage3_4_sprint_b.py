@@ -128,13 +128,15 @@ async def test_adult_and_kids_wallets_firewalled(db):
 @pytest.mark.asyncio
 async def test_handle_event_dedupes_by_event_id(db):
     await billing_webhook.seed_cohort_seats(db)
+    # §COMMERCE-CLEANUP 2026-02 — use current live SKU (voice.return.30
+    # replaces the retired topup.compass.30).
     fake_event = {
         "id": "evt_test_001",
         "type": "order.paid",
         "data": {
             "id": "ord_abc",
             "customer": {"external_id": "u_test", "email": "x@y.com"},
-            "product": {"metadata": {"sku_code": "topup.compass.30"}},
+            "product": {"metadata": {"sku_code": "voice.return.30"}},
         },
     }
     r1 = await billing_webhook.handle_event(db, fake_event)
@@ -149,43 +151,36 @@ async def test_handle_event_dedupes_by_event_id(db):
 @pytest.mark.asyncio
 async def test_house_compass_grants_both_wallets(db):
     await billing_webhook.seed_cohort_seats(db)
+    # §COMMERCE-CLEANUP 2026-02 — companion.month replaces the retired
+    # sanctuary.compass.month. Wallet-split behaviour identical.
+    # companion.month grants: 60 adult + 60 kids.
     fake_event = {
         "id": "evt_test_house",
         "type": "order.paid",
         "data": {
             "id": "ord_sanc",
             "customer": {"external_id": "u_family", "email": "p@q.com"},
-            "product": {"metadata": {"sku_code": "sanctuary.compass.month"}},
+            "product": {"metadata": {"sku_code": "companion.month"}},
         },
     }
     r = await billing_webhook.handle_event(db, fake_event)
     assert r.get("ok") is True
     adult = await credit_ledger.get_wallet_balance(db, "u_family", "adult")
     kids = await credit_ledger.get_wallet_balance(db, "u_family", "kids")
-    assert adult["minutes_remaining"] == 90
+    assert adult["minutes_remaining"] == 60
     assert kids["minutes_remaining"] == 60
 
 
 @pytest.mark.asyncio
 async def test_sovereign_cohort_decrements_atomic(db):
-    await billing_webhook.seed_cohort_seats(db)
-    # Sovereign Standard quarter starts at 10 seats
-    initial = await db.polar_cohort_seats.find_one({"sku": "sovereign.standard.quarter"})
-    assert initial["seats_remaining"] == 10
-    fake_event = {
-        "id": "evt_test_sov_001",
-        "type": "order.paid",
-        "data": {
-            "id": "ord_sov_001",
-            "customer": {"external_id": "u_sov_1", "email": "s@y.com"},
-            "product": {"metadata": {"sku_code": "sovereign.standard.quarter"}},
-        },
-    }
-    r = await billing_webhook.handle_event(db, fake_event)
-    assert r.get("ok") is True
-    assert r.get("cohort") == "founding"
-    after = await db.polar_cohort_seats.find_one({"sku": "sovereign.standard.quarter"})
-    assert after["seats_remaining"] == 9
+    """§COMMERCE-CLEANUP 2026-02 — Sovereign SKUs are archived and no
+    longer live in the catalogue. The cohort seat mechanism itself is
+    preserved for future use. This test is skipped until a live
+    cohort SKU is reintroduced."""
+    pytest.skip(
+        "Sovereign SKUs archived in 2026-02 commerce cleanup; cohort "
+        "logic preserved for future reintroduction."
+    )
 
 
 @pytest.mark.asyncio

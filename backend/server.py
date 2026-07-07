@@ -651,7 +651,7 @@ async def github_sync(inp: GithubSyncRequest):
                         "author": fm.get("author") or "Matrix Aurin",
                         "cover_image_url": fm.get("cover_image_url"),
                         "price": float(fm.get("price") or 0),
-                        "currency": fm.get("currency") or "NOK",
+                        "currency": fm.get("currency") or "EUR",
                         "tax_category": fm.get("tax_category") or "book_zero_rate_ready",
                         "delivery_options": fm.get("delivery_options") or ["read_online", "download_pdf"],
                         "pages": fm.get("pages"),

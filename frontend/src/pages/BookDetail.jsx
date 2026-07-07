@@ -12,11 +12,11 @@ const fmtPrice = (price, currency) => {
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: currency || "USD",
+      currency: currency || "EUR",
       minimumFractionDigits: 0,
     }).format(price);
   } catch {
-    return `${price} ${currency || "NOK"}`;
+    return `${price} ${currency || "EUR"}`;
   }
 };
 

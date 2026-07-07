@@ -13,14 +13,14 @@ import LaunchPauseButton from "@/components/LaunchPauseButton";
 
 const fmtPrice = (price, currency) => {
   if (price == null || price === 0) return "Free";
+  const cur = currency || "EUR";
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: currency || "USD",
-      minimumFractionDigits: 0,
+      currency: cur,
     }).format(price);
-  } catch {
-    return `${price} ${currency || "NOK"}`;
+  } catch (e) {
+    return `${price} ${cur}`;
   }
 };
 
