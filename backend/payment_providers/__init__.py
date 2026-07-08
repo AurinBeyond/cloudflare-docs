@@ -65,14 +65,8 @@ def get_provider() -> PaymentProvider:
         return PolarProvider()
 
     if name == "creem":
-        # §COMMERCE-CLEANUP 2026-02 — placeholder. The Creem provider
-        # will be implemented in a follow-up PR after Anna's Creem
-        # account is created and the category-fit answer arrives.
-        raise PaymentProviderError(
-            "Creem provider selected via PAYMENT_PROVIDER=creem but the "
-            "Creem adapter is not yet implemented. Set PAYMENT_PROVIDER=polar "
-            "to fall back to Polar, or ship payment_providers/creem.py first."
-        )
+        from payment_providers.creem import CreemProvider
+        return CreemProvider()
 
     raise PaymentProviderError(
         f"Unknown PAYMENT_PROVIDER='{name}'. "

@@ -112,12 +112,12 @@ class TestCheckoutAbstraction:
             get_provider()
 
     def test_creem_placeholder_raises_pending_error(self, monkeypatch):
-        """PAYMENT_PROVIDER=creem must fail with a friendly not-implemented
-        error until the Creem adapter ships."""
+        """PAYMENT_PROVIDER=creem now returns a live CreemProvider instance
+        (adapter shipped 2026-02-07). Verifies it is a PaymentProvider."""
         monkeypatch.setenv("PAYMENT_PROVIDER", "creem")
-        with pytest.raises(PaymentProviderError) as exc_info:
-            get_provider()
-        assert "not yet implemented" in str(exc_info.value).lower()
+        provider = get_provider()
+        assert isinstance(provider, PaymentProvider)
+        assert provider.name == "creem"
 
 
 # ─── 4. Webhook idempotency ──────────────────────────────────────
